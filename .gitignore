@@ -1,0 +1,12 @@
+__pycache__
+Pipfile.lock
+.junit_report.xml
+.idea
+
+.mypy_cache
+.dmypy.json
+.pytest_cache
+
+*.env
+!ci.env
+node_modules

@@ -1,0 +1,65 @@
+[tool.black]
+  py310 = true
+  line-length = 100
+  skip-string-normalization = true
+  exclude = '(^\..+|local_cache)'
+
+[tool.isort]
+    profile = "black"
+    multi_line_output = 3
+    line_length = 100
+    atomic = true
+    skip_gitignore = true
+    case_sensitive = true
+
+
+[tool.pytest.ini_options]
+addopts = [
+    '--junitxml=.junit_report.xml',
+]
+junit_family = 'xunit2'
+asyncio_mode = 'auto'
+filterwarnings = [
+    'error',
+    'ignore:The SelectBase.c and SelectBase.columns attributes are deprecated.*:DeprecationWarning',
+    'ignore:Sending a large body directly with raw bytes might lock the event loop.*:ResourceWarning',
+    'ignore:.*unclosed transport <_SelectorSocketTransport.*:ResourceWarning',
+    'ignore:.*unclosed <socket.socket.*:ResourceWarning',
+    'ignore:.*unclosed event loop <_UnixSelectorEventLoop.*:ResourceWarning',
+]
+
+[tool.mypy]
+    junit_xml = '.junit_report.xml'
+    follow_imports = 'silent'
+    disallow_any_explicit = false
+    disallow_any_generics = true
+    check_untyped_defs = true
+    disallow_untyped_defs = true
+    disallow_incomplete_defs = true
+    disallow_untyped_decorators = false
+    warn_unused_configs = true
+    disallow_subclassing_any = false
+    disallow_untyped_calls = true
+    no_implicit_optional = true
+    warn_redundant_casts = true
+    warn_unused_ignores = true
+    warn_return_any = true
+    no_implicit_reexport = true
+    show_error_codes = true
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    'missing-docstring',
+    'too-few-public-methods',
+    'no-name-in-module', # Gives false positives.
+    'unused-argument',  # Gives false positives.
+    'invalid-name',
+    'dangerous-default-value',
+]
+
+[tool.bandit]
+skips = [
+    'B101',
+    'B106',
+    'B108'
+]
