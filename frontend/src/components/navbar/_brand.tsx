@@ -1,7 +1,6 @@
 import React from 'react';
-import { Group, ActionIcon, useMantineColorScheme, Box, Title } from '@mantine/core';
-import { IconSun, IconMoonStars } from '@tabler/icons';
-import { Logo } from './_logo';
+import { ActionIcon, Box, Group, Title, useMantineColorScheme } from '@mantine/core';
+import { IconMoonStars, IconSun } from '@tabler/icons';
 import { GiShuttlecock } from '@react-icons/all-files/gi/GiShuttlecock';
 
 export function Brand() {

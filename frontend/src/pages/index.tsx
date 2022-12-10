@@ -7,29 +7,27 @@ export default function HomePage() {
   const theme = useMantineTheme();
 
   return (
-    <>
-      <AppShell
-        styles={{
-          main: {
-            background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-          },
-        }}
-        navbarOffsetBreakpoint="sm"
-        asideOffsetBreakpoint="sm"
-        navbar={
-          <Navbar p="xs" width={{ base: 300 }}>
-            <Navbar.Section mt="xs">
-              <Brand />
-            </Navbar.Section>
-            <Navbar.Section grow mt="md">
-              <MainLinks />
-            </Navbar.Section>
-            <Navbar.Section>
-              <User />
-            </Navbar.Section>
-          </Navbar>
-        }
-      ></AppShell>
-    </>
+    <AppShell
+      styles={{
+        main: {
+          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+        },
+      }}
+      navbarOffsetBreakpoint="sm"
+      asideOffsetBreakpoint="sm"
+      navbar={
+        <Navbar p="xs" width={{ base: 300 }}>
+          <Navbar.Section mt="xs">
+            <Brand />
+          </Navbar.Section>
+          <Navbar.Section grow mt="md">
+            <MainLinks />
+          </Navbar.Section>
+          <Navbar.Section>
+            <User />
+          </Navbar.Section>
+        </Navbar>
+      }
+    />
   );
 }
