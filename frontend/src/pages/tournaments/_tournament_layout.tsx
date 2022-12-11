@@ -1,8 +1,9 @@
 import { AppShell, Navbar, useMantineTheme } from '@mantine/core';
-import { Brand } from '../components/navbar/_brand';
-import { User } from '../components/navbar/_user';
+import { Brand } from '../../components/navbar/_brand';
+import { MainLinks } from '../../components/navbar/_main_links';
+import { User } from '../../components/navbar/_user';
 
-export default function Layout({ children }: any) {
+export default function TournamentLayout({ children, tournament_id }: any) {
   const theme = useMantineTheme();
 
   return (
@@ -17,8 +18,11 @@ export default function Layout({ children }: any) {
         asideOffsetBreakpoint="sm"
         navbar={
           <Navbar p="xs" width={{ base: 300 }}>
-            <Navbar.Section grow mt="md">
+            <Navbar.Section mt="md">
               <Brand />
+            </Navbar.Section>
+            <Navbar.Section grow mt="md">
+              <MainLinks tournament_id={tournament_id} />
             </Navbar.Section>
             <Navbar.Section>
               <User />

@@ -22,7 +22,7 @@ export default function PlayersTable({ tournament_id }: any) {
     <tr key={row.name}>
       <td>
         <Anchor lineClamp={1} size="sm">
-          <Link href={`/tournaments/${tournament_id}/${row.id}`}>{row.name}</Link>
+          <Link href={`/tournaments/${tournament_id}/players/${row.id}`}>{row.name}</Link>
         </Anchor>
       </td>
       <td>{row.created}</td>

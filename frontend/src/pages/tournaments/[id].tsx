@@ -1,15 +1,15 @@
 import { Title } from '@mantine/core';
-import Layout from '../_layout';
+import TournamentLayout from './_tournament_layout';
 
 export default function HomePage({ tournamentData }: any) {
   return (
-    <Layout>
+    <TournamentLayout tournament_id={tournamentData.id}>
       <Title>Tournament {tournamentData.id}</Title>
-    </Layout>
+    </TournamentLayout>
   );
 }
 
-export function getAllPostIds() {
+export function getAllTournamentIds() {
   const tournament_ids = [1, 2, 3];
   return tournament_ids.map((id) => ({
     params: {
@@ -20,7 +20,7 @@ export function getAllPostIds() {
 
 export async function getStaticPaths() {
   return {
-    paths: getAllPostIds(),
+    paths: getAllTournamentIds(),
     fallback: false,
   };
 }

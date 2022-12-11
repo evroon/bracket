@@ -41,13 +41,30 @@ function MainLink({ icon, color, label, endpoint }: MainLinkProps) {
   );
 }
 
-const data = [
-  { icon: <BsFillPersonFill size={16} />, color: 'violet', label: 'Players', endpoint: '/players' },
-  { icon: <AiOutlineTeam size={16} />, color: 'grape', label: 'Teams', endpoint: '/teams' },
-  { icon: <IconAlertCircle size={16} />, color: 'teal', label: 'Rounds', endpoint: '/rounds' },
-];
+export function MainLinks({ tournament_id }: any) {
+  const tm_prefix = `/tournaments/${tournament_id}`;
 
-export function MainLinks() {
+  const data = [
+    {
+      icon: <BsFillPersonFill size={16} />,
+      color: 'violet',
+      label: 'Players',
+      endpoint: `${tm_prefix}/players`,
+    },
+    {
+      icon: <AiOutlineTeam size={16} />,
+      color: 'grape',
+      label: 'Teams',
+      endpoint: `${tm_prefix}/teams`,
+    },
+    {
+      icon: <IconAlertCircle size={16} />,
+      color: 'teal',
+      label: 'Rounds',
+      endpoint: `${tm_prefix}/rounds`,
+    },
+  ];
+
   const links = data.map((link) => <MainLink {...link} key={link.label} />);
   return <div>{links}</div>;
 }
