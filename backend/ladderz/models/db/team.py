@@ -3,19 +3,19 @@ from heliclockter import datetime_utc
 from ladderz.models.db.shared import BaseModelORM
 
 
-class Player(BaseModelORM):
+class Team(BaseModelORM):
     id: int | None = None
-    name: str
     created: datetime_utc
-    team_id: int | None = None
-    tournament_id: int
-
-
-class PlayerBody(BaseModelORM):
     name: str
-    team_id: int | None
+    tournament_id: int
+    active: bool
 
 
-class PlayerToInsert(PlayerBody):
+class TeamBody(BaseModelORM):
+    name: str
+    active: bool
+
+
+class TeamToInsert(TeamBody):
     created: datetime_utc
     tournament_id: int

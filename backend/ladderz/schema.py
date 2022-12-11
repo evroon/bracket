@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table
+from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeMeta  # type: ignore[attr-defined]
 from sqlalchemy.sql.sqltypes import Boolean, DateTime
@@ -21,6 +21,7 @@ tournaments = Table(
     Column('id', Integer, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
+    Column('club_id', Integer, ForeignKey('clubs.id'), nullable=False),
 )
 
 rounds = Table(
@@ -30,6 +31,17 @@ rounds = Table(
     Column('round_index', Integer, nullable=False),
     Column('created', DateTimeTZ, nullable=False),
     Column('is_draft', Boolean, nullable=False),
+    Column('tournament_id', Integer, ForeignKey('tournaments.id'), nullable=False),
+)
+
+matches = Table(
+    'matches',
+    metadata,
+    Column('id', Integer, primary_key=True, index=True),
+    Column('created', DateTimeTZ, nullable=False),
+    Column('round_id', Integer, ForeignKey('rounds.id'), nullable=False),
+    Column('team1', Integer, ForeignKey('teams.id'), nullable=False),
+    Column('team2', Integer, ForeignKey('teams.id'), nullable=False),
 )
 
 teams = Table(
@@ -38,6 +50,8 @@ teams = Table(
     Column('id', Integer, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
+    Column('tournament_id', Integer, ForeignKey('tournaments.id'), nullable=False),
+    Column('active', Boolean, nullable=False, index=True),
 )
 
 players = Table(
@@ -46,6 +60,8 @@ players = Table(
     Column('id', Integer, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
+    Column('team_id', Integer, ForeignKey('teams.id'), nullable=True),
+    Column('tournament_id', Integer, ForeignKey('tournaments.id'), nullable=False),
 )
 
 

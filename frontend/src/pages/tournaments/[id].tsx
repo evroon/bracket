@@ -1,10 +1,14 @@
 import { Title } from '@mantine/core';
+import dynamic from 'next/dynamic';
 import TournamentLayout from './_tournament_layout';
 
-export default function HomePage({ tournamentData }: any) {
+export default function TournamentPage({ tournamentData }: any) {
+  const Brackets = dynamic(() => import('../../components/brackets/brackets'), { ssr: false });
+
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Title>Tournament {tournamentData.id}</Title>
+      <Brackets />
     </TournamentLayout>
   );
 }

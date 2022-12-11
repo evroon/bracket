@@ -1,0 +1,9 @@
+import { Button } from '@mantine/core';
+
+export default function SaveButton(props: any) {
+  return (
+    <Button color="green" size="md" style={{ marginBottom: 10 }} {...props}>
+      {props.title}
+    </Button>
+  );
+}

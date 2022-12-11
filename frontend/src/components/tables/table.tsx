@@ -11,7 +11,7 @@ import {
 import { HiSortAscending } from '@react-icons/all-files/hi/HiSortAscending';
 import { HiSortDescending } from '@react-icons/all-files/hi/HiSortDescending';
 import { MdSort } from '@react-icons/all-files/md/MdSort';
-import { getItemColor } from '../util';
+import { getItemColor } from '../utils/util';
 
 export const useStyles = createStyles((theme) => ({
   th: {
@@ -54,9 +54,9 @@ export const setSorting = (state: TableState, newSortField: string) => {
   }
 };
 
-export const getTableState = () => {
+export const getTableState = (initial_sort_field: string) => {
   const [reversed, setReversed] = useState(false);
-  const [sortField, setSortField] = useState('title');
+  const [sortField, setSortField] = useState(initial_sort_field);
   return {
     sortField,
     setSortField,
@@ -64,6 +64,11 @@ export const getTableState = () => {
     setReversed,
   };
 };
+
+export function sortTableEntries(r1: any, r2: any, tableState: TableState) {
+  const order = r1[tableState.sortField] > r2[tableState.sortField];
+  return (tableState.reversed ? order : !order) ? 1 : 0;
+}
 
 export function getSortIcon(sorted: boolean, reversed: boolean) {
   if (!sorted) return <MdSort />;

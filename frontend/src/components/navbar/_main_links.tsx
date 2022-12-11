@@ -46,6 +46,12 @@ export function MainLinks({ tournament_id }: any) {
 
   const data = [
     {
+      icon: <IconAlertCircle size={16} />,
+      color: 'teal',
+      label: 'Tournament',
+      endpoint: `${tm_prefix}/`,
+    },
+    {
       icon: <BsFillPersonFill size={16} />,
       color: 'violet',
       label: 'Players',
@@ -56,12 +62,6 @@ export function MainLinks({ tournament_id }: any) {
       color: 'grape',
       label: 'Teams',
       endpoint: `${tm_prefix}/teams`,
-    },
-    {
-      icon: <IconAlertCircle size={16} />,
-      color: 'teal',
-      label: 'Rounds',
-      endpoint: `${tm_prefix}/rounds`,
     },
   ];
 

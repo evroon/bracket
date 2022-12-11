@@ -1,13 +1,15 @@
 import { Title } from '@mantine/core';
-import PlayersTable from '../../../components/tables/players';
+import TeamsTable from '../../../components/tables/teams';
 import { getStaticPaths as _getStaticPaths, getStaticProps as _getStaticProps } from '../[id]';
 import TournamentLayout from '../_tournament_layout';
+import TeamModal from '../../../components/modals/team_modal';
 
 export default function Teams({ tournamentData }: any) {
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Title>Teams</Title>
-      <PlayersTable tournament_id={tournamentData.id} />
+      <TeamModal tournament_id={tournamentData.id} team={null} />
+      <TeamsTable tournament_id={tournamentData.id} />
     </TournamentLayout>
   );
 }

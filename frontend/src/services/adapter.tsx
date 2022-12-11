@@ -1,6 +1,15 @@
 import useSWR, { SWRResponse } from 'swr';
+import { showNotification } from '@mantine/notifications';
 
 const axios = require('axios').default;
+
+export function handleRequestError(error: any) {
+  showNotification({
+    color: 'red',
+    title: 'Default notification',
+    message: error.response.data.detail.toString(),
+  });
+}
 
 export function createAxios() {
   const user = localStorage.getItem('login');
@@ -25,4 +34,12 @@ export function getTournaments(): SWRResponse<any, any> {
 
 export function getPlayers(tournament_id: number): SWRResponse<any, any> {
   return useSWR(`tournaments/${tournament_id}/players`, fetcher);
+}
+
+export function getSinglePlayer(tournament_id: number, player_id: number): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/players/${player_id}`, fetcher);
+}
+
+export function getTeams(tournament_id: number): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/teams`, fetcher);
 }
