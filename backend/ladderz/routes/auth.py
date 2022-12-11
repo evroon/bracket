@@ -4,22 +4,21 @@ import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from heliclockter import datetime_utc, timedelta
-from jwt import DecodeError
+from jwt import DecodeError, ExpiredSignatureError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from ladderz.config import config
 from ladderz.database import database
-from ladderz.models.database import User, UserInDB, UserPublic
+from ladderz.models.db.user import User, UserInDB, UserPublic
 from ladderz.schema import users
 from ladderz.utils.db import fetch_one_parsed
-from ladderz.utils.logging import logger
 from ladderz.utils.types import JsonDict, JsonList, assert_some
 
 router = APIRouter()
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 7 * 24 * 60  # 1 week
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -80,7 +79,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserPublic:
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-    except DecodeError:
+    except (DecodeError, ExpiredSignatureError):
         raise credentials_exception
 
     user = await get_user(username=assert_some(token_data.username))

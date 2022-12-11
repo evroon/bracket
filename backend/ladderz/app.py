@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from ladderz.database import database
-from ladderz.routes import auth
+from ladderz.routes import auth, players, tournaments
 
 app = FastAPI(
     title="Ladderz API",
@@ -40,3 +40,5 @@ async def ping() -> str:
 
 
 app.include_router(auth.router, tags=['auth'])
+app.include_router(tournaments.router, tags=['tournaments'])
+app.include_router(players.router, tags=['tournaments'])

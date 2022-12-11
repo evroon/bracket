@@ -3,14 +3,16 @@ import { IconAlertCircle } from '@tabler/icons';
 import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import { AiOutlineTeam } from '@react-icons/all-files/ai/AiOutlineTeam';
 import { BsFillPersonFill } from '@react-icons/all-files/bs/BsFillPersonFill';
+import Link from 'next/link';
 
 interface MainLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
+  endpoint: string;
 }
 
-function MainLink({ icon, color, label }: MainLinkProps) {
+function MainLink({ icon, color, label, endpoint }: MainLinkProps) {
   return (
     <UnstyledButton
       sx={(theme) => ({
@@ -31,16 +33,18 @@ function MainLink({ icon, color, label }: MainLinkProps) {
           {icon}
         </ThemeIcon>
 
-        <Text size="sm">{label}</Text>
+        <Text size="sm">
+          <Link href={endpoint}>{label}</Link>
+        </Text>
       </Group>
     </UnstyledButton>
   );
 }
 
 const data = [
-  { icon: <IconAlertCircle size={16} />, color: 'teal', label: 'Tournaments' },
-  { icon: <BsFillPersonFill size={16} />, color: 'violet', label: 'Players' },
-  { icon: <AiOutlineTeam size={16} />, color: 'grape', label: 'Teams' },
+  { icon: <BsFillPersonFill size={16} />, color: 'violet', label: 'Players', endpoint: '/players' },
+  { icon: <AiOutlineTeam size={16} />, color: 'grape', label: 'Teams', endpoint: '/teams' },
+  { icon: <IconAlertCircle size={16} />, color: 'teal', label: 'Rounds', endpoint: '/rounds' },
 ];
 
 export function MainLinks() {

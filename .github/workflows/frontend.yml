@@ -20,10 +20,10 @@ jobs:
         run: yarn
         working-directory: frontend
 
-      - name: Build website
-        run: yarn build
-        working-directory: frontend
-
       - name: Run prettier, lint, jest checks
         run: yarn test
+        working-directory: frontend
+
+      - name: Build website
+        run: yarn build
         working-directory: frontend

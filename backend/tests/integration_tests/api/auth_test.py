@@ -31,7 +31,7 @@ async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> N
     assert response.get('token_type') == 'bearer'
 
     decoded = jwt.decode(response['access_token'], config.jwt_secret, algorithms=['HS256'])
-    assert decoded == {'user': MOCK_USER.username, 'exp': 7258120200}
+    assert decoded == {'user': MOCK_USER.username, 'exp': 7258723200}
 
 
 async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server: None) -> None:

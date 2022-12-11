@@ -1,6 +1,7 @@
 import React from 'react';
-import { IconChevronRight, IconChevronLeft } from '@tabler/icons';
-import { UnstyledButton, Group, Avatar, Text, Box, useMantineTheme } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
+import { Avatar, Box, Group, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
+import Link from 'next/link';
 
 export function User() {
   const theme = useMantineTheme();
@@ -40,6 +41,7 @@ export function User() {
             <Text color="dimmed" size="xs">
               ahorsefighter@gmail.com
             </Text>
+            <Link href="/login">Login</Link>
           </Box>
 
           {theme.dir === 'ltr' ? <IconChevronRight size={18} /> : <IconChevronLeft size={18} />}

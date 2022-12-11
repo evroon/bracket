@@ -15,7 +15,7 @@ clubs = Table(
     Column('created', DateTimeTZ, nullable=False),
 )
 
-clubs = Table(
+tournaments = Table(
     'tournaments',
     metadata,
     Column('id', Integer, primary_key=True, index=True),

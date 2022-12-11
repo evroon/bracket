@@ -6,8 +6,8 @@ import click
 
 from ladderz.database import database, engine
 from ladderz.logger import get_logger
-from ladderz.schema import metadata, users
-from ladderz.utils.dummy_records import DUMMY_USER
+from ladderz.schema import metadata, players, tournaments, users
+from ladderz.utils.dummy_records import DUMMY_PLAYER, DUMMY_TOURNAMENT, DUMMY_USER
 
 logger = get_logger('cli')
 
@@ -47,6 +47,8 @@ async def create_dev_db() -> None:
     await database.connect()
     metadata.create_all(engine)
     await database.execute(query=users.insert(), values=DUMMY_USER.dict())
+    await database.execute(query=tournaments.insert(), values=DUMMY_TOURNAMENT.dict())
+    await database.execute(query=players.insert(), values=DUMMY_PLAYER.dict())
 
 
 if __name__ == "__main__":
