@@ -32,7 +32,7 @@ jobs:
 #          python-version: "3.10"
 
       - name: Install pipenv
-        run: python3 -m pip install --upgrade pipenv wheel pyenv
+        run: python3 -m pip install --upgrade pipenv wheel
         working-directory: backend
 #
 #      - id: cache-pipenv
