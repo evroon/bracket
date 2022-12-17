@@ -31,7 +31,7 @@ async def startup_and_shutdown_uvicorn_server() -> AsyncIterator[None]:
 
 @pytest.fixture
 def mock_http() -> Iterator[aioresponses.aioresponses]:
-    with aioresponses.aioresponses() as m:  # type: ignore[no-untyped-call]
+    with aioresponses.aioresponses() as m:
         m.add = partial(m.add, response_class=ClientResponse)  # type: ignore[assignment]
         yield m
 
