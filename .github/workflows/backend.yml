@@ -30,6 +30,12 @@ jobs:
         run: python3 -m pip install --upgrade pipenv wheel
         working-directory: backend
 
+      - id: cache-pipenv
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/backend/Pipfile.lock') }}
+
       - name: Install dependencies
         run: pipenv install -d
         working-directory: backend
