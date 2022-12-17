@@ -34,7 +34,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('backend/Pipfile.lock') }}
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
       - name: Install dependencies
         run: pipenv install -d
