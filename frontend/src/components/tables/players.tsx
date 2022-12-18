@@ -39,7 +39,7 @@ export default function PlayersTable({
           <DeleteButton
             onClick={async () => {
               await deletePlayer(tournamentData.id, row.id);
-              swrPlayersResponse.mutate(null);
+              await swrPlayersResponse.mutate(null);
             }}
             title="Delete Player"
           />

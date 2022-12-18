@@ -47,7 +47,7 @@ jobs:
           ENVIRONMENT: CI
 
       - name: Run mypy
-        run: pipenv run mypy .
+        run: pipenv run mypy --version && mypy .
         working-directory: backend
 
       - name: Run pylint
