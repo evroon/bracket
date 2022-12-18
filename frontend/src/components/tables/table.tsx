@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
 import {
   Center,
-  createStyles,
   Group,
   ScrollArea,
   Table,
   Text,
   UnstyledButton,
+  createStyles,
 } from '@mantine/core';
 import { HiSortAscending } from '@react-icons/all-files/hi/HiSortAscending';
 import { HiSortDescending } from '@react-icons/all-files/hi/HiSortDescending';
 import { MdSort } from '@react-icons/all-files/md/MdSort';
+import React, { useState } from 'react';
+
 import { getItemColor } from '../utils/util';
 
 export const useStyles = createStyles((theme) => ({
@@ -76,11 +77,10 @@ export function getSortIcon(sorted: boolean, reversed: boolean) {
   return <HiSortDescending />;
 }
 
-export function Th({ children, field, state }: ThProps) {
+export function ThSortable({ children, field, state }: ThProps) {
+  const { classes } = useStyles();
   const sorted = state.sortField === field;
   const onSort = () => setSorting(state, field);
-  const { classes } = useStyles();
-
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
@@ -91,6 +91,20 @@ export function Th({ children, field, state }: ThProps) {
           <Center className={classes.icon}>{getSortIcon(sorted, state.reversed)}</Center>
         </Group>
       </UnstyledButton>
+    </th>
+  );
+}
+
+export function ThNotSortable({ children }: { children: React.ReactNode }) {
+  const { classes } = useStyles();
+
+  return (
+    <th className={classes.th}>
+      <Group position="apart" ml="20px">
+        <Text weight={500} size="sm">
+          {children}
+        </Text>
+      </Group>
     </th>
   );
 }

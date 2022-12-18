@@ -1,5 +1,5 @@
-import useSWR, { SWRResponse } from 'swr';
 import { showNotification } from '@mantine/notifications';
+import useSWR, { SWRResponse } from 'swr';
 
 const axios = require('axios').default;
 
@@ -32,8 +32,11 @@ export function getTournaments(): SWRResponse<any, any> {
   return useSWR('tournaments', fetcher);
 }
 
-export function getPlayers(tournament_id: number): SWRResponse<any, any> {
-  return useSWR(`tournaments/${tournament_id}/players`, fetcher);
+export function getPlayers(
+  tournament_id: number,
+  not_in_team: boolean = false
+): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/players?not_in_team=${not_in_team}`, fetcher);
 }
 
 export function getSinglePlayer(tournament_id: number, player_id: number): SWRResponse<any, any> {

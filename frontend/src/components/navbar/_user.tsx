@@ -1,7 +1,7 @@
-import React from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import { Avatar, Box, Group, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
 import Link from 'next/link';
+import React from 'react';
 
 export function User() {
   const theme = useMantineTheme();

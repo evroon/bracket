@@ -1,4 +1,5 @@
 import { Center, Title } from '@mantine/core';
+
 import Game from './game';
 
 export default function Brackets() {

@@ -109,8 +109,3 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @router.get("/users/me/", response_model=UserPublic)
 async def read_users_me(current_user: UserPublic = Depends(get_current_user)) -> UserPublic:
     return current_user
-
-
-@router.get("/users/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_user)) -> JsonList:
-    return [{"item_id": "Foo", "owner": current_user.username}]

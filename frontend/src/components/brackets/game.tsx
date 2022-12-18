@@ -1,4 +1,4 @@
-import { createStyles, Grid } from '@mantine/core';
+import { Grid, createStyles } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
   root: {

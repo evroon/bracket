@@ -6,7 +6,7 @@ from pydantic.generics import GenericModel
 from ladderz.models.db.club import Club
 from ladderz.models.db.player import Player
 from ladderz.models.db.round import Round
-from ladderz.models.db.team import Team
+from ladderz.models.db.team import Team, TeamWithPlayers
 from ladderz.models.db.tournament import Tournament
 
 DataT = TypeVar('DataT')
@@ -41,6 +41,10 @@ class RoundsResponse(DataResponse[list[Round]]):
 
 
 class TeamsResponse(DataResponse[list[Team]]):
+    pass
+
+
+class TeamsWithPlayersResponse(DataResponse[list[TeamWithPlayers]]):
     pass
 
 

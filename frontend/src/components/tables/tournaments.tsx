@@ -1,11 +1,12 @@
-import React from 'react';
 import { Anchor } from '@mantine/core';
 import Link from 'next/link';
-import { getTournaments } from '../../services/adapter';
-import TableLayout, { getTableState, sortTableEntries, Th } from './table';
-import ErrorAlert from '../utils/error_alert';
-import DateTime from '../utils/datetime';
+import React from 'react';
+
 import { Tournament } from '../../interfaces/tournament';
+import { getTournaments } from '../../services/adapter';
+import DateTime from '../utils/datetime';
+import ErrorAlert from '../utils/error_alert';
+import TableLayout, { ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function TournamentsTable() {
   const { data, error } = getTournaments();
@@ -33,12 +34,12 @@ export default function TournamentsTable() {
     <TableLayout>
       <thead>
         <tr>
-          <Th state={tableState} field="name">
+          <ThSortable state={tableState} field="name">
             Title
-          </Th>
-          <Th state={tableState} field="created">
+          </ThSortable>
+          <ThSortable state={tableState} field="created">
             Created
-          </Th>
+          </ThSortable>
         </tr>
       </thead>
       <tbody>{rows}</tbody>

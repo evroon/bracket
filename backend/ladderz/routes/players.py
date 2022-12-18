@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from heliclockter import datetime_utc
 
 from ladderz.database import database
@@ -14,13 +14,15 @@ router = APIRouter()
 
 @router.get("/tournaments/{tournament_id}/players", response_model=PlayersResponse)
 async def get_players(
-    tournament_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int,
+    not_in_team: bool = False,
+    _: UserPublic = Depends(get_current_user),
 ) -> PlayersResponse:
-    return PlayersResponse(
-        data=await fetch_all_parsed(
-            database, Player, players.select().where(players.c.tournament_id == tournament_id)
-        )
-    )
+    query = players.select().where(players.c.tournament_id == tournament_id)
+    if not_in_team:
+        query = query.where(players.c.team_id == None)
+
+    return PlayersResponse(data=await fetch_all_parsed(database, Player, query))
 
 
 @router.patch(

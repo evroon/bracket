@@ -1,5 +1,5 @@
-import Document from 'next/document';
 import { createGetInitialProps } from '@mantine/next';
+import Document from 'next/document';
 
 const getInitialProps = createGetInitialProps();
 

@@ -1,9 +1,9 @@
-import React from 'react';
-import { IconAlertCircle } from '@tabler/icons';
 import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import { AiOutlineTeam } from '@react-icons/all-files/ai/AiOutlineTeam';
 import { BsFillPersonFill } from '@react-icons/all-files/bs/BsFillPersonFill';
+import { IconAlertCircle } from '@tabler/icons';
 import Link from 'next/link';
+import React from 'react';
 
 interface MainLinkProps {
   icon: React.ReactNode;

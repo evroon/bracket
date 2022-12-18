@@ -1,19 +1,26 @@
 import React from 'react';
-import { getPlayers } from '../../services/adapter';
-import TableLayout, { getTableState, sortTableEntries, Th } from './table';
-import ErrorAlert from '../utils/error_alert';
-import DateTime from '../utils/datetime';
-import { deletePlayer } from '../../services/player';
-import PlayerModal from '../modals/player_modal';
-import DeleteButton from '../buttons/delete';
-import { Player } from '../../interfaces/player';
+import { SWRResponse } from 'swr';
 
-export default function PlayersTable({ tournament_id }: { tournament_id: number }) {
-  const { data, error } = getPlayers(tournament_id);
-  const players: Player[] = data != null ? data.data : [];
+import { Player } from '../../interfaces/player';
+import { Tournament } from '../../interfaces/tournament';
+import { deletePlayer } from '../../services/player';
+import DeleteButton from '../buttons/delete';
+import PlayerModal from '../modals/player_modal';
+import DateTime from '../utils/datetime';
+import ErrorAlert from '../utils/error_alert';
+import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+
+export default function PlayersTable({
+  swrPlayersResponse,
+  tournamentData,
+}: {
+  swrPlayersResponse: SWRResponse;
+  tournamentData: Tournament;
+}) {
+  const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 
-  if (error) return ErrorAlert(error);
+  if (swrPlayersResponse.error) return ErrorAlert(swrPlayersResponse.error);
 
   const rows = players
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))
@@ -24,9 +31,18 @@ export default function PlayersTable({ tournament_id }: { tournament_id: number 
           <DateTime datetime={row.created} />
         </td>
         <td>
-          <PlayerModal tournament_id={tournament_id} player={row} />
-
-          <DeleteButton onClick={() => deletePlayer(tournament_id, row.id)} title="Delete Player" />
+          <PlayerModal
+            swrPlayersResponse={swrPlayersResponse}
+            tournament_id={tournamentData.id}
+            player={row}
+          />
+          <DeleteButton
+            onClick={async () => {
+              await deletePlayer(tournamentData.id, row.id);
+              swrPlayersResponse.mutate(null);
+            }}
+            title="Delete Player"
+          />
         </td>
       </tr>
     ));
@@ -35,15 +51,13 @@ export default function PlayersTable({ tournament_id }: { tournament_id: number 
     <TableLayout>
       <thead>
         <tr>
-          <Th state={tableState} field="name">
+          <ThSortable state={tableState} field="name">
             Title
-          </Th>
-          <Th state={tableState} field="created">
+          </ThSortable>
+          <ThSortable state={tableState} field="created">
             Created
-          </Th>
-          <Th state={tableState} field="">
-            {null}
-          </Th>
+          </ThSortable>
+          <ThNotSortable>{null}</ThNotSortable>
         </tr>
       </thead>
       <tbody>{rows}</tbody>

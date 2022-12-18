@@ -1,18 +1,22 @@
-import { useState } from 'react';
 import { Button, Group, Modal, TextInput } from '@mantine/core';
-import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useState } from 'react';
+import { SWRResponse } from 'swr';
+
+import { Player } from '../../interfaces/player';
 import { createPlayer, updatePlayer } from '../../services/player';
 import SaveButton from '../buttons/save';
-import { Player } from '../../interfaces/player';
 
 export default function PlayerModal({
   tournament_id,
   player,
+  swrPlayersResponse,
 }: {
   tournament_id: number;
   player: Player | null;
+  swrPlayersResponse: SWRResponse;
 }) {
   const is_create_form = player == null;
   const operation_text = is_create_form ? 'Create Player' : 'Edit Player';
@@ -46,9 +50,10 @@ export default function PlayerModal({
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
         <form
-          onSubmit={form.onSubmit((values) => {
-            if (is_create_form) createPlayer(tournament_id, values.name, null);
-            else updatePlayer(tournament_id, player.id, values.name, null);
+          onSubmit={form.onSubmit(async (values) => {
+            if (is_create_form) await createPlayer(tournament_id, values.name, null);
+            else await updatePlayer(tournament_id, player.id, values.name, null);
+            await swrPlayersResponse.mutate(null);
             setOpened(false);
           })}
         >

@@ -1,8 +1,8 @@
-import React from 'react';
 import { ActionIcon, Box, Group, Title, useMantineColorScheme } from '@mantine/core';
-import { IconMoonStars, IconSun } from '@tabler/icons';
 import { GiShuttlecock } from '@react-icons/all-files/gi/GiShuttlecock';
+import { IconMoonStars, IconSun } from '@tabler/icons';
 import Link from 'next/link';
+import React from 'react';
 
 export function Brand() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();

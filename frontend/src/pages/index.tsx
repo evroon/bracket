@@ -1,6 +1,7 @@
 import { Title } from '@mantine/core';
-import Layout from './_layout';
+
 import TournamentsTable from '../components/tables/tournaments';
+import Layout from './_layout';
 
 export default function HomePage() {
   return (

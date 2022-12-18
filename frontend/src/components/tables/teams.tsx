@@ -1,34 +1,55 @@
-import React from 'react';
 import { GoCheck } from '@react-icons/all-files/go/GoCheck';
 import { GoCircleSlash } from '@react-icons/all-files/go/GoCircleSlash';
-import { getTeams } from '../../services/adapter';
-import TableLayout, { getTableState, sortTableEntries, Th } from './table';
-import ErrorAlert from '../utils/error_alert';
-import DateTime from '../utils/datetime';
-import { deleteTeam } from '../../services/team';
-import TeamModal from '../modals/team_modal';
-import DeleteButton from '../buttons/delete';
-import { Team } from '../../interfaces/team';
+import React from 'react';
+import { SWRResponse } from 'swr';
 
-export default function TeamsTable({ tournament_id }: any) {
-  const { data, error } = getTeams(tournament_id);
-  const teams: Team[] = data != null ? data.data : [];
+import { Team } from '../../interfaces/team';
+import { Tournament } from '../../interfaces/tournament';
+import { deleteTeam } from '../../services/team';
+import DeleteButton from '../buttons/delete';
+import PlayerList from '../info/player_list';
+import TeamModal from '../modals/team_modal';
+import DateTime from '../utils/datetime';
+import ErrorAlert from '../utils/error_alert';
+import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+
+export default function TeamsTable({
+  tournamentData,
+  swrTeamsResponse,
+}: {
+  tournamentData: Tournament;
+  swrTeamsResponse: SWRResponse;
+}) {
+  const teams: Team[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
   const tableState = getTableState('name');
 
-  if (error) return ErrorAlert(error);
+  if (swrTeamsResponse.error) return ErrorAlert(swrTeamsResponse.error);
 
   const rows = teams
     .sort((p1: Team, p2: Team) => sortTableEntries(p1, p2, tableState))
-    .map((row) => (
-      <tr key={row.name}>
-        <td>{row.active ? <GoCheck size="24px" /> : <GoCircleSlash size="24px" />}</td>
-        <td>{row.name}</td>
+    .map((team) => (
+      <tr key={team.name}>
+        <td>{team.active ? <GoCheck size="24px" /> : <GoCircleSlash size="24px" />}</td>
+        <td>{team.name}</td>
         <td>
-          <DateTime datetime={row.created} />
+          <PlayerList team={team} />
         </td>
         <td>
-          <TeamModal tournament_id={tournament_id} team={row} />
-          <DeleteButton onClick={() => deleteTeam(tournament_id, row.id)} title="Delete Team" />
+          <DateTime datetime={team.created} />
+        </td>
+        <td>
+          <TeamModal
+            tournament_id={tournamentData.id}
+            team={team}
+            swrTeamsResponse={swrTeamsResponse}
+          />
+          <DeleteButton
+            onClick={async () => {
+              await deleteTeam(tournamentData.id, team.id);
+              await swrTeamsResponse.mutate(null);
+            }}
+            title="Delete Team"
+          />
         </td>
       </tr>
     ));
@@ -37,18 +58,17 @@ export default function TeamsTable({ tournament_id }: any) {
     <TableLayout>
       <thead>
         <tr>
-          <Th state={tableState} field="active">
+          <ThSortable state={tableState} field="active">
             Active?
-          </Th>
-          <Th state={tableState} field="name">
+          </ThSortable>
+          <ThSortable state={tableState} field="name">
             Name
-          </Th>
-          <Th state={tableState} field="created">
+          </ThSortable>
+          <ThNotSortable>Members</ThNotSortable>
+          <ThSortable state={tableState} field="created">
             Created
-          </Th>
-          <Th state={tableState} field="">
-            {null}
-          </Th>
+          </ThSortable>
+          <ThNotSortable>{null}</ThNotSortable>
         </tr>
       </thead>
       <tbody>{rows}</tbody>

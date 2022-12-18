@@ -1,19 +1,33 @@
-import { useState } from 'react';
-import { Button, Checkbox, Group, Modal, TextInput } from '@mantine/core';
-import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { Button, Checkbox, Group, Modal, MultiSelect, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useState } from 'react';
+import { SWRResponse } from 'swr';
+
+import { Player } from '../../interfaces/player';
+import { Team } from '../../interfaces/team';
+import { getPlayers } from '../../services/adapter';
 import { createTeam, updateTeam } from '../../services/team';
 import SaveButton from '../buttons/save';
-import { Team } from '../../interfaces/team';
 
 export default function TeamModal({
   tournament_id,
   team,
+  swrTeamsResponse,
 }: {
   tournament_id: number;
   team: Team | null;
+  swrTeamsResponse: SWRResponse;
 }) {
+  const { data } = getPlayers(tournament_id, false);
+  const players: Player[] =
+    data != null
+      ? data.data.filter(
+          (player: Player) => player.team_id == null || (team != null && player.team_id === team.id)
+        )
+      : [];
+
   const is_create_form = team == null;
   const operation_text = is_create_form ? 'Create Team' : 'Edit Team';
   const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
@@ -35,7 +49,8 @@ export default function TeamModal({
   const form = useForm({
     initialValues: {
       name: team == null ? '' : team.name,
-      active: team == null ? false : team.active,
+      active: team == null ? true : team.active,
+      player_ids: team == null ? [] : team.players.map((player) => player.id),
     },
 
     validate: {
@@ -47,9 +62,19 @@ export default function TeamModal({
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
         <form
-          onSubmit={form.onSubmit((values) => {
-            if (is_create_form) createTeam(tournament_id, values.name, values.active);
-            else updateTeam(tournament_id, team.id, values.name, values.active);
+          onSubmit={form.onSubmit(async (values) => {
+            if (is_create_form) {
+              await createTeam(tournament_id, values.name, values.active, values.player_ids);
+            } else {
+              await updateTeam(
+                tournament_id,
+                team.id,
+                values.name,
+                values.active,
+                values.player_ids
+              );
+            }
+            swrTeamsResponse.mutate(null);
             setOpened(false);
           })}
         >
@@ -64,6 +89,15 @@ export default function TeamModal({
             mt="md"
             label="This team is active"
             {...form.getInputProps('active', { type: 'checkbox' })}
+          />
+
+          <MultiSelect
+            data={players.map((p) => ({ value: p.id, label: p.name }))}
+            label="Team members"
+            placeholder="Pick all that you like"
+            searchable
+            limit={20}
+            {...form.getInputProps('player_ids')}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">

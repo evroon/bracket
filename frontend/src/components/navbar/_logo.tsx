@@ -1,5 +1,5 @@
-import React from 'react';
 import { ColorScheme } from '@mantine/core';
+import React from 'react';
 
 export function Logo({ colorScheme }: { colorScheme: ColorScheme }) {
   return (

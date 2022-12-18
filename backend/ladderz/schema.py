@@ -58,7 +58,7 @@ players = Table(
     'players',
     metadata,
     Column('id', Integer, primary_key=True, index=True),
-    Column('name', String, nullable=False, index=True),
+    Column('name', String, nullable=False, index=True, unique=True),
     Column('created', DateTimeTZ, nullable=False),
     Column('team_id', Integer, ForeignKey('teams.id'), nullable=True),
     Column('tournament_id', Integer, ForeignKey('tournaments.id'), nullable=False),

@@ -87,9 +87,23 @@ DUMMY_PLAYER3 = Player(
 )
 
 DUMMY_PLAYER4 = Player(
-    name='Leia',
+    name='Yoda',
     created=datetime_utc.now(),
     team_id=2,
+    tournament_id=1,
+)
+
+DUMMY_PLAYER5 = Player(
+    name='Boba',
+    created=datetime_utc.now(),
+    team_id=None,
+    tournament_id=1,
+)
+
+DUMMY_PLAYER6 = Player(
+    name='General',
+    created=datetime_utc.now(),
+    team_id=None,
     tournament_id=1,
 )
 
@@ -100,4 +114,11 @@ DUMMY_ROUNDS = [DUMMY_ROUND1, DUMMY_ROUND2]
 DUMMY_MATCHES = [DUMMY_MATCH1]
 DUMMY_USERS = [DUMMY_USER]
 DUMMY_TEAMS = [DUMMY_TEAM1, DUMMY_TEAM2]
-DUMMY_PLAYERS = [DUMMY_PLAYER1, DUMMY_PLAYER2, DUMMY_PLAYER3, DUMMY_PLAYER4]
+DUMMY_PLAYERS = [
+    DUMMY_PLAYER1,
+    DUMMY_PLAYER2,
+    DUMMY_PLAYER3,
+    DUMMY_PLAYER4,
+    DUMMY_PLAYER5,
+    DUMMY_PLAYER6,
+]

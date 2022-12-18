@@ -1,4 +1,5 @@
 import { AppShell, Navbar, useMantineTheme } from '@mantine/core';
+
 import { Brand } from '../../components/navbar/_brand';
 import { MainLinks } from '../../components/navbar/_main_links';
 import { User } from '../../components/navbar/_user';
