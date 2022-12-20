@@ -69,7 +69,7 @@ users = Table(
     'users',
     metadata,
     Column('id', Integer, primary_key=True, index=True),
-    Column('username', String, nullable=False, index=True),
+    Column('email', String, nullable=False, index=True),
     Column('name', String, nullable=False),
     Column('password_hash', String, nullable=False),
     Column('created', DateTimeTZ, nullable=False),

@@ -1,4 +1,5 @@
 import { showNotification } from '@mantine/notifications';
+import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
 const axios = require('axios').default;
@@ -9,6 +10,13 @@ export function handleRequestError(error: any) {
     title: 'Default notification',
     message: error.response.data.detail.toString(),
   });
+}
+
+export function checkForAuthError(response: any) {
+  if (response.error != null && response.error.response.status === 401) {
+    const router = useRouter();
+    router.push('/login');
+  }
 }
 
 export function createAxios() {
@@ -39,10 +47,10 @@ export function getPlayers(
   return useSWR(`tournaments/${tournament_id}/players?not_in_team=${not_in_team}`, fetcher);
 }
 
-export function getSinglePlayer(tournament_id: number, player_id: number): SWRResponse<any, any> {
-  return useSWR(`tournaments/${tournament_id}/players/${player_id}`, fetcher);
-}
-
 export function getTeams(tournament_id: number): SWRResponse<any, any> {
   return useSWR(`tournaments/${tournament_id}/teams`, fetcher);
+}
+
+export function getRounds(tournament_id: number): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/rounds`, fetcher);
 }

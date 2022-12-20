@@ -5,7 +5,7 @@ from ladderz.models.db.shared import BaseModelORM
 
 class UserBase(BaseModelORM):
     id: int | None = None
-    username: str
+    email: str
     name: str
     created: datetime_utc
 

@@ -20,7 +20,7 @@ def mock_auth_time() -> Generator[None, None, None]:
 
 async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> None:
     body = {
-        'username': MOCK_USER.username,
+        'username': MOCK_USER.email,
         'password': 'mypassword',
     }
     with mock_auth_time():
@@ -31,19 +31,19 @@ async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> N
     assert response.get('token_type') == 'bearer'
 
     decoded = jwt.decode(response['access_token'], config.jwt_secret, algorithms=['HS256'])
-    assert decoded == {'user': MOCK_USER.username, 'exp': 7258723200}
+    assert decoded == {'user': MOCK_USER.email, 'exp': 7258723200}
 
 
 async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server: None) -> None:
     body = {
-        'username': MOCK_USER.username,
+        'username': MOCK_USER.email,
         'password': 'invalid password',
     }
     with mock_auth_time():
         async with inserted_user(MOCK_USER):
             response = JsonDict(await send_request(HTTPMethod.POST, 'token', body))
 
-    assert response == {'detail': 'Incorrect username or password'}
+    assert response == {'detail': 'Incorrect email or password'}
 
 
 async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: None) -> None:
@@ -59,7 +59,7 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
 
         assert response == {
             'id': user_inserted.id,
-            'username': user_inserted.username,
+            'email': user_inserted.email,
             'name': user_inserted.name,
             'created': '2200-01-01T00:00:00+00:00',
         }

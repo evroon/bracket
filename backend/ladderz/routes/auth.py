@@ -30,7 +30,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: str | None = None
+    email: str | None = None
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -41,14 +41,12 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-async def get_user(username: str) -> UserInDB | None:
-    return await fetch_one_parsed(
-        database, UserInDB, users.select().where(users.c.username == username)
-    )
+async def get_user(email: str) -> UserInDB | None:
+    return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))
 
 
-async def authenticate_user(username: str, password: str) -> UserInDB | None:
-    user = await get_user(username)
+async def authenticate_user(email: str, password: str) -> UserInDB | None:
+    user = await get_user(email)
 
     if not user or not verify_password(password, user.password_hash):
         return None
@@ -75,14 +73,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserPublic:
     )
     try:
         payload = jwt.decode(token, config.jwt_secret, algorithms=[ALGORITHM])
-        username: str = str(payload.get("user"))
-        if username is None:
+        email: str = str(payload.get("user"))
+        if email is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
     except (DecodeError, ExpiredSignatureError):
         raise credentials_exception
 
-    user = await get_user(username=assert_some(token_data.username))
+    user = await get_user(email=assert_some(token_data.email))
     if user is None:
         raise credentials_exception
 
@@ -95,13 +93,13 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"user": user.username}, expires_delta=access_token_expires
+        data={"user": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 

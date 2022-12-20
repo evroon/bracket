@@ -44,9 +44,9 @@ DUMMY_MATCH1 = Match(
 )
 
 DUMMY_USER = User(
-    username='admin',
+    email='admin@example.com',
     name='Admin',
-    password_hash=pwd_context.hash('admin'),
+    password_hash=pwd_context.hash('adminadmin'),
     created=datetime_utc.now(),
 )
 

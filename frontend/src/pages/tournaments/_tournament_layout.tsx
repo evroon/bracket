@@ -3,9 +3,12 @@ import { AppShell, Navbar, useMantineTheme } from '@mantine/core';
 import { Brand } from '../../components/navbar/_brand';
 import { MainLinks } from '../../components/navbar/_main_links';
 import { User } from '../../components/navbar/_user';
+import { checkForAuthError, getTournaments } from '../../services/adapter';
 
 export default function TournamentLayout({ children, tournament_id }: any) {
   const theme = useMantineTheme();
+  const tournament = getTournaments();
+  checkForAuthError(tournament);
 
   return (
     <>

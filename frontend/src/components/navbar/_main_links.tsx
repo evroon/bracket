@@ -1,67 +1,51 @@
-import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
+import { ThemeIcon } from '@mantine/core';
 import { AiOutlineTeam } from '@react-icons/all-files/ai/AiOutlineTeam';
 import { BsFillPersonFill } from '@react-icons/all-files/bs/BsFillPersonFill';
 import { IconAlertCircle } from '@tabler/icons';
-import Link from 'next/link';
+import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
+
+import { useNavbarStyles } from './_user';
 
 interface MainLinkProps {
   icon: React.ReactNode;
-  color: string;
   label: string;
   endpoint: string;
+  router: NextRouter;
 }
 
-function MainLink({ icon, color, label, endpoint }: MainLinkProps) {
+function MainLink({ router, icon, label, endpoint }: MainLinkProps) {
+  const { classes } = useNavbarStyles();
   return (
-    <UnstyledButton
-      sx={(theme) => ({
-        display: 'block',
-        width: '100%',
-        padding: theme.spacing.xs,
-        borderRadius: theme.radius.sm,
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
-        '&:hover': {
-          backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        },
-      })}
-    >
-      <Group>
-        <ThemeIcon color={color} variant="light">
-          {icon}
-        </ThemeIcon>
-
-        <Text size="sm">
-          <Link href={endpoint}>{label}</Link>
-        </Text>
-      </Group>
-    </UnstyledButton>
+    <a href="#" className={classes.link} onClick={() => router.push(endpoint)}>
+      <ThemeIcon variant="default">{icon}</ThemeIcon>
+      <span style={{ marginLeft: '10px' }}>{label}</span>
+    </a>
   );
 }
 
 export function MainLinks({ tournament_id }: any) {
+  const router = useRouter();
   const tm_prefix = `/tournaments/${tournament_id}`;
 
   const data = [
     {
       icon: <IconAlertCircle size={16} />,
-      color: 'teal',
       label: 'Tournament',
       endpoint: `${tm_prefix}/`,
+      router,
     },
     {
       icon: <BsFillPersonFill size={16} />,
-      color: 'violet',
       label: 'Players',
       endpoint: `${tm_prefix}/players`,
+      router,
     },
     {
       icon: <AiOutlineTeam size={16} />,
-      color: 'grape',
       label: 'Teams',
       endpoint: `${tm_prefix}/teams`,
+      router,
     },
   ];
 

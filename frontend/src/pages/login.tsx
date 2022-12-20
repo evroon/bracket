@@ -1,6 +1,7 @@
 import { Button, Container, Paper, PasswordInput, Text, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { useRouter } from 'next/router';
 
 import useStyles from '../components/login/login.styles';
 import { performLogin } from '../services/user';
@@ -8,6 +9,7 @@ import Layout from './_layout';
 
 export default function Login() {
   const { classes } = useStyles();
+  const router = useRouter();
 
   function attemptLogin(email: string, password: string) {
     performLogin(email, password).then(() => {
@@ -17,6 +19,8 @@ export default function Login() {
         message: '',
       });
     });
+
+    router.push('/');
   }
   const form = useForm({
     initialValues: {
