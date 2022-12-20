@@ -33,7 +33,7 @@ DUMMY_ROUND2 = Round(
     tournament_id=1,
     created=datetime_utc.now(),
     is_draft=False,
-    round_index=1,
+    round_index=2,
 )
 
 DUMMY_MATCH1 = Match(

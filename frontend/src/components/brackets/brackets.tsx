@@ -1,17 +1,16 @@
-import { Center, Title } from '@mantine/core';
+import { Group } from '@mantine/core';
+import { SWRResponse } from 'swr';
 
-import Game from './game';
+import { RoundInterface } from '../../interfaces/round';
+import Round from './round';
 
-export default function Brackets() {
-  return (
-    <div style={{ width: 250, height: 200 }}>
-      <Center>
-        <Title order={3}>Round 1</Title>
-      </Center>
-      <Game />
-      <Game />
-      <Game />
-      <Game />
-    </div>
-  );
+export default function Brackets({ swrRoundsResponse }: { swrRoundsResponse: SWRResponse }) {
+  if (swrRoundsResponse.data == null) {
+    return <div />;
+  }
+
+  const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
+    <Round round={round} />
+  ));
+  return <Group>{rounds}</Group>;
 }

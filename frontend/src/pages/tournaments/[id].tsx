@@ -1,17 +1,17 @@
 import { Title } from '@mantine/core';
-import dynamic from 'next/dynamic';
+import { SWRResponse } from 'swr';
 
+import Brackets from '../../components/brackets/brackets';
+import { getRounds } from '../../services/adapter';
 import TournamentLayout from './_tournament_layout';
 
 export default function TournamentPage({ tournamentData }: any) {
-  const Brackets = dynamic(() => import('../../components/brackets/brackets'), {
-    ssr: false,
-  });
+  const swrRoundsResponse: SWRResponse = getRounds(tournamentData.id);
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Title>Tournament {tournamentData.id}</Title>
-      <Brackets />
+      <Brackets swrRoundsResponse={swrRoundsResponse} />
     </TournamentLayout>
   );
 }
