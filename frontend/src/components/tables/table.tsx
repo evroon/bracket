@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
 import {
   Center,
-  createStyles,
   Group,
   ScrollArea,
   Table,
   Text,
   UnstyledButton,
+  createStyles,
 } from '@mantine/core';
 import { HiSortAscending } from '@react-icons/all-files/hi/HiSortAscending';
 import { HiSortDescending } from '@react-icons/all-files/hi/HiSortDescending';
 import { MdSort } from '@react-icons/all-files/md/MdSort';
-import { getItemColor } from '../util';
+import React, { useState } from 'react';
+
+import { getItemColor } from '../utils/util';
 
 export const useStyles = createStyles((theme) => ({
   th: {
@@ -54,9 +55,9 @@ export const setSorting = (state: TableState, newSortField: string) => {
   }
 };
 
-export const getTableState = () => {
+export const getTableState = (initial_sort_field: string) => {
   const [reversed, setReversed] = useState(false);
-  const [sortField, setSortField] = useState('title');
+  const [sortField, setSortField] = useState(initial_sort_field);
   return {
     sortField,
     setSortField,
@@ -65,27 +66,45 @@ export const getTableState = () => {
   };
 };
 
+export function sortTableEntries(r1: any, r2: any, tableState: TableState) {
+  const order = r1[tableState.sortField] > r2[tableState.sortField];
+  return (tableState.reversed ? order : !order) ? 1 : 0;
+}
+
 export function getSortIcon(sorted: boolean, reversed: boolean) {
   if (!sorted) return <MdSort />;
   if (reversed) return <HiSortAscending />;
   return <HiSortDescending />;
 }
 
-export function Th({ children, field, state }: ThProps) {
+export function ThSortable({ children, field, state }: ThProps) {
+  const { classes } = useStyles();
   const sorted = state.sortField === field;
   const onSort = () => setSorting(state, field);
-  const { classes } = useStyles();
-
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
         <Group position="apart">
-          <Text weight={500} size="sm">
+          <Text weight={800} size="sm">
             {children}
           </Text>
           <Center className={classes.icon}>{getSortIcon(sorted, state.reversed)}</Center>
         </Group>
       </UnstyledButton>
+    </th>
+  );
+}
+
+export function ThNotSortable({ children }: { children: React.ReactNode }) {
+  const { classes } = useStyles();
+
+  return (
+    <th className={classes.th}>
+      <Group position="apart" ml="20px">
+        <Text weight={800} size="sm">
+          {children}
+        </Text>
+      </Group>
     </th>
   );
 }

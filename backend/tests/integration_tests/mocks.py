@@ -10,7 +10,7 @@ MOCK_NOW = datetime_utc(
 
 
 MOCK_USER = User(
-    username='donald_duck',
+    email='donald_duck',
     name='Donald Duck',
     # hash of 'mypassword'
     password_hash='$2b$12$.LcTJuoOtwU4CfK8UgEtIu5BRmTdvZv6IH.6IvGshDCgwJsvOMLeu',

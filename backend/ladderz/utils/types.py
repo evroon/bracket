@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Sequence, TypeVar
+from typing import Any, NewType, Sequence, TypeVar
 
 from pydantic import BaseModel
 
@@ -10,6 +10,8 @@ T = TypeVar('T')
 JsonDict = dict[str, Any]
 JsonList = list[Any]
 JsonObject = JsonDict | JsonList
+
+ELO = NewType('ELO', int)
 
 
 class EnumValues(Enum):

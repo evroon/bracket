@@ -1,70 +1,57 @@
+import { IconUsers, TablerIcon } from '@tabler/icons';
+import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
-import { IconAlertCircle } from '@tabler/icons';
-import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
-import { AiOutlineTeam } from '@react-icons/all-files/ai/AiOutlineTeam';
-import { BsFillPersonFill } from '@react-icons/all-files/bs/BsFillPersonFill';
-import Link from 'next/link';
+
+import { useNavbarStyles } from './_user';
 
 interface MainLinkProps {
-  icon: React.ReactNode;
-  color: string;
+  icon: TablerIcon;
   label: string;
   endpoint: string;
+  router: NextRouter;
 }
 
-function MainLink({ icon, color, label, endpoint }: MainLinkProps) {
+function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String }) {
+  const { classes, cx } = useNavbarStyles();
   return (
-    <UnstyledButton
-      sx={(theme) => ({
-        display: 'block',
-        width: '100%',
-        padding: theme.spacing.xs,
-        borderRadius: theme.radius.sm,
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
-        '&:hover': {
-          backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        },
-      })}
+    <a
+      href="#"
+      key={item.endpoint}
+      className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
+      onClick={() => item.router.push(item.endpoint)}
     >
-      <Group>
-        <ThemeIcon color={color} variant="light">
-          {icon}
-        </ThemeIcon>
-
-        <Text size="sm">
-          <Link href={endpoint}>{label}</Link>
-        </Text>
-      </Group>
-    </UnstyledButton>
+      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <span style={{ marginLeft: '10px' }}>{item.label}</span>
+    </a>
   );
 }
 
 export function MainLinks({ tournament_id }: any) {
+  const router = useRouter();
   const tm_prefix = `/tournaments/${tournament_id}`;
+  const pathName = router.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
 
   const data = [
     {
-      icon: <BsFillPersonFill size={16} />,
-      color: 'violet',
+      icon: IconUsers,
+      label: 'Tournament',
+      endpoint: `${tm_prefix}`,
+      router,
+    },
+    {
+      icon: IconUsers,
       label: 'Players',
       endpoint: `${tm_prefix}/players`,
+      router,
     },
     {
-      icon: <AiOutlineTeam size={16} />,
-      color: 'grape',
+      icon: IconUsers,
       label: 'Teams',
       endpoint: `${tm_prefix}/teams`,
-    },
-    {
-      icon: <IconAlertCircle size={16} />,
-      color: 'teal',
-      label: 'Rounds',
-      endpoint: `${tm_prefix}/rounds`,
+      router,
     },
   ];
 
-  const links = data.map((link) => <MainLink {...link} key={link.label} />);
+  const links = data.map((link) => <MainLink key={link.label} item={link} pathName={pathName} />);
   return <div>{links}</div>;
 }

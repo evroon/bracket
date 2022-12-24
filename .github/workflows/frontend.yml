@@ -23,7 +23,3 @@ jobs:
       - name: Run prettier, lint, jest checks
         run: yarn test
         working-directory: frontend
-
-      - name: Build website
-        run: yarn build
-        working-directory: frontend

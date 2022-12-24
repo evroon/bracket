@@ -18,3 +18,12 @@ async def fetch_all_parsed(
 ) -> list[BaseModelT]:
     records = await database.fetch_all(query)
     return [model.parse_obj(record._mapping) for record in records]
+
+
+async def get_max_round_id(database: Database, tournament_id: int) -> int:
+    query = '''
+        SELECT max(round_id) FROM rounds
+        WHERE rounds.tournament_id = :tournament_id
+        GROUP BY rounds.id
+    '''
+    return int(await database.fetch_val(query=query, values={'tournament_id': tournament_id}))

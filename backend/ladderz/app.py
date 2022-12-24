@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from ladderz.database import database
-from ladderz.routes import auth, players, tournaments
+from ladderz.routes import auth, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
     title="Ladderz API",
@@ -13,6 +13,8 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "https://ladderz.vercel.app",
+    "https://ladderz-git-tournaments-system-evroon.vercel.app",
 ]
 
 app.add_middleware(
@@ -41,4 +43,7 @@ async def ping() -> str:
 
 app.include_router(auth.router, tags=['auth'])
 app.include_router(tournaments.router, tags=['tournaments'])
-app.include_router(players.router, tags=['tournaments'])
+app.include_router(players.router, tags=['players'])
+app.include_router(rounds.router, tags=['rounds'])
+app.include_router(matches.router, tags=['matches'])
+app.include_router(teams.router, tags=['teams'])

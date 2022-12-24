@@ -3,11 +3,21 @@ import functools
 from typing import Any
 
 import click
+from sqlalchemy import Table
 
 from ladderz.database import database, engine
 from ladderz.logger import get_logger
-from ladderz.schema import metadata, players, tournaments, users
-from ladderz.utils.dummy_records import DUMMY_PLAYER, DUMMY_TOURNAMENT, DUMMY_USER
+from ladderz.schema import clubs, matches, metadata, players, rounds, teams, tournaments, users
+from ladderz.utils.dummy_records import (
+    DUMMY_CLUBS,
+    DUMMY_MATCHES,
+    DUMMY_PLAYERS,
+    DUMMY_ROUNDS,
+    DUMMY_TEAMS,
+    DUMMY_TOURNAMENTS,
+    DUMMY_USERS,
+)
+from ladderz.utils.types import BaseModelT
 
 logger = get_logger('cli')
 
@@ -40,15 +50,26 @@ def cli() -> None:
     pass
 
 
+async def bulk_insert(table: Table, rows: list[BaseModelT]) -> None:
+    for row in rows:
+        await database.execute(query=table.insert(), values=row.dict())
+
+
 @click.command()
 @run_async
 async def create_dev_db() -> None:
     logger.warning('Initializing database with dummy records')
     await database.connect()
+    metadata.drop_all(engine)
     metadata.create_all(engine)
-    await database.execute(query=users.insert(), values=DUMMY_USER.dict())
-    await database.execute(query=tournaments.insert(), values=DUMMY_TOURNAMENT.dict())
-    await database.execute(query=players.insert(), values=DUMMY_PLAYER.dict())
+
+    await bulk_insert(users, DUMMY_USERS)
+    await bulk_insert(clubs, DUMMY_CLUBS)
+    await bulk_insert(tournaments, DUMMY_TOURNAMENTS)
+    await bulk_insert(teams, DUMMY_TEAMS)
+    await bulk_insert(players, DUMMY_PLAYERS)
+    await bulk_insert(rounds, DUMMY_ROUNDS)
+    await bulk_insert(matches, DUMMY_MATCHES)
 
 
 if __name__ == "__main__":
