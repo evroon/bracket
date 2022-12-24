@@ -1,6 +1,6 @@
-import { Team } from '../../interfaces/team';
+import { TeamInterface } from '../../interfaces/team';
 
-export default function PlayerList({ team }: { team: Team }) {
+export default function PlayerList({ team }: { team: TeamInterface }) {
   if (team.players.length < 1) {
     return <i>No members</i>;
   }

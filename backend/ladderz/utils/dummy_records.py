@@ -26,21 +26,24 @@ DUMMY_ROUND1 = Round(
     tournament_id=1,
     created=datetime_utc.now(),
     is_draft=False,
+    is_active=True,
     round_index=1,
 )
 
 DUMMY_ROUND2 = Round(
     tournament_id=1,
     created=datetime_utc.now(),
-    is_draft=False,
+    is_draft=True,
     round_index=2,
 )
 
 DUMMY_MATCH1 = Match(
     created=datetime_utc.now(),
     round_id=1,
-    team1=1,
-    team2=2,
+    team1_id=1,
+    team2_id=2,
+    team1_score=11,
+    team2_score=22,
 )
 
 DUMMY_USER = User(
@@ -70,6 +73,7 @@ DUMMY_PLAYER1 = Player(
     created=datetime_utc.now(),
     team_id=1,
     tournament_id=1,
+    elo_score=0,
 )
 
 DUMMY_PLAYER2 = Player(
@@ -77,6 +81,7 @@ DUMMY_PLAYER2 = Player(
     created=datetime_utc.now(),
     team_id=1,
     tournament_id=1,
+    elo_score=0,
 )
 
 DUMMY_PLAYER3 = Player(
@@ -84,6 +89,7 @@ DUMMY_PLAYER3 = Player(
     created=datetime_utc.now(),
     team_id=2,
     tournament_id=1,
+    elo_score=0,
 )
 
 DUMMY_PLAYER4 = Player(
@@ -91,6 +97,7 @@ DUMMY_PLAYER4 = Player(
     created=datetime_utc.now(),
     team_id=2,
     tournament_id=1,
+    elo_score=0,
 )
 
 DUMMY_PLAYER5 = Player(
@@ -98,6 +105,7 @@ DUMMY_PLAYER5 = Player(
     created=datetime_utc.now(),
     team_id=None,
     tournament_id=1,
+    elo_score=0,
 )
 
 DUMMY_PLAYER6 = Player(
@@ -105,6 +113,7 @@ DUMMY_PLAYER6 = Player(
     created=datetime_utc.now(),
     team_id=None,
     tournament_id=1,
+    elo_score=0,
 )
 
 

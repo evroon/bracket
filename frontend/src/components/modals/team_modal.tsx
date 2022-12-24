@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
-import { Team } from '../../interfaces/team';
+import { TeamInterface } from '../../interfaces/team';
 import { getPlayers } from '../../services/adapter';
 import { createTeam, updateTeam } from '../../services/team';
 import SaveButton from '../buttons/save';
@@ -17,7 +17,7 @@ export default function TeamModal({
   swrTeamsResponse,
 }: {
   tournament_id: number;
-  team: Team | null;
+  team: TeamInterface | null;
   swrTeamsResponse: SWRResponse;
 }) {
   const { data } = getPlayers(tournament_id, false);

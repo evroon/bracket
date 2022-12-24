@@ -54,3 +54,7 @@ export function getTeams(tournament_id: number): SWRResponse<any, any> {
 export function getRounds(tournament_id: number): SWRResponse<any, any> {
   return useSWR(`tournaments/${tournament_id}/rounds`, fetcher);
 }
+
+export function getUpcomingMatches(tournament_id: number): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/upcoming_matches`, fetcher);
+}

@@ -9,6 +9,7 @@ class Player(BaseModelORM):
     created: datetime_utc
     team_id: int | None = None
     tournament_id: int
+    elo_score: float
 
 
 class PlayerBody(BaseModelORM):

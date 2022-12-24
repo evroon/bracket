@@ -4,8 +4,9 @@ from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
 from ladderz.models.db.club import Club
+from ladderz.models.db.match import Match
 from ladderz.models.db.player import Player
-from ladderz.models.db.round import Round
+from ladderz.models.db.round import Round, RoundWithMatches
 from ladderz.models.db.team import Team, TeamWithPlayers
 from ladderz.models.db.tournament import Tournament
 
@@ -37,6 +38,14 @@ class SinglePlayerResponse(DataResponse[Player]):
 
 
 class RoundsResponse(DataResponse[list[Round]]):
+    pass
+
+
+class RoundsWithMatchesResponse(DataResponse[list[RoundWithMatches]]):
+    pass
+
+
+class UpcomingMatchesResponse(DataResponse[list[Match]]):
     pass
 
 

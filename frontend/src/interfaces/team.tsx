@@ -1,6 +1,6 @@
 import { Player } from './player';
 
-export interface Team {
+export interface TeamInterface {
   id: number;
   name: string;
   created: string;

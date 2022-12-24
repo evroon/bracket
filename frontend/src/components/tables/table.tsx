@@ -85,7 +85,7 @@ export function ThSortable({ children, field, state }: ThProps) {
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
         <Group position="apart">
-          <Text weight={500} size="sm">
+          <Text weight={800} size="sm">
             {children}
           </Text>
           <Center className={classes.icon}>{getSortIcon(sorted, state.reversed)}</Center>
@@ -101,7 +101,7 @@ export function ThNotSortable({ children }: { children: React.ReactNode }) {
   return (
     <th className={classes.th}>
       <Group position="apart" ml="20px">
-        <Text weight={500} size="sm">
+        <Text weight={800} size="sm">
           {children}
         </Text>
       </Group>

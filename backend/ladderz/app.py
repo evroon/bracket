@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from ladderz.database import database
-from ladderz.routes import auth, players, rounds, teams, tournaments
+from ladderz.routes import auth, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
     title="Ladderz API",
@@ -45,4 +45,5 @@ app.include_router(auth.router, tags=['auth'])
 app.include_router(tournaments.router, tags=['tournaments'])
 app.include_router(players.router, tags=['players'])
 app.include_router(rounds.router, tags=['rounds'])
+app.include_router(matches.router, tags=['matches'])
 app.include_router(teams.router, tags=['teams'])

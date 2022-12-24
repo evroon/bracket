@@ -1,8 +1,9 @@
-import { Grid, createStyles } from '@mantine/core';
+import { Grid, createStyles, useMantineTheme } from '@mantine/core';
+
+import { MatchInterface } from '../../interfaces/match';
 
 const useStyles = createStyles((theme) => ({
   root: {
-    maxWidth: 250,
     width: '100%',
     marginTop: '20px',
   },
@@ -27,21 +28,29 @@ const useStyles = createStyles((theme) => ({
     borderRadius: '0px 0px 8px 8px',
   },
 }));
-export default function Game() {
+
+export default function Game({ match }: { match: MatchInterface }) {
   const { classes } = useStyles();
+  const theme = useMantineTheme();
+  const winner_style = {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
+  };
+  const team1_style = match.team1_score > match.team2_score ? winner_style : {};
+  const team2_style = match.team1_score < match.team2_score ? winner_style : {};
+
   return (
     <div className={classes.root}>
-      <div className={classes.top}>
+      <div className={classes.top} style={team1_style}>
         <Grid grow>
-          <Grid.Col span={10}>Team 1</Grid.Col>
-          <Grid.Col span={2}>3</Grid.Col>
+          <Grid.Col span={10}>{match.team1.name}</Grid.Col>
+          <Grid.Col span={2}>{match.team1_score}</Grid.Col>
         </Grid>
       </div>
       <div className={classes.divider} />
-      <div className={classes.bottom}>
+      <div className={classes.bottom} style={team2_style}>
         <Grid grow>
-          <Grid.Col span={10}>Team 2</Grid.Col>
-          <Grid.Col span={2}>1</Grid.Col>
+          <Grid.Col span={10}>{match.team2.name}</Grid.Col>
+          <Grid.Col span={2}>{match.team2_score}</Grid.Col>
         </Grid>
       </div>
     </div>
