@@ -17,7 +17,7 @@ heliclockter = "1.0.4"
 alembic = "1.9.0"
 types-simplejson = "3.18.0"
 python-dotenv = "0.21.0"
-databases = {extras = ["asyncpg"], version = "0.6.2"}
+databases = {extras = ["asyncpg"], version = "0.7.0"}
 passlib = "1.7.4"
 types-passlib = "*"
 pyjwt = "2.6.0"
