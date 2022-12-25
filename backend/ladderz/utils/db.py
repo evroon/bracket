@@ -20,10 +20,10 @@ async def fetch_all_parsed(
     return [model.parse_obj(record._mapping) for record in records]
 
 
-async def get_max_round_id(database: Database, tournament_id: int) -> int:
+async def get_next_round_name(database: Database, tournament_id: int) -> str:
     query = '''
-        SELECT max(round_id) FROM rounds
+        SELECT count(*) FROM rounds
         WHERE rounds.tournament_id = :tournament_id
-        GROUP BY rounds.id
     '''
-    return int(await database.fetch_val(query=query, values={'tournament_id': tournament_id}))
+    round_count = int(await database.fetch_val(query=query, values={'tournament_id': tournament_id}))
+    return f'Round {round_count + 1}'

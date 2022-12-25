@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeMeta  # type: ignore[attr-defined]
-from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Float
+from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Float, Text
 
 Base: DeclarativeMeta = declarative_base()
 metadata = Base.metadata
@@ -28,7 +28,7 @@ rounds = Table(
     'rounds',
     metadata,
     Column('id', BigInteger, primary_key=True, index=True),
-    Column('round_index', Integer, nullable=False),
+    Column('name', Text, nullable=False),
     Column('created', DateTimeTZ, nullable=False),
     Column('is_draft', Boolean, nullable=False),
     Column('is_active', Boolean, nullable=False, server_default='false'),

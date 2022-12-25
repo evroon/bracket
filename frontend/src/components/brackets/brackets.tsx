@@ -19,7 +19,12 @@ export default function Brackets({
   }
 
   const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
-    <Round key={round.id} round={round} />
+    <Round
+      key={round.id}
+      tournamentData={tournamentData}
+      round={round}
+      swrRoundsResponse={swrRoundsResponse}
+    />
   ));
 
   const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(tournamentData.id);
