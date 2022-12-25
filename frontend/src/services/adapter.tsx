@@ -13,7 +13,11 @@ export function handleRequestError(error: any) {
 }
 
 export function checkForAuthError(response: any) {
-  if (response.error != null && response.error.response.status === 401) {
+  if (
+    response.error != null &&
+    response.error.response != null &&
+    response.error.response.status === 401
+  ) {
     const router = useRouter();
     router.push('/login');
   }
