@@ -27,7 +27,10 @@ export function createAxios() {
   const user = localStorage.getItem('login');
   const access_token = user != null ? JSON.parse(user).access_token : '';
   return axios.create({
-    baseURL: process.env.API_BASE_URL != null ? process.env.API_BASE_URL : 'http://localhost:8400',
+    baseURL:
+      process.env.NEXT_PUBLIC_API_BASE_URL != null
+        ? process.env.NEXT_PUBLIC_API_BASE_URL
+        : 'http://localhost:8400',
     headers: {
       Authorization: `bearer ${access_token}`,
       Accept: 'application/json',

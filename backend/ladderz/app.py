@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from ladderz.config import config
 from ladderz.database import database
 from ladderz.routes import auth, matches, players, rounds, teams, tournaments
 
@@ -12,11 +13,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
-origins = ["http://localhost", "http://localhost:3000", *os.getenv('CORS_ORIGINS', '').split(',')]
+origins = ["http://localhost", "http://localhost:3000", *config.cors_origins.split(',')]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=config.cors_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

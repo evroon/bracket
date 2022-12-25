@@ -30,6 +30,8 @@ class Environment(EnumAutoStr):
 class Config(BaseSettings):
     pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
     jwt_secret: str
+    cors_origins: str = ''
+    cors_origin_regex: str = ''
 
 
 environment = Environment(os.getenv('ENVIRONMENT', 'DEVELOPMENT'))
