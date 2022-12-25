@@ -25,5 +25,7 @@ async def get_next_round_name(database: Database, tournament_id: int) -> str:
         SELECT count(*) FROM rounds
         WHERE rounds.tournament_id = :tournament_id
     '''
-    round_count = int(await database.fetch_val(query=query, values={'tournament_id': tournament_id}))
+    round_count = int(
+        await database.fetch_val(query=query, values={'tournament_id': tournament_id})
+    )
     return f'Round {round_count + 1}'

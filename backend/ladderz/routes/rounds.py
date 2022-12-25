@@ -95,7 +95,10 @@ async def update_round_by_id(
                 END
         WHERE rounds.tournament_id = :tournament_id
     '''
-    await database.execute(query=query, values={**values, 'is_active': round_body.is_active, 'is_draft': round_body.is_draft})
+    await database.execute(
+        query=query,
+        values={**values, 'is_active': round_body.is_active, 'is_draft': round_body.is_draft},
+    )
     query = '''
         UPDATE rounds
         SET name = :name

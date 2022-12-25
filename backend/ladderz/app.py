@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -13,8 +15,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://ladderz.vercel.app",
-    "https://ladderz-git-tournaments-system-evroon.vercel.app",
+    *os.getenv('CORS_ORIGINS', '').split(',')
 ]
 
 app.add_middleware(
