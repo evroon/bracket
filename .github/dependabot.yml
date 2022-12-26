@@ -12,14 +12,5 @@ updates:
 
   - package-ecosystem: "npm"
     directory: "/frontend"
-    allow:
-      - dependency-type: "production"
     schedule:
       interval: "weekly"
-
-  - package-ecosystem: "npm"
-    directory: "/frontend"
-    allow:
-      - dependency-type: "development"
-    schedule:
-      interval: "monthly"
