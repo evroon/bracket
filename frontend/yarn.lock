@@ -1529,7 +1529,7 @@
     semver "^7.3.7"
     tsutils "^3.21.0"
 
-"@typescript-eslint/utils@5.17.0", "@typescript-eslint/utils@^5.10.0", "@typescript-eslint/utils@^5.13.0":
+"@typescript-eslint/utils@5.17.0":
   version "5.17.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.17.0.tgz#549a9e1d491c6ccd3624bc3c1b098f5cfb45f306"
   integrity sha512-DVvndq1QoxQH+hFv+MUQHrrWZ7gQ5KcJzyjhzcqB1Y2Xes1UQQkTRPUfRpqhS8mhTWsSb2+iyvDW1Lef5DD7vA==
@@ -1541,7 +1541,7 @@
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
-"@typescript-eslint/utils@5.30.0":
+"@typescript-eslint/utils@5.30.0", "@typescript-eslint/utils@^5.10.0", "@typescript-eslint/utils@^5.13.0":
   version "5.30.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.30.0.tgz#1dac771fead5eab40d31860716de219356f5f754"
   integrity sha512-0bIgOgZflLKIcZsWvfklsaQTM3ZUbmtH0rJ1hKyV3raoUYyeZwcjQ8ZUJTzS7KnhNcsVT1Rxs7zeeMHEhGlltw==
@@ -2604,10 +2604,10 @@ eslint-plugin-storybook@^0.5.7:
     "@typescript-eslint/experimental-utils" "^5.3.0"
     requireindex "^1.1.0"
 
-eslint-plugin-testing-library@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.2.0.tgz#4e097027345ecc4a2479be12b5a5b9098e7c9c7a"
-  integrity sha512-fYFH8lA1hbc1Epr9laNm/+YIR2d+R7WI8sFz9jIRAUfqCf21Nb5BzZwhNeZlu9wKXwDtuf+hUM5QJxG1PuDsTQ==
+eslint-plugin-testing-library@^5.9.1:
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.9.1.tgz#12e4bd34c48683ee98af4df2e3318ec9f51dcf8a"
+  integrity sha512-6BQp3tmb79jLLasPHJmy8DnxREe+2Pgf7L+7o09TSWPfdqqtQfRZmZNetr5mOs3yqZk/MRNxpN3RUpJe0wB4LQ==
   dependencies:
     "@typescript-eslint/utils" "^5.13.0"
 
