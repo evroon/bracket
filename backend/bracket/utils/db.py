@@ -3,7 +3,7 @@ from typing import Type
 from databases import Database
 from sqlalchemy.sql import Select
 
-from bracket.utils.types import BaseModelT
+from bracket.utils.types import BaseModelT, assert_some
 
 
 async def fetch_one_parsed(
@@ -11,6 +11,12 @@ async def fetch_one_parsed(
 ) -> BaseModelT | None:
     record = await database.fetch_one(query)
     return model.parse_obj(record._mapping) if record is not None else None
+
+
+async def fetch_one_parsed_certain(
+    database: Database, model: Type[BaseModelT], query: Select
+) -> BaseModelT:
+    return assert_some(await fetch_one_parsed(database, model, query))
 
 
 async def fetch_all_parsed(

@@ -8,9 +8,12 @@ import uvicorn
 from fastapi import FastAPI
 
 from bracket.app import app
+from bracket.routes.models import SuccessResponse
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict, JsonObject
 from tests.integration_tests.models import AuthContext
+
+SUCCESS_RESPONSE = SuccessResponse().dict()
 
 
 def find_free_port() -> int:
@@ -64,13 +67,18 @@ class UvicornTestServer(uvicorn.Server):
 
 
 async def send_request(
-    method: HTTPMethod, endpoint: str, body: JsonDict = {}, headers: JsonDict = {}
+    method: HTTPMethod,
+    endpoint: str,
+    body: JsonDict | None = None,
+    json: JsonDict | None = None,
+    headers: JsonDict = {},
 ) -> JsonObject:
     async with aiohttp.ClientSession() as session:
         async with session.request(
             method=method.value,
             url=get_root_uvicorn_url() + endpoint,
             data=body,
+            json=json,
             headers=headers,
         ) as resp:
             response: JsonObject = await resp.json()
@@ -78,14 +86,28 @@ async def send_request(
 
 
 async def send_auth_request(
-    method: HTTPMethod, endpoint: str, auth_context: AuthContext, body: JsonDict = {}
+    method: HTTPMethod,
+    endpoint: str,
+    auth_context: AuthContext,
+    body: JsonDict | None = None,
+    json: JsonDict | None = None,
 ) -> JsonObject:
-    return await send_request(method, endpoint, body, auth_context.headers)
+    return await send_request(
+        method=method, endpoint=endpoint, body=body, json=json, headers=auth_context.headers
+    )
 
 
 async def send_tournament_request(
-    method: HTTPMethod, endpoint: str, auth_context: AuthContext, body: JsonDict = {}
+    method: HTTPMethod,
+    endpoint: str,
+    auth_context: AuthContext,
+    body: JsonDict | None = None,
+    json: JsonDict | None = None,
 ) -> JsonObject:
     return await send_request(
-        method, f'tournaments/{auth_context.tournament.id}/{endpoint}', body, auth_context.headers
+        method=method,
+        endpoint=f'tournaments/{auth_context.tournament.id}/{endpoint}',
+        body=body,
+        json=json,
+        headers=auth_context.headers,
     )

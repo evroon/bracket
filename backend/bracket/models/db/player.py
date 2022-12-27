@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from heliclockter import datetime_utc
 
 from bracket.models.db.shared import BaseModelORM
@@ -9,14 +11,14 @@ class Player(BaseModelORM):
     created: datetime_utc
     team_id: int | None = None
     tournament_id: int
-    elo_score: float
+    elo_score: Decimal
 
 
 class PlayerBody(BaseModelORM):
     name: str
-    team_id: int | None
 
 
 class PlayerToInsert(PlayerBody):
     created: datetime_utc
     tournament_id: int
+    elo_score: Decimal

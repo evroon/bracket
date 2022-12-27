@@ -70,7 +70,10 @@ async def create_player(
     last_record_id = await database.execute(
         query=players.insert(),
         values=PlayerToInsert(
-            **player_body.dict(), created=datetime_utc.now(), tournament_id=tournament_id
+            **player_body.dict(),
+            created=datetime_utc.now(),
+            tournament_id=tournament_id,
+            elo_score=0,
         ).dict(),
     )
     return SinglePlayerResponse(

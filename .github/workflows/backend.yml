@@ -39,7 +39,7 @@ jobs:
         env:
           ENVIRONMENT: CI
 
-      - name: Upload coverage reports to Codecov with GitHub Action
+      - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v3
 
       - name: Run mypy

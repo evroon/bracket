@@ -50,7 +50,7 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
     headers = {'Authorization': f'Bearer {get_mock_token()}'}
 
     async with inserted_user(MOCK_USER) as user_inserted:
-        response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, headers))
+        response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, None, headers))
 
         assert response == {
             'id': user_inserted.id,
@@ -63,5 +63,5 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
 async def test_invalid_token(startup_and_shutdown_uvicorn_server: None) -> None:
     headers = {'Authorization': 'Bearer some.invalid.token'}
 
-    response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, headers))
+    response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, None, headers))
     assert response == {'detail': 'Could not validate credentials'}
