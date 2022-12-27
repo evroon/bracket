@@ -16,7 +16,6 @@ class Player(BaseModelORM):
 
 class PlayerBody(BaseModelORM):
     name: str
-    team_id: int | None
 
 
 class PlayerToInsert(PlayerBody):
