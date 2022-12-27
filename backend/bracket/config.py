@@ -32,6 +32,8 @@ class Config(BaseSettings):
     jwt_secret: str
     cors_origins: str = ''
     cors_origin_regex: str = ''
+    admin_email: str
+    admin_password: str
 
 
 environment = Environment(os.getenv('ENVIRONMENT', 'DEVELOPMENT'))
