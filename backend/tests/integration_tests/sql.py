@@ -34,6 +34,11 @@ async def inserted_generic(
         await database.execute(query=table.delete().where(table.c.id == last_record_id))
 
 
+async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
+    assert len(await database.fetch_all(query=table.select())) == expected_rows
+    await database.execute(query=table.delete())
+
+
 @asynccontextmanager
 async def inserted_user(user: User) -> AsyncIterator[UserInDB]:
     async with inserted_generic(user, users, UserInDB) as row_inserted:
