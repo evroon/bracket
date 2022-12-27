@@ -10,3 +10,6 @@ Pipfile.lock
 *.env
 !ci.env
 node_modules
+.coverage
+coverage.xml
+coverage.json
