@@ -1,8 +1,12 @@
+from bracket.database import database
+from bracket.models.db.team import Team
+from bracket.schema import teams
+from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
-from tests.integration_tests.api.shared import send_tournament_request
+from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import inserted_team
+from tests.integration_tests.sql import assert_row_count_and_clear, inserted_team
 
 
 async def test_teams_endpoint(
@@ -21,3 +25,42 @@ async def test_teams_endpoint(
                 }
             ],
         }
+
+
+async def test_create_team(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'name': 'Some new name', 'active': True, 'player_ids': []}
+    response = await send_tournament_request(HTTPMethod.POST, 'teams', auth_context, None, body)
+    assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+    await assert_row_count_and_clear(teams, 1)
+
+
+async def test_delete_team(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+        assert (
+            await send_tournament_request(
+                HTTPMethod.DELETE, f'teams/{team_inserted.id}', auth_context, {}
+            )
+            == SUCCESS_RESPONSE
+        )
+        await assert_row_count_and_clear(teams, 0)
+
+
+async def test_update_team(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'name': 'Some new name', 'active': True, 'player_ids': []}
+    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+        response = await send_tournament_request(
+            HTTPMethod.PATCH, f'teams/{team_inserted.id}', auth_context, None, body
+        )
+        patched_round = await fetch_one_parsed_certain(
+            database, Team, query=teams.select().where(teams.c.id == team_inserted.id)
+        )
+        assert patched_round.name == body['name']
+        assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+
+        await assert_row_count_and_clear(teams, 1)

@@ -1,4 +1,7 @@
+from bracket.database import database
+from bracket.models.db.round import Round
 from bracket.schema import rounds
+from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_ROUND1, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
@@ -63,4 +66,11 @@ async def test_update_round(
                 )
                 == SUCCESS_RESPONSE
             )
+            patched_round = await fetch_one_parsed_certain(
+                database, Round, query=rounds.select().where(rounds.c.id == round_inserted.id)
+            )
+            assert patched_round.name == body['name']
+            assert patched_round.is_draft == body['is_draft']
+            assert patched_round.is_active == body['is_active']
+
             await assert_row_count_and_clear(rounds, 1)

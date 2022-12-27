@@ -19,6 +19,11 @@ from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
 
 
+async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
+    assert len(await database.fetch_all(query=table.select())) == expected_rows
+    await database.execute(query=table.delete())
+
+
 @asynccontextmanager
 async def inserted_generic(
     data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
@@ -32,11 +37,6 @@ async def inserted_generic(
         yield row_inserted
     finally:
         await database.execute(query=table.delete().where(table.c.id == last_record_id))
-
-
-async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
-    assert len(await database.fetch_all(query=table.select())) == expected_rows
-    await database.execute(query=table.delete())
 
 
 @asynccontextmanager
