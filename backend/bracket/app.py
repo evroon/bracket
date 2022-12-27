@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from bracket.config import config, Environment, environment
+from bracket.config import Environment, config, environment
 from bracket.database import database
-from bracket.routes import auth, matches, players, rounds, teams, tournaments
+from bracket.routes import auth, matches, players, rounds, teams, tournaments, clubs
 
 app = FastAPI(
     title="Bracket API",
@@ -42,6 +42,7 @@ async def ping() -> str:
 
 
 app.include_router(auth.router, tags=['auth'])
+app.include_router(clubs.router, tags=['clubs'])
 app.include_router(tournaments.router, tags=['tournaments'])
 app.include_router(players.router, tags=['players'])
 app.include_router(rounds.router, tags=['rounds'])

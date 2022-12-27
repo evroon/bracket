@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 import asyncio
 import os
 from asyncio import AbstractEventLoop
@@ -9,7 +10,8 @@ from databases import Database
 from bracket.database import database, engine
 from bracket.schema import metadata
 from tests.integration_tests.api.shared import UvicornTestServer
-from tests.integration_tests.sql import inserted_auth_context, AuthContext
+from tests.integration_tests.models import AuthContext
+from tests.integration_tests.sql import inserted_auth_context
 
 os.environ['ENVIRONMENT'] = 'CI'
 
@@ -39,9 +41,7 @@ def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def reinit_database(
-    event_loop: AbstractEventLoop,  # pylint: disable=redefined-outer-name
-) -> AsyncIterator[Database]:
+async def reinit_database(event_loop: AbstractEventLoop) -> AsyncIterator[Database]:
     await database.connect()
     metadata.drop_all(engine)
     metadata.create_all(engine)

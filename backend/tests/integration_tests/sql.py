@@ -1,72 +1,64 @@
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
+from functools import partial
+from typing import AsyncIterator, Type, cast
 
-from pydantic import BaseModel
+from sqlalchemy import Table
 
 from bracket.database import database
 from bracket.models.db.club import Club
+from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.schema import users, tournaments, clubs
+from bracket.schema import clubs, tournaments, users, teams
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.dummy_records import DUMMY_TOURNAMENT, DUMMY_CLUB
-from tests.integration_tests.mocks import MOCK_USER
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
+from bracket.utils.types import BaseModelT
+from tests.integration_tests.mocks import MOCK_USER, get_mock_token
+from tests.integration_tests.models import AuthContext
+
+
+@asynccontextmanager
+async def inserted_generic(
+    data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
+) -> AsyncIterator[BaseModelT]:
+    last_record_id = await database.execute(query=table.insert(), values=data_model.dict())
+    row_inserted = await fetch_one_parsed(
+        database, return_type, table.select().where(table.c.id == last_record_id)
+    )
+    assert isinstance(row_inserted, return_type)
+    try:
+        yield row_inserted
+    finally:
+        await database.execute(query=table.delete().where(table.c.id == last_record_id))
 
 
 @asynccontextmanager
 async def inserted_user(user: User) -> AsyncIterator[UserInDB]:
-    last_record_id = await database.execute(query=users.insert(), values=user.dict())
-    user_inserted = await fetch_one_parsed(
-        database, UserInDB, users.select().where(users.c.id == last_record_id)
-    )
-    assert user_inserted is not None
-    try:
-        yield user_inserted
-    finally:
-        await database.execute(query=users.delete().where(users.c.id == last_record_id))
+    async with inserted_generic(user, users, UserInDB) as row_inserted:
+        yield cast(UserInDB, row_inserted)
 
 
 @asynccontextmanager
 async def inserted_club(club: Club) -> AsyncIterator[Club]:
-    last_record_id = await database.execute(query=clubs.insert(), values=club.dict())
-    user_inserted = await fetch_one_parsed(
-        database, Club, clubs.select().where(clubs.c.id == last_record_id)
-    )
-    assert user_inserted is not None
-    try:
-        yield user_inserted
-    finally:
-        await database.execute(query=clubs.delete().where(clubs.c.id == last_record_id))
+    async with inserted_generic(club, clubs, Club) as row_inserted:
+        yield row_inserted
 
 
 @asynccontextmanager
 async def inserted_tournament(tournament: Tournament) -> AsyncIterator[Tournament]:
-    last_record_id = await database.execute(query=tournaments.insert(), values=tournament.dict())
-    user_inserted = await fetch_one_parsed(
-        database, Tournament, tournaments.select().where(tournaments.c.id == last_record_id)
-    )
-    assert user_inserted is not None
-    try:
-        yield user_inserted
-    finally:
-        await database.execute(query=tournaments.delete().where(tournaments.c.id == last_record_id))
+    async with inserted_generic(tournament, tournaments, Tournament) as row_inserted:
+        yield row_inserted
 
 
-class AuthContext(BaseModel):
-    club: Club
-    tournament: Tournament
-    user: User
-    headers: dict[str, str]
+@asynccontextmanager
+async def inserted_team(team: Team) -> AsyncIterator[Team]:
+    async with inserted_generic(team, teams, Team) as row_inserted:
+        yield row_inserted
 
 
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
-    token = (
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-        + 'eyJ1c2VyIjoiZG9uYWxkX2R1Y2siLCJleHAiOjcyNTgxMjAyMDB9.'
-        + 'CRk4n5gmgto5K-qWtI4hbcqo92BxLkggwwK1yTgWGLM'
-    )
-    headers = {'Authorization': f'Bearer {token}'}
+    headers = {'Authorization': f'Bearer {get_mock_token()}'}
     async with inserted_user(MOCK_USER) as user_inserted:
         async with inserted_club(DUMMY_CLUB) as club_inserted:
             async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:

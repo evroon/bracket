@@ -9,6 +9,14 @@ MOCK_NOW = datetime_utc(
 )
 
 
+def get_mock_token() -> str:
+    return (
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
+        + 'eyJ1c2VyIjoiZG9uYWxkX2R1Y2siLCJleHAiOjcyNTgxMjAyMDB9.'
+        + 'CRk4n5gmgto5K-qWtI4hbcqo92BxLkggwwK1yTgWGLM'
+    )
+
+
 MOCK_USER = User(
     email='donald_duck',
     name='Donald Duck',
