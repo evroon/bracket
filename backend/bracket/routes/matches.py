@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from ladderz.models.db.user import UserPublic
-from ladderz.routes.auth import get_current_user
-from ladderz.routes.models import UpcomingMatchesResponse
+from bracket.models.db.user import UserPublic
+from bracket.routes.auth import get_current_user
+from bracket.routes.models import UpcomingMatchesResponse
 
 router = APIRouter()
 

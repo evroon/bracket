@@ -1,4 +1,4 @@
-# Ladderz
+# Bracket
 Ladder tournament system meant to be really easy to use.
 
 # Setup
@@ -15,18 +15,24 @@ npm run dev
 
 
 #### Database
-Create a new `ladderz` database in a `ladderz` cluster:
+Create a new `bracket` database in a `bracket` cluster:
 
 ```shell
-sudo pg_createcluster -u postgres -p 5532 13 ladderz
-pg_ctlcluster 13 ladderz start
+sudo pg_createcluster -u postgres -p 5532 13 bracket
+pg_ctlcluster 13 bracket start
 
 ```
 
 ```shell
 sudo -Hu postgres psql  -p 5532
-CREATE USER ladderz_ci WITH PASSWORD 'ladderz_ci';
-CREATE DATABASE ladderz_ci OWNER ladderz_ci;
+CREATE USER bracket_ci WITH PASSWORD 'bracket_ci';
+CREATE DATABASE bracket_ci OWNER bracket_ci;
+```
+
+```shell
+sudo -Hu postgres psql  -p 5532
+CREATE USER bracket_dev WITH PASSWORD 'bracket_dev';
+CREATE DATABASE bracket_dev OWNER bracket_dev;
 ```
 
 ### Config

@@ -1,7 +1,7 @@
 import sqlalchemy
 from databases import Database
 
-from ladderz.config import config
+from bracket.config import config
 
 database = Database(config.pg_dsn)
 

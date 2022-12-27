@@ -9,8 +9,8 @@ import pytest
 from aiohttp import ClientResponse
 from databases import Database
 
-from ladderz.database import database, engine
-from ladderz.schema import metadata
+from bracket.database import database, engine
+from bracket.schema import metadata
 from tests.integration_tests.api.shared import UvicornTestServer
 
 os.environ['ENVIRONMENT'] = 'CI'

@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from ladderz.database import database
-from ladderz.models.db.user import User, UserInDB
-from ladderz.schema import users
-from ladderz.utils.db import fetch_one_parsed
+from bracket.database import database
+from bracket.models.db.user import User, UserInDB
+from bracket.schema import users
+from bracket.utils.db import fetch_one_parsed
 
 
 @asynccontextmanager

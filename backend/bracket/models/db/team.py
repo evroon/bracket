@@ -3,8 +3,8 @@ import json
 from heliclockter import datetime_utc
 from pydantic import validator
 
-from ladderz.models.db.player import Player
-from ladderz.models.db.shared import BaseModelORM
+from bracket.models.db.player import Player
+from bracket.models.db.shared import BaseModelORM
 
 
 class Team(BaseModelORM):

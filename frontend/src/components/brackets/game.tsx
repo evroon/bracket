@@ -1,4 +1,4 @@
-import { Grid, createStyles, useMantineTheme } from '@mantine/core';
+import { Grid, Tooltip, createStyles, useMantineTheme } from '@mantine/core';
 
 import { MatchInterface } from '../../interfaces/match';
 
@@ -38,20 +38,27 @@ export default function Game({ match }: { match: MatchInterface }) {
   const team1_style = match.team1_score > match.team2_score ? winner_style : {};
   const team2_style = match.team1_score < match.team2_score ? winner_style : {};
 
+  const team1_players = match.team1.players.map((player) => player.name).join(', ');
+  const team2_players = match.team2.players.map((player) => player.name).join(', ');
+
   return (
     <div className={classes.root}>
       <div className={classes.top} style={team1_style}>
-        <Grid grow>
-          <Grid.Col span={10}>{match.team1.name}</Grid.Col>
-          <Grid.Col span={2}>{match.team1_score}</Grid.Col>
-        </Grid>
+        <Tooltip label={team1_players} withArrow color="blue">
+          <Grid grow>
+            <Grid.Col span={10}>{match.team1.name}</Grid.Col>
+            <Grid.Col span={2}>{match.team1_score}</Grid.Col>
+          </Grid>
+        </Tooltip>
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
-        <Grid grow>
-          <Grid.Col span={10}>{match.team2.name}</Grid.Col>
-          <Grid.Col span={2}>{match.team2_score}</Grid.Col>
-        </Grid>
+        <Tooltip label={team2_players} position="bottom" withArrow color="blue">
+          <Grid grow>
+            <Grid.Col span={10}>{match.team2.name}</Grid.Col>
+            <Grid.Col span={2}>{match.team2_score}</Grid.Col>
+          </Grid>
+        </Tooltip>
       </div>
     </div>
   );

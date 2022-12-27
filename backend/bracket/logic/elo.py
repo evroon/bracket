@@ -1,6 +1,6 @@
-from ladderz.models.db.match import Match
-from ladderz.models.db.round import Round, RoundWithMatches
-from ladderz.utils.types import ELO
+from bracket.models.db.match import Match
+from bracket.models.db.round import Round, RoundWithMatches
+from bracket.utils.types import ELO
 
 
 def calculate_elo_for_players_in_match(match: Match) -> dict[int, ELO]:

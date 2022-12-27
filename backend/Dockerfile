@@ -4,13 +4,13 @@ RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y python3 python3-pip
 
-RUN useradd -ms /bin/bash ladderz
-WORKDIR /home/ladderz/backend
+RUN useradd -ms /bin/bash bracket
+WORKDIR /home/bracket/backend
 
-COPY . /home/ladderz/backend
-RUN chown -R ladderz:ladderz /home/ladderz
-USER ladderz
-ENV PATH="${PATH}:/home/ladderz/.local/bin"
+COPY . /home/bracket/backend
+RUN chown -R bracket:bracket /home/bracket
+USER bracket
+ENV PATH="${PATH}:/home/bracket/.local/bin"
 
 # Install backend
 RUN python3 -m pip install --upgrade pipenv wheel virtualenv

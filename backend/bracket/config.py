@@ -4,7 +4,7 @@ from enum import auto
 
 from pydantic import BaseSettings, PostgresDsn
 
-from ladderz.utils.types import EnumAutoStr
+from bracket.utils.types import EnumAutoStr
 
 
 class Environment(EnumAutoStr):
@@ -30,6 +30,8 @@ class Environment(EnumAutoStr):
 class Config(BaseSettings):
     pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
     jwt_secret: str
+    cors_origins: str = ''
+    cors_origin_regex: str = ''
 
 
 environment = Environment(os.getenv('ENVIRONMENT', 'DEVELOPMENT'))

@@ -1,25 +1,22 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from ladderz.database import database
-from ladderz.routes import auth, matches, players, rounds, teams, tournaments
+from bracket.config import config
+from bracket.database import database
+from bracket.routes import auth, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
-    title="Ladderz API",
+    title="Bracket API",
     docs_url="/docs",
     version="1.0.0",
 )
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "https://ladderz.vercel.app",
-    "https://ladderz-git-tournaments-system-evroon.vercel.app",
-]
+origins = ["http://localhost", "http://localhost:3000", *config.cors_origins.split(',')]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=config.cors_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -3,12 +3,12 @@ from typing import Generic, TypeVar
 from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
-from ladderz.models.db.club import Club
-from ladderz.models.db.match import Match
-from ladderz.models.db.player import Player
-from ladderz.models.db.round import Round, RoundWithMatches
-from ladderz.models.db.team import Team, TeamWithPlayers
-from ladderz.models.db.tournament import Tournament
+from bracket.models.db.club import Club
+from bracket.models.db.match import Match
+from bracket.models.db.player import Player
+from bracket.models.db.round import Round, RoundWithMatches
+from bracket.models.db.team import Team, TeamWithPlayers
+from bracket.models.db.tournament import Tournament
 
 DataT = TypeVar('DataT')
 

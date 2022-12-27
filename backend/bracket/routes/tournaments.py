@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 
-from ladderz.database import database
-from ladderz.models.db.tournament import Tournament
-from ladderz.models.db.user import UserPublic
-from ladderz.routes.auth import get_current_user
-from ladderz.routes.models import TournamentsResponse
-from ladderz.schema import tournaments
-from ladderz.utils.db import fetch_all_parsed
+from bracket.database import database
+from bracket.models.db.tournament import Tournament
+from bracket.models.db.user import UserPublic
+from bracket.routes.auth import get_current_user
+from bracket.routes.models import TournamentsResponse
+from bracket.schema import tournaments
+from bracket.utils.db import fetch_all_parsed
 
 router = APIRouter()
 

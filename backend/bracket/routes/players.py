@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Query
 from heliclockter import datetime_utc
 
-from ladderz.database import database
-from ladderz.models.db.player import Player, PlayerBody, PlayerToInsert
-from ladderz.models.db.user import UserPublic
-from ladderz.routes.auth import get_current_user
-from ladderz.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
-from ladderz.schema import players
-from ladderz.utils.db import fetch_all_parsed, fetch_one_parsed
+from bracket.database import database
+from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
+from bracket.models.db.user import UserPublic
+from bracket.routes.auth import get_current_user
+from bracket.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
+from bracket.schema import players
+from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
 
 router = APIRouter()
 

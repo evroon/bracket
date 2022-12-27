@@ -13,7 +13,11 @@ export function handleRequestError(error: any) {
 }
 
 export function checkForAuthError(response: any) {
-  if (response.error != null && response.error.response.status === 401) {
+  if (
+    response.error != null &&
+    response.error.response != null &&
+    response.error.response.status === 401
+  ) {
     const router = useRouter();
     router.push('/login');
   }
@@ -23,7 +27,10 @@ export function createAxios() {
   const user = localStorage.getItem('login');
   const access_token = user != null ? JSON.parse(user).access_token : '';
   return axios.create({
-    baseURL: 'http://localhost:8400',
+    baseURL:
+      process.env.NEXT_PUBLIC_API_BASE_URL != null
+        ? process.env.NEXT_PUBLIC_API_BASE_URL
+        : 'http://localhost:8400',
     headers: {
       Authorization: `bearer ${access_token}`,
       Accept: 'application/json',

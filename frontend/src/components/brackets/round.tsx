@@ -1,9 +1,20 @@
 import { Center, Title } from '@mantine/core';
+import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
+import { Tournament } from '../../interfaces/tournament';
+import RoundModal from '../modals/round_modal';
 import Game from './game';
 
-export default function Round({ round }: { round: RoundInterface }) {
+export default function Round({
+  tournamentData,
+  round,
+  swrRoundsResponse,
+}: {
+  tournamentData: Tournament;
+  round: RoundInterface;
+  swrRoundsResponse: SWRResponse;
+}) {
   const games = round.matches.map((match) => <Game key={match.id} match={match} />);
   const active_round_style = round.is_active
     ? {
@@ -15,21 +26,7 @@ export default function Round({ round }: { round: RoundInterface }) {
         borderStyle: 'dashed',
         borderColor: 'gray',
       }
-    : {};
-  const active_round_header = round.is_active ? (
-    <Center>
-      <h3 style={{ color: 'green' }}>Active round</h3>
-    </Center>
-  ) : (
-    ''
-  );
-  const draft_round_header = round.is_draft ? (
-    <Center>
-      <h3 style={{ color: 'gray' }}>Draft round</h3>
-    </Center>
-  ) : (
-    ''
-  );
+    : { borderStyle: 'hidden' };
 
   return (
     <div style={{ width: 300, marginLeft: '50px', minHeight: 500 }}>
@@ -43,12 +40,15 @@ export default function Round({ round }: { round: RoundInterface }) {
         }}
       >
         <Center>
-          <Title order={3}>Round {round.round_index}</Title>
+          <Title order={3}>{round.name}</Title>
+          <RoundModal
+            tournamentData={tournamentData}
+            round={round}
+            swrRoundsResponse={swrRoundsResponse}
+          />
         </Center>
         {games}
       </div>
-      {active_round_header}
-      {draft_round_header}
     </div>
   );
 }

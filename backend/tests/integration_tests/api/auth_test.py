@@ -4,9 +4,9 @@ from unittest.mock import Mock, patch
 
 import jwt
 
-from ladderz.config import config
-from ladderz.utils.http import HTTPMethod
-from ladderz.utils.types import JsonDict
+from bracket.config import config
+from bracket.utils.http import HTTPMethod
+from bracket.utils.types import JsonDict
 from tests.integration_tests.api.shared import send_request
 from tests.integration_tests.mocks import MOCK_NOW, MOCK_USER
 from tests.integration_tests.sql import inserted_user
@@ -14,7 +14,7 @@ from tests.integration_tests.sql import inserted_user
 
 @contextmanager
 def mock_auth_time() -> Generator[None, None, None]:
-    with patch('ladderz.routes.auth.datetime_utc.now', Mock(return_value=MOCK_NOW)):
+    with patch('bracket.routes.auth.datetime_utc.now', Mock(return_value=MOCK_NOW)):
         yield
 
 

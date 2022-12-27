@@ -4,7 +4,7 @@ export interface RoundInterface {
   id: number;
   tournament_id: number;
   created: string;
-  round_index: number;
+  name: string;
   is_draft: boolean;
   is_active: boolean;
   matches: MatchInterface[];

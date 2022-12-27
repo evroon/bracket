@@ -5,10 +5,10 @@ from typing import Any
 import click
 from sqlalchemy import Table
 
-from ladderz.database import database, engine
-from ladderz.logger import get_logger
-from ladderz.schema import clubs, matches, metadata, players, rounds, teams, tournaments, users
-from ladderz.utils.dummy_records import (
+from bracket.database import database, engine
+from bracket.logger import get_logger
+from bracket.schema import clubs, matches, metadata, players, rounds, teams, tournaments, users
+from bracket.utils.dummy_records import (
     DUMMY_CLUBS,
     DUMMY_MATCHES,
     DUMMY_PLAYERS,
@@ -17,7 +17,7 @@ from ladderz.utils.dummy_records import (
     DUMMY_TOURNAMENTS,
     DUMMY_USERS,
 )
-from ladderz.utils.types import BaseModelT
+from bracket.utils.types import BaseModelT
 
 logger = get_logger('cli')
 

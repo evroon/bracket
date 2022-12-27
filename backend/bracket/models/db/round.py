@@ -3,8 +3,8 @@ import json
 from heliclockter import datetime_utc
 from pydantic import validator
 
-from ladderz.models.db.match import Match, MatchWithTeamDetails
-from ladderz.models.db.shared import BaseModelORM
+from bracket.models.db.match import Match, MatchWithTeamDetails
+from bracket.models.db.shared import BaseModelORM
 
 
 class Round(BaseModelORM):
@@ -13,7 +13,7 @@ class Round(BaseModelORM):
     created: datetime_utc
     is_draft: bool
     is_active: bool = False
-    round_index: int
+    name: str
 
 
 class RoundWithMatches(Round):
@@ -35,4 +35,10 @@ class RoundToInsert(BaseModelORM):
     tournament_id: int
     is_draft: bool = False
     is_active: bool = False
-    round_index: int
+    name: str
+
+
+class RoundBody(BaseModelORM):
+    name: str
+    is_draft: bool
+    is_active: bool

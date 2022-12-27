@@ -8,12 +8,12 @@ from jwt import DecodeError, ExpiredSignatureError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from ladderz.config import config
-from ladderz.database import database
-from ladderz.models.db.user import User, UserInDB, UserPublic
-from ladderz.schema import users
-from ladderz.utils.db import fetch_one_parsed
-from ladderz.utils.types import JsonDict, JsonList, assert_some
+from bracket.config import config
+from bracket.database import database
+from bracket.models.db.user import User, UserInDB, UserPublic
+from bracket.schema import users
+from bracket.utils.db import fetch_one_parsed
+from bracket.utils.types import JsonDict, JsonList, assert_some
 
 router = APIRouter()
 
