@@ -13,13 +13,6 @@ jobs:
           POSTGRES_USER: bracket_ci
           POSTGRES_PASSWORD: bracket_ci
           POSTGRES_DB: bracket_ci
-
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
         ports:
           - 5532:5432
 
