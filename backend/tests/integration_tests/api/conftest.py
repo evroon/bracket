@@ -1,17 +1,15 @@
 import asyncio
 import os
 from asyncio import AbstractEventLoop
-from functools import partial
-from typing import AsyncIterator, Iterator
+from typing import AsyncIterator
 
-import aioresponses
 import pytest
-from aiohttp import ClientResponse
 from databases import Database
 
 from bracket.database import database, engine
 from bracket.schema import metadata
 from tests.integration_tests.api.shared import UvicornTestServer
+from tests.integration_tests.sql import inserted_auth_context, AuthContext
 
 os.environ['ENVIRONMENT'] = 'CI'
 
@@ -27,13 +25,6 @@ async def startup_and_shutdown_uvicorn_server() -> AsyncIterator[None]:
         yield
     finally:
         await server.down()
-
-
-@pytest.fixture
-def mock_http() -> Iterator[aioresponses.aioresponses]:
-    with aioresponses.aioresponses() as m:
-        m.add = partial(m.add, response_class=ClientResponse)  # type: ignore[assignment]
-        yield m
 
 
 @pytest.fixture(scope="session")
@@ -54,4 +45,14 @@ async def reinit_database(
     await database.connect()
     metadata.drop_all(engine)
     metadata.create_all(engine)
-    yield database
+    try:
+        yield database
+    finally:
+        await database.disconnect()
+
+
+@pytest.fixture(scope="session")
+async def auth_context(reinit_database: Database) -> AsyncIterator[AuthContext]:
+    async with reinit_database:
+        async with inserted_auth_context() as auth_context:
+            yield auth_context

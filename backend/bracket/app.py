@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from bracket.config import config
+from bracket.config import config, Environment, environment
 from bracket.database import database
 from bracket.routes import auth, matches, players, rounds, teams, tournaments
 
@@ -30,7 +30,10 @@ async def startup() -> None:
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
-    await database.disconnect()
+    # On CI, we need first to clean up db data in conftest.py before we can disconnect the
+    # db connections.
+    if environment != Environment.CI:
+        await database.disconnect()
 
 
 @app.get('/ping', summary="Healthcheck ping")
