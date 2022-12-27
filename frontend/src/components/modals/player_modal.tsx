@@ -31,7 +31,13 @@ export default function PlayerModal({
       />
     </Group>
   ) : (
-    <Button color="green" size="xs" onClick={() => setOpened(true)} leftIcon={icon}>
+    <Button
+      color="green"
+      size="xs"
+      style={{ marginRight: 10 }}
+      onClick={() => setOpened(true)}
+      leftIcon={icon}
+    >
       {operation_text}
     </Button>
   );

@@ -4,13 +4,7 @@ import React from 'react';
 
 export default function DeleteButton(props: any) {
   return (
-    <Button
-      color="red"
-      size="xs"
-      leftIcon={<MdDelete size={20} />}
-      style={{ marginLeft: 10 }}
-      {...props}
-    >
+    <Button color="red" size="xs" leftIcon={<MdDelete size={20} />} {...props}>
       {props.title}
     </Button>
   );

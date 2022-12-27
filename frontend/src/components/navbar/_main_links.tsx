@@ -1,4 +1,4 @@
-import { IconUsers, TablerIcon } from '@tabler/icons';
+import { IconTournament, IconUser, IconUsers, TablerIcon } from '@tabler/icons';
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
@@ -33,13 +33,13 @@ export function MainLinks({ tournament_id }: any) {
 
   const data = [
     {
-      icon: IconUsers,
+      icon: IconTournament,
       label: 'Tournament',
       endpoint: `${tm_prefix}`,
       router,
     },
     {
-      icon: IconUsers,
+      icon: IconUser,
       label: 'Players',
       endpoint: `${tm_prefix}/players`,
       router,

@@ -3,7 +3,6 @@ module.exports = {
     'mantine',
     'plugin:@next/next/recommended',
     'plugin:jest/recommended',
-    'plugin:storybook/recommended',
   ],
   plugins: ['testing-library', 'jest'],
   overrides: [
