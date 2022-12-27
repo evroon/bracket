@@ -1,4 +1,4 @@
-from ladderz.utils.http import HTTPMethod
+from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import send_request
 
 

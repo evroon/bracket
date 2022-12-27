@@ -1,8 +1,8 @@
 from heliclockter import datetime_utc
 from pydantic import BaseModel
 
-from ladderz.models.db.shared import BaseModelORM
-from ladderz.models.db.team import Team, TeamWithPlayers
+from bracket.models.db.shared import BaseModelORM
+from bracket.models.db.team import Team, TeamWithPlayers
 
 
 class Match(BaseModelORM):

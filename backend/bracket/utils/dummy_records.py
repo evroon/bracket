@@ -1,13 +1,13 @@
 from heliclockter import datetime_utc
 from passlib.context import CryptContext
 
-from ladderz.models.db.club import Club
-from ladderz.models.db.match import Match
-from ladderz.models.db.player import Player
-from ladderz.models.db.round import Round
-from ladderz.models.db.team import Team
-from ladderz.models.db.tournament import Tournament
-from ladderz.models.db.user import User
+from bracket.models.db.club import Club
+from bracket.models.db.match import Match
+from bracket.models.db.player import Player
+from bracket.models.db.round import Round
+from bracket.models.db.team import Team
+from bracket.models.db.tournament import Tournament
+from bracket.models.db.user import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

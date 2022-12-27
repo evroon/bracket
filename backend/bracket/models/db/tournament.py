@@ -1,6 +1,6 @@
 from heliclockter import datetime_utc
 
-from ladderz.models.db.shared import BaseModelORM
+from bracket.models.db.shared import BaseModelORM
 
 
 class Tournament(BaseModelORM):

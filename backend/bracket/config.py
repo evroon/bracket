@@ -4,7 +4,7 @@ from enum import auto
 
 from pydantic import BaseSettings, PostgresDsn
 
-from ladderz.utils.types import EnumAutoStr
+from bracket.utils.types import EnumAutoStr
 
 
 class Environment(EnumAutoStr):

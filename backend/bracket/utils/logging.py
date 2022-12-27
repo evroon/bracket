@@ -1,12 +1,12 @@
 import logging
 
-from ladderz.config import Environment, environment
+from bracket.config import Environment, environment
 
 
 def create_logger(level: int) -> logging.Logger:
     logFormatter = logging.Formatter(fmt='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
 
-    logger = logging.getLogger('ladderz')
+    logger = logging.getLogger('bracket')
     logger.setLevel(level)
 
     consoleHandler = logging.StreamHandler()

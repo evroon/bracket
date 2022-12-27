@@ -10,9 +10,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ladderz_ci
-          POSTGRES_PASSWORD: ladderz_ci
-          POSTGRES_DB: ladderz_ci
+          POSTGRES_USER: bracket_ci
+          POSTGRES_PASSWORD: bracket_ci
+          POSTGRES_DB: bracket_ci
 
         # Set health checks to wait until postgres has started
         options: >-
@@ -51,7 +51,7 @@ jobs:
         working-directory: backend
 
       - name: Run pylint
-        run: pipenv run pylint alembic ladderz tests
+        run: pipenv run pylint alembic bracket tests
         working-directory: backend
 
       - name: Run black

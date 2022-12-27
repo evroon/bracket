@@ -40,7 +40,7 @@ export default function Login() {
       <Title className={classes.title} align="center" mt={100}>
         Welcome to{' '}
         <Text inherit variant="gradient" component="span">
-          Ladderz
+          Bracket
         </Text>
       </Title>
       <Container size={420} my={40}>

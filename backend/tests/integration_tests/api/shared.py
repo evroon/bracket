@@ -7,9 +7,9 @@ import aiohttp
 import uvicorn
 from fastapi import FastAPI
 
-from ladderz.app import app
-from ladderz.utils.http import HTTPMethod
-from ladderz.utils.types import JsonDict, JsonObject
+from bracket.app import app
+from bracket.utils.http import HTTPMethod
+from bracket.utils.types import JsonDict, JsonObject
 
 
 def find_free_port() -> int:

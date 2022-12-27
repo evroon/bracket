@@ -3,7 +3,7 @@ from typing import Type
 from databases import Database
 from sqlalchemy.sql import Select
 
-from ladderz.utils.types import BaseModelT
+from bracket.utils.types import BaseModelT
 
 
 async def fetch_one_parsed(

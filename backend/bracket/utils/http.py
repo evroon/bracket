@@ -1,6 +1,6 @@
 from enum import auto
 
-from ladderz.utils.types import EnumAutoStr
+from bracket.utils.types import EnumAutoStr
 
 
 class HTTPMethod(EnumAutoStr):

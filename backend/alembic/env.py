@@ -10,7 +10,7 @@ from alembic import context
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parent_dir)
 
-from ladderz.schema import Base  # pylint: disable=wrong-import-position
+from bracket.schema import Base  # pylint: disable=wrong-import-position
 
 load_dotenv()
 

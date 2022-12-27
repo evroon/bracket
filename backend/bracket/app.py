@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from ladderz.config import config
-from ladderz.database import database
-from ladderz.routes import auth, matches, players, rounds, teams, tournaments
+from bracket.config import config
+from bracket.database import database
+from bracket.routes import auth, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
-    title="Ladderz API",
+    title="Bracket API",
     docs_url="/docs",
     version="1.0.0",
 )

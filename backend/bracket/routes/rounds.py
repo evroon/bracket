@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
-from ladderz.database import database
-from ladderz.models.db.round import RoundBody, RoundToInsert, RoundWithMatches
-from ladderz.models.db.user import UserPublic
-from ladderz.routes.auth import get_current_user
-from ladderz.routes.models import RoundsWithMatchesResponse, SuccessResponse
-from ladderz.schema import rounds
-from ladderz.utils.db import get_next_round_name
+from bracket.database import database
+from bracket.models.db.round import RoundBody, RoundToInsert, RoundWithMatches
+from bracket.models.db.user import UserPublic
+from bracket.routes.auth import get_current_user
+from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
+from bracket.schema import rounds
+from bracket.utils.db import get_next_round_name
 
 router = APIRouter()
 

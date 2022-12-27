@@ -34,7 +34,7 @@ export function Brand() {
               router.push('/');
             }}
           >
-            Ladderz
+            Bracket
           </Title>
         </UnstyledButton>
         <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30}>
