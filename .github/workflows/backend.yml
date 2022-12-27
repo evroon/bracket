@@ -41,10 +41,13 @@ jobs:
         working-directory: backend
 
       - name: Run tests
-        run: pipenv run pytest .
+        run: pipenv run pytest --cov --cov-report=xml .
         working-directory: backend
         env:
           ENVIRONMENT: CI
+
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
 
       - name: Run mypy
         run: pipenv run mypy --version && pipenv run mypy .
