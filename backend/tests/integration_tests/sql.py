@@ -1,5 +1,4 @@
 from contextlib import asynccontextmanager
-from functools import partial
 from typing import AsyncIterator, Type, cast
 
 from sqlalchemy import Table
@@ -9,7 +8,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.schema import clubs, tournaments, users, teams
+from bracket.schema import clubs, teams, tournaments, users
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT

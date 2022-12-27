@@ -1,4 +1,4 @@
-from bracket.utils.dummy_records import DUMMY_TEAM1, DUMMY_MOCK_TIME
+from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import send_tournament_request
 from tests.integration_tests.models import AuthContext

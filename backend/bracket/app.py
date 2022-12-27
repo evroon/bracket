@@ -3,7 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from bracket.config import Environment, config, environment
 from bracket.database import database
-from bracket.routes import auth, matches, players, rounds, teams, tournaments, clubs
+from bracket.routes import auth, clubs, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
     title="Bracket API",
