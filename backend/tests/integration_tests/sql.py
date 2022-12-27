@@ -5,10 +5,13 @@ from sqlalchemy import Table
 
 from bracket.database import database
 from bracket.models.db.club import Club
+from bracket.models.db.match import Match
+from bracket.models.db.player import Player
+from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.schema import clubs, teams, tournaments, users
+from bracket.schema import clubs, teams, tournaments, users, players, rounds, matches
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT
@@ -52,6 +55,24 @@ async def inserted_tournament(tournament: Tournament) -> AsyncIterator[Tournamen
 @asynccontextmanager
 async def inserted_team(team: Team) -> AsyncIterator[Team]:
     async with inserted_generic(team, teams, Team) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_player(player: Player) -> AsyncIterator[Player]:
+    async with inserted_generic(player, players, Player) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_round(round: Round) -> AsyncIterator[Round]:
+    async with inserted_generic(round, rounds, Round) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_match(match: Match) -> AsyncIterator[Match]:
+    async with inserted_generic(match, matches, Match) as row_inserted:
         yield row_inserted
 
 
