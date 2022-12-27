@@ -24,7 +24,7 @@ jobs:
           - 5532:5432
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install pipenv
         run: python3 -m pip install --upgrade pipenv wheel virtualenv
