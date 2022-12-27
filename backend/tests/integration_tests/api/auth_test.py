@@ -8,7 +8,7 @@ from bracket.config import config
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict
 from tests.integration_tests.api.shared import send_request
-from tests.integration_tests.mocks import MOCK_NOW, MOCK_USER
+from tests.integration_tests.mocks import MOCK_NOW, MOCK_USER, get_mock_token
 from tests.integration_tests.sql import inserted_user
 
 
@@ -47,12 +47,7 @@ async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server
 
 
 async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: None) -> None:
-    token = (
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-        + 'eyJ1c2VyIjoiZG9uYWxkX2R1Y2siLCJleHAiOjcyNTgxMjAyMDB9.'
-        + 'CRk4n5gmgto5K-qWtI4hbcqo92BxLkggwwK1yTgWGLM'
-    )
-    headers = {'Authorization': f'Bearer {token}'}
+    headers = {'Authorization': f'Bearer {get_mock_token()}'}
 
     async with inserted_user(MOCK_USER) as user_inserted:
         response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, headers))

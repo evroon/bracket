@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from bracket.config import config
+from bracket.config import Environment, config, environment
 from bracket.database import database
-from bracket.routes import auth, matches, players, rounds, teams, tournaments
+from bracket.routes import auth, clubs, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
     title="Bracket API",
@@ -30,7 +30,10 @@ async def startup() -> None:
 
 @app.on_event("shutdown")
 async def shutdown() -> None:
-    await database.disconnect()
+    # On CI, we need first to clean up db data in conftest.py before we can disconnect the
+    # db connections.
+    if environment != Environment.CI:
+        await database.disconnect()
 
 
 @app.get('/ping', summary="Healthcheck ping")
@@ -39,6 +42,7 @@ async def ping() -> str:
 
 
 app.include_router(auth.router, tags=['auth'])
+app.include_router(clubs.router, tags=['clubs'])
 app.include_router(tournaments.router, tags=['tournaments'])
 app.include_router(players.router, tags=['players'])
 app.include_router(rounds.router, tags=['rounds'])

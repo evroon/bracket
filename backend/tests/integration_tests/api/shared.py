@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from bracket.app import app
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict, JsonObject
+from tests.integration_tests.models import AuthContext
 
 
 def find_free_port() -> int:
@@ -74,3 +75,17 @@ async def send_request(
         ) as resp:
             response: JsonObject = await resp.json()
             return response
+
+
+async def send_auth_request(
+    method: HTTPMethod, endpoint: str, auth_context: AuthContext, body: JsonDict = {}
+) -> JsonObject:
+    return await send_request(method, endpoint, body, auth_context.headers)
+
+
+async def send_tournament_request(
+    method: HTTPMethod, endpoint: str, auth_context: AuthContext, body: JsonDict = {}
+) -> JsonObject:
+    return await send_request(
+        method, f'tournaments/{auth_context.tournament.id}/{endpoint}', body, auth_context.headers
+    )

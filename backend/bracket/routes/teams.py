@@ -2,18 +2,12 @@ from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
-from bracket.models.db.player import Player
 from bracket.models.db.team import Team, TeamBody, TeamToInsert, TeamWithPlayers
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import get_current_user
-from bracket.routes.models import (
-    SingleTeamResponse,
-    SuccessResponse,
-    TeamsResponse,
-    TeamsWithPlayersResponse,
-)
+from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.schema import players, teams
-from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
+from bracket.utils.db import fetch_one_parsed
 
 router = APIRouter()
 
