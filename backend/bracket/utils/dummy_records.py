@@ -10,8 +10,7 @@ from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from bracket.utils.security import pwd_context
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo('UTC'))
 
