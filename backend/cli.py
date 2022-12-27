@@ -5,7 +5,7 @@ from typing import Any
 import click
 from sqlalchemy import Table
 
-from bracket.database import database, engine
+from bracket.database import database, engine, init_db_when_empty
 from bracket.logger import get_logger
 from bracket.schema import clubs, matches, metadata, players, rounds, teams, tournaments, users
 from bracket.utils.dummy_records import (
@@ -61,7 +61,7 @@ async def create_dev_db() -> None:
     logger.warning('Initializing database with dummy records')
     await database.connect()
     metadata.drop_all(engine)
-    metadata.create_all(engine)
+    await init_db_when_empty()
 
     await bulk_insert(users, DUMMY_USERS)
     await bulk_insert(clubs, DUMMY_CLUBS)

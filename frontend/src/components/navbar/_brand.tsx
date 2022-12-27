@@ -6,8 +6,7 @@ import {
   UnstyledButton,
   useMantineColorScheme,
 } from '@mantine/core';
-import { GiShuttlecock } from '@react-icons/all-files/gi/GiShuttlecock';
-import { IconMoonStars, IconSun } from '@tabler/icons';
+import { IconBrackets, IconMoonStars, IconSun } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -27,7 +26,7 @@ export function Brand() {
       })}
     >
       <Group position="apart">
-        <GiShuttlecock size={28} />
+        <IconBrackets size={36} style={{ marginBottom: 10 }} />
         <UnstyledButton>
           <Title
             onClick={() => {

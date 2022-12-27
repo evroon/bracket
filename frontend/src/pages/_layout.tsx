@@ -10,63 +10,75 @@ export default function Layout({ children, links }: any) {
 
   return (
     <>
-      <AppShell
+      <MediaQuery
+        largerThan="md"
         styles={{
-          main: {
-            background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-          },
+          '--mantine-header-height': '0px',
         }}
-        navbarOffsetBreakpoint="sm"
-        asideOffsetBreakpoint="sm"
-        header={
-          <MediaQuery
-            largerThan="md"
-            styles={{
-              display: 'none',
-              height: '0px',
-              maxHeight: '0px',
-              '--mantine-header-height': '0px',
-            }}
-          >
-            <Header height={70} p="md">
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-              >
-                <Burger
-                  opened={navBarOpened}
-                  onClick={() => setNavBarOpened((o) => !o)}
-                  size="sm"
-                  color={theme.colors.gray[6]}
-                  mr="xl"
-                />
-              </div>
-            </Header>
-          </MediaQuery>
-        }
-        navbar={
-          <Navbar p="xs" width={{ base: 300 }}>
-            <Navbar.Section mt="md">
-              <Brand />
-            </Navbar.Section>
-            {links == null ? (
-              <Navbar.Section grow>
-                <div />
-              </Navbar.Section>
-            ) : (
-              links
-            )}
-            <Navbar.Section>
-              <User />
-            </Navbar.Section>
-          </Navbar>
-        }
       >
-        {children}
-      </AppShell>
+        <AppShell
+          fixed
+          styles={{
+            main: {
+              background:
+                theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+            },
+          }}
+          padding="md"
+          navbarOffsetBreakpoint="md"
+          header={
+            <MediaQuery
+              largerThan="md"
+              styles={{
+                display: 'none',
+                '--mantine-header-height': '0px',
+              }}
+            >
+              <Header height={70} p="md">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%',
+                  }}
+                >
+                  <Burger
+                    opened={navBarOpened}
+                    onClick={() => setNavBarOpened((o) => !o)}
+                    size="sm"
+                    color={theme.colors.gray[6]}
+                    mr="xl"
+                  />
+                </div>
+              </Header>
+            </MediaQuery>
+          }
+          navbar={
+            <Navbar
+              p="md"
+              width={{ sm: 300, lg: 300 }}
+              hidden={!navBarOpened}
+              hiddenBreakpoint="md"
+            >
+              <Navbar.Section mt="md">
+                <Brand />
+              </Navbar.Section>
+              {links == null ? (
+                <Navbar.Section grow>
+                  <div />
+                </Navbar.Section>
+              ) : (
+                links
+              )}
+              <Navbar.Section>
+                <User />
+              </Navbar.Section>
+            </Navbar>
+          }
+        >
+          {children}
+        </AppShell>
+      </MediaQuery>
     </>
   );
 }

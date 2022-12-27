@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from bracket.config import Environment, config, environment
-from bracket.database import database
+from bracket.database import database, init_db_when_empty
 from bracket.routes import auth, clubs, matches, players, rounds, teams, tournaments
 
 app = FastAPI(
@@ -26,6 +26,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup() -> None:
     await database.connect()
+    await init_db_when_empty()
 
 
 @app.on_event("shutdown")

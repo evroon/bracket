@@ -118,7 +118,7 @@ export default function TableLayout({ children }: any) {
           verticalSpacing="xs"
           striped
           highlightOnHover
-          sx={{ tableLayout: 'fixed', minWidth: 700 }}
+          sx={{ minWidth: 700 }}
         >
           {children}
         </Table>

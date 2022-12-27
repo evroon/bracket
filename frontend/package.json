@@ -14,9 +14,7 @@
     "jest:watch": "jest --watch",
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
-    "test": "tsc --noEmit && npm run prettier:check && npm run lint && npm run jest -- --passWithNoTests",
-    "storybook": "start-storybook -p 7001",
-    "storybook:build": "build-storybook"
+    "test": "tsc --noEmit && npm run prettier:check && npm run lint && npm run jest -- --passWithNoTests"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -62,7 +60,6 @@
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-storybook": "^0.5.7",
     "eslint-plugin-testing-library": "^5.9.1",
     "jest": "^27.5.1",
     "prettier": "^2.7.1",
