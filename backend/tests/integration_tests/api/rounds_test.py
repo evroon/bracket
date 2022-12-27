@@ -1,8 +1,8 @@
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1, DUMMY_PLAYER1, DUMMY_ROUND1
+from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1, DUMMY_ROUND1
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import send_tournament_request
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import inserted_team, inserted_player, inserted_round
+from tests.integration_tests.sql import inserted_team, inserted_round
 
 
 async def test_rounds_endpoint(
