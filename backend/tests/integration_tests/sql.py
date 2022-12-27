@@ -11,7 +11,7 @@ from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.schema import clubs, teams, tournaments, users, players, rounds, matches
+from bracket.schema import clubs, matches, players, rounds, teams, tournaments, users
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT
@@ -65,8 +65,8 @@ async def inserted_player(player: Player) -> AsyncIterator[Player]:
 
 
 @asynccontextmanager
-async def inserted_round(round: Round) -> AsyncIterator[Round]:
-    async with inserted_generic(round, rounds, Round) as row_inserted:
+async def inserted_round(round_: Round) -> AsyncIterator[Round]:
+    async with inserted_generic(round_, rounds, Round) as row_inserted:
         yield row_inserted
 
 
