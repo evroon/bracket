@@ -66,6 +66,9 @@ players = Table(
     Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=True),
     Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
     Column('elo_score', Float, nullable=False),
+    Column('wins', Integer, nullable=False),
+    Column('draws', Integer, nullable=False),
+    Column('losses', Integer, nullable=False),
 )
 
 

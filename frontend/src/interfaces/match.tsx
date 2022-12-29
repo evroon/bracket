@@ -10,6 +10,13 @@ export interface MatchInterface {
   team2: TeamInterface;
 }
 
+export interface MatchBodyInterface {
+  id: number;
+  round_id: number;
+  team1_score: number;
+  team2_score: number;
+}
+
 export interface UpcomingMatchInterface {
   id: number;
   team1: TeamInterface;

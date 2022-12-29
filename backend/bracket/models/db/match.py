@@ -23,3 +23,19 @@ class UpcomingMatch(BaseModel):
 class MatchWithTeamDetails(Match):
     team1: TeamWithPlayers
     team2: TeamWithPlayers
+
+    @property
+    def teams(self) -> list[TeamWithPlayers]:
+        return [self.team1, self.team2]
+
+
+class MatchBody(BaseModelORM):
+    round_id: int
+    team1_score: int = 0
+    team2_score: int = 0
+
+
+class MatchToInsert(MatchBody):
+    created: datetime_utc
+    team1_id: int
+    team2_id: int

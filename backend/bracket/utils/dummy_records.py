@@ -124,7 +124,6 @@ DUMMY_PLAYER1 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=1,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER2 = Player(
@@ -132,7 +131,6 @@ DUMMY_PLAYER2 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=1,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER3 = Player(
@@ -140,7 +138,6 @@ DUMMY_PLAYER3 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=2,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER4 = Player(
@@ -148,7 +145,6 @@ DUMMY_PLAYER4 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=2,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER5 = Player(
@@ -156,7 +152,6 @@ DUMMY_PLAYER5 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=3,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER6 = Player(
@@ -164,7 +159,6 @@ DUMMY_PLAYER6 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=3,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER7 = Player(
@@ -172,7 +166,6 @@ DUMMY_PLAYER7 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=4,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER8 = Player(
@@ -180,7 +173,6 @@ DUMMY_PLAYER8 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=4,
     tournament_id=1,
-    elo_score=0,
 )
 
 DUMMY_PLAYER9 = Player(
@@ -188,7 +180,6 @@ DUMMY_PLAYER9 = Player(
     created=DUMMY_MOCK_TIME,
     team_id=None,
     tournament_id=1,
-    elo_score=0,
 )
 
 

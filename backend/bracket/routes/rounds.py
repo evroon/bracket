@@ -2,49 +2,22 @@ from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
-from bracket.models.db.round import RoundBody, RoundToInsert, RoundWithMatches
+from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.models.db.round import RoundBody, RoundToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import get_current_user
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.schema import rounds
-from bracket.utils.db import get_next_round_name
+from bracket.utils.sql import get_next_round_name, get_rounds_with_matches
 
 router = APIRouter()
 
 
 @router.get("/tournaments/{tournament_id}/rounds", response_model=RoundsWithMatchesResponse)
-async def get_matches_to_schedule(
+async def get_rounds(
     tournament_id: int, _: UserPublic = Depends(get_current_user)
 ) -> RoundsWithMatchesResponse:
-    query = '''
-        WITH teams_with_players AS (
-            SELECT DISTINCT ON (teams.id)
-                teams.*,
-                to_json(array_agg(p)) as players
-            FROM teams
-            LEFT JOIN players p on p.team_id = teams.id
-            WHERE teams.tournament_id = :tournament_id
-            GROUP BY teams.id
-        ), matches_with_teams AS (
-            SELECT DISTINCT ON (matches.id)
-                matches.*,
-                to_json(t1) as team1,
-                to_json(t2) as team2
-            FROM matches
-            LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
-            LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
-            LEFT JOIN rounds r on matches.round_id = r.id
-            WHERE r.tournament_id = :tournament_id
-        )
-        SELECT rounds.*, to_json(array_agg(m.*)) AS matches FROM rounds
-        LEFT JOIN matches_with_teams m on rounds.id = m.round_id
-        WHERE rounds.tournament_id = :tournament_id
-        GROUP BY rounds.id
-    '''
-    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
-    return RoundsWithMatchesResponse.parse_obj(
-        {'data': [RoundWithMatches.parse_obj(x._mapping) for x in result]}
-    )
+    return await get_rounds_with_matches(tournament_id)
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
@@ -56,6 +29,7 @@ async def delete_round(
             rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
         ),
     )
+    await recalculate_elo_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 

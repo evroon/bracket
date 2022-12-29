@@ -15,7 +15,14 @@ export default function Round({
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
 }) {
-  const games = round.matches.map((match) => <Game key={match.id} match={match} />);
+  const games = round.matches.map((match) => (
+    <Game
+      key={match.id}
+      tournamentData={tournamentData}
+      swrRoundsResponse={swrRoundsResponse}
+      match={match}
+    />
+  ));
   const active_round_style = round.is_active
     ? {
         borderStyle: 'solid',

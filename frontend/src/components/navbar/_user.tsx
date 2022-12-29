@@ -1,7 +1,10 @@
 import { Navbar, createStyles } from '@mantine/core';
-import { IconLogin, IconLogout, IconSwitchHorizontal } from '@tabler/icons';
+import { showNotification } from '@mantine/notifications';
+import { IconLogout } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { performLogout } from '../../services/user';
 
 export const useNavbarStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -67,21 +70,27 @@ export function User() {
   const { classes } = useNavbarStyles();
   const router = useRouter();
 
+  function attemptLogout() {
+    performLogout();
+    showNotification({
+      color: 'green',
+      title: 'Logout successful',
+      message: '',
+    });
+
+    router.push('/login');
+  }
+
   return (
     <Navbar.Section className={classes.footer}>
-      <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-        <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-        <span>Account</span>
-      </a>
+      {/*<a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>*/}
+      {/*  <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />*/}
+      {/*  <span>Account</span>*/}
+      {/*</a>*/}
 
-      <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+      <a href="#" className={classes.link} onClick={() => attemptLogout()}>
         <IconLogout className={classes.linkIcon} stroke={1.5} />
         <span>Logout</span>
-      </a>
-
-      <a href="#" className={classes.link} onClick={() => router.push('/login')}>
-        <IconLogin className={classes.linkIcon} stroke={1.5} />
-        <span>Login</span>
       </a>
     </Navbar.Section>
   );

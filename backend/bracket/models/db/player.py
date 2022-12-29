@@ -11,7 +11,10 @@ class Player(BaseModelORM):
     created: datetime_utc
     team_id: int | None = None
     tournament_id: int
-    elo_score: Decimal
+    elo_score: Decimal = Decimal('0.0')
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
 
 
 class PlayerBody(BaseModelORM):
@@ -22,3 +25,6 @@ class PlayerToInsert(PlayerBody):
     created: datetime_utc
     tournament_id: int
     elo_score: Decimal
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0

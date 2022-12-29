@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
+from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.team import Team, TeamBody, TeamToInsert, TeamWithPlayers
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import get_current_user
@@ -29,6 +30,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
         ),
         values={'team_id': None},
     )
+    await recalculate_elo_for_tournament_id(tournament_id)
 
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
@@ -83,6 +85,7 @@ async def delete_team(
             teams.c.id == team_id and teams.c.tournament_id == tournament_id
         ),
     )
+    await recalculate_elo_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 

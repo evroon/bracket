@@ -1,6 +1,5 @@
-export interface Tournament {
+export interface ClubInterface {
   id: number;
   name: string;
   created: string;
-  club_id: number;
 }

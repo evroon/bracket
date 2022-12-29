@@ -34,7 +34,7 @@ export function MainLinks({ tournament_id }: any) {
   const data = [
     {
       icon: IconTournament,
-      label: 'Tournament',
+      label: 'Schedule',
       endpoint: `${tm_prefix}`,
       router,
     },
