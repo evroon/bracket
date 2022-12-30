@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 from heliclockter import datetime_utc
 from pydantic import validator
@@ -27,6 +28,12 @@ class TeamWithPlayers(Team):
             return values_json
 
         return values
+
+    def get_elo(self) -> Decimal:
+        """
+        The ELO score of a team is the average of all player's ELO scores.
+        """
+        return max(player.elo_score for player in self.players) / len(self.players)
 
 
 class TeamBody(BaseModelORM):

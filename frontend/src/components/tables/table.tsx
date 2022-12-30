@@ -55,8 +55,11 @@ export const setSorting = (state: TableState, newSortField: string) => {
   }
 };
 
-export const getTableState = (initial_sort_field: string) => {
-  const [reversed, setReversed] = useState(false);
+export const getTableState = (
+  initial_sort_field: string,
+  initial_sort_direection: boolean = true
+) => {
+  const [reversed, setReversed] = useState(initial_sort_direection);
   const [sortField, setSortField] = useState(initial_sort_field);
   return {
     sortField,
@@ -73,8 +76,8 @@ export function sortTableEntries(r1: any, r2: any, tableState: TableState) {
 
 export function getSortIcon(sorted: boolean, reversed: boolean) {
   if (!sorted) return <MdSort />;
-  if (reversed) return <HiSortAscending />;
-  return <HiSortDescending />;
+  if (reversed) return <HiSortDescending />;
+  return <HiSortAscending />;
 }
 
 export function ThSortable({ children, field, state }: ThProps) {

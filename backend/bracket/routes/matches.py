@@ -3,7 +3,8 @@ from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.match import MatchBody, MatchToInsert
+from bracket.logic.upcoming_matches import get_possible_upcoming_matches
+from bracket.models.db.match import MatchBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import get_current_user
 from bracket.routes.models import SuccessResponse, UpcomingMatchesResponse
@@ -16,7 +17,9 @@ router = APIRouter()
 async def get_matches_to_schedule(
     tournament_id: int, _: UserPublic = Depends(get_current_user)
 ) -> UpcomingMatchesResponse:
-    return UpcomingMatchesResponse(data=[])
+    return UpcomingMatchesResponse(
+        data=await get_possible_upcoming_matches(tournament_id, MatchFilter())
+    )
 
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)

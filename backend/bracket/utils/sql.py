@@ -2,7 +2,8 @@ from databases import Database
 
 from bracket.database import database
 from bracket.models.db.round import RoundWithMatches
-from bracket.routes.models import RoundsWithMatchesResponse
+from bracket.models.db.team import TeamWithPlayers
+from bracket.routes.models import RoundsWithMatchesResponse, TeamsWithPlayersResponse
 
 
 async def get_rounds_with_matches(tournament_id: int) -> RoundsWithMatchesResponse:
@@ -46,3 +47,17 @@ async def get_next_round_name(database: Database, tournament_id: int) -> str:
         await database.fetch_val(query=query, values={'tournament_id': tournament_id})
     )
     return f'Round {round_count + 1}'
+
+
+async def get_teams_with_members(tournament_id: int) -> TeamsWithPlayersResponse:
+    query = '''
+        SELECT teams.*, to_json(array_agg(players.*)) AS players
+        FROM teams
+        LEFT JOIN players ON players.team_id = teams.id
+        WHERE teams.tournament_id = :tournament_id
+        GROUP BY teams.id;
+        '''
+    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
+    return TeamsWithPlayersResponse.parse_obj(
+        {'data': [TeamWithPlayers.parse_obj(x._mapping) for x in result]}
+    )

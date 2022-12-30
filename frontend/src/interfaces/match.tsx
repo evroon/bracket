@@ -18,7 +18,7 @@ export interface MatchBodyInterface {
 }
 
 export interface UpcomingMatchInterface {
-  id: number;
   team1: TeamInterface;
   team2: TeamInterface;
+  elo_diff: number;
 }

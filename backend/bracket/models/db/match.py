@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from heliclockter import datetime_utc
 from pydantic import BaseModel
 
@@ -39,3 +41,13 @@ class MatchToInsert(MatchBody):
     created: datetime_utc
     team1_id: int
     team2_id: int
+
+
+class MatchFilter(BaseModel):
+    elo_diff: int = 100
+
+
+class SuggestedMatch(BaseModel):
+    team1: TeamWithPlayers
+    team2: TeamWithPlayers
+    elo_diff: Decimal

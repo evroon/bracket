@@ -1,3 +1,5 @@
+import { Button } from '@mantine/core';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -13,7 +15,7 @@ export default function UpcomingMatchesTable({
 }) {
   const upcoming_matches: UpcomingMatchInterface[] =
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
-  const tableState = getTableState('team1');
+  const tableState = getTableState('elo_diff');
 
   if (swrUpcomingMatchesResponse.error) return ErrorAlert(swrUpcomingMatchesResponse.error);
 
@@ -22,12 +24,24 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={upcoming_match.id}>
+      <tr key={upcoming_match.elo_diff}>
         <td>
           <PlayerList team={upcoming_match.team1} />
         </td>
         <td>
           <PlayerList team={upcoming_match.team2} />
+        </td>
+        <td>{upcoming_match.elo_diff}</td>
+        <td>
+          <Button
+            color="green"
+            size="xs"
+            style={{ marginRight: 10 }}
+            onClick={() => {}}
+            leftIcon={<GoPlus size={20} />}
+          >
+            Schedule
+          </Button>
         </td>
       </tr>
     ));
@@ -41,6 +55,9 @@ export default function UpcomingMatchesTable({
           </ThSortable>
           <ThSortable state={tableState} field="name">
             Team 2
+          </ThSortable>
+          <ThSortable state={tableState} field="elo_diff">
+            ELO Difference
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>

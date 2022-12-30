@@ -13,3 +13,5 @@ node_modules
 .coverage
 coverage.xml
 coverage.json
+
+backend/yarn.lock
