@@ -4,7 +4,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.upcoming_matches import get_possible_upcoming_matches
-from bracket.models.db.match import MatchBody, MatchFilter, MatchToInsert
+from bracket.models.db.match import MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import get_current_user
 from bracket.routes.models import SuccessResponse, UpcomingMatchesResponse
@@ -37,7 +37,7 @@ async def delete_match(
 
 @router.post("/tournaments/{tournament_id}/matches", response_model=SuccessResponse)
 async def create_match(
-    tournament_id: int, match_body: MatchBody, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, match_body: MatchCreateBody, _: UserPublic = Depends(get_current_user)
 ) -> SuccessResponse:
     await database.execute(
         query=matches.insert(),

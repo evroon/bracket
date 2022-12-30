@@ -12,12 +12,14 @@ export default function MatchModal({
   tournamentData,
   match,
   swrRoundsResponse,
+  swrUpcomingMatchesResponse,
   opened,
   setOpened,
 }: {
   tournamentData: Tournament;
   match: MatchInterface;
   swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse;
   opened: boolean;
   setOpened: any;
 }) {
@@ -46,6 +48,7 @@ export default function MatchModal({
             };
             await updateMatch(tournamentData.id, match.id, newMatch);
             await swrRoundsResponse.mutate(null);
+            await swrUpcomingMatchesResponse.mutate(null);
             setOpened(false);
           })}
         >
@@ -71,6 +74,7 @@ export default function MatchModal({
           onClick={async () => {
             await deleteMatch(tournamentData.id, match.id);
             await swrRoundsResponse.mutate(null);
+            await swrUpcomingMatchesResponse.mutate(null);
           }}
           style={{ marginTop: '15px' }}
           size="sm"

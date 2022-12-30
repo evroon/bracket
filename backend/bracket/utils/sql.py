@@ -49,12 +49,16 @@ async def get_next_round_name(database: Database, tournament_id: int) -> str:
     return f'Round {round_count + 1}'
 
 
-async def get_teams_with_members(tournament_id: int) -> TeamsWithPlayersResponse:
-    query = '''
+async def get_teams_with_members(
+    tournament_id: int, *, only_active_teams: bool = False
+) -> TeamsWithPlayersResponse:
+    teams_filter = 'AND teams.active IS TRUE' if only_active_teams else ''
+    query = f'''
         SELECT teams.*, to_json(array_agg(players.*)) AS players
         FROM teams
         LEFT JOIN players ON players.team_id = teams.id
         WHERE teams.tournament_id = :tournament_id
+        {teams_filter}
         GROUP BY teams.id;
         '''
     result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})

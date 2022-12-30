@@ -1,4 +1,4 @@
-import { Center, Title } from '@mantine/core';
+import { Center } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -10,16 +10,19 @@ export default function Round({
   tournamentData,
   round,
   swrRoundsResponse,
+  swrUpcomingMatchesResponse,
 }: {
   tournamentData: Tournament;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse;
 }) {
   const games = round.matches.map((match) => (
     <Game
       key={match.id}
       tournamentData={tournamentData}
       swrRoundsResponse={swrRoundsResponse}
+      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
       match={match}
     />
   ));
@@ -47,11 +50,11 @@ export default function Round({
         }}
       >
         <Center>
-          <Title order={3}>{round.name}</Title>
           <RoundModal
             tournamentData={tournamentData}
             round={round}
             swrRoundsResponse={swrRoundsResponse}
+            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           />
         </Center>
         {games}

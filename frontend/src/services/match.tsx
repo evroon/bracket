@@ -1,7 +1,7 @@
-import { MatchBodyInterface, MatchInterface } from '../interfaces/match';
+import { MatchBodyInterface, MatchCreateBodyInterface } from '../interfaces/match';
 import { createAxios } from './adapter';
 
-export async function createMatch(tournament_id: number, match: MatchInterface) {
+export async function createMatch(tournament_id: number, match: MatchCreateBodyInterface) {
   return createAxios().post(`tournaments/${tournament_id}/matches`, match);
 }
 

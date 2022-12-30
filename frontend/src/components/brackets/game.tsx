@@ -31,10 +31,12 @@ const useStyles = createStyles((theme) => ({
 
 export default function Game({
   swrRoundsResponse,
+  swrUpcomingMatchesResponse,
   tournamentData,
   match,
 }: {
   swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse;
   tournamentData: Tournament;
   match: MatchInterface;
 }) {
@@ -72,6 +74,7 @@ export default function Game({
       </div>
       <MatchModal
         swrRoundsResponse={swrRoundsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}
         match={match}
         opened={opened}

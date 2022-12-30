@@ -14,6 +14,7 @@ export default function Brackets({
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;
 }) {
+  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(tournamentData.id);
   if (swrRoundsResponse.data == null) {
     return <div />;
   }
@@ -24,16 +25,30 @@ export default function Brackets({
       tournamentData={tournamentData}
       round={round}
       swrRoundsResponse={swrRoundsResponse}
+      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
     />
   ));
 
-  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(tournamentData.id);
+  const draft_round = swrRoundsResponse.data.data.filter((round: RoundInterface) => round.is_draft);
+  const scheduler =
+    draft_round.length > 0 ? (
+      <>
+        <h2>Settings</h2>
+        <Scheduler
+          round_id={draft_round[0].id}
+          tournamentData={tournamentData}
+          swrRoundsResponse={swrRoundsResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        />
+      </>
+    ) : (
+      ''
+    );
 
   return (
     <div style={{ marginTop: '15px' }}>
       <Group>{rounds}</Group>
-      <h2>Settings</h2>
-      <Scheduler swrUpcomingMatchesResponse={swrUpcomingMatchesResponse} />
+      {scheduler}
     </div>
   );
 }

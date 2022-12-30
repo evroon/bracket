@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.team import Team, TeamWithPlayers
+from bracket.utils.types import assert_some
 
 
 class Match(BaseModelORM):
@@ -30,6 +31,10 @@ class MatchWithTeamDetails(Match):
     def teams(self) -> list[TeamWithPlayers]:
         return [self.team1, self.team2]
 
+    @property
+    def team_ids(self) -> list[int]:
+        return [assert_some(self.team1.id), assert_some(self.team2.id)]
+
 
 class MatchBody(BaseModelORM):
     round_id: int
@@ -37,10 +42,16 @@ class MatchBody(BaseModelORM):
     team2_score: int = 0
 
 
-class MatchToInsert(MatchBody):
-    created: datetime_utc
+class MatchCreateBody(BaseModelORM):
+    round_id: int
     team1_id: int
     team2_id: int
+
+
+class MatchToInsert(MatchCreateBody):
+    created: datetime_utc
+    team1_score: int = 0
+    team2_score: int = 0
 
 
 class MatchFilter(BaseModel):
