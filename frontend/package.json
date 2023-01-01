@@ -26,7 +26,7 @@
     "@mantine/notifications": "^5.9.5",
     "@next/bundle-analyzer": "^13.1.1",
     "@react-icons/all-files": "^4.1.0",
-    "@tabler/icons": "^1.118.0",
+    "@tabler/icons": "^1.119.0",
     "cookies-next": "^2.1.1",
     "axios": "^1.2.1",
     "date-fns": "^2.29.3",
