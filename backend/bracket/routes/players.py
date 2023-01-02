@@ -74,6 +74,7 @@ async def create_player(
             created=datetime_utc.now(),
             tournament_id=tournament_id,
             elo_score=0,
+            swiss_score=0,
         ).dict(),
     )
     return SinglePlayerResponse(

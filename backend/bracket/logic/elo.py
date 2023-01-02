@@ -1,4 +1,5 @@
 from collections import defaultdict
+from decimal import Decimal
 
 from pydantic import BaseModel
 
@@ -14,6 +15,7 @@ class PlayerStatistics(BaseModel):
     draws: int = 0
     losses: int = 0
     elo_score: int = 0
+    swiss_score: Decimal = Decimal('0.00')
 
 
 def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int, PlayerStatistics]:
@@ -29,9 +31,14 @@ def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int,
                         match.team1_score, match.team2_score
                     )
 
-                    player_x_elo[assert_some(player.id)].wins += 1 if has_won else 0
-                    player_x_elo[assert_some(player.id)].draws += 1 if was_draw else 0
-                    player_x_elo[assert_some(player.id)].losses += 1 if not has_won else 0
+                    if has_won:
+                        player_x_elo[assert_some(player.id)].wins += 1
+                        player_x_elo[assert_some(player.id)].swiss_score += Decimal('1.00')
+                    elif was_draw:
+                        player_x_elo[assert_some(player.id)].draws += 1
+                        player_x_elo[assert_some(player.id)].swiss_score += Decimal('0.50')
+                    else:
+                        player_x_elo[assert_some(player.id)].losses += 1
 
                     player_x_elo[assert_some(player.id)].elo_score += team_score
 

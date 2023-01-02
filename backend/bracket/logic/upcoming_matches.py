@@ -9,8 +9,10 @@ def check_team_combination_adheres_to_filter(
     team1: TeamWithPlayers, team2: TeamWithPlayers, filter: MatchFilter
 ) -> SuggestedMatch | None:
     elo_diff = abs(team1.get_elo() - team2.get_elo())
+    swiss_diff = abs(team1.get_swiss_score() - team2.get_swiss_score())
+
     if elo_diff < filter.elo_diff:
-        return SuggestedMatch(team1=team1, team2=team2, elo_diff=elo_diff)
+        return SuggestedMatch(team1=team1, team2=team2, elo_diff=elo_diff, swiss_diff=swiss_diff)
 
     return None
 

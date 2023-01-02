@@ -21,6 +21,7 @@ export interface UpcomingMatchInterface {
   team1: TeamInterface;
   team2: TeamInterface;
   elo_diff: number;
+  swiss_diff: number;
 }
 
 export interface MatchCreateBodyInterface {

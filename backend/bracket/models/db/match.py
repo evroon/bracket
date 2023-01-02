@@ -62,3 +62,4 @@ class SuggestedMatch(BaseModel):
     team1: TeamWithPlayers
     team2: TeamWithPlayers
     elo_diff: Decimal
+    swiss_diff: Decimal

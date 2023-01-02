@@ -51,6 +51,7 @@ export default function UpcomingMatchesTable({
           <PlayerList team={upcoming_match.team2} />
         </td>
         <td>{upcoming_match.elo_diff}</td>
+        <td>{upcoming_match.swiss_diff}</td>
         <td>
           <Button
             color="green"
@@ -77,6 +78,9 @@ export default function UpcomingMatchesTable({
           </ThSortable>
           <ThSortable state={tableState} field="elo_diff">
             ELO Difference
+          </ThSortable>
+          <ThSortable state={tableState} field="swiss_diff">
+            Swiss Difference
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>
