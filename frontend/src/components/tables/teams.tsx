@@ -3,26 +3,26 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { TeamInterface } from '../../interfaces/team';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
 import TeamModal from '../modals/team_modal';
 import DateTime from '../utils/datetime';
-import ErrorAlert from '../utils/error_alert';
+import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function TeamsTable({
   tournamentData,
   swrTeamsResponse,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   swrTeamsResponse: SWRResponse;
 }) {
   const teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
   const tableState = getTableState('name');
 
-  if (swrTeamsResponse.error) return ErrorAlert(swrTeamsResponse.error);
+  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))

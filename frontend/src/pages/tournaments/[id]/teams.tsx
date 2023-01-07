@@ -3,12 +3,12 @@ import { SWRResponse } from 'swr';
 
 import TeamModal from '../../../components/modals/team_modal';
 import TeamsTable from '../../../components/tables/teams';
-import { Tournament } from '../../../interfaces/tournament';
+import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { getTeams } from '../../../services/adapter';
-import { getStaticPaths as _getStaticPaths, getStaticProps as _getStaticProps } from '../[id]';
 import TournamentLayout from '../_tournament_layout';
 
-export default function Teams({ tournamentData }: { tournamentData: Tournament }) {
+export default function Teams() {
+  const { tournamentData } = getTournamentIdFromRouter();
   const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
@@ -28,6 +28,3 @@ export default function Teams({ tournamentData }: { tournamentData: Tournament }
     </TournamentLayout>
   );
 }
-
-export const getStaticPaths = _getStaticPaths;
-export const getStaticProps = _getStaticProps;

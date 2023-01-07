@@ -43,6 +43,10 @@ const fetcher = (url: string) =>
     .get(url)
     .then((res: { data: any }) => res.data);
 
+export function getClubs(): SWRResponse {
+  return useSWR('clubs', fetcher);
+}
+
 export function getTournaments(): SWRResponse<any, any> {
   return useSWR('tournaments', fetcher);
 }

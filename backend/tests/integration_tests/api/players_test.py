@@ -12,17 +12,23 @@ from tests.integration_tests.sql import assert_row_count_and_clear, inserted_pla
 async def test_players_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with inserted_team(DUMMY_TEAM1):
-        async with inserted_player(DUMMY_PLAYER1) as player_inserted:
+    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+        async with inserted_player(
+            DUMMY_PLAYER1.copy(update={'team_id': team_inserted.id})
+        ) as player_inserted:
             assert await send_tournament_request(HTTPMethod.GET, 'players', auth_context, {}) == {
                 'data': [
                     {
                         'created': DUMMY_MOCK_TIME.isoformat(),
                         'id': player_inserted.id,
                         'elo_score': 0.0,
+                        'swiss_score': 0.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                         'name': 'Luke',
-                        'team_id': 1,
-                        'tournament_id': 1,
+                        'team_id': team_inserted.id,
+                        'tournament_id': auth_context.tournament.id,
                     }
                 ],
             }

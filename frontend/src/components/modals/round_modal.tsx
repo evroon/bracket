@@ -1,11 +1,19 @@
-import { ActionIcon, Button, Checkbox, Modal, TextInput } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Checkbox,
+  Modal,
+  TextInput,
+  Title,
+  UnstyledButton,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
 
@@ -13,10 +21,12 @@ export default function RoundModal({
   tournamentData,
   round,
   swrRoundsResponse,
+  swrUpcomingMatchesResponse,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -38,7 +48,7 @@ export default function RoundModal({
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updateRound(tournamentData.id, round.id, values as RoundInterface);
-            swrRoundsResponse.mutate(null);
+            await swrRoundsResponse.mutate(null);
             setOpened(false);
           })}
         >
@@ -67,6 +77,7 @@ export default function RoundModal({
           onClick={async () => {
             await deleteRound(tournamentData.id, round.id);
             await swrRoundsResponse.mutate(null);
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
           }}
           style={{ marginTop: '15px' }}
           size="sm"
@@ -74,6 +85,9 @@ export default function RoundModal({
         />
       </Modal>
 
+      <UnstyledButton onClick={() => setOpened(true)}>
+        <Title order={3}>{round.name}</Title>
+      </UnstyledButton>
       <ActionIcon onClick={() => setOpened(true)}>
         <IconPencil size={18} style={{ marginBottom: '5px' }} />
       </ActionIcon>

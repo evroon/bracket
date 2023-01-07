@@ -34,7 +34,7 @@ jobs:
         working-directory: backend
 
       - name: Run tests
-        run: pipenv run pytest --cov --cov-report=xml .
+        run: SQLALCHEMY_SILENCE_UBER_WARNING=1 pipenv run pytest --cov --cov-report=xml .
         working-directory: backend
         env:
           ENVIRONMENT: CI

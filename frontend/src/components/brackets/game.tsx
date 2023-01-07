@@ -1,6 +1,10 @@
-import { Grid, Tooltip, createStyles, useMantineTheme } from '@mantine/core';
+import { Grid, Tooltip, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
+import { useState } from 'react';
+import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
+import { TournamentMinimal } from '../../interfaces/tournament';
+import MatchModal from '../modals/match_modal';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -14,22 +18,28 @@ const useStyles = createStyles((theme) => ({
   top: {
     // subscribe to color scheme changes right in your styles
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
-    paddingLeft: '15px',
-    paddingTop: '6px',
-    paddingBottom: '6px',
+    padding: '8px 8px 8px 15px',
     borderRadius: '8px 8px 0px 0px',
   },
   bottom: {
     // subscribe to color scheme changes right in your styles
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
-    paddingLeft: '15px',
-    paddingTop: '6px',
-    paddingBottom: '6px',
+    padding: '8px 8px 8px 15px',
     borderRadius: '0px 0px 8px 8px',
   },
 }));
 
-export default function Game({ match }: { match: MatchInterface }) {
+export default function Game({
+  swrRoundsResponse,
+  swrUpcomingMatchesResponse,
+  tournamentData,
+  match,
+}: {
+  swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  tournamentData: TournamentMinimal;
+  match: MatchInterface;
+}) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
@@ -41,8 +51,10 @@ export default function Game({ match }: { match: MatchInterface }) {
   const team1_players = match.team1.players.map((player) => player.name).join(', ');
   const team2_players = match.team2.players.map((player) => player.name).join(', ');
 
+  const [opened, setOpened] = useState(false);
+
   return (
-    <div className={classes.root}>
+    <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
       <div className={classes.top} style={team1_style}>
         <Tooltip label={team1_players} withArrow color="blue">
           <Grid grow>
@@ -60,6 +72,14 @@ export default function Game({ match }: { match: MatchInterface }) {
           </Grid>
         </Tooltip>
       </div>
-    </div>
+      <MatchModal
+        swrRoundsResponse={swrRoundsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        tournamentData={tournamentData}
+        match={match}
+        opened={opened}
+        setOpened={setOpened}
+      />
+    </UnstyledButton>
   );
 }

@@ -11,16 +11,15 @@ export default function Login() {
   const { classes } = useStyles();
   const router = useRouter();
 
-  function attemptLogin(email: string, password: string) {
-    performLogin(email, password).then(() => {
-      showNotification({
-        color: 'green',
-        title: 'Login successful',
-        message: '',
-      });
+  async function attemptLogin(email: string, password: string) {
+    await performLogin(email, password);
+    showNotification({
+      color: 'green',
+      title: 'Login successful',
+      message: '',
     });
 
-    router.push('/');
+    await router.push('/');
   }
   const form = useForm({
     initialValues: {
@@ -45,11 +44,14 @@ export default function Login() {
       </Title>
       <Container size={420} my={40}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <form onSubmit={form.onSubmit((values) => attemptLogin(values.email, values.password))}>
+          <form
+            onSubmit={form.onSubmit(async (values) => attemptLogin(values.email, values.password))}
+          >
             <TextInput
               label="Email"
               placeholder="Your email"
               required
+              type="email"
               {...form.getInputProps('email')}
             />
             <PasswordInput

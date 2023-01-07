@@ -2,17 +2,17 @@ import { Group } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
-import { Tournament } from '../../interfaces/tournament';
-import { getUpcomingMatches } from '../../services/adapter';
-import Scheduler from '../scheduling/scheduler';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import Round from './round';
 
 export default function Brackets({
   tournamentData,
   swrRoundsResponse,
+  swrUpcomingMatchesResponse,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   if (swrRoundsResponse.data == null) {
     return <div />;
@@ -24,16 +24,9 @@ export default function Brackets({
       tournamentData={tournamentData}
       round={round}
       swrRoundsResponse={swrRoundsResponse}
+      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
     />
   ));
 
-  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(tournamentData.id);
-
-  return (
-    <div style={{ marginTop: '15px' }}>
-      <Group>{rounds}</Group>
-      <h2>Settings</h2>
-      <Scheduler swrUpcomingMatchesResponse={swrUpcomingMatchesResponse} />
-    </div>
-  );
+  return <Group>{rounds}</Group>;
 }

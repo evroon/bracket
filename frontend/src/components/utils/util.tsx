@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 export function getItemColor(theme: any) {
   const darkTheme = theme.colorScheme === 'dark';
   return darkTheme ? theme.colors.dark[4] : theme.colors.gray[2];
@@ -31,4 +33,12 @@ export function getDefaultTimeRange(selectMultipleDates: boolean) {
 
 export function onlyUnique(value: any, index: number, self: any) {
   return self.indexOf(value) === index;
+}
+
+export function getTournamentIdFromRouter() {
+  const router = useRouter();
+  const { id: idString }: any = router.query;
+  const id = parseInt(idString, 10);
+  const tournamentData = { id };
+  return { id, tournamentData };
 }

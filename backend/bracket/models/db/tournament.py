@@ -8,3 +8,17 @@ class Tournament(BaseModelORM):
     club_id: int
     name: str
     created: datetime_utc
+    dashboard_public: bool
+
+
+class TournamentUpdateBody(BaseModelORM):
+    name: str
+    dashboard_public: bool
+
+
+class TournamentBody(TournamentUpdateBody):
+    club_id: int
+
+
+class TournamentToInsert(TournamentBody):
+    created: datetime_utc

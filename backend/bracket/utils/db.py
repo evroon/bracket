@@ -24,14 +24,3 @@ async def fetch_all_parsed(
 ) -> list[BaseModelT]:
     records = await database.fetch_all(query)
     return [model.parse_obj(record._mapping) for record in records]
-
-
-async def get_next_round_name(database: Database, tournament_id: int) -> str:
-    query = '''
-        SELECT count(*) FROM rounds
-        WHERE rounds.tournament_id = :tournament_id
-    '''
-    round_count = int(
-        await database.fetch_val(query=query, values={'tournament_id': tournament_id})
-    )
-    return f'Round {round_count + 1}'

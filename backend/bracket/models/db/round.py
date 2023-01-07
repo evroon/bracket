@@ -30,15 +30,14 @@ class RoundWithMatches(Round):
         return values
 
 
-class RoundToInsert(BaseModelORM):
-    created: datetime_utc
-    tournament_id: int
-    is_draft: bool = False
-    is_active: bool = False
-    name: str
-
-
 class RoundBody(BaseModelORM):
     name: str
     is_draft: bool
     is_active: bool
+
+
+class RoundToInsert(RoundBody):
+    created: datetime_utc
+    tournament_id: int
+    is_draft: bool = False
+    is_active: bool = False
