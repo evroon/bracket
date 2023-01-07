@@ -82,7 +82,7 @@ export default function TournamentModal({
           />
 
           <Select
-            data={clubs.map((p) => ({ value: p.id, label: p.name }))}
+            data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
             label="Club"
             placeholder="Pick a club for this tournament"
             searchable
