@@ -96,10 +96,11 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
             async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:
                 async with inserted_user_x_club(
                     UserXClub(user_id=user_inserted.id, club_id=club_inserted.id)
-                ):
+                ) as user_x_club_inserted:
                     yield AuthContext(
                         headers=headers,
                         user=user_inserted,
                         club=club_inserted,
                         tournament=tournament_inserted,
+                        user_x_club=user_x_club_inserted,
                     )

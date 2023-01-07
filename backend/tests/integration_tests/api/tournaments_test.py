@@ -2,7 +2,7 @@ from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.schema import tournaments
 from bracket.utils.db import fetch_one_parsed_certain
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME
+from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
@@ -10,7 +10,7 @@ from tests.integration_tests.api.shared import (
     send_tournament_request,
 )
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import assert_row_count_and_clear
+from tests.integration_tests.sql import assert_row_count_and_clear, inserted_tournament
 
 
 async def test_tournaments_endpoint(
@@ -29,12 +29,23 @@ async def test_tournaments_endpoint(
     }
 
 
+async def test_create_tournament(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'name': 'Some new name', 'club_id': auth_context.club.id, 'dashboard_public': False}
+    assert (
+        await send_auth_request(HTTPMethod.POST, 'tournaments', auth_context, json=body)
+        == SUCCESS_RESPONSE
+    )
+    await database.execute(tournaments.delete().where(tournaments.c.name == body['name']))
+
+
 async def test_update_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     body = {'name': 'Some new name', 'dashboard_public': False}
     assert (
-        await send_tournament_request(HTTPMethod.PATCH, '', auth_context, None, body)
+        await send_tournament_request(HTTPMethod.PATCH, '', auth_context, json=body)
         == SUCCESS_RESPONSE
     )
     patched_tournament = await fetch_one_parsed_certain(
@@ -46,3 +57,17 @@ async def test_update_tournament(
     assert patched_tournament.dashboard_public == body['dashboard_public']
 
     await assert_row_count_and_clear(tournaments, 1)
+
+
+async def test_delete_tournament(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:
+        assert (
+            await send_tournament_request(
+                HTTPMethod.DELETE, '', auth_context.copy(update={'tournament': tournament_inserted})
+            )
+            == SUCCESS_RESPONSE
+        )
+
+    await assert_row_count_and_clear(tournaments, 0)
