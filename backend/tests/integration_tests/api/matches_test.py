@@ -1,4 +1,9 @@
+from bracket.database import database
+from bracket.models.db.match import Match
+from bracket.schema import matches
+from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
+    DUMMY_MATCH1,
     DUMMY_PLAYER1,
     DUMMY_PLAYER2,
     DUMMY_ROUND1,
@@ -6,9 +11,96 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM2,
 )
 from bracket.utils.http import HTTPMethod
-from tests.integration_tests.api.shared import send_tournament_request
+from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import inserted_player, inserted_round, inserted_team
+from tests.integration_tests.sql import (
+    assert_row_count_and_clear,
+    inserted_match,
+    inserted_player,
+    inserted_round,
+    inserted_team,
+)
+
+
+async def test_create_match(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_round(DUMMY_ROUND1) as round_inserted:
+        async with inserted_team(DUMMY_TEAM1) as team1_inserted:
+            async with inserted_team(DUMMY_TEAM2) as team2_inserted:
+                body = {
+                    'team1_id': team1_inserted.id,
+                    'team2_id': team2_inserted.id,
+                    'round_id': round_inserted.id,
+                }
+                assert (
+                    await send_tournament_request(
+                        HTTPMethod.POST, 'matches', auth_context, json=body
+                    )
+                    == SUCCESS_RESPONSE
+                )
+                await assert_row_count_and_clear(matches, 1)
+
+
+async def test_delete_match(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_round(DUMMY_ROUND1) as round_inserted:
+        async with inserted_team(DUMMY_TEAM1) as team1_inserted:
+            async with inserted_team(DUMMY_TEAM2) as team2_inserted:
+                async with inserted_match(
+                    DUMMY_MATCH1.copy(
+                        update={
+                            'round_id': round_inserted.id,
+                            'team1_id': team1_inserted.id,
+                            'team2_id': team2_inserted.id,
+                        }
+                    )
+                ) as match_inserted:
+                    assert (
+                        await send_tournament_request(
+                            HTTPMethod.DELETE, f'matches/{match_inserted.id}', auth_context, {}
+                        )
+                        == SUCCESS_RESPONSE
+                    )
+                    await assert_row_count_and_clear(matches, 0)
+
+
+async def test_update_match(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_team(DUMMY_TEAM1) as team1_inserted:
+        async with inserted_team(DUMMY_TEAM2) as team2_inserted:
+            async with inserted_round(DUMMY_ROUND1) as round_inserted:
+                async with inserted_match(
+                    DUMMY_MATCH1.copy(
+                        update={
+                            'round_id': round_inserted.id,
+                            'team1_id': team1_inserted.id,
+                            'team2_id': team2_inserted.id,
+                        }
+                    )
+                ) as match_inserted:
+                    body = {'team1_score': 42, 'team2_score': 24, 'round_id': round_inserted.id}
+                    assert (
+                        await send_tournament_request(
+                            HTTPMethod.PATCH,
+                            f'matches/{match_inserted.id}',
+                            auth_context,
+                            None,
+                            body,
+                        )
+                        == SUCCESS_RESPONSE
+                    )
+                    patched_match = await fetch_one_parsed_certain(
+                        database,
+                        Match,
+                        query=matches.select().where(matches.c.id == round_inserted.id),
+                    )
+                    assert patched_match.team1_score == body['team1_score']
+                    assert patched_match.team2_score == body['team2_score']
+
+                    await assert_row_count_and_clear(matches, 1)
 
 
 async def test_upcoming_matches_endpoint(

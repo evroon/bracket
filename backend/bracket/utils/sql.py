@@ -11,7 +11,7 @@ async def get_rounds_with_matches(tournament_id: int) -> RoundsWithMatchesRespon
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
                 teams.*,
-                to_json(array_agg(p)) as players
+                to_json(array_remove(array_agg(p), NULL)) as players
             FROM teams
             LEFT JOIN players p on p.team_id = teams.id
             WHERE teams.tournament_id = :tournament_id
@@ -33,6 +33,7 @@ async def get_rounds_with_matches(tournament_id: int) -> RoundsWithMatchesRespon
         GROUP BY rounds.id
     '''
     result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
+    print([x._mapping for x in result])
     return RoundsWithMatchesResponse.parse_obj(
         {'data': [RoundWithMatches.parse_obj(x._mapping) for x in result]}
     )
