@@ -1,6 +1,6 @@
 import logging
 
-from bracket.config import Environment, environment
+from bracket.config import environment
 
 
 def create_logger(level: int) -> logging.Logger:

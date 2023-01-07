@@ -4,7 +4,7 @@ from heliclockter import datetime_utc
 from pydantic import BaseModel
 
 from bracket.models.db.shared import BaseModelORM
-from bracket.models.db.team import Team, TeamWithPlayers
+from bracket.models.db.team import TeamWithPlayers
 from bracket.utils.types import assert_some
 
 
