@@ -29,12 +29,23 @@ async def test_tournaments_endpoint(
     }
 
 
+async def test_create_tournament(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'name': 'Some new name', 'club_id': auth_context.club.id, 'dashboard_public': False}
+    assert (
+        await send_auth_request(HTTPMethod.POST, 'tournaments', auth_context, json=body)
+        == SUCCESS_RESPONSE
+    )
+    await database.execute(tournaments.delete().where(tournaments.c.name == body['name']))
+
+
 async def test_update_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     body = {'name': 'Some new name', 'dashboard_public': False}
     assert (
-        await send_tournament_request(HTTPMethod.PATCH, '', auth_context, None, body)
+        await send_tournament_request(HTTPMethod.PATCH, '', auth_context, json=body)
         == SUCCESS_RESPONSE
     )
     patched_tournament = await fetch_one_parsed_certain(
