@@ -20,7 +20,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.9.5",
-    "@mantine/form": "^5.9.5",
+    "@mantine/form": "^5.10.0",
     "@mantine/hooks": "^5.9.5",
     "@mantine/next": "^5.9.6",
     "@mantine/notifications": "^5.9.5",
