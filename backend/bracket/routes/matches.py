@@ -6,7 +6,7 @@ from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.upcoming_matches import get_possible_upcoming_matches
 from bracket.models.db.match import MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import get_current_user
+from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse, UpcomingMatchesResponse
 from bracket.schema import matches
 
@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/tournaments/{tournament_id}/upcoming_matches", response_model=UpcomingMatchesResponse)
 async def get_matches_to_schedule(
-    tournament_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> UpcomingMatchesResponse:
     return UpcomingMatchesResponse(
         data=await get_possible_upcoming_matches(tournament_id, MatchFilter())
@@ -24,7 +24,7 @@ async def get_matches_to_schedule(
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def delete_match(
-    tournament_id: int, match_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, match_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     await database.execute(
         query=matches.delete().where(
@@ -37,7 +37,9 @@ async def delete_match(
 
 @router.post("/tournaments/{tournament_id}/matches", response_model=SuccessResponse)
 async def create_match(
-    tournament_id: int, match_body: MatchCreateBody, _: UserPublic = Depends(get_current_user)
+    tournament_id: int,
+    match_body: MatchCreateBody,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     await database.execute(
         query=matches.insert(),
@@ -54,7 +56,7 @@ async def update_match_by_id(
     tournament_id: int,
     match_id: int,
     match_body: MatchBody,
-    _: UserPublic = Depends(get_current_user),
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     await database.execute(
         query=matches.update().where(matches.c.id == match_id),

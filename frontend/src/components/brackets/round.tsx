@@ -2,7 +2,7 @@ import { Center } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
 import Game from './game';
 
@@ -12,10 +12,10 @@ export default function Round({
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const games = round.matches.map((match) => (
     <Game
@@ -36,7 +36,10 @@ export default function Round({
         borderStyle: 'dashed',
         borderColor: 'gray',
       }
-    : { borderStyle: 'hidden' };
+    : {
+        borderStyle: 'solid',
+        borderColor: 'gray',
+      };
 
   return (
     <div style={{ width: 300, marginLeft: '50px', minHeight: 500 }}>

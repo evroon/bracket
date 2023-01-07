@@ -22,6 +22,7 @@ tournaments = Table(
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
     Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
+    Column('dashboard_public', Boolean, nullable=False),
 )
 
 rounds = Table(
@@ -81,4 +82,12 @@ users = Table(
     Column('name', String, nullable=False),
     Column('password_hash', String, nullable=False),
     Column('created', DateTimeTZ, nullable=False),
+)
+
+users_x_clubs = Table(
+    'users_x_clubs',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
+    Column('user_id', BigInteger, ForeignKey('users.id'), nullable=False),
 )

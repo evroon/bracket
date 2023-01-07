@@ -2,14 +2,14 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
 import { PlayerELOScore } from '../info/player_elo_score';
 import { PlayerStatistics } from '../info/player_statistics';
 import PlayerModal from '../modals/player_modal';
 import DateTime from '../utils/datetime';
-import ErrorAlert from '../utils/error_alert';
+import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function PlayersTable({
@@ -17,14 +17,14 @@ export default function PlayersTable({
   tournamentData,
 }: {
   swrPlayersResponse: SWRResponse;
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
 }) {
   const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 
   const maxELOScore = Math.max(...players.map((player) => player.elo_score));
 
-  if (swrPlayersResponse.error) return ErrorAlert(swrPlayersResponse.error);
+  if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
   const rows = players
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))

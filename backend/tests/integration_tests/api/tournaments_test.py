@@ -14,6 +14,7 @@ async def test_tournaments_endpoint(
                 'club_id': auth_context.club.id,
                 'created': DUMMY_MOCK_TIME.isoformat(),
                 'name': 'Some Cool Tournament',
+                'dashboard_public': True,
             }
         ],
     }

@@ -7,7 +7,7 @@ import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfac
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import PlayerList from '../info/player_list';
-import ErrorAlert from '../utils/error_alert';
+import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function UpcomingMatchesTable({
@@ -25,7 +25,9 @@ export default function UpcomingMatchesTable({
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
   const tableState = getTableState('elo_diff');
 
-  if (swrUpcomingMatchesResponse.error) return ErrorAlert(swrUpcomingMatchesResponse.error);
+  if (swrUpcomingMatchesResponse.error) {
+    return <RequestErrorAlert error={swrUpcomingMatchesResponse.error} />;
+  }
 
   async function scheduleMatch(upcoming_match: UpcomingMatchInterface) {
     const match_to_schedule: MatchCreateBodyInterface = {
@@ -65,6 +67,8 @@ export default function UpcomingMatchesTable({
         </td>
       </tr>
     ));
+
+  if (rows.length < 1) return <p>No upcoming matches available.</p>;
 
   return (
     <TableLayout>

@@ -44,7 +44,9 @@ export default function Login() {
       </Title>
       <Container size={420} my={40}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-          <form onSubmit={form.onSubmit((values) => attemptLogin(values.email, values.password))}>
+          <form
+            onSubmit={form.onSubmit(async (values) => attemptLogin(values.email, values.password))}
+          >
             <TextInput
               label="Email"
               placeholder="Your email"

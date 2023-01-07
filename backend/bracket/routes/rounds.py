@@ -5,7 +5,10 @@ from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.round import RoundBody, RoundToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import get_current_user
+from bracket.routes.auth import (
+    user_authenticated_or_public_dashboard,
+    user_authenticated_for_tournament,
+)
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.schema import rounds
 from bracket.utils.sql import get_next_round_name, get_rounds_with_matches
@@ -15,14 +18,18 @@ router = APIRouter()
 
 @router.get("/tournaments/{tournament_id}/rounds", response_model=RoundsWithMatchesResponse)
 async def get_rounds(
-    tournament_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, user: UserPublic = Depends(user_authenticated_or_public_dashboard)
 ) -> RoundsWithMatchesResponse:
-    return await get_rounds_with_matches(tournament_id)
+    rounds = await get_rounds_with_matches(tournament_id)
+    if user is not None:
+        return rounds
+
+    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds.data if not round_.is_draft])
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def delete_round(
-    tournament_id: int, round_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, round_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     await database.execute(
         query=rounds.delete().where(
@@ -35,7 +42,7 @@ async def delete_round(
 
 @router.post("/tournaments/{tournament_id}/rounds", response_model=SuccessResponse)
 async def create_round(
-    tournament_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     await database.execute(
         query=rounds.insert(),
@@ -53,7 +60,7 @@ async def update_round_by_id(
     tournament_id: int,
     round_id: int,
     round_body: RoundBody,
-    _: UserPublic = Depends(get_current_user),
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     values = {'tournament_id': tournament_id, 'round_id': round_id}
     query = '''

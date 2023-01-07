@@ -5,7 +5,7 @@ from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.team import Team, TeamBody, TeamToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import get_current_user
+from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.schema import players, teams
 from bracket.utils.db import fetch_one_parsed
@@ -36,7 +36,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
 async def get_teams(
-    tournament_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> TeamsWithPlayersResponse:
     return await get_teams_with_members(tournament_id)
 
@@ -46,7 +46,7 @@ async def update_team_by_id(
     tournament_id: int,
     team_id: int,
     team_body: TeamBody,
-    _: UserPublic = Depends(get_current_user),
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
     await database.execute(
         query=teams.update().where(
@@ -69,7 +69,7 @@ async def update_team_by_id(
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)
 async def delete_team(
-    tournament_id: int, team_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, team_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     await database.execute(
         query=teams.delete().where(
@@ -82,7 +82,9 @@ async def delete_team(
 
 @router.post("/tournaments/{tournament_id}/teams", response_model=SingleTeamResponse)
 async def create_team(
-    team_to_insert: TeamBody, tournament_id: int, _: UserPublic = Depends(get_current_user)
+    team_to_insert: TeamBody,
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
     print(team_to_insert.dict(exclude={'player_ids'}))
     last_record_id = await database.execute(

@@ -1,9 +1,9 @@
-import { Button, Group, Modal, Select, TextInput } from '@mantine/core';
+import { Button, Checkbox, Group, Modal, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import assert from 'assert';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { ClubInterface } from '../../interfaces/club';
@@ -15,9 +15,11 @@ import SaveButton from '../buttons/save';
 export default function TournamentModal({
   tournament,
   swrTournamentsResponse,
+  in_table,
 }: {
   tournament: Tournament | null;
   swrTournamentsResponse: SWRResponse;
+  in_table: boolean;
 }) {
   const is_create_form = tournament == null;
   const operation_text = is_create_form ? 'Create Tournament' : 'Edit Tournament';
@@ -34,8 +36,8 @@ export default function TournamentModal({
   ) : (
     <Button
       color="green"
-      size="xs"
-      style={{ marginRight: 10 }}
+      size={in_table ? 'xs' : 'md'}
+      style={in_table ? { marginRight: 10 } : { marginBottom: 10 }}
       onClick={() => setOpened(true)}
       leftIcon={icon}
     >
@@ -49,6 +51,7 @@ export default function TournamentModal({
     initialValues: {
       name: tournament == null ? '' : tournament.name,
       club_id: tournament == null ? null : tournament.club_id,
+      dashboard_public: tournament == null ? true : tournament.dashboard_public,
     },
 
     validate: {
@@ -64,7 +67,14 @@ export default function TournamentModal({
           onSubmit={form.onSubmit(async (values) => {
             assert(values.club_id != null);
             if (is_create_form) await createTournament(values.club_id, values.name);
-            else await updateTournament(tournament.id, values.name);
+            else {
+              await updateTournament(
+                tournament.id,
+                values.name,
+                tournament?.club_id,
+                values.dashboard_public
+              );
+            }
             await swrTournamentsResponse.mutate(null);
             setOpened(false);
           })}
@@ -84,6 +94,11 @@ export default function TournamentModal({
             limit={20}
             style={{ marginTop: 10 }}
             {...form.getInputProps('club_id')}
+          />
+          <Checkbox
+            mt="md"
+            label="Allow anyone to see the dashboard of rounds and matches"
+            {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">

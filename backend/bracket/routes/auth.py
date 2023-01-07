@@ -9,10 +9,12 @@ from pydantic import BaseModel
 
 from bracket.config import config
 from bracket.database import database
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
-from bracket.schema import users
-from bracket.utils.db import fetch_one_parsed
+from bracket.schema import tournaments, users
+from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
 from bracket.utils.security import pwd_context
+from bracket.utils.sql import get_user_access_to_tournament
 from bracket.utils.types import JsonDict, assert_some
 
 router = APIRouter()
@@ -64,26 +66,70 @@ def create_access_token(data: dict[str, Any], expires_delta: timedelta | None = 
     return jwt.encode(to_encode, config.jwt_secret, algorithm=ALGORITHM)
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserPublic:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+async def check_jwt_and_get_user(token: str) -> UserPublic | None:
     try:
         payload = jwt.decode(token, config.jwt_secret, algorithms=[ALGORITHM])
         email: str = str(payload.get("user"))
         if email is None:
-            raise credentials_exception
+            return None
         token_data = TokenData(email=email)
     except (DecodeError, ExpiredSignatureError):
-        raise credentials_exception
+        return None
 
     user = await get_user(email=assert_some(token_data.email))
     if user is None:
-        raise credentials_exception
+        return None
 
     return UserPublic.parse_obj(user.dict())
+
+
+async def user_authenticated(token: str = Depends(oauth2_scheme)) -> UserPublic:
+    user = await check_jwt_and_get_user(token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return UserPublic.parse_obj(user.dict())
+
+
+async def user_authenticated_for_tournament(
+    tournament_id: int, token: str = Depends(oauth2_scheme)
+) -> UserPublic:
+    user = await check_jwt_and_get_user(token)
+
+    if not user or not await get_user_access_to_tournament(tournament_id, assert_some(user.id)):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return UserPublic.parse_obj(user.dict())
+
+
+async def user_authenticated_or_public_dashboard(
+    tournament_id: int, token: str = Depends(oauth2_scheme)
+) -> UserPublic | None:
+    user = await check_jwt_and_get_user(token)
+    if user is not None and await get_user_access_to_tournament(
+        tournament_id, assert_some(user.id)
+    ):
+        return user
+
+    tournaments_fetched = await fetch_all_parsed(
+        database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
+    )
+    if len(tournaments_fetched) < 1:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials or page is not publicly available",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return None
 
 
 @router.post("/token", response_model=Token)
@@ -104,5 +150,5 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 
 @router.get("/users/me/", response_model=UserPublic)
-async def read_users_me(current_user: UserPublic = Depends(get_current_user)) -> UserPublic:
+async def read_users_me(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
     return current_user

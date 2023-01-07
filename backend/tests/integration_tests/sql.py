@@ -11,9 +11,10 @@ from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.schema import clubs, matches, players, rounds, teams, tournaments, users
+from bracket.models.db.user_x_club import UserXClub
+from bracket.schema import clubs, matches, players, rounds, teams, tournaments, users, users_x_clubs
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT, DUMMY_USER_X_CLUB
 from bracket.utils.types import BaseModelT
 from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
@@ -82,14 +83,23 @@ async def inserted_match(match: Match) -> AsyncIterator[Match]:
 
 
 @asynccontextmanager
+async def inserted_user_x_club(user_x_club: UserXClub) -> AsyncIterator[UserXClub]:
+    async with inserted_generic(user_x_club, users_x_clubs, UserXClub) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
     headers = {'Authorization': f'Bearer {get_mock_token()}'}
     async with inserted_user(MOCK_USER) as user_inserted:
         async with inserted_club(DUMMY_CLUB) as club_inserted:
             async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:
-                yield AuthContext(
-                    headers=headers,
-                    user=user_inserted,
-                    club=club_inserted,
-                    tournament=tournament_inserted,
-                )
+                async with inserted_user_x_club(
+                    UserXClub(user_id=user_inserted.id, club_id=club_inserted.id)
+                ):
+                    yield AuthContext(
+                        headers=headers,
+                        user=user_inserted,
+                        club=club_inserted,
+                        tournament=tournament_inserted,
+                    )

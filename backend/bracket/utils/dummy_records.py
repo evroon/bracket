@@ -1,7 +1,6 @@
 from zoneinfo import ZoneInfo
 
 from heliclockter import datetime_utc
-from passlib.context import CryptContext
 
 from bracket.models.db.club import Club
 from bracket.models.db.match import Match
@@ -10,6 +9,7 @@ from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
+from bracket.models.db.user_x_club import UserXClub
 from bracket.utils.security import pwd_context
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo('UTC'))
@@ -20,9 +20,7 @@ DUMMY_CLUB = Club(
 )
 
 DUMMY_TOURNAMENT = Tournament(
-    club_id=1,
-    name='Some Cool Tournament',
-    created=DUMMY_MOCK_TIME,
+    club_id=1, name='Some Cool Tournament', created=DUMMY_MOCK_TIME, dashboard_public=True
 )
 
 DUMMY_ROUND1 = Round(
@@ -182,6 +180,11 @@ DUMMY_PLAYER9 = Player(
     tournament_id=1,
 )
 
+DUMMY_USER_X_CLUB = UserXClub(
+    user_id=1,
+    club_id=1,
+)
+
 
 DUMMY_CLUBS = [DUMMY_CLUB]
 DUMMY_TOURNAMENTS = [DUMMY_TOURNAMENT]
@@ -200,3 +203,4 @@ DUMMY_PLAYERS = [
     DUMMY_PLAYER8,
     DUMMY_PLAYER9,
 ]
+DUMMY_USERS_X_CLUBS = [DUMMY_USER_X_CLUB]

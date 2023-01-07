@@ -65,3 +65,14 @@ async def get_teams_with_members(
     return TeamsWithPlayersResponse.parse_obj(
         {'data': [TeamWithPlayers.parse_obj(x._mapping) for x in result]}
     )
+
+
+async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:
+    query = f'''
+        SELECT DISTINCT t.id
+        FROM users_x_clubs
+        JOIN tournaments t ON t.club_id = users_x_clubs.club_id
+        WHERE user_id = :user_id         
+        '''
+    result = await database.fetch_all(query=query, values={'user_id': user_id})
+    return tournament_id in [tournament.id for tournament in result]  # type: ignore[attr-defined]

@@ -7,7 +7,18 @@ from sqlalchemy import Table
 
 from bracket.database import database, engine, init_db_when_empty
 from bracket.logger import get_logger
-from bracket.schema import clubs, matches, metadata, players, rounds, teams, tournaments, users
+from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.schema import (
+    clubs,
+    matches,
+    metadata,
+    players,
+    rounds,
+    teams,
+    tournaments,
+    users,
+    users_x_clubs,
+)
 from bracket.utils.dummy_records import (
     DUMMY_CLUBS,
     DUMMY_MATCHES,
@@ -16,6 +27,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAMS,
     DUMMY_TOURNAMENTS,
     DUMMY_USERS,
+    DUMMY_USERS_X_CLUBS,
 )
 from bracket.utils.types import BaseModelT
 
@@ -70,6 +82,10 @@ async def create_dev_db() -> None:
     await bulk_insert(players, DUMMY_PLAYERS)
     await bulk_insert(rounds, DUMMY_ROUNDS)
     await bulk_insert(matches, DUMMY_MATCHES)
+    await bulk_insert(users_x_clubs, DUMMY_USERS_X_CLUBS)
+
+    for tournament in await database.fetch_all(tournaments.select()):
+        await recalculate_elo_for_tournament_id(tournament.id)  # type: ignore[attr-defined]
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import MatchModal from '../modals/match_modal';
 
 const useStyles = createStyles((theme) => ({
@@ -36,8 +36,8 @@ export default function Game({
   match,
 }: {
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
-  tournamentData: Tournament;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  tournamentData: TournamentMinimal;
   match: MatchInterface;
 }) {
   const { classes } = useStyles();

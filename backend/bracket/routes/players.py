@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import get_current_user
+from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
 from bracket.schema import players
 from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
@@ -16,7 +16,7 @@ router = APIRouter()
 async def get_players(
     tournament_id: int,
     not_in_team: bool = False,
-    _: UserPublic = Depends(get_current_user),
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> PlayersResponse:
     query = players.select().where(players.c.tournament_id == tournament_id)
     if not_in_team:
@@ -32,7 +32,7 @@ async def update_player_by_id(
     tournament_id: int,
     player_id: int,
     player_body: PlayerBody,
-    _: UserPublic = Depends(get_current_user),
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SinglePlayerResponse:
     await database.execute(
         query=players.update().where(
@@ -53,7 +53,7 @@ async def update_player_by_id(
 
 @router.delete("/tournaments/{tournament_id}/players/{player_id}", response_model=SuccessResponse)
 async def delete_player(
-    tournament_id: int, player_id: int, _: UserPublic = Depends(get_current_user)
+    tournament_id: int, player_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     await database.execute(
         query=players.delete().where(
@@ -65,7 +65,9 @@ async def delete_player(
 
 @router.post("/tournaments/{tournament_id}/players", response_model=SinglePlayerResponse)
 async def create_player(
-    player_body: PlayerBody, tournament_id: int, _: UserPublic = Depends(get_current_user)
+    player_body: PlayerBody,
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SinglePlayerResponse:
     last_record_id = await database.execute(
         query=players.insert(),

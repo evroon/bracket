@@ -4,7 +4,7 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchBodyInterface, MatchInterface } from '../../interfaces/match';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
 
@@ -16,10 +16,10 @@ export default function MatchModal({
   opened,
   setOpened,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   match: MatchInterface;
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
 }) {
@@ -48,7 +48,7 @@ export default function MatchModal({
             };
             await updateMatch(tournamentData.id, match.id, newMatch);
             await swrRoundsResponse.mutate(null);
-            await swrUpcomingMatchesResponse.mutate(null);
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
             setOpened(false);
           })}
         >
@@ -74,7 +74,7 @@ export default function MatchModal({
           onClick={async () => {
             await deleteMatch(tournamentData.id, match.id);
             await swrRoundsResponse.mutate(null);
-            await swrUpcomingMatchesResponse.mutate(null);
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
           }}
           style={{ marginTop: '15px' }}
           size="sm"

@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
-import { Tournament } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
 
@@ -23,10 +23,10 @@ export default function RoundModal({
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
 }: {
-  tournamentData: Tournament;
+  tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -77,7 +77,7 @@ export default function RoundModal({
           onClick={async () => {
             await deleteRound(tournamentData.id, round.id);
             await swrRoundsResponse.mutate(null);
-            await swrUpcomingMatchesResponse.mutate(null);
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
           }}
           style={{ marginTop: '15px' }}
           size="sm"

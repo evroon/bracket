@@ -4,12 +4,11 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
-import { getTournaments } from '../../services/adapter';
 import { deleteTournament } from '../../services/tournament';
 import DeleteButton from '../buttons/delete';
 import TournamentModal from '../modals/tournament_modal';
 import DateTime from '../utils/datetime';
-import ErrorAlert from '../utils/error_alert';
+import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function TournamentsTable({
@@ -17,11 +16,14 @@ export default function TournamentsTable({
 }: {
   swrTournamentsResponse: SWRResponse;
 }) {
-  const { data, error } = getTournaments();
-  const tournaments: Tournament[] = data != null ? data.data : [];
   const tableState = getTableState('name');
 
-  if (error) return ErrorAlert(error);
+  if (swrTournamentsResponse.error) {
+    return <RequestErrorAlert error={swrTournamentsResponse.error} />;
+  }
+
+  const tournaments: Tournament[] =
+    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
 
   const rows = tournaments
     .sort((p1: Tournament, p2: Tournament) => sortTableEntries(p1, p2, tableState))
@@ -39,6 +41,7 @@ export default function TournamentsTable({
           <TournamentModal
             tournament={tournament}
             swrTournamentsResponse={swrTournamentsResponse}
+            in_table
           />
           <DeleteButton
             onClick={async () => {
