@@ -14,7 +14,7 @@ from bracket.models.db.user import User, UserInDB
 from bracket.models.db.user_x_club import UserXClub
 from bracket.schema import clubs, matches, players, rounds, teams, tournaments, users, users_x_clubs
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT, DUMMY_USER_X_CLUB
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT
 from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
