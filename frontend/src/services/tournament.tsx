@@ -14,12 +14,10 @@ export async function deleteTournament(tournament_id: number) {
 export async function updateTournament(
   tournament_id: number,
   name: string,
-  club_id: number,
   dashboard_public: boolean
 ) {
   return createAxios().patch(`tournaments/${tournament_id}`, {
     name,
     dashboard_public,
-    club_id,
   });
 }

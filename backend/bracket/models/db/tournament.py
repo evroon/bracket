@@ -11,10 +11,13 @@ class Tournament(BaseModelORM):
     dashboard_public: bool
 
 
-class TournamentBody(BaseModelORM):
+class TournamentUpdateBody(BaseModelORM):
     name: str
-    club_id: int
     dashboard_public: bool
+
+
+class TournamentBody(TournamentUpdateBody):
+    club_id: int
 
 
 class TournamentToInsert(TournamentBody):

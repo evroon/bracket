@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
-from bracket.models.db.tournament import Tournament, TournamentBody, TournamentToInsert
+from bracket.models.db.tournament import (
+    Tournament,
+    TournamentBody,
+    TournamentToInsert,
+    TournamentUpdateBody,
+)
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated, user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse, TournamentsResponse
@@ -22,7 +27,7 @@ async def get_tournaments(_: UserPublic = Depends(user_authenticated)) -> Tourna
 @router.patch("/tournaments/{tournament_id}", response_model=SuccessResponse)
 async def update_tournament_by_id(
     tournament_id: int,
-    tournament_body: TournamentBody,
+    tournament_body: TournamentUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     await database.execute(

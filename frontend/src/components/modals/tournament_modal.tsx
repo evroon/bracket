@@ -68,12 +68,7 @@ export default function TournamentModal({
             assert(values.club_id != null);
             if (is_create_form) await createTournament(values.club_id, values.name);
             else {
-              await updateTournament(
-                tournament.id,
-                values.name,
-                tournament?.club_id,
-                values.dashboard_public
-              );
+              await updateTournament(tournament.id, values.name, values.dashboard_public);
             }
             await swrTournamentsResponse.mutate(null);
             setOpened(false);
