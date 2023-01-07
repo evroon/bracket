@@ -6,8 +6,8 @@ from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.round import RoundBody, RoundToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
-    user_authenticated_or_public_dashboard,
     user_authenticated_for_tournament,
+    user_authenticated_or_public_dashboard,
 )
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.schema import rounds

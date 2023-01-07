@@ -33,13 +33,21 @@ class TeamWithPlayers(Team):
         """
         The ELO score of a team is the average of all player's ELO scores.
         """
-        return Decimal(sum(player.elo_score for player in self.players)) / len(self.players)
+        return (
+            Decimal(sum(player.elo_score for player in self.players)) / len(self.players)
+            if len(self.players) > 0
+            else Decimal('0.00')
+        )
 
     def get_swiss_score(self) -> Decimal:
         """
         The Swiss system score of a team.
         """
-        return Decimal(sum(player.swiss_score for player in self.players)) / len(self.players)
+        return (
+            Decimal(sum(player.swiss_score for player in self.players)) / len(self.players)
+            if len(self.players) > 0
+            else Decimal('0.00')
+        )
 
 
 class TeamBody(BaseModelORM):
