@@ -2,6 +2,8 @@ coverage:
   status:
     project:
       default:
+        target: auto
+        threshold: 5%
         informational: true
         wait_for_ci: false
         require_ci_to_pass: false
