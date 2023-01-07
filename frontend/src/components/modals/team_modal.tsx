@@ -98,7 +98,7 @@ export default function TeamModal({
           />
 
           <MultiSelect
-            data={players.map((p) => ({ value: p.id, label: p.name }))}
+            data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
             label="Team members"
             placeholder="Pick all that you like"
             searchable
