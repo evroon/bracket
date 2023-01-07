@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from heliclockter import datetime_utc, timedelta
 from jwt import DecodeError, ExpiredSignatureError
 from pydantic import BaseModel
+from starlette.requests import Request
 
 from bracket.config import config
 from bracket.database import database
@@ -38,10 +39,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
-
-
 async def get_user(email: str) -> UserInDB | None:
     return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))
 
@@ -55,13 +52,9 @@ async def authenticate_user(email: str, password: str) -> UserInDB | None:
     return user
 
 
-def create_access_token(data: dict[str, Any], expires_delta: timedelta | None = None) -> str:
+def create_access_token(data: dict[str, Any], expires_delta: timedelta) -> str:
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime_utc.now() + expires_delta
-    else:
-        expire = datetime_utc.now() + timedelta(minutes=15)
-
+    expire = datetime_utc.now() + expires_delta
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, config.jwt_secret, algorithm=ALGORITHM)
 
@@ -111,13 +104,17 @@ async def user_authenticated_for_tournament(
 
 
 async def user_authenticated_or_public_dashboard(
-    tournament_id: int, token: str = Depends(oauth2_scheme)
+    tournament_id: int, request: Request
 ) -> UserPublic | None:
-    user = await check_jwt_and_get_user(token)
-    if user is not None and await get_user_access_to_tournament(
-        tournament_id, assert_some(user.id)
-    ):
-        return user
+    try:
+        token: str = assert_some(await oauth2_scheme(request))
+        user = await check_jwt_and_get_user(token)
+        if user is not None and await get_user_access_to_tournament(
+            tournament_id, assert_some(user.id)
+        ):
+            return user
+    except HTTPException:
+        pass
 
     tournaments_fetched = await fetch_all_parsed(
         database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)

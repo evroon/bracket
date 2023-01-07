@@ -5,11 +5,13 @@ from unittest.mock import Mock, patch
 import jwt
 
 from bracket.config import config
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict
-from tests.integration_tests.api.shared import send_request
+from tests.integration_tests.api.shared import send_auth_request, send_request
 from tests.integration_tests.mocks import MOCK_NOW, MOCK_USER, get_mock_token
-from tests.integration_tests.sql import inserted_user
+from tests.integration_tests.models import AuthContext
+from tests.integration_tests.sql import inserted_club, inserted_tournament, inserted_user
 
 
 @contextmanager
@@ -64,4 +66,19 @@ async def test_invalid_token(startup_and_shutdown_uvicorn_server: None) -> None:
     headers = {'Authorization': 'Bearer some.invalid.token'}
 
     response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, None, headers))
+    assert response == {'detail': 'Could not validate credentials'}
+
+
+async def test_not_authenticated_for_tournament(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_club(DUMMY_CLUB) as club_inserted:
+        async with inserted_tournament(
+            DUMMY_TOURNAMENT.copy(update={'club_id': club_inserted.id})
+        ) as tournament_inserted:
+            response = JsonDict(
+                await send_auth_request(
+                    HTTPMethod.GET, f'tournaments/{tournament_inserted.id}/teams', auth_context
+                )
+            )
     assert response == {'detail': 'Could not validate credentials'}
