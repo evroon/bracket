@@ -38,7 +38,7 @@
     "swr": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.5",
+    "@babel/core": "^7.20.12",
     "@next/eslint-plugin-next": "^13.0.7",
     "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.5",
