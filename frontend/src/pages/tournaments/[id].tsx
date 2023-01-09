@@ -4,11 +4,11 @@ import { IconExternalLink } from '@tabler/icons';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import SaveButton from '../../components/buttons/save';
 import TournamentModal from '../../components/modals/tournament_modal';
 import Scheduler from '../../components/scheduling/scheduler';
-import { ErrorAlert } from '../../components/utils/error_alert';
 import { getTournamentIdFromRouter } from '../../components/utils/util';
 import { RoundInterface } from '../../interfaces/round';
 import { Tournament } from '../../interfaces/tournament';
@@ -34,11 +34,7 @@ export default function TournamentPage() {
   const tournamentDataFull = tournaments.filter((tournament) => tournament.id === id)[0];
 
   if (tournamentDataFull == null) {
-    return (
-      <TournamentLayout tournament_id={tournamentData.id}>
-        <ErrorAlert title="Error" message="Could not find tournament" />
-      </TournamentLayout>
-    );
+    return <NotFoundTitle />;
   }
 
   const draft_round =
@@ -105,6 +101,7 @@ export default function TournamentPage() {
           tournamentData={tournamentDataFull}
           swrRoundsResponse={swrRoundsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          readOnly={false}
         />
         {scheduler}
       </div>

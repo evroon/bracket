@@ -9,10 +9,12 @@ export default function Brackets({
   tournamentData,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
+  readOnly,
 }: {
   tournamentData: TournamentMinimal;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
+  readOnly: boolean;
 }) {
   if (swrRoundsResponse.data == null) {
     return <div />;
@@ -25,6 +27,7 @@ export default function Brackets({
       round={round}
       swrRoundsResponse={swrRoundsResponse}
       swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+      readOnly={readOnly}
     />
   ));
 

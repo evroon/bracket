@@ -18,9 +18,13 @@ router = APIRouter()
 
 @router.get("/tournaments/{tournament_id}/rounds", response_model=RoundsWithMatchesResponse)
 async def get_rounds(
-    tournament_id: int, user: UserPublic = Depends(user_authenticated_or_public_dashboard)
+    tournament_id: int,
+    user: UserPublic = Depends(user_authenticated_or_public_dashboard),
+    no_draft_rounds: bool = False,
 ) -> RoundsWithMatchesResponse:
-    rounds = await get_rounds_with_matches(tournament_id)
+    rounds = await get_rounds_with_matches(
+        tournament_id, no_draft_rounds=user is None or no_draft_rounds
+    )
     if user is not None:
         return rounds
 

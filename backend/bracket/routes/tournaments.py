@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
 
@@ -72,5 +72,20 @@ async def create_tournament(
             **tournament_to_insert.dict(),
             created=datetime_utc.now(),
         ).dict(),
+    )
+    return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/logo")
+async def create_upload_logo(
+    file: UploadFile, tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+) -> SuccessResponse:
+    contents = await file.read()
+    with open(f'static/{file.filename}', 'wb') as f:
+        f.write(contents)
+
+    await database.execute(
+        tournaments.update().where(tournaments.c.id == tournament_id),
+        values={'logo_path': file.filename},
     )
     return SuccessResponse()

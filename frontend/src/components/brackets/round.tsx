@@ -1,4 +1,5 @@
-import { Center } from '@mantine/core';
+import { Center, Title } from '@mantine/core';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -11,11 +12,13 @@ export default function Round({
   round,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
+  readOnly,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
+  readOnly: boolean;
 }) {
   const games = round.matches.map((match) => (
     <Game
@@ -24,6 +27,7 @@ export default function Round({
       swrRoundsResponse={swrRoundsResponse}
       swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
       match={match}
+      readOnly={readOnly}
     />
   ));
   const active_round_style = round.is_active
@@ -41,6 +45,17 @@ export default function Round({
         borderColor: 'gray',
       };
 
+  const modal = readOnly ? (
+    <Title order={3}>{round.name}</Title>
+  ) : (
+    <RoundModal
+      tournamentData={tournamentData}
+      round={round}
+      swrRoundsResponse={swrRoundsResponse}
+      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+    />
+  );
+
   return (
     <div style={{ width: 300, marginLeft: '50px', minHeight: 500 }}>
       <div
@@ -52,14 +67,7 @@ export default function Round({
           ...active_round_style,
         }}
       >
-        <Center>
-          <RoundModal
-            tournamentData={tournamentData}
-            round={round}
-            swrRoundsResponse={swrRoundsResponse}
-            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-          />
-        </Center>
+        <Center>{modal}</Center>
         {games}
       </div>
     </div>

@@ -34,11 +34,13 @@ export default function Game({
   swrUpcomingMatchesResponse,
   tournamentData,
   match,
+  readOnly,
 }: {
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
+  readOnly: boolean;
 }) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
@@ -53,8 +55,8 @@ export default function Game({
 
   const [opened, setOpened] = useState(false);
 
-  return (
-    <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
+  const bracket = (
+    <>
       <div className={classes.top} style={team1_style}>
         <Tooltip label={team1_players} withArrow color="blue">
           <Grid grow>
@@ -80,6 +82,16 @@ export default function Game({
         opened={opened}
         setOpened={setOpened}
       />
+    </>
+  );
+
+  if (readOnly) {
+    return <div className={classes.root}>{bracket}</div>;
+  }
+
+  return (
+    <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
+      {bracket}
     </UnstyledButton>
   );
 }

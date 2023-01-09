@@ -23,6 +23,7 @@ tournaments = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
     Column('dashboard_public', Boolean, nullable=False),
+    Column('logo_path', String, nullable=True),
 )
 
 rounds = Table(
