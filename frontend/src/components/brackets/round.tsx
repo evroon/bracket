@@ -57,7 +57,7 @@ export default function Round({
   );
 
   return (
-    <div style={{ width: 300, marginLeft: '50px', minHeight: 500 }}>
+    <div style={{ minHeight: 500 }}>
       <div
         style={{
           height: '100%',

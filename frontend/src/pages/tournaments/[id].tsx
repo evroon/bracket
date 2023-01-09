@@ -68,10 +68,10 @@ export default function TournamentPage() {
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
-        <Grid.Col span={8}>
+        <Grid.Col span={6}>
           <Title>{tournamentDataFull.name}</Title>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col span={6}>
           <Group position="right">
             <Button
               color="blue"

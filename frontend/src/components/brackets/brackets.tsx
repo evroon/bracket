@@ -1,4 +1,4 @@
-import { Group } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -21,15 +21,17 @@ export default function Brackets({
   }
 
   const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
-    <Round
-      key={round.id}
-      tournamentData={tournamentData}
-      round={round}
-      swrRoundsResponse={swrRoundsResponse}
-      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-      readOnly={readOnly}
-    />
+    <Grid.Col sm={6} lg={3}>
+      <Round
+        key={round.id}
+        tournamentData={tournamentData}
+        round={round}
+        swrRoundsResponse={swrRoundsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        readOnly={readOnly}
+      />
+    </Grid.Col>
   ));
 
-  return <Group>{rounds}</Group>;
+  return <Grid>{rounds}</Grid>;
 }

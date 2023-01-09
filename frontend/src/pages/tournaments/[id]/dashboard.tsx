@@ -24,10 +24,13 @@ export default function Dashboard() {
   }
 
   return (
-    <Grid grow style={{ marginBottom: '20px', marginTop: '20px', marginLeft: '20px' }}>
+    <Grid
+      grow
+      style={{ marginBottom: '20px', marginTop: '20px', marginLeft: '20px', marginRight: '20px' }}
+    >
       <Grid.Col span={3}>
         <Title>{tournamentDataFull.name}</Title>
-        <Image src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
+        <Image radius={'lg'} src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
       </Grid.Col>
       <Grid.Col span={9}>
         <Brackets
