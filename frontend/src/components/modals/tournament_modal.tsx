@@ -72,9 +72,9 @@ export default function TournamentModal({
         <form
           onSubmit={form.onSubmit(async (values) => {
             assert(values.club_id != null);
-            if (is_create_form)
+            if (is_create_form) {
               await createTournament(values.club_id, values.name, values.dashboard_public);
-            else {
+            } else {
               await updateTournament(tournament.id, values.name, values.dashboard_public);
             }
             await swrTournamentsResponse.mutate(null);
