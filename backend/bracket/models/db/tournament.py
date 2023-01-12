@@ -9,6 +9,7 @@ class Tournament(BaseModelORM):
     name: str
     created: datetime_utc
     dashboard_public: bool
+    logo_path: str | None
 
 
 class TournamentUpdateBody(BaseModelORM):

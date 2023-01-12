@@ -22,6 +22,7 @@
     "@mantine/core": "^5.9.5",
     "@mantine/form": "^5.10.0",
     "@mantine/hooks": "^5.9.5",
+    "@mantine/dropzone": "^5.9.5",
     "@mantine/next": "^5.9.6",
     "@mantine/notifications": "^5.9.5",
     "@next/bundle-analyzer": "^13.1.1",

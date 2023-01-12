@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, Select, TextInput } from '@mantine/core';
+import { Button, Checkbox, Group, Image, Modal, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
@@ -8,9 +8,15 @@ import { SWRResponse } from 'swr';
 
 import { ClubInterface } from '../../interfaces/club';
 import { Tournament } from '../../interfaces/tournament';
-import { getClubs } from '../../services/adapter';
+import { getBaseApiUrl, getClubs } from '../../services/adapter';
 import { createTournament, updateTournament } from '../../services/tournament';
 import SaveButton from '../buttons/save';
+import { DropzoneButton } from '../utils/file_upload';
+
+export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
+  if (tournament == null) return null;
+  return <Image radius="md" src={`${getBaseApiUrl()}/static/${tournament.logo_path}`} />;
+}
 
 export default function TournamentModal({
   tournament,
@@ -96,6 +102,9 @@ export default function TournamentModal({
             {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
           />
 
+          {tournament != null ? <DropzoneButton tournament={tournament} /> : null}
+
+          <TournamentLogo tournament={tournament} />
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
             Save
           </Button>

@@ -86,7 +86,6 @@ async def create_team(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
-    print(team_to_insert.dict(exclude={'player_ids'}))
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(

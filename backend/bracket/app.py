@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment
 from bracket.database import database, init_db_when_empty
@@ -41,6 +42,8 @@ async def shutdown() -> None:
 async def ping() -> str:
     return 'ping'
 
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(auth.router, tags=['auth'])
 app.include_router(clubs.router, tags=['clubs'])

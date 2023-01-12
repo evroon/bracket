@@ -23,14 +23,17 @@ export function checkForAuthError(response: any) {
   }
 }
 
+export function getBaseApiUrl() {
+  return process.env.NEXT_PUBLIC_API_BASE_URL != null
+    ? process.env.NEXT_PUBLIC_API_BASE_URL
+    : 'http://localhost:8400';
+}
+
 export function createAxios() {
   const user = localStorage.getItem('login');
   const access_token = user != null ? JSON.parse(user).access_token : '';
   return axios.create({
-    baseURL:
-      process.env.NEXT_PUBLIC_API_BASE_URL != null
-        ? process.env.NEXT_PUBLIC_API_BASE_URL
-        : 'http://localhost:8400',
+    baseURL: getBaseApiUrl(),
     headers: {
       Authorization: `bearer ${access_token}`,
       Accept: 'application/json',
@@ -62,10 +65,20 @@ export function getTeams(tournament_id: number): SWRResponse<any, any> {
   return useSWR(`tournaments/${tournament_id}/teams`, fetcher);
 }
 
-export function getRounds(tournament_id: number): SWRResponse<any, any> {
-  return useSWR(`tournaments/${tournament_id}/rounds`, fetcher);
+export function getRounds(
+  tournament_id: number,
+  no_draft_rounds: boolean = false
+): SWRResponse<any, any> {
+  return useSWR(`tournaments/${tournament_id}/rounds?no_draft_rounds=${no_draft_rounds}`, fetcher);
 }
 
 export function getUpcomingMatches(tournament_id: number): SWRResponse<any, any> {
   return useSWR(`tournaments/${tournament_id}/upcoming_matches`, fetcher);
+}
+
+export async function uploadLogo(tournament_id: number, file: any) {
+  const bodyFormData = new FormData();
+  bodyFormData.append('file', file, file.name);
+
+  return createAxios().post(`tournaments/${tournament_id}/logo`, bodyFormData);
 }

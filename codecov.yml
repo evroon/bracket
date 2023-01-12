@@ -7,3 +7,6 @@ coverage:
         informational: true
         wait_for_ci: false
         require_ci_to_pass: false
+
+ignore:
+  - "backend/bracket/database.py"

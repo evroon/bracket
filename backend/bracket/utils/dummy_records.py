@@ -20,7 +20,11 @@ DUMMY_CLUB = Club(
 )
 
 DUMMY_TOURNAMENT = Tournament(
-    club_id=1, name='Some Cool Tournament', created=DUMMY_MOCK_TIME, dashboard_public=True
+    club_id=1,
+    name='Some Cool Tournament',
+    created=DUMMY_MOCK_TIME,
+    dashboard_public=True,
+    logo_path=None,
 )
 
 DUMMY_ROUND1 = Round(

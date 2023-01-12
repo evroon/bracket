@@ -6,8 +6,11 @@ from bracket.models.db.team import TeamWithPlayers
 from bracket.routes.models import RoundsWithMatchesResponse, TeamsWithPlayersResponse
 
 
-async def get_rounds_with_matches(tournament_id: int) -> RoundsWithMatchesResponse:
-    query = '''
+async def get_rounds_with_matches(
+    tournament_id: int, no_draft_rounds: bool = False
+) -> RoundsWithMatchesResponse:
+    draft_filter = 'AND rounds.is_draft IS FALSE' if no_draft_rounds else ''
+    query = f'''
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
                 teams.*,
@@ -30,10 +33,10 @@ async def get_rounds_with_matches(tournament_id: int) -> RoundsWithMatchesRespon
         SELECT rounds.*, to_json(array_agg(m.*)) AS matches FROM rounds
         LEFT JOIN matches_with_teams m on rounds.id = m.round_id
         WHERE rounds.tournament_id = :tournament_id
+        {draft_filter}
         GROUP BY rounds.id
     '''
     result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
-    print([x._mapping for x in result])
     return RoundsWithMatchesResponse.parse_obj(
         {'data': [RoundWithMatches.parse_obj(x._mapping) for x in result]}
     )
