@@ -1,6 +1,6 @@
 import { createAxios } from './adapter';
 
-export async function createTournament(club_id: number, name: string, dashboard_public: booean) {
+export async function createTournament(club_id: number, name: string, dashboard_public: boolean) {
   return createAxios().post('tournaments', {
     name,
     club_id,
