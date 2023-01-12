@@ -15,7 +15,7 @@ import { DropzoneButton } from '../utils/file_upload';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null) return null;
-  return <Image radius={'md'} src={`${getBaseApiUrl()}/static/${tournament.logo_path}`} />;
+  return <Image radius="md" src={`${getBaseApiUrl()}/static/${tournament.logo_path}`} />;
 }
 
 export default function TournamentModal({

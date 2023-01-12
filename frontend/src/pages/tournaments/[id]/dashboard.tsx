@@ -30,7 +30,7 @@ export default function Dashboard() {
     >
       <Grid.Col span={3}>
         <Title>{tournamentDataFull.name}</Title>
-        <Image radius={'lg'} src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
+        <Image radius="lg" src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
       </Grid.Col>
       <Grid.Col span={9}>
         <Brackets
