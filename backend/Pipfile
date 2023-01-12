@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 aiopg = "1.4.0"
 fastapi = "0.88.0"
-fastapi-cache2 = "0.1.9"
+fastapi-cache2 = "0.2.0"
 gunicorn = "20.1.0"
 uvicorn = "0.20.0"
 starlette = "0.22.0"
