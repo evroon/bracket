@@ -26,8 +26,8 @@ CREATE DATABASE bracket_ci OWNER bracket_ci;
 ```
 
 You can do the same but replace the user and database name with:
-- `bracket_ci` for running tests
-- `bracket_prod` for a production database
+- `bracket_ci`: for running tests
+- `bracket_prod`: for a production database
 
 The database URL can be specified per environment in the `.env` files (see [config](#config)).
 
