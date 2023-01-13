@@ -4,6 +4,9 @@
 [![frontend](https://github.com/evroon/bracket/actions/workflows/frontend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/frontend.yml)
 
 Ladder tournament system meant to be easy to use.
+it's written in async Python (with FastAPI) and Next.js as frontend.
+
+![Preview](misc/img/preview.png)
 
 # Setup
 ### Frontend
