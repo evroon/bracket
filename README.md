@@ -9,19 +9,9 @@ Bracket written in async Python (with FastAPI) and Next.js as frontend using the
 ![Preview](misc/img/preview.png)
 
 # Setup
-### Frontend
-```
-yarn
-npm run dev
-```
-
-### Backend
-```
-./run.sh
-```
 
 
-#### Database
+## Database
 First create a `bracket` cluster:
 ```shell
 sudo pg_createcluster -u postgres -p 5532 13 bracket
@@ -41,9 +31,25 @@ You can do the same but replace the user and database name with:
 
 The database URL can be specified per environment in the `.env` files (see [config](#config)).
 
-### Config
+## Config
 Copy [ci.env](backend/ci.env) to `prod.env` and fill in the values:
 - `PG_DSN`: The URL of the PostgreSQL database
 - `JWT_SECRET`: Create a random secret using `openssl rand -hex 32`
 - `CORS_ORIGINS` and `CORS_ORIGIN_REGEX`: Specify allowed frontend domain names for CORS (see the [FastAPI docs](https://fastapi.tiangolo.com/tutorial/cors/))
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when initializing the database
+
+
+## Running the frontend and backend
+The following starts the frontend and backend for local development:
+### Frontend
+```
+cd frontend
+yarn
+npm run dev
+```
+
+### Backend
+```
+cd backend
+./run.sh
+```
