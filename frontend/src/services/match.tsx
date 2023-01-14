@@ -1,12 +1,16 @@
 import { MatchBodyInterface, MatchCreateBodyInterface } from '../interfaces/match';
-import { createAxios } from './adapter';
+import { createAxios, handleRequestError } from './adapter';
 
 export async function createMatch(tournament_id: number, match: MatchCreateBodyInterface) {
-  return createAxios().post(`tournaments/${tournament_id}/matches`, match);
+  return createAxios()
+    .post(`tournaments/${tournament_id}/matches`, match)
+    .catch((response: any) => handleRequestError(response));
 }
 
 export async function deleteMatch(tournament_id: number, match_id: number) {
-  return createAxios().delete(`tournaments/${tournament_id}/matches/${match_id}`);
+  return createAxios()
+    .delete(`tournaments/${tournament_id}/matches/${match_id}`)
+    .catch((response: any) => handleRequestError(response));
 }
 
 export async function updateMatch(
@@ -14,5 +18,7 @@ export async function updateMatch(
   match_id: number,
   match: MatchBodyInterface
 ) {
-  return createAxios().patch(`tournaments/${tournament_id}/matches/${match_id}`, match);
+  return createAxios()
+    .patch(`tournaments/${tournament_id}/matches/${match_id}`, match)
+    .catch((response: any) => handleRequestError(response));
 }

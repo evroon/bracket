@@ -4,10 +4,11 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.upcoming_matches import get_possible_upcoming_matches
-from bracket.models.db.match import MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
+from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse, UpcomingMatchesResponse
+from bracket.routes.util import match_dependency
 from bracket.schema import matches
 
 router = APIRouter()
@@ -24,11 +25,13 @@ async def get_matches_to_schedule(
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def delete_match(
-    tournament_id: int, match_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     await database.execute(
         query=matches.delete().where(
-            matches.c.id == match_id and matches.c.tournament_id == tournament_id
+            matches.c.id == match.id and matches.c.tournament_id == tournament_id
         ),
     )
     await recalculate_elo_for_tournament_id(tournament_id)
@@ -37,7 +40,6 @@ async def delete_match(
 
 @router.post("/tournaments/{tournament_id}/matches", response_model=SuccessResponse)
 async def create_match(
-    tournament_id: int,
     match_body: MatchCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -54,12 +56,12 @@ async def create_match(
 @router.patch("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def update_match_by_id(
     tournament_id: int,
-    match_id: int,
     match_body: MatchBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     await database.execute(
-        query=matches.update().where(matches.c.id == match_id),
+        query=matches.update().where(matches.c.id == match.id),
         values=match_body.dict(),
     )
     await recalculate_elo_for_tournament_id(tournament_id)

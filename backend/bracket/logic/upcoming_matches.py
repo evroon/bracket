@@ -22,14 +22,14 @@ async def get_possible_upcoming_matches(
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
     rounds_response = await get_rounds_with_matches(tournament_id)
-    draft_round = next((round for round in rounds_response.data if round.is_draft), None)
+    draft_round = next((round for round in rounds_response if round.is_draft), None)
     if draft_round is None:
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
 
     teams = await get_teams_with_members(tournament_id, only_active_teams=True)
 
-    for i, team1 in enumerate(teams.data):
-        for j, team2 in enumerate(teams.data[i + 1 :]):
+    for i, team1 in enumerate(teams):
+        for j, team2 in enumerate(teams[i + 1 :]):
             team_already_scheduled = any(
                 (
                     True

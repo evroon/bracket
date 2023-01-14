@@ -4,12 +4,16 @@ from bracket.database import database
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
 from bracket.routes.models import RoundsWithMatchesResponse, TeamsWithPlayersResponse
+from bracket.utils.types import dict_without_none
 
 
 async def get_rounds_with_matches(
-    tournament_id: int, no_draft_rounds: bool = False
-) -> RoundsWithMatchesResponse:
+    tournament_id: int,
+    no_draft_rounds: bool = False,
+    round_id: int | None = None,
+) -> list[RoundWithMatches]:
     draft_filter = 'AND rounds.is_draft IS FALSE' if no_draft_rounds else ''
+    round_filter = 'AND rounds.id = :round_id' if round_id is not None else ''
     query = f'''
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
@@ -34,12 +38,12 @@ async def get_rounds_with_matches(
         LEFT JOIN matches_with_teams m on rounds.id = m.round_id
         WHERE rounds.tournament_id = :tournament_id
         {draft_filter}
+        {round_filter}
         GROUP BY rounds.id
     '''
-    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
-    return RoundsWithMatchesResponse.parse_obj(
-        {'data': [RoundWithMatches.parse_obj(x._mapping) for x in result]}
-    )
+    values = dict_without_none({'tournament_id': tournament_id, 'round_id': round_id})
+    result = await database.fetch_all(query=query, values=values)
+    return [RoundWithMatches.parse_obj(x._mapping) for x in result]
 
 
 async def get_next_round_name(database: Database, tournament_id: int) -> str:
@@ -54,21 +58,22 @@ async def get_next_round_name(database: Database, tournament_id: int) -> str:
 
 
 async def get_teams_with_members(
-    tournament_id: int, *, only_active_teams: bool = False
-) -> TeamsWithPlayersResponse:
-    teams_filter = 'AND teams.active IS TRUE' if only_active_teams else ''
+    tournament_id: int, *, only_active_teams: bool = False, team_id: int | None = None
+) -> list[TeamWithPlayers]:
+    active_team_filter = 'AND teams.active IS TRUE' if only_active_teams else ''
+    team_id_filter = 'AND teams.id = :team_id' if team_id is not None else ''
     query = f'''
         SELECT teams.*, to_json(array_agg(players.*)) AS players
         FROM teams
         LEFT JOIN players ON players.team_id = teams.id
         WHERE teams.tournament_id = :tournament_id
-        {teams_filter}
+        {active_team_filter}
+        {team_id_filter}
         GROUP BY teams.id;
         '''
-    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
-    return TeamsWithPlayersResponse.parse_obj(
-        {'data': [TeamWithPlayers.parse_obj(x._mapping) for x in result]}
-    )
+    values = dict_without_none({'tournament_id': tournament_id, 'team_id': team_id})
+    result = await database.fetch_all(query=query, values=values)
+    return [TeamWithPlayers.parse_obj(x._mapping) for x in result]
 
 
 async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:

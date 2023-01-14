@@ -48,7 +48,7 @@ def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int,
 
 async def recalculate_elo_for_tournament_id(tournament_id: int) -> None:
     rounds_response = await get_rounds_with_matches(tournament_id)
-    elo_per_player = calculate_elo_per_player(rounds_response.data)
+    elo_per_player = calculate_elo_per_player(rounds_response)
 
     for player_id, statistics in elo_per_player.items():
         await database.execute(

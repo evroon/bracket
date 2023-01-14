@@ -5,6 +5,7 @@ from pydantic import validator
 
 from bracket.models.db.match import Match, MatchWithTeamDetails
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.types import assert_some
 
 
 class Round(BaseModelORM):
@@ -28,6 +29,9 @@ class RoundWithMatches(Round):
             return values_json
 
         return values
+
+    def get_team_ids(self) -> set[int]:
+        return {assert_some(team.id) for match in self.matches for team in match.teams}
 
 
 class RoundBody(BaseModelORM):

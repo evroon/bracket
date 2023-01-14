@@ -5,7 +5,7 @@ import { Player } from '../../interfaces/player';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
-import { PlayerELOScore } from '../info/player_elo_score';
+import { PlayerScore } from '../info/player_score';
 import { PlayerStatistics } from '../info/player_statistics';
 import PlayerModal from '../modals/player_modal';
 import DateTime from '../utils/datetime';
@@ -23,6 +23,7 @@ export default function PlayersTable({
   const tableState = getTableState('name');
 
   const maxELOScore = Math.max(...players.map((player) => player.elo_score));
+  const maxSwissScore = Math.max(...players.map((player) => player.swiss_score));
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
@@ -38,7 +39,10 @@ export default function PlayersTable({
           <PlayerStatistics wins={player.wins} draws={player.draws} losses={player.losses} />
         </td>
         <td>
-          <PlayerELOScore elo_score={player.elo_score} max_elo_score={maxELOScore} />
+          <PlayerScore score={player.elo_score} max_score={maxELOScore} color="indigo" />
+        </td>
+        <td>
+          <PlayerScore score={player.swiss_score} max_score={maxSwissScore} color="grape" />
         </td>
         <td>
           <PlayerModal
@@ -70,6 +74,9 @@ export default function PlayersTable({
           <ThNotSortable>Win distribution</ThNotSortable>
           <ThSortable state={tableState} field="elo_score">
             ELO score
+          </ThSortable>
+          <ThSortable state={tableState} field="swiss_score">
+            Swiss score
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>
