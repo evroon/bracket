@@ -22,25 +22,26 @@ def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int,
     player_x_elo: defaultdict[int, PlayerStatistics] = defaultdict(PlayerStatistics)
 
     for round in rounds:
-        for match in round.matches:
-            for team_index, team in enumerate(match.teams):
-                for player in team.players:
-                    team_score = match.team1_score if team_index == 0 else match.team2_score
-                    was_draw = match.team1_score == match.team2_score
-                    has_won = not was_draw and team_score == max(
-                        match.team1_score, match.team2_score
-                    )
+        if not round.is_draft:
+            for match in round.matches:
+                for team_index, team in enumerate(match.teams):
+                    for player in team.players:
+                        team_score = match.team1_score if team_index == 0 else match.team2_score
+                        was_draw = match.team1_score == match.team2_score
+                        has_won = not was_draw and team_score == max(
+                            match.team1_score, match.team2_score
+                        )
 
-                    if has_won:
-                        player_x_elo[assert_some(player.id)].wins += 1
-                        player_x_elo[assert_some(player.id)].swiss_score += Decimal('1.00')
-                    elif was_draw:
-                        player_x_elo[assert_some(player.id)].draws += 1
-                        player_x_elo[assert_some(player.id)].swiss_score += Decimal('0.50')
-                    else:
-                        player_x_elo[assert_some(player.id)].losses += 1
+                        if has_won:
+                            player_x_elo[assert_some(player.id)].wins += 1
+                            player_x_elo[assert_some(player.id)].swiss_score += Decimal('1.00')
+                        elif was_draw:
+                            player_x_elo[assert_some(player.id)].draws += 1
+                            player_x_elo[assert_some(player.id)].swiss_score += Decimal('0.50')
+                        else:
+                            player_x_elo[assert_some(player.id)].losses += 1
 
-                    player_x_elo[assert_some(player.id)].elo_score += team_score
+                        player_x_elo[assert_some(player.id)].elo_score += team_score
 
     return player_x_elo
 

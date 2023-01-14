@@ -53,12 +53,15 @@ export default function Game({
   const team1_players = match.team1.players.map((player) => player.name).join(', ');
   const team2_players = match.team2.players.map((player) => player.name).join(', ');
 
+  const team1_players_label = team1_players === '' ? 'No players' : team1_players;
+  const team2_players_label = team2_players === '' ? 'No players' : team2_players;
+
   const [opened, setOpened] = useState(false);
 
   const bracket = (
     <>
       <div className={classes.top} style={team1_style}>
-        <Tooltip label={team1_players} withArrow color="blue">
+        <Tooltip label={team1_players_label} withArrow color="blue">
           <Grid grow>
             <Grid.Col span={10}>{match.team1.name}</Grid.Col>
             <Grid.Col span={2}>{match.team1_score}</Grid.Col>
@@ -67,7 +70,7 @@ export default function Game({
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
-        <Tooltip label={team2_players} position="bottom" withArrow color="blue">
+        <Tooltip label={team2_players_label} position="bottom" withArrow color="blue">
           <Grid grow>
             <Grid.Col span={10}>{match.team2.name}</Grid.Col>
             <Grid.Col span={2}>{match.team2_score}</Grid.Col>

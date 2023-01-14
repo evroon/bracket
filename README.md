@@ -18,7 +18,7 @@ sudo pg_createcluster -u postgres -p 5532 13 bracket
 pg_ctlcluster 13 bracket start
 ```
 
-Subsequently, create a new `bracket_dev` database (and `bracket_ci` for tests):
+Subsequently, create a new `bracket_dev` database:
 ```shell
 sudo -Hu postgres psql  -p 5532
 CREATE USER bracket_ci WITH PASSWORD 'bracket_ci';

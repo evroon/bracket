@@ -3,14 +3,16 @@ from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.round import RoundBody, RoundToInsert
+from bracket.models.db.round import Round, RoundBody, RoundToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
 )
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
+from bracket.routes.util import round_dependency
 from bracket.schema import rounds
+from bracket.utils.db import fetch_one_parsed
 from bracket.utils.sql import get_next_round_name, get_rounds_with_matches
 
 router = APIRouter()
@@ -33,7 +35,10 @@ async def get_rounds(
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def delete_round(
-    tournament_id: int, round_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    round_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    round: Round = Depends(round_dependency),
 ) -> SuccessResponse:
     await database.execute(
         query=rounds.delete().where(

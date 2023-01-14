@@ -11,7 +11,7 @@ def test_elo_calculation() -> None:
     round_ = RoundWithMatches(
         tournament_id=1,
         created=DUMMY_MOCK_TIME,
-        is_draft=True,
+        is_draft=False,
         is_active=False,
         name='Some round',
         matches=[
