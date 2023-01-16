@@ -1,3 +1,5 @@
+<img align="left" alt="Favicon of Bracket" src="frontend/public/favicon.svg" height="130" />
+
 # Bracket
 [![codecov](https://codecov.io/gh/evroon/bracket/branch/master/graph/badge.svg?token=YJL0DVPFFG)](https://codecov.io/gh/evroon/bracket)
 [![backend](https://github.com/evroon/bracket/actions/workflows/backend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/backend.yml)
