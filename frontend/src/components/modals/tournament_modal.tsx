@@ -14,7 +14,7 @@ import SaveButton from '../buttons/save';
 import { DropzoneButton } from '../utils/file_upload';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
-  if (tournament == null) return null;
+  if (tournament == null || tournament.logo_path == null) return null;
   return <Image radius="md" src={`${getBaseApiUrl()}/static/${tournament.logo_path}`} />;
 }
 
