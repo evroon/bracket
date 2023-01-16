@@ -6,7 +6,7 @@
 [![frontend](https://github.com/evroon/bracket/actions/workflows/frontend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/frontend.yml)
 
 Ladder tournament system meant to be easy to use.
-Bracket written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
+Bracket is written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
 
 ![Preview](misc/img/preview.png)
 
@@ -23,8 +23,8 @@ pg_ctlcluster 13 bracket start
 Subsequently, create a new `bracket_dev` database:
 ```shell
 sudo -Hu postgres psql  -p 5532
-CREATE USER bracket_ci WITH PASSWORD 'bracket_ci';
-CREATE DATABASE bracket_ci OWNER bracket_ci;
+CREATE USER bracket_dev WITH PASSWORD 'bracket_dev';
+CREATE DATABASE bracket_dev OWNER bracket_dev;
 ```
 
 You can do the same but replace the user and database name with:
@@ -53,5 +53,7 @@ npm run dev
 ### Backend
 ```
 cd backend
+pipenv install -d
+pipenv shell
 ./run.sh
 ```
