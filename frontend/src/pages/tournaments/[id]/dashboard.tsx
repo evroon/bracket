@@ -8,6 +8,12 @@ import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getRounds, getTournaments } from '../../../services/adapter';
 
+function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
+  return tournamentDataFull.logo_path ? (
+    <Image radius="lg" src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
+  ) : null;
+}
+
 export default function Dashboard() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrRoundsResponse: SWRResponse = getRounds(tournamentData.id, true);
@@ -24,15 +30,12 @@ export default function Dashboard() {
   }
 
   return (
-    <Grid
-      grow
-      style={{ marginBottom: '20px', marginTop: '20px', marginLeft: '20px', marginRight: '20px' }}
-    >
-      <Grid.Col span={3}>
+    <Grid grow style={{ margin: '20px' }}>
+      <Grid.Col span={2}>
         <Title>{tournamentDataFull.name}</Title>
-        <Image radius="lg" src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
+        <TournamentLogo tournamentDataFull={tournamentDataFull} />
       </Grid.Col>
-      <Grid.Col span={9}>
+      <Grid.Col span={10}>
         <Brackets
           tournamentData={tournamentData}
           swrRoundsResponse={swrRoundsResponse}

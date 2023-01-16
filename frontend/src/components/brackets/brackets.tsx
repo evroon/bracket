@@ -21,7 +21,7 @@ export default function Brackets({
   }
 
   const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
-    <Grid.Col sm={6} lg={3}>
+    <Grid.Col sm={6} lg={4} xl={3}>
       <Round
         key={round.id}
         tournamentData={tournamentData}

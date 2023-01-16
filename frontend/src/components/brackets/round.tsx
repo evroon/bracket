@@ -5,7 +5,7 @@ import { SWRResponse } from 'swr';
 import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
-import Game from './game';
+import Match from './match';
 
 export default function Round({
   tournamentData,
@@ -20,16 +20,18 @@ export default function Round({
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
 }) {
-  const games = round.matches.map((match) => (
-    <Game
-      key={match.id}
-      tournamentData={tournamentData}
-      swrRoundsResponse={swrRoundsResponse}
-      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-      match={match}
-      readOnly={readOnly}
-    />
-  ));
+  const matches = round.matches
+    .sort((m1, m2) => (m1.label > m2.label ? 1 : 0))
+    .map((match) => (
+      <Match
+        key={match.id}
+        tournamentData={tournamentData}
+        swrRoundsResponse={swrRoundsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        match={match}
+        readOnly={readOnly}
+      />
+    ));
   const active_round_style = round.is_active
     ? {
         borderStyle: 'solid',
@@ -68,7 +70,7 @@ export default function Round({
         }}
       >
         <Center>{modal}</Center>
-        {games}
+        {matches}
       </div>
     </div>
   );

@@ -32,6 +32,7 @@ async def test_create_match(
                     'team1_id': team1_inserted.id,
                     'team2_id': team2_inserted.id,
                     'round_id': round_inserted.id,
+                    'label': 'Some label',
                 }
                 assert (
                     await send_tournament_request(
@@ -81,7 +82,12 @@ async def test_update_match(
                         }
                     )
                 ) as match_inserted:
-                    body = {'team1_score': 42, 'team2_score': 24, 'round_id': round_inserted.id}
+                    body = {
+                        'team1_score': 42,
+                        'team2_score': 24,
+                        'round_id': round_inserted.id,
+                        'label': 'Some label',
+                    }
                     assert (
                         await send_tournament_request(
                             HTTPMethod.PATCH,
@@ -99,6 +105,7 @@ async def test_update_match(
                     )
                     assert patched_match.team1_score == body['team1_score']
                     assert patched_match.team2_score == body['team2_score']
+                    assert patched_match.label == body['label']
 
                     await assert_row_count_and_clear(matches, 1)
 

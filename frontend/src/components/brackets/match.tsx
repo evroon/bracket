@@ -1,15 +1,26 @@
-import { Grid, Tooltip, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
-import { useState } from 'react';
+import {
+  Badge,
+  Center,
+  Grid,
+  Tooltip,
+  UnstyledButton,
+  createStyles,
+  useMantineTheme,
+} from '@mantine/core';
+import { Property } from 'csstype';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import MatchModal from '../modals/match_modal';
 
+import Visibility = Property.Visibility;
+
 const useStyles = createStyles((theme) => ({
   root: {
     width: '100%',
-    marginTop: '20px',
+    marginTop: '30px',
   },
   divider: {
     backgroundColor: 'darkgray',
@@ -29,7 +40,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Game({
+function MatchBadge({ match }: { match: MatchInterface }) {
+  const visibility: Visibility = match.label === '' ? 'hidden' : 'visible';
+  return (
+    <Center style={{ transform: 'translateY(50%)', visibility }}>
+      <Badge size="lg" variant="filled">
+        {match.label}
+      </Badge>
+    </Center>
+  );
+}
+
+export default function Match({
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
@@ -53,12 +75,16 @@ export default function Game({
   const team1_players = match.team1.players.map((player) => player.name).join(', ');
   const team2_players = match.team2.players.map((player) => player.name).join(', ');
 
+  const team1_players_label = team1_players === '' ? 'No players' : team1_players;
+  const team2_players_label = team2_players === '' ? 'No players' : team2_players;
+
   const [opened, setOpened] = useState(false);
 
   const bracket = (
     <>
+      <MatchBadge match={match} />
       <div className={classes.top} style={team1_style}>
-        <Tooltip label={team1_players} withArrow color="blue">
+        <Tooltip label={team1_players_label} withArrow color="blue">
           <Grid grow>
             <Grid.Col span={10}>{match.team1.name}</Grid.Col>
             <Grid.Col span={2}>{match.team1_score}</Grid.Col>
@@ -67,7 +93,7 @@ export default function Game({
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
-        <Tooltip label={team2_players} position="bottom" withArrow color="blue">
+        <Tooltip label={team2_players_label} position="bottom" withArrow color="blue">
           <Grid grow>
             <Grid.Col span={10}>{match.team2.name}</Grid.Col>
             <Grid.Col span={2}>{match.team2_score}</Grid.Col>

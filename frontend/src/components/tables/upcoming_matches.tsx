@@ -34,6 +34,7 @@ export default function UpcomingMatchesTable({
       team1_id: upcoming_match.team1.id,
       team2_id: upcoming_match.team2.id,
       round_id,
+      label: '',
     };
     await createMatch(tournamentData.id, match_to_schedule);
     await swrRoundsResponse.mutate(null);
@@ -45,7 +46,7 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={upcoming_match.elo_diff}>
+      <tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
         <td>
           <PlayerList team={upcoming_match.team1} />
         </td>
@@ -74,10 +75,10 @@ export default function UpcomingMatchesTable({
     <TableLayout>
       <thead>
         <tr>
-          <ThSortable state={tableState} field="name">
+          <ThSortable state={tableState} field="team1.name">
             Team 1
           </ThSortable>
-          <ThSortable state={tableState} field="name">
+          <ThSortable state={tableState} field="team2.name">
             Team 2
           </ThSortable>
           <ThSortable state={tableState} field="elo_diff">

@@ -12,14 +12,16 @@ export default function Login() {
   const router = useRouter();
 
   async function attemptLogin(email: string, password: string) {
-    await performLogin(email, password);
-    showNotification({
-      color: 'green',
-      title: 'Login successful',
-      message: '',
-    });
+    const success = await performLogin(email, password);
+    if (success) {
+      showNotification({
+        color: 'green',
+        title: 'Login successful',
+        message: '',
+      });
 
-    await router.push('/');
+      await router.push('/');
+    }
   }
   const form = useForm({
     initialValues: {

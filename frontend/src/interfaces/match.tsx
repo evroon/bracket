@@ -8,6 +8,7 @@ export interface MatchInterface {
   team2_score: number;
   team1: TeamInterface;
   team2: TeamInterface;
+  label: string;
 }
 
 export interface MatchBodyInterface {
@@ -15,6 +16,7 @@ export interface MatchBodyInterface {
   round_id: number;
   team1_score: number;
   team2_score: number;
+  label: string;
 }
 
 export interface UpcomingMatchInterface {
@@ -28,4 +30,5 @@ export interface MatchCreateBodyInterface {
   round_id: number;
   team1_id: number;
   team2_id: number;
+  label: string;
 }

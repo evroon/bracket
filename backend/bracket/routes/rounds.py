@@ -1,15 +1,17 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc
+from starlette import status
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.round import RoundBody, RoundToInsert
+from bracket.models.db.round import Round, RoundBody, RoundToInsert, RoundWithMatches
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
 )
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
+from bracket.routes.util import round_dependency, round_with_matches_dependency
 from bracket.schema import rounds
 from bracket.utils.sql import get_next_round_name, get_rounds_with_matches
 
@@ -26,15 +28,24 @@ async def get_rounds(
         tournament_id, no_draft_rounds=user is None or no_draft_rounds
     )
     if user is not None:
-        return rounds
+        return RoundsWithMatchesResponse(data=rounds)
 
-    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds.data if not round_.is_draft])
+    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds if not round_.is_draft])
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def delete_round(
-    tournament_id: int, round_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    round_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    round_with_matches: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
+    if len(round_with_matches.matches) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Round contains matches, delete those first",
+        )
+
     await database.execute(
         query=rounds.delete().where(
             rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
@@ -65,6 +76,7 @@ async def update_round_by_id(
     round_id: int,
     round_body: RoundBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    round: Round = Depends(round_dependency),
 ) -> SuccessResponse:
     values = {'tournament_id': tournament_id, 'round_id': round_id}
     query = '''
