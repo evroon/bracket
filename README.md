@@ -12,8 +12,8 @@ Bracket is written in async Python (with FastAPI) and Next.js as frontend using 
 
 
 ### Preview
-<img align="left" alt="" src="misc/img/schedule_preview.png" width="50%" />
-<img alt="" src="misc/img/players_preview.png" width="50%" />
+<img align="left" alt="" src="misc/img/schedule_preview.png" width="100%" />
+<img alt="" src="misc/img/players_preview.png" width="100%" />
 
 # Setup
 
