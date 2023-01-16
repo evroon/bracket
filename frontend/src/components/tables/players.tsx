@@ -39,10 +39,20 @@ export default function PlayersTable({
           <PlayerStatistics wins={player.wins} draws={player.draws} losses={player.losses} />
         </td>
         <td>
-          <PlayerScore score={player.elo_score} max_score={maxELOScore} color="indigo" />
+          <PlayerScore
+            score={player.elo_score}
+            max_score={maxELOScore}
+            color="indigo"
+            decimals={0}
+          />
         </td>
         <td>
-          <PlayerScore score={player.swiss_score} max_score={maxSwissScore} color="grape" />
+          <PlayerScore
+            score={player.swiss_score}
+            max_score={maxSwissScore}
+            color="grape"
+            decimals={1}
+          />
         </td>
         <td>
           <PlayerModal

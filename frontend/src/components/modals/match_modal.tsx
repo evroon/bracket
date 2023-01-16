@@ -1,4 +1,4 @@
-import { Button, Modal, NumberInput } from '@mantine/core';
+import { Button, Modal, NumberInput, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -27,6 +27,7 @@ export default function MatchModal({
     initialValues: {
       team1_score: match != null ? match.team1_score : 0,
       team2_score: match != null ? match.team2_score : 0,
+      label: match != null ? match.label : '',
     },
 
     validate: {
@@ -45,6 +46,7 @@ export default function MatchModal({
               round_id: match.round_id,
               team1_score: values.team1_score,
               team2_score: values.team2_score,
+              label: values.label,
             };
             await updateMatch(tournamentData.id, match.id, newMatch);
             await swrRoundsResponse.mutate(null);
@@ -64,6 +66,13 @@ export default function MatchModal({
             label={`Score of ${match.team2.name}`}
             placeholder={`Score of ${match.team2.name}`}
             {...form.getInputProps('team2_score')}
+          />
+          <TextInput
+            withAsterisk
+            style={{ marginTop: 20 }}
+            label="Label for this match"
+            placeholder="Court 1 | 11:30 - 12:00"
+            {...form.getInputProps('label')}
           />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             Save

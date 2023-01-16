@@ -1,15 +1,26 @@
-import { Grid, Tooltip, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
-import { useState } from 'react';
+import {
+  Badge,
+  Center,
+  Grid,
+  Tooltip,
+  UnstyledButton,
+  createStyles,
+  useMantineTheme,
+} from '@mantine/core';
+import { Property } from 'csstype';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import MatchModal from '../modals/match_modal';
 
+import Visibility = Property.Visibility;
+
 const useStyles = createStyles((theme) => ({
   root: {
     width: '100%',
-    marginTop: '20px',
+    marginTop: '30px',
   },
   divider: {
     backgroundColor: 'darkgray',
@@ -29,7 +40,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Game({
+function MatchBadge({ match }: { match: MatchInterface }) {
+  const visibility: Visibility = match.label === '' ? 'hidden' : 'visible';
+  return (
+    <Center style={{ transform: 'translateY(50%)', visibility }}>
+      <Badge size="lg" variant="filled">
+        {match.label}
+      </Badge>
+    </Center>
+  );
+}
+
+export default function Match({
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
@@ -60,6 +82,7 @@ export default function Game({
 
   const bracket = (
     <>
+      <MatchBadge match={match} />
       <div className={classes.top} style={team1_style}>
         <Tooltip label={team1_players_label} withArrow color="blue">
           <Grid grow>

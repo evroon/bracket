@@ -22,6 +22,7 @@ def test_elo_calculation() -> None:
                 team1_score=3,
                 team2_score=4,
                 round_id=1,
+                label='Some label',
                 team1=TeamWithPlayers(
                     name='Dummy team 1',
                     tournament_id=1,

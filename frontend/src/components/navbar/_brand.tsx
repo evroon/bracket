@@ -2,11 +2,12 @@ import {
   ActionIcon,
   Box,
   Group,
+  Image,
   Title,
   UnstyledButton,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconBrackets, IconMoonStars, IconSun } from '@tabler/icons';
+import { IconMoonStars, IconSun } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -26,15 +27,17 @@ export function Brand() {
       })}
     >
       <Group position="apart">
-        <IconBrackets size={36} style={{ marginBottom: 10 }} />
         <UnstyledButton>
-          <Title
-            onClick={() => {
-              router.push('/');
-            }}
-          >
-            Bracket
-          </Title>
+          <Group>
+            <Image src="/favicon.svg" width="50px" height="50px" mt="-8px" />
+            <Title
+              onClick={() => {
+                router.push('/');
+              }}
+            >
+              Bracket
+            </Title>
+          </Group>
         </UnstyledButton>
         <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30}>
           {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}

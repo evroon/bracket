@@ -57,9 +57,9 @@ export const setSorting = (state: TableState, newSortField: string) => {
 
 export const getTableState = (
   initial_sort_field: string,
-  initial_sort_direection: boolean = true
+  initial_sort_direction: boolean = true
 ) => {
-  const [reversed, setReversed] = useState(initial_sort_direection);
+  const [reversed, setReversed] = useState(initial_sort_direction);
   const [sortField, setSortField] = useState(initial_sort_field);
   return {
     sortField,

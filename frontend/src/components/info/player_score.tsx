@@ -5,9 +5,10 @@ interface ScoreProps {
   score: number;
   max_score: number;
   color: DefaultMantineColor;
+  decimals: number;
 }
 
-export function PlayerScore({ score, max_score, color }: ScoreProps) {
+export function PlayerScore({ score, max_score, color, decimals }: ScoreProps) {
   const theme = useMantineTheme();
   const percentageScale = 100.0 / max_score;
   const base_color = theme.colors[color];
@@ -24,7 +25,7 @@ export function PlayerScore({ score, max_score, color }: ScoreProps) {
           {
             value: percentageScale * score,
             color: theme.colorScheme === 'dark' ? base_color[9] : base_color[6],
-            tooltip: `ELO Score (${(percentageScale * score).toFixed(0)}%)`,
+            tooltip: `ELO Score (${(percentageScale * score).toFixed(decimals)}%)`,
           },
         ]}
       />
