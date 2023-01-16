@@ -5,6 +5,7 @@
 [![backend](https://github.com/evroon/bracket/actions/workflows/backend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/backend.yml)
 [![frontend](https://github.com/evroon/bracket/actions/workflows/frontend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/frontend.yml)
 
+<br/>
 Ladder tournament system meant to be easy to use.
 Bracket is written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
 
