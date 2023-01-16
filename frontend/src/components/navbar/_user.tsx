@@ -1,9 +1,12 @@
 import { Navbar, createStyles } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { FaBook } from '@react-icons/all-files/fa/FaBook';
+import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { IconLogout } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { getBaseApiUrl } from '../../services/adapter';
 import { performLogout } from '../../services/user';
 
 export const useNavbarStyles = createStyles((theme, _params, getRef) => {
@@ -83,10 +86,15 @@ export function User() {
 
   return (
     <Navbar.Section className={classes.footer}>
-      {/*<a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>*/}
-      {/*  <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />*/}
-      {/*  <span>Account</span>*/}
-      {/*</a>*/}
+      <a href={`${getBaseApiUrl()}/docs`} className={classes.link}>
+        <FaBook className={classes.linkIcon} size={20} />
+        <span>API documentation</span>
+      </a>
+
+      <a href="https://github.com/evroon/bracket" className={classes.link}>
+        <FaGithub className={classes.linkIcon} size={20} />
+        <span>Bracket on GitHub</span>
+      </a>
 
       <a href="#" className={classes.link} onClick={() => attemptLogout()}>
         <IconLogout className={classes.linkIcon} stroke={1.5} />

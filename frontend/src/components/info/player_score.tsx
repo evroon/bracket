@@ -17,7 +17,7 @@ export function PlayerScore({ score, max_score, color, decimals }: ScoreProps) {
     <>
       <Group position="apart">
         <Text size="xs" color={color} weight={700}>
-          {score.toFixed(0)}
+          {score.toFixed(decimals)}
         </Text>
       </Group>
       <Progress
