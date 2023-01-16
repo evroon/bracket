@@ -8,8 +8,9 @@
 <br/>
 Ladder tournament system meant to be easy to use.
 Bracket is written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
-<br/>
 
+
+### Preview
 ![Preview](misc/img/preview.png)
 
 # Setup
