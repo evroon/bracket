@@ -6,7 +6,7 @@ import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getRounds, getTournaments } from '../../../services/adapter';
+import { getBaseApiUrl, getRounds, getTournament } from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   return tournamentDataFull.logo_path ? (
@@ -17,13 +17,10 @@ function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament
 export default function Dashboard() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrRoundsResponse: SWRResponse = getRounds(tournamentData.id, true);
-  const swrTournamentsResponse = getTournaments();
+  const swrTournamentsResponse = getTournament(tournamentData.id);
 
-  const tournaments: Tournament[] =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
-  const tournamentDataFull = tournaments.filter(
-    (tournament) => tournament.id === tournamentData.id
-  )[0];
+  const tournamentDataFull: Tournament =
+    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
 
   if (tournamentDataFull == null) {
     return <NotFoundTitle />;

@@ -10,20 +10,46 @@ from bracket.models.db.tournament import (
     TournamentUpdateBody,
 )
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import user_authenticated, user_authenticated_for_tournament
-from bracket.routes.models import SuccessResponse, TournamentsResponse
+from bracket.routes.auth import (
+    user_authenticated,
+    user_authenticated_for_tournament,
+    user_authenticated_or_public_dashboard,
+)
+from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
-from bracket.utils.db import fetch_all_parsed
-from bracket.utils.sql import get_user_access_to_club
+from bracket.utils.db import fetch_all_parsed, fetch_one_parsed, fetch_one_parsed_certain
+from bracket.utils.sql import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.types import assert_some
 
 router = APIRouter()
 
 
+@router.get("/tournaments/{tournament_id}", response_model=TournamentResponse)
+async def get_tournament(
+    tournament_id: int, user: UserPublic | None = Depends(user_authenticated_or_public_dashboard)
+) -> TournamentResponse:
+    tournament = await fetch_one_parsed_certain(
+        database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
+    )
+    if user is None and not tournament.dashboard_public:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="You don't have access to this tournament",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return TournamentResponse(data=tournament)
+
+
 @router.get("/tournaments", response_model=TournamentsResponse)
-async def get_tournaments(_: UserPublic = Depends(user_authenticated)) -> TournamentsResponse:
+async def get_tournaments(user: UserPublic = Depends(user_authenticated)) -> TournamentsResponse:
+    user_clubs = await get_which_clubs_has_user_access_to(assert_some(user.id))
     return TournamentsResponse(
-        data=await fetch_all_parsed(database, Tournament, tournaments.select())
+        data=await fetch_all_parsed(
+            database,
+            Tournament,
+            tournaments.select().where(tournaments.c.club_id.in_(tuple(user_clubs))),
+        )
     )
 
 
