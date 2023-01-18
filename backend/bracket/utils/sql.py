@@ -87,11 +87,15 @@ async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> boo
     return tournament_id in {tournament.id for tournament in result}  # type: ignore[attr-defined]
 
 
-async def get_user_access_to_club(club_id: int, user_id: int) -> bool:
+async def get_which_clubs_has_user_access_to(user_id: int) -> set[int]:
     query = f'''
         SELECT club_id
         FROM users_x_clubs
         WHERE user_id = :user_id         
         '''
     result = await database.fetch_all(query=query, values={'user_id': user_id})
-    return club_id in {club.club_id for club in result}  # type: ignore[attr-defined]
+    return {club.club_id for club in result}  # type: ignore[attr-defined]
+
+
+async def get_user_access_to_club(club_id: int, user_id: int) -> bool:
+    return club_id in await get_which_clubs_has_user_access_to(user_id)

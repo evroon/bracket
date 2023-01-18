@@ -25,6 +25,10 @@ class ClubsResponse(DataResponse[list[Club]]):
     pass
 
 
+class TournamentResponse(DataResponse[Tournament]):
+    pass
+
+
 class TournamentsResponse(DataResponse[list[Tournament]]):
     pass
 
