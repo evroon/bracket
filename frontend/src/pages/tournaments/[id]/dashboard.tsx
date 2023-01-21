@@ -1,4 +1,5 @@
 import { Grid, Image, Title } from '@mantine/core';
+import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -29,19 +30,24 @@ export default function Dashboard() {
   }
 
   return (
-    <Grid grow style={{ margin: '20px' }}>
-      <Grid.Col span={2}>
-        <Title>{tournamentDataFull.name}</Title>
-        <TournamentLogo tournamentDataFull={tournamentDataFull} />
-      </Grid.Col>
-      <Grid.Col span={10}>
-        <Brackets
-          tournamentData={tournamentData}
-          swrRoundsResponse={swrRoundsResponse}
-          swrUpcomingMatchesResponse={null}
-          readOnly
-        />
-      </Grid.Col>
-    </Grid>
+    <>
+      <Head>
+        <title>{tournamentDataFull.name}</title>
+      </Head>
+      <Grid grow style={{ margin: '20px' }}>
+        <Grid.Col span={2}>
+          <Title>{tournamentDataFull.name}</Title>
+          <TournamentLogo tournamentDataFull={tournamentDataFull} />
+        </Grid.Col>
+        <Grid.Col span={10}>
+          <Brackets
+            tournamentData={tournamentData}
+            swrRoundsResponse={swrRoundsResponse}
+            swrUpcomingMatchesResponse={null}
+            readOnly
+          />
+        </Grid.Col>
+      </Grid>
+    </>
   );
 }
