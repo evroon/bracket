@@ -22,7 +22,9 @@ export default function Dashboard() {
   const tournamentDataFull: Tournament =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
 
-  if (tournamentDataFull == null) {
+  const roundsData = swrRoundsResponse.data != null ? swrRoundsResponse.data.data : null;
+
+  if (tournamentDataFull == null || roundsData == null) {
     return <NotFoundTitle />;
   }
 

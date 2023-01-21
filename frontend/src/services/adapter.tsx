@@ -69,9 +69,7 @@ export function getTeams(tournament_id: number): SWRResponse {
 }
 
 export function getRounds(tournament_id: number, no_draft_rounds: boolean = false): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/rounds?no_draft_rounds=${no_draft_rounds}`, fetcher, {
-    refreshInterval: 3000,
-  });
+  return useSWR(`tournaments/${tournament_id}/rounds?no_draft_rounds=${no_draft_rounds}`, fetcher);
 }
 
 export function getUpcomingMatches(tournament_id: number): SWRResponse {

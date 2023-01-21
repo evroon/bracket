@@ -16,14 +16,13 @@ export default function Brackets({
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
 }) {
-  if (swrRoundsResponse.data == null) {
-    return <div />;
+  if (swrRoundsResponse.isLoading || swrRoundsResponse.data == null) {
+    return <p>No rounds found</p>;
   }
 
   const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
-    <Grid.Col sm={6} lg={4} xl={3}>
+    <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
       <Round
-        key={round.id}
         tournamentData={tournamentData}
         round={round}
         swrRoundsResponse={swrRoundsResponse}
