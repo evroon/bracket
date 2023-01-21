@@ -3,8 +3,9 @@ coverage:
     project:
       default:
         informational: true
-        wait_for_ci: false
-        require_ci_to_pass: false
+    patch:
+      default:
+        informational: true
 
 ignore:
   - "backend/bracket/database.py"
