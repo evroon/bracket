@@ -2,15 +2,16 @@ coverage:
   status:
     patch:
       default:
+        target: 100%
+        threshold: 100%
         informational: true
         wait_for_ci: false
         require_ci_to_pass: false
         
     project:
       default:
-        informational: true
-        wait_for_ci: false
-        require_ci_to_pass: false
+        target: 100%
+        threshold: 100%
 
 ignore:
   - "backend/bracket/database.py"
