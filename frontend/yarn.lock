@@ -897,10 +897,10 @@
   resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.9.5.tgz#9b56c899e479c90abecc096eb8543b93bdc52938"
   integrity sha512-OtMOvXMyqpZ+Tz25DYRwRkvERvmF4L0RJiq+JnXk+1yKDvG+JZQuMMLnt0nZ81T6q7uzDSA29cJ45syHL2BXmQ==
 
-"@next/bundle-analyzer@^13.1.1":
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-13.1.1.tgz#f36108dcb953ea518253df5eb9e175642f78b04a"
-  integrity sha512-zxC/MOj7gDjvQffHT4QZqcPe1Ny+e6o3wethCZn3liSElMA+kxgEopbziTUXdrvJcd/porq+3Itc8P+gxE/xog==
+"@next/bundle-analyzer@^13.1.3":
+  version "13.1.3"
+  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-13.1.3.tgz#f0e82bdcf17126907a58a68f85d49a71cadb6b07"
+  integrity sha512-3C9NVjV0RRwceejYuwc9yVtBGRyKZaQIAgjLnLPydg1rDO/cNNgmRaq5n+S8Wcsw+YhcDiTWtn1kTX+bbBZYOw==
   dependencies:
     webpack-bundle-analyzer "4.7.0"
 
