@@ -6,7 +6,6 @@ from bracket.config import Environment, config, environment, init_sentry
 from bracket.database import database, init_db_when_empty
 from bracket.routes import auth, clubs, matches, players, rounds, teams, tournaments
 
-
 init_sentry()
 
 app = FastAPI(

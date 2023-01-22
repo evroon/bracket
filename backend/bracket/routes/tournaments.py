@@ -17,7 +17,7 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
-from bracket.utils.db import fetch_all_parsed, fetch_one_parsed, fetch_one_parsed_certain
+from bracket.utils.db import fetch_all_parsed, fetch_one_parsed_certain
 from bracket.utils.sql import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.types import assert_some
 
