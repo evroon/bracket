@@ -1,4 +1,4 @@
-import { Grid } from '@mantine/core';
+import { Grid, Skeleton } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -16,8 +16,20 @@ export default function Brackets({
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
 }) {
-  if (swrRoundsResponse.isLoading || swrRoundsResponse.data == null) {
+  if (!swrRoundsResponse.isLoading && swrRoundsResponse.data == null) {
     return <p>No rounds found</p>;
+  }
+  if (swrRoundsResponse.isLoading) {
+    return (
+      <Grid>
+        <Grid.Col sm={6} lg={4} xl={3}>
+          <Skeleton height={500} mb="xl" radius="xl" />
+        </Grid.Col>
+        <Grid.Col sm={6} lg={4} xl={3}>
+          <Skeleton height={500} mb="xl" radius="xl" />
+        </Grid.Col>
+      </Grid>
+    );
   }
 
   const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
