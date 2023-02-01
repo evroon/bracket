@@ -81,7 +81,7 @@ export function getUpcomingMatches(
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    `tournaments/${tournament_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}`,
+    `tournaments/${tournament_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher
   );
 }
