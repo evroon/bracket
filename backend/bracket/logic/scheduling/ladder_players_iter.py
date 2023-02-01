@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 from functools import lru_cache
 
 from fastapi import HTTPException
@@ -9,6 +10,7 @@ from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
 from bracket.utils.sql import get_active_players_in_tournament, get_rounds_with_matches
+from bracket.utils.types import assert_some
 
 
 def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> bool:
@@ -44,9 +46,17 @@ async def get_possible_upcoming_matches_for_players(
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
 
     players = await get_active_players_in_tournament(tournament_id)
-    players_match_count = {
-        player.id: player.wins + player.draws + player.losses for player in players
-    }
+
+    players_match_count: dict[int, int] = defaultdict(int)
+    for round_ in other_rounds:
+        for match_ in round_.matches:
+            for player_id in match_.player_ids:
+                players_match_count[player_id] += 1
+
+    for player in players:
+        if player.id not in players_match_count:
+            players_match_count[assert_some(player.id)] = 0
+
     max_played_matches = max(players_match_count.values())
     player_ids_behind_schedule = [
         player_id
