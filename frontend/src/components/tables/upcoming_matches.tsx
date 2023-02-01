@@ -4,16 +4,16 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
+import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import { createTeam } from '../../services/team';
 import PlayerList from '../info/player_list';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
-import {TeamInterface} from "../../interfaces/team";
 
 function getPlayerIds(team: TeamInterface) {
-  return team.players.map((p) => {return p.id.toString();});
+  return team.players.map((p) => p.id.toString());
 }
 
 export default function UpcomingMatchesTable({
@@ -42,9 +42,18 @@ export default function UpcomingMatchesTable({
     const teamName1 = `${upcoming_match.team1.players[0].name}, ${upcoming_match.team1.players[1].name}`;
     const teamName2 = `${upcoming_match.team2.players[0].name}, ${upcoming_match.team2.players[1].name}`;
 
-    const {data: team1Response} = await createTeam(tournamentData.id, teamName1, true, team1PlayerIds);
-    const {data: team2Response} = await createTeam(tournamentData.id, teamName2, true, team2PlayerIds);
-    console.error(team1Response);
+    const { data: team1Response } = await createTeam(
+      tournamentData.id,
+      teamName1,
+      true,
+      team1PlayerIds
+    );
+    const { data: team2Response } = await createTeam(
+      tournamentData.id,
+      teamName2,
+      true,
+      team2PlayerIds
+    );
 
     const match_to_schedule: MatchCreateBodyInterface = {
       team1_id: team1Response.data.id,

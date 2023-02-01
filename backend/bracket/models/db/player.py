@@ -18,7 +18,7 @@ class Player(BaseModelORM):
     losses: int = 0
 
     def __hash__(self) -> int:
-        return self.id
+        return self.id if self.id is not None else int(self.created.timestamp())
 
 
 class PlayerBody(BaseModelORM):

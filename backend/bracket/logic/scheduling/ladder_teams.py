@@ -1,18 +1,12 @@
 from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
-from bracket.models.db.match import (
-    MatchFilter,
-    SuggestedMatch,
-)
-from bracket.utils.sql import (
-    get_rounds_with_matches,
-    get_teams_with_members,
-)
+from bracket.models.db.match import MatchFilter, SuggestedMatch
+from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
 
 
 async def get_possible_upcoming_matches_for_teams(
-    tournament_id: int, filter: MatchFilter
+    tournament_id: int, filter_: MatchFilter
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
     rounds_response = await get_rounds_with_matches(tournament_id)
@@ -23,7 +17,7 @@ async def get_possible_upcoming_matches_for_teams(
     teams = await get_teams_with_members(tournament_id, only_active_teams=True)
 
     for i, team1 in enumerate(teams):
-        for j, team2 in enumerate(teams[i + 1 :]):
+        for _, team2 in enumerate(teams[i + 1 :]):
             team_already_scheduled = any(
                 (
                     team1.id in match.team_ids or team2.id in match.team_ids
@@ -33,7 +27,7 @@ async def get_possible_upcoming_matches_for_teams(
             if team_already_scheduled:
                 continue
 
-            suggested_match = check_team_combination_adheres_to_filter(team1, team2, filter)
+            suggested_match = check_team_combination_adheres_to_filter(team1, team2, filter_)
             if suggested_match:
                 suggestions.append(suggested_match)
 

@@ -4,17 +4,11 @@ from functools import lru_cache
 from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
-from bracket.models.db.match import (
-    MatchFilter,
-    SuggestedMatch,
-)
+from bracket.models.db.match import MatchFilter, SuggestedMatch
 from bracket.models.db.player import Player
-from bracket.models.db.round import Round, RoundWithMatches
+from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
-from bracket.utils.sql import (
-    get_rounds_with_matches,
-    get_active_players_in_tournament,
-)
+from bracket.utils.sql import get_active_players_in_tournament, get_rounds_with_matches
 
 
 def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> bool:
@@ -22,8 +16,9 @@ def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> b
 
 
 async def get_possible_upcoming_matches_for_players(
-    tournament_id: int, filter: MatchFilter
+    tournament_id: int, filter_: MatchFilter
 ) -> list[SuggestedMatch]:
+    random.seed(10)
     suggestions: set[SuggestedMatch] = set()
     all_rounds = await get_rounds_with_matches(tournament_id)
     draft_round = next((round_ for round_ in all_rounds if round_.is_draft), None)
@@ -61,12 +56,18 @@ async def get_possible_upcoming_matches_for_players(
     players_behind_schedule = [
         player for player in players if player.id in player_ids_behind_schedule
     ]
-    players_to_consider = players_behind_schedule if filter.only_behind_schedule else players
+    players_to_consider = players_behind_schedule if filter_.only_behind_schedule else players
     players_to_schedule = [
-        player for player in players_to_consider if not player_already_scheduled(player, draft_round)
+        player
+        for player in players_to_consider
+        if not player_already_scheduled(player, draft_round)
     ]
 
-    for i in range(filter.iterations):
+    if len(players_to_schedule) < 4:
+        print(len(players_to_consider))
+        return []
+
+    for i in range(filter_.iterations):
         possible_players = random.sample(players_to_schedule, 4)
         team1_players, team2_players = possible_players[:2], possible_players[2:4]
 
@@ -78,7 +79,7 @@ async def get_possible_upcoming_matches_for_players(
         team1 = TeamWithPlayers(players=team1_players)
         team2 = TeamWithPlayers(players=team2_players)
 
-        suggested_match = check_team_combination_adheres_to_filter(team1, team2, filter)
+        suggested_match = check_team_combination_adheres_to_filter(team1, team2, filter_)
         if suggested_match:
             suggested_match.player_behind_schedule_count = sum(
                 1 if player.id in player_ids_behind_schedule else 0
@@ -88,10 +89,10 @@ async def get_possible_upcoming_matches_for_players(
 
     result = sorted(
         list(suggestions),
-        key=lambda s: s.elo_diff + (int(1e9) * s.player_behind_schedule_count),
+        key=lambda s: s.elo_diff - (int(1e9) * s.player_behind_schedule_count),
     )
     for i in range(min(max_matches_per_round, len(result))):
         result[i].is_recommended = True
 
     team_already_scheduled_before.cache_clear()
-    return result[: filter.limit]
+    return result[: filter_.limit]

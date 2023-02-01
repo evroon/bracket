@@ -1,5 +1,5 @@
 import { Divider, Flex, NumberInput, Radio } from '@mantine/core';
-import {IconListNumbers, IconMedal, IconRepeat} from '@tabler/icons';
+import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons';
 import { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../../interfaces/match';
@@ -53,7 +53,7 @@ export default function Scheduler({
         />
         <NumberInput
           value={schedulerSettings.iterations}
-          onChange={(val) => schedulerSettings.setLimit(val != null ? val : 0)}
+          onChange={(val) => schedulerSettings.setIterations(val != null ? val : 0)}
           placeholder="100"
           label="Iterations"
           min={0}

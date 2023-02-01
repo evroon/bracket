@@ -4,7 +4,7 @@ from starlette import status
 from bracket.database import database
 from bracket.models.db.match import Match
 from bracket.models.db.round import Round, RoundWithMatches
-from bracket.models.db.team import Team, TeamWithPlayers, FullTeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.schema import matches, rounds, teams
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members

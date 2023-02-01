@@ -4,18 +4,12 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.team import (
-    Team,
-    TeamBody,
-    TeamToInsert,
-    TeamWithPlayers,
-    FullTeamWithPlayers,
-)
+from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
-from bracket.schema import players, teams, players_x_teams
+from bracket.schema import players_x_teams, teams
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
 from bracket.utils.types import assert_some

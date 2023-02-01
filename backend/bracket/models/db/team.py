@@ -2,7 +2,7 @@ import json
 from decimal import Decimal
 
 from heliclockter import datetime_utc
-from pydantic import validator, BaseModel
+from pydantic import BaseModel, validator
 
 from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM

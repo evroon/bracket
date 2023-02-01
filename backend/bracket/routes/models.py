@@ -7,7 +7,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.match import SuggestedMatch
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round, RoundWithMatches
-from bracket.models.db.team import Team, TeamWithPlayers, FullTeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.tournament import Tournament
 
 DataT = TypeVar('DataT')

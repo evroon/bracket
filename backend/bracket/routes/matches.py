@@ -4,7 +4,6 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_matches_for_players
-
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament

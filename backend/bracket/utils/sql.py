@@ -3,7 +3,7 @@ from databases import Database
 from bracket.database import database
 from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
-from bracket.models.db.team import TeamWithPlayers, FullTeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers
 from bracket.utils.types import dict_without_none
 
 

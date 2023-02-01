@@ -62,6 +62,8 @@ disable = [
     'invalid-name',
     'dangerous-default-value',
     'duplicate-code',
+    'too-many-locals',
+    'too-many-nested-blocks',
 ]
 
 [tool.bandit]

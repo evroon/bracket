@@ -7,34 +7,47 @@ from pydantic import BaseModel
 from bracket.database import database
 from bracket.models.db.round import RoundWithMatches
 from bracket.schema import players
-from bracket.utils.sql import get_rounds_with_matches, get_all_players_in_tournament
+from bracket.utils.sql import get_all_players_in_tournament, get_rounds_with_matches
 from bracket.utils.types import assert_some
+
+START_ELO: int = 1200
+K = 32
+D = 400
 
 
 class PlayerStatistics(BaseModel):
     wins: int = 0
     draws: int = 0
     losses: int = 0
-    elo_score: int = 1200
+    elo_score: int = START_ELO
     swiss_score: Decimal = Decimal('0.00')
 
 
 def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int, PlayerStatistics]:
     player_x_elo: defaultdict[int, PlayerStatistics] = defaultdict(PlayerStatistics)
 
-    K = 32
-    D = 400
-
     for round_ in rounds:
         if not round_.is_draft:
             for match in round_.matches:
                 if match.team1_score != 0 or match.team2_score != 0:
-                    rating_team1_before = sum(
-                        player_x_elo[player_id].elo_score for player_id in match.team1.player_ids
-                    ) / len(match.team1.player_ids)
-                    rating_team2_before = sum(
-                        player_x_elo[player_id].elo_score for player_id in match.team2.player_ids
-                    ) / len(match.team2.player_ids)
+                    rating_team1_before = (
+                        sum(
+                            player_x_elo[player_id].elo_score
+                            for player_id in match.team1.player_ids
+                        )
+                        / len(match.team1.player_ids)
+                        if len(match.team1.player_ids) > 0
+                        else START_ELO
+                    )
+                    rating_team2_before = (
+                        sum(
+                            player_x_elo[player_id].elo_score
+                            for player_id in match.team2.player_ids
+                        )
+                        / len(match.team2.player_ids)
+                        if len(match.team2.player_ids) > 0
+                        else START_ELO
+                    )
 
                     for team_index, team in enumerate(match.teams):
                         is_team1 = team_index == 0

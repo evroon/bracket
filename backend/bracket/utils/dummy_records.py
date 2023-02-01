@@ -5,7 +5,6 @@ from heliclockter import datetime_utc
 from bracket.models.db.club import Club
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
-from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament

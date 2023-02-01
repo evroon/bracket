@@ -88,18 +88,14 @@ export default function Match({
       <MatchBadge match={match} theme={theme} />
       <div className={classes.top} style={team1_style}>
         <Grid grow>
-          <Grid.Col span={10}>
-            {team1_players_label}
-          </Grid.Col>
+          <Grid.Col span={10}>{team1_players_label}</Grid.Col>
           <Grid.Col span={2}>{match.team1_score}</Grid.Col>
         </Grid>
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
         <Grid grow>
-          <Grid.Col span={10}>
-            {team2_players_label}
-          </Grid.Col>
+          <Grid.Col span={10}>{team2_players_label}</Grid.Col>
           <Grid.Col span={2}>{match.team2_score}</Grid.Col>
         </Grid>
       </div>
