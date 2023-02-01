@@ -64,7 +64,6 @@ async def get_possible_upcoming_matches_for_players(
     ]
 
     if len(players_to_schedule) < 4:
-        print(len(players_to_consider))
         return []
 
     for i in range(filter_.iterations):
