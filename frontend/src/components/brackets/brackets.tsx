@@ -32,7 +32,7 @@ export default function Brackets({
     );
   }
 
-  const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
+  const rounds = swrRoundsResponse.data.data.sort((r1, r2) => (r1.name > r2.name ? 1 : 0)).map((round: RoundInterface) => (
     <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
       <Round
         tournamentData={tournamentData}
