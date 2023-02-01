@@ -2,10 +2,11 @@ import json
 from decimal import Decimal
 
 from heliclockter import datetime_utc
-from pydantic import validator
+from pydantic import BaseModel, validator
 
 from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.types import assert_some
 
 
 class Team(BaseModelORM):
@@ -16,8 +17,12 @@ class Team(BaseModelORM):
     active: bool
 
 
-class TeamWithPlayers(Team):
+class TeamWithPlayers(BaseModel):
     players: list[Player]
+
+    @property
+    def player_ids(self) -> list[int]:
+        return [assert_some(player.id) for player in self.players]
 
     @validator('players', pre=True)
     def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]
@@ -48,6 +53,10 @@ class TeamWithPlayers(Team):
             if len(self.players) > 0
             else Decimal('0.00')
         )
+
+
+class FullTeamWithPlayers(TeamWithPlayers, Team):
+    pass
 
 
 class TeamBody(BaseModelORM):

@@ -7,12 +7,23 @@ from bracket.database import database
 from bracket.models.db.club import Club
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
+from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
 from bracket.models.db.user_x_club import UserXClub
-from bracket.schema import clubs, matches, players, rounds, teams, tournaments, users, users_x_clubs
+from bracket.schema import (
+    clubs,
+    matches,
+    players,
+    players_x_teams,
+    rounds,
+    teams,
+    tournaments,
+    users,
+    users_x_clubs,
+)
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT
@@ -68,6 +79,15 @@ async def inserted_team(team: Team) -> AsyncIterator[Team]:
 async def inserted_player(player: Player) -> AsyncIterator[Player]:
     async with inserted_generic(player, players, Player) as row_inserted:
         yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_player_in_team(player: Player, team_id: int) -> AsyncIterator[Player]:
+    async with inserted_generic(player, players, Player) as row_inserted:
+        async with inserted_generic(
+            PlayerXTeam(player_id=row_inserted.id, team_id=team_id), players_x_teams, PlayerXTeam
+        ):
+            yield row_inserted
 
 
 @asynccontextmanager

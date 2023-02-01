@@ -24,6 +24,7 @@ tournaments = Table(
     Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
     Column('dashboard_public', Boolean, nullable=False),
     Column('logo_path', String, nullable=True),
+    Column('players_can_be_in_multiple_teams', Boolean, nullable=False, server_default='f'),
 )
 
 rounds = Table(
@@ -57,7 +58,7 @@ teams = Table(
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
     Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
-    Column('active', Boolean, nullable=False, index=True),
+    Column('active', Boolean, nullable=False, index=True, server_default='t'),
 )
 
 players = Table(
@@ -66,13 +67,13 @@ players = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True, unique=True),
     Column('created', DateTimeTZ, nullable=False),
-    Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=True),
     Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
     Column('elo_score', Float, nullable=False),
     Column('swiss_score', Float, nullable=False),
     Column('wins', Integer, nullable=False),
     Column('draws', Integer, nullable=False),
     Column('losses', Integer, nullable=False),
+    Column('active', Boolean, nullable=False, index=True, server_default='t'),
 )
 
 
@@ -92,4 +93,12 @@ users_x_clubs = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
     Column('user_id', BigInteger, ForeignKey('users.id'), nullable=False),
+)
+
+players_x_teams = Table(
+    'players_x_teams',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('player_id', BigInteger, ForeignKey('players.id'), nullable=False),
+    Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=False),
 )

@@ -3,7 +3,7 @@ from decimal import Decimal
 from bracket.logic.elo import PlayerStatistics, calculate_elo_per_player
 from bracket.models.db.match import MatchWithTeamDetails
 from bracket.models.db.round import RoundWithMatches
-from bracket.models.db.team import TeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_PLAYER1, DUMMY_PLAYER2
 
 
@@ -23,14 +23,14 @@ def test_elo_calculation() -> None:
                 team2_score=4,
                 round_id=1,
                 label='Some label',
-                team1=TeamWithPlayers(
+                team1=FullTeamWithPlayers(
                     name='Dummy team 1',
                     tournament_id=1,
                     active=True,
                     created=DUMMY_MOCK_TIME,
                     players=[DUMMY_PLAYER1.copy(update={'id': 1})],
                 ),
-                team2=TeamWithPlayers(
+                team2=FullTeamWithPlayers(
                     name='Dummy team 2',
                     tournament_id=1,
                     active=True,
@@ -42,6 +42,6 @@ def test_elo_calculation() -> None:
     )
     calculation = calculate_elo_per_player([round_])
     assert calculation == {
-        1: PlayerStatistics(losses=1, elo_score=3, swiss_score=Decimal('0.00')),
-        2: PlayerStatistics(wins=1, elo_score=4, swiss_score=Decimal('1.00')),
+        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal('0.00')),
+        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal('1.00')),
     }

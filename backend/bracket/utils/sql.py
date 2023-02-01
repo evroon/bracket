@@ -1,8 +1,9 @@
 from databases import Database
 
 from bracket.database import database
+from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
-from bracket.models.db.team import TeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers
 from bracket.utils.types import dict_without_none
 
 
@@ -19,7 +20,8 @@ async def get_rounds_with_matches(
                 teams.*,
                 to_json(array_remove(array_agg(p), NULL)) as players
             FROM teams
-            LEFT JOIN players p on p.team_id = teams.id
+            LEFT JOIN players_x_teams pt on pt.team_id = teams.id
+            LEFT JOIN players p on pt.player_id = p.id
             WHERE teams.tournament_id = :tournament_id
             GROUP BY teams.id
         ), matches_with_teams AS (
@@ -58,13 +60,14 @@ async def get_next_round_name(database: Database, tournament_id: int) -> str:
 
 async def get_teams_with_members(
     tournament_id: int, *, only_active_teams: bool = False, team_id: int | None = None
-) -> list[TeamWithPlayers]:
+) -> list[FullTeamWithPlayers]:
     active_team_filter = 'AND teams.active IS TRUE' if only_active_teams else ''
     team_id_filter = 'AND teams.id = :team_id' if team_id is not None else ''
     query = f'''
-        SELECT teams.*, to_json(array_agg(players.*)) AS players
+        SELECT teams.*, to_json(array_agg(p.*)) AS players
         FROM teams
-        LEFT JOIN players ON players.team_id = teams.id
+        LEFT JOIN players_x_teams pt on pt.team_id = teams.id
+        LEFT JOIN players p on pt.player_id = p.id
         WHERE teams.tournament_id = :tournament_id
         {active_team_filter}
         {team_id_filter}
@@ -72,7 +75,28 @@ async def get_teams_with_members(
         '''
     values = dict_without_none({'tournament_id': tournament_id, 'team_id': team_id})
     result = await database.fetch_all(query=query, values=values)
-    return [TeamWithPlayers.parse_obj(x._mapping) for x in result]
+    return [FullTeamWithPlayers.parse_obj(x._mapping) for x in result]
+
+
+async def get_active_players_in_tournament(tournament_id: int) -> list[Player]:
+    query = f'''
+        SELECT *
+        FROM players
+        WHERE players.tournament_id = :tournament_id
+        AND players.active IS TRUE
+        '''
+    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
+    return [Player.parse_obj(x._mapping) for x in result]
+
+
+async def get_all_players_in_tournament(tournament_id: int) -> list[Player]:
+    query = f'''
+        SELECT *
+        FROM players
+        WHERE players.tournament_id = :tournament_id
+        '''
+    result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
+    return [Player.parse_obj(x._mapping) for x in result]
 
 
 async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:

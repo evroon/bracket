@@ -4,7 +4,7 @@ from starlette import status
 from bracket.database import database
 from bracket.models.db.match import Match
 from bracket.models.db.round import Round, RoundWithMatches
-from bracket.models.db.team import Team, TeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.schema import matches, rounds, teams
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
@@ -72,7 +72,7 @@ async def team_dependency(tournament_id: int, team_id: int) -> Team:
     return team
 
 
-async def team_with_players_dependency(tournament_id: int, team_id: int) -> TeamWithPlayers:
+async def team_with_players_dependency(tournament_id: int, team_id: int) -> FullTeamWithPlayers:
     teams = await get_teams_with_members(tournament_id, team_id=team_id)
 
     if len(teams) < 1:

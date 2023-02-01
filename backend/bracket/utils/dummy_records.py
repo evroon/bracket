@@ -25,6 +25,7 @@ DUMMY_TOURNAMENT = Tournament(
     created=DUMMY_MOCK_TIME,
     dashboard_public=True,
     logo_path=None,
+    players_can_be_in_multiple_teams=True,
 )
 
 DUMMY_ROUND1 = Round(
@@ -127,69 +128,69 @@ DUMMY_TEAM4 = Team(
 
 DUMMY_PLAYER1 = Player(
     name='Luke',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=1,
     tournament_id=1,
 )
 
 DUMMY_PLAYER2 = Player(
     name='Anakin',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=1,
     tournament_id=1,
 )
 
 DUMMY_PLAYER3 = Player(
     name='Leia',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=2,
     tournament_id=1,
 )
 
 DUMMY_PLAYER4 = Player(
     name='Yoda',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=2,
     tournament_id=1,
 )
 
 DUMMY_PLAYER5 = Player(
     name='Boba',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=3,
     tournament_id=1,
 )
 
 DUMMY_PLAYER6 = Player(
     name='General',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=3,
     tournament_id=1,
 )
 
 DUMMY_PLAYER7 = Player(
     name='Han',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=4,
     tournament_id=1,
 )
 
 DUMMY_PLAYER8 = Player(
     name='Emperor',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=4,
     tournament_id=1,
 )
 
 DUMMY_PLAYER9 = Player(
     name='R2D2',
+    active=True,
     created=DUMMY_MOCK_TIME,
-    team_id=None,
     tournament_id=1,
 )
 
 DUMMY_USER_X_CLUB = UserXClub(
-    user_id=1,
+    user_id=2,
     club_id=1,
 )
 

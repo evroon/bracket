@@ -4,12 +4,12 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.team import Team, TeamBody, TeamToInsert, TeamWithPlayers
+from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
-from bracket.schema import players, teams
+from bracket.schema import players_x_teams, teams
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
 from bracket.utils.types import assert_some
@@ -18,21 +18,21 @@ router = APIRouter()
 
 
 async def update_team_members(team_id: int, tournament_id: int, player_ids: list[int]) -> None:
+    [team] = await get_teams_with_members(tournament_id, team_id=team_id)
+
     # Add members to the team
     for player_id in player_ids:
-        await database.execute(
-            query=players.update().where(
-                (players.c.id == player_id) & (teams.c.tournament_id == tournament_id)
-            ),
-            values={'team_id': team_id},
-        )
+        if player_id not in team.player_ids:
+            await database.execute(
+                query=players_x_teams.insert(),
+                values={'team_id': team_id, 'player_id': player_id},
+            )
 
     # Remove old members from the team
     await database.execute(
-        query=players.update().where(
-            (players.c.id.not_in(player_ids)) & (players.c.team_id == team_id) & (teams.c.tournament_id == tournament_id)  # type: ignore[attr-defined]
+        query=players_x_teams.delete().where(
+            (players_x_teams.c.player_id.not_in(player_ids)) & (players_x_teams.c.team_id == team_id)  # type: ignore[attr-defined]
         ),
-        values={'team_id': None},
     )
     await recalculate_elo_for_tournament_id(tournament_id)
 
@@ -74,7 +74,7 @@ async def update_team_by_id(
 async def delete_team(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    team: TeamWithPlayers = Depends(team_with_players_dependency),
+    team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
     rounds = await get_rounds_with_matches(tournament_id, no_draft_rounds=False)
     for round in rounds:
@@ -105,6 +105,11 @@ async def create_team(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
+    tournament_teams = await get_teams_with_members(tournament_id)
+    for team in tournament_teams:
+        if sorted(team.player_ids) == sorted(team_to_insert.player_ids):
+            return SingleTeamResponse(data=team)
+
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(

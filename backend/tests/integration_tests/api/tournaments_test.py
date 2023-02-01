@@ -24,6 +24,7 @@ async def test_tournaments_endpoint(
                 'created': DUMMY_MOCK_TIME.isoformat(),
                 'name': 'Some Cool Tournament',
                 'dashboard_public': True,
+                'players_can_be_in_multiple_teams': True,
             }
         ],
     }
@@ -32,7 +33,12 @@ async def test_tournaments_endpoint(
 async def test_create_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'name': 'Some new name', 'club_id': auth_context.club.id, 'dashboard_public': False}
+    body = {
+        'name': 'Some new name',
+        'club_id': auth_context.club.id,
+        'dashboard_public': False,
+        'players_can_be_in_multiple_teams': True,
+    }
     assert (
         await send_auth_request(HTTPMethod.POST, 'tournaments', auth_context, json=body)
         == SUCCESS_RESPONSE
@@ -43,7 +49,11 @@ async def test_create_tournament(
 async def test_update_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'name': 'Some new name', 'dashboard_public': False}
+    body = {
+        'name': 'Some new name',
+        'dashboard_public': False,
+        'players_can_be_in_multiple_teams': True,
+    }
     assert (
         await send_tournament_request(HTTPMethod.PATCH, '', auth_context, json=body)
         == SUCCESS_RESPONSE

@@ -4,9 +4,9 @@ export async function createTeam(
   tournament_id: number,
   name: string,
   active: boolean,
-  player_ids: number[]
+  player_ids: string[]
 ) {
-  await createAxios().post(`tournaments/${tournament_id}/teams`, {
+  return createAxios().post(`tournaments/${tournament_id}/teams`, {
     name,
     active,
     player_ids,
@@ -24,7 +24,7 @@ export async function updateTeam(
   team_id: number,
   name: string,
   active: boolean,
-  player_ids: number[]
+  player_ids: string[]
 ) {
   await createAxios()
     .patch(`tournaments/${tournament_id}/teams/${team_id}`, {

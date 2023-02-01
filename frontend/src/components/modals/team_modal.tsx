@@ -21,12 +21,7 @@ export default function TeamModal({
   swrTeamsResponse: SWRResponse;
 }) {
   const { data } = getPlayers(tournament_id, false);
-  const players: Player[] =
-    data != null
-      ? data.data.filter(
-          (player: Player) => player.team_id == null || (team != null && player.team_id === team.id)
-        )
-      : [];
+  const players: Player[] = data != null ? data.data : [];
 
   const is_create_form = team == null;
   const operation_text = is_create_form ? 'Create Team' : 'Edit Team';
@@ -56,7 +51,7 @@ export default function TeamModal({
     initialValues: {
       name: team == null ? '' : team.name,
       active: team == null ? true : team.active,
-      player_ids: team == null ? [] : team.players.map((player) => player.id),
+      player_ids: team == null ? [] : team.players.map((player) => `${player.id}`),
     },
 
     validate: {
