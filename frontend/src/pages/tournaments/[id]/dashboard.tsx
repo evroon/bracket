@@ -14,7 +14,12 @@ function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament
     return <Skeleton height={150} radius="xl" mb="xl" />;
   }
   return tournamentDataFull.logo_path ? (
-    <Image radius="lg" src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`} />
+    <Image
+      radius="lg"
+      mt={12}
+      src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`}
+      style={{ maxWidth: '400px' }}
+    />
   ) : null;
 }
 
