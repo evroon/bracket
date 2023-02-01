@@ -58,6 +58,8 @@ export default function TournamentModal({
       name: tournament == null ? '' : tournament.name,
       club_id: tournament == null ? null : tournament.club_id,
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
+      players_can_be_in_multiple_teams:
+        tournament == null ? true : tournament.players_can_be_in_multiple_teams,
     },
 
     validate: {
@@ -73,9 +75,19 @@ export default function TournamentModal({
           onSubmit={form.onSubmit(async (values) => {
             assert(values.club_id != null);
             if (is_create_form) {
-              await createTournament(values.club_id, values.name, values.dashboard_public);
+              await createTournament(
+                values.club_id,
+                values.name,
+                values.dashboard_public,
+                values.players_can_be_in_multiple_teams
+              );
             } else {
-              await updateTournament(tournament.id, values.name, values.dashboard_public);
+              await updateTournament(
+                tournament.id,
+                values.name,
+                values.dashboard_public,
+                values.players_can_be_in_multiple_teams
+              );
             }
             await swrTournamentsResponse.mutate(null);
             setOpened(false);
@@ -101,6 +113,11 @@ export default function TournamentModal({
             mt="md"
             label="Allow anyone to see the dashboard of rounds and matches"
             {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
+          />
+          <Checkbox
+            mt="md"
+            label="Allow players to be in multiple teams"
+            {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
           />
 
           {tournament != null ? <DropzoneButton tournament={tournament} /> : null}
