@@ -1,7 +1,7 @@
 import { Button, Grid, Group, Title } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconExternalLink } from '@tabler/icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../404';
@@ -10,6 +10,7 @@ import SaveButton from '../../components/buttons/save';
 import TournamentModal from '../../components/modals/tournament_modal';
 import Scheduler from '../../components/scheduling/scheduler';
 import { getTournamentIdFromRouter } from '../../components/utils/util';
+import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { Tournament } from '../../interfaces/tournament';
 import {
@@ -27,7 +28,23 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrRoundsResponse: SWRResponse = getRounds(id);
-  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(id);
+  const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
+  const [eloThreshold, setEloThreshold] = useState(100);
+  const [iterations, setIterations] = useState(200);
+  const [limit, setLimit] = useState(50);
+
+  const schedulerSettings: SchedulerSettings = {
+    eloThreshold,
+    setEloThreshold,
+    onlyBehindSchedule,
+    setOnlyBehindSchedule,
+    limit,
+    setLimit,
+    iterations,
+    setIterations,
+  };
+
+  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(id, schedulerSettings);
 
   const tournaments: Tournament[] =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
@@ -51,6 +68,7 @@ export default function TournamentPage() {
           tournamentData={tournamentDataFull}
           swrRoundsResponse={swrRoundsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          schedulerSettings={schedulerSettings}
         />
       </>
     ) : (

@@ -1,9 +1,15 @@
 import { createAxios, handleRequestError } from './adapter';
 
-export async function createPlayer(tournament_id: number, name: string, team_id: string | null) {
+export async function createPlayer(
+  tournament_id: number,
+  name: string,
+  active: boolean,
+  team_id: string | null
+) {
   return createAxios()
     .post(`tournaments/${tournament_id}/players`, {
       name,
+      active,
       team_id,
     })
     .catch((response: any) => handleRequestError(response));
@@ -19,11 +25,13 @@ export async function updatePlayer(
   tournament_id: number,
   player_id: number,
   name: string,
+  active: boolean,
   team_id: string | null
 ) {
   return createAxios()
     .patch(`tournaments/${tournament_id}/players/${player_id}`, {
       name,
+      active,
       team_id,
     })
     .catch((response: any) => handleRequestError(response));

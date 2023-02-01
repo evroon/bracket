@@ -1,3 +1,4 @@
+import { Badge } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -31,6 +32,13 @@ export default function PlayersTable({
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))
     .map((player) => (
       <tr key={player.name}>
+        <td>
+          {player.active ? (
+            <Badge color="green">Active</Badge>
+          ) : (
+            <Badge color="red">Inactive</Badge>
+          )}
+        </td>
         <td>{player.name}</td>
         <td>
           <DateTime datetime={player.created} />
@@ -75,6 +83,9 @@ export default function PlayersTable({
     <TableLayout>
       <thead>
         <tr>
+          <ThSortable state={tableState} field="active">
+            Status
+          </ThSortable>
           <ThSortable state={tableState} field="name">
             Title
           </ThSortable>

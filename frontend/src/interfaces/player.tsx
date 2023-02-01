@@ -1,6 +1,7 @@
 export interface Player {
   id: number;
   name: string;
+  active: boolean;
   created: string;
   tournament_id: number;
   team_id: number;

@@ -10,11 +10,13 @@ class Tournament(BaseModelORM):
     created: datetime_utc
     dashboard_public: bool
     logo_path: str | None
+    players_can_be_in_multiple_teams: bool
 
 
 class TournamentUpdateBody(BaseModelORM):
     name: str
     dashboard_public: bool
+    players_can_be_in_multiple_teams: bool
 
 
 class TournamentBody(TournamentUpdateBody):

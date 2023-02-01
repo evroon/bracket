@@ -2,6 +2,8 @@ import { showNotification } from '@mantine/notifications';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
+import { SchedulerSettings } from '../interfaces/match';
+
 const axios = require('axios').default;
 
 export function handleRequestError(response: any) {
@@ -74,8 +76,14 @@ export function getRounds(tournament_id: number, no_draft_rounds: boolean = fals
   });
 }
 
-export function getUpcomingMatches(tournament_id: number): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/upcoming_matches`, fetcher);
+export function getUpcomingMatches(
+  tournament_id: number,
+  schedulerSettings: SchedulerSettings
+): SWRResponse {
+  return useSWR(
+    `tournaments/${tournament_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}`,
+    fetcher
+  );
 }
 
 export async function uploadLogo(tournament_id: number, file: any) {

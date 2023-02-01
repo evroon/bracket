@@ -1,23 +1,17 @@
 from fastapi import HTTPException
 
-from bracket.models.db.match import MatchFilter, SuggestedMatch
-from bracket.models.db.team import TeamWithPlayers
-from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
+from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
+from bracket.models.db.match import (
+    MatchFilter,
+    SuggestedMatch,
+)
+from bracket.utils.sql import (
+    get_rounds_with_matches,
+    get_teams_with_members,
+)
 
 
-def check_team_combination_adheres_to_filter(
-    team1: TeamWithPlayers, team2: TeamWithPlayers, filter: MatchFilter
-) -> SuggestedMatch | None:
-    elo_diff = abs(team1.get_elo() - team2.get_elo())
-    swiss_diff = abs(team1.get_swiss_score() - team2.get_swiss_score())
-
-    if elo_diff < filter.elo_diff:
-        return SuggestedMatch(team1=team1, team2=team2, elo_diff=elo_diff, swiss_diff=swiss_diff)
-
-    return None
-
-
-async def get_possible_upcoming_matches(
+async def get_possible_upcoming_matches_for_teams(
     tournament_id: int, filter: MatchFilter
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
@@ -32,9 +26,8 @@ async def get_possible_upcoming_matches(
         for j, team2 in enumerate(teams[i + 1 :]):
             team_already_scheduled = any(
                 (
-                    True
+                    team1.id in match.team_ids or team2.id in match.team_ids
                     for match in draft_round.matches
-                    if team1.id in match.team_ids or team2.id in match.team_ids
                 )
             )
             if team_already_scheduled:

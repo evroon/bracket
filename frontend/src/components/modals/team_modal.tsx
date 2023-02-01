@@ -56,7 +56,7 @@ export default function TeamModal({
     initialValues: {
       name: team == null ? '' : team.name,
       active: team == null ? true : team.active,
-      player_ids: team == null ? [] : team.players.map((player) => player.id),
+      player_ids: team == null ? [] : team.players.map((player) => `${player.id}`),
     },
 
     validate: {

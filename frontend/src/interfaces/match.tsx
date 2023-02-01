@@ -20,6 +20,7 @@ export interface MatchBodyInterface {
 }
 
 export interface UpcomingMatchInterface {
+  is_recommended: boolean;
   team1: TeamInterface;
   team2: TeamInterface;
   elo_diff: number;
@@ -31,4 +32,15 @@ export interface MatchCreateBodyInterface {
   team1_id: number;
   team2_id: number;
   label: string;
+}
+
+export interface SchedulerSettings {
+  eloThreshold: number;
+  setEloThreshold: any;
+  limit: number;
+  setLimit: any;
+  iterations: number;
+  setIterations: any;
+  onlyBehindSchedule: string;
+  setOnlyBehindSchedule: any;
 }

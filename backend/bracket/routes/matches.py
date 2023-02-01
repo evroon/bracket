@@ -3,7 +3,8 @@ from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.logic.upcoming_matches import get_possible_upcoming_matches
+from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_matches_for_players
+
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
@@ -16,11 +17,25 @@ router = APIRouter()
 
 @router.get("/tournaments/{tournament_id}/upcoming_matches", response_model=UpcomingMatchesResponse)
 async def get_matches_to_schedule(
-    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    elo_diff_threshold: int = 100,
+    iterations: int = 200,
+    only_behind_schedule: bool = False,
+    limit: int = 50,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> UpcomingMatchesResponse:
-    return UpcomingMatchesResponse(
-        data=await get_possible_upcoming_matches(tournament_id, MatchFilter())
+    match_filter = MatchFilter(
+        elo_diff_threshold=elo_diff_threshold,
+        only_behind_schedule=only_behind_schedule,
+        limit=limit,
+        iterations=iterations,
     )
+    return UpcomingMatchesResponse(
+        data=await get_possible_upcoming_matches_for_players(tournament_id, match_filter)
+    )
+    # return UpcomingMatchesResponse(
+    #     data=await get_possible_upcoming_matches_for_teams(tournament_id, MatchFilter())
+    # )
 
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)

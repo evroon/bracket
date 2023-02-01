@@ -1,14 +1,20 @@
-import { Button } from '@mantine/core';
-import { IconCalendarPlus } from '@tabler/icons';
+import { Badge, Button } from '@mantine/core';
+import { IconCalendarPlus, IconCheck } from '@tabler/icons';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
+import { createTeam } from '../../services/team';
 import PlayerList from '../info/player_list';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import {TeamInterface} from "../../interfaces/team";
+
+function getPlayerIds(team: TeamInterface) {
+  return team.players.map((p) => {return p.id.toString();});
+}
 
 export default function UpcomingMatchesTable({
   round_id,
@@ -30,12 +36,23 @@ export default function UpcomingMatchesTable({
   }
 
   async function scheduleMatch(upcoming_match: UpcomingMatchInterface) {
+    const team1PlayerIds = getPlayerIds(upcoming_match.team1);
+    const team2PlayerIds = getPlayerIds(upcoming_match.team2);
+
+    const teamName1 = `${upcoming_match.team1.players[0].name}, ${upcoming_match.team1.players[1].name}`;
+    const teamName2 = `${upcoming_match.team2.players[0].name}, ${upcoming_match.team2.players[1].name}`;
+
+    const {data: team1Response} = await createTeam(tournamentData.id, teamName1, true, team1PlayerIds);
+    const {data: team2Response} = await createTeam(tournamentData.id, teamName2, true, team2PlayerIds);
+    console.error(team1Response);
+
     const match_to_schedule: MatchCreateBodyInterface = {
-      team1_id: upcoming_match.team1.id,
-      team2_id: upcoming_match.team2.id,
+      team1_id: team1Response.data.id,
+      team2_id: team2Response.data.id,
       round_id,
       label: '',
     };
+
     await createMatch(tournamentData.id, match_to_schedule);
     await swrRoundsResponse.mutate(null);
     await swrUpcomingMatchesResponse.mutate(null);
@@ -46,7 +63,14 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
+      <tr key={`${getPlayerIds(upcoming_match.team1)} - ${getPlayerIds(upcoming_match.team2)}`}>
+        <td>
+          {upcoming_match.is_recommended ? (
+            <Badge leftSection={<IconCheck size={18} />} color="blue">
+              Recommended
+            </Badge>
+          ) : null}
+        </td>
         <td>
           <PlayerList team={upcoming_match.team1} />
         </td>
@@ -75,6 +99,9 @@ export default function UpcomingMatchesTable({
     <TableLayout>
       <thead>
         <tr>
+          <ThSortable state={tableState} field="is_recommended">
+            Recommended
+          </ThSortable>
           <ThSortable state={tableState} field="team1.name">
             Team 1
           </ThSortable>
