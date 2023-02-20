@@ -6,17 +6,17 @@ export async function performLogin(username: string, password: string) {
   bodyFormData.append('username', username);
   bodyFormData.append('password', password);
 
-  const response = await createAxios()
+  const { data } = await createAxios()
     .post('token', bodyFormData)
     .catch((err_response: any) => handleRequestError(err_response));
 
-  if (response == null) {
+  if (data == null) {
     return false;
   }
 
-  localStorage.setItem('login', JSON.stringify(response.data));
+  localStorage.setItem('login', JSON.stringify(data));
 
-  handleRequestError(response);
+  handleRequestError(data);
 
   // Reload axios object.
   createAxios();

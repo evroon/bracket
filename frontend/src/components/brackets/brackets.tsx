@@ -32,17 +32,19 @@ export default function Brackets({
     );
   }
 
-  const rounds = swrRoundsResponse.data.data.map((round: RoundInterface) => (
-    <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
-      <Round
-        tournamentData={tournamentData}
-        round={round}
-        swrRoundsResponse={swrRoundsResponse}
-        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-        readOnly={readOnly}
-      />
-    </Grid.Col>
-  ));
+  const rounds = swrRoundsResponse.data.data
+    .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
+    .map((round: RoundInterface) => (
+      <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
+        <Round
+          tournamentData={tournamentData}
+          round={round}
+          swrRoundsResponse={swrRoundsResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          readOnly={readOnly}
+        />
+      </Grid.Col>
+    ));
 
   return <Grid>{rounds}</Grid>;
 }
