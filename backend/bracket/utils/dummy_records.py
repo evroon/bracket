@@ -190,7 +190,7 @@ DUMMY_PLAYER9 = Player(
 )
 
 DUMMY_USER_X_CLUB = UserXClub(
-    user_id=2,
+    user_id=1,
     club_id=1,
 )
 
