@@ -1,4 +1,4 @@
-name: backend
+name: docker
 
 on: [push, workflow_dispatch]
 
