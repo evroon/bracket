@@ -1,18 +1,17 @@
-FROM ubuntu:22.04
+FROM python:3.10-alpine3.17
+ARG packages
+RUN apk --update add ${packages} \
+    && rm -rf /var/cache/apk/* \
+    && pip3 install --upgrade pip pipenv wheel virtualenv
 
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip
+COPY . /app
+WORKDIR /app
 
-RUN useradd -ms /bin/bash bracket
-WORKDIR /home/bracket/backend
-
-COPY . /home/bracket/backend
-RUN chown -R bracket:bracket /home/bracket
+# -- Install dependencies:
+RUN addgroup -S bracket && adduser -S bracket -G bracket \
+    && chown -R bracket:bracket /app
 USER bracket
-ENV PATH="${PATH}:/home/bracket/.local/bin"
 
-# Install backend
-RUN python3 -m pip install --upgrade pipenv wheel virtualenv
-RUN pipenv install -d
-RUN pipenv run mypy .
+RUN set -ex \
+    && pip3 install --upgrade pip pipenv wheel virtualenv \
+    && pipenv install --deploy

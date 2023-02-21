@@ -1,0 +1,14 @@
+name: backend
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: sudo docker build .
+        working-directory: backend
