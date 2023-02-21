@@ -9,6 +9,7 @@ from bracket.models.db.player import Player
 from bracket.models.db.round import Round, RoundWithMatches
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.tournament import Tournament
+from bracket.models.db.user import UserPublic
 
 DataT = TypeVar('DataT')
 
@@ -62,4 +63,8 @@ class TeamsWithPlayersResponse(DataResponse[list[FullTeamWithPlayers]]):
 
 
 class SingleTeamResponse(DataResponse[Team]):
+    pass
+
+
+class UserPublicResponse(DataResponse[UserPublic]):
     pass
