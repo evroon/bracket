@@ -1,3 +1,4 @@
+import { UserBodyInterface, UserToRegisterInterface } from '../interfaces/user';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function performLogin(username: string, password: string) {
@@ -23,6 +24,20 @@ export async function performLogin(username: string, password: string) {
   return true;
 }
 
-export function performLogout() {
-  localStorage.removeItem('login');
+export async function updateUser(user_id: number, user: UserBodyInterface) {
+  return createAxios()
+    .patch(`users/${user_id}`, user)
+    .catch((response: any) => handleRequestError(response));
+}
+
+export async function updatePassword(user_id: number, password: string) {
+  return createAxios()
+    .patch(`users/${user_id}/password`, { password })
+    .catch((response: any) => handleRequestError(response));
+}
+
+export async function registerUser(user: UserToRegisterInterface) {
+  return createAxios()
+    .post('users/register', user)
+    .catch((response: any) => handleRequestError(response));
 }

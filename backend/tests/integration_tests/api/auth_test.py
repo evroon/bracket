@@ -52,13 +52,17 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
     headers = {'Authorization': f'Bearer {get_mock_token()}'}
 
     async with inserted_user(MOCK_USER) as user_inserted:
-        response = JsonDict(await send_request(HTTPMethod.GET, 'users/me', {}, None, headers))
+        response = JsonDict(
+            await send_request(HTTPMethod.GET, f'users/{user_inserted.id}', {}, None, headers)
+        )
 
         assert response == {
-            'id': user_inserted.id,
-            'email': user_inserted.email,
-            'name': user_inserted.name,
-            'created': '2200-01-01T00:00:00+00:00',
+            'data': {
+                'id': user_inserted.id,
+                'email': user_inserted.email,
+                'name': user_inserted.name,
+                'created': '2200-01-01T00:00:00+00:00',
+            }
         }
 
 

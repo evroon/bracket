@@ -1,4 +1,5 @@
 from heliclockter import datetime_utc
+from pydantic import BaseModel, constr
 
 from bracket.models.db.shared import BaseModelORM
 
@@ -16,6 +17,21 @@ class User(UserBase):
 
 class UserPublic(UserBase):
     pass
+
+
+class UserToUpdate(BaseModel):
+    email: str
+    name: str
+
+
+class UserPasswordToUpdate(BaseModel):
+    password: constr(min_length=8, max_length=48)  # type: ignore[valid-type]
+
+
+class UserToRegister(BaseModelORM):
+    email: str
+    name: str
+    password: str
 
 
 class UserInDB(User):

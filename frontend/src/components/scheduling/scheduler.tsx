@@ -1,4 +1,4 @@
-import { Divider, Flex, NumberInput, Radio } from '@mantine/core';
+import { Divider, Flex, Group, NumberInput, Radio } from '@mantine/core';
 import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons';
 import { SWRResponse } from 'swr';
 
@@ -38,8 +38,10 @@ export default function Scheduler({
           onChange={schedulerSettings.setOnlyBehindSchedule}
           label="Only show teams/players who played less matches"
         >
-          <Radio value="true" label="Only players who played less" />
-          <Radio value="false" label="All matches" />
+          <Group mt={8}>
+            <Radio value="true" label="Only players who played less" />
+            <Radio value="false" label="All matches" />
+          </Group>
         </Radio.Group>
         <Divider orientation="vertical" />
         <NumberInput

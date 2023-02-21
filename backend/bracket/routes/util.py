@@ -6,8 +6,9 @@ from bracket.models.db.match import Match
 from bracket.models.db.round import Round, RoundWithMatches
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.schema import matches, rounds, teams
+from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.teams import get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
 
 
 async def round_dependency(tournament_id: int, round_id: int) -> Round:
@@ -27,15 +28,15 @@ async def round_dependency(tournament_id: int, round_id: int) -> Round:
 
 
 async def round_with_matches_dependency(tournament_id: int, round_id: int) -> RoundWithMatches:
-    rounds = await get_rounds_with_matches(tournament_id, no_draft_rounds=False, round_id=round_id)
+    rounds_ = await get_rounds_with_matches(tournament_id, no_draft_rounds=False, round_id=round_id)
 
-    if len(rounds) < 1:
+    if len(rounds_) < 1:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Could not find round with id {round_id}",
         )
 
-    return rounds[0]
+    return rounds_[0]
 
 
 async def match_dependency(tournament_id: int, match_id: int) -> Match:
@@ -73,12 +74,12 @@ async def team_dependency(tournament_id: int, team_id: int) -> Team:
 
 
 async def team_with_players_dependency(tournament_id: int, team_id: int) -> FullTeamWithPlayers:
-    teams = await get_teams_with_members(tournament_id, team_id=team_id)
+    teams_with_members = await get_teams_with_members(tournament_id, team_id=team_id)
 
-    if len(teams) < 1:
+    if len(teams_with_members) < 1:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Could not find team with id {team_id}",
         )
 
-    return teams[0]
+    return teams_with_members[0]

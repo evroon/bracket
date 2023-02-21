@@ -9,7 +9,8 @@ from bracket.models.db.match import MatchFilter, SuggestedMatch
 from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
-from bracket.utils.sql import get_active_players_in_tournament, get_rounds_with_matches
+from bracket.sql.players import get_active_players_in_tournament
+from bracket.sql.rounds import get_rounds_with_matches
 from bracket.utils.types import assert_some
 
 

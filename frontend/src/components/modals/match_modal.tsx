@@ -67,6 +67,7 @@ export default function MatchModal({
             placeholder={`Score of ${match.team2.name}`}
             {...form.getInputProps('team2_score')}
           />
+
           <TextInput
             withAsterisk
             style={{ marginTop: 20 }}
@@ -85,7 +86,7 @@ export default function MatchModal({
             await swrRoundsResponse.mutate(null);
             if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
           }}
-          style={{ marginTop: '15px' }}
+          style={{ marginTop: '1rem' }}
           size="sm"
           title="Remove Match"
         />

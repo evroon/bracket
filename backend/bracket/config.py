@@ -39,10 +39,46 @@ class Config(BaseSettings):
     admin_email: str | None = None
     admin_password: str | None = None
     sentry_dsn: str | None = None
+    allow_insecure_http_sso: bool = False
+    base_url: str = 'http://localhost:8400'
+
+
+class CIConfig(Config):
+    allow_insecure_http_sso = False
+
+    class Config:
+        env_file = 'ci.env'
+
+
+class DevelopmentConfig(Config):
+    allow_insecure_http_sso = True
+
+    class Config:
+        env_file = 'dev.env'
+
+
+class ProductionConfig(Config):
+    allow_insecure_http_sso = False
+
+    class Config:
+        env_file = 'prod.env'
+
+
+class DemoConfig(Config):
+    allow_insecure_http_sso = False
+
+    class Config:
+        env_file = 'demo.env'
 
 
 environment = Environment(os.getenv('ENVIRONMENT', 'DEVELOPMENT'))
-config = Config(_env_file=environment.get_env_filepath())
+config: Config
+
+match environment:
+    case Environment.CI:
+        config = CIConfig()  # type: ignore[call-arg]
+    case Environment.DEVELOPMENT:
+        config = DevelopmentConfig()  # type: ignore[call-arg]
 
 
 def init_sentry() -> None:
@@ -50,5 +86,5 @@ def init_sentry() -> None:
         sentry_sdk.init(
             dsn=config.sentry_dsn,
             environment=str(environment.value),
-            with_locals=False,
+            include_local_variables=False,
         )

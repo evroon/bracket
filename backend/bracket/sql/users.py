@@ -1,0 +1,78 @@
+from datetime import datetime
+
+from bracket.database import database
+from bracket.models.db.user import User, UserToUpdate
+from bracket.utils.types import assert_some
+
+
+async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:
+    query = '''
+        SELECT DISTINCT t.id
+        FROM users_x_clubs
+        JOIN tournaments t ON t.club_id = users_x_clubs.club_id
+        WHERE user_id = :user_id         
+        '''
+    result = await database.fetch_all(query=query, values={'user_id': user_id})
+    return tournament_id in {tournament.id for tournament in result}  # type: ignore[attr-defined]
+
+
+async def get_which_clubs_has_user_access_to(user_id: int) -> set[int]:
+    query = '''
+        SELECT club_id
+        FROM users_x_clubs
+        WHERE user_id = :user_id         
+        '''
+    result = await database.fetch_all(query=query, values={'user_id': user_id})
+    return {club.club_id for club in result}  # type: ignore[attr-defined]
+
+
+async def get_user_access_to_club(club_id: int, user_id: int) -> bool:
+    return club_id in await get_which_clubs_has_user_access_to(user_id)
+
+
+async def update_user(user_id: int, user: UserToUpdate) -> None:
+    query = '''
+        UPDATE users
+        SET name = :name, email = :email
+        WHERE id = :user_id         
+        '''
+    await database.execute(
+        query=query, values={'user_id': user_id, 'name': user.name, 'email': user.email}
+    )
+
+
+async def update_user_password(user_id: int, password_hash: str) -> None:
+    query = '''
+        UPDATE users
+        SET password_hash = :password_hash
+        WHERE id = :user_id         
+        '''
+    await database.execute(query=query, values={'user_id': user_id, 'password_hash': password_hash})
+
+
+async def create_user(user: User) -> User:
+    query = '''
+        INSERT INTO users (email, name, password_hash, created)
+        VALUES (:email, :name, :password_hash, :created)
+        RETURNING *
+        '''
+    result = await database.fetch_one(
+        query=query,
+        values={
+            'password_hash': user.password_hash,
+            'name': user.name,
+            'email': user.email,
+            'created': datetime.fromisoformat(user.created.isoformat()),
+        },
+    )
+    return User.parse_obj(assert_some(result)._mapping)
+
+
+async def check_whether_email_is_in_use(email: str) -> bool:
+    query = '''
+        SELECT id
+        FROM users
+        WHERE email = :email
+        '''
+    result = await database.fetch_one(query=query, values={'email': email})
+    return result is not None

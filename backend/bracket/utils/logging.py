@@ -4,18 +4,18 @@ from bracket.config import environment
 
 
 def create_logger(level: int) -> logging.Logger:
-    logFormatter = logging.Formatter(fmt='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
+    log_formatter = logging.Formatter(fmt='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
 
-    logger = logging.getLogger('bracket')
+    logger = logging.getLogger('bracket')  # pylint: disable=redefined-outer-name
     logger.setLevel(level)
 
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setLevel(level)
-    consoleHandler.setFormatter(logFormatter)
-    logger.addHandler(consoleHandler)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(level)
+    console_handler.setFormatter(log_formatter)
+    logger.addHandler(console_handler)
 
     return logger
 
 
 logger = create_logger(environment.get_log_level())
-logger.info(f'Current env: {environment.value}')
+logger.info('Current env: %s', environment.value)

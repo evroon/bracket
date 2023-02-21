@@ -1,7 +1,20 @@
-import { Button, Container, Paper, PasswordInput, Text, TextInput, Title } from '@mantine/core';
+import {
+  Anchor,
+  Button,
+  Container,
+  Divider,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
+import { FaGoogle } from '@react-icons/all-files/fa/FaGoogle';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 import useStyles from '../components/login/login.styles';
 import { performLogin } from '../services/user';
@@ -23,6 +36,7 @@ export default function Login() {
       await router.push('/');
     }
   }
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -44,8 +58,29 @@ export default function Login() {
           Bracket
         </Text>
       </Title>
-      <Container size={420} my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Container size={480} my={40}>
+        <Paper withBorder shadow="md" p={30} pt={8} mt={30} radius="md">
+          <Button
+            size="md"
+            fullWidth
+            mt="lg"
+            type="submit"
+            color="gray"
+            leftIcon={<FaGithub size={20} />}
+          >
+            Continue with GitHub
+          </Button>
+          <Button
+            size="md"
+            fullWidth
+            mt="lg"
+            type="submit"
+            color="indigo"
+            leftIcon={<FaGoogle size={20} />}
+          >
+            Continue with Google
+          </Button>
+          <Divider label="Or continue with email" labelPosition="center" my="lg" />
           <form
             onSubmit={form.onSubmit(async (values) => attemptLogin(values.email, values.password))}
           >
@@ -63,22 +98,20 @@ export default function Login() {
               mt="md"
               {...form.getInputProps('password')}
             />
-            {/*<Group position="right" mt="lg">*/}
-            {/*  <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">*/}
-            {/*    Forgot password?*/}
-            {/*  </Anchor>*/}
-            {/*</Group>*/}
             <Button fullWidth mt="xl" type="submit">
               Sign in
             </Button>
           </form>
+          <Text color="dimmed" size="sm" align="center" mt={15}>
+            <Anchor<'a'> onClick={() => router.push('/create_account')} size="sm">
+              Create account
+            </Anchor>
+            {' - '}
+            <Anchor<'a'> onClick={() => router.push('/password_reset')} size="sm">
+              Forgot password?
+            </Anchor>
+          </Text>
         </Paper>
-        {/*<Text color="dimmed" size="sm" align="center" mt={15}>*/}
-        {/*  Do not have an account yet?{' '}*/}
-        {/*  <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>*/}
-        {/*    Create account*/}
-        {/*  </Anchor>*/}
-        {/*</Text>*/}
       </Container>
     </Layout>
   );

@@ -1,16 +1,16 @@
-import { Navbar, createStyles } from '@mantine/core';
+import { Navbar, createStyles, getStylesRef, rem } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { FaBook } from '@react-icons/all-files/fa/FaBook';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
-import { IconLogout } from '@tabler/icons';
+import { IconLogout, IconUser } from '@tabler/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { getBaseApiUrl } from '../../services/adapter';
-import { performLogout } from '../../services/user';
+import { performLogout } from '../../services/local_storage';
 
-export const useNavbarStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef('icon');
+export const useNavbarStyles = createStyles((theme) => {
+  const icon = getStylesRef('icon');
 
   return {
     navbar: {
@@ -19,7 +19,7 @@ export const useNavbarStyles = createStyles((theme, _params, getRef) => {
 
     title: {
       textTransform: 'uppercase',
-      letterSpacing: -0.25,
+      letterSpacing: rem(-0.25),
     },
 
     link: {
@@ -29,7 +29,7 @@ export const useNavbarStyles = createStyles((theme, _params, getRef) => {
       textDecoration: 'none',
       fontSize: theme.fontSizes.sm,
       color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
-      padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+      padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
@@ -61,10 +61,11 @@ export const useNavbarStyles = createStyles((theme, _params, getRef) => {
     },
 
     footer: {
-      borderTop: `1px solid ${
+      borderTop: `${rem(1)} solid ${
         theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
       }`,
-      paddingTop: theme.spacing.md,
+      paddingTop: theme.spacing.xs,
+      paddingBottom: theme.spacing.xs,
     },
   };
 });
@@ -85,21 +86,30 @@ export function User() {
   }
 
   return (
-    <Navbar.Section className={classes.footer}>
-      <a href={`${getBaseApiUrl()}/docs`} className={classes.link}>
-        <FaBook className={classes.linkIcon} size={20} />
-        <span>API documentation</span>
-      </a>
+    <>
+      <Navbar.Section className={classes.footer}>
+        <a href={`${getBaseApiUrl()}/docs`} className={classes.link}>
+          <FaBook className={classes.linkIcon} size={20} />
+          <span>API documentation</span>
+        </a>
 
-      <a href="https://github.com/evroon/bracket" className={classes.link}>
-        <FaGithub className={classes.linkIcon} size={20} />
-        <span>Bracket on GitHub</span>
-      </a>
+        <a href="https://github.com/evroon/bracket" className={classes.link}>
+          <FaGithub className={classes.linkIcon} size={20} />
+          <span>Bracket on GitHub</span>
+        </a>
+      </Navbar.Section>
 
-      <a href="#" className={classes.link} onClick={() => attemptLogout()}>
-        <IconLogout className={classes.linkIcon} stroke={1.5} />
-        <span>Logout</span>
-      </a>
-    </Navbar.Section>
+      <Navbar.Section className={classes.footer}>
+        <a href="#" className={classes.link} onClick={() => router.push('/user')}>
+          <IconUser className={classes.linkIcon} stroke={1.5} />
+          <span>User</span>
+        </a>
+
+        <a href="#" className={classes.link} onClick={() => attemptLogout()}>
+          <IconLogout className={classes.linkIcon} stroke={1.5} />
+          <span>Logout</span>
+        </a>
+      </Navbar.Section>
+    </>
   );
 }

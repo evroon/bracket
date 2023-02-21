@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
@@ -8,6 +10,7 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
 from bracket.schema import players
 from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
+from bracket.utils.types import assert_some
 
 router = APIRouter()
 
@@ -20,7 +23,7 @@ async def get_players(
 ) -> PlayersResponse:
     query = players.select().where(players.c.tournament_id == tournament_id)
     if not_in_team:
-        query = query.where(players.c.team_id == None)
+        query = query.where(players.c.team_id is None)
 
     return PlayersResponse(data=await fetch_all_parsed(database, Player, query))
 
@@ -41,12 +44,14 @@ async def update_player_by_id(
         values=player_body.dict(),
     )
     return SinglePlayerResponse(
-        data=await fetch_one_parsed(
-            database,
-            Player,
-            players.select().where(
-                (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
-            ),
+        data=assert_some(
+            await fetch_one_parsed(
+                database,
+                Player,
+                players.select().where(
+                    (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
+                ),
+            )
         )
     )
 
@@ -75,16 +80,18 @@ async def create_player(
             **player_body.dict(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-            elo_score=0,
-            swiss_score=0,
+            elo_score=Decimal('0.0'),
+            swiss_score=Decimal('0.0'),
         ).dict(),
     )
     return SinglePlayerResponse(
-        data=await fetch_one_parsed(
-            database,
-            Player,
-            players.select().where(
-                players.c.id == last_record_id and players.c.tournament_id == tournament_id
-            ),
+        data=assert_some(
+            await fetch_one_parsed(
+                database,
+                Player,
+                players.select().where(
+                    players.c.id == last_record_id and players.c.tournament_id == tournament_id
+                ),
+            )
         )
     )

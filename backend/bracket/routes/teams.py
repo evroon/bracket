@@ -10,8 +10,9 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
+from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.teams import get_team_by_id, get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -31,7 +32,8 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
     # Remove old members from the team
     await database.execute(
         query=players_x_teams.delete().where(
-            (players_x_teams.c.player_id.not_in(player_ids)) & (players_x_teams.c.team_id == team_id)  # type: ignore[attr-defined]
+            (players_x_teams.c.player_id.not_in(player_ids))  # type: ignore[attr-defined]
+            & (players_x_teams.c.team_id == team_id)
         ),
     )
     await recalculate_elo_for_tournament_id(tournament_id)
@@ -60,12 +62,14 @@ async def update_team_by_id(
     await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
 
     return SingleTeamResponse(
-        data=await fetch_one_parsed(
-            database,
-            Team,
-            teams.select().where(
-                (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
-            ),
+        data=assert_some(
+            await fetch_one_parsed(
+                database,
+                Team,
+                teams.select().where(
+                    (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
+                ),
+            )
         )
     )
 
@@ -77,17 +81,17 @@ async def delete_team(
     team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
     rounds = await get_rounds_with_matches(tournament_id, no_draft_rounds=False)
-    for round in rounds:
-        if team.id in round.get_team_ids():
+    for round_ in rounds:
+        if team.id in round_.get_team_ids():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Could not delete team that participates in matches in the tournament",
+                detail="Could not delete team that participates in matches in the tournament",
             )
 
     if len(team.players):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Could not delete team that still has players in it",
+            detail="Could not delete team that still has players in it",
         )
 
     await database.execute(
@@ -119,8 +123,7 @@ async def create_team(
         ).dict(),
     )
     await update_team_members(last_record_id, tournament_id, team_to_insert.player_ids)
-    return SingleTeamResponse(
-        data=await fetch_one_parsed(
-            database, Team, teams.select().where(teams.c.id == last_record_id)
-        )
-    )
+
+    team_result = await get_team_by_id(last_record_id, tournament_id)
+    assert team_result is not None
+    return SingleTeamResponse(data=team_result)
