@@ -10,18 +10,23 @@ updates:
     schedule:
       interval: "daily"
     ignore:
-      - update-types: ["version-update:semver-patch"]
+      - dependency-name: "*"    
+        update-types: ["version-update:semver-patch"]
 
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "daily"
     ignore:
-      - update-types: ["version-update:semver-patch"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     ignore:
-      - update-types: ["version-update:semver-patch"]
+        - dependency-name: "*"
+          update-types: ["version-update:semver-patch"]
+
+
