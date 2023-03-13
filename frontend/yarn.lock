@@ -1122,10 +1122,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tabler/icons@^1.119.0":
-  version "1.119.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.119.0.tgz#8c590bc5a563c8673a78ccd451bedabd584b376e"
-  integrity sha512-Fk3Qq4w2SXcTjc/n1cuL5bccPkylrOMo7cYpQIf/yw6zP76LQV9dtLcHQUjFiUnaYuswR645CnURIhlafyAh9g==
+"@tabler/icons@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.10.0.tgz#e3007f67d4ef146b506e1ce65b5ec2964fbd324a"
+  integrity sha512-rj9xrHTSw7bPpylx8g9xhhUgO9NYKX1wGnGrMaFS5CQ9KS+jhwhKFqbZaQKhXNhpvI0cLEEW6GaRXdrC3iBs1A==
 
 "@testing-library/dom@^9.0.0":
   version "9.0.0"
