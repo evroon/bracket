@@ -23,7 +23,7 @@
     "@mantine/form": "^5.10.0",
     "@mantine/hooks": "^5.9.5",
     "@mantine/dropzone": "^5.9.5",
-    "@mantine/next": "^5.10.5",
+    "@mantine/next": "^6.0.4",
     "@mantine/notifications": "^5.9.5",
     "@next/bundle-analyzer": "^13.2.1",
     "@react-icons/all-files": "^4.1.0",
