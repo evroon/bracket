@@ -28,10 +28,10 @@ async def test_create_club(
     user_id = assert_some(auth_context.user.id)
 
     clubs = await get_clubs_for_user_id(user_id)
-    club_id = response['data']['id']  # type: ignore[call-overload]
+    club_id = response['data']['id']
 
     # await sql_remove_user_from_club(club_id, user_id)
     await sql_delete_club(club_id)
 
     assert len(clubs) == 2
-    assert response['data']['name'] == payload['name']  # type: ignore[call-overload]
+    assert response['data']['name'] == payload['name']
