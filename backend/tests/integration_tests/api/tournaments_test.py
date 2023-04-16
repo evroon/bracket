@@ -30,6 +30,23 @@ async def test_tournaments_endpoint(
     }
 
 
+async def test_tournament_endpoint(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    assert await send_auth_request(
+        HTTPMethod.GET, f'tournaments/{auth_context.tournament.id}', auth_context, {}
+    ) == {
+        'data': {
+            'id': auth_context.tournament.id,
+            'club_id': auth_context.club.id,
+            'created': DUMMY_MOCK_TIME.isoformat(),
+            'name': 'Some Cool Tournament',
+            'dashboard_public': True,
+            'players_can_be_in_multiple_teams': True,
+        },
+    }
+
+
 async def test_create_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

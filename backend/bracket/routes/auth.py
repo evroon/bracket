@@ -196,8 +196,3 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 #         "email": user.email,
 #         "provider": user.provider,
 #     }
-
-
-@router.get("/me", response_model=UserPublic)
-async def get_user_details(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
-    return current_user

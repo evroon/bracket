@@ -1,9 +1,11 @@
+from bracket.models.db.user_x_club import UserXClub
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_MOCK_TIME
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import send_auth_request
 from tests.integration_tests.models import AuthContext
+from tests.integration_tests.sql import inserted_club, inserted_user_x_club
 
 
 async def test_clubs_endpoint(
@@ -28,10 +30,24 @@ async def test_create_club(
     user_id = assert_some(auth_context.user.id)
 
     clubs = await get_clubs_for_user_id(user_id)
-    club_id = response['data']['id']  # type: ignore[call-overload]
+    club_id = response['data']['id']
 
-    # await sql_remove_user_from_club(club_id, user_id)
     await sql_delete_club(club_id)
 
     assert len(clubs) == 2
-    assert response['data']['name'] == payload['name']  # type: ignore[call-overload]
+    assert response['data']['name'] == payload['name']
+
+
+async def test_delete_club(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with inserted_club(DUMMY_CLUB) as club_inserted:
+        async with inserted_user_x_club(
+            UserXClub(
+                user_id=assert_some(auth_context.user.id), club_id=assert_some(club_inserted.id)
+            )
+        ):
+            response = await send_auth_request(
+                HTTPMethod.DELETE, f'clubs/{club_inserted.id}', auth_context
+            )
+            assert response['success'] is True

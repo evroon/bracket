@@ -37,7 +37,7 @@ async def test_create_player(
 ) -> None:
     body = {'name': 'Some new name', 'active': True}
     response = await send_tournament_request(HTTPMethod.POST, 'players', auth_context, json=body)
-    assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+    assert response['data']['name'] == body['name']
     await assert_row_count_and_clear(players, 1)
 
 
@@ -68,6 +68,6 @@ async def test_update_player(
                 database, Player, query=players.select().where(players.c.id == player_inserted.id)
             )
             assert patched_player.name == body['name']
-            assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+            assert response['data']['name'] == body['name']
 
             await assert_row_count_and_clear(players, 1)

@@ -32,7 +32,7 @@ async def test_create_team(
 ) -> None:
     body = {'name': 'Some new name', 'active': True, 'player_ids': []}
     response = await send_tournament_request(HTTPMethod.POST, 'teams', auth_context, None, body)
-    assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+    assert response['data']['name'] == body['name']
     await assert_row_count_and_clear(teams, 1)
 
 
@@ -57,10 +57,10 @@ async def test_update_team(
         response = await send_tournament_request(
             HTTPMethod.PATCH, f'teams/{team_inserted.id}', auth_context, None, body
         )
-        patched_round = await fetch_one_parsed_certain(
+        patched_team = await fetch_one_parsed_certain(
             database, Team, query=teams.select().where(teams.c.id == team_inserted.id)
         )
-        assert patched_round.name == body['name']
-        assert response['data']['name'] == body['name']  # type: ignore[call-overload]
+        assert patched_team.name == body['name']
+        assert response['data']['name'] == body['name']
 
         await assert_row_count_and_clear(teams, 1)
