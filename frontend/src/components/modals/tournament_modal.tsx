@@ -6,7 +6,7 @@ import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { ClubInterface } from '../../interfaces/club';
+import { Club } from '../../interfaces/club';
 import { Tournament } from '../../interfaces/tournament';
 import { getBaseApiUrl, getClubs } from '../../services/adapter';
 import { createTournament, updateTournament } from '../../services/tournament';
@@ -51,12 +51,12 @@ export default function TournamentModal({
     </Button>
   );
   const swrClubsResponse: SWRResponse = getClubs();
-  const clubs: ClubInterface[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
+  const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
 
   const form = useForm({
     initialValues: {
       name: tournament == null ? '' : tournament.name,
-      club_id: tournament == null ? null : tournament.club_id,
+      club_id: tournament == null ? null : `${tournament.club_id}`,
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
       players_can_be_in_multiple_teams:
         tournament == null ? true : tournament.players_can_be_in_multiple_teams,
@@ -76,7 +76,7 @@ export default function TournamentModal({
             assert(values.club_id != null);
             if (is_create_form) {
               await createTournament(
-                values.club_id,
+                parseInt(values.club_id, 10),
                 values.name,
                 values.dashboard_public,
                 values.players_can_be_in_multiple_teams

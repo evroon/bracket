@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../interfaces/match';
+import { getLogin } from './local_storage';
 
 const axios = require('axios').default;
 
@@ -34,8 +35,8 @@ export function getBaseApiUrl() {
 }
 
 export function createAxios() {
-  const user = localStorage.getItem('login');
-  const access_token = user != null ? JSON.parse(user).access_token : '';
+  const user = getLogin();
+  const access_token = user != null ? user.access_token : '';
   return axios.create({
     baseURL: getBaseApiUrl(),
     headers: {
@@ -74,6 +75,10 @@ export function getRounds(tournament_id: number, no_draft_rounds: boolean = fals
   return useSWR(`tournaments/${tournament_id}/rounds?no_draft_rounds=${no_draft_rounds}`, fetcher, {
     refreshInterval: 3000,
   });
+}
+
+export function getUser(user_id: number): SWRResponse {
+  return useSWR(`users/${user_id}`, fetcher);
 }
 
 export function getUpcomingMatches(

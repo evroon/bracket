@@ -2,7 +2,8 @@ from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
 from bracket.models.db.match import MatchFilter, SuggestedMatch
-from bracket.utils.sql import get_rounds_with_matches, get_teams_with_members
+from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.teams import get_teams_with_members
 
 
 async def get_possible_upcoming_matches_for_teams(

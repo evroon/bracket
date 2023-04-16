@@ -33,5 +33,5 @@ def assert_some(result: T | None) -> T:
     return result
 
 
-def dict_without_none(input: dict[Any, Any]) -> dict[Any, Any]:
-    return {k: v for k, v in input.items() if v is not None}
+def dict_without_none(input_: dict[Any, Any]) -> dict[Any, Any]:
+    return {k: v for k, v in input_.items() if v is not None}

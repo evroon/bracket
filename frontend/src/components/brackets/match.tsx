@@ -99,6 +99,18 @@ export default function Match({
           <Grid.Col span={2}>{match.team2_score}</Grid.Col>
         </Grid>
       </div>
+    </>
+  );
+
+  if (readOnly) {
+    return <div className={classes.root}>{bracket}</div>;
+  }
+
+  return (
+    <>
+      <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
+        {bracket}
+      </UnstyledButton>
       <MatchModal
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
@@ -108,15 +120,5 @@ export default function Match({
         setOpened={setOpened}
       />
     </>
-  );
-
-  if (readOnly) {
-    return <div className={classes.root}>{bracket}</div>;
-  }
-
-  return (
-    <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
-      {bracket}
-    </UnstyledButton>
   );
 }

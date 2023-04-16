@@ -26,7 +26,7 @@ from bracket.schema import (
 )
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
-from bracket.utils.types import BaseModelT
+from bracket.utils.types import BaseModelT, assert_some
 from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
 
@@ -85,7 +85,9 @@ async def inserted_player(player: Player) -> AsyncIterator[Player]:
 async def inserted_player_in_team(player: Player, team_id: int) -> AsyncIterator[Player]:
     async with inserted_generic(player, players, Player) as row_inserted:
         async with inserted_generic(
-            PlayerXTeam(player_id=row_inserted.id, team_id=team_id), players_x_teams, PlayerXTeam
+            PlayerXTeam(player_id=assert_some(row_inserted.id), team_id=team_id),
+            players_x_teams,
+            PlayerXTeam,
         ):
             yield row_inserted
 
@@ -115,7 +117,7 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         async with inserted_club(DUMMY_CLUB) as club_inserted:
             async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:
                 async with inserted_user_x_club(
-                    UserXClub(user_id=user_inserted.id, club_id=club_inserted.id)
+                    UserXClub(user_id=user_inserted.id, club_id=assert_some(club_inserted.id))
                 ) as user_x_club_inserted:
                     yield AuthContext(
                         headers=headers,

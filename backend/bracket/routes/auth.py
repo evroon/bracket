@@ -13,10 +13,10 @@ from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
 from bracket.schema import tournaments, users
+from bracket.sql.users import get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
 from bracket.utils.security import pwd_context
-from bracket.utils.sql import get_user_access_to_tournament
-from bracket.utils.types import JsonDict, assert_some
+from bracket.utils.types import assert_some
 
 router = APIRouter()
 
@@ -26,9 +26,25 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 7 * 24 * 60  # 1 week
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
+# def convert_openid(response: dict[str, Any]) -> OpenID:
+#     """Convert user information returned by OIDC"""
+#     return OpenID(display_name=response["sub"])
+
+
+# os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+# sso = GoogleSSO(
+#     client_id="test",
+#     client_secret="secret",
+#     redirect_uri="http://localhost:8080/sso_callback",
+#     allow_insecure_http=config.allow_insecure_http_sso,
+# )
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user_id: int
 
 
 class TokenData(BaseModel):
@@ -103,6 +119,21 @@ async def user_authenticated_for_tournament(
     return UserPublic.parse_obj(user.dict())
 
 
+async def user_authenticated_for_club(
+    club_id: int, token: str = Depends(oauth2_scheme)
+) -> UserPublic:
+    user = await check_jwt_and_get_user(token)
+
+    if not user or not await get_user_access_to_club(club_id, assert_some(user.id)):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return UserPublic.parse_obj(user.dict())
+
+
 async def user_authenticated_or_public_dashboard(
     tournament_id: int, request: Request
 ) -> UserPublic | None:
@@ -130,7 +161,7 @@ async def user_authenticated_or_public_dashboard(
 
 
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> JsonDict:
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> Token:
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -143,9 +174,30 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"user": user.email}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return Token(access_token=access_token, token_type='bearer', user_id=user.id)
 
 
-@router.get("/users/me/", response_model=UserPublic)
-async def read_users_me(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
+# @router.get("/login", summary='SSO login')
+# async def sso_login() -> RedirectResponse:
+#     """Generate login url and redirect"""
+#     return cast(RedirectResponse, await sso.get_login_redirect())
+#
+#
+# @router.get("/sso_callback", summary='SSO callback')
+# async def sso_callback(request: Request) -> dict[str, Any]:
+#     """Process login response from OIDC and return user info"""
+#     user = await sso.verify_and_process(request)
+#     if user is None:
+#         raise HTTPException(401, "Failed to fetch user information")
+#     return {
+#         "id": user.id,
+#         "picture": user.picture,
+#         "display_name": user.display_name,
+#         "email": user.email,
+#         "provider": user.provider,
+#     }
+
+
+@router.get("/me", response_model=UserPublic)
+async def get_user_details(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
     return current_user

@@ -22,10 +22,8 @@ asyncio_mode = 'auto'
 filterwarnings = [
     'error',
     'ignore:The SelectBase.c and SelectBase.columns attributes are deprecated.*:DeprecationWarning',
-    'ignore:Sending a large body directly with raw bytes might lock the event loop.*:ResourceWarning',
-    'ignore:.*unclosed transport <_SelectorSocketTransport.*:ResourceWarning',
-    'ignore:.*unclosed <socket.socket.*:ResourceWarning',
-    'ignore:.*unclosed event loop <_UnixSelectorEventLoop.*:ResourceWarning',
+    'ignore:pkg_resources is deprecated as an API.*:DeprecationWarning',
+    'ignore:Deprecated call to `pkg_resources.declare_namespace(.*)`.*:DeprecationWarning',
 ]
 
 [tool.mypy]
@@ -47,11 +45,21 @@ filterwarnings = [
     no_implicit_reexport = true
     show_error_codes = true
 
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
 # Per-module options:
 [[tool.mypy.overrides]]
 module = ['aioresponses.*']
 disallow_any_explicit = false
 disallow_any_generics = false
+
+[[tool.mypy.overrides]]
+module = ['fastapi_sso.*']
+ignore_missing_imports = true
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
@@ -64,6 +72,7 @@ disable = [
     'duplicate-code',
     'too-many-locals',
     'too-many-nested-blocks',
+    'protected-access',
 ]
 
 [tool.bandit]

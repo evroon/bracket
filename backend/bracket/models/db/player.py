@@ -21,6 +21,10 @@ class Player(BaseModelORM):
         return self.id if self.id is not None else int(self.created.timestamp())
 
 
+class PlayerInDB(Player):
+    id: int
+
+
 class PlayerBody(BaseModelORM):
     name: str
     active: bool

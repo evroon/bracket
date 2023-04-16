@@ -13,7 +13,7 @@ from bracket.routes.auth import (
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.routes.util import round_dependency, round_with_matches_dependency
 from bracket.schema import rounds
-from bracket.utils.sql import get_next_round_name, get_rounds_with_matches
+from bracket.sql.rounds import get_next_round_name, get_rounds_with_matches
 
 router = APIRouter()
 
@@ -24,13 +24,13 @@ async def get_rounds(
     user: UserPublic = Depends(user_authenticated_or_public_dashboard),
     no_draft_rounds: bool = False,
 ) -> RoundsWithMatchesResponse:
-    rounds = await get_rounds_with_matches(
+    rounds_ = await get_rounds_with_matches(
         tournament_id, no_draft_rounds=user is None or no_draft_rounds
     )
     if user is not None:
-        return RoundsWithMatchesResponse(data=rounds)
+        return RoundsWithMatchesResponse(data=rounds_)
 
-    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds if not round_.is_draft])
+    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds_ if not round_.is_draft])
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
@@ -64,7 +64,7 @@ async def create_round(
         values=RoundToInsert(
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-            name=await get_next_round_name(database, tournament_id),
+            name=await get_next_round_name(tournament_id),
         ).dict(),
     )
     return SuccessResponse()
@@ -76,7 +76,7 @@ async def update_round_by_id(
     round_id: int,
     round_body: RoundBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    round: Round = Depends(round_dependency),
+    round: Round = Depends(round_dependency),  # pylint: disable=redefined-builtin
 ) -> SuccessResponse:
     values = {'tournament_id': tournament_id, 'round_id': round_id}
     query = '''

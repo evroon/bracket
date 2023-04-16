@@ -10,6 +10,7 @@ from bracket.models.db.round import Round, RoundWithMatches
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
+from bracket.routes.auth import Token
 
 DataT = TypeVar('DataT')
 
@@ -23,6 +24,10 @@ class DataResponse(GenericModel, Generic[DataT]):
 
 
 class ClubsResponse(DataResponse[list[Club]]):
+    pass
+
+
+class ClubResponse(DataResponse[Club | None]):
     pass
 
 
@@ -67,4 +72,8 @@ class SingleTeamResponse(DataResponse[Team]):
 
 
 class UserPublicResponse(DataResponse[UserPublic]):
+    pass
+
+
+class TokenResponse(DataResponse[Token]):
     pass

@@ -98,6 +98,7 @@ export default function TeamModal({
             placeholder="Pick all that you like"
             searchable
             limit={20}
+            mt={12}
             {...form.getInputProps('player_ids')}
           />
 
