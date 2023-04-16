@@ -32,6 +32,6 @@ async def delete_club(
 
 @router.patch("/clubs/{club_id}", response_model=ClubResponse)
 async def update_club(
-    club_id: int, club: ClubUpdateBody, _: UserPublic = Depends(user_authenticated)
+    club_id: int, club: ClubUpdateBody, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> ClubResponse:
     return ClubResponse(data=await sql_update_club(club_id, club))
