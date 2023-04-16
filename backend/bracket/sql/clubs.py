@@ -1,5 +1,5 @@
 from bracket.database import database
-from bracket.models.db.club import Club, ClubUpdateBody, ClubCreateBody
+from bracket.models.db.club import Club, ClubCreateBody, ClubUpdateBody
 from bracket.utils.types import assert_some
 
 

@@ -8,7 +8,6 @@ Create Date: 2023-04-15 11:08:57.406407
 
 from alembic import op
 
-
 # revision identifiers, used by Alembic.
 revision: str | None = '274385f2a757'
 down_revision: str | None = None

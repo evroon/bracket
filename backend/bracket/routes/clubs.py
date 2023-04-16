@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 
-from bracket.models.db.club import ClubUpdateBody, ClubCreateBody
+from bracket.models.db.club import ClubCreateBody, ClubUpdateBody
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated, user_authenticated_for_club
 from bracket.routes.models import ClubResponse, ClubsResponse, SuccessResponse
-from bracket.sql.clubs import create_club, get_clubs_for_user_id, sql_update_club, sql_delete_club
+from bracket.sql.clubs import create_club, get_clubs_for_user_id, sql_delete_club, sql_update_club
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -22,7 +22,7 @@ async def create_new_club(
     return ClubResponse(data=await create_club(club, assert_some(user.id)))
 
 
-@router.post("/clubs/{club_id}", response_model=SuccessResponse)
+@router.delete("/clubs/{club_id}", response_model=SuccessResponse)
 async def delete_club(
     club_id: int, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> SuccessResponse:

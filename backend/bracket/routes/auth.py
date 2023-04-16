@@ -1,23 +1,19 @@
-import os
-from typing import Any, cast
+from typing import Any
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi_sso.sso.base import OpenID
-from fastapi_sso.sso.google import GoogleSSO
 from heliclockter import datetime_utc, timedelta
 from jwt import DecodeError, ExpiredSignatureError
 from pydantic import BaseModel
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
 
 from bracket.config import config
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
 from bracket.schema import tournaments, users
-from bracket.sql.users import get_user_access_to_tournament, get_user_access_to_club
+from bracket.sql.users import get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed, fetch_one_parsed
 from bracket.utils.security import pwd_context
 from bracket.utils.types import assert_some
@@ -30,20 +26,19 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 7 * 24 * 60  # 1 week
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def convert_openid(response: dict[str, Any]) -> OpenID:
-    """Convert user information returned by OIDC"""
-    print(response)
-    return OpenID(display_name=response["sub"])
+# def convert_openid(response: dict[str, Any]) -> OpenID:
+#     """Convert user information returned by OIDC"""
+#     return OpenID(display_name=response["sub"])
 
 
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+# os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-sso = GoogleSSO(
-    client_id="test",
-    client_secret="secret",
-    redirect_uri="http://localhost:8080/sso_callback",
-    allow_insecure_http=config.allow_insecure_http_sso,
-)
+# sso = GoogleSSO(
+#     client_id="test",
+#     client_secret="secret",
+#     redirect_uri="http://localhost:8080/sso_callback",
+#     allow_insecure_http=config.allow_insecure_http_sso,
+# )
 
 
 class Token(BaseModel):
@@ -182,27 +177,27 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return Token(access_token=access_token, token_type='bearer', user_id=user.id)
 
 
-@router.get("/login", summary='SSO login')
-async def sso_login() -> RedirectResponse:
-    """Generate login url and redirect"""
-    return cast(RedirectResponse, await sso.get_login_redirect())
+# @router.get("/login", summary='SSO login')
+# async def sso_login() -> RedirectResponse:
+#     """Generate login url and redirect"""
+#     return cast(RedirectResponse, await sso.get_login_redirect())
+#
+#
+# @router.get("/sso_callback", summary='SSO callback')
+# async def sso_callback(request: Request) -> dict[str, Any]:
+#     """Process login response from OIDC and return user info"""
+#     user = await sso.verify_and_process(request)
+#     if user is None:
+#         raise HTTPException(401, "Failed to fetch user information")
+#     return {
+#         "id": user.id,
+#         "picture": user.picture,
+#         "display_name": user.display_name,
+#         "email": user.email,
+#         "provider": user.provider,
+#     }
 
 
-@router.get("/sso_callback", summary='SSO callback')
-async def sso_callback(request: Request) -> dict[str, Any]:
-    """Process login response from OIDC and return user info"""
-    user = await sso.verify_and_process(request)
-    if user is None:
-        raise HTTPException(401, "Failed to fetch user information")
-    return {
-        "id": user.id,
-        "picture": user.picture,
-        "display_name": user.display_name,
-        "email": user.email,
-        "provider": user.provider,
-    }
-
-
-@router.get("/users/me/", response_model=UserPublic)
-async def read_users_me(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
+@router.get("/me", response_model=UserPublic)
+async def get_user_details(current_user: UserPublic = Depends(user_authenticated)) -> UserPublic:
     return current_user

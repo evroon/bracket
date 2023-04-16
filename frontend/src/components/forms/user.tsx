@@ -39,9 +39,9 @@ export default function UserForm({ user }: { user: UserInterface }) {
         <Tabs.Tab value="password" icon={<IconHash size="1.0rem" />}>
           Edit password
         </Tabs.Tab>
-        <Tabs.Tab value="settings" icon={<IconSettings size="1.0rem" />}>
-          Settings
-        </Tabs.Tab>
+        {/*<Tabs.Tab value="settings" icon={<IconSettings size="1.0rem" />}>*/}
+        {/*  Settings*/}
+        {/*</Tabs.Tab>*/}
       </Tabs.List>
       <Tabs.Panel value="details" pt="xs">
         <form

@@ -99,14 +99,6 @@ export default function Match({
           <Grid.Col span={2}>{match.team2_score}</Grid.Col>
         </Grid>
       </div>
-      <MatchModal
-        swrRoundsResponse={swrRoundsResponse}
-        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-        tournamentData={tournamentData}
-        match={match}
-        opened={opened}
-        setOpened={setOpened}
-      />
     </>
   );
 
@@ -115,8 +107,18 @@ export default function Match({
   }
 
   return (
+    <>
     <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
       {bracket}
     </UnstyledButton>
+    <MatchModal
+      swrRoundsResponse={swrRoundsResponse}
+      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+      tournamentData={tournamentData}
+      match={match}
+      opened={opened}
+      setOpened={setOpened}
+    />
+    </>
   );
 }

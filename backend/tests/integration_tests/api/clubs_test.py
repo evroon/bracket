@@ -1,4 +1,4 @@
-from bracket.sql.clubs import sql_delete_club, get_clubs_for_user_id
+from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import assert_some
