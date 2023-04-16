@@ -19,6 +19,7 @@ from bracket.routes.models import SuccessResponse, TokenResponse, UserPublicResp
 from bracket.sql.users import (
     check_whether_email_is_in_use,
     create_user,
+    get_user_by_id,
     update_user,
     update_user_password,
 )
@@ -38,15 +39,18 @@ async def get_user(
     return UserPublicResponse(data=user_public)
 
 
-@router.patch("/users/{user_id}", response_model=SuccessResponse)
+@router.patch("/users/{user_id}", response_model=UserPublicResponse)
 async def patch_user(
     user_id: int,
     user_to_update: UserToUpdate,
     user_public: UserPublic = Depends(user_authenticated),
-) -> SuccessResponse:
-    assert user_public.id == user_id
+) -> UserPublicResponse:
+    if user_public.id != user_id:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Can\'t change details of this user')
+
     await update_user(assert_some(user_public.id), user_to_update)
-    return SuccessResponse()
+    user_updated = await get_user_by_id(user_id)
+    return UserPublicResponse(data=assert_some(user_updated))
 
 
 @router.patch("/users/{user_id}/password", response_model=SuccessResponse)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from bracket.database import database
-from bracket.models.db.user import User, UserToUpdate
+from bracket.models.db.user import User, UserPublic, UserToUpdate
 from bracket.utils.types import assert_some
 
 
@@ -50,6 +50,16 @@ async def update_user_password(user_id: int, password_hash: str) -> None:
     await database.execute(query=query, values={'user_id': user_id, 'password_hash': password_hash})
 
 
+async def get_user_by_id(user_id: int) -> UserPublic | None:
+    query = '''
+        SELECT *
+        FROM users
+        WHERE id = :user_id         
+        '''
+    result = await database.fetch_one(query=query, values={'user_id': user_id})
+    return UserPublic.parse_obj(result._mapping) if result is not None else None
+
+
 async def create_user(user: User) -> User:
     query = '''
         INSERT INTO users (email, name, password_hash, created)
@@ -66,6 +76,14 @@ async def create_user(user: User) -> User:
         },
     )
     return User.parse_obj(assert_some(result)._mapping)
+
+
+async def delete_user(user_id: int) -> None:
+    query = '''
+        DELETE FROM users
+        WHERE id = :user_id
+        '''
+    await database.fetch_one(query=query, values={'user_id': user_id})
 
 
 async def check_whether_email_is_in_use(email: str) -> bool:

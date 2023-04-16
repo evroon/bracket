@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from bracket.app import app
 from bracket.routes.models import SuccessResponse
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import JsonDict, JsonObject
+from bracket.utils.types import JsonDict
 from tests.integration_tests.models import AuthContext
 
 SUCCESS_RESPONSE = SuccessResponse().dict()
@@ -72,7 +72,7 @@ async def send_request(
     body: JsonDict | None = None,
     json: JsonDict | None = None,
     headers: JsonDict = {},
-) -> JsonObject:
+) -> JsonDict:
     async with aiohttp.ClientSession() as session:
         async with session.request(
             method=method.value,
@@ -81,7 +81,7 @@ async def send_request(
             json=json,
             headers=headers,
         ) as resp:
-            response: JsonObject = await resp.json()
+            response: JsonDict = await resp.json()
             return response
 
 
@@ -91,7 +91,7 @@ async def send_auth_request(
     auth_context: AuthContext,
     body: JsonDict | None = None,
     json: JsonDict | None = None,
-) -> JsonObject:
+) -> JsonDict:
     return await send_request(
         method=method, endpoint=endpoint, body=body, json=json, headers=auth_context.headers
     )
@@ -103,7 +103,7 @@ async def send_tournament_request(
     auth_context: AuthContext,
     body: JsonDict | None = None,
     json: JsonDict | None = None,
-) -> JsonObject:
+) -> JsonDict:
     return await send_request(
         method=method,
         endpoint=f'tournaments/{auth_context.tournament.id}/{endpoint}',
