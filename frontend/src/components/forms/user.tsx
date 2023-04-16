@@ -1,6 +1,6 @@
 import { Button, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconHash, IconSettings, IconUser } from '@tabler/icons';
+import { IconHash, IconUser } from '@tabler/icons';
 import React from 'react';
 
 import { UserInterface } from '../../interfaces/user';

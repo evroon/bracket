@@ -4,16 +4,17 @@ import {
   Button,
   Center,
   Container,
-  createStyles,
   Group,
   Paper,
   Text,
   TextInput,
   Title,
+  createStyles,
 } from '@mantine/core';
-import {IconArrowLeft} from '@tabler/icons';
-import {useRouter} from 'next/router';
-import NotFoundTitle from "./404";
+import { IconArrowLeft } from '@tabler/icons';
+import { useRouter } from 'next/router';
+
+import NotFoundTitle from './404';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -38,7 +39,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function ForgotPassword() {
   // TODO: Implement this page.
-  return <NotFoundTitle/>;
+  return <NotFoundTitle />;
 
   const { classes } = useStyles();
   const router = useRouter();

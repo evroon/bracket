@@ -108,17 +108,17 @@ export default function Match({
 
   return (
     <>
-    <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
-      {bracket}
-    </UnstyledButton>
-    <MatchModal
-      swrRoundsResponse={swrRoundsResponse}
-      swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-      tournamentData={tournamentData}
-      match={match}
-      opened={opened}
-      setOpened={setOpened}
-    />
+      <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
+        {bracket}
+      </UnstyledButton>
+      <MatchModal
+        swrRoundsResponse={swrRoundsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        tournamentData={tournamentData}
+        match={match}
+        opened={opened}
+        setOpened={setOpened}
+      />
     </>
   );
 }

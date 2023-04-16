@@ -8,13 +8,13 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import {useForm} from '@mantine/form';
-import {showNotification} from '@mantine/notifications';
-import {useRouter} from 'next/router';
+import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import useStyles from '../components/login/login.styles';
-import {performLogin} from '../services/user';
+import { performLogin } from '../services/user';
 import Layout from './_layout';
 
 export default function Login() {

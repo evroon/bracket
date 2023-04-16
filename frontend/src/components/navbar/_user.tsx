@@ -1,13 +1,13 @@
-import {createStyles, getStylesRef, Navbar, rem} from '@mantine/core';
-import {showNotification} from '@mantine/notifications';
-import {FaBook} from '@react-icons/all-files/fa/FaBook';
-import {FaGithub} from '@react-icons/all-files/fa/FaGithub';
-import {IconCategory2, IconLogout, IconUser} from '@tabler/icons';
-import {useRouter} from 'next/router';
+import { Navbar, createStyles, getStylesRef, rem } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { FaBook } from '@react-icons/all-files/fa/FaBook';
+import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
+import { IconCategory2, IconLogout, IconUser } from '@tabler/icons';
+import { useRouter } from 'next/router';
 import React from 'react';
 
-import {getBaseApiUrl} from '../../services/adapter';
-import {performLogout} from '../../services/local_storage';
+import { getBaseApiUrl } from '../../services/adapter';
+import { performLogout } from '../../services/local_storage';
 
 export const useNavbarStyles = createStyles((theme) => {
   const icon = getStylesRef('icon');
