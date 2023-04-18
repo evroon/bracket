@@ -16,7 +16,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: frontend/yarn.lock
 
-      - name: Install JS modules
+      - name: Install npm modules
         run: yarn
         working-directory: frontend
 
