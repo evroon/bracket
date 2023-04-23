@@ -73,6 +73,7 @@ disable = [
     'too-many-locals',
     'too-many-nested-blocks',
     'protected-access',
+    'logging-fstring-interpolation',
 ]
 
 [tool.bandit]

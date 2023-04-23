@@ -10,7 +10,7 @@ from bracket.utils.types import assert_some
 
 class Round(BaseModelORM):
     id: int | None = None
-    tournament_id: int
+    stage_id: int
     created: datetime_utc
     is_draft: bool
     is_active: bool = False
@@ -34,14 +34,19 @@ class RoundWithMatches(Round):
         return {assert_some(team.id) for match in self.matches for team in match.teams}
 
 
-class RoundBody(BaseModelORM):
+class RoundUpdateBody(BaseModelORM):
     name: str
     is_draft: bool
     is_active: bool
 
 
-class RoundToInsert(RoundBody):
+class RoundCreateBody(BaseModelORM):
+    name: str | None
+    stage_id: int
+
+
+class RoundToInsert(RoundUpdateBody):
     created: datetime_utc
-    tournament_id: int
+    stage_id: int
     is_draft: bool = False
     is_active: bool = False

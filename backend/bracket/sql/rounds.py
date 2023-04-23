@@ -29,11 +29,13 @@ async def get_rounds_with_matches(
             LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
             LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
             LEFT JOIN rounds r on matches.round_id = r.id
-            WHERE r.tournament_id = :tournament_id
+            LEFT JOIN stages s2 on r.stage_id = s2.id
+            WHERE s2.tournament_id = :tournament_id
         )
         SELECT rounds.*, to_json(array_agg(m.*)) AS matches FROM rounds
         LEFT JOIN matches_with_teams m on rounds.id = m.round_id
-        WHERE rounds.tournament_id = :tournament_id
+        JOIN stages s on rounds.stage_id = s.id
+        WHERE s.tournament_id = :tournament_id
         {draft_filter}
         {round_filter}
         GROUP BY rounds.id
@@ -43,12 +45,16 @@ async def get_rounds_with_matches(
     return [RoundWithMatches.parse_obj(x._mapping) for x in result]
 
 
-async def get_next_round_name(tournament_id: int) -> str:
+async def get_next_round_name(tournament_id: int, stage_id: int) -> str:
     query = '''
         SELECT count(*) FROM rounds
-        WHERE rounds.tournament_id = :tournament_id
+        JOIN stages s on s.id = rounds.stage_id
+        WHERE s.tournament_id = :tournament_id
+        AND rounds.stage_id = :stage_id
     '''
     round_count = int(
-        await database.fetch_val(query=query, values={'tournament_id': tournament_id})
+        await database.fetch_val(
+            query=query, values={'tournament_id': tournament_id, 'stage_id': stage_id}
+        )
     )
     return f'Round {round_count + 1}'
