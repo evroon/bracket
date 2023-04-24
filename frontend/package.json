@@ -25,7 +25,7 @@
     "@mantine/dropzone": "^6.0.5",
     "@mantine/next": "^6.0.5",
     "@mantine/notifications": "^6.0.5",
-    "@next/bundle-analyzer": "^13.2.1",
+    "@next/bundle-analyzer": "^13.3.1",
     "@react-icons/all-files": "^4.1.0",
     "@tabler/icons": "^1.119.0",
     "cookies-next": "^2.1.1",
