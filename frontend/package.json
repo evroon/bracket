@@ -47,7 +47,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/jest": "^27.4.1",
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.16.0",
     "@types/react": "^18.0.28",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
