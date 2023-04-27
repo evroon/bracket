@@ -30,11 +30,11 @@ async def test_rounds_endpoint(
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
     ):
         if with_auth:
-            response = await send_tournament_request(HTTPMethod.GET, 'rounds', auth_context, {})
+            response = await send_tournament_request(HTTPMethod.GET, 'stages', auth_context, {})
         else:
             response = await send_request(
                 HTTPMethod.GET,
-                f'tournaments/{auth_context.tournament.id}/rounds?no_draft_rounds=true',
+                f'tournaments/{auth_context.tournament.id}/stages?no_draft_rounds=true',
             )
 
         assert response == {
