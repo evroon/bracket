@@ -1,4 +1,6 @@
-import { Grid, Skeleton } from '@mantine/core';
+import { Alert, Grid, Skeleton } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -17,7 +19,11 @@ export default function Brackets({
   readOnly: boolean;
 }) {
   if (!swrRoundsResponse.isLoading && swrRoundsResponse.data == null) {
-    return <p>No rounds found</p>;
+    return (
+      <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
+        Add a round using the top right button.
+      </Alert>
+    );
   }
   if (swrRoundsResponse.isLoading) {
     return (

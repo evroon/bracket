@@ -24,8 +24,8 @@ from bracket.sql.rounds import get_next_round_name, get_stages_with_rounds_and_m
 router = APIRouter()
 
 
-@router.get("/tournaments/{tournament_id}/rounds", response_model=RoundsWithMatchesResponse)
-async def get_rounds(
+@router.get("/tournaments/{tournament_id}/stages", response_model=RoundsWithMatchesResponse)
+async def get_stages(
     tournament_id: int,
     user: UserPublic = Depends(user_authenticated_or_public_dashboard),
     no_draft_rounds: bool = False,

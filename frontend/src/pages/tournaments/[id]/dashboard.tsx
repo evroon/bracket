@@ -7,7 +7,7 @@ import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getRounds, getTournament } from '../../../services/adapter';
+import { getBaseApiUrl, getStages, getTournament } from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -41,7 +41,7 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
 
 export default function Dashboard() {
   const { tournamentData } = getTournamentIdFromRouter();
-  const swrRoundsResponse: SWRResponse = getRounds(tournamentData.id, true);
+  const swrRoundsResponse: SWRResponse = getStages(tournamentData.id, true);
   const swrTournamentsResponse = getTournament(tournamentData.id);
 
   const tournamentDataFull: Tournament =

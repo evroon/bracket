@@ -15,7 +15,7 @@ import { RoundInterface } from '../../interfaces/round';
 import { Tournament } from '../../interfaces/tournament';
 import {
   checkForAuthError,
-  getRounds,
+  getStages,
   getTournaments,
   getUpcomingMatches,
 } from '../../services/adapter';
@@ -27,7 +27,7 @@ export default function TournamentPage() {
 
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
-  const swrRoundsResponse: SWRResponse = getRounds(id);
+  const swrRoundsResponse: SWRResponse = getStages(id);
   const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
