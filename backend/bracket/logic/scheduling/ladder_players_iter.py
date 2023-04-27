@@ -10,7 +10,7 @@ from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
 from bracket.sql.players import get_active_players_in_tournament
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.rounds import get_rounds_for_stage
 from bracket.utils.types import assert_some
 
 
@@ -19,13 +19,13 @@ def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> b
 
 
 async def get_possible_upcoming_matches_for_players(
-    tournament_id: int, filter_: MatchFilter
+    tournament_id: int, stage_id: int, filter_: MatchFilter
 ) -> list[SuggestedMatch]:
     random.seed(10)
     suggestions: set[SuggestedMatch] = set()
-    all_rounds = await get_rounds_with_matches(tournament_id)
-    draft_round = next((round_ for round_ in all_rounds if round_.is_draft), None)
-    other_rounds = [round_ for round_ in all_rounds if not round_.is_draft]
+    rounds = await get_rounds_for_stage(tournament_id, stage_id)
+    draft_round = next((round_ for round_ in rounds if round_.is_draft), None)
+    other_rounds = [round_ for round_ in rounds if not round_.is_draft]
     max_matches_per_round = (
         max(len(other_round.matches) for other_round in other_rounds)
         if len(other_rounds) > 0

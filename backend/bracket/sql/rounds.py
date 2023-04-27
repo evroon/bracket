@@ -1,13 +1,16 @@
+from typing import List
+
 from bracket.database import database
-from bracket.models.db.round import RoundWithMatches
+from bracket.models.db.round import RoundWithMatches, StageWithRounds
 from bracket.utils.types import dict_without_none
 
 
-async def get_rounds_with_matches(
+async def get_stages_with_rounds_and_matches(
     tournament_id: int,
-    no_draft_rounds: bool = False,
     round_id: int | None = None,
-) -> list[RoundWithMatches]:
+    *,
+    no_draft_rounds: bool = False,
+) -> list[StageWithRounds]:
     draft_filter = 'AND rounds.is_draft IS FALSE' if no_draft_rounds else ''
     round_filter = 'AND rounds.id = :round_id' if round_id is not None else ''
     query = f'''
@@ -31,18 +34,35 @@ async def get_rounds_with_matches(
             LEFT JOIN rounds r on matches.round_id = r.id
             LEFT JOIN stages s2 on r.stage_id = s2.id
             WHERE s2.tournament_id = :tournament_id
+        ), rounds_with_matches AS (
+            SELECT DISTINCT ON (rounds.id)
+                rounds.*,
+                to_json(array_agg(m.*)) AS matches
+            FROM rounds
+            LEFT JOIN matches_with_teams m on m.round_id = rounds.id
+            LEFT JOIN stages s2 on rounds.stage_id = s2.id
+            WHERE s2.tournament_id = :tournament_id
+            {draft_filter}
+            {round_filter}
+            GROUP BY rounds.id
         )
-        SELECT rounds.*, to_json(array_agg(m.*)) AS matches FROM rounds
-        LEFT JOIN matches_with_teams m on rounds.id = m.round_id
-        JOIN stages s on rounds.stage_id = s.id
-        WHERE s.tournament_id = :tournament_id
-        {draft_filter}
-        {round_filter}
-        GROUP BY rounds.id
+        SELECT stages.*, to_json(array_agg(r.*)) AS rounds FROM stages
+        LEFT JOIN rounds_with_matches r on stages.id = r.stage_id
+        WHERE stages.tournament_id = :tournament_id
+        GROUP BY stages.id
     '''
     values = dict_without_none({'tournament_id': tournament_id, 'round_id': round_id})
     result = await database.fetch_all(query=query, values=values)
-    return [RoundWithMatches.parse_obj(x._mapping) for x in result]
+    return [StageWithRounds.parse_obj(x._mapping) for x in result]
+
+
+async def get_rounds_for_stage(tournament_id: int, stage_id: int) -> List[RoundWithMatches]:
+    stages = await get_stages_with_rounds_and_matches(tournament_id)
+    result_stage = next((stage for stage in stages if stage.id == stage_id), None)
+    if result_stage is None:
+        raise ValueError(f'Could not find stage with id {stage_id} for tournament {tournament_id}')
+
+    return result_stage.rounds
 
 
 async def get_next_round_name(tournament_id: int, stage_id: int) -> str:

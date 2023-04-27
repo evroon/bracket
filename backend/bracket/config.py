@@ -71,7 +71,7 @@ class DemoConfig(Config):
         env_file = 'demo.env'
 
 
-environment = Environment(os.getenv('ENVIRONMENT', 'DEVELOPMENT'))
+environment = Environment(os.getenv('ENVIRONMENT', 'CI'))
 config: Config
 
 match environment:

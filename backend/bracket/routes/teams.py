@@ -10,7 +10,7 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.rounds import get_stages_with_rounds_and_matches
 from bracket.sql.teams import get_team_by_id, get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
@@ -80,13 +80,14 @@ async def delete_team(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
-    rounds = await get_rounds_with_matches(tournament_id, no_draft_rounds=False)
-    for round_ in rounds:
-        if team.id in round_.get_team_ids():
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Could not delete team that participates in matches in the tournament",
-            )
+    stages = await get_stages_with_rounds_and_matches(tournament_id, no_draft_rounds=False)
+    for stage in stages:
+        for round_ in stage.rounds:
+            if team.id in round_.get_team_ids():
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Could not delete team that participates in matches in the tournament",
+                )
 
     if len(team.players):
         raise HTTPException(

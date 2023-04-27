@@ -6,6 +6,7 @@ from typing import Any
 import click
 from sqlalchemy import Table
 
+from bracket.config import Environment, environment
 from bracket.database import database, engine, init_db_when_empty
 from bracket.logger import get_logger
 from bracket.logic.elo import recalculate_elo_for_tournament_id
@@ -74,6 +75,8 @@ async def bulk_insert(table: Table, rows: list[BaseModelT]) -> None:
 @click.command()
 @run_async
 async def create_dev_db() -> None:
+    assert environment is Environment.DEVELOPMENT
+
     logger.warning('Initializing database with dummy records')
     await database.connect()
     metadata.drop_all(engine)

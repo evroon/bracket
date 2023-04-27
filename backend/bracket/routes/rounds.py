@@ -19,7 +19,7 @@ from bracket.routes.auth import (
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.routes.util import round_dependency, round_with_matches_dependency
 from bracket.schema import rounds
-from bracket.sql.rounds import get_next_round_name, get_rounds_with_matches
+from bracket.sql.rounds import get_next_round_name, get_stages_with_rounds_and_matches
 
 router = APIRouter()
 
@@ -30,13 +30,16 @@ async def get_rounds(
     user: UserPublic = Depends(user_authenticated_or_public_dashboard),
     no_draft_rounds: bool = False,
 ) -> RoundsWithMatchesResponse:
-    rounds_ = await get_rounds_with_matches(
-        tournament_id, no_draft_rounds=user is None or no_draft_rounds
-    )
-    if user is not None:
-        return RoundsWithMatchesResponse(data=rounds_)
+    if no_draft_rounds is False and user is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can't view draft rounds when not authorized",
+        )
 
-    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds_ if not round_.is_draft])
+    stages = await get_stages_with_rounds_and_matches(
+        tournament_id, no_draft_rounds=no_draft_rounds
+    )
+    return RoundsWithMatchesResponse(data=stages)
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)

@@ -1,5 +1,8 @@
 from fastapi import FastAPI
+from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
@@ -43,6 +46,16 @@ async def shutdown() -> None:
 @app.get('/ping', summary="Healthcheck ping")
 async def ping() -> str:
     return 'ping'
+
+
+@app.exception_handler(HTTPException)
+async def validation_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    return JSONResponse({'detail': exc.detail}, status_code=exc.status_code)
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    return JSONResponse({'detail': 'Internal server error'}, status_code=500)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

@@ -6,7 +6,7 @@ from pydantic.generics import GenericModel
 from bracket.models.db.club import Club
 from bracket.models.db.match import SuggestedMatch
 from bracket.models.db.player import Player
-from bracket.models.db.round import Round, RoundWithMatches
+from bracket.models.db.round import Round, StageWithRounds
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
@@ -51,7 +51,7 @@ class RoundsResponse(DataResponse[list[Round]]):
     pass
 
 
-class RoundsWithMatchesResponse(DataResponse[list[RoundWithMatches]]):
+class RoundsWithMatchesResponse(DataResponse[list[StageWithRounds]]):
     pass
 
 

@@ -33,21 +33,31 @@ async def test_rounds_endpoint(
             response = await send_tournament_request(HTTPMethod.GET, 'rounds', auth_context, {})
         else:
             response = await send_request(
-                HTTPMethod.GET, f'tournaments/{auth_context.tournament.id}/rounds'
+                HTTPMethod.GET,
+                f'tournaments/{auth_context.tournament.id}/rounds?no_draft_rounds=true',
             )
 
         assert response == {
             'data': [
                 {
+                    'id': stage_inserted.id,
+                    'tournament_id': 1,
                     'created': DUMMY_MOCK_TIME.isoformat(),
-                    'id': round_inserted.id,
+                    'type': 'ROUND_ROBIN',
                     'is_active': False,
-                    'is_draft': False,
-                    'matches': [],
-                    'name': 'Round 1',
-                    'stage_id': stage_inserted.id,
+                    'rounds': [
+                        {
+                            'id': round_inserted.id,
+                            'stage_id': stage_inserted.id,
+                            'created': '2022-01-11T04:32:11+00:00',
+                            'is_draft': False,
+                            'is_active': False,
+                            'name': 'Round 1',
+                            'matches': [],
+                        }
+                    ],
                 }
-            ],
+            ]
         }
 
 

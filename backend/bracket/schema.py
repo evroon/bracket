@@ -1,9 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import DeclarativeMeta  # type: ignore[attr-defined]
+from sqlalchemy.orm import declarative_base  # type: ignore[attr-defined]
 from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Enum, Float, Text
 
-Base: DeclarativeMeta = declarative_base()
+Base = declarative_base()
 metadata = Base.metadata
 DateTimeTZ = DateTime(timezone=True)
 
