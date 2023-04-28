@@ -6,7 +6,6 @@ import {
   Grid,
   Header,
   Menu,
-  Navbar,
   Text,
   UnstyledButton,
   createStyles,
@@ -18,10 +17,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { IconMoonStars, IconSun } from '@tabler/icons';
 import { useRouter } from 'next/router';
-import React, { Component, ReactNode, useState } from 'react';
+import React, { Component, ReactNode } from 'react';
 
 import { Brand } from '../components/navbar/_brand';
-import { User } from '../components/navbar/_user';
 import { getBaseApiUrl } from '../services/adapter';
 
 const LINKS = [
@@ -169,9 +167,8 @@ export function HeaderAction({ links }: HeaderActionProps) {
   );
 }
 
-export default function Layout({ children, links }: any) {
+export default function Layout({ children, navbar }: any) {
   const theme = useMantineTheme();
-  const [navBarOpened] = useState(false);
 
   return (
     <AppShell
@@ -184,20 +181,7 @@ export default function Layout({ children, links }: any) {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       header={<HeaderAction links={LINKS} />}
-      navbar={
-        <Navbar p="md" width={{ sm: 200, lg: 300 }} hidden={!navBarOpened} hiddenBreakpoint="sm">
-          {links == null ? (
-            <Navbar.Section grow>
-              <div />
-            </Navbar.Section>
-          ) : (
-            links
-          )}
-          <Navbar.Section>
-            <User />
-          </Navbar.Section>
-        </Navbar>
-      }
+      navbar={navbar}
     >
       {children}
     </AppShell>

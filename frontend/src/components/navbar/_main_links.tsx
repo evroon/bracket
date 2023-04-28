@@ -1,3 +1,4 @@
+import { Tooltip, UnstyledButton } from '@mantine/core';
 import { IconTournament, IconUser, IconUsers, TablerIcon } from '@tabler/icons';
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
@@ -14,15 +15,24 @@ interface MainLinkProps {
 function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String }) {
   const { classes, cx } = useNavbarStyles();
   return (
-    <a
-      href="#"
-      key={item.endpoint}
-      className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
-      onClick={() => item.router.push(item.endpoint)}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span style={{ marginLeft: '10px' }}>{item.label}</span>
-    </a>
+    <Tooltip label={item.label} position="right" transitionProps={{ duration: 0 }}>
+      <UnstyledButton
+        onClick={() => item.router.push(item.endpoint)}
+        className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
+      >
+        {/*<Icon size="1.2rem" stroke={1.5} />*/}
+        <item.icon className={classes.linkIcon} stroke={1.5} />
+      </UnstyledButton>
+    </Tooltip>
+    // <a
+    //   href="#"
+    //   key={item.endpoint}
+    //   className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
+    //   onClick={() => item.router.push(item.endpoint)}
+    // >
+    //   <item.icon className={classes.linkIcon} stroke={1.5} />
+    //   <span style={{ marginLeft: '10px' }}>{item.label}</span>
+    // </a>
   );
 }
 
