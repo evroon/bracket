@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { SWRResponse } from 'swr';
 
 export function getItemColor(theme: any) {
   const darkTheme = theme.colorScheme === 'dark';
@@ -41,4 +42,8 @@ export function getTournamentIdFromRouter() {
   const id = parseInt(idString, 10);
   const tournamentData = { id };
   return { id, tournamentData };
+}
+
+export function responseIsValid(response: SWRResponse) {
+  return response.data != null && response.data.data != null;
 }

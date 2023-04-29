@@ -1,4 +1,4 @@
-import { Button, Grid, Group, Title } from '@mantine/core';
+import { Button, Center, Grid, Group, Title } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconExternalLink } from '@tabler/icons';
 import React, { useState } from 'react';
@@ -9,9 +9,10 @@ import Brackets from '../../components/brackets/brackets';
 import SaveButton from '../../components/buttons/save';
 import TournamentModal from '../../components/modals/tournament_modal';
 import Scheduler from '../../components/scheduling/scheduler';
-import { getTournamentIdFromRouter } from '../../components/utils/util';
+import StagesTab from '../../components/utils/stages_tab';
+import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
 import { SchedulerSettings } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
+import { StageInterface } from '../../interfaces/round';
 import { Tournament } from '../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -27,11 +28,12 @@ export default function TournamentPage() {
 
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
-  const swrRoundsResponse: SWRResponse = getStages(id);
+  const swrStagesResponse: SWRResponse = getStages(id);
   const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
+  const [activeStageId, setActiveStageId] = useState(null);
 
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
@@ -54,10 +56,12 @@ export default function TournamentPage() {
     return <NotFoundTitle />;
   }
 
-  const draft_round =
-    swrRoundsResponse.data != null
-      ? swrRoundsResponse.data.data.filter((round: RoundInterface) => round.is_draft)
-      : null;
+  let draft_round = null;
+  if (responseIsValid(swrStagesResponse)) {
+    draft_round = swrStagesResponse.data.data
+      .flat()
+      .filter((stage: StageInterface) => stage.is_draft);
+  }
 
   const scheduler =
     draft_round != null && draft_round.length > 0 ? (
@@ -66,7 +70,7 @@ export default function TournamentPage() {
         <Scheduler
           round_id={draft_round[0].id}
           tournamentData={tournamentDataFull}
-          swrRoundsResponse={swrRoundsResponse}
+          swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           schedulerSettings={schedulerSettings}
         />
@@ -106,7 +110,7 @@ export default function TournamentPage() {
             <SaveButton
               onClick={async () => {
                 await createRound(tournamentData.id);
-                await swrRoundsResponse.mutate();
+                await swrStagesResponse.mutate();
               }}
               leftIcon={<GoPlus size={24} />}
               title="Add Round"
@@ -115,11 +119,15 @@ export default function TournamentPage() {
         </Grid.Col>
       </Grid>
       <div style={{ marginTop: '15px' }}>
+        <Center>
+          <StagesTab swrStagesResponse={swrStagesResponse} setActiveStageId={setActiveStageId} />
+        </Center>
         <Brackets
           tournamentData={tournamentDataFull}
-          swrRoundsResponse={swrRoundsResponse}
+          swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
+          activeStageId={activeStageId}
         />
         {scheduler}
       </div>

@@ -2,7 +2,7 @@ import { Center, Title } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { RoundInterface } from '../../interfaces/round';
+import { StageInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
 import Match from './match';
@@ -15,7 +15,7 @@ export default function Round({
   readOnly,
 }: {
   tournamentData: TournamentMinimal;
-  round: RoundInterface;
+  round: StageInterface;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;

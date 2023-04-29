@@ -31,9 +31,7 @@ export default function TournamentLayout({ children, tournament_id }: any) {
 
   return (
     <>
-      <Layout links={links} navbar={<NavBar navBarOpened={navBarOpened} links={links} />}>
-        {children}
-      </Layout>
+      <Layout navbar={<NavBar navBarOpened={navBarOpened} links={links} />}>{children}</Layout>
     </>
   );
 }

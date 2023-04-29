@@ -1,6 +1,6 @@
 import { MatchInterface } from './match';
 
-export interface RoundInterface {
+export interface StageInterface {
   id: number;
   created: string;
   name: string;
