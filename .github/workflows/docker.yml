@@ -9,6 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build Docker image
+      - name: Build backend Docker image
         run: sudo docker build .
         working-directory: backend
+
+      - name: Build frontend Docker image
+        run: sudo docker build .
+        working-directory: frontend
