@@ -36,7 +36,7 @@
     "react-icons": "^4.8.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "swr": "^2.0.4"
+    "swr": "^2.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
