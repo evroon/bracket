@@ -22,11 +22,11 @@ class Stage(BaseModelORM):
     is_active: bool
 
 
-class StageBody(BaseModelORM):
-    name: str
+class StageUpdateBody(BaseModelORM):
     is_active: bool
 
 
-class StageToInsert(StageBody):
+class StageToInsert(StageUpdateBody):
     created: datetime_utc
     tournament_id: int
+    type: StageType

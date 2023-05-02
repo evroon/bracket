@@ -15,12 +15,11 @@ router = APIRouter()
 
 
 @router.get(
-    "/tournaments/{tournament_id}/stages/{stage_id}/upcoming_matches",
+    "/tournaments/{tournament_id}/upcoming_matches",
     response_model=UpcomingMatchesResponse,
 )
 async def get_matches_to_schedule(
     tournament_id: int,
-    stage_id: int,
     elo_diff_threshold: int = 100,
     iterations: int = 200,
     only_behind_schedule: bool = False,
@@ -34,7 +33,7 @@ async def get_matches_to_schedule(
         iterations=iterations,
     )
     return UpcomingMatchesResponse(
-        data=await get_possible_upcoming_matches_for_players(tournament_id, stage_id, match_filter)
+        data=await get_possible_upcoming_matches_for_players(tournament_id, match_filter)
     )
 
 

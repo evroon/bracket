@@ -8,7 +8,7 @@ from bracket.database import database
 from bracket.models.db.round import RoundWithMatches, StageWithRounds
 from bracket.schema import players
 from bracket.sql.players import get_all_players_in_tournament
-from bracket.sql.rounds import get_stages_with_rounds_and_matches
+from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.utils.types import assert_some
 
 START_ELO: int = 1200

@@ -126,7 +126,7 @@ async def test_upcoming_matches_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_stage(DUMMY_STAGE1.copy(update={'is_active': True})) as stage_inserted,
         inserted_round(
             DUMMY_ROUND1.copy(
                 update={
@@ -158,8 +158,9 @@ async def test_upcoming_matches_endpoint(
         ),
     ):
         json_response = await send_tournament_request(
-            HTTPMethod.GET, f'stages/{stage_inserted.id}/upcoming_matches', auth_context, {}
+            HTTPMethod.GET, 'upcoming_matches', auth_context, {}
         )
+        print(json_response)
         assert json_response == {
             'data': [
                 {

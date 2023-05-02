@@ -10,7 +10,7 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
-from bracket.sql.rounds import get_stages_with_rounds_and_matches
+from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.sql.teams import get_team_by_id, get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
