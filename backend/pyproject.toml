@@ -75,6 +75,7 @@ disable = [
     'protected-access',
     'logging-fstring-interpolation',
     'too-many-arguments',
+    'unspecified-encoding',
 ]
 
 [tool.bandit]

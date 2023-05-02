@@ -1,6 +1,8 @@
 # pylint: disable=redefined-outer-name
 import asyncio
+import os
 from asyncio import AbstractEventLoop
+from time import sleep
 from typing import AsyncIterator
 
 import pytest
@@ -37,11 +39,45 @@ def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
     loop.close()
 
 
-@pytest.fixture(scope="session", autouse=True)
-async def reinit_database(event_loop: AbstractEventLoop) -> AsyncIterator[Database]:
+@pytest.fixture(scope='session', autouse=True)
+async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> AsyncIterator[Database]:
+    """
+    Creates the test database on the first test run in the session.
+
+    When running in parallel, the first test runner (gw0) creates a "lock" file and initializes the
+    database. The other runners poll this file and wait until it has been removed by gw0.
+    When running tests sequentially, the master worker just creates the test database and that's it.
+    """
     await database.connect()
-    metadata.drop_all(engine)
-    metadata.create_all(engine)
+
+    if worker_id == 'master':
+        metadata.drop_all(engine)
+        metadata.create_all(engine)
+
+        try:
+            yield database
+        finally:
+            await database.disconnect()
+
+        return
+
+    lock_path = '/tmp/tm_test_lock'
+
+    if worker_id == 'gw0':
+        try:
+            with open(lock_path, mode='w') as file:
+                file.write('')
+
+            metadata.drop_all(engine)
+            metadata.create_all(engine)
+        finally:
+            os.remove(lock_path)
+    else:
+        for _ in range(50):
+            sleep(0.1)
+            if not os.path.exists(lock_path):
+                break
+
     try:
         yield database
     finally:

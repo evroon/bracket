@@ -12,8 +12,12 @@ from tests.integration_tests.sql import assert_row_count_and_clear, inserted_pla
 async def test_players_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with inserted_team(DUMMY_TEAM1):
-        async with inserted_player(DUMMY_PLAYER1.copy()) as player_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ):
+        async with inserted_player(
+            DUMMY_PLAYER1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as player_inserted:
             assert await send_tournament_request(HTTPMethod.GET, 'players', auth_context, {}) == {
                 'data': [
                     {
@@ -44,8 +48,12 @@ async def test_create_player(
 async def test_delete_player(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with inserted_team(DUMMY_TEAM1):
-        async with inserted_player(DUMMY_PLAYER1.copy()) as player_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ):
+        async with inserted_player(
+            DUMMY_PLAYER1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as player_inserted:
             assert (
                 await send_tournament_request(
                     HTTPMethod.DELETE, f'players/{player_inserted.id}', auth_context
@@ -59,8 +67,12 @@ async def test_update_player(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     body = {'name': 'Some new name', 'active': True}
-    async with inserted_team(DUMMY_TEAM1):
-        async with inserted_player(DUMMY_PLAYER1.copy()) as player_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ):
+        async with inserted_player(
+            DUMMY_PLAYER1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as player_inserted:
             response = await send_tournament_request(
                 HTTPMethod.PATCH, f'players/{player_inserted.id}', auth_context, json=body
             )

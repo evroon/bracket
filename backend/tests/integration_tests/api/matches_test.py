@@ -31,10 +31,16 @@ async def test_create_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
-        inserted_team(DUMMY_TEAM1) as team1_inserted,
-        inserted_team(DUMMY_TEAM2) as team2_inserted,
+        inserted_team(
+            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team1_inserted,
+        inserted_team(
+            DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team2_inserted,
     ):
         body = {
             'team1_id': team1_inserted.id,
@@ -42,10 +48,12 @@ async def test_create_match(
             'round_id': round_inserted.id,
             'label': 'Some label',
         }
-        assert (
-            await send_tournament_request(HTTPMethod.POST, 'matches', auth_context, json=body)
-            == SUCCESS_RESPONSE
+        response = await send_tournament_request(
+            HTTPMethod.POST, 'matches', auth_context, json=body
         )
+        assert response['data']['id']
+
+        # await sql_delete_match(response['data']['id'])
         await assert_row_count_and_clear(matches, 1)
 
 
@@ -53,10 +61,16 @@ async def test_delete_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
-        inserted_team(DUMMY_TEAM1) as team1_inserted,
-        inserted_team(DUMMY_TEAM2) as team2_inserted,
+        inserted_team(
+            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team1_inserted,
+        inserted_team(
+            DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team2_inserted,
         inserted_match(
             DUMMY_MATCH1.copy(
                 update={
@@ -80,10 +94,16 @@ async def test_update_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
-        inserted_team(DUMMY_TEAM1) as team1_inserted,
-        inserted_team(DUMMY_TEAM2) as team2_inserted,
+        inserted_team(
+            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team1_inserted,
+        inserted_team(
+            DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as team2_inserted,
         inserted_match(
             DUMMY_MATCH1.copy(
                 update={
@@ -113,7 +133,7 @@ async def test_update_match(
         patched_match = await fetch_one_parsed_certain(
             database,
             Match,
-            query=matches.select().where(matches.c.id == round_inserted.id),
+            query=matches.select().where(matches.c.id == match_inserted.id),
         )
         assert patched_match.team1_score == body['team1_score']
         assert patched_match.team2_score == body['team2_score']
@@ -126,7 +146,11 @@ async def test_upcoming_matches_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_stage(DUMMY_STAGE1.copy(update={'is_active': True})) as stage_inserted,
+        inserted_stage(
+            DUMMY_STAGE1.copy(
+                update={'is_active': True, 'tournament_id': auth_context.tournament.id}
+            )
+        ) as stage_inserted,
         inserted_round(
             DUMMY_ROUND1.copy(
                 update={
@@ -142,25 +166,33 @@ async def test_upcoming_matches_endpoint(
             DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team2_inserted,
         inserted_player_in_team(
-            DUMMY_PLAYER1.copy(update={'elo_score': 1100}), assert_some(team1_inserted.id)
-        ),
-        inserted_player_in_team(
-            DUMMY_PLAYER2.copy(update={'elo_score': 1300}),
-            assert_some(team2_inserted.id),
-        ),
-        inserted_player_in_team(
-            DUMMY_PLAYER3.copy(update={'elo_score': 1200}),
+            DUMMY_PLAYER1.copy(
+                update={'elo_score': 1100, 'tournament_id': auth_context.tournament.id}
+            ),
             assert_some(team1_inserted.id),
         ),
         inserted_player_in_team(
-            DUMMY_PLAYER4.copy(update={'elo_score': 1400}),
+            DUMMY_PLAYER2.copy(
+                update={'elo_score': 1300, 'tournament_id': auth_context.tournament.id}
+            ),
+            assert_some(team2_inserted.id),
+        ),
+        inserted_player_in_team(
+            DUMMY_PLAYER3.copy(
+                update={'elo_score': 1200, 'tournament_id': auth_context.tournament.id}
+            ),
+            assert_some(team1_inserted.id),
+        ),
+        inserted_player_in_team(
+            DUMMY_PLAYER4.copy(
+                update={'elo_score': 1400, 'tournament_id': auth_context.tournament.id}
+            ),
             assert_some(team2_inserted.id),
         ),
     ):
         json_response = await send_tournament_request(
             HTTPMethod.GET, 'upcoming_matches', auth_context, {}
         )
-        print(json_response)
         assert json_response == {
             'data': [
                 {

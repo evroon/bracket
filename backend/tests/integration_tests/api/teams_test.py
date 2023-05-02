@@ -12,7 +12,9 @@ from tests.integration_tests.sql import assert_row_count_and_clear, inserted_tea
 async def test_teams_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ) as team_inserted:
         assert await send_tournament_request(HTTPMethod.GET, 'teams', auth_context, {}) == {
             'data': [
                 {
@@ -21,7 +23,7 @@ async def test_teams_endpoint(
                     'id': team_inserted.id,
                     'name': 'Team 1',
                     'players': [],
-                    'tournament_id': 1,
+                    'tournament_id': team_inserted.tournament_id,
                 }
             ],
         }
@@ -39,7 +41,9 @@ async def test_create_team(
 async def test_delete_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ) as team_inserted:
         assert (
             await send_tournament_request(
                 HTTPMethod.DELETE, f'teams/{team_inserted.id}', auth_context, {}
@@ -53,7 +57,9 @@ async def test_update_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     body = {'name': 'Some new name', 'active': True, 'player_ids': []}
-    async with inserted_team(DUMMY_TEAM1) as team_inserted:
+    async with inserted_team(
+        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+    ) as team_inserted:
         response = await send_tournament_request(
             HTTPMethod.PATCH, f'teams/{team_inserted.id}', auth_context, None, body
         )

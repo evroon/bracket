@@ -17,7 +17,12 @@ from tests.integration_tests.sql import (
 async def test_create_round(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    async with (inserted_team(DUMMY_TEAM1), inserted_stage(DUMMY_STAGE1) as stage_inserted):
+    async with (
+        inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
+    ):
         assert (
             await send_tournament_request(
                 HTTPMethod.POST, 'rounds', auth_context, json={'stage_id': stage_inserted.id}
@@ -31,8 +36,10 @@ async def test_delete_round(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_team(DUMMY_TEAM1),
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
     ):
         assert (
@@ -49,8 +56,10 @@ async def test_update_round(
 ) -> None:
     body = {'name': 'Some new name', 'is_draft': True, 'is_active': False}
     async with (
-        inserted_team(DUMMY_TEAM1),
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
+        inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_stage(
+            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as stage_inserted,
         inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
     ):
         assert (
