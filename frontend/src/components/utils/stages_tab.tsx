@@ -1,5 +1,5 @@
 import { Tabs, TabsProps, rem } from '@mantine/core';
-import { IconSettings } from '@tabler/icons';
+import { IconSettings } from '@tabler/icons-react';
 
 import { StageInterface } from '../../interfaces/stage';
 import { responseIsValid } from './util';

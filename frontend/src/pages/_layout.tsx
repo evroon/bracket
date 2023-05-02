@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
-import { IconMoonStars, IconSun } from '@tabler/icons';
+import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React, { Component, ReactNode } from 'react';
 

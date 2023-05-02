@@ -1,5 +1,5 @@
 import { Alert, Grid, Skeleton } from '@mantine/core';
-import { IconAlertCircle } from '@tabler/icons';
+import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
