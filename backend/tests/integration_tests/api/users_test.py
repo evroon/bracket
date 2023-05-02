@@ -5,6 +5,7 @@ from bracket.sql.users import delete_user
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import send_auth_request, send_request
+from tests.integration_tests.mocks import MOCK_USER
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear
 
@@ -16,7 +17,7 @@ async def test_users_endpoint(
         HTTPMethod.GET, f'users/{auth_context.user.id}', auth_context, {}
     ) == {
         'data': {
-            'email': 'donald_duck',
+            'email': MOCK_USER.email,
             'created': '2200-01-01T00:00:00+00:00',
             'id': auth_context.user.id,
             'name': 'Donald Duck',

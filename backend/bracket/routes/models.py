@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
 from bracket.models.db.club import Club
-from bracket.models.db.match import SuggestedMatch
+from bracket.models.db.match import Match, SuggestedMatch
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round, StageWithRounds
 from bracket.models.db.team import FullTeamWithPlayers, Team
@@ -56,6 +56,10 @@ class RoundsWithMatchesResponse(DataResponse[list[StageWithRounds]]):
 
 
 class UpcomingMatchesResponse(DataResponse[list[SuggestedMatch]]):
+    pass
+
+
+class SingleMatchResponse(DataResponse[Match]):
     pass
 
 

@@ -7,9 +7,11 @@ from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_m
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
-from bracket.routes.models import SuccessResponse, UpcomingMatchesResponse
+from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import match_dependency
 from bracket.schema import matches
+from bracket.sql.matches import sql_create_match, sql_delete_match
+from bracket.utils.types import assert_some
 
 router = APIRouter()
 
@@ -43,28 +45,22 @@ async def delete_match(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
-    await database.execute(
-        query=matches.delete().where(
-            matches.c.id == match.id and matches.c.tournament_id == tournament_id
-        ),
-    )
+    await sql_delete_match(assert_some(match.id))
     await recalculate_elo_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 
-@router.post("/tournaments/{tournament_id}/matches", response_model=SuccessResponse)
+@router.post("/tournaments/{tournament_id}/matches", response_model=SingleMatchResponse)
 async def create_match(
+    tournament_id: int,
     match_body: MatchCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-) -> SuccessResponse:
+) -> SingleMatchResponse:
     await database.execute(
         query=matches.insert(),
-        values=MatchToInsert(
-            created=datetime_utc.now(),
-            **match_body.dict(),
-        ).dict(),
+        values=MatchToInsert(created=datetime_utc.now(), **match_body.dict()).dict(),
     )
-    return SuccessResponse()
+    return SingleMatchResponse(data=await sql_create_match(match_body))
 
 
 @router.patch("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)

@@ -15,13 +15,16 @@ from bracket.utils.security import pwd_context
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo('UTC'))
 
+# We don't know any db IDs here, so we use a placeholder for foreign keys.
+DB_PLACEHOLDER_ID = -42
+
 DUMMY_CLUB = Club(
     name='Some Cool Club',
     created=DUMMY_MOCK_TIME,
 )
 
 DUMMY_TOURNAMENT = Tournament(
-    club_id=1,
+    club_id=DB_PLACEHOLDER_ID,
     name='Some Cool Tournament',
     created=DUMMY_MOCK_TIME,
     dashboard_public=True,
@@ -30,28 +33,28 @@ DUMMY_TOURNAMENT = Tournament(
 )
 
 DUMMY_STAGE1 = Stage(
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_active=False,
     type=StageType.ROUND_ROBIN,
 )
 
 DUMMY_STAGE2 = Stage(
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_active=True,
     type=StageType.SWISS,
 )
 
 DUMMY_ROUND1 = Round(
-    stage_id=1,
+    stage_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name='Round 1',
 )
 
 DUMMY_ROUND2 = Round(
-    stage_id=1,
+    stage_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_active=True,
     is_draft=False,
@@ -67,8 +70,8 @@ DUMMY_ROUND3 = Round(
 
 DUMMY_MATCH1 = Match(
     created=DUMMY_MOCK_TIME,
-    round_id=1,
-    team1_id=1,
+    round_id=DB_PLACEHOLDER_ID,
+    team1_id=DB_PLACEHOLDER_ID,
     team2_id=2,
     team1_score=11,
     team2_score=22,
@@ -77,7 +80,7 @@ DUMMY_MATCH1 = Match(
 
 DUMMY_MATCH2 = Match(
     created=DUMMY_MOCK_TIME,
-    round_id=1,
+    round_id=DB_PLACEHOLDER_ID,
     team1_id=3,
     team2_id=4,
     team1_score=9,
@@ -88,7 +91,7 @@ DUMMY_MATCH2 = Match(
 DUMMY_MATCH3 = Match(
     created=DUMMY_MOCK_TIME,
     round_id=2,
-    team1_id=1,
+    team1_id=DB_PLACEHOLDER_ID,
     team2_id=4,
     team1_score=23,
     team2_score=26,
@@ -115,28 +118,28 @@ DUMMY_USER = User(
 DUMMY_TEAM1 = Team(
     created=DUMMY_MOCK_TIME,
     name='Team 1',
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     active=True,
 )
 
 DUMMY_TEAM2 = Team(
     created=DUMMY_MOCK_TIME,
     name='Team 2',
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     active=True,
 )
 
 DUMMY_TEAM3 = Team(
     created=DUMMY_MOCK_TIME,
     name='Team 3',
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     active=True,
 )
 
 DUMMY_TEAM4 = Team(
     created=DUMMY_MOCK_TIME,
     name='Team 4',
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
     active=True,
 )
 
@@ -145,68 +148,68 @@ DUMMY_PLAYER1 = Player(
     name='Luke',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER2 = Player(
     name='Anakin',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER3 = Player(
     name='Leia',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER4 = Player(
     name='Yoda',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER5 = Player(
     name='Boba',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER6 = Player(
     name='General',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER7 = Player(
     name='Han',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER8 = Player(
     name='Emperor',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER9 = Player(
     name='R2D2',
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=1,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_USER_X_CLUB = UserXClub(
-    user_id=1,
-    club_id=1,
+    user_id=DB_PLACEHOLDER_ID,
+    club_id=DB_PLACEHOLDER_ID,
 )
 
 
