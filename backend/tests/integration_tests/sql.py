@@ -9,6 +9,7 @@ from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
+from bracket.models.db.stage import Stage
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
@@ -19,13 +20,16 @@ from bracket.schema import (
     players,
     players_x_teams,
     rounds,
+    stages,
     teams,
     tournaments,
     users,
     users_x_clubs,
 )
+from bracket.utils.conversion import to_string_mapping
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
+from bracket.utils.logging import logger
 from bracket.utils.types import BaseModelT, assert_some
 from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
@@ -40,7 +44,14 @@ async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
 async def inserted_generic(
     data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
 ) -> AsyncIterator[BaseModelT]:
-    last_record_id = await database.execute(query=table.insert(), values=data_model.dict())
+    try:
+        last_record_id = await database.execute(
+            query=table.insert(), values=to_string_mapping(data_model)  # type: ignore[arg-type]
+        )
+    except:
+        logger.exception(f'Could not insert {type(data_model).__name__}')
+        raise
+
     row_inserted = await fetch_one_parsed(
         database, return_type, table.select().where(table.c.id == last_record_id)
     )
@@ -93,6 +104,12 @@ async def inserted_player_in_team(player: Player, team_id: int) -> AsyncIterator
 
 
 @asynccontextmanager
+async def inserted_stage(stage: Stage) -> AsyncIterator[Stage]:
+    async with inserted_generic(stage, stages, Stage) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
 async def inserted_round(round_: Round) -> AsyncIterator[Round]:
     async with inserted_generic(round_, rounds, Round) as row_inserted:
         yield row_inserted
@@ -113,16 +130,18 @@ async def inserted_user_x_club(user_x_club: UserXClub) -> AsyncIterator[UserXClu
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
     headers = {'Authorization': f'Bearer {get_mock_token()}'}
-    async with inserted_user(MOCK_USER) as user_inserted:
-        async with inserted_club(DUMMY_CLUB) as club_inserted:
-            async with inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted:
-                async with inserted_user_x_club(
-                    UserXClub(user_id=user_inserted.id, club_id=assert_some(club_inserted.id))
-                ) as user_x_club_inserted:
-                    yield AuthContext(
-                        headers=headers,
-                        user=user_inserted,
-                        club=club_inserted,
-                        tournament=tournament_inserted,
-                        user_x_club=user_x_club_inserted,
-                    )
+    async with (
+        inserted_user(MOCK_USER) as user_inserted,
+        inserted_club(DUMMY_CLUB) as club_inserted,
+        inserted_tournament(DUMMY_TOURNAMENT) as tournament_inserted,
+        inserted_user_x_club(
+            UserXClub(user_id=user_inserted.id, club_id=assert_some(club_inserted.id))
+        ) as user_x_club_inserted,
+    ):
+        yield AuthContext(
+            headers=headers,
+            user=user_inserted,
+            club=club_inserted,
+            tournament=tournament_inserted,
+            user_x_club=user_x_club_inserted,
+        )

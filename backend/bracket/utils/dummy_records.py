@@ -6,6 +6,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round
+from bracket.models.db.stage import Stage, StageType
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
@@ -28,15 +29,29 @@ DUMMY_TOURNAMENT = Tournament(
     players_can_be_in_multiple_teams=True,
 )
 
-DUMMY_ROUND1 = Round(
+DUMMY_STAGE1 = Stage(
     tournament_id=1,
+    created=DUMMY_MOCK_TIME,
+    is_active=False,
+    type=StageType.ROUND_ROBIN,
+)
+
+DUMMY_STAGE2 = Stage(
+    tournament_id=1,
+    created=DUMMY_MOCK_TIME,
+    is_active=True,
+    type=StageType.SWISS,
+)
+
+DUMMY_ROUND1 = Round(
+    stage_id=1,
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name='Round 1',
 )
 
 DUMMY_ROUND2 = Round(
-    tournament_id=1,
+    stage_id=1,
     created=DUMMY_MOCK_TIME,
     is_active=True,
     is_draft=False,
@@ -44,7 +59,7 @@ DUMMY_ROUND2 = Round(
 )
 
 DUMMY_ROUND3 = Round(
-    tournament_id=1,
+    stage_id=2,
     created=DUMMY_MOCK_TIME,
     is_draft=True,
     name='Round 3',
@@ -197,6 +212,7 @@ DUMMY_USER_X_CLUB = UserXClub(
 
 DUMMY_CLUBS = [DUMMY_CLUB]
 DUMMY_TOURNAMENTS = [DUMMY_TOURNAMENT]
+DUMMY_STAGES = [DUMMY_STAGE1, DUMMY_STAGE2]
 DUMMY_ROUNDS = [DUMMY_ROUND1, DUMMY_ROUND2, DUMMY_ROUND3]
 DUMMY_MATCHES = [DUMMY_MATCH1, DUMMY_MATCH2, DUMMY_MATCH3, DUMMY_MATCH4]
 DUMMY_USERS = [DUMMY_USER]

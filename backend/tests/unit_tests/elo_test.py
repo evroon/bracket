@@ -9,7 +9,7 @@ from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_PLAYER1, DUMMY_PL
 
 def test_elo_calculation() -> None:
     round_ = RoundWithMatches(
-        tournament_id=1,
+        stage_id=1,
         created=DUMMY_MOCK_TIME,
         is_draft=False,
         is_active=False,

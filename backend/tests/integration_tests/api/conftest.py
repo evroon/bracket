@@ -1,6 +1,5 @@
 # pylint: disable=redefined-outer-name
 import asyncio
-import os
 from asyncio import AbstractEventLoop
 from typing import AsyncIterator
 
@@ -12,8 +11,6 @@ from bracket.schema import metadata
 from tests.integration_tests.api.shared import UvicornTestServer
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
-
-os.environ['ENVIRONMENT'] = 'CI'
 
 
 @pytest.fixture(scope='module')

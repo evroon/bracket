@@ -35,6 +35,7 @@ pylint = ">=2.15.10"
 pytest = ">=7.2.0"
 pytest-cov = ">=4.0.0"
 pytest-asyncio = ">=0.20.3"
+pytest-xdist = ">=3.2.1"
 aiohttp = ">=3.8.3"
 aioresponses = ">=0.7.4"
 

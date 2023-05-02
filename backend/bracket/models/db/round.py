@@ -5,12 +5,13 @@ from pydantic import validator
 
 from bracket.models.db.match import Match, MatchWithTeamDetails
 from bracket.models.db.shared import BaseModelORM
+from bracket.models.db.stage import Stage
 from bracket.utils.types import assert_some
 
 
 class Round(BaseModelORM):
     id: int | None = None
-    tournament_id: int
+    stage_id: int
     created: datetime_utc
     is_draft: bool
     is_active: bool = False
@@ -21,7 +22,20 @@ class RoundWithMatches(Round):
     matches: list[MatchWithTeamDetails]
 
     @validator('matches', pre=True)
-    def handle_players(values: list[Match]) -> list[Match]:  # type: ignore[misc]
+    def handle_matches(values: list[Match]) -> list[Match]:  # type: ignore[misc]
+        if values == [None]:
+            return []
+        return values
+
+    def get_team_ids(self) -> set[int]:
+        return {assert_some(team.id) for match in self.matches for team in match.teams}
+
+
+class StageWithRounds(Stage):
+    rounds: list[RoundWithMatches]
+
+    @validator('rounds', pre=True)
+    def handle_rounds(values: list[Round]) -> list[Round]:  # type: ignore[misc]
         if isinstance(values, str):
             values_json = json.loads(values)
             if values_json == [None]:
@@ -30,18 +44,20 @@ class RoundWithMatches(Round):
 
         return values
 
-    def get_team_ids(self) -> set[int]:
-        return {assert_some(team.id) for match in self.matches for team in match.teams}
 
-
-class RoundBody(BaseModelORM):
+class RoundUpdateBody(BaseModelORM):
     name: str
     is_draft: bool
     is_active: bool
 
 
-class RoundToInsert(RoundBody):
+class RoundCreateBody(BaseModelORM):
+    name: str | None
+    stage_id: int
+
+
+class RoundToInsert(RoundUpdateBody):
     created: datetime_utc
-    tournament_id: int
+    stage_id: int
     is_draft: bool = False
     is_active: bool = False

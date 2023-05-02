@@ -14,7 +14,10 @@ from bracket.schema import matches
 router = APIRouter()
 
 
-@router.get("/tournaments/{tournament_id}/upcoming_matches", response_model=UpcomingMatchesResponse)
+@router.get(
+    "/tournaments/{tournament_id}/upcoming_matches",
+    response_model=UpcomingMatchesResponse,
+)
 async def get_matches_to_schedule(
     tournament_id: int,
     elo_diff_threshold: int = 100,
@@ -32,9 +35,6 @@ async def get_matches_to_schedule(
     return UpcomingMatchesResponse(
         data=await get_possible_upcoming_matches_for_players(tournament_id, match_filter)
     )
-    # return UpcomingMatchesResponse(
-    #     data=await get_possible_upcoming_matches_for_teams(tournament_id, MatchFilter())
-    # )
 
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)

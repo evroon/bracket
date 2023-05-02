@@ -1,9 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import DeclarativeMeta  # type: ignore[attr-defined]
-from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Float, Text
+from sqlalchemy.orm import declarative_base  # type: ignore[attr-defined]
+from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Enum, Float, Text
 
-Base: DeclarativeMeta = declarative_base()
+Base = declarative_base()
 metadata = Base.metadata
 DateTimeTZ = DateTime(timezone=True)
 
@@ -27,6 +26,27 @@ tournaments = Table(
     Column('players_can_be_in_multiple_teams', Boolean, nullable=False, server_default='f'),
 )
 
+stages = Table(
+    'stages',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('created', DateTimeTZ, nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
+    Column('is_active', Boolean, nullable=False, server_default='false'),
+    Column(
+        'type',
+        Enum(
+            'SINGLE_ELIMINATION',
+            'DOUBLE_ELIMINATION',
+            'SWISS',
+            'SWISS_DYNAMIC_TEAMS',
+            'ROUND_ROBIN',
+            name='stage_type',
+        ),
+        nullable=False,
+    ),
+)
+
 rounds = Table(
     'rounds',
     metadata,
@@ -35,7 +55,7 @@ rounds = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('is_draft', Boolean, nullable=False),
     Column('is_active', Boolean, nullable=False, server_default='false'),
-    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
+    Column('stage_id', BigInteger, ForeignKey('stages.id'), nullable=False),
 )
 
 matches = Table(

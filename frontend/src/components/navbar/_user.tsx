@@ -25,11 +25,14 @@ export const useNavbarStyles = createStyles((theme) => {
     link: {
       ...theme.fn.focusStyles(),
       display: 'flex',
+      width: rem(50),
+      height: rem(50),
       alignItems: 'center',
+      justifyContent: 'center',
       textDecoration: 'none',
       fontSize: theme.fontSizes.sm,
       color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
-      padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
+      padding: `${theme.spacing.xs} ${theme.spacing.xs}`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
@@ -46,7 +49,6 @@ export const useNavbarStyles = createStyles((theme) => {
     linkIcon: {
       ref: icon,
       color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
-      marginRight: theme.spacing.sm,
     },
 
     linkActive: {

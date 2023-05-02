@@ -1,13 +1,14 @@
-import { Grid, Image, Skeleton, Title } from '@mantine/core';
+import { Center, Grid, Image, Skeleton, Title } from '@mantine/core';
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
+import StagesTab from '../../../components/utils/stages_tab';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getRounds, getTournament } from '../../../services/adapter';
+import { getBaseApiUrl, getStages, getTournament } from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -41,8 +42,9 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
 
 export default function Dashboard() {
   const { tournamentData } = getTournamentIdFromRouter();
-  const swrRoundsResponse: SWRResponse = getRounds(tournamentData.id, true);
+  const swrStagesResponse: SWRResponse = getStages(tournamentData.id, true);
   const swrTournamentsResponse = getTournament(tournamentData.id);
+  const [activeStageId, setActiveStageId] = useState(null);
 
   const tournamentDataFull: Tournament =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
@@ -62,11 +64,15 @@ export default function Dashboard() {
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span={10}>
+          <Center>
+            <StagesTab swrStagesResponse={swrStagesResponse} setActiveStageId={setActiveStageId} />
+          </Center>
           <Brackets
             tournamentData={tournamentData}
-            swrRoundsResponse={swrRoundsResponse}
+            swrStagesResponse={swrStagesResponse}
             swrUpcomingMatchesResponse={null}
             readOnly
+            activeStageId={activeStageId}
           />
         </Grid.Col>
       </Grid>

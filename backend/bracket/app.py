@@ -1,10 +1,13 @@
 from fastapi import FastAPI
+from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
 from bracket.database import database, init_db_when_empty
-from bracket.routes import auth, clubs, matches, players, rounds, teams, tournaments, users
+from bracket.routes import auth, clubs, matches, players, rounds, stages, teams, tournaments, users
 
 init_sentry()
 
@@ -45,6 +48,16 @@ async def ping() -> str:
     return 'ping'
 
 
+@app.exception_handler(HTTPException)
+async def validation_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    return JSONResponse({'detail': exc.detail}, status_code=exc.status_code)
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    return JSONResponse({'detail': 'Internal server error'}, status_code=500)
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(auth.router, tags=['auth'])
@@ -53,5 +66,6 @@ app.include_router(tournaments.router, tags=['tournaments'])
 app.include_router(players.router, tags=['players'])
 app.include_router(rounds.router, tags=['rounds'])
 app.include_router(matches.router, tags=['matches'])
+app.include_router(stages.router, tags=['stages'])
 app.include_router(teams.router, tags=['teams'])
 app.include_router(users.router, tags=['users'])

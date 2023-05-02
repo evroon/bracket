@@ -10,7 +10,7 @@ from bracket.models.db.player import Player
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
 from bracket.sql.players import get_active_players_in_tournament
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.utils.types import assert_some
 
 
@@ -23,9 +23,14 @@ async def get_possible_upcoming_matches_for_players(
 ) -> list[SuggestedMatch]:
     random.seed(10)
     suggestions: set[SuggestedMatch] = set()
-    all_rounds = await get_rounds_with_matches(tournament_id)
-    draft_round = next((round_ for round_ in all_rounds if round_.is_draft), None)
-    other_rounds = [round_ for round_ in all_rounds if not round_.is_draft]
+    stages = await get_stages_with_rounds_and_matches(tournament_id)
+    active_stage = next((stage for stage in stages if stage.is_active), None)
+
+    if active_stage is None:
+        raise HTTPException(400, 'There is no active stage, so no matches can be scheduled.')
+
+    draft_round = next((round_ for round_ in active_stage.rounds if round_.is_draft), None)
+    other_rounds = [round_ for round_ in active_stage.rounds if not round_.is_draft]
     max_matches_per_round = (
         max(len(other_round.matches) for other_round in other_rounds)
         if len(other_rounds) > 0

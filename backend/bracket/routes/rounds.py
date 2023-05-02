@@ -4,33 +4,21 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.round import Round, RoundBody, RoundToInsert, RoundWithMatches
-from bracket.models.db.user import UserPublic
-from bracket.routes.auth import (
-    user_authenticated_for_tournament,
-    user_authenticated_or_public_dashboard,
+from bracket.models.db.round import (
+    Round,
+    RoundCreateBody,
+    RoundToInsert,
+    RoundUpdateBody,
+    RoundWithMatches,
 )
-from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
+from bracket.models.db.user import UserPublic
+from bracket.routes.auth import user_authenticated_for_tournament
+from bracket.routes.models import SuccessResponse
 from bracket.routes.util import round_dependency, round_with_matches_dependency
 from bracket.schema import rounds
-from bracket.sql.rounds import get_next_round_name, get_rounds_with_matches
+from bracket.sql.rounds import get_next_round_name
 
 router = APIRouter()
-
-
-@router.get("/tournaments/{tournament_id}/rounds", response_model=RoundsWithMatchesResponse)
-async def get_rounds(
-    tournament_id: int,
-    user: UserPublic = Depends(user_authenticated_or_public_dashboard),
-    no_draft_rounds: bool = False,
-) -> RoundsWithMatchesResponse:
-    rounds_ = await get_rounds_with_matches(
-        tournament_id, no_draft_rounds=user is None or no_draft_rounds
-    )
-    if user is not None:
-        return RoundsWithMatchesResponse(data=rounds_)
-
-    return RoundsWithMatchesResponse(data=[round_ for round_ in rounds_ if not round_.is_draft])
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
@@ -57,14 +45,16 @@ async def delete_round(
 
 @router.post("/tournaments/{tournament_id}/rounds", response_model=SuccessResponse)
 async def create_round(
-    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    round_body: RoundCreateBody,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     await database.execute(
         query=rounds.insert(),
         values=RoundToInsert(
             created=datetime_utc.now(),
-            tournament_id=tournament_id,
-            name=await get_next_round_name(tournament_id),
+            stage_id=round_body.stage_id,
+            name=await get_next_round_name(tournament_id, round_body.stage_id),
         ).dict(),
     )
     return SuccessResponse()
@@ -74,9 +64,9 @@ async def create_round(
 async def update_round_by_id(
     tournament_id: int,
     round_id: int,
-    round_body: RoundBody,
+    round_body: RoundUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    round: Round = Depends(round_dependency),  # pylint: disable=redefined-builtin
+    round_: Round = Depends(round_dependency),  # pylint: disable=redefined-builtin
 ) -> SuccessResponse:
     values = {'tournament_id': tournament_id, 'round_id': round_id}
     query = '''
@@ -90,7 +80,12 @@ async def update_round_by_id(
                 CASE WHEN rounds.id=:round_id THEN :is_active
                      ELSE is_active AND NOT :is_active
                 END
-        WHERE rounds.tournament_id = :tournament_id
+        WHERE rounds.id IN (
+            SELECT rounds.id
+            FROM rounds
+            JOIN stages s on s.id = rounds.stage_id
+            WHERE s.tournament_id = :tournament_id
+        )
     '''
     await database.execute(
         query=query,
@@ -99,7 +94,12 @@ async def update_round_by_id(
     query = '''
         UPDATE rounds
         SET name = :name
-        WHERE rounds.tournament_id = :tournament_id
+        WHERE rounds.id IN (
+            SELECT rounds.id
+            FROM rounds
+            JOIN stages s on s.id = rounds.stage_id
+            WHERE s.tournament_id = :tournament_id
+        )
         AND rounds.id = :round_id
     '''
     await database.execute(query=query, values={**values, 'name': round_body.name})

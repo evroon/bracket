@@ -3,10 +3,10 @@ from starlette import status
 
 from bracket.database import database
 from bracket.models.db.match import Match
-from bracket.models.db.round import Round, RoundWithMatches
+from bracket.models.db.round import Round, RoundWithMatches, StageWithRounds
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.schema import matches, rounds, teams
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
 
@@ -28,15 +28,31 @@ async def round_dependency(tournament_id: int, round_id: int) -> Round:
 
 
 async def round_with_matches_dependency(tournament_id: int, round_id: int) -> RoundWithMatches:
-    rounds_ = await get_rounds_with_matches(tournament_id, no_draft_rounds=False, round_id=round_id)
+    stages = await get_stages_with_rounds_and_matches(
+        tournament_id, no_draft_rounds=False, round_id=round_id
+    )
 
-    if len(rounds_) < 1:
+    if len(stages) < 1:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Could not find round with id {round_id}",
         )
 
-    return rounds_[0]
+    return stages[0].rounds[0]
+
+
+async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithRounds:
+    stages = await get_stages_with_rounds_and_matches(
+        tournament_id, no_draft_rounds=False, stage_id=stage_id
+    )
+
+    if len(stages) < 1:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Could not find stage with id {stage_id}",
+        )
+
+    return stages[0]
 
 
 async def match_dependency(tournament_id: int, match_id: int) -> Match:

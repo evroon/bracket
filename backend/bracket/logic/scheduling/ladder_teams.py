@@ -2,16 +2,16 @@ from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
 from bracket.models.db.match import MatchFilter, SuggestedMatch
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.rounds import get_rounds_for_stage
 from bracket.sql.teams import get_teams_with_members
 
 
 async def get_possible_upcoming_matches_for_teams(
-    tournament_id: int, filter_: MatchFilter
+    tournament_id: int, stage_id: int, filter_: MatchFilter
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
-    rounds_response = await get_rounds_with_matches(tournament_id)
-    draft_round = next((round for round in rounds_response if round.is_draft), None)
+    rounds = await get_rounds_for_stage(tournament_id, stage_id)
+    draft_round = next((round_ for round_ in rounds if round_.is_draft), None)
     if draft_round is None:
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
 

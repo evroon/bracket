@@ -5,10 +5,10 @@ from decimal import Decimal
 from pydantic import BaseModel
 
 from bracket.database import database
-from bracket.models.db.round import RoundWithMatches
+from bracket.models.db.round import RoundWithMatches, StageWithRounds
 from bracket.schema import players
 from bracket.sql.players import get_all_players_in_tournament
-from bracket.sql.rounds import get_rounds_with_matches
+from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.utils.types import assert_some
 
 START_ELO: int = 1200
@@ -83,8 +83,13 @@ def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int,
 
 
 async def recalculate_elo_for_tournament_id(tournament_id: int) -> None:
-    rounds_response = await get_rounds_with_matches(tournament_id)
-    elo_per_player = calculate_elo_per_player(rounds_response)
+    stages = await get_stages_with_rounds_and_matches(tournament_id)
+    for stage in stages:
+        await recalculate_elo_for_stage(tournament_id, stage)
+
+
+async def recalculate_elo_for_stage(tournament_id: int, stage: StageWithRounds) -> None:
+    elo_per_player = calculate_elo_per_player(stage.rounds)
 
     for player_id, statistics in elo_per_player.items():
         await database.execute(
