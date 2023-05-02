@@ -1,5 +1,5 @@
 import { Divider, Flex, Group, NumberInput, Radio } from '@mantine/core';
-import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons';
+import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons-react';
 import { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../../interfaces/match';

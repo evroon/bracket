@@ -1,5 +1,5 @@
 import { Badge, Button } from '@mantine/core';
-import { IconCalendarPlus, IconCheck } from '@tabler/icons';
+import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 

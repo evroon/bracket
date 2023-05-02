@@ -2,7 +2,7 @@ import { Navbar, createStyles, getStylesRef, rem } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { FaBook } from '@react-icons/all-files/fa/FaBook';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
-import { IconCategory2, IconLogout, IconUser } from '@tabler/icons';
+import { IconCategory2, IconLogout, IconUser } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 

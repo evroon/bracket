@@ -28,6 +28,7 @@
     "@next/bundle-analyzer": "^13.3.1",
     "@react-icons/all-files": "^4.1.0",
     "@tabler/icons": "^2.17.0",
+    "@tabler/icons-react": "^2.17.0",
     "axios": "^1.4.0",
     "cookies-next": "^2.1.1",
     "date-fns": "^2.29.3",

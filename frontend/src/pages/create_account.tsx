@@ -11,7 +11,7 @@ import {
   createStyles,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconArrowLeft } from '@tabler/icons';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
