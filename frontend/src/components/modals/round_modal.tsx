@@ -8,7 +8,7 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconPencil } from '@tabler/icons';
+import { IconPencil } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 

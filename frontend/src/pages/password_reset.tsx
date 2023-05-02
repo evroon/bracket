@@ -11,7 +11,7 @@ import {
   Title,
   createStyles,
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons';
+import { IconArrowLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 
 import NotFoundTitle from './404';

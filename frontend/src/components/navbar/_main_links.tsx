@@ -1,12 +1,12 @@
 import { Tooltip, UnstyledButton } from '@mantine/core';
-import { IconTournament, IconUser, IconUsers, TablerIcon } from '@tabler/icons';
+import { Icon, IconTournament, IconUser, IconUsers } from '@tabler/icons-react';
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
 import { useNavbarStyles } from './_user';
 
 interface MainLinkProps {
-  icon: TablerIcon;
+  icon: Icon;
   label: string;
   endpoint: string;
   router: NextRouter;

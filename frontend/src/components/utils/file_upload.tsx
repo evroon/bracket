@@ -1,6 +1,6 @@
 import { Button, Group, Text, createStyles } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
-import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons';
+import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 import { useRef } from 'react';
 
 import { Tournament } from '../../interfaces/tournament';
