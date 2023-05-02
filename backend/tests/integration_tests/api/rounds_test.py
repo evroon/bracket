@@ -1,16 +1,10 @@
-import pytest
-
 from bracket.database import database
 from bracket.models.db.round import Round
 from bracket.schema import rounds
 from bracket.utils.db import fetch_one_parsed_certain
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_ROUND1, DUMMY_STAGE1, DUMMY_TEAM1
+from bracket.utils.dummy_records import DUMMY_ROUND1, DUMMY_STAGE1, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
-from tests.integration_tests.api.shared import (
-    SUCCESS_RESPONSE,
-    send_request,
-    send_tournament_request,
-)
+from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
     assert_row_count_and_clear,
@@ -18,47 +12,6 @@ from tests.integration_tests.sql import (
     inserted_stage,
     inserted_team,
 )
-
-
-@pytest.mark.parametrize(("with_auth",), [(True,), (False,)])
-async def test_rounds_endpoint(
-    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext, with_auth: bool
-) -> None:
-    async with (
-        inserted_team(DUMMY_TEAM1),
-        inserted_stage(DUMMY_STAGE1) as stage_inserted,
-        inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
-    ):
-        if with_auth:
-            response = await send_tournament_request(HTTPMethod.GET, 'stages', auth_context, {})
-        else:
-            response = await send_request(
-                HTTPMethod.GET,
-                f'tournaments/{auth_context.tournament.id}/stages?no_draft_rounds=true',
-            )
-
-        assert response == {
-            'data': [
-                {
-                    'id': stage_inserted.id,
-                    'tournament_id': 1,
-                    'created': DUMMY_MOCK_TIME.isoformat(),
-                    'type': 'ROUND_ROBIN',
-                    'is_active': False,
-                    'rounds': [
-                        {
-                            'id': round_inserted.id,
-                            'stage_id': stage_inserted.id,
-                            'created': '2022-01-11T04:32:11+00:00',
-                            'is_draft': False,
-                            'is_active': False,
-                            'name': 'Round 1',
-                            'matches': [],
-                        }
-                    ],
-                }
-            ]
-        }
 
 
 async def test_create_round(

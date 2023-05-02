@@ -1,5 +1,6 @@
 from bracket.database import database
 from bracket.models.db.round import StageWithRounds
+from bracket.models.db.stage import Stage, StageCreateBody
 from bracket.utils.types import dict_without_none
 
 
@@ -68,3 +69,20 @@ async def sql_delete_stage(tournament_id: int, stage_id: int) -> None:
     await database.fetch_one(
         query=query, values={'stage_id': stage_id, 'tournament_id': tournament_id}
     )
+
+
+async def sql_create_stage(stage: StageCreateBody, tournament_id: int) -> Stage:
+    async with database.transaction():
+        query = '''
+            INSERT INTO stages (type, created, is_active, tournament_id)
+            VALUES (:stage_type, NOW(), false, :tournament_id)
+            RETURNING *
+            '''
+        result = await database.fetch_one(
+            query=query, values={'stage_type': stage.type.value, 'tournament_id': tournament_id}
+        )
+
+    if result is None:
+        raise ValueError('Could not create stage')
+
+    return Stage.parse_obj(result._mapping)

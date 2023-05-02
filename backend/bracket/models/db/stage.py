@@ -26,7 +26,12 @@ class StageUpdateBody(BaseModelORM):
     is_active: bool
 
 
-class StageToInsert(StageUpdateBody):
+class StageCreateBody(BaseModelORM):
+    type: StageType
+
+
+class StageToInsert(BaseModelORM):
     created: datetime_utc
     tournament_id: int
     type: StageType
+    is_active: bool = False

@@ -3,7 +3,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.models.db.match import Match
-from bracket.models.db.round import Round, RoundWithMatches
+from bracket.models.db.round import Round, RoundWithMatches, StageWithRounds
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.schema import matches, rounds, teams
 from bracket.sql.stages import get_stages_with_rounds_and_matches
@@ -41,7 +41,7 @@ async def round_with_matches_dependency(tournament_id: int, round_id: int) -> Ro
     return stages[0].rounds[0]
 
 
-async def stage_dependency(tournament_id: int, stage_id: int) -> RoundWithMatches:
+async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithRounds:
     stages = await get_stages_with_rounds_and_matches(
         tournament_id, no_draft_rounds=False, stage_id=stage_id
     )
@@ -52,7 +52,7 @@ async def stage_dependency(tournament_id: int, stage_id: int) -> RoundWithMatche
             detail=f"Could not find stage with id {stage_id}",
         )
 
-    return stages[0].rounds[0]
+    return stages[0]
 
 
 async def match_dependency(tournament_id: int, match_id: int) -> Match:
