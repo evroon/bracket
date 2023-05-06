@@ -15,3 +15,10 @@ USER bracket
 RUN set -ex \
     && pip3 install --upgrade pip pipenv wheel virtualenv \
     && pipenv install --deploy
+
+CMD pipenv run pipenv run gunicorn \
+    -k bracket.uvicorn.RestartableUvicornWorker \
+    bracket.app:app \
+    --bind localhost:8400 \
+    --workers 1 \
+    --reload

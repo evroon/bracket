@@ -50,7 +50,8 @@ class CIConfig(Config):
 
 
 class DevelopmentConfig(Config):
-    allow_insecure_http_sso: bool = Field(default=True)
+    allow_insecure_http_sso = True
+    jwt_secret = 'abd84ebeb6581c26b53fa30d89c4e7fbc48ee5b4f3b8ddedb7586cfeb3daca0c'
 
     class Config:
         env_file = 'dev.env'

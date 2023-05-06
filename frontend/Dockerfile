@@ -1,11 +1,12 @@
-FROM yarnpkg/node-yarn
+FROM node:18-alpine
 
 COPY . /app
 WORKDIR /app
 
 # -- Install dependencies:
-RUN addgroup --system bracket && adduser --system bracket --ingroup bracket \
-    && chown -R bracket:bracket /app
-USER bracket
+#RUN addgroup bracket && adduser bracket --ingroup bracket \
+#    && chown -R bracket:bracket /app
+#USER bracket
 
-RUN yarn run
+RUN cd /app && yarn && yarn next telemetry disable
+CMD yarn run dev

@@ -56,8 +56,7 @@ The following starts the frontend and backend for local development:
 ### Frontend
 ```
 cd frontend
-yarn
-npm run dev
+yarn run dev
 ```
 
 ### Backend
