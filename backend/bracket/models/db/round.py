@@ -1,11 +1,12 @@
 import json
+from typing import Any
 
 from heliclockter import datetime_utc
-from pydantic import validator
+from pydantic import validator, root_validator
 
 from bracket.models.db.match import Match, MatchWithTeamDetails
 from bracket.models.db.shared import BaseModelORM
-from bracket.models.db.stage import Stage
+from bracket.models.db.stage import Stage, StageType
 from bracket.utils.types import assert_some
 
 
@@ -33,6 +34,17 @@ class RoundWithMatches(Round):
 
 class StageWithRounds(Stage):
     rounds: list[RoundWithMatches]
+    type_name: str
+
+    @root_validator(pre=True)
+    def fill_type_name(cls, values: Any) -> Any:
+        match values['type']:
+            case str() as type_:
+                values['type_name'] = type_.lower().capitalize().replace('_', ' ')
+            case StageType() as type_:
+                values['type_name'] = type_.value.lower().capitalize().replace('_', ' ')
+
+        return values
 
     @validator('rounds', pre=True)
     def handle_rounds(values: list[Round]) -> list[Round]:  # type: ignore[misc]

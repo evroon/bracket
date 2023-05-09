@@ -1,14 +1,15 @@
 import { Tabs, TabsProps, rem } from '@mantine/core';
-import { IconSettings } from '@tabler/icons-react';
+import { BiCircle } from '@react-icons/all-files/bi/BiCircle';
+import { MdPlayCircleFilled } from '@react-icons/all-files/md/MdPlayCircleFilled';
 
 import { StageInterface } from '../../interfaces/stage';
 import { responseIsValid } from './util';
 
-function StyledTabs(props: TabsProps & { setActiveStageId: any }) {
+function StyledTabs(props: TabsProps & { setSelectedStageId: any }) {
   return (
     <Tabs
       unstyled
-      onTabChange={(value) => props.setActiveStageId(value)}
+      onTabChange={(value) => props.setSelectedStageId(value)}
       mb="1rem"
       styles={(theme) => ({
         tab: {
@@ -65,7 +66,7 @@ function StyledTabs(props: TabsProps & { setActiveStageId: any }) {
   );
 }
 
-export default function StagesTab({ swrStagesResponse, setActiveStageId }: any) {
+export default function StagesTab({ swrStagesResponse, activeStageId, setActiveStageId }: any) {
   if (!responseIsValid(swrStagesResponse)) {
     return <></>;
   }
@@ -73,13 +74,13 @@ export default function StagesTab({ swrStagesResponse, setActiveStageId }: any) 
     <Tabs.Tab
       value={item.id.toString()}
       key={item.id.toString()}
-      icon={<IconSettings size="1rem" />}
+      icon={item.is_active ? <MdPlayCircleFilled size="1rem" /> : <BiCircle size="1rem" />}
     >
-      {item.type}
+      {item.type_name}
     </Tabs.Tab>
   ));
   return (
-    <StyledTabs setActiveStageId={setActiveStageId}>
+    <StyledTabs value={activeStageId} setSelectedStageId={setActiveStageId}>
       <Tabs.List>{items}</Tabs.List>
     </StyledTabs>
   );
