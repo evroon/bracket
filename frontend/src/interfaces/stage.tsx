@@ -3,7 +3,9 @@ export interface StageInterface {
   tournament_id: number;
   created: string;
   type: string;
+  type_name: string;
   name: string;
+  status: string;
   is_active: boolean;
   rounds: StageInterface[];
 }

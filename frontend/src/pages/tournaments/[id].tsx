@@ -61,6 +61,13 @@ export default function TournamentPage() {
     draft_round = swrStagesResponse.data.data
       .flat()
       .filter((stage: StageInterface) => stage.is_draft);
+
+    const activeTab = swrStagesResponse.data.data.filter(
+      (stage: StageInterface) => stage.is_active
+    );
+    if (activeTab.length > 0 && activeStageId == null && activeTab[0].id != null) {
+      setActiveStageId(activeTab[0].id.toString());
+    }
   }
 
   const scheduler =
@@ -120,7 +127,11 @@ export default function TournamentPage() {
       </Grid>
       <div style={{ marginTop: '15px' }}>
         <Center>
-          <StagesTab swrStagesResponse={swrStagesResponse} setActiveStageId={setActiveStageId} />
+          <StagesTab
+            swrStagesResponse={swrStagesResponse}
+            activeStageId={activeStageId}
+            setActiveStageId={setActiveStageId}
+          />
         </Center>
         <Brackets
           tournamentData={tournamentDataFull}

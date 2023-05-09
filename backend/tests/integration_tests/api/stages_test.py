@@ -46,6 +46,7 @@ async def test_stages_endpoint(
                     'tournament_id': 1,
                     'created': DUMMY_MOCK_TIME.isoformat(),
                     'type': 'ROUND_ROBIN',
+                    'type_name': 'Round robin',
                     'is_active': False,
                     'rounds': [
                         {

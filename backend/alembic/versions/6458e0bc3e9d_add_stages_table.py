@@ -39,6 +39,17 @@ def upgrade() -> None:
             ),
             nullable=False,
         ),
+        sa.Column(
+            'status',
+            ENUM(
+                'COMPLETED',
+                'ACTIVE',
+                'INACTIVE',
+                name='stage_status',
+                create_type=True,
+            ),
+            nullable=False,
+        ),
         sa.ForeignKeyConstraint(
             ['tournament_id'],
             ['tournaments.id'],
