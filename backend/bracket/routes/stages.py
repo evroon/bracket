@@ -52,6 +52,12 @@ async def delete_stage(
             detail="Stage contains rounds, please delete those first",
         )
 
+    if stage.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Stage is active, please activate another stage first",
+        )
+
     await sql_delete_stage(tournament_id, stage_id)
 
     await recalculate_elo_for_tournament_id(tournament_id)
