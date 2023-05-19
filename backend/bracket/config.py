@@ -3,7 +3,7 @@ import os
 from enum import auto
 
 import sentry_sdk
-from pydantic import BaseSettings, PostgresDsn
+from pydantic import BaseSettings, Field, PostgresDsn
 
 from bracket.utils.types import EnumAutoStr
 
@@ -34,39 +34,34 @@ class Environment(EnumAutoStr):
 class Config(BaseSettings):
     pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
     jwt_secret: str
-    cors_origins: str = ''
-    cors_origin_regex: str = ''
-    admin_email: str | None = None
-    admin_password: str | None = None
-    sentry_dsn: str | None = None
-    allow_insecure_http_sso: bool = False
-    base_url: str = 'http://localhost:8400'
+    cors_origins: str = Field(default='')
+    cors_origin_regex: str = Field(default='')
+    admin_email: str | None = Field(default=None)
+    admin_password: str | None = Field(default=None)
+    sentry_dsn: str | None = Field(default=None)
+    allow_insecure_http_sso: bool = Field(default=False)
+    base_url: str = Field(default='http://localhost:8400')
+    allow_user_registration: bool = Field(default=True)
 
 
 class CIConfig(Config):
-    allow_insecure_http_sso = False
-
     class Config:
         env_file = 'ci.env'
 
 
 class DevelopmentConfig(Config):
-    allow_insecure_http_sso = True
+    allow_insecure_http_sso: bool = Field(default=True)
 
     class Config:
         env_file = 'dev.env'
 
 
 class ProductionConfig(Config):
-    allow_insecure_http_sso = False
-
     class Config:
         env_file = 'prod.env'
 
 
 class DemoConfig(Config):
-    allow_insecure_http_sso = False
-
     class Config:
         env_file = 'demo.env'
 
