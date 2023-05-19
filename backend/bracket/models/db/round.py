@@ -2,7 +2,7 @@ import json
 from typing import Any
 
 from heliclockter import datetime_utc
-from pydantic import validator, root_validator
+from pydantic import root_validator, validator
 
 from bracket.models.db.match import Match, MatchWithTeamDetails
 from bracket.models.db.shared import BaseModelORM
