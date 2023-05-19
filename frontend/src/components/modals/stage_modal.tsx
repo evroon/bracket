@@ -23,7 +23,6 @@ function CreateStageForm(
       onSubmit={form.onSubmit(async (values) => {
         await createStage(tournament.id, values.type);
         await swrClubsResponse.mutate(null);
-        setOpened(false);
       })}
     >
       <Divider mt={12} />
