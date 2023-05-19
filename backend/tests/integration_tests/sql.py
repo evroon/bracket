@@ -26,10 +26,8 @@ from bracket.schema import (
     users,
     users_x_clubs,
 )
-from bracket.utils.conversion import to_string_mapping
-from bracket.utils.db import fetch_one_parsed
+from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
-from bracket.utils.logging import logger
 from bracket.utils.types import BaseModelT, assert_some
 from tests.integration_tests.mocks import MOCK_USER, get_mock_token
 from tests.integration_tests.models import AuthContext
@@ -44,18 +42,8 @@ async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
 async def inserted_generic(
     data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
 ) -> AsyncIterator[BaseModelT]:
-    try:
-        last_record_id = await database.execute(
-            query=table.insert(), values=to_string_mapping(data_model)  # type: ignore[arg-type]
-        )
-    except:
-        logger.exception(f'Could not insert {type(data_model).__name__}')
-        raise
+    last_record_id, row_inserted = await insert_generic(database, data_model, table, return_type)
 
-    row_inserted = await fetch_one_parsed(
-        database, return_type, table.select().where(table.c.id == last_record_id)
-    )
-    assert isinstance(row_inserted, return_type)
     try:
         yield row_inserted
     finally:
