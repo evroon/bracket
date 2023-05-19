@@ -1,4 +1,5 @@
 #!/bin/bash
+set -evo pipefail
 
 function run_frontend() {
   cd frontend && yarn run dev
