@@ -1,7 +1,7 @@
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { StageInterface } from '../../interfaces/stage';
+import { StageWithRounds } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import { deleteStage } from '../../services/stage';
 import DeleteButton from '../buttons/delete';
@@ -15,14 +15,14 @@ export default function StagesTable({
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
 }) {
-  const stages: StageInterface[] =
+  const stages: StageWithRounds[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
   const tableState = getTableState('id');
 
   if (swrStagesResponse.error) return <RequestErrorAlert error={swrStagesResponse.error} />;
 
   const rows = stages
-    .sort((s1: StageInterface, s2: StageInterface) => sortTableEntries(s1, s2, tableState))
+    .sort((s1: StageWithRounds, s2: StageWithRounds) => sortTableEntries(s1, s2, tableState))
     .map((stage) => (
       <tr key={stage.type_name}>
         <td>{stage.type_name}</td>

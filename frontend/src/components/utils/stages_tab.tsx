@@ -2,7 +2,7 @@ import { Tabs, TabsProps, rem } from '@mantine/core';
 import { BiCircle } from '@react-icons/all-files/bi/BiCircle';
 import { MdPlayCircleFilled } from '@react-icons/all-files/md/MdPlayCircleFilled';
 
-import { StageInterface } from '../../interfaces/stage';
+import { StageWithRounds } from '../../interfaces/stage';
 import { responseIsValid } from './util';
 
 function StyledTabs(props: TabsProps & { setSelectedStageId: any }) {
@@ -70,7 +70,7 @@ export default function StagesTab({ swrStagesResponse, activeStageId, setActiveS
   if (!responseIsValid(swrStagesResponse)) {
     return <></>;
   }
-  const items = swrStagesResponse.data.data.map((item: StageInterface) => (
+  const items = swrStagesResponse.data.data.map((item: StageWithRounds) => (
     <Tabs.Tab
       value={item.id.toString()}
       key={item.id.toString()}

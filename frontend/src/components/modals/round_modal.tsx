@@ -12,7 +12,7 @@ import { IconPencil } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { StageInterface } from '../../interfaces/round';
+import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
@@ -24,7 +24,7 @@ export default function RoundModal({
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  round: StageInterface;
+  round: RoundInterface;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
@@ -47,7 +47,7 @@ export default function RoundModal({
       <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Round">
         <form
           onSubmit={form.onSubmit(async (values) => {
-            await updateRound(tournamentData.id, round.id, values as StageInterface);
+            await updateRound(tournamentData.id, round.id, values as RoundInterface);
             await swrRoundsResponse.mutate(null);
             setOpened(false);
           })}

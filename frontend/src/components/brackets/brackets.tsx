@@ -3,7 +3,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { StageInterface } from '../../interfaces/round';
+import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
@@ -18,7 +18,7 @@ function getRoundsGridCols(
 ) {
   const rounds = stages_map[activeStageId].rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
-    .map((round: StageInterface) => (
+    .map((round: RoundInterface) => (
       <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
         <Round
           tournamentData={tournamentData}
@@ -68,7 +68,7 @@ export default function Brackets({
     );
   }
   const stages_map = Object.fromEntries(
-    swrStagesResponse.data.data.map((x: StageInterface) => [x.id, x])
+    swrStagesResponse.data.data.map((x: RoundInterface) => [x.id, x])
   );
   const rounds =
     stages_map[activeStageId].rounds.length > 0 ? (

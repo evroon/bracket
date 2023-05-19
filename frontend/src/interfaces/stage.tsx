@@ -1,4 +1,6 @@
-export interface StageInterface {
+import { RoundInterface } from './round';
+
+export interface StageWithRounds {
   id: number;
   tournament_id: number;
   created: string;
@@ -6,5 +8,5 @@ export interface StageInterface {
   type_name: string;
   status: string;
   is_active: boolean;
-  rounds: StageInterface[];
+  rounds: RoundInterface[];
 }
