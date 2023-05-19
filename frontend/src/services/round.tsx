@@ -1,9 +1,11 @@
 import { StageInterface } from '../interfaces/round';
 import { createAxios, handleRequestError } from './adapter';
 
-export async function createRound(tournament_id: number) {
+export async function createRound(tournament_id: number, stage_id: number) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/rounds`)
+    .post(`tournaments/${tournament_id}/rounds`, {
+      stage_id,
+    })
     .catch((response: any) => handleRequestError(response));
 }
 

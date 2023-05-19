@@ -121,14 +121,16 @@ export default function TournamentPage() {
             </Button>
             {tournamentModal}
             {stagesModal}
-            <SaveButton
-              onClick={async () => {
-                await createRound(tournamentData.id);
-                await swrStagesResponse.mutate();
-              }}
-              leftIcon={<GoPlus size={24} />}
-              title="Add Round"
-            />
+            {activeStageId == null ? null : (
+              <SaveButton
+                onClick={async () => {
+                  await createRound(tournamentData.id, activeStageId);
+                  await swrStagesResponse.mutate();
+                }}
+                leftIcon={<GoPlus size={24} />}
+                title="Add Round"
+              />
+            )}
           </Group>
         </Grid.Col>
       </Grid>
