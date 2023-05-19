@@ -13,7 +13,7 @@ database = Database(config.pg_dsn)
 engine = sqlalchemy.create_engine(config.pg_dsn)
 
 
-async def init_db_when_empty() -> None:
+async def init_db_when_empty() -> int | None:
     table_count = await database.fetch_val(
         'SELECT count(*) FROM information_schema.tables WHERE table_schema = \'public\''
     )
@@ -33,4 +33,7 @@ async def init_db_when_empty() -> None:
             password_hash=pwd_context.hash(config.admin_password),
             created=datetime_utc.now(),
         )
-        await database.execute(query=users.insert(), values=admin.dict())
+        user_id: int = await database.execute(query=users.insert(), values=admin.dict())
+        return user_id
+
+    return None
