@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc, timedelta
 from starlette import status
 
+from bracket.config import Environment, environment
 from bracket.models.db.user import (
     User,
     UserPasswordToUpdate,
@@ -68,6 +69,9 @@ async def patch_user_password(
 
 @router.post("/users/register", response_model=TokenResponse)
 async def register_user(user_to_register: UserToRegister) -> TokenResponse:
+    if environment is Environment.PRODUCTION:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Account creation is unavailable for now')
+
     user = User(
         email=user_to_register.email,
         password_hash=pwd_context.hash(user_to_register.password),

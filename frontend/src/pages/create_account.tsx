@@ -8,10 +8,10 @@ import {
   Paper,
   TextInput,
   Title,
-  createStyles,
+  createStyles, Alert,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconArrowLeft } from '@tabler/icons-react';
+import {IconAlertCircle, IconArrowLeft} from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -72,6 +72,9 @@ export default function CreateAccount() {
         Create a new account
       </Title>
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+        <Alert icon={<IconAlertCircle size={16} />} mb={16} title='Unavailable' color="red" radius="lg">
+          Account creation is disabled on this domain for now since bracket is still in beta phase
+        </Alert>
         <form
           onSubmit={form.onSubmit(async (values) => {
             await registerAndRedirect(values);
