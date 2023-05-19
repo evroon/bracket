@@ -8,11 +8,7 @@ import { Tournament } from '../../interfaces/tournament';
 import { createStage } from '../../services/stage';
 import StagesTable from '../tables/stages';
 
-function CreateStageForm(
-  tournament: Tournament,
-  swrClubsResponse: SWRResponse,
-  setOpened: (value: ((prevState: boolean) => boolean) | boolean) => void
-) {
+function CreateStageForm(tournament: Tournament, swrClubsResponse: SWRResponse) {
   const form = useForm({
     initialValues: { type: 'ROUND_ROBIN' },
     validate: {},
@@ -56,7 +52,7 @@ export default function StagesModal({
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="Add or remove stages">
         <StagesTable tournament={tournament} swrStagesResponse={swrStagesResponse} />
-        {CreateStageForm(tournament, swrStagesResponse, setOpened)}
+        {CreateStageForm(tournament, swrStagesResponse)}
       </Modal>
 
       <Button

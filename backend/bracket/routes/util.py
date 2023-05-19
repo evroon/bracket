@@ -32,13 +32,15 @@ async def round_with_matches_dependency(tournament_id: int, round_id: int) -> Ro
         tournament_id, no_draft_rounds=False, round_id=round_id
     )
 
-    if len(stages) < 1:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Could not find round with id {round_id}",
-        )
+    for stage in stages:
+        for round_ in stage.rounds:
+            if round_ is not None:
+                return round_
 
-    return stages[0].rounds[0]
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Could not find round with id {round_id}",
+    )
 
 
 async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithRounds:
