@@ -6,7 +6,8 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
 import StagesTab from '../../../components/utils/stages_tab';
-import { getTournamentIdFromRouter } from '../../../components/utils/util';
+import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
+import { StageInterface } from '../../../interfaces/stage';
 import { Tournament } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getStages, getTournament } from '../../../services/adapter';
 
@@ -53,6 +54,16 @@ export default function Dashboard() {
     return <NotFoundTitle />;
   }
 
+  if (responseIsValid(swrStagesResponse)) {
+    const activeTab = swrStagesResponse.data.data.filter(
+      (stage: StageInterface) => stage.is_active
+    );
+
+    if (activeTab.length > 0 && activeStageId == null && activeTab[0].id != null) {
+      setActiveStageId(activeTab[0].id.toString());
+    }
+  }
+
   return (
     <>
       <Head>
@@ -65,7 +76,11 @@ export default function Dashboard() {
         </Grid.Col>
         <Grid.Col span={10}>
           <Center>
-            <StagesTab swrStagesResponse={swrStagesResponse} setActiveStageId={setActiveStageId} />
+            <StagesTab
+              activeStageId={activeStageId}
+              swrStagesResponse={swrStagesResponse}
+              setActiveStageId={setActiveStageId}
+            />
           </Center>
           <Brackets
             tournamentData={tournamentData}
