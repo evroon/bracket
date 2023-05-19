@@ -4,7 +4,6 @@ export interface StageInterface {
   created: string;
   type: string;
   type_name: string;
-  name: string;
   status: string;
   is_active: boolean;
   rounds: StageInterface[];

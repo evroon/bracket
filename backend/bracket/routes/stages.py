@@ -49,7 +49,7 @@ async def delete_stage(
     if len(stage.rounds) > 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Round contains matches, delete those first",
+            detail="Stage contains rounds, please delete those first",
         )
 
     await sql_delete_stage(tournament_id, stage_id)

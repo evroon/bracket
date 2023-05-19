@@ -47,3 +47,7 @@ export function getTournamentIdFromRouter() {
 export function responseIsValid(response: SWRResponse) {
   return response.data != null && response.data.data != null;
 }
+
+export function getBaseURL() {
+  return typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
+}

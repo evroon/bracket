@@ -116,13 +116,7 @@ export default function TableLayout({ children }: any) {
   return (
     <>
       <ScrollArea>
-        <Table
-          horizontalSpacing="md"
-          verticalSpacing="xs"
-          striped
-          highlightOnHover
-          sx={{ minWidth: 700 }}
-        >
+        <Table horizontalSpacing="md" verticalSpacing="xs" striped highlightOnHover>
           {children}
         </Table>
       </ScrollArea>
