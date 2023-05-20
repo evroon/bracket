@@ -60,9 +60,9 @@ export default function TournamentPage() {
 
   let draft_round = null;
   if (responseIsValid(swrStagesResponse)) {
-    const draftRounds = swrStagesResponse.data.data.map((stage: StageWithRounds) => {
-      return stage.rounds.filter((round: RoundInterface) => round.is_draft);
-    });
+    const draftRounds = swrStagesResponse.data.data.map((stage: StageWithRounds) =>
+      stage.rounds.filter((round: RoundInterface) => round.is_draft)
+    );
     if (draftRounds != null && draftRounds.length > 0) {
       [draft_round] = draftRounds;
     }
