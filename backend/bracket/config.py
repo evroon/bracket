@@ -74,6 +74,10 @@ match environment:
         config = CIConfig()  # type: ignore[call-arg]
     case Environment.DEVELOPMENT:
         config = DevelopmentConfig()  # type: ignore[call-arg]
+    case Environment.PRODUCTION:
+        config = ProductionConfig()  # type: ignore[call-arg]
+    case Environment.DEMO:
+        config = DemoConfig()  # type: ignore[call-arg]
 
 
 def init_sentry() -> None:
