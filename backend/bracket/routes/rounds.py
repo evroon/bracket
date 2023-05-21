@@ -66,7 +66,7 @@ async def update_round_by_id(
     round_id: int,
     round_body: RoundUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    round_: Round = Depends(round_dependency),  # pylint: disable=redefined-builtin
+    __: Round = Depends(round_dependency),
 ) -> SuccessResponse:
     values = {'tournament_id': tournament_id, 'round_id': round_id}
     query = '''

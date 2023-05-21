@@ -19,17 +19,17 @@ def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> b
 
 
 async def get_possible_upcoming_matches_for_players(
-    tournament_id: int, filter_: MatchFilter
+    tournament_id: int, filter_: MatchFilter, stage_id: int, round_id: int
 ) -> list[SuggestedMatch]:
     random.seed(10)
     suggestions: set[SuggestedMatch] = set()
-    stages = await get_stages_with_rounds_and_matches(tournament_id)
-    active_stage = next((stage for stage in stages if stage.is_active), None)
+    stages = await get_stages_with_rounds_and_matches(tournament_id, stage_id=stage_id)
 
-    if active_stage is None:
+    if len(stages) < 1:
         raise HTTPException(400, 'There is no active stage, so no matches can be scheduled.')
 
-    draft_round = next((round_ for round_ in active_stage.rounds if round_.is_draft), None)
+    [active_stage] = stages
+    draft_round = next((round_ for round_ in active_stage.rounds if round_.id == round_id), None)
     other_rounds = [round_ for round_ in active_stage.rounds if not round_.is_draft]
     max_matches_per_round = (
         max(len(other_round.matches) for other_round in other_rounds)

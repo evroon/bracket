@@ -18,6 +18,8 @@ export function handleRequestError(response: any) {
 }
 
 export function checkForAuthError(response: any) {
+  // if (localStorage)
+  //     console.error('asdasd', localStorage.getItem('login'), response.error);
   if (
     response.error != null &&
     response.error.response != null &&
@@ -83,10 +85,11 @@ export function getUser(user_id: number): SWRResponse {
 
 export function getUpcomingMatches(
   tournament_id: number,
+  round_id: number,
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    `tournaments/${tournament_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
+    `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher
   );
 }

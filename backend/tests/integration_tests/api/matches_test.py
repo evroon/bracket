@@ -1,5 +1,6 @@
 from bracket.database import database
 from bracket.models.db.match import Match
+from bracket.models.db.stage import StageType
 from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
@@ -148,7 +149,11 @@ async def test_upcoming_matches_endpoint(
     async with (
         inserted_stage(
             DUMMY_STAGE1.copy(
-                update={'is_active': True, 'tournament_id': auth_context.tournament.id}
+                update={
+                    'is_active': True,
+                    'tournament_id': auth_context.tournament.id,
+                    'type': StageType.SWISS,
+                }
             )
         ) as stage_inserted,
         inserted_round(
@@ -158,7 +163,7 @@ async def test_upcoming_matches_endpoint(
                     'stage_id': stage_inserted.id,
                 }
             )
-        ),
+        ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team1_inserted,
@@ -191,7 +196,7 @@ async def test_upcoming_matches_endpoint(
         ),
     ):
         json_response = await send_tournament_request(
-            HTTPMethod.GET, 'upcoming_matches', auth_context, {}
+            HTTPMethod.GET, f'rounds/{round_inserted.id}/upcoming_matches', auth_context, {}
         )
         assert json_response == {
             'data': [
