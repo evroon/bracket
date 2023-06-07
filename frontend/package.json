@@ -64,7 +64,7 @@
     "eslint-plugin-testing-library": "^5.10.2",
     "jest": "^27.5.1",
     "prettier": "^2.8.4",
-    "ts-jest": "^27.1.4",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   }
 }
