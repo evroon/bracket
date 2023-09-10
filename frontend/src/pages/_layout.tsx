@@ -156,9 +156,9 @@ export function HeaderAction({ links }: HeaderActionProps) {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-        {/*<ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">*/}
-        {/*  {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}*/}
-        {/*</ActionIcon>*/}
+        <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">
+          {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
+        </ActionIcon>
       </Container>
     </Header>
   );
