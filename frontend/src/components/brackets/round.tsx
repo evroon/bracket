@@ -77,7 +77,7 @@ export default function Round({
   if (matches.length < 1) return null;
 
   return (
-    <div style={{ minHeight: 320, minWidth: 500, marginRight: '1rem' }}>
+    <div style={{ minHeight: 320, minWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}>
       <div
         style={{
           height: '100%',
