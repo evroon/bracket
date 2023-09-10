@@ -198,10 +198,12 @@ async def test_upcoming_matches_endpoint(
         json_response = await send_tournament_request(
             HTTPMethod.GET, f'rounds/{round_inserted.id}/upcoming_matches', auth_context, {}
         )
+        print(json_response)
         assert json_response == {
             'data': [
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 4,
@@ -227,9 +229,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 2,
@@ -255,7 +258,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -264,6 +267,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 4,
@@ -289,9 +293,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 3,
@@ -317,7 +322,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -326,6 +331,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 2,
@@ -351,9 +357,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 1,
@@ -379,7 +386,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -388,6 +395,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 1,
@@ -413,9 +421,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 2,
@@ -441,7 +450,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -450,6 +459,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 3,
@@ -475,9 +485,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 4,
@@ -503,7 +514,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -512,6 +523,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 3,
@@ -537,9 +549,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 1,
@@ -565,7 +578,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -574,6 +587,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 1,
@@ -599,9 +613,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 3,
@@ -627,7 +642,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -636,6 +651,7 @@ async def test_upcoming_matches_endpoint(
                 },
                 {
                     'team1': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 2,
@@ -661,9 +677,10 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'team2': {
+                        'id': None,
                         'players': [
                             {
                                 'id': 4,
@@ -689,7 +706,7 @@ async def test_upcoming_matches_endpoint(
                                 'draws': 0,
                                 'losses': 0,
                             },
-                        ]
+                        ],
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,

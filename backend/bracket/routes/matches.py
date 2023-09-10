@@ -4,7 +4,7 @@ from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_matches_for_players
 from bracket.logic.scheduling.round_robin import get_possible_upcoming_matches_round_robin
-from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, MatchToInsert
+from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter
 from bracket.models.db.round import Round
 from bracket.models.db.stage import StageType
 from bracket.models.db.user import UserPublic
