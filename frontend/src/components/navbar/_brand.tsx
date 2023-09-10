@@ -12,16 +12,14 @@ export function Brand() {
       })}
     >
       <Group position="apart" ml="1rem">
-        <UnstyledButton>
+        <UnstyledButton
+          onClick={async () => {
+            await router.push('/');
+          }}
+        >
           <Group>
             <Image src="/favicon.svg" width="40px" height="40px" mt="-0.5rem" />
-            <Title
-              onClick={async () => {
-                await router.push('/');
-              }}
-            >
-              Bracket
-            </Title>
+            <Title>Bracket</Title>
           </Group>
         </UnstyledButton>
       </Group>

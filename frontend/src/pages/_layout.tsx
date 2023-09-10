@@ -4,6 +4,7 @@ import {
   Burger,
   Container,
   Grid,
+  Group,
   Header,
   Menu,
   Text,
@@ -90,25 +91,21 @@ interface HeaderActionProps {
 export function HeaderAction({ links }: HeaderActionProps) {
   const { classes } = useStyles();
   const router = useRouter();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure(false);
 
   const items = links.map((link) => {
-    const menuItems = link.links?.map((item) => (
-      <Menu.Item
-        key={item.link}
-        onClick={async () => {
-          await router.push(item.link);
-        }}
-      >
-        <Container>
-          <span>{item.icon}</span>
-          <span style={{ marginLeft: '0.25rem' }}>{item.label}</span>
-        </Container>
-      </Menu.Item>
-    ));
-
-    if (menuItems) {
+    if (link.links) {
+      const menuItems = link.links?.map((item) => (
+        <UnstyledButton
+          key={item.label}
+          className={classes.link}
+          onClick={async () => {
+            await router.push(item.link);
+          }}
+        >
+          {item.label}
+        </UnstyledButton>
+      ));
       return (
         <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
           <Menu.Target>
@@ -133,7 +130,6 @@ export function HeaderAction({ links }: HeaderActionProps) {
 
     return (
       <UnstyledButton
-        mr="1rem"
         key={link.label}
         className={classes.link}
         onClick={async () => {
@@ -145,24 +141,25 @@ export function HeaderAction({ links }: HeaderActionProps) {
     );
   });
   return (
-    <Header height={{ base: HEADER_HEIGHT, md: HEADER_HEIGHT }}>
-      <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" mt="0.5rem" />
-      <Grid>
-        <Grid.Col span={4}>
+    <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={120}>
+      <Container className={classes.inner} fluid>
+        <Group>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            size="sm"
+            mt="0.5rem"
+          />
           <Brand />
-        </Grid.Col>
-        <Grid.Col span={4} offset={4}>
-          <Container className={classes.inner} fluid style={{ justifyContent: 'end' }}>
-            {items}
-            {/*<Button radius="xl" h={30}>*/}
-            {/*  Get early access*/}
-            {/*</Button>*/}
-            <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">
-              {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
-            </ActionIcon>
-          </Container>
-        </Grid.Col>
-      </Grid>
+        </Group>
+        <Group spacing={5} className={classes.links}>
+          {items}
+        </Group>
+        {/*<ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">*/}
+        {/*  {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}*/}
+        {/*</ActionIcon>*/}
+      </Container>
     </Header>
   );
 }
