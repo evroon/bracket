@@ -9,7 +9,7 @@ import Brackets from '../../components/brackets/brackets';
 import SaveButton from '../../components/buttons/save';
 import StagesModal from '../../components/modals/stage_modal';
 import TournamentModal from '../../components/modals/tournament_modal';
-import Scheduler from '../../components/scheduling/scheduler';
+import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
 import { SchedulerSettings } from '../../interfaces/match';
@@ -48,23 +48,21 @@ export default function TournamentPage() {
     setIterations,
   };
 
-  const swrUpcomingMatchesResponse: SWRResponse = getUpcomingMatches(id, schedulerSettings);
-
   const tournaments: Tournament[] =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
   const tournamentDataFull = tournaments.filter((tournament) => tournament.id === id)[0];
 
-  if (tournamentDataFull == null) {
-    return <NotFoundTitle />;
-  }
+  let activeStage = null;
+  let draftRound = null;
 
-  let draft_round = null;
   if (responseIsValid(swrStagesResponse)) {
+    [activeStage] = swrStagesResponse.data.data.filter((stage: StageWithRounds) => stage.is_active);
+
     const draftRounds = swrStagesResponse.data.data.map((stage: StageWithRounds) =>
       stage.rounds.filter((round: RoundInterface) => round.is_draft)
     );
     if (draftRounds != null && draftRounds.length > 0) {
-      [draft_round] = draftRounds;
+      [[draftRound]] = draftRounds;
     }
 
     const activeTab = swrStagesResponse.data.data.filter(
@@ -75,21 +73,31 @@ export default function TournamentPage() {
     }
   }
 
+  // TODO: Find a way to not send a request with -1 as round_id here.
+  const swrUpcomingMatchesResponse = getUpcomingMatches(
+    id,
+    draftRound != null ? draftRound.id : -1,
+    schedulerSettings
+  );
+
+  if (tournamentDataFull == null) {
+    return <NotFoundTitle />;
+  }
+
   const scheduler =
-    draft_round != null ? (
+    draftRound != null && swrUpcomingMatchesResponse != null ? (
       <>
-        <h2>Settings</h2>
         <Scheduler
-          round_id={draft_round.id}
+          activeStage={activeStage}
+          round_id={draftRound.id}
           tournamentData={tournamentDataFull}
           swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           schedulerSettings={schedulerSettings}
         />
       </>
-    ) : (
-      ''
-    );
+    ) : null;
+
   const tournamentModal =
     tournamentData != null ? (
       <TournamentModal

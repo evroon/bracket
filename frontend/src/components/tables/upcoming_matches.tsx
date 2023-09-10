@@ -36,33 +36,44 @@ export default function UpcomingMatchesTable({
   }
 
   async function scheduleMatch(upcoming_match: UpcomingMatchInterface) {
-    const team1PlayerIds = getPlayerIds(upcoming_match.team1);
-    const team2PlayerIds = getPlayerIds(upcoming_match.team2);
+    if (upcoming_match.team1.id != null && upcoming_match.team2.id != null) {
+      const match_to_schedule: MatchCreateBodyInterface = {
+        team1_id: upcoming_match.team1.id,
+        team2_id: upcoming_match.team2.id,
+        round_id,
+        label: '',
+      };
 
-    const teamName1 = `${upcoming_match.team1.players[0].name}, ${upcoming_match.team1.players[1].name}`;
-    const teamName2 = `${upcoming_match.team2.players[0].name}, ${upcoming_match.team2.players[1].name}`;
+      await createMatch(tournamentData.id, match_to_schedule);
+    } else {
+      const team1PlayerIds = getPlayerIds(upcoming_match.team1);
+      const team2PlayerIds = getPlayerIds(upcoming_match.team2);
 
-    const { data: team1Response } = await createTeam(
-      tournamentData.id,
-      teamName1,
-      true,
-      team1PlayerIds
-    );
-    const { data: team2Response } = await createTeam(
-      tournamentData.id,
-      teamName2,
-      true,
-      team2PlayerIds
-    );
+      const teamName1 = `${upcoming_match.team1.players[0].name}, ${upcoming_match.team1.players[1].name}`;
+      const teamName2 = `${upcoming_match.team2.players[0].name}, ${upcoming_match.team2.players[1].name}`;
 
-    const match_to_schedule: MatchCreateBodyInterface = {
-      team1_id: team1Response.data.id,
-      team2_id: team2Response.data.id,
-      round_id,
-      label: '',
-    };
+      const { data: team1Response } = await createTeam(
+        tournamentData.id,
+        teamName1,
+        true,
+        team1PlayerIds
+      );
+      const { data: team2Response } = await createTeam(
+        tournamentData.id,
+        teamName2,
+        true,
+        team2PlayerIds
+      );
 
-    await createMatch(tournamentData.id, match_to_schedule);
+      const match_to_schedule: MatchCreateBodyInterface = {
+        team1_id: team1Response.data.id,
+        team2_id: team2Response.data.id,
+        round_id,
+        label: '',
+      };
+
+      await createMatch(tournamentData.id, match_to_schedule);
+    }
     await swrRoundsResponse.mutate(null);
     await swrUpcomingMatchesResponse.mutate(null);
   }

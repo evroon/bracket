@@ -18,6 +18,7 @@ class Team(BaseModelORM):
 
 
 class TeamWithPlayers(BaseModel):
+    id: int | None = None
     players: list[Player]
 
     @property

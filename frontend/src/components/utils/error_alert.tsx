@@ -17,5 +17,5 @@ export default function RequestErrorAlert({ error }: any) {
       : 'Error';
   const message = `${status_code}: ${error.response ? error.response.data.detail : error.message}`;
 
-  return <ErrorAlert message={message} title="Network error" />;
+  return <ErrorAlert message={message} title="Error" />;
 }
