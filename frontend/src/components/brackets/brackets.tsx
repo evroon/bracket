@@ -49,6 +49,18 @@ export default function Brackets({
     activeStageId == null ||
     (!swrStagesResponse.isLoading && !responseIsValid(swrStagesResponse))
   ) {
+    if (readOnly) {
+      return (
+        <Alert
+          icon={<IconAlertCircle size={16} />}
+          title="No rounds found"
+          color="blue"
+          radius="lg"
+        >
+          Please wait for the organiser to add them.
+        </Alert>
+      );
+    }
     return (
       <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
         Add a round using the top right button.
