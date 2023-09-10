@@ -13,10 +13,10 @@ function StageSettings({
   activeStage,
   schedulerSettings,
 }: {
-  activeStage: StageWithRounds;
+  activeStage?: StageWithRounds;
   schedulerSettings: SchedulerSettings;
 }) {
-  if (activeStage.type === 'ROUND_ROBIN') {
+  if (activeStage != null && activeStage.type === 'ROUND_ROBIN') {
     return <RoundRobin />;
   }
   return <LadderFixed schedulerSettings={schedulerSettings} />;
@@ -30,7 +30,7 @@ export default function Scheduler({
   swrUpcomingMatchesResponse,
   schedulerSettings,
 }: {
-  activeStage: StageWithRounds;
+  activeStage?: StageWithRounds;
   round_id: number;
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;

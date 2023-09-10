@@ -8,6 +8,7 @@ import { deleteTournament } from '../../services/tournament';
 import DeleteButton from '../buttons/delete';
 import TournamentModal from '../modals/tournament_modal';
 import DateTime from '../utils/datetime';
+import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
@@ -53,6 +54,8 @@ export default function TournamentsTable({
         </td>
       </tr>
     ));
+
+  if (rows.length < 1) return <EmptyTableInfo entity_name="tournaments" />;
 
   return (
     <TableLayout>

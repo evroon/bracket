@@ -58,7 +58,7 @@ async def sql_remove_user_from_club(club_id: int, user_id: int) -> None:
 
 async def get_clubs_for_user_id(user_id: int) -> list[Club]:
     query = '''
-        SELECT * FROM clubs
+        SELECT clubs.* FROM clubs
         JOIN users_x_clubs uxc on clubs.id = uxc.club_id
         WHERE uxc.user_id = :user_id
         '''
@@ -68,7 +68,7 @@ async def get_clubs_for_user_id(user_id: int) -> list[Club]:
 
 async def get_club_for_user_id(club_id: int, user_id: int) -> Club | None:
     query = '''
-        SELECT * FROM clubs
+        SELECT clubs.* FROM clubs
         JOIN users_x_clubs uxc on clubs.id = uxc.club_id
         WHERE uxc.user_id = :user_id
         AND club_id = :club_id
