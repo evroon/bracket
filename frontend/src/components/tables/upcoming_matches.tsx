@@ -9,6 +9,7 @@ import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import { createTeam } from '../../services/team';
 import PlayerList from '../info/player_list';
+import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
@@ -113,7 +114,7 @@ export default function UpcomingMatchesTable({
       </tr>
     ));
 
-  if (rows.length < 1) return <p>No upcoming matches available.</p>;
+  if (rows.length < 1) return <EmptyTableInfo entity_name="upcoming matches" />;
 
   return (
     <TableLayout>

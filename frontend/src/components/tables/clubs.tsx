@@ -5,6 +5,7 @@ import { Club } from '../../interfaces/club';
 import { deleteClub } from '../../services/club';
 import DeleteButton from '../buttons/delete';
 import ClubModal from '../modals/club_modal';
+import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
@@ -31,6 +32,8 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
         </td>
       </tr>
     ));
+
+  if (rows.length < 1) return <EmptyTableInfo entity_name="clubs" />;
 
   return (
     <TableLayout>

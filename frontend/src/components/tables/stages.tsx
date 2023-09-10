@@ -5,6 +5,7 @@ import { StageWithRounds } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import { deleteStage } from '../../services/stage';
 import DeleteButton from '../buttons/delete';
+import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, getTableState, sortTableEntries } from './table';
 
@@ -38,6 +39,8 @@ export default function StagesTable({
         </td>
       </tr>
     ));
+
+  if (rows.length < 1) return <EmptyTableInfo entity_name="stages" />;
 
   return (
     <TableLayout>
