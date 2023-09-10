@@ -3,7 +3,6 @@ import {
   AppShell,
   Burger,
   Container,
-  Grid,
   Group,
   Header,
   Menu,
@@ -14,7 +13,6 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -87,11 +85,14 @@ interface HeaderActionProps {
     icon?: Component | null;
     links?: { link: string; label: string; icon?: ReactNode }[] | null;
   }[];
+  navbarState: any;
 }
-export function HeaderAction({ links }: HeaderActionProps) {
+export function HeaderAction({ links, navbarState }: HeaderActionProps) {
   const { classes } = useStyles();
+
+  const [opened, { toggle }] = navbarState != null ? navbarState : [false, { toggle: () => {} }];
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
-  const [opened, { toggle }] = useDisclosure(false);
 
   const items = links.map((link) => {
     if (link.links) {
@@ -155,16 +156,16 @@ export function HeaderAction({ links }: HeaderActionProps) {
         </Group>
         <Group spacing={5} className={classes.links}>
           {items}
+          <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">
+            {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
+          </ActionIcon>
         </Group>
-        <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">
-          {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
-        </ActionIcon>
       </Container>
     </Header>
   );
 }
 
-export default function Layout({ children, navbar }: any) {
+export default function Layout({ children, navbar, navbarState }: any) {
   const theme = useMantineTheme();
 
   return (
@@ -177,7 +178,7 @@ export default function Layout({ children, navbar }: any) {
       layout="default"
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      header={<HeaderAction links={LINKS} />}
+      header={<HeaderAction links={LINKS} navbarState={navbarState} />}
       navbar={navbar}
     >
       {children}
