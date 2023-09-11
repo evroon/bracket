@@ -6,5 +6,5 @@ module.exports = {
   importOrder: ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
-  "plugins": [require.resolve("@trivago/prettier-plugin-sort-imports")],
+  plugins: [require.resolve("@trivago/prettier-plugin-sort-imports")]
 };
