@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from pydantic.generics import GenericModel
 
 from bracket.models.db.club import Club
+from bracket.models.db.court import Court
 from bracket.models.db.match import Match, SuggestedMatch
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round, StageWithRounds
@@ -80,4 +81,12 @@ class UserPublicResponse(DataResponse[UserPublic]):
 
 
 class TokenResponse(DataResponse[Token]):
+    pass
+
+
+class CourtsResponse(DataResponse[list[Court]]):
+    pass
+
+
+class SingleCourtResponse(DataResponse[Court]):
     pass

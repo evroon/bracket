@@ -5,6 +5,7 @@ from sqlalchemy import Table
 
 from bracket.database import database
 from bracket.models.db.club import Club
+from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
@@ -16,6 +17,7 @@ from bracket.models.db.user import User, UserInDB
 from bracket.models.db.user_x_club import UserXClub
 from bracket.schema import (
     clubs,
+    courts,
     matches,
     players,
     players_x_teams,
@@ -71,6 +73,12 @@ async def inserted_tournament(tournament: Tournament) -> AsyncIterator[Tournamen
 @asynccontextmanager
 async def inserted_team(team: Team) -> AsyncIterator[Team]:
     async with inserted_generic(team, teams, Team) as row_inserted:
+        yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_court(court: Court) -> AsyncIterator[Court]:
+    async with inserted_generic(court, courts, Court) as row_inserted:
         yield row_inserted
 
 

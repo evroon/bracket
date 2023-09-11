@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 from heliclockter import datetime_utc
 
 from bracket.models.db.club import Club
+from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round
@@ -210,4 +211,16 @@ DUMMY_PLAYER9 = Player(
 DUMMY_USER_X_CLUB = UserXClub(
     user_id=DB_PLACEHOLDER_ID,
     club_id=DB_PLACEHOLDER_ID,
+)
+
+DUMMY_COURT1 = Court(
+    name='Endor',
+    created=DUMMY_MOCK_TIME,
+    tournament_id=DB_PLACEHOLDER_ID,
+)
+
+DUMMY_COURT2 = Court(
+    name='Naboo',
+    created=DUMMY_MOCK_TIME,
+    tournament_id=DB_PLACEHOLDER_ID,
 )
