@@ -1,5 +1,6 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { Analytics } from '@vercel/analytics/react';
 import { getCookie, setCookie } from 'cookies-next';
 import NextApp, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
@@ -31,6 +32,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <Component {...pageProps} />
         </MantineProvider>
       </ColorSchemeProvider>
+
+      <Analytics />
     </>
   );
 }
