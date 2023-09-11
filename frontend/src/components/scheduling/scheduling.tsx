@@ -8,6 +8,7 @@ import { Tournament } from '../../interfaces/tournament';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
 import LadderFixed from './settings/ladder_fixed';
 import RoundRobin from './settings/round_robin';
+import SchedulingPlaceholder from './settings/placeholder';
 
 function StageSettings({
   activeStage,
@@ -16,7 +17,10 @@ function StageSettings({
   activeStage?: StageWithRounds;
   schedulerSettings: SchedulerSettings;
 }) {
-  if (activeStage != null && activeStage.type === 'ROUND_ROBIN') {
+  if (activeStage == null) {
+    return <SchedulingPlaceholder />;
+  }
+  if (activeStage.type === 'ROUND_ROBIN') {
     return <RoundRobin />;
   }
   return <LadderFixed schedulerSettings={schedulerSettings} />;
