@@ -30,10 +30,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <Notifications />
           <Component {...pageProps} />
+          <Analytics />
         </MantineProvider>
       </ColorSchemeProvider>
 
-      <Analytics />
     </>
   );
 }
