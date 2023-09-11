@@ -33,7 +33,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <Analytics />
         </MantineProvider>
       </ColorSchemeProvider>
-
     </>
   );
 }
