@@ -7,8 +7,8 @@ import { StageWithRounds } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
 import LadderFixed from './settings/ladder_fixed';
-import RoundRobin from './settings/round_robin';
 import SchedulingPlaceholder from './settings/placeholder';
+import RoundRobin from './settings/round_robin';
 
 function StageSettings({
   activeStage,
