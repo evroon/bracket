@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { IconMoonStars, IconSun } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import React, { Component, ReactNode } from 'react';
 
 import { Brand } from '../components/navbar/_brand';
@@ -26,7 +26,7 @@ const LINKS = [
   { link: '/', label: 'Tournaments', links: null },
   { link: '/user', label: 'User', links: [{ link: '/user', label: 'Logout', icon: null }] },
   {
-    link: '/docs',
+    link: null,
     label: 'More',
     links: [
       { link: 'https://evroon.github.io/bracket/', label: 'Website', icon: null },
@@ -78,15 +78,52 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface HeaderActionLink {
+  link: string | null;
+  label: string;
+  icon?: Component | null;
+  links?: { link: string; label: string; icon?: ReactNode }[] | null;
+}
+
 interface HeaderActionProps {
-  links: {
-    link: string;
-    label: string;
-    icon?: Component | null;
-    links?: { link: string; label: string; icon?: ReactNode }[] | null;
-  }[];
+  links: HeaderActionLink[];
   navbarState: any;
 }
+
+function getMenuItemsForLink(link: HeaderActionLink, classes: any, router: NextRouter) {
+  const menuItems = link.links?.map((item) => (
+    <UnstyledButton
+      key={item.label}
+      className={classes.link}
+      onClick={async () => {
+        await router.push(item.link);
+      }}
+    >
+      {item.label}
+    </UnstyledButton>
+  ));
+  return (
+    <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
+      <Menu.Target>
+        <UnstyledButton
+          className={classes.link}
+          onClick={async () => {
+            if (link.link) await router.push(link.link);
+          }}
+        >
+          <>
+            {link.icon}
+            <Text span className={classes.linkLabel}>
+              {link.label}
+            </Text>
+          </>
+        </UnstyledButton>
+      </Menu.Target>
+      <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+    </Menu>
+  );
+}
+
 export function HeaderAction({ links, navbarState }: HeaderActionProps) {
   const { classes } = useStyles();
 
@@ -96,37 +133,7 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
 
   const items = links.map((link) => {
     if (link.links) {
-      const menuItems = link.links?.map((item) => (
-        <UnstyledButton
-          key={item.label}
-          className={classes.link}
-          onClick={async () => {
-            await router.push(item.link);
-          }}
-        >
-          {item.label}
-        </UnstyledButton>
-      ));
-      return (
-        <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
-          <Menu.Target>
-            <UnstyledButton
-              className={classes.link}
-              onClick={async () => {
-                await router.push(link.link);
-              }}
-            >
-              <>
-                {link.icon}
-                <Text span className={classes.linkLabel}>
-                  {link.label}
-                </Text>
-              </>
-            </UnstyledButton>
-          </Menu.Target>
-          <Menu.Dropdown>{menuItems}</Menu.Dropdown>
-        </Menu>
-      );
+      return getMenuItemsForLink(link, classes, router);
     }
 
     return (
@@ -134,7 +141,7 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
         key={link.label}
         className={classes.link}
         onClick={async () => {
-          await router.push(link.link);
+          if (link.link) await router.push(link.link);
         }}
       >
         {link.label}
