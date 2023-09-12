@@ -19,6 +19,6 @@ RUN set -ex \
 CMD pipenv run pipenv run gunicorn \
     -k bracket.uvicorn.RestartableUvicornWorker \
     bracket.app:app \
-    --bind localhost:8400 \
+    --bind 0.0.0.0:8400 \
     --workers 1 \
     --reload

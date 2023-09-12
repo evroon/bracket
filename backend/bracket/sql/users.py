@@ -1,7 +1,9 @@
 from datetime import datetime
 
 from bracket.database import database
-from bracket.models.db.user import User, UserPublic, UserToUpdate
+from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
+from bracket.schema import users
+from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
 
 
@@ -94,3 +96,7 @@ async def check_whether_email_is_in_use(email: str) -> bool:
         '''
     result = await database.fetch_one(query=query, values={'email': email})
     return result is not None
+
+
+async def get_user(email: str) -> UserInDB | None:
+    return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))

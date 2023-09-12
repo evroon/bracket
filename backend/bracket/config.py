@@ -3,7 +3,7 @@ import os
 from enum import auto
 
 import sentry_sdk
-from pydantic import BaseSettings, Field, PostgresDsn
+from pydantic import BaseSettings, PostgresDsn
 
 from bracket.utils.types import EnumAutoStr
 
@@ -32,16 +32,16 @@ class Environment(EnumAutoStr):
 
 
 class Config(BaseSettings):
-    pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
+    admin_email: str | None = None
+    admin_password: str | None = None
+    allow_insecure_http_sso: bool = False
+    allow_user_registration: bool = True
+    base_url: str = 'http://localhost:8400'
+    cors_origin_regex: str = ''
+    cors_origins: str = ''
     jwt_secret: str
-    cors_origins: str = Field(default='')
-    cors_origin_regex: str = Field(default='')
-    admin_email: str | None = Field(default=None)
-    admin_password: str | None = Field(default=None)
-    sentry_dsn: str | None = Field(default=None)
-    allow_insecure_http_sso: bool = Field(default=False)
-    base_url: str = Field(default='http://localhost:8400')
-    allow_user_registration: bool = Field(default=True)
+    pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
+    sentry_dsn: str | None = None
 
 
 class CIConfig(Config):
@@ -50,8 +50,10 @@ class CIConfig(Config):
 
 
 class DevelopmentConfig(Config):
+    admin_email = 'test@example.org'
+    admin_password = 'aeGhoe1ahng2Aezai0Dei6Aih6dieHoo'
     allow_insecure_http_sso = True
-    jwt_secret = 'abd84ebeb6581c26b53fa30d89c4e7fbc48ee5b4f3b8ddedb7586cfeb3daca0c'
+    jwt_secret = '7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7'
 
     class Config:
         env_file = 'dev.env'
