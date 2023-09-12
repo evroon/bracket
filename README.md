@@ -28,8 +28,8 @@ cd bracket
 sudo docker-compose up -d
 ```
 
-This will start the backend and frontend of Bracket, as well as a postgres instance.
-Please only use this for testing/development purposes.
+This will start the backend and frontend of Bracket, as well as a postgres instance. You should now
+be able to view bracket at http://localhost:3000.
 
 To insert dummy rows into the database, run:
 ```shell
