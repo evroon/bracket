@@ -20,9 +20,18 @@ Bracket is written in async Python (with FastAPI) and Next.js as frontend using 
 <img alt="" src="misc/img/schedule_preview.png" width="100%" />
 <img alt="" src="misc/img/players_preview.png" width="100%" />
 
+# Quickstart
+To quickly run bracket to see how it works, clone it and run `docker-compose up`:
+```
+git clone git@github.com:evroon/bracket.git
+cd bracket
+sudo docker-compose up -d
+```
+
+This will start the backend and frontend of Bracket, as well as a postgres instance.
+Please only use this for testing/development purposes.
+
 # Setup
-
-
 ## Database
 First create a `bracket` cluster:
 ```shell

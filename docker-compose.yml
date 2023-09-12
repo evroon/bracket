@@ -2,14 +2,14 @@ version: '3.1'
 
 services:
     bracket-frontend:
-        build: frontend
+        image: ghcr.io/evroon/bracket-frontend
         container_name: bracket-frontend
         ports:
             - "3000:3000"
         restart: unless-stopped
 
     bracket-backend:
-        build: backend
+        image: ghcr.io/evroon/bracket-backend
         container_name: bracket-backend
         ports:
             - "8400:8400"
