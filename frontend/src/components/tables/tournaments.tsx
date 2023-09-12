@@ -1,12 +1,13 @@
-import { Anchor } from '@mantine/core';
+import { Anchor, Button } from '@mantine/core';
+import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
 import { deleteTournament } from '../../services/tournament';
 import DeleteButton from '../buttons/delete';
-import TournamentModal from '../modals/tournament_modal';
 import DateTime from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
@@ -17,6 +18,7 @@ export default function TournamentsTable({
 }: {
   swrTournamentsResponse: SWRResponse;
 }) {
+  const router = useRouter();
   const tableState = getTableState('name');
 
   if (swrTournamentsResponse.error) {
@@ -39,11 +41,15 @@ export default function TournamentsTable({
           <DateTime datetime={tournament.created} />
         </td>
         <td>
-          <TournamentModal
-            tournament={tournament}
-            swrTournamentsResponse={swrTournamentsResponse}
-            in_table
-          />
+          <Button
+            color="green"
+            size="xs"
+            style={{ marginRight: 10 }}
+            onClick={() => router.push(`/tournaments/${tournament.id}/settings`)}
+            leftIcon={<BiEditAlt size={20} />}
+          >
+            Edit Tournament
+          </Button>
           <DeleteButton
             onClick={async () => {
               await deleteTournament(tournament.id);

@@ -1,5 +1,13 @@
 import { Tooltip, UnstyledButton } from '@mantine/core';
-import { Icon, IconSoccerField, IconTournament, IconUser, IconUsers } from '@tabler/icons-react';
+import {
+  Icon,
+  IconSettings,
+  IconSoccerField,
+  IconTournament,
+  IconTrophy,
+  IconUser,
+  IconUsers,
+} from '@tabler/icons-react';
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
@@ -64,6 +72,18 @@ export function MainLinks({ tournament_id }: any) {
       icon: IconSoccerField,
       label: 'Courts',
       endpoint: `${tm_prefix}/courts`,
+      router,
+    },
+    {
+      icon: IconTrophy,
+      label: 'Stages',
+      endpoint: `${tm_prefix}/stages`,
+      router,
+    },
+    {
+      icon: IconSettings,
+      label: 'Tournament Settings',
+      endpoint: `${tm_prefix}/settings`,
       router,
     },
   ];

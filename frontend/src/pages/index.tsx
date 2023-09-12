@@ -16,11 +16,7 @@ export default function HomePage() {
           <Title>Tournaments</Title>
         </Grid.Col>
         <Grid.Col span={3}>
-          <TournamentModal
-            swrTournamentsResponse={swrTournamentsResponse}
-            tournament={null}
-            in_table={false}
-          />
+          <TournamentModal swrTournamentsResponse={swrTournamentsResponse} />
         </Grid.Col>
       </Grid>
       <TournamentsTable swrTournamentsResponse={swrTournamentsResponse} />
