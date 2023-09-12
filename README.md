@@ -33,7 +33,7 @@ be able to view bracket at http://localhost:3000.
 
 To insert dummy rows into the database, run:
 ```shell
-sudo docker exec -it bracket-backend pipenv run ./cli.py create-dev-db
+sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ```
 
 # Setup
