@@ -11,15 +11,22 @@ import {
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import useStyles from '../components/login/login.styles';
+import { tokenPresent } from '../services/local_storage';
 import { performLogin } from '../services/user';
 import Layout from './_layout';
 
 export default function Login() {
   const { classes } = useStyles();
   const router = useRouter();
+
+  useEffect(() => {
+    if (tokenPresent()) {
+      router.replace('/');
+    }
+  }, []);
 
   async function attemptLogin(email: string, password: string) {
     const success = await performLogin(email, password);
