@@ -7,8 +7,6 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import SaveButton from '../../components/buttons/save';
-import StagesModal from '../../components/modals/stage_modal';
-import TournamentModal from '../../components/modals/tournament_modal';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
@@ -100,20 +98,6 @@ export default function TournamentPage() {
       </>
     ) : null;
 
-  const tournamentModal =
-    tournamentData != null ? (
-      <TournamentModal
-        tournament={tournamentDataFull}
-        swrTournamentsResponse={swrTournamentsResponse}
-        in_table={false}
-      />
-    ) : null;
-
-  const stagesModal =
-    tournamentData != null ? (
-      <StagesModal tournament={tournamentDataFull} swrStagesResponse={swrStagesResponse} />
-    ) : null;
-
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
@@ -133,8 +117,6 @@ export default function TournamentPage() {
             >
               View dashboard
             </Button>
-            {tournamentModal}
-            {stagesModal}
             {activeStageId == null ? null : (
               <SaveButton
                 onClick={async () => {
