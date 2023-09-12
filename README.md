@@ -22,7 +22,7 @@ Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)
 
 # Quickstart
 To quickly run bracket to see how it works, clone it and run `docker-compose up`:
-```
+```shell
 git clone git@github.com:evroon/bracket.git
 cd bracket
 sudo docker-compose up -d
@@ -30,6 +30,11 @@ sudo docker-compose up -d
 
 This will start the backend and frontend of Bracket, as well as a postgres instance.
 Please only use this for testing/development purposes.
+
+To insert dummy rows into the database, run:
+```shell
+sudo docker exec -it bracket-backend pipenv run ./cli.py create-dev-db
+```
 
 # Setup
 ## Database
