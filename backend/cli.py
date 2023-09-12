@@ -34,6 +34,8 @@ from bracket.schema import (
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import (
     DUMMY_CLUB,
+    DUMMY_COURT1,
+    DUMMY_COURT2,
     DUMMY_MATCH1,
     DUMMY_MATCH2,
     DUMMY_MATCH3,
@@ -149,14 +151,27 @@ async def create_dev_db() -> None:
     round_id_2 = await insert_dummy(DUMMY_ROUND2.copy(update={'stage_id': stage_id_1}))
     round_id_3 = await insert_dummy(DUMMY_ROUND3.copy(update={'stage_id': stage_id_2}))
 
+    court_id_1 = await insert_dummy(DUMMY_COURT1.copy(update={'tournament_id': tournament_id_1}))
+    court_id_2 = await insert_dummy(DUMMY_COURT2.copy(update={'tournament_id': tournament_id_1}))
+
     await insert_dummy(
         DUMMY_MATCH1.copy(
-            update={'round_id': round_id_1, 'team1_id': team_id_1, 'team2_id': team_id_2}
+            update={
+                'round_id': round_id_1,
+                'team1_id': team_id_1,
+                'team2_id': team_id_2,
+                'court_id': court_id_1,
+            }
         ),
     )
     await insert_dummy(
         DUMMY_MATCH2.copy(
-            update={'round_id': round_id_1, 'team1_id': team_id_3, 'team2_id': team_id_4}
+            update={
+                'round_id': round_id_1,
+                'team1_id': team_id_3,
+                'team2_id': team_id_4,
+                'court_id': court_id_2,
+            }
         ),
     )
     await insert_dummy(

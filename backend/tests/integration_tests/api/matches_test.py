@@ -4,6 +4,7 @@ from bracket.models.db.stage import StageType
 from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
+    DUMMY_COURT1,
     DUMMY_MATCH1,
     DUMMY_PLAYER1,
     DUMMY_PLAYER2,
@@ -20,6 +21,7 @@ from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
     assert_row_count_and_clear,
+    inserted_court,
     inserted_match,
     inserted_player_in_team,
     inserted_round,
@@ -39,6 +41,9 @@ async def test_create_match(
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team1_inserted,
+        inserted_court(
+            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as court1_inserted,
         inserted_team(
             DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team2_inserted,
@@ -47,14 +52,13 @@ async def test_create_match(
             'team1_id': team1_inserted.id,
             'team2_id': team2_inserted.id,
             'round_id': round_inserted.id,
-            'label': 'Some label',
+            'court_id': court1_inserted.id,
         }
         response = await send_tournament_request(
             HTTPMethod.POST, 'matches', auth_context, json=body
         )
         assert response['data']['id']
 
-        # await sql_delete_match(response['data']['id'])
         await assert_row_count_and_clear(matches, 1)
 
 
@@ -72,12 +76,16 @@ async def test_delete_match(
         inserted_team(
             DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team2_inserted,
+        inserted_court(
+            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as court1_inserted,
         inserted_match(
             DUMMY_MATCH1.copy(
                 update={
                     'round_id': round_inserted.id,
                     'team1_id': team1_inserted.id,
                     'team2_id': team2_inserted.id,
+                    'court_id': court1_inserted.id,
                 }
             )
         ) as match_inserted,
@@ -105,12 +113,16 @@ async def test_update_match(
         inserted_team(
             DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team2_inserted,
+        inserted_court(
+            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+        ) as court1_inserted,
         inserted_match(
             DUMMY_MATCH1.copy(
                 update={
                     'round_id': round_inserted.id,
                     'team1_id': team1_inserted.id,
                     'team2_id': team2_inserted.id,
+                    'court_id': court1_inserted.id,
                 }
             )
         ) as match_inserted,
@@ -119,7 +131,7 @@ async def test_update_match(
             'team1_score': 42,
             'team2_score': 24,
             'round_id': round_inserted.id,
-            'label': 'Some label',
+            'court_id': None,
         }
         assert (
             await send_tournament_request(
@@ -138,7 +150,7 @@ async def test_update_match(
         )
         assert patched_match.team1_score == body['team1_score']
         assert patched_match.team2_score == body['team2_score']
-        assert patched_match.label == body['label']
+        assert patched_match.court_id == body['court_id']
 
         await assert_row_count_and_clear(matches, 1)
 

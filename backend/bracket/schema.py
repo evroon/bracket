@@ -70,7 +70,6 @@ matches = Table(
     Column('court_id', BigInteger, ForeignKey('courts.id'), nullable=True),
     Column('team1_score', Integer, nullable=False),
     Column('team2_score', Integer, nullable=False),
-    Column('label', String, nullable=False),
 )
 
 teams = Table(

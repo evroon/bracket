@@ -77,7 +77,7 @@ DUMMY_MATCH1 = Match(
     team2_id=2,
     team1_score=11,
     team2_score=22,
-    label='Court 1 | 11:00 - 11:20',
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH2 = Match(
@@ -87,7 +87,7 @@ DUMMY_MATCH2 = Match(
     team2_id=4,
     team1_score=9,
     team2_score=6,
-    label='Court 2 | 11:00 - 11:20',
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH3 = Match(
@@ -97,7 +97,7 @@ DUMMY_MATCH3 = Match(
     team2_id=4,
     team1_score=23,
     team2_score=26,
-    label='Court 1 | 11:30 - 11:50',
+    court_id=None,
 )
 
 DUMMY_MATCH4 = Match(
@@ -107,7 +107,7 @@ DUMMY_MATCH4 = Match(
     team2_id=3,
     team1_score=43,
     team2_score=45,
-    label='Court 2 | 11:30 - 11:50',
+    court_id=None,
 )
 
 DUMMY_USER = User(

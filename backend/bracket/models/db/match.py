@@ -16,7 +16,7 @@ class Match(BaseModelORM):
     team2_id: int
     team1_score: int
     team2_score: int
-    label: str
+    court_id: int | None
 
 
 class UpcomingMatch(BaseModel):
@@ -45,14 +45,14 @@ class MatchBody(BaseModelORM):
     round_id: int
     team1_score: int = 0
     team2_score: int = 0
-    label: str
+    court_id: int | None
 
 
 class MatchCreateBody(BaseModelORM):
     round_id: int
     team1_id: int
     team2_id: int
-    label: str
+    court_id: int | None
 
 
 class MatchToInsert(MatchCreateBody):

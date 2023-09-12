@@ -38,9 +38,12 @@ def upgrade() -> None:
         'tournaments',
         sa.Column('auto_assign_courts', sa.Boolean(), server_default='f', nullable=False),
     )
+    op.drop_column('matches', 'label')
 
 
 def downgrade() -> None:
+    op.add_column('matches', sa.Column('label', sa.Text(), nullable=True, server_default=''))
+    op.alter_column('matches', 'label', server_default=None)
     op.drop_column('tournaments', 'auto_assign_courts')
     op.drop_index(op.f('ix_courts_tournament_id'), table_name='courts')
     op.drop_constraint('matches_courts_fkey', 'matches', type_='foreignkey')
