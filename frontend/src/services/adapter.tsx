@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../interfaces/match';
-import { getLogin } from './local_storage';
+import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 const axios = require('axios').default;
 
@@ -19,17 +19,6 @@ export function handleRequestError(response: any) {
       title: 'An error occurred',
       message,
     });
-  }
-}
-
-export function checkForAuthError(response: any) {
-  if (
-    response.error != null &&
-    response.error.response != null &&
-    response.error.response.status === 401
-  ) {
-    const router = useRouter();
-    router.push('/login');
   }
 }
 
@@ -106,4 +95,33 @@ export async function uploadLogo(tournament_id: number, file: any) {
   bodyFormData.append('file', file, file.name);
 
   return createAxios().post(`tournaments/${tournament_id}/logo`, bodyFormData);
+}
+
+export function checkForAuthError(response: any) {
+  if (typeof window !== 'undefined' && !tokenPresent()) {
+    const router = useRouter();
+    router.push('/login');
+  }
+
+  // We send a simple GET `/clubs` request to test whether we really should log out. // Next
+  // sometimes uses out-of-date local storage, so we send an additional request with up-to-date
+  // local storage.
+  // If that gives a 401, we log out.
+  function responseHasAuthError(_response: any) {
+    return (
+      _response.error != null &&
+      _response.error.response != null &&
+      _response.error.response.status === 401
+    );
+  }
+  if (responseHasAuthError(response)) {
+    createAxios()
+      .get('clubs')
+      .then(() => {})
+      .catch((error: any) => {
+        if (error.toJSON().status === 401) {
+          performLogout();
+        }
+      });
+  }
 }
