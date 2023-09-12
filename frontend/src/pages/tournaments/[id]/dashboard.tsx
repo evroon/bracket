@@ -9,7 +9,7 @@ import StagesTab from '../../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { StageWithRounds } from '../../../interfaces/stage';
 import { Tournament } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getStages, getTournament } from '../../../services/adapter';
+import { getBaseApiUrl, getCourts, getStages, getTournament } from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -44,6 +44,8 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
 export default function Dashboard() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse: SWRResponse = getStages(tournamentData.id, true);
+  const swrCourtsResponse: SWRResponse = getCourts(tournamentData.id);
+
   const swrTournamentsResponse = getTournament(tournamentData.id);
   const [activeStageId, setActiveStageId] = useState(null);
 
@@ -85,6 +87,7 @@ export default function Dashboard() {
           <Brackets
             tournamentData={tournamentData}
             swrStagesResponse={swrStagesResponse}
+            swrCourtsResponse={swrCourtsResponse}
             swrUpcomingMatchesResponse={null}
             readOnly
             activeStageId={activeStageId}

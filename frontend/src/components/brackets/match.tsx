@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
-  const visibility: Visibility = match.label === '' ? 'hidden' : 'visible';
+  const visibility: Visibility = match.round_id ? 'hidden' : 'visible';
   const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[2];
   return (
     <Center style={{ transform: 'translateY(0%)', visibility }}>
@@ -47,7 +47,7 @@ function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
         }}
       >
         <Center>
-          <b>{match.label}</b>
+          <b>{match.round_id}</b>
         </Center>
       </div>
     </Center>
@@ -56,12 +56,14 @@ function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
 
 export default function Match({
   swrRoundsResponse,
+  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
   match,
   readOnly,
 }: {
   swrRoundsResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
@@ -113,6 +115,7 @@ export default function Match({
       </UnstyledButton>
       <MatchModal
         swrRoundsResponse={swrRoundsResponse}
+        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}
         match={match}

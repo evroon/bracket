@@ -11,6 +11,7 @@ from bracket.database import database, engine, init_db_when_empty
 from bracket.logger import get_logger
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.club import Club
+from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round
@@ -21,6 +22,7 @@ from bracket.models.db.user import User
 from bracket.models.db.user_x_club import UserXClub
 from bracket.schema import (
     clubs,
+    courts,
     matches,
     metadata,
     players,
@@ -114,6 +116,7 @@ async def create_dev_db() -> None:
         Round: rounds,
         Match: matches,
         Tournament: tournaments,
+        Court: courts,
     }
 
     async def insert_dummy(obj_to_insert: BaseModelT) -> int:

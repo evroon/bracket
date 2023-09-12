@@ -13,6 +13,7 @@ function getRoundsGridCols(
   activeStageId: number,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,
+  swrCourtsResponse: SWRResponse,
   swrUpcomingMatchesResponse: SWRResponse | null,
   readOnly: boolean
 ) {
@@ -24,6 +25,7 @@ function getRoundsGridCols(
           tournamentData={tournamentData}
           round={round}
           swrRoundsResponse={swrStagesResponse}
+          swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={readOnly}
         />
@@ -35,12 +37,14 @@ function getRoundsGridCols(
 export default function Brackets({
   tournamentData,
   swrStagesResponse,
+  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
   activeStageId,
 }: {
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   activeStageId: number | null;
@@ -89,6 +93,7 @@ export default function Brackets({
         activeStageId,
         tournamentData,
         swrStagesResponse,
+        swrCourtsResponse,
         swrUpcomingMatchesResponse,
         readOnly
       )

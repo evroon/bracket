@@ -23,8 +23,6 @@ export function handleRequestError(response: any) {
 }
 
 export function checkForAuthError(response: any) {
-  // if (localStorage)
-  //     console.error('asdasd', localStorage.getItem('login'), response.error);
   if (
     response.error != null &&
     response.error.response != null &&
