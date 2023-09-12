@@ -17,8 +17,7 @@ RUN set -ex \
     && pipenv install --deploy
 
 CMD pipenv run pipenv run gunicorn \
-    -k bracket.uvicorn.RestartableUvicornWorker \
+    -k uvicorn.workers.UvicornWorker \
     bracket.app:app \
     --bind 0.0.0.0:8400 \
-    --workers 1 \
-    --reload
+    --workers 2
