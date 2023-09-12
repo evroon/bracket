@@ -25,6 +25,7 @@ async def test_tournaments_endpoint(
                 'name': 'Some Cool Tournament',
                 'dashboard_public': True,
                 'players_can_be_in_multiple_teams': True,
+                'auto_assign_courts': True,
             }
         ],
     }
@@ -43,6 +44,7 @@ async def test_tournament_endpoint(
             'name': 'Some Cool Tournament',
             'dashboard_public': True,
             'players_can_be_in_multiple_teams': True,
+            'auto_assign_courts': True,
         },
     }
 
@@ -55,6 +57,7 @@ async def test_create_tournament(
         'club_id': auth_context.club.id,
         'dashboard_public': False,
         'players_can_be_in_multiple_teams': True,
+        'auto_assign_courts': True,
     }
     assert (
         await send_auth_request(HTTPMethod.POST, 'tournaments', auth_context, json=body)
@@ -70,6 +73,7 @@ async def test_update_tournament(
         'name': 'Some new name',
         'dashboard_public': False,
         'players_can_be_in_multiple_teams': True,
+        'auto_assign_courts': True,
     }
     assert (
         await send_tournament_request(HTTPMethod.PATCH, '', auth_context, json=body)

@@ -48,6 +48,7 @@ function GeneralTournamentForm({
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
       players_can_be_in_multiple_teams:
         tournament == null ? true : tournament.players_can_be_in_multiple_teams,
+      auto_assign_courts: tournament == null ? true : tournament.auto_assign_courts,
     },
 
     validate: {
@@ -65,7 +66,8 @@ function GeneralTournamentForm({
             parseInt(values.club_id, 10),
             values.name,
             values.dashboard_public,
-            values.players_can_be_in_multiple_teams
+            values.players_can_be_in_multiple_teams,
+            values.auto_assign_courts
           );
         } else {
           assert(tournament != null);
@@ -73,7 +75,8 @@ function GeneralTournamentForm({
             tournament.id,
             values.name,
             values.dashboard_public,
-            values.players_can_be_in_multiple_teams
+            values.players_can_be_in_multiple_teams,
+            values.auto_assign_courts
           );
         }
         await swrTournamentsResponse.mutate(null);
@@ -105,6 +108,11 @@ function GeneralTournamentForm({
         mt="md"
         label="Allow players to be in multiple teams"
         {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
+      />
+      <Checkbox
+        mt="md"
+        label="Automatically assign courts to matches"
+        {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
       />
 
       {tournament != null ? <DropzoneButton tournament={tournament} /> : null}

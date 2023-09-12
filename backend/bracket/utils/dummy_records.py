@@ -31,6 +31,7 @@ DUMMY_TOURNAMENT = Tournament(
     dashboard_public=True,
     logo_path=None,
     players_can_be_in_multiple_teams=True,
+    auto_assign_courts=True,
 )
 
 DUMMY_STAGE1 = Stage(
