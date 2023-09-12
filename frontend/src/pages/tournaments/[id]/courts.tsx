@@ -1,4 +1,4 @@
-import { Button, Divider, TextInput } from '@mantine/core';
+import { Button, Container, Divider, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { SWRResponse } from 'swr';
 
@@ -25,14 +25,14 @@ function CreateCourtForm(tournament: Tournament, swrCourtsResponse: SWRResponse)
       })}
     >
       <Divider mt={12} />
-      <h5>Add Court</h5>
+      <h3>Add Court</h3>
       <TextInput
         withAsterisk
         label="Name"
         placeholder="Best Court Ever"
         {...form.getInputProps('name')}
       />
-      <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
+      <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
         Create Court
       </Button>
     </form>
@@ -52,8 +52,10 @@ export default function CourtsPage() {
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <CourtsTable tournament={tournamentDataFull} swrCourtsResponse={swrCourtsResponse} />
-      {CreateCourtForm(tournamentDataFull, swrCourtsResponse)}
+      <Container>
+        <CourtsTable tournament={tournamentDataFull} swrCourtsResponse={swrCourtsResponse} />
+        {CreateCourtForm(tournamentDataFull, swrCourtsResponse)}
+      </Container>
     </TournamentLayout>
   );
 }
