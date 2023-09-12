@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 from heliclockter import datetime_utc
 
 from bracket.models.db.club import Club
+from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.round import Round
@@ -30,6 +31,7 @@ DUMMY_TOURNAMENT = Tournament(
     dashboard_public=True,
     logo_path=None,
     players_can_be_in_multiple_teams=True,
+    auto_assign_courts=True,
 )
 
 DUMMY_STAGE1 = Stage(
@@ -75,7 +77,7 @@ DUMMY_MATCH1 = Match(
     team2_id=2,
     team1_score=11,
     team2_score=22,
-    label='Court 1 | 11:00 - 11:20',
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH2 = Match(
@@ -85,7 +87,7 @@ DUMMY_MATCH2 = Match(
     team2_id=4,
     team1_score=9,
     team2_score=6,
-    label='Court 2 | 11:00 - 11:20',
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH3 = Match(
@@ -95,7 +97,7 @@ DUMMY_MATCH3 = Match(
     team2_id=4,
     team1_score=23,
     team2_score=26,
-    label='Court 1 | 11:30 - 11:50',
+    court_id=None,
 )
 
 DUMMY_MATCH4 = Match(
@@ -105,7 +107,7 @@ DUMMY_MATCH4 = Match(
     team2_id=3,
     team1_score=43,
     team2_score=45,
-    label='Court 2 | 11:30 - 11:50',
+    court_id=None,
 )
 
 DUMMY_USER = User(
@@ -210,4 +212,16 @@ DUMMY_PLAYER9 = Player(
 DUMMY_USER_X_CLUB = UserXClub(
     user_id=DB_PLACEHOLDER_ID,
     club_id=DB_PLACEHOLDER_ID,
+)
+
+DUMMY_COURT1 = Court(
+    name='Endor',
+    created=DUMMY_MOCK_TIME,
+    tournament_id=DB_PLACEHOLDER_ID,
+)
+
+DUMMY_COURT2 = Court(
+    name='Naboo',
+    created=DUMMY_MOCK_TIME,
+    tournament_id=DB_PLACEHOLDER_ID,
 )

@@ -9,17 +9,20 @@ const axios = require('axios').default;
 
 export function handleRequestError(response: any) {
   if (response.response != null && response.response.data.detail != null) {
+    // If the detail contains an array, there is likely a pydantic validation error occurring.
+    const message = Array.isArray(response.response.data.detail)
+      ? 'Unknown error'
+      : response.response.data.detail.toString();
+
     showNotification({
       color: 'red',
       title: 'An error occurred',
-      message: response.response.data.detail.toString(),
+      message,
     });
   }
 }
 
 export function checkForAuthError(response: any) {
-  // if (localStorage)
-  //     console.error('asdasd', localStorage.getItem('login'), response.error);
   if (
     response.error != null &&
     response.error.response != null &&
@@ -77,6 +80,10 @@ export function getStages(tournament_id: number, no_draft_rounds: boolean = fals
   return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher, {
     refreshInterval: 3000,
   });
+}
+
+export function getCourts(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
 export function getUser(user_id: number): SWRResponse {

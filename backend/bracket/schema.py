@@ -24,6 +24,7 @@ tournaments = Table(
     Column('dashboard_public', Boolean, nullable=False),
     Column('logo_path', String, nullable=True),
     Column('players_can_be_in_multiple_teams', Boolean, nullable=False, server_default='f'),
+    Column('auto_assign_courts', Boolean, nullable=False, server_default='f'),
 )
 
 stages = Table(
@@ -66,9 +67,9 @@ matches = Table(
     Column('round_id', BigInteger, ForeignKey('rounds.id'), nullable=False),
     Column('team1_id', BigInteger, ForeignKey('teams.id'), nullable=False),
     Column('team2_id', BigInteger, ForeignKey('teams.id'), nullable=False),
+    Column('court_id', BigInteger, ForeignKey('courts.id'), nullable=True),
     Column('team1_score', Integer, nullable=False),
     Column('team2_score', Integer, nullable=False),
-    Column('label', String, nullable=False),
 )
 
 teams = Table(
@@ -96,7 +97,6 @@ players = Table(
     Column('active', Boolean, nullable=False, index=True, server_default='t'),
 )
 
-
 users = Table(
     'users',
     metadata,
@@ -121,4 +121,13 @@ players_x_teams = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('player_id', BigInteger, ForeignKey('players.id'), nullable=False),
     Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=False),
+)
+
+courts = Table(
+    'courts',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('name', Text, nullable=False),
+    Column('created', DateTimeTZ, nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False, index=True),
 )

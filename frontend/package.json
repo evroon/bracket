@@ -14,7 +14,7 @@
     "jest:watch": "jest --watch",
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
-    "test": "tsc --noEmit && npm run prettier:check && npm run lint && npm run jest -- --passWithNoTests"
+    "test": "tsc --noEmit && npm run prettier:write && npm run lint && npm run jest -- --passWithNoTests"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

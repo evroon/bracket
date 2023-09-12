@@ -11,22 +11,25 @@ export default function Round({
   tournamentData,
   round,
   swrRoundsResponse,
+  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
 }) {
   const matches = round.matches
-    .sort((m1, m2) => (m1.label > m2.label ? 1 : 0))
+    .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
     .map((match) => (
       <Match
         key={match.id}
         tournamentData={tournamentData}
         swrRoundsResponse={swrRoundsResponse}
+        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
         readOnly={readOnly}

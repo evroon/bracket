@@ -7,7 +7,18 @@ from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
 from bracket.database import database, init_db_when_empty
-from bracket.routes import auth, clubs, matches, players, rounds, stages, teams, tournaments, users
+from bracket.routes import (
+    auth,
+    clubs,
+    courts,
+    matches,
+    players,
+    rounds,
+    stages,
+    teams,
+    tournaments,
+    users,
+)
 
 init_sentry()
 
@@ -68,4 +79,5 @@ app.include_router(rounds.router, tags=['rounds'])
 app.include_router(matches.router, tags=['matches'])
 app.include_router(stages.router, tags=['stages'])
 app.include_router(teams.router, tags=['teams'])
+app.include_router(courts.router, tags=['courts'])
 app.include_router(users.router, tags=['users'])

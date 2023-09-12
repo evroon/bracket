@@ -1,3 +1,4 @@
+import { Court } from './court';
 import { TeamInterface } from './team';
 
 export interface MatchInterface {
@@ -8,7 +9,8 @@ export interface MatchInterface {
   team2_score: number;
   team1: TeamInterface;
   team2: TeamInterface;
-  label: string;
+  court_id: number | null;
+  court: Court | null;
 }
 
 export interface MatchBodyInterface {
@@ -16,7 +18,7 @@ export interface MatchBodyInterface {
   round_id: number;
   team1_score: number;
   team2_score: number;
-  label: string;
+  court_id: number | null;
 }
 
 export interface UpcomingMatchInterface {

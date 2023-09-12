@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from bracket.logic.elo import PlayerStatistics, calculate_elo_per_player
-from bracket.models.db.match import MatchWithTeamDetails
+from bracket.models.db.match import MatchWithDetails
 from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_PLAYER1, DUMMY_PLAYER2
@@ -15,14 +15,15 @@ def test_elo_calculation() -> None:
         is_active=False,
         name='Some round',
         matches=[
-            MatchWithTeamDetails(
+            MatchWithDetails(
                 created=DUMMY_MOCK_TIME,
                 team1_id=1,
                 team2_id=1,
                 team1_score=3,
                 team2_score=4,
                 round_id=1,
-                label='Some label',
+                court_id=None,
+                court=None,
                 team1=FullTeamWithPlayers(
                     name='Dummy team 1',
                     tournament_id=1,

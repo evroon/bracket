@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_matches_for_players
 from bracket.logic.scheduling.round_robin import get_possible_upcoming_matches_round_robin
@@ -11,8 +10,7 @@ from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import match_dependency, round_dependency
-from bracket.schema import matches
-from bracket.sql.matches import sql_create_match, sql_delete_match
+from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
 from bracket.sql.stages import get_stages_with_rounds_and_matches
 from bracket.utils.types import assert_some
 
@@ -87,9 +85,7 @@ async def update_match_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
-    await database.execute(
-        query=matches.update().where(matches.c.id == match.id),
-        values=match_body.dict(),
-    )
+    assert match.id
+    await sql_update_match(match.id, match_body)
     await recalculate_elo_for_tournament_id(tournament_id)
     return SuccessResponse()

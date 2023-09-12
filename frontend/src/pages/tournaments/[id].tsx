@@ -18,6 +18,7 @@ import { StageWithRounds } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import {
   checkForAuthError,
+  getCourts,
   getStages,
   getTournaments,
   getUpcomingMatches,
@@ -31,6 +32,7 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
+  const swrCourtsResponse: SWRResponse = getCourts(id);
   const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
@@ -157,6 +159,7 @@ export default function TournamentPage() {
         <Brackets
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
+          swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
           activeStageId={activeStageId}
