@@ -6,7 +6,7 @@ from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
-from bracket.database import database, init_db_when_empty
+from bracket.database import database
 from bracket.routes import (
     auth,
     clubs,
@@ -19,6 +19,7 @@ from bracket.routes import (
     tournaments,
     users,
 )
+from bracket.utils.db_init import init_db_when_empty
 
 init_sentry()
 

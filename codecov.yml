@@ -8,4 +8,4 @@ coverage:
         informational: true
 
 ignore:
-  - "backend/bracket/database.py"
+  - "backend/bracket/utils/db_init.py"

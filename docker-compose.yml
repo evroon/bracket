@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+    bracket-frontend:
+        build: frontend
+        container_name: bracket-frontend
+        ports:
+            - "3000:3000"
+        restart: unless-stopped
+
+    bracket-backend:
+        build: backend
+        container_name: bracket-backend
+        ports:
+            - "8400:8400"
+        environment:
+            ENVIRONMENT: "DEVELOPMENT"
+            PG_DSN: "postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev"
+        restart: unless-stopped
+        depends_on:
+          - postgres
+
+    postgres:
+        image: postgres
+        restart: always
+        environment:
+          POSTGRES_DB: bracket_dev
+          POSTGRES_USER: bracket_dev
+          POSTGRES_PASSWORD: bracket_dev
