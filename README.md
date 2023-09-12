@@ -13,7 +13,7 @@
 > Release v1.0.0 will be the first out-of-beta release.
 
 Ladder tournament system meant to be easy to use.
-Bracket is written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
+Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
 
 
 ### Preview
