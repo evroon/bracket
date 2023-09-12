@@ -13,16 +13,30 @@
 > Release v1.0.0 will be the first out-of-beta release.
 
 Ladder tournament system meant to be easy to use.
-Bracket is written in async Python (with FastAPI) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
+Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
 
 
 ### Preview
 <img alt="" src="misc/img/schedule_preview.png" width="100%" />
 <img alt="" src="misc/img/players_preview.png" width="100%" />
 
+# Quickstart
+To quickly run bracket to see how it works, clone it and run `docker-compose up`:
+```shell
+git clone git@github.com:evroon/bracket.git
+cd bracket
+sudo docker-compose up -d
+```
+
+This will start the backend and frontend of Bracket, as well as a postgres instance. You should now
+be able to view bracket at http://localhost:3000.
+
+To insert dummy rows into the database, run:
+```shell
+sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
+```
+
 # Setup
-
-
 ## Database
 First create a `bracket` cluster:
 ```shell
