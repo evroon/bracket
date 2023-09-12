@@ -11,6 +11,7 @@ import DeleteButton from '../buttons/delete';
 import { responseIsValid } from '../utils/util';
 
 function CourtsSelect({ form, swrCourtsResponse }: { form: any; swrCourtsResponse: SWRResponse }) {
+  const noCourtOption = { value: null, label: 'No Court' };
   const data = responseIsValid(swrCourtsResponse)
     ? swrCourtsResponse.data.data.map((court: Court) => ({ value: court.id, label: court.name }))
     : [];
@@ -18,7 +19,7 @@ function CourtsSelect({ form, swrCourtsResponse }: { form: any; swrCourtsRespons
     <Select
       label="Court"
       placeholder="Pick a court"
-      data={data}
+      data={data.concat(noCourtOption)}
       searchable
       maxDropdownHeight={400}
       style={{ marginTop: 20 }}

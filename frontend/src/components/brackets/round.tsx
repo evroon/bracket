@@ -23,7 +23,7 @@ export default function Round({
   readOnly: boolean;
 }) {
   const matches = round.matches
-    .sort((m1, m2) => ((m1.court_id ? m1.court_id : -1) > (m2.court_id ? m2.court_id : -2) ? 1 : 0))
+    .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
     .map((match) => (
       <Match
         key={match.id}

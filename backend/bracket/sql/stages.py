@@ -28,12 +28,14 @@ async def get_stages_with_rounds_and_matches(
             SELECT DISTINCT ON (matches.id)
                 matches.*,
                 to_json(t1) as team1,
-                to_json(t2) as team2
+                to_json(t2) as team2,
+                to_json(c) as court
             FROM matches
             LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
             LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
             LEFT JOIN rounds r on matches.round_id = r.id
             LEFT JOIN stages s2 on r.stage_id = s2.id
+            LEFT JOIN courts c on matches.court_id = c.id
             WHERE s2.tournament_id = :tournament_id
         ), rounds_with_matches AS (
             SELECT DISTINCT ON (rounds.id)

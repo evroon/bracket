@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
-  const visibility: Visibility = match.round_id ? 'hidden' : 'visible';
+  const visibility: Visibility = match.court ? 'visible' : 'hidden';
   const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[2];
   return (
     <Center style={{ transform: 'translateY(0%)', visibility }}>
@@ -47,7 +47,7 @@ function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
         }}
       >
         <Center>
-          <b>{match.round_id}</b>
+          <b>{match.court?.name}</b>
         </Center>
       </div>
     </Center>

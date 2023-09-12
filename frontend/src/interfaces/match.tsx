@@ -1,3 +1,4 @@
+import { Court } from './court';
 import { TeamInterface } from './team';
 
 export interface MatchInterface {
@@ -9,6 +10,7 @@ export interface MatchInterface {
   team1: TeamInterface;
   team2: TeamInterface;
   court_id: number | null;
+  court: Court | null;
 }
 
 export interface MatchBodyInterface {

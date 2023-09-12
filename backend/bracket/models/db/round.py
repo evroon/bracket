@@ -4,7 +4,7 @@ from typing import Any
 from heliclockter import datetime_utc
 from pydantic import root_validator, validator
 
-from bracket.models.db.match import Match, MatchWithTeamDetails
+from bracket.models.db.match import Match, MatchWithDetails
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage import Stage, StageType
 from bracket.utils.types import assert_some
@@ -20,7 +20,7 @@ class Round(BaseModelORM):
 
 
 class RoundWithMatches(Round):
-    matches: list[MatchWithTeamDetails]
+    matches: list[MatchWithDetails]
 
     @validator('matches', pre=True)
     def handle_matches(values: list[Match]) -> list[Match]:  # type: ignore[misc]

@@ -3,6 +3,7 @@ from decimal import Decimal
 from heliclockter import datetime_utc
 from pydantic import BaseModel
 
+from bracket.models.db.court import Court
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.team import FullTeamWithPlayers, TeamWithPlayers
 from bracket.utils.types import assert_some
@@ -24,9 +25,10 @@ class UpcomingMatch(BaseModel):
     team2_id: int
 
 
-class MatchWithTeamDetails(Match):
+class MatchWithDetails(Match):
     team1: FullTeamWithPlayers
     team2: FullTeamWithPlayers
+    court: Court | None
 
     @property
     def teams(self) -> list[FullTeamWithPlayers]:
