@@ -1,3 +1,5 @@
+from typing import Literal, cast
+
 from bracket.database import database
 from bracket.models.db.round import StageWithRounds
 from bracket.models.db.stage import Stage, StageCreateBody
@@ -88,3 +90,58 @@ async def sql_create_stage(stage: StageCreateBody, tournament_id: int) -> Stage:
         raise ValueError('Could not create stage')
 
     return Stage.parse_obj(result._mapping)
+
+
+async def get_next_stage_in_tournament(
+    tournament_id: int, direction: Literal['next', 'previous']
+) -> int | None:
+    select_query = '''
+        SELECT id
+        FROM stages
+        WHERE
+            CASE WHEN :direction='next'
+            THEN (
+                id > COALESCE(
+                    (
+                        SELECT id FROM stages AS t
+                        WHERE is_active IS TRUE
+                        AND stages.tournament_id = :tournament_id
+                        ORDER BY id ASC 
+                    ),
+                    -1
+                )
+            )
+            ELSE (
+                id < COALESCE(
+                    (
+                        SELECT id FROM stages AS t
+                        WHERE is_active IS TRUE
+                        AND stages.tournament_id = :tournament_id
+                        ORDER BY id DESC 
+                    ),
+                    -1
+                )
+            )
+            END
+        AND stages.tournament_id = :tournament_id
+    '''
+    return cast(
+        int,
+        await database.execute(
+            query=select_query,
+            values={'tournament_id': tournament_id, 'direction': direction},
+        ),
+    )
+
+
+async def sql_activate_next_stage(new_active_stage_id: int, tournament_id: int) -> None:
+    update_query = '''
+        UPDATE stages
+        SET is_active = (stages.id = :new_active_stage_id)
+        WHERE stages.tournament_id = :tournament_id
+        
+    '''
+    await database.execute(
+        query=update_query,
+        values={'tournament_id': tournament_id, 'new_active_stage_id': new_active_stage_id},
+    )

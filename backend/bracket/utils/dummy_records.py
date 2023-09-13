@@ -97,7 +97,7 @@ DUMMY_MATCH3 = Match(
     team2_id=4,
     team1_score=23,
     team2_score=26,
-    court_id=None,
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH4 = Match(

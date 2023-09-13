@@ -6,9 +6,9 @@ export async function createStage(tournament_id: number, type: string) {
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function activateNextStage(tournament_id: number) {
+export async function activateNextStage(tournament_id: number, direction: string) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stages/activate`)
+    .post(`tournaments/${tournament_id}/stages/activate`, { direction })
     .catch((response: any) => handleRequestError(response));
 }
 

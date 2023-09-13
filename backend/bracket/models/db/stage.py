@@ -1,4 +1,5 @@
 from enum import auto
+from typing import Literal
 
 from heliclockter import datetime_utc
 
@@ -24,6 +25,10 @@ class Stage(BaseModelORM):
 
 class StageUpdateBody(BaseModelORM):
     is_active: bool
+
+
+class StageActivateBody(BaseModelORM):
+    direction: Literal['next', 'previous'] = 'next'
 
 
 class StageCreateBody(BaseModelORM):

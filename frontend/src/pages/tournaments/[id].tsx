@@ -1,11 +1,12 @@
 import { Button, Center, Grid, Group, Title } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconExternalLink, IconSquareArrowRight } from '@tabler/icons-react';
+import { IconExternalLink } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
+import { NextStageButton } from '../../components/buttons/next_stage_button';
 import SaveButton from '../../components/buttons/save';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
@@ -22,7 +23,6 @@ import {
   getUpcomingMatches,
 } from '../../services/adapter';
 import { createRound } from '../../services/round';
-import { activateNextStage } from '../../services/stage';
 import TournamentLayout from './_tournament_layout';
 
 export default function TournamentPage() {
@@ -118,18 +118,10 @@ export default function TournamentPage() {
             >
               View dashboard
             </Button>
-            <Button
-              size="md"
-              style={{ marginBottom: 10 }}
-              color="indigo"
-              leftIcon={<IconSquareArrowRight size={24} />}
-              onClick={() => {
-                activateNextStage(tournamentData.id);
-                swrStagesResponse.mutate();
-              }}
-            >
-              Go to next stage
-            </Button>
+            <NextStageButton
+              tournamentData={tournamentData}
+              swrStagesResponse={swrStagesResponse}
+            />
             {selectedStageId == null ? null : (
               <SaveButton
                 onClick={async () => {

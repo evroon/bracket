@@ -206,7 +206,12 @@ async def sql_create_dev_db() -> None:
     )
     await insert_dummy(
         DUMMY_MATCH3.copy(
-            update={'round_id': round_id_2, 'team1_id': team_id_2, 'team2_id': team_id_4}
+            update={
+                'round_id': round_id_2,
+                'team1_id': team_id_2,
+                'team2_id': team_id_4,
+                'court_id': court_id_1,
+            }
         ),
     )
     await insert_dummy(

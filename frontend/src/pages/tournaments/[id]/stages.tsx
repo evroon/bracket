@@ -1,7 +1,12 @@
-import { Button, Container, Divider, Select } from '@mantine/core';
+import { Button, Container, Divider, Group, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
+import {
+  NextStageButton,
+  PreviousStageButton,
+} from '../../../components/buttons/next_stage_button';
 import StagesTable from '../../../components/tables/stages';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
@@ -56,6 +61,13 @@ export default function StagesPage() {
       <Container>
         <StagesTable tournament={tournamentDataFull} swrStagesResponse={swrStagesResponse} />
         {CreateStageForm(tournamentDataFull, swrStagesResponse)}
+        <Group grow mt="1rem">
+          <PreviousStageButton
+            tournamentData={tournamentData}
+            swrStagesResponse={swrStagesResponse}
+          />
+          <NextStageButton tournamentData={tournamentData} swrStagesResponse={swrStagesResponse} />
+        </Group>
       </Container>
     </TournamentLayout>
   );
