@@ -8,6 +8,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
+from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.team import Team
@@ -20,6 +21,7 @@ from bracket.schema import (
     matches,
     metadata,
     players,
+    players_x_teams,
     rounds,
     stages,
     teams,
@@ -46,6 +48,7 @@ from bracket.utils.dummy_records import (
     DUMMY_PLAYER7,
     DUMMY_PLAYER8,
     DUMMY_PLAYER9,
+    DUMMY_PLAYER_X_TEAM,
     DUMMY_ROUND1,
     DUMMY_ROUND2,
     DUMMY_ROUND3,
@@ -110,6 +113,7 @@ async def sql_create_dev_db() -> None:
         Stage: stages,
         Team: teams,
         UserXClub: users_x_clubs,
+        PlayerXTeam: players_x_teams,
         Player: players,
         Round: rounds,
         Match: matches,
@@ -138,15 +142,40 @@ async def sql_create_dev_db() -> None:
     team_id_3 = await insert_dummy(DUMMY_TEAM3.copy(update={'tournament_id': tournament_id_1}))
     team_id_4 = await insert_dummy(DUMMY_TEAM4.copy(update={'tournament_id': tournament_id_1}))
 
-    await insert_dummy(DUMMY_PLAYER1.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER2.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER3.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER4.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER5.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER6.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER7.copy(update={'tournament_id': tournament_id_1}))
-    await insert_dummy(DUMMY_PLAYER8.copy(update={'tournament_id': tournament_id_1}))
+    player_id_1 = await insert_dummy(DUMMY_PLAYER1.copy(update={'tournament_id': tournament_id_1}))
+    player_id_2 = await insert_dummy(DUMMY_PLAYER2.copy(update={'tournament_id': tournament_id_1}))
+    player_id_3 = await insert_dummy(DUMMY_PLAYER3.copy(update={'tournament_id': tournament_id_1}))
+    player_id_4 = await insert_dummy(DUMMY_PLAYER4.copy(update={'tournament_id': tournament_id_1}))
+    player_id_5 = await insert_dummy(DUMMY_PLAYER5.copy(update={'tournament_id': tournament_id_1}))
+    player_id_6 = await insert_dummy(DUMMY_PLAYER6.copy(update={'tournament_id': tournament_id_1}))
+    player_id_7 = await insert_dummy(DUMMY_PLAYER7.copy(update={'tournament_id': tournament_id_1}))
+    player_id_8 = await insert_dummy(DUMMY_PLAYER8.copy(update={'tournament_id': tournament_id_1}))
     await insert_dummy(DUMMY_PLAYER9.copy(update={'tournament_id': tournament_id_1}))
+
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_1, 'team_id': team_id_1})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_2, 'team_id': team_id_1})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_3, 'team_id': team_id_2})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_4, 'team_id': team_id_2})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_5, 'team_id': team_id_3})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_6, 'team_id': team_id_3})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_7, 'team_id': team_id_4})
+    )
+    await insert_dummy(
+        DUMMY_PLAYER_X_TEAM.copy(update={'player_id': player_id_8, 'team_id': team_id_4})
+    )
 
     round_id_1 = await insert_dummy(DUMMY_ROUND1.copy(update={'stage_id': stage_id_1}))
     round_id_2 = await insert_dummy(DUMMY_ROUND2.copy(update={'stage_id': stage_id_1}))
