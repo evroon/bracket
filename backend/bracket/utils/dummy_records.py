@@ -6,6 +6,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
+from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage, StageType
 from bracket.models.db.team import Team
@@ -207,6 +208,11 @@ DUMMY_PLAYER9 = Player(
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
+)
+
+DUMMY_PLAYER_X_TEAM = PlayerXTeam(
+    player_id=DB_PLACEHOLDER_ID,
+    team_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_USER_X_CLUB = UserXClub(
