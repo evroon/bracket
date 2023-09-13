@@ -47,7 +47,7 @@ export default function Dashboard() {
   const swrCourtsResponse: SWRResponse = getCourts(tournamentData.id);
 
   const swrTournamentsResponse = getTournament(tournamentData.id);
-  const [activeStageId, setActiveStageId] = useState(null);
+  const [selectedStageId, setSelectedStageId] = useState(null);
 
   const tournamentDataFull: Tournament =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
@@ -61,8 +61,8 @@ export default function Dashboard() {
       (stage: StageWithRounds) => stage.is_active
     );
 
-    if (activeTab.length > 0 && activeStageId == null && activeTab[0].id != null) {
-      setActiveStageId(activeTab[0].id.toString());
+    if (activeTab.length > 0 && selectedStageId == null && activeTab[0].id != null) {
+      setSelectedStageId(activeTab[0].id.toString());
     }
   }
 
@@ -79,9 +79,9 @@ export default function Dashboard() {
         <Grid.Col span={10}>
           <Center>
             <StagesTab
-              activeStageId={activeStageId}
+              selectedStageId={selectedStageId}
               swrStagesResponse={swrStagesResponse}
-              setActiveStageId={setActiveStageId}
+              setSelectedStageId={setSelectedStageId}
             />
           </Center>
           <Brackets
@@ -90,7 +90,7 @@ export default function Dashboard() {
             swrCourtsResponse={swrCourtsResponse}
             swrUpcomingMatchesResponse={null}
             readOnly
-            activeStageId={activeStageId}
+            selectedStageId={selectedStageId}
           />
         </Grid.Col>
       </Grid>

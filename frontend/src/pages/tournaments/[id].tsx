@@ -1,6 +1,6 @@
 import { Button, Center, Grid, Group, Title } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconExternalLink } from '@tabler/icons-react';
+import { IconExternalLink, IconSquareArrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -22,6 +22,7 @@ import {
   getUpcomingMatches,
 } from '../../services/adapter';
 import { createRound } from '../../services/round';
+import { activateNextStage } from '../../services/stage';
 import TournamentLayout from './_tournament_layout';
 
 export default function TournamentPage() {
@@ -35,7 +36,7 @@ export default function TournamentPage() {
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
-  const [activeStageId, setActiveStageId] = useState(null);
+  const [selectedStageId, setSelectedStageId] = useState(null);
 
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
@@ -65,11 +66,11 @@ export default function TournamentPage() {
       [[draftRound]] = draftRounds;
     }
 
-    const activeTab = swrStagesResponse.data.data.filter(
+    const selectedTab = swrStagesResponse.data.data.filter(
       (stage: RoundInterface) => stage.is_active
     );
-    if (activeTab.length > 0 && activeStageId == null && activeTab[0].id != null) {
-      setActiveStageId(activeTab[0].id.toString());
+    if (selectedTab.length > 0 && selectedStageId == null && selectedTab[0].id != null) {
+      setSelectedStageId(selectedTab[0].id.toString());
     }
   }
 
@@ -117,10 +118,22 @@ export default function TournamentPage() {
             >
               View dashboard
             </Button>
-            {activeStageId == null ? null : (
+            <Button
+              size="md"
+              style={{ marginBottom: 10 }}
+              color="indigo"
+              leftIcon={<IconSquareArrowRight size={24} />}
+              onClick={() => {
+                activateNextStage(tournamentData.id);
+                swrStagesResponse.mutate();
+              }}
+            >
+              Go to next stage
+            </Button>
+            {selectedStageId == null ? null : (
               <SaveButton
                 onClick={async () => {
-                  await createRound(tournamentData.id, activeStageId);
+                  await createRound(tournamentData.id, selectedStageId);
                   await swrStagesResponse.mutate();
                 }}
                 leftIcon={<GoPlus size={24} />}
@@ -134,8 +147,8 @@ export default function TournamentPage() {
         <Center>
           <StagesTab
             swrStagesResponse={swrStagesResponse}
-            activeStageId={activeStageId}
-            setActiveStageId={setActiveStageId}
+            selectedStageId={selectedStageId}
+            setSelectedStageId={setSelectedStageId}
           />
         </Center>
         <Brackets
@@ -144,7 +157,7 @@ export default function TournamentPage() {
           swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
-          activeStageId={activeStageId}
+          selectedStageId={selectedStageId}
         />
         {scheduler}
       </div>

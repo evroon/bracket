@@ -66,7 +66,7 @@ function StyledTabs(props: TabsProps & { setSelectedStageId: any }) {
   );
 }
 
-export default function StagesTab({ swrStagesResponse, activeStageId, setActiveStageId }: any) {
+export default function StagesTab({ swrStagesResponse, selectedStageId, setSelectedStageId }: any) {
   if (!responseIsValid(swrStagesResponse)) {
     return <></>;
   }
@@ -80,8 +80,10 @@ export default function StagesTab({ swrStagesResponse, activeStageId, setActiveS
     </Tabs.Tab>
   ));
   return (
-    <StyledTabs value={activeStageId} setSelectedStageId={setActiveStageId}>
-      <Tabs.List>{items}</Tabs.List>
-    </StyledTabs>
+    <>
+      <StyledTabs value={selectedStageId} setSelectedStageId={setSelectedStageId}>
+        <Tabs.List>{items}</Tabs.List>
+      </StyledTabs>
+    </>
   );
 }

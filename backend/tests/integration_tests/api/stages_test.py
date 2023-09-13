@@ -3,7 +3,13 @@ import pytest
 from bracket.models.db.stage import StageType
 from bracket.schema import stages
 from bracket.sql.stages import get_stages_with_rounds_and_matches
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_ROUND1, DUMMY_STAGE1, DUMMY_TEAM1
+from bracket.utils.dummy_records import (
+    DUMMY_MOCK_TIME,
+    DUMMY_ROUND1,
+    DUMMY_STAGE1,
+    DUMMY_STAGE2,
+    DUMMY_TEAM1,
+)
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import (
@@ -47,7 +53,7 @@ async def test_stages_endpoint(
                     'created': DUMMY_MOCK_TIME.isoformat(),
                     'type': 'ROUND_ROBIN',
                     'type_name': 'Round robin',
-                    'is_active': False,
+                    'is_active': True,
                     'rounds': [
                         {
                             'id': round_inserted.id,
@@ -88,7 +94,7 @@ async def test_delete_stage(
     async with (
         inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
         inserted_stage(
-            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted,
     ):
         assert (

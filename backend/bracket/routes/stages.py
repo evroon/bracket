@@ -94,3 +94,45 @@ async def update_stage(
         values={**values, 'is_active': stage_body.is_active},
     )
     return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/stages/activate", response_model=SuccessResponse)
+async def activate_next_stage(
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    select_query = '''
+        SELECT id
+        FROM stages
+        WHERE id > COALESCE(
+            (
+                SELECT id FROM stages AS t
+                WHERE is_active IS TRUE
+                AND stages.tournament_id = :tournament_id
+                ORDER BY id ASC 
+            ),
+            -1
+        )
+        AND stages.tournament_id = :tournament_id
+    '''
+    new_active_stage_id = await database.execute(
+        query=select_query,
+        values={'tournament_id': tournament_id},
+    )
+    if new_active_stage_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="There is no next stage",
+        )
+
+    update_query = '''
+        UPDATE stages
+        SET is_active = (stages.id = :new_active_stage_id)
+        WHERE stages.tournament_id = :tournament_id
+        
+    '''
+    await database.execute(
+        query=update_query,
+        values={'tournament_id': tournament_id, 'new_active_stage_id': new_active_stage_id},
+    )
+    return SuccessResponse()
