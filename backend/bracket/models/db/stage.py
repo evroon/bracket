@@ -8,11 +8,11 @@ from bracket.utils.types import EnumAutoStr
 
 
 class StageType(EnumAutoStr):
-    SINGLE_ELIMINATION = auto()
     DOUBLE_ELIMINATION = auto()
+    ROUND_ROBIN = auto()
+    SINGLE_ELIMINATION = auto()
     SWISS = auto()
     SWISS_DYNAMIC_TEAMS = auto()
-    ROUND_ROBIN = auto()
 
 
 class Stage(BaseModelORM):

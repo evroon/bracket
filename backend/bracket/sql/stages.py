@@ -107,8 +107,9 @@ async def get_next_stage_in_tournament(
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
                         ORDER BY id ASC 
+                        LIMIT 1
                     ),
-                    -1
+                    10000000000000
                 )
             )
             ELSE (
@@ -118,15 +119,17 @@ async def get_next_stage_in_tournament(
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
                         ORDER BY id DESC 
+                        LIMIT 1
                     ),
                     -1
                 )
             )
             END
         AND stages.tournament_id = :tournament_id
+        AND is_active IS FALSE
     '''
     return cast(
-        int,
+        int | None,
         await database.execute(
             query=select_query,
             values={'tournament_id': tournament_id, 'direction': direction},

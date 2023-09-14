@@ -1,4 +1,4 @@
-import { Alert, Grid, Skeleton } from '@mantine/core';
+import { Alert, Container, Grid, Skeleton } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -48,6 +48,21 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
   );
 }
 
+function NotStartedAlert() {
+  return (
+    <Container>
+      <Alert
+        icon={<IconAlertCircle size={16} />}
+        title="Tournament has not started yet"
+        color="blue"
+        radius="lg"
+      >
+        Please go to the next stage to start the tournament.
+      </Alert>
+    </Container>
+  );
+}
+
 function LoadingSkeleton() {
   return (
     <Grid>
@@ -76,6 +91,9 @@ export default function Brackets({
   readOnly: boolean;
   selectedStageId: number | null;
 }) {
+  if (selectedStageId == null) {
+    return <NotStartedAlert />;
+  }
   if (
     selectedStageId == null ||
     (!swrStagesResponse.isLoading && !responseIsValid(swrStagesResponse))

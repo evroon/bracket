@@ -6,7 +6,6 @@ export interface StageWithRounds {
   created: string;
   type: string;
   type_name: string;
-  status: string;
   is_active: boolean;
   rounds: RoundInterface[];
 }
