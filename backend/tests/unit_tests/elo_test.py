@@ -1,15 +1,16 @@
 from decimal import Decimal
 
-from bracket.logic.elo import PlayerStatistics, calculate_elo_per_player
+from bracket.logic.elo import calculate_elo_per_player
 from bracket.models.db.match import MatchWithDetails
-from bracket.models.db.round import RoundWithMatches
+from bracket.models.db.players import PlayerStatistics
 from bracket.models.db.team import FullTeamWithPlayers
+from bracket.models.db.util import RoundWithMatches
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_PLAYER1, DUMMY_PLAYER2
 
 
 def test_elo_calculation() -> None:
     round_ = RoundWithMatches(
-        stage_id=1,
+        stage_item_id=1,
         created=DUMMY_MOCK_TIME,
         is_draft=False,
         is_active=False,
@@ -32,6 +33,9 @@ def test_elo_calculation() -> None:
                     players=[DUMMY_PLAYER1.copy(update={'id': 1})],
                     elo_score=DUMMY_PLAYER1.elo_score,
                     swiss_score=DUMMY_PLAYER1.swiss_score,
+                    wins=DUMMY_PLAYER1.wins,
+                    draws=DUMMY_PLAYER1.draws,
+                    losses=DUMMY_PLAYER1.losses,
                 ),
                 team2=FullTeamWithPlayers(
                     name='Dummy team 2',
@@ -41,6 +45,9 @@ def test_elo_calculation() -> None:
                     players=[DUMMY_PLAYER2.copy(update={'id': 2})],
                     elo_score=DUMMY_PLAYER2.elo_score,
                     swiss_score=DUMMY_PLAYER2.swiss_score,
+                    wins=DUMMY_PLAYER2.wins,
+                    draws=DUMMY_PLAYER2.draws,
+                    losses=DUMMY_PLAYER2.losses,
                 ),
             )
         ],

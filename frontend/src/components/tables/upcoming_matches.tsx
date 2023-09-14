@@ -32,6 +32,10 @@ export default function UpcomingMatchesTable({
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
   const tableState = getTableState('elo_diff');
 
+  if (round_id == null) {
+    return null;
+  }
+
   if (swrUpcomingMatchesResponse.error) {
     return <RequestErrorAlert error={swrUpcomingMatchesResponse.error} />;
   }

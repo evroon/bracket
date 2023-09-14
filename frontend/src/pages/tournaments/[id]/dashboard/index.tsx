@@ -8,25 +8,27 @@ import Brackets from '../../../../components/brackets/brackets';
 import {
   TournamentHeadTitle,
   TournamentLogo,
+  TournamentQRCode,
   TournamentTitle,
 } from '../../../../components/dashboard/layout';
 import StagesTab from '../../../../components/utils/stages_tab';
 import { responseIsValid } from '../../../../components/utils/util';
-import { StageWithRounds } from '../../../../interfaces/stage';
-import { getCourts, getStages } from '../../../../services/adapter';
+import { StageWithStageItems } from '../../../../interfaces/stage';
+import { getCourts, getStagesLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 export default function Index() {
   const tournamentResponse = getTournamentResponseByEndpointName();
 
   // Hack to avoid unequal number of rendered hooks.
-  const tournamentId = tournamentResponse != null ? tournamentResponse[0].id : -1;
+  const notFound = tournamentResponse == null || tournamentResponse[0] == null;
+  const tournamentId = !notFound ? tournamentResponse[0].id : -1;
 
-  const swrStagesResponse: SWRResponse = getStages(tournamentId, true);
+  const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
   const swrCourtsResponse: SWRResponse = getCourts(tournamentId);
   const [selectedStageId, setSelectedStageId] = useState(null);
 
-  if (tournamentResponse == null) {
+  if (notFound) {
     return <NotFoundTitle />;
   }
 
@@ -34,7 +36,7 @@ export default function Index() {
 
   if (responseIsValid(swrStagesResponse)) {
     const activeTab = swrStagesResponse.data.data.filter(
-      (stage: StageWithRounds) => stage.is_active
+      (stage: StageWithStageItems) => stage.is_active
     );
 
     if (activeTab.length > 0 && selectedStageId == null && activeTab[0].id != null) {
@@ -51,6 +53,7 @@ export default function Index() {
         <Grid.Col span={2}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
+          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span={10}>
           <Center>

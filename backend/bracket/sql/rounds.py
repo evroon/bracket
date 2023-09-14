@@ -1,27 +1,39 @@
 from bracket.database import database
-from bracket.models.db.round import RoundWithMatches
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.models.db.util import RoundWithMatches
+from bracket.sql.stage_items import get_stage_item
 
 
-async def get_rounds_for_stage(tournament_id: int, stage_id: int) -> list[RoundWithMatches]:
-    stages = await get_stages_with_rounds_and_matches(tournament_id)
-    result_stage = next((stage for stage in stages if stage.id == stage_id), None)
-    if result_stage is None:
-        raise ValueError(f'Could not find stage with id {stage_id} for tournament {tournament_id}')
+async def get_rounds_for_stage_item(
+    tournament_id: int, stage_item_id: int
+) -> list[RoundWithMatches]:
+    stage_item = await get_stage_item(tournament_id, stage_item_id)
 
-    return result_stage.rounds
+    if stage_item is None:
+        raise ValueError(
+            f'Could not find stage item with id {stage_item_id} for tournament {tournament_id}'
+        )
+
+    return stage_item.rounds
 
 
-async def get_next_round_name(tournament_id: int, stage_id: int) -> str:
+async def get_next_round_name(tournament_id: int, stage_item_id: int) -> str:
     query = '''
         SELECT count(*) FROM rounds
-        JOIN stages s on s.id = rounds.stage_id
+        JOIN stages s on s.id = rounds.stage_item_id
         WHERE s.tournament_id = :tournament_id
-        AND rounds.stage_id = :stage_id
+        AND rounds.stage_item_id = :stage_item_id
     '''
     round_count = int(
         await database.fetch_val(
-            query=query, values={'tournament_id': tournament_id, 'stage_id': stage_id}
+            query=query, values={'tournament_id': tournament_id, 'stage_item_id': stage_item_id}
         )
     )
     return f'Round {round_count + 1}'
+
+
+async def sql_delete_rounds_for_stage_item_id(stage_item_id: int) -> None:
+    query = '''
+        DELETE FROM rounds
+        WHERE rounds.stage_item_id = :stage_item_id
+        '''
+    await database.execute(query=query, values={'stage_item_id': stage_item_id})

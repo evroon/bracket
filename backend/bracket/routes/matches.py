@@ -1,19 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.logic.scheduling.ladder_players_iter import get_possible_upcoming_matches_for_players
-from bracket.logic.scheduling.round_robin import get_possible_upcoming_matches_round_robin
-from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter
+from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.logic.scheduling.upcoming_matches import (
+    get_upcoming_matches_for_swiss_round,
+)
+from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, SuggestedMatch
 from bracket.models.db.round import Round
-from bracket.models.db.stage import StageType
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import match_dependency, round_dependency
-from bracket.sql.courts import get_all_free_courts_in_round
-from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
-from bracket.sql.stages import get_stages_with_rounds_and_matches
-from bracket.sql.tournaments import sql_get_tournament
+from bracket.sql.matches import sql_delete_match, sql_update_match
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -42,22 +40,9 @@ async def get_matches_to_schedule(
     if not round_.is_draft:
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
 
-    [stage] = await get_stages_with_rounds_and_matches(tournament_id, stage_id=round_.stage_id)
-    match stage.type:
-        case StageType.ROUND_ROBIN:
-            upcoming_matches = await get_possible_upcoming_matches_round_robin(
-                tournament_id, assert_some(stage.id), assert_some(round_.id)
-            )
-
-        case StageType.SWISS:
-            upcoming_matches = await get_possible_upcoming_matches_for_players(
-                tournament_id, match_filter, assert_some(stage.id), assert_some(round_.id)
-            )
-
-        case _:
-            raise NotImplementedError(f'Cannot suggest matches for stage type {stage.type}')
-
-    return UpcomingMatchesResponse(data=upcoming_matches)
+    return UpcomingMatchesResponse(
+        data=await get_upcoming_matches_for_swiss_round(match_filter, round_, tournament_id)
+    )
 
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
@@ -77,20 +62,59 @@ async def create_match(
     match_body: MatchCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
-    tournament = await sql_get_tournament(tournament_id)
-    next_free_court_id = None
-
-    if tournament.auto_assign_courts:
-        free_courts = await get_all_free_courts_in_round(tournament_id, match_body.round_id)
-        if len(free_courts) > 0:
-            next_free_court_id = free_courts[0].id
-
-    match_body = match_body.copy(update={'court_id': next_free_court_id})
-    match = await sql_create_match(match_body)
-    return SingleMatchResponse(data=match)
+    return SingleMatchResponse(
+        data=await create_match_and_assign_free_court(tournament_id, match_body)
+    )
 
 
-@router.patch("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
+@router.post(
+    "/tournaments/{tournament_id}/rounds/{round_id}/schedule_auto",
+    response_model=SuccessResponse,
+)
+async def create_matches_automatically(
+    tournament_id: int,
+    elo_diff_threshold: int = 100,
+    iterations: int = 200,
+    only_behind_schedule: bool = False,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    round_: Round = Depends(round_dependency),
+) -> SuccessResponse:
+    if not round_.is_draft:
+        raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
+
+    match_filter = MatchFilter(
+        elo_diff_threshold=elo_diff_threshold,
+        only_behind_schedule=only_behind_schedule,
+        limit=1,
+        iterations=iterations,
+    )
+
+    limit = 15
+    for __ in range(limit):
+        all_matches_to_schedule = await get_upcoming_matches_for_swiss_round(
+            match_filter, round_, tournament_id
+        )
+        if len(all_matches_to_schedule) < 1:
+            break
+
+        match = all_matches_to_schedule[0]
+        assert isinstance(match, SuggestedMatch)
+
+        assert round_.id and match.team1.id and match.team2.id
+        await create_match_and_assign_free_court(
+            tournament_id,
+            MatchCreateBody(
+                round_id=round_.id,
+                team1_id=match.team1.id,
+                team2_id=match.team2.id,
+                court_id=None,
+            ),
+        )
+
+    return SuccessResponse()
+
+
+@router.put("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def update_match_by_id(
     tournament_id: int,
     match_body: MatchBody,

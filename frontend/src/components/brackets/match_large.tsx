@@ -102,6 +102,7 @@ export default function MatchLarge({
         match={match}
         opened={opened}
         setOpened={setOpened}
+        dynamicSchedule={false}
       />
     </>
   );

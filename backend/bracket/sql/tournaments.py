@@ -15,6 +15,18 @@ async def sql_get_tournament(tournament_id: int) -> Tournament:
     return Tournament.parse_obj(result._mapping)
 
 
+async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament:
+    query = '''
+        SELECT *
+        FROM tournaments
+        WHERE dashboard_endpoint = :endpoint_name
+        AND dashboard_public IS TRUE
+        '''
+    result = await database.fetch_one(query=query, values={'endpoint_name': endpoint_name})
+    assert result is not None
+    return Tournament.parse_obj(result._mapping)
+
+
 async def sql_get_tournaments(
     club_ids: tuple[int, ...], endpoint_name: str | None
 ) -> list[Tournament]:

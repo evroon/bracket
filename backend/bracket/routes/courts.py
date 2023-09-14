@@ -5,11 +5,14 @@ from starlette import status
 from bracket.database import database
 from bracket.models.db.court import Court, CourtBody, CourtToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import user_authenticated_for_tournament
+from bracket.routes.auth import (
+    user_authenticated_for_tournament,
+    user_authenticated_or_public_dashboard,
+)
 from bracket.routes.models import CourtsResponse, SingleCourtResponse, SuccessResponse
 from bracket.schema import courts
 from bracket.sql.courts import get_all_courts_in_tournament, update_court
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
 
@@ -19,12 +22,12 @@ router = APIRouter()
 @router.get("/tournaments/{tournament_id}/courts", response_model=CourtsResponse)
 async def get_courts(
     tournament_id: int,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    _: UserPublic = Depends(user_authenticated_or_public_dashboard),
 ) -> CourtsResponse:
     return CourtsResponse(data=await get_all_courts_in_tournament(tournament_id))
 
 
-@router.patch("/tournaments/{tournament_id}/courts/{court_id}", response_model=SingleCourtResponse)
+@router.put("/tournaments/{tournament_id}/courts/{court_id}", response_model=SingleCourtResponse)
 async def update_court_by_id(
     tournament_id: int,
     court_id: int,
@@ -53,13 +56,14 @@ async def update_court_by_id(
 async def delete_court(
     tournament_id: int, court_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
-    stages = await get_stages_with_rounds_and_matches(tournament_id, no_draft_rounds=False)
+    stages = await get_full_tournament_details(tournament_id, no_draft_rounds=False)
     used_in_matches_count = 0
     for stage in stages:
-        for round_ in stage.rounds:
-            for match in round_.matches:
-                if match.court_id == court_id:
-                    used_in_matches_count += 1
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                for match in round_.matches:
+                    if match.court_id == court_id:
+                        used_in_matches_count += 1
 
     if used_in_matches_count > 0:
         raise HTTPException(

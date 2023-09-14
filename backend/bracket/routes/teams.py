@@ -6,11 +6,14 @@ from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamToInsert
 from bracket.models.db.user import UserPublic
-from bracket.routes.auth import user_authenticated_for_tournament
+from bracket.routes.auth import (
+    user_authenticated_for_tournament,
+    user_authenticated_or_public_dashboard,
+)
 from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_team_by_id, get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
@@ -41,12 +44,12 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
 async def get_teams(
-    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int, _: UserPublic = Depends(user_authenticated_or_public_dashboard)
 ) -> TeamsWithPlayersResponse:
     return TeamsWithPlayersResponse.parse_obj({'data': await get_teams_with_members(tournament_id)})
 
 
-@router.patch("/tournaments/{tournament_id}/teams/{team_id}", response_model=SingleTeamResponse)
+@router.put("/tournaments/{tournament_id}/teams/{team_id}", response_model=SingleTeamResponse)
 async def update_team_by_id(
     tournament_id: int,
     team_body: TeamBody,
@@ -60,6 +63,7 @@ async def update_team_by_id(
         values=team_body.dict(exclude={'player_ids'}),
     )
     await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
+    await recalculate_elo_for_tournament_id(tournament_id)
 
     return SingleTeamResponse(
         data=assert_some(
@@ -80,14 +84,15 @@ async def delete_team(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
-    stages = await get_stages_with_rounds_and_matches(tournament_id, no_draft_rounds=False)
+    stages = await get_full_tournament_details(tournament_id, no_draft_rounds=False)
     for stage in stages:
-        for round_ in stage.rounds:
-            if team.id in round_.get_team_ids():
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Could not delete team that participates in matches in the tournament",
-                )
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                if team.id in round_.get_team_ids():
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Could not delete team that participates in matches",
+                    )
 
     if len(team.players):
         raise HTTPException(
@@ -112,7 +117,7 @@ async def create_team(
 ) -> SingleTeamResponse:
     tournament_teams = await get_teams_with_members(tournament_id)
     for team in tournament_teams:
-        if sorted(team.player_ids) == sorted(team_to_insert.player_ids):
+        if team.player_ids != [] and sorted(team.player_ids) == sorted(team_to_insert.player_ids):
             return SingleTeamResponse(data=team)
 
     last_record_id = await database.execute(

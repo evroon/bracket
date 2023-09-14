@@ -78,16 +78,16 @@ async def test_update_tournament(
         'auto_assign_courts': True,
     }
     assert (
-        await send_tournament_request(HTTPMethod.PATCH, '', auth_context, json=body)
+        await send_tournament_request(HTTPMethod.PUT, '', auth_context, json=body)
         == SUCCESS_RESPONSE
     )
-    patched_tournament = await fetch_one_parsed_certain(
+    updated_tournament = await fetch_one_parsed_certain(
         database,
         Tournament,
         query=tournaments.select().where(tournaments.c.id == auth_context.tournament.id),
     )
-    assert patched_tournament.name == body['name']
-    assert patched_tournament.dashboard_public == body['dashboard_public']
+    assert updated_tournament.name == body['name']
+    assert updated_tournament.dashboard_public == body['dashboard_public']
 
     await assert_row_count_and_clear(tournaments, 1)
 

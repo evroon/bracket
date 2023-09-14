@@ -40,8 +40,8 @@ async def get_user(
     return UserPublicResponse(data=user_public)
 
 
-@router.patch("/users/{user_id}", response_model=UserPublicResponse)
-async def patch_user(
+@router.put("/users/{user_id}", response_model=UserPublicResponse)
+async def put_user(
     user_id: int,
     user_to_update: UserToUpdate,
     user_public: UserPublic = Depends(user_authenticated),
@@ -54,8 +54,8 @@ async def patch_user(
     return UserPublicResponse(data=assert_some(user_updated))
 
 
-@router.patch("/users/{user_id}/password", response_model=SuccessResponse)
-async def patch_user_password(
+@router.put("/users/{user_id}/password", response_model=SuccessResponse)
+async def put_user_password(
     user_id: int,
     user_to_update: UserPasswordToUpdate,
     user_public: UserPublic = Depends(user_authenticated),

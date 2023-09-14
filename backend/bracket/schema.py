@@ -20,7 +20,7 @@ tournaments = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
-    Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
+    Column('club_id', BigInteger, ForeignKey('clubs.id'), index=True, nullable=False),
     Column('dashboard_public', Boolean, nullable=False),
     Column('logo_path', String, nullable=True),
     Column('dashboard_endpoint', String, nullable=True),
@@ -32,21 +32,48 @@ stages = Table(
     'stages',
     metadata,
     Column('id', BigInteger, primary_key=True, index=True),
+    Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
-    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
     Column('is_active', Boolean, nullable=False, server_default='false'),
+)
+
+stage_items = Table(
+    'stage_items',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('name', Text, nullable=False),
+    Column('created', DateTimeTZ, nullable=False, server_default='now()'),
+    Column('stage_id', BigInteger, ForeignKey('stages.id'), index=True, nullable=False),
+    Column('team_count', Integer, nullable=False),
     Column(
         'type',
         Enum(
             'SINGLE_ELIMINATION',
-            'DOUBLE_ELIMINATION',
             'SWISS',
-            'SWISS_DYNAMIC_TEAMS',
             'ROUND_ROBIN',
             name='stage_type',
         ),
         nullable=False,
     ),
+)
+
+stage_item_inputs = Table(
+    'stage_item_inputs',
+    metadata,
+    Column('id', BigInteger, primary_key=True, index=True),
+    Column('slot', Integer, nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
+    Column(
+        'stage_item_id',
+        BigInteger,
+        ForeignKey('stage_items.id', ondelete="CASCADE"),
+        index=True,
+        nullable=False,
+    ),
+    Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=True),
+    Column('team_stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=True),
+    Column('team_position_in_group', Integer, nullable=True),
 )
 
 rounds = Table(
@@ -57,8 +84,9 @@ rounds = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('is_draft', Boolean, nullable=False),
     Column('is_active', Boolean, nullable=False, server_default='false'),
-    Column('stage_id', BigInteger, ForeignKey('stages.id'), nullable=False),
+    Column('stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=False),
 )
+
 
 matches = Table(
     'matches',
@@ -66,8 +94,12 @@ matches = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('created', DateTimeTZ, nullable=False),
     Column('round_id', BigInteger, ForeignKey('rounds.id'), nullable=False),
-    Column('team1_id', BigInteger, ForeignKey('teams.id'), nullable=False),
-    Column('team2_id', BigInteger, ForeignKey('teams.id'), nullable=False),
+    Column('team1_id', BigInteger, ForeignKey('teams.id'), nullable=True),
+    Column('team2_id', BigInteger, ForeignKey('teams.id'), nullable=True),
+    Column('team1_stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=True),
+    Column('team2_stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=True),
+    Column('team1_position_in_group', Integer, nullable=True),
+    Column('team2_position_in_group', Integer, nullable=True),
     Column('court_id', BigInteger, ForeignKey('courts.id'), nullable=True),
     Column('team1_score', Integer, nullable=False),
     Column('team2_score', Integer, nullable=False),
@@ -79,7 +111,7 @@ teams = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
-    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
     Column('active', Boolean, nullable=False, index=True, server_default='t'),
 )
 
@@ -89,7 +121,7 @@ players = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True, unique=True),
     Column('created', DateTimeTZ, nullable=False),
-    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), nullable=False),
+    Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
     Column('elo_score', Float, nullable=False),
     Column('swiss_score', Float, nullable=False),
     Column('wins', Integer, nullable=False),

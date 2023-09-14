@@ -74,12 +74,12 @@ async def test_update_player(
             DUMMY_PLAYER1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as player_inserted:
             response = await send_tournament_request(
-                HTTPMethod.PATCH, f'players/{player_inserted.id}', auth_context, json=body
+                HTTPMethod.PUT, f'players/{player_inserted.id}', auth_context, json=body
             )
-            patched_player = await fetch_one_parsed_certain(
+            updated_player = await fetch_one_parsed_certain(
                 database, Player, query=players.select().where(players.c.id == player_inserted.id)
             )
-            assert patched_player.name == body['name']
+            assert updated_player.name == body['name']
             assert response['data']['name'] == body['name']
 
             await assert_row_count_and_clear(players, 1)

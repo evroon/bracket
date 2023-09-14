@@ -29,6 +29,35 @@ function CourtsSelect({ form, swrCourtsResponse }: { form: any; swrCourtsRespons
   );
 }
 
+function MatchDeleteButton({
+  tournamentData,
+  match,
+  swrRoundsResponse,
+  swrUpcomingMatchesResponse,
+  dynamicSchedule,
+}: {
+  tournamentData: TournamentMinimal;
+  match: MatchInterface;
+  swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  dynamicSchedule: boolean;
+}) {
+  if (!dynamicSchedule) return null;
+  return (
+    <DeleteButton
+      fullWidth
+      onClick={async () => {
+        await deleteMatch(tournamentData.id, match.id);
+        await swrRoundsResponse.mutate(null);
+        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
+      }}
+      style={{ marginTop: '1rem' }}
+      size="sm"
+      title="Remove Match"
+    />
+  );
+}
+
 export default function MatchModal({
   tournamentData,
   match,
@@ -37,6 +66,7 @@ export default function MatchModal({
   swrUpcomingMatchesResponse,
   opened,
   setOpened,
+  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface;
@@ -45,6 +75,7 @@ export default function MatchModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
+  dynamicSchedule: boolean;
 }) {
   const form = useForm({
     initialValues: {
@@ -96,16 +127,12 @@ export default function MatchModal({
             Save
           </Button>
         </form>
-        <DeleteButton
-          fullWidth
-          onClick={async () => {
-            await deleteMatch(tournamentData.id, match.id);
-            await swrRoundsResponse.mutate(null);
-            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
-          }}
-          style={{ marginTop: '1rem' }}
-          size="sm"
-          title="Remove Match"
+        <MatchDeleteButton
+          swrRoundsResponse={swrRoundsResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          tournamentData={tournamentData}
+          match={match}
+          dynamicSchedule={dynamicSchedule}
         />
       </Modal>
     </>

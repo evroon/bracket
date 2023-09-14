@@ -31,7 +31,7 @@ export async function updateTournament(
   players_can_be_in_multiple_teams: boolean,
   auto_assign_courts: boolean
 ) {
-  return createAxios().patch(`tournaments/${tournament_id}`, {
+  return createAxios().put(`tournaments/${tournament_id}`, {
     name,
     dashboard_public,
     dashboard_endpoint,

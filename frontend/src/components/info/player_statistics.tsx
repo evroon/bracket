@@ -14,8 +14,23 @@ interface PlayerStatisticsProps {
   losses: number;
 }
 
-export function PlayerStatistics({ wins, draws, losses }: PlayerStatisticsProps) {
-  const { classes, theme } = useStyles();
+export function getWinColor() {
+  const { theme } = useStyles();
+  return theme.colorScheme === 'dark' ? theme.colors.teal[9] : theme.colors.teal[6];
+}
+
+export function getDrawColor() {
+  const { theme } = useStyles();
+  return theme.colorScheme === 'dark' ? theme.colors.orange[9] : theme.colors.orange[6];
+}
+
+export function getLossColor() {
+  const { theme } = useStyles();
+  return theme.colorScheme === 'dark' ? theme.colors.red[9] : theme.colors.red[6];
+}
+
+export function WinDistribution({ wins, draws, losses }: PlayerStatisticsProps) {
+  const { classes } = useStyles();
   const percentageScale = 100.0 / (wins + draws + losses);
 
   const draws_text =
@@ -41,17 +56,17 @@ export function PlayerStatistics({ wins, draws, losses }: PlayerStatisticsProps)
         sections={[
           {
             value: percentageScale * wins,
-            color: theme.colorScheme === 'dark' ? theme.colors.teal[9] : theme.colors.teal[6],
+            color: getWinColor(),
             tooltip: `Wins (${(percentageScale * wins).toFixed(0)}%)`,
           },
           {
             value: percentageScale * draws,
-            color: theme.colorScheme === 'dark' ? theme.colors.orange[9] : theme.colors.orange[6],
+            color: getDrawColor(),
             tooltip: `Draws (${(percentageScale * draws).toFixed(0)}%)`,
           },
           {
             value: percentageScale * losses,
-            color: theme.colorScheme === 'dark' ? theme.colors.red[9] : theme.colors.red[6],
+            color: getLossColor(),
             tooltip: `Losses (${(percentageScale * losses).toFixed(0)}%)`,
           },
         ]}

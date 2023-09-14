@@ -18,6 +18,7 @@ function getRoundsGridCols(activeRound: RoundInterface, tournamentData: Tourname
           swrUpcomingMatchesResponse={null}
           match={match}
           readOnly
+          dynamicSchedule={false}
         />
       </Grid.Col>
     ));

@@ -8,24 +8,24 @@ import { getBaseURL } from '../utils/util';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   return (
-    <Center>
-      <div
-        style={{
-          width: '100%',
-          background: 'white',
-          marginTop: '3rem',
-          maxWidth: '400px',
-          height: 'auto',
-        }}
-      >
-        <Center>
-          <QRCode
-            style={{ margin: '32px 0px 32px 0px' }}
-            value={`${getBaseURL()}/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`}
-          />
-        </Center>
-      </div>
-    </Center>
+    <div
+      style={{
+        width: '100%',
+        background: 'white',
+        marginTop: '3rem',
+        maxWidth: '400px',
+        height: 'auto',
+      }}
+    >
+      <Center>
+        <QRCode
+          style={{ margin: '24px' }}
+          // @ts-ignore
+          size="auto"
+          value={`${getBaseURL()}/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`}
+        />
+      </Center>
+    </div>
   );
 }
 
@@ -41,7 +41,6 @@ export function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tou
         src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`}
         style={{ maxWidth: '400px' }}
       />
-      <TournamentQRCode tournamentDataFull={tournamentDataFull} />
     </>
   ) : null;
 }

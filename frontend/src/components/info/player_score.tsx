@@ -3,14 +3,15 @@ import { DefaultMantineColor } from '@mantine/styles/lib/theme/types/MantineColo
 
 interface ScoreProps {
   score: number;
+  min_score: number;
   max_score: number;
   color: DefaultMantineColor;
   decimals: number;
 }
 
-export function PlayerScore({ score, max_score, color, decimals }: ScoreProps) {
+export function PlayerScore({ score, min_score, max_score, color, decimals }: ScoreProps) {
   const theme = useMantineTheme();
-  const percentageScale = 100.0 / max_score;
+  const percentageScale = 100.0 / (max_score - min_score);
   const base_color = theme.colors[color];
 
   return (
@@ -23,9 +24,9 @@ export function PlayerScore({ score, max_score, color, decimals }: ScoreProps) {
       <Progress
         sections={[
           {
-            value: percentageScale * score,
+            value: percentageScale * (score - min_score),
             color: theme.colorScheme === 'dark' ? base_color[9] : base_color[6],
-            tooltip: `ELO Score (${(percentageScale * score).toFixed(decimals)}%)`,
+            tooltip: `${(percentageScale * (score - min_score)).toFixed(decimals)}%`,
           },
         ]}
       />

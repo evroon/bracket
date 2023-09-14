@@ -25,6 +25,9 @@ class TeamWithPlayers(BaseModel):
     players: list[Player]
     swiss_score: Decimal
     elo_score: Decimal
+    wins: int
+    draws: int
+    losses: int
 
     @classmethod
     def from_players(cls, players: list[Player]) -> TeamWithPlayers:
@@ -32,6 +35,9 @@ class TeamWithPlayers(BaseModel):
             players=players,
             elo_score=Decimal(sum(p.elo_score for p in players) / len(players)),
             swiss_score=Decimal(sum(p.swiss_score for p in players) / len(players)),
+            wins=sum(p.wins for p in players) // len(players),
+            draws=sum(p.draws for p in players) // len(players),
+            losses=sum(p.losses for p in players) // len(players),
         )
 
     @property

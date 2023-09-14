@@ -1,6 +1,6 @@
 from bracket.database import database
 from bracket.models.db.match import Match
-from bracket.models.db.stage import StageType
+from bracket.models.db.stage_item import StageType
 from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
@@ -12,6 +12,7 @@ from bracket.utils.dummy_records import (
     DUMMY_PLAYER4,
     DUMMY_ROUND1,
     DUMMY_STAGE1,
+    DUMMY_STAGE_ITEM1,
     DUMMY_TEAM1,
     DUMMY_TEAM2,
 )
@@ -26,6 +27,7 @@ from tests.integration_tests.sql import (
     inserted_player_in_team,
     inserted_round,
     inserted_stage,
+    inserted_stage_item,
     inserted_team,
 )
 
@@ -37,7 +39,12 @@ async def test_create_match(
         inserted_stage(
             DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})
+        ) as stage_item_inserted,
+        inserted_round(
+            DUMMY_ROUND1.copy(update={'stage_item_id': stage_item_inserted.id})
+        ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team1_inserted,
@@ -69,7 +76,12 @@ async def test_delete_match(
         inserted_stage(
             DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})
+        ) as stage_item_inserted,
+        inserted_round(
+            DUMMY_ROUND1.copy(update={'stage_item_id': stage_item_inserted.id})
+        ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team1_inserted,
@@ -106,7 +118,12 @@ async def test_update_match(
         inserted_stage(
             DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_round(DUMMY_ROUND1.copy(update={'stage_id': stage_inserted.id})) as round_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})
+        ) as stage_item_inserted,
+        inserted_round(
+            DUMMY_ROUND1.copy(update={'stage_item_id': stage_item_inserted.id})
+        ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team1_inserted,
@@ -135,7 +152,7 @@ async def test_update_match(
         }
         assert (
             await send_tournament_request(
-                HTTPMethod.PATCH,
+                HTTPMethod.PUT,
                 f'matches/{match_inserted.id}',
                 auth_context,
                 None,
@@ -143,14 +160,14 @@ async def test_update_match(
             )
             == SUCCESS_RESPONSE
         )
-        patched_match = await fetch_one_parsed_certain(
+        updated_match = await fetch_one_parsed_certain(
             database,
             Match,
             query=matches.select().where(matches.c.id == match_inserted.id),
         )
-        assert patched_match.team1_score == body['team1_score']
-        assert patched_match.team2_score == body['team2_score']
-        assert patched_match.court_id == body['court_id']
+        assert updated_match.team1_score == body['team1_score']
+        assert updated_match.team2_score == body['team2_score']
+        assert updated_match.court_id == body['court_id']
 
         await assert_row_count_and_clear(matches, 1)
 
@@ -164,15 +181,17 @@ async def test_upcoming_matches_endpoint(
                 update={
                     'is_active': True,
                     'tournament_id': auth_context.tournament.id,
-                    'type': StageType.SWISS,
                 }
             )
         ) as stage_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id, 'type': StageType.SWISS})
+        ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.copy(
                 update={
                     'is_draft': True,
-                    'stage_id': stage_inserted.id,
+                    'stage_item_id': stage_item_inserted.id,
                 }
             )
         ) as round_inserted,
@@ -243,6 +262,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -274,6 +296,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -311,6 +336,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -342,6 +370,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -379,6 +410,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -410,6 +444,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -447,6 +484,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -478,6 +518,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -515,6 +558,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -546,6 +592,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -583,6 +632,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -614,6 +666,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -651,6 +706,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -682,6 +740,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,
@@ -719,6 +780,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'team2': {
                         'id': None,
@@ -750,6 +814,9 @@ async def test_upcoming_matches_endpoint(
                         ],
                         'swiss_score': 0.0,
                         'elo_score': 1250.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
                     },
                     'elo_diff': 0.0,
                     'swiss_diff': 0.0,

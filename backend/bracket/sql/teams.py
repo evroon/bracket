@@ -25,15 +25,19 @@ async def get_teams_with_members(
         SELECT
             teams.*,
             to_json(array_agg(p.*)) AS players,
-            COALESCE(avg(p.elo_score), 0.0) AS elo_score,
-            COALESCE(avg(p.swiss_score), 0.0) AS swiss_score
+            COALESCE(avg(p.elo_score), 1200.0) AS elo_score,
+            COALESCE(avg(p.swiss_score), 0.0) AS swiss_score,
+            COALESCE(avg(p.wins), 0.0) AS wins,
+            COALESCE(avg(p.draws), 0.0) AS draws,
+            COALESCE(avg(p.losses), 0.0) AS losses
         FROM teams
         LEFT JOIN players_x_teams pt on pt.team_id = teams.id
         LEFT JOIN players p on pt.player_id = p.id
         WHERE teams.tournament_id = :tournament_id
         {active_team_filter}
         {team_id_filter}
-        GROUP BY teams.id;
+        GROUP BY teams.id
+        ORDER BY elo_score DESC, wins DESC, name ASC
         '''
     values = dict_without_none({'tournament_id': tournament_id, 'team_id': team_id})
     result = await database.fetch_all(query=query, values=values)

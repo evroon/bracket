@@ -14,6 +14,7 @@ export default function Round({
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
+  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
@@ -21,6 +22,7 @@ export default function Round({
   swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
+  dynamicSchedule: boolean;
 }) {
   const matches = round.matches
     .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
@@ -33,6 +35,7 @@ export default function Round({
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
         readOnly={readOnly}
+        dynamicSchedule={dynamicSchedule}
       />
     ));
   const active_round_style = round.is_active
@@ -58,15 +61,16 @@ export default function Round({
       round={round}
       swrRoundsResponse={swrRoundsResponse}
       swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+      dynamicSchedule={dynamicSchedule}
     />
   );
 
   return (
-    <div style={{ minHeight: 500 }}>
+    <div style={{ minHeight: 300 }}>
       <div
         style={{
           height: '100%',
-          minHeight: 500,
+          minHeight: 300,
           padding: '15px',
           borderRadius: '20px',
           ...active_round_style,

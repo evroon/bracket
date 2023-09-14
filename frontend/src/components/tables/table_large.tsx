@@ -6,7 +6,7 @@ export const regularStyle = createStyles(() => ({
     tbody: {
       tr: {
         td: {
-          fontSize: '2rem',
+          fontSize: '1.5rem',
           div: {
             fontSize: '1.5rem',
           },

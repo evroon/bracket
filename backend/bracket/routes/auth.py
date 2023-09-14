@@ -13,6 +13,7 @@ from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
 from bracket.schema import tournaments
+from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name
 from bracket.sql.users import get_user, get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed
 from bracket.utils.security import pwd_context
@@ -154,6 +155,21 @@ async def user_authenticated_or_public_dashboard(
         )
 
     return None
+
+
+async def user_authenticated_or_public_dashboard_by_endpoint_name(
+    token: str = Depends(oauth2_scheme), endpoint_name: str | None = None
+) -> UserPublic | None:
+    if endpoint_name is not None:
+        if await sql_get_tournament_by_endpoint_name(endpoint_name) is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return None
+
+    return await user_authenticated(token)
 
 
 @router.post("/token", response_model=Token)

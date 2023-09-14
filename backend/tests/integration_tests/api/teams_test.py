@@ -24,8 +24,11 @@ async def test_teams_endpoint(
                     'name': 'Team 1',
                     'players': [],
                     'tournament_id': team_inserted.tournament_id,
-                    'elo_score': 0.0,
+                    'elo_score': 1200.0,
                     'swiss_score': 0.0,
+                    'wins': 0,
+                    'draws': 0,
+                    'losses': 0,
                 }
             ],
         }
@@ -63,12 +66,12 @@ async def test_update_team(
         DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
     ) as team_inserted:
         response = await send_tournament_request(
-            HTTPMethod.PATCH, f'teams/{team_inserted.id}', auth_context, None, body
+            HTTPMethod.PUT, f'teams/{team_inserted.id}', auth_context, None, body
         )
-        patched_team = await fetch_one_parsed_certain(
+        updated_team = await fetch_one_parsed_certain(
             database, Team, query=teams.select().where(teams.c.id == team_inserted.id)
         )
-        assert patched_team.name == body['name']
+        assert updated_team.name == body['name']
         assert response['data']['name'] == body['name']
 
         await assert_row_count_and_clear(teams, 1)

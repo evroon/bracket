@@ -8,4 +8,7 @@ export interface TeamInterface {
   players: Player[];
   elo_score: number;
   swiss_score: number;
+  wins: number;
+  draws: number;
+  losses: number;
 }

@@ -3,42 +3,46 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
-from bracket.models.db.round import StageWithRounds
-from bracket.models.db.stage import Stage, StageActivateBody, StageCreateBody, StageUpdateBody
+from bracket.logic.scheduling.builder import determine_available_inputs
+from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
 from bracket.models.db.user import UserPublic
+from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
 )
-from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
+from bracket.routes.models import (
+    StageItemInputOptionsResponse,
+    StagesWithStageItemsResponse,
+    SuccessResponse,
+)
 from bracket.routes.util import stage_dependency
 from bracket.sql.stages import (
+    get_full_tournament_details,
     get_next_stage_in_tournament,
-    get_stages_with_rounds_and_matches,
     sql_activate_next_stage,
     sql_create_stage,
     sql_delete_stage,
 )
+from bracket.sql.teams import get_teams_with_members
 
 router = APIRouter()
 
 
-@router.get("/tournaments/{tournament_id}/stages", response_model=RoundsWithMatchesResponse)
+@router.get("/tournaments/{tournament_id}/stages", response_model=StagesWithStageItemsResponse)
 async def get_stages(
     tournament_id: int,
     user: UserPublic = Depends(user_authenticated_or_public_dashboard),
     no_draft_rounds: bool = False,
-) -> RoundsWithMatchesResponse:
+) -> StagesWithStageItemsResponse:
     if no_draft_rounds is False and user is None:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Can't view draft rounds when not authorized",
         )
 
-    stages_ = await get_stages_with_rounds_and_matches(
-        tournament_id, no_draft_rounds=no_draft_rounds
-    )
-    return RoundsWithMatchesResponse(data=stages_)
+    stages_ = await get_full_tournament_details(tournament_id, no_draft_rounds=no_draft_rounds)
+    return StagesWithStageItemsResponse(data=stages_)
 
 
 @router.delete("/tournaments/{tournament_id}/stages/{stage_id}", response_model=SuccessResponse)
@@ -46,12 +50,12 @@ async def delete_stage(
     tournament_id: int,
     stage_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    stage: StageWithRounds = Depends(stage_dependency),
+    stage: StageWithStageItems = Depends(stage_dependency),
 ) -> SuccessResponse:
-    if len(stage.rounds) > 0:
+    if len(stage.stage_items) > 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Stage contains rounds, please delete those first",
+            detail="Stage contains stage items, please delete those first",
         )
 
     if stage.is_active:
@@ -69,14 +73,13 @@ async def delete_stage(
 @router.post("/tournaments/{tournament_id}/stages", response_model=SuccessResponse)
 async def create_stage(
     tournament_id: int,
-    stage_body: StageCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    await sql_create_stage(stage_body, tournament_id)
+    await sql_create_stage(tournament_id)
     return SuccessResponse()
 
 
-@router.patch("/tournaments/{tournament_id}/stages/{stage_id}", response_model=SuccessResponse)
+@router.put("/tournaments/{tournament_id}/stages/{stage_id}", response_model=SuccessResponse)
 async def update_stage(
     tournament_id: int,
     stage_id: int,
@@ -87,13 +90,13 @@ async def update_stage(
     values = {'tournament_id': tournament_id, 'stage_id': stage_id}
     query = '''
         UPDATE stages
-        SET is_active = :is_active
+        SET name = :name
         WHERE stages.id = :stage_id
         AND stages.tournament_id = :tournament_id
     '''
     await database.execute(
         query=query,
-        values={**values, 'is_active': stage_body.is_active},
+        values={**values, 'name': stage_body.name},
     )
     return SuccessResponse()
 
@@ -108,8 +111,24 @@ async def activate_next_stage(
     if new_active_stage_id is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="There is no next stage",
+            detail=f"There is no {stage_body.direction} stage",
         )
 
     await sql_activate_next_stage(new_active_stage_id, tournament_id)
     return SuccessResponse()
+
+
+@router.get(
+    "/tournaments/{tournament_id}/stages/{stage_id}/available_inputs",
+    response_model=StageItemInputOptionsResponse,
+)
+async def get_available_inputs(
+    tournament_id: int,
+    stage_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    stage: Stage = Depends(stage_dependency),
+) -> StageItemInputOptionsResponse:
+    stages = await get_full_tournament_details(tournament_id)
+    teams = await get_teams_with_members(tournament_id)
+    available_inputs = determine_available_inputs(stage_id, teams, stages)
+    return StageItemInputOptionsResponse(data=available_inputs)

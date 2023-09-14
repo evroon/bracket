@@ -1,4 +1,4 @@
-import { Grid, Title } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import React from 'react';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -32,7 +32,6 @@ export default function CourtsLarge({
 }) {
   return (
     <div>
-      <Title>{activeRound.name}</Title>
       <Grid>{getRoundsGridCols(activeRound, tournamentData)}</Grid>
     </div>
   );

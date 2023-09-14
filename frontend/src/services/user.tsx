@@ -29,13 +29,13 @@ export async function performLogin(username: string, password: string) {
 
 export async function updateUser(user_id: number, user: UserBodyInterface) {
   return createAxios()
-    .patch(`users/${user_id}`, user)
+    .put(`users/${user_id}`, user)
     .catch((response: any) => handleRequestError(response));
 }
 
 export async function updatePassword(user_id: number, password: string) {
   return createAxios()
-    .patch(`users/${user_id}/password`, { password })
+    .put(`users/${user_id}/password`, { password })
     .catch((response: any) => handleRequestError(response));
 }
 
