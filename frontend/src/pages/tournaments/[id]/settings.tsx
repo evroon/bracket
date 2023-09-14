@@ -1,4 +1,13 @@
-import { Button, Checkbox, Container, CopyButton, Image, Select, TextInput } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Container,
+  CopyButton,
+  Image,
+  Select,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import assert from 'assert';
 import { SWRResponse } from 'swr';
@@ -102,8 +111,11 @@ function GeneralTournamentForm({
 
       {tournament != null ? <DropzoneButton tournament={tournament} /> : null}
 
-      <TournamentLogo tournament={tournament} />
-      <Button fullWidth mt={8} color="green" type="submit">
+      <Center maw="50%" mx="auto">
+        <TournamentLogo tournament={tournament} />
+      </Center>
+
+      <Button fullWidth mt={24} color="green" type="submit">
         Save
       </Button>
 

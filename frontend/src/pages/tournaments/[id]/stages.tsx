@@ -35,6 +35,7 @@ function CreateStageForm(tournament: Tournament, swrClubsResponse: SWRResponse) 
           { value: 'ROUND_ROBIN', label: 'Round Robin' },
           { value: 'SINGLE_ELIMINATION', label: 'Single Elimination' },
           { value: 'DOUBLE_ELIMINATION', label: 'Double Elimination' },
+          { value: 'SWISS', label: 'Swiss' },
         ]}
         {...form.getInputProps('type')}
       />
