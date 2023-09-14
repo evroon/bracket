@@ -38,14 +38,14 @@ DUMMY_TOURNAMENT = Tournament(
 DUMMY_STAGE1 = Stage(
     tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
-    is_active=False,
+    is_active=True,
     type=StageType.ROUND_ROBIN,
 )
 
 DUMMY_STAGE2 = Stage(
     tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
-    is_active=True,
+    is_active=False,
     type=StageType.SWISS,
 )
 
@@ -59,15 +59,14 @@ DUMMY_ROUND1 = Round(
 DUMMY_ROUND2 = Round(
     stage_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
-    is_active=True,
-    is_draft=False,
+    is_draft=True,
     name='Round 2',
 )
 
 DUMMY_ROUND3 = Round(
     stage_id=2,
     created=DUMMY_MOCK_TIME,
-    is_draft=True,
+    is_draft=False,
     name='Round 3',
 )
 
@@ -98,7 +97,7 @@ DUMMY_MATCH3 = Match(
     team2_id=4,
     team1_score=23,
     team2_score=26,
-    court_id=None,
+    court_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_MATCH4 = Match(

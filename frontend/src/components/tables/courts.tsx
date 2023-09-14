@@ -45,7 +45,6 @@ export default function CourtsTable({
       <thead>
         <tr>
           <ThNotSortable>Title</ThNotSortable>
-          <ThNotSortable>Status</ThNotSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>
       </thead>

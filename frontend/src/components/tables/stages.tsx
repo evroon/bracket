@@ -1,3 +1,4 @@
+import { Badge } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -27,7 +28,14 @@ export default function StagesTable({
     .map((stage) => (
       <tr key={stage.type_name}>
         <td>{stage.type_name}</td>
-        <td>{stage.status}</td>
+        <td>
+          {' '}
+          {stage.is_active ? (
+            <Badge color="green">Active</Badge>
+          ) : (
+            <Badge color="dark">Inactive</Badge>
+          )}
+        </td>
         <td>
           <DeleteButton
             onClick={async () => {

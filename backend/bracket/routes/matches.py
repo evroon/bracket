@@ -10,8 +10,10 @@ from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import match_dependency, round_dependency
+from bracket.sql.courts import get_all_free_courts_in_round
 from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
 from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -75,7 +77,17 @@ async def create_match(
     match_body: MatchCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
-    return SingleMatchResponse(data=await sql_create_match(match_body))
+    tournament = await sql_get_tournament(tournament_id)
+    next_free_court_id = None
+
+    if tournament.auto_assign_courts:
+        free_courts = await get_all_free_courts_in_round(tournament_id, match_body.round_id)
+        if len(free_courts) > 0:
+            next_free_court_id = free_courts[0].id
+
+    match_body = match_body.copy(update={'court_id': next_free_court_id})
+    match = await sql_create_match(match_body)
+    return SingleMatchResponse(data=match)
 
 
 @router.patch("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)

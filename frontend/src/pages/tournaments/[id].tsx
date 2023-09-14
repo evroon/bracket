@@ -6,6 +6,7 @@ import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
+import { NextStageButton } from '../../components/buttons/next_stage_button';
 import SaveButton from '../../components/buttons/save';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
@@ -35,7 +36,7 @@ export default function TournamentPage() {
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
-  const [activeStageId, setActiveStageId] = useState(null);
+  const [selectedStageId, setSelectedStageId] = useState(null);
 
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
@@ -65,11 +66,11 @@ export default function TournamentPage() {
       [[draftRound]] = draftRounds;
     }
 
-    const activeTab = swrStagesResponse.data.data.filter(
+    const selectedTab = swrStagesResponse.data.data.filter(
       (stage: RoundInterface) => stage.is_active
     );
-    if (activeTab.length > 0 && activeStageId == null && activeTab[0].id != null) {
-      setActiveStageId(activeTab[0].id.toString());
+    if (selectedTab.length > 0 && selectedStageId == null && selectedTab[0].id != null) {
+      setSelectedStageId(selectedTab[0].id.toString());
     }
   }
 
@@ -117,10 +118,14 @@ export default function TournamentPage() {
             >
               View dashboard
             </Button>
-            {activeStageId == null ? null : (
+            <NextStageButton
+              tournamentData={tournamentData}
+              swrStagesResponse={swrStagesResponse}
+            />
+            {selectedStageId == null ? null : (
               <SaveButton
                 onClick={async () => {
-                  await createRound(tournamentData.id, activeStageId);
+                  await createRound(tournamentData.id, selectedStageId);
                   await swrStagesResponse.mutate();
                 }}
                 leftIcon={<GoPlus size={24} />}
@@ -134,8 +139,8 @@ export default function TournamentPage() {
         <Center>
           <StagesTab
             swrStagesResponse={swrStagesResponse}
-            activeStageId={activeStageId}
-            setActiveStageId={setActiveStageId}
+            selectedStageId={selectedStageId}
+            setSelectedStageId={setSelectedStageId}
           />
         </Center>
         <Brackets
@@ -144,7 +149,7 @@ export default function TournamentPage() {
           swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
-          activeStageId={activeStageId}
+          selectedStageId={selectedStageId}
         />
         {scheduler}
       </div>

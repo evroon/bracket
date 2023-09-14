@@ -4,7 +4,7 @@ from starlette import status
 from bracket.database import database
 from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.models.db.round import StageWithRounds
-from bracket.models.db.stage import Stage, StageCreateBody, StageUpdateBody
+from bracket.models.db.stage import Stage, StageActivateBody, StageCreateBody, StageUpdateBody
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
@@ -13,7 +13,9 @@ from bracket.routes.auth import (
 from bracket.routes.models import RoundsWithMatchesResponse, SuccessResponse
 from bracket.routes.util import stage_dependency
 from bracket.sql.stages import (
+    get_next_stage_in_tournament,
     get_stages_with_rounds_and_matches,
+    sql_activate_next_stage,
     sql_create_stage,
     sql_delete_stage,
 )
@@ -93,4 +95,21 @@ async def update_stage(
         query=query,
         values={**values, 'is_active': stage_body.is_active},
     )
+    return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/stages/activate", response_model=SuccessResponse)
+async def activate_next_stage(
+    tournament_id: int,
+    stage_body: StageActivateBody,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    new_active_stage_id = await get_next_stage_in_tournament(tournament_id, stage_body.direction)
+    if new_active_stage_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="There is no next stage",
+        )
+
+    await sql_activate_next_stage(new_active_stage_id, tournament_id)
     return SuccessResponse()
