@@ -129,3 +129,27 @@ async def test_update_stage(
         assert patched_stage.is_active == body['is_active']
 
         await assert_row_count_and_clear(stages, 1)
+
+
+async def test_activate_stage(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'type': StageType.ROUND_ROBIN.value, 'is_active': False}
+    async with (
+        inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_stage(DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_stage(DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})),
+    ):
+        assert (
+            await send_tournament_request(
+                HTTPMethod.POST, 'stages/activate?direction=next', auth_context, None, body
+            )
+            == SUCCESS_RESPONSE
+        )
+        [prev_stage, next_stage] = await get_stages_with_rounds_and_matches(
+            assert_some(auth_context.tournament.id)
+        )
+        assert prev_stage.is_active is False
+        assert next_stage.is_active is True
+
+        await assert_row_count_and_clear(stages, 1)
