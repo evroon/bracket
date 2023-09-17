@@ -18,7 +18,6 @@ Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)
 
 ### Preview
 <img alt="" src="misc/img/schedule_preview.png" width="100%" />
-<img alt="" src="misc/img/players_preview.png" width="100%" />
 
 # Quickstart
 To quickly run bracket to see how it works, clone it and run `docker-compose up`:
