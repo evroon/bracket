@@ -1,3 +1,4 @@
+import { Table } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -18,9 +19,9 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
   const rows = clubs
     .sort((p1: Club, p2: Club) => sortTableEntries(p1, p2, tableState))
     .map((club) => (
-      <tr key={club.id}>
-        <td>{club.name}</td>
-        <td>
+      <Table.Tr key={club.id}>
+        <Table.Td>{club.name}</Table.Td>
+        <Table.Td>
           <ClubModal swrClubsResponse={swrClubsResponse} club={club} />
           <DeleteButton
             onClick={async () => {
@@ -29,23 +30,23 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
             }}
             title="Delete Club"
           />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="clubs" />;
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThSortable state={tableState} field="name">
             Title
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

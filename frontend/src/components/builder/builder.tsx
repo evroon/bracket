@@ -39,7 +39,7 @@ function StageItemInputSectionLast({
 
   return (
     <Card.Section inheritPadding {...opts}>
-      <Text weight={500}>{content}</Text>
+      <Text fw={500}>{content}</Text>
     </Card.Section>
   );
 }
@@ -80,8 +80,8 @@ function StageItemRow({
   return (
     <Card withBorder shadow="sm" radius="md" mb="1rem">
       <Card.Section withBorder inheritPadding py="xs" color="dimmed">
-        <Group position="apart">
-          <Text weight={800}>{stageItem.name}</Text>
+        <Group justify="space-between">
+          <Text fw={800}>{stageItem.name}</Text>
           <UpdateStageItemModal
             swrStagesResponse={swrStagesResponse}
             stageItem={stageItem}
@@ -91,14 +91,14 @@ function StageItemRow({
           />
           <Menu withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
-              <ActionIcon>
+              <ActionIcon variant="transparent" color="gray">
                 <IconDots size="1rem" />
               </ActionIcon>
             </Menu.Target>
 
             <Menu.Dropdown>
               <Menu.Item
-                icon={<IconPencil size={rem(14)} />}
+                leftSection={<IconPencil size={rem(14)} />}
                 onClick={() => {
                   setOpened(true);
                 }}
@@ -106,7 +106,7 @@ function StageItemRow({
                 Edit name
               </Menu.Item>
               <Menu.Item
-                icon={<IconTrash size={rem(14)} />}
+                leftSection={<IconTrash size={rem(14)} />}
                 onClick={async () => {
                   await deleteStageItem(tournament.id, stageItem.id);
                   await swrStagesResponse.mutate(null);
@@ -153,7 +153,7 @@ function StageColumn({
     ));
 
   return (
-    <Grid.Col mb="1rem" sm={6} lg={4} xl={3} key={stage.id}>
+    <Grid.Col mb="1rem" span={{ sm: 6, lg: 4, xl: 3 }} key={stage.id}>
       <UpdateStageModal
         swrStagesResponse={swrStagesResponse}
         stage={stage}
@@ -161,7 +161,7 @@ function StageColumn({
         opened={opened}
         setOpened={setOpened}
       />
-      <Group position="apart">
+      <Group justify="space-between">
         <h4>
           {stage.name}
           {stage.is_active ? (
@@ -172,14 +172,14 @@ function StageColumn({
         </h4>
         <Menu withinPortal position="bottom-end" shadow="sm">
           <Menu.Target>
-            <ActionIcon>
+            <ActionIcon variant="transparent" color="gray">
               <IconDots size="1rem" />
             </ActionIcon>
           </Menu.Target>
 
           <Menu.Dropdown>
             <Menu.Item
-              icon={<IconPencil size={rem(14)} />}
+              leftSection={<IconPencil size={rem(14)} />}
               onClick={() => {
                 setOpened(true);
               }}
@@ -187,7 +187,7 @@ function StageColumn({
               Edit name
             </Menu.Item>
             <Menu.Item
-              icon={<IconTrash size={rem(14)} />}
+              leftSection={<IconTrash size={rem(14)} />}
               onClick={async () => {
                 await deleteStage(tournament.id, stage.id);
                 await swrStagesResponse.mutate(null);
@@ -234,7 +234,7 @@ export default function Builder({
     ));
 
   const button = (
-    <Grid.Col mb="1rem" sm={6} lg={4} xl={4} key={-1}>
+    <Grid.Col mb="1rem" span={{ sm: 6, lg: 4, xl: 4 }} key={-1}>
       <h4>
         <CreateStageButton tournament={tournament} swrStagesResponse={swrStagesResponse} />
       </h4>

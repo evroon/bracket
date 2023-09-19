@@ -9,7 +9,6 @@ import {
   Paper,
   TextInput,
   Title,
-  createStyles,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
@@ -18,30 +17,9 @@ import React from 'react';
 
 import { PasswordStrength } from '../components/utils/password';
 import { registerUser } from '../services/user';
-
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 26,
-    fontWeight: 900,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-
-  controls: {
-    [theme.fn.smallerThan('xs')]: {
-      flexDirection: 'column-reverse',
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan('xs')]: {
-      width: '100%',
-      textAlign: 'center',
-    },
-  },
-}));
+import classes from './create_account.module.css';
 
 export default function CreateAccount() {
-  const { classes } = useStyles();
   const router = useRouter();
 
   async function registerAndRedirect(values: any) {
@@ -69,7 +47,7 @@ export default function CreateAccount() {
 
   return (
     <Container size={460} my={30}>
-      <Title className={classes.title} align="center">
+      <Title className={classes.title} ta="center">
         Create a new account
       </Title>
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
@@ -103,8 +81,8 @@ export default function CreateAccount() {
             {...form.getInputProps('name')}
           />
           <PasswordStrength form={form} />
-          <Group position="apart" mt="lg" className={classes.controls}>
-            <Anchor color="dimmed" size="sm" className={classes.control}>
+          <Group justify="apart" mt="lg" className={classes.controls}>
+            <Anchor c="dimmed" size="sm" className={classes.control}>
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
                 <Box ml={5} onClick={() => router.push('/login')}>

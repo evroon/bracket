@@ -55,12 +55,12 @@ export default function Index() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '0.5rem' }}>
-        <Grid.Col span={2}>
+      <Grid style={{ margin: '0.5rem' }}>
+        <Grid.Col span={{ base: 12, lg: 2 }}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
-        <Grid.Col span={10}>
+        <Grid.Col span="auto">
           <Center>
             <StagesTab
               selectedStageId={selectedStageId}

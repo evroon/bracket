@@ -1,4 +1,4 @@
-import { Badge, Button } from '@mantine/core';
+import { Badge, Button, Table } from '@mantine/core';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -79,7 +79,7 @@ export default function UpcomingMatchesTable({
             size="xs"
             style={{ marginRight: 10 }}
             onClick={() => scheduleMatch(upcoming_match)}
-            leftIcon={<IconCalendarPlus size={20} />}
+            leftSection={<IconCalendarPlus size={20} />}
           >
             Schedule
           </Button>
@@ -91,8 +91,8 @@ export default function UpcomingMatchesTable({
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThSortable state={tableState} field="is_recommended">
             Recommended
           </ThSortable>
@@ -109,9 +109,9 @@ export default function UpcomingMatchesTable({
             Swiss Difference
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

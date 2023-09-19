@@ -2,17 +2,16 @@ import {
   ActionIcon,
   AppShell,
   Burger,
+  Center,
   Container,
   Group,
-  Header,
   Menu,
   Text,
   UnstyledButton,
-  createStyles,
-  rem,
+  useComputedColorScheme,
   useMantineColorScheme,
-  useMantineTheme,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
 import { IconMoonStars, IconSun } from '@tabler/icons-react';
 import { NextRouter, useRouter } from 'next/router';
@@ -20,6 +19,7 @@ import React, { Component, ReactNode } from 'react';
 
 import { Brand } from '../components/navbar/_brand';
 import { getBaseApiUrl } from '../services/adapter';
+import classes from './_layout.module.css';
 
 const LINKS = [
   { link: '/clubs', label: 'Clubs', links: null },
@@ -36,48 +36,6 @@ const LINKS = [
   },
 ];
 
-const HEADER_HEIGHT = rem(70);
-
-const useStyles = createStyles((theme) => ({
-  inner: {
-    height: HEADER_HEIGHT,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  links: {
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none',
-    },
-  },
-
-  burger: {
-    [theme.fn.largerThan('sm')]: {
-      display: 'none',
-    },
-  },
-
-  link: {
-    display: 'block',
-    lineHeight: 1,
-    padding: `${rem(8)} ${rem(12)}`,
-    borderRadius: theme.radius.sm,
-    textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
-    fontWeight: 500,
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
-  },
-
-  linkLabel: {
-    marginRight: rem(5),
-  },
-}));
-
 interface HeaderActionLink {
   link: string | null;
   label: string;
@@ -90,7 +48,7 @@ interface HeaderActionProps {
   navbarState: any;
 }
 
-function getMenuItemsForLink(link: HeaderActionLink, classes: any, router: NextRouter) {
+function getMenuItemsForLink(link: HeaderActionLink, _classes: any, router: NextRouter) {
   const menuItems = link.links?.map((item) => (
     <UnstyledButton
       key={item.label}
@@ -125,10 +83,11 @@ function getMenuItemsForLink(link: HeaderActionLink, classes: any, router: NextR
 }
 
 export function HeaderAction({ links, navbarState }: HeaderActionProps) {
-  const { classes } = useStyles();
+  // const { classes } = useStyles();
 
   const [opened, { toggle }] = navbarState != null ? navbarState : [false, { toggle: () => {} }];
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
   const router = useRouter();
 
   const items = links.map((link) => {
@@ -149,46 +108,45 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
     );
   });
   return (
-    <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={120}>
+    <AppShell.Header>
       <Container className={classes.inner} fluid>
-        <Group>
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            className={classes.burger}
-            size="sm"
-            mt="0.5rem"
-          />
+        <Center>
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Brand />
-        </Group>
-        <Group spacing={5} className={classes.links}>
+        </Center>
+        <Group gap={5} className={classes.links}>
           {items}
-          <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30} ml="1rem">
-            {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoonStars size={16} />}
+          <ActionIcon
+            variant="default"
+            onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
+            size={30}
+            ml="1rem"
+          >
+            <IconSun size={16} className={classes.light} />
+            <IconMoonStars size={16} className={classes.dark} />
           </ActionIcon>
         </Group>
       </Container>
-    </Header>
+    </AppShell.Header>
   );
 }
 
-export default function Layout({ children, navbar, navbarState }: any) {
-  const theme = useMantineTheme();
-
+export default function Layout({ children, navbar }: any) {
+  const navbarState = useDisclosure();
+  const [opened] = navbarState;
   return (
     <AppShell
-      styles={{
-        main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-        },
+      header={{ height: 60 }}
+      navbar={{
+        width: 80,
+        breakpoint: 'sm',
+        collapsed: { desktop: navbar == null, mobile: navbar == null || !opened },
       }}
-      layout="default"
-      navbarOffsetBreakpoint="sm"
-      asideOffsetBreakpoint="sm"
-      header={<HeaderAction links={LINKS} navbarState={navbarState} />}
-      navbar={navbar}
+      padding="md"
     >
-      {children}
+      <HeaderAction links={LINKS} navbarState={navbarState} />
+      {navbar}
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 }

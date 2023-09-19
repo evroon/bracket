@@ -1,4 +1,4 @@
-import { Center, Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
+import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
 import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -14,34 +14,11 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
 import { Time } from '../utils/datetime';
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    width: '100%',
-    marginTop: '30px',
-    padding: '0px',
-  },
-  divider: {
-    backgroundColor: 'darkgray',
-    height: '1px',
-  },
-  top: {
-    // subscribe to color scheme changes right in your styles
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
-    padding: '8px 8px 8px 15px',
-    borderRadius: '8px 8px 0px 0px',
-  },
-  bottom: {
-    // subscribe to color scheme changes right in your styles
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2],
-    padding: '8px 8px 8px 15px',
-    borderRadius: '0px 0px 8px 8px',
-  },
-}));
+import classes from './match.module.css';
 
 export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
   const visibility = match.court ? 'visible' : 'hidden';
-  const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[2];
+  const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[7];
   return (
     <Center style={{ transform: 'translateY(0%)', visibility }}>
       <div
@@ -80,10 +57,11 @@ export default function Match({
   dynamicSchedule: boolean;
   displaySettings?: BracketDisplaySettings | null;
 }) {
-  const { classes } = useStyles();
+  // const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
+    // backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
+    backgroundColor: theme.colors.green[9],
   };
   const showTeamMemberNames =
     displaySettings != null && displaySettings.teamNamesDisplay === 'player-names';

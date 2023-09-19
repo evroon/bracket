@@ -1,4 +1,4 @@
-import { Badge, Text } from '@mantine/core';
+import { Badge, Table, Text } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -7,12 +7,7 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
 import { PlayerScore } from '../info/player_score';
-import {
-  WinDistribution,
-  getDrawColor,
-  getLossColor,
-  getWinColor,
-} from '../info/player_statistics';
+import { WinDistribution } from '../info/player_statistics';
 import PlayerUpdateModal from '../modals/player_update_modal';
 import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
@@ -22,15 +17,15 @@ import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries
 export function WinDistributionTitle() {
   return (
     <>
-      <Text span color={getWinColor()} inherit>
+      <Text span color="teal" inherit>
         wins
       </Text>{' '}
       /{' '}
-      <Text span color={getDrawColor()} inherit>
+      <Text span color="orange" inherit>
         draws
       </Text>{' '}
       /{' '}
-      <Text span color={getLossColor()} inherit>
+      <Text span color="red" inherit>
         losses
       </Text>
     </>
@@ -56,42 +51,40 @@ export default function PlayersTable({
   const rows = players
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))
     .map((player) => (
-      <tr key={player.id}>
-        <td>
+      <Table.Tr key={player.id}>
+        <Table.Td>
           {player.active ? (
             <Badge color="green">Active</Badge>
           ) : (
             <Badge color="red">Inactive</Badge>
           )}
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <Text>{player.name}</Text>
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <DateTime datetime={player.created} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <WinDistribution wins={player.wins} draws={player.draws} losses={player.losses} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerScore
             score={player.elo_score}
             min_score={minELOScore}
             max_score={maxELOScore}
-            color="indigo"
             decimals={0}
           />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerScore
             score={player.swiss_score}
             min_score={0}
             max_score={maxSwissScore}
-            color="grape"
             decimals={1}
           />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerUpdateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}
@@ -104,16 +97,16 @@ export default function PlayersTable({
             }}
             title="Delete Player"
           />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="players" />;
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThSortable state={tableState} field="active">
             Status
           </ThSortable>
@@ -135,9 +128,9 @@ export default function PlayersTable({
             Swiss score
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

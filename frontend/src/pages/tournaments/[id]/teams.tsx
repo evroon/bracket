@@ -29,8 +29,6 @@ function StageItemSelect({
       data={data}
       label="Filter on stage item"
       placeholder="No filter"
-      dropdownPosition="bottom"
-      clearable
       searchable
       limit={25}
       onChange={(x) => {
@@ -67,7 +65,7 @@ export default function Teams() {
           <Title>Teams</Title>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Group position="right">
+          <Group justify="right">
             <StageItemSelect
               groupStageItems={Object.values(stageItemInputLookup)}
               setFilteredStageItemId={setFilteredStageItemId}

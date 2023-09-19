@@ -115,7 +115,13 @@ export default function RoundModal({
       <UnstyledButton onClick={() => setOpened(true)}>
         <Title order={3}>{round.name}</Title>
       </UnstyledButton>
-      <ActionIcon onClick={() => setOpened(true)}>
+      <ActionIcon
+        variant="subtle"
+        ml="0.5rem"
+        mb="0.25rem"
+        color="gray"
+        onClick={() => setOpened(true)}
+      >
         <IconPencil size={18} style={{ marginBottom: '5px' }} />
       </ActionIcon>
     </>

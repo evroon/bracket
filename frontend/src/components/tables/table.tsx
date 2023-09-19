@@ -1,38 +1,10 @@
-import {
-  Center,
-  Group,
-  ScrollArea,
-  Table,
-  Text,
-  UnstyledButton,
-  createStyles,
-} from '@mantine/core';
+import { Center, Group, ScrollArea, Table, Text, UnstyledButton } from '@mantine/core';
 import { HiSortAscending } from '@react-icons/all-files/hi/HiSortAscending';
 import { HiSortDescending } from '@react-icons/all-files/hi/HiSortDescending';
 import { MdSort } from '@react-icons/all-files/md/MdSort';
 import React, { useState } from 'react';
 
-import { getItemColor } from '../utils/util';
-
-export const useStyles = createStyles((theme) => ({
-  th: {
-    padding: '0 !important',
-  },
-
-  control: {
-    width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-    '&:hover': {
-      backgroundColor: getItemColor(theme),
-    },
-  },
-
-  icon: {
-    width: 21,
-    height: 21,
-    borderRadius: 21,
-  },
-}));
+import classes from './table.module.css';
 
 export interface TableState {
   sortField: string;
@@ -81,34 +53,31 @@ export function getSortIcon(sorted: boolean, reversed: boolean) {
 }
 
 export function ThSortable({ children, field, state }: ThProps) {
-  const { classes } = useStyles();
   const sorted = state.sortField === field;
   const onSort = () => setSorting(state, field);
   return (
-    <th className={classes.th}>
+    <Table.Th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
-        <Group position="apart">
-          <Text weight={800} size="sm">
+        <Group justify="apart">
+          <Text fw={800} size="sm" ml="0.5rem" my="0.25rem">
             {children}
           </Text>
           <Center className={classes.icon}>{getSortIcon(sorted, state.reversed)}</Center>
         </Group>
       </UnstyledButton>
-    </th>
+    </Table.Th>
   );
 }
 
 export function ThNotSortable({ children }: { children: React.ReactNode }) {
-  const { classes } = useStyles();
-
   return (
-    <th className={classes.th}>
-      <Group position="apart" ml="20px">
-        <Text weight={800} size="sm">
+    <Table.Th className={classes.th}>
+      <Group justify="apart" ml="20px">
+        <Text fw={800} size="sm">
           {children}
         </Text>
       </Group>
-    </th>
+    </Table.Th>
   );
 }
 

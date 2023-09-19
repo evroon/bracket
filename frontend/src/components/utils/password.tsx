@@ -3,7 +3,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
-    <Text color={meets ? 'teal' : 'red'} mt={5} size="sm">
+    <Text c={meets ? 'teal' : 'red'} mt={5} size="sm">
       <Center inline>
         {meets ? <IconCheck size={14} stroke={1.5} /> : <IconX size={14} stroke={1.5} />}
         <Box ml={7}>{label}</Box>
@@ -44,7 +44,6 @@ export function PasswordStrength({ form }: { form: any }) {
     .fill(0)
     .map((_, index) => (
       <Progress
-        styles={{ bar: { transitionDuration: '0ms' } }}
         value={
           form.values.password.length > 0 && index === 0
             ? 100
@@ -52,7 +51,7 @@ export function PasswordStrength({ form }: { form: any }) {
             ? 100
             : 0
         }
-        color={strength > 80 ? 'teal' : strength > 50 ? 'yellow' : 'red'}
+        c={strength > 80 ? 'teal' : strength > 50 ? 'yellow' : 'red'}
         key={index}
         size={4}
       />
@@ -68,7 +67,7 @@ export function PasswordStrength({ form }: { form: any }) {
         {...form.getInputProps('password')}
       />
 
-      <Group spacing={5} grow mt="xs" mb="md">
+      <Group gap={5} grow mt="xs" mb="md">
         {bars}
       </Group>
 

@@ -1,4 +1,4 @@
-import { Badge } from '@mantine/core';
+import { Badge, Table } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -29,20 +29,20 @@ export default function TeamsTable({
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .map((team) => (
-      <tr key={team.id}>
-        <td>
+      <Table.Tr key={team.id}>
+        <Table.Td>
           {team.active ? <Badge color="green">Active</Badge> : <Badge color="red">Inactive</Badge>}
-        </td>
-        <td>{team.name}</td>
-        <td>
+        </Table.Td>
+        <Table.Td>{team.name}</Table.Td>
+        <Table.Td>
           <PlayerList team={team} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <DateTime datetime={team.created} />
-        </td>
-        <td>{team.swiss_score.toFixed(1)}</td>
-        <td>{team.elo_score.toFixed(0)}</td>
-        <td>
+        </Table.Td>
+        <Table.Td>{team.swiss_score.toFixed(1)}</Table.Td>
+        <Table.Td>{team.elo_score.toFixed(0)}</Table.Td>
+        <Table.Td>
           <TeamUpdateModal
             tournament_id={tournamentData.id}
             team={team}
@@ -55,16 +55,16 @@ export default function TeamsTable({
             }}
             title="Delete Team"
           />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThSortable state={tableState} field="active">
             Status
           </ThSortable>
@@ -82,9 +82,9 @@ export default function TeamsTable({
             ELO score
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

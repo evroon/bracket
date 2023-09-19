@@ -193,7 +193,7 @@ export function CreateStageItemModal({
         size="xs"
         style={{ marginRight: 10 }}
         onClick={() => setOpened(true)}
-        leftIcon={<GoPlus size={24} />}
+        leftSection={<GoPlus size={24} />}
       >
         Add stage item
       </Button>

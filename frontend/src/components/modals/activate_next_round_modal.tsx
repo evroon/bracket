@@ -73,7 +73,7 @@ export default function ActivateNextRoundModal({
             size="md"
             mt="lg"
             type="submit"
-            leftIcon={<IconSquareArrowRight size={24} />}
+            leftSection={<IconSquareArrowRight size={24} />}
           >
             Plan next round
           </Button>
@@ -83,7 +83,7 @@ export default function ActivateNextRoundModal({
       <Button
         color="indigo"
         size="md"
-        leftIcon={<IconSquareArrowRight size={24} />}
+        leftSection={<IconSquareArrowRight size={24} />}
         onClick={() => setOpened(true)}
       >
         Plan next round

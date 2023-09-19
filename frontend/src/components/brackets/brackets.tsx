@@ -56,12 +56,12 @@ function getRoundsGridCols(
             <h2>{stageItem.name}</h2>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Group position="right">
+            <Group justify="right">
               {hideAddRoundButton ? null : (
                 <Button
                   color="green"
                   size="md"
-                  leftIcon={<GoPlus size={24} />}
+                  leftSection={<GoPlus size={24} />}
                   variant="outline"
                   onClick={async () => {
                     await createRound(tournamentData.id, stageItem.id);
@@ -82,9 +82,7 @@ function getRoundsGridCols(
           </Grid.Col>
         </Grid>
       </div>
-      <div style={{ width: '100%' }}>
-        <Grid>{rounds}</Grid>
-      </div>
+      <Group>{rounds}</Group>
     </React.Fragment>
   );
 }

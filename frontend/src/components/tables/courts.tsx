@@ -1,3 +1,4 @@
+import { Table } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -24,9 +25,9 @@ export default function CourtsTable({
   const rows = courts
     .sort((s1: Court, s2: Court) => sortTableEntries(s1, s2, tableState))
     .map((court) => (
-      <tr key={court.id}>
-        <td>{court.name}</td>
-        <td>
+      <Table.Tr key={court.id}>
+        <Table.Td>{court.name}</Table.Td>
+        <Table.Td>
           <DeleteButton
             onClick={async () => {
               await deleteCourt(tournament.id, court.id);
@@ -34,21 +35,21 @@ export default function CourtsTable({
             }}
             title="Delete Court"
           />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="courts" />;
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThNotSortable>Title</ThNotSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

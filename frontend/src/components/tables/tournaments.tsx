@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -31,20 +31,20 @@ export default function TournamentsTable({
   const rows = tournaments
     .sort((p1: Tournament, p2: Tournament) => sortTableEntries(p1, p2, tableState))
     .map((tournament) => (
-      <tr key={tournament.id}>
-        <td>
+      <Table.Tr key={tournament.id}>
+        <Table.Td>
           <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <DateTime datetime={tournament.created} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <Button
             color="green"
             size="xs"
             style={{ marginRight: 10 }}
             onClick={() => router.push(`/tournaments/${tournament.id}/settings`)}
-            leftIcon={<BiEditAlt size={20} />}
+            leftSection={<BiEditAlt size={20} />}
           >
             Edit Tournament
           </Button>
@@ -55,16 +55,16 @@ export default function TournamentsTable({
             }}
             title="Delete Tournament"
           />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="tournaments" />;
 
   return (
     <TableLayout>
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThSortable state={tableState} field="name">
             Title
           </ThSortable>
@@ -72,9 +72,9 @@ export default function TournamentsTable({
             Created
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayout>
   );
 }

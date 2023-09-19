@@ -122,7 +122,7 @@ export default function TournamentPage() {
           <Title>{tournamentDataFull != null ? tournamentDataFull.name : ''}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Group position="right">
+          <Group justify="right">
             <SegmentedControl
               value={matchVisibility}
               onChange={setMatchVisibility}
@@ -144,7 +144,7 @@ export default function TournamentPage() {
               color="blue"
               size="sm"
               variant="outline"
-              leftIcon={<IconExternalLink size={24} />}
+              leftSection={<IconExternalLink size={24} />}
               onClick={() => {
                 const endpoint = getTournamentEndpoint(tournamentDataFull);
                 window.open(`/tournaments/${endpoint}/dashboard`, '_ blank');

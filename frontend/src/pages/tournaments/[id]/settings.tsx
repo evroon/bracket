@@ -4,6 +4,7 @@ import {
   Checkbox,
   Container,
   CopyButton,
+  Fieldset,
   Grid,
   Image,
   NumberInput,
@@ -104,79 +105,79 @@ function GeneralTournamentForm({
         {...form.getInputProps('club_id')}
       />
 
-      <TextInput
-        label="Dashboard link"
-        placeholder="best_tournament"
-        mt="lg"
-        {...form.getInputProps('dashboard_endpoint')}
-      />
+      <Fieldset legend="Planning of matches" mt="lg" radius="md">
+        <Text fz="sm">Start of the tournament</Text>
+        <Grid>
+          <Grid.Col span={{ sm: 9 }}>
+            <DateTimePicker
+              rightSection={<IconCalendar size="1.1rem" stroke={1.5} />}
+              placeholder="Pick date and time"
+              mx="auto"
+              {...form.getInputProps('start_time')}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ sm: 3 }}>
+            <Button
+              fullWidth
+              color="indigo"
+              leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
+              onClick={() => {
+                form.setFieldValue('start_time', new Date());
+              }}
+            >
+              Set to now
+            </Button>
+          </Grid.Col>
+        </Grid>
 
-      <Text fz="sm" mt="lg">
-        Start of the tournament
-      </Text>
-      <Grid>
-        <Grid.Col sm={9}>
-          <DateTimePicker
-            icon={<IconCalendar size="1.1rem" stroke={1.5} />}
-            placeholder="Pick date and time"
-            mx="auto"
-            {...form.getInputProps('start_time')}
-          />
-        </Grid.Col>
-        <Grid.Col sm={3}>
-          <Button
-            fullWidth
-            color="indigo"
-            leftIcon={<IconCalendarTime size="1.1rem" stroke={1.5} />}
-            onClick={() => {
-              form.setFieldValue('start_time', new Date());
-            }}
-          >
-            Set to now
-          </Button>
-        </Grid.Col>
-      </Grid>
+        <Grid>
+          <Grid.Col span={{ sm: 6 }}>
+            <NumberInput
+              label="Match duration (minutes)"
+              mt="lg"
+              {...form.getInputProps('duration_minutes')}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ sm: 6 }}>
+            <NumberInput
+              label="Time between matches (minutes)"
+              mt="lg"
+              {...form.getInputProps('margin_minutes')}
+            />
+          </Grid.Col>
+        </Grid>
+      </Fieldset>
+      <Fieldset legend="Dashboard settings" mt="lg" radius="md">
+        <TextInput
+          label="Dashboard link"
+          placeholder="best_tournament"
+          {...form.getInputProps('dashboard_endpoint')}
+        />
 
-      <Grid>
-        <Grid.Col sm={6}>
-          <NumberInput
-            label="Match duration (minutes)"
-            mt="lg"
-            type="number"
-            {...form.getInputProps('duration_minutes')}
-          />
-        </Grid.Col>
-        <Grid.Col sm={6}>
-          <NumberInput
-            label="Time between matches (minutes)"
-            mt="lg"
-            type="number"
-            {...form.getInputProps('margin_minutes')}
-          />
-        </Grid.Col>
-      </Grid>
+        <Checkbox
+          mt="lg"
+          label="Allow anyone to see the dashboard of rounds and matches"
+          {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
+        />
 
-      <Checkbox
-        mt="lg"
-        label="Allow anyone to see the dashboard of rounds and matches"
-        {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
-      />
-      <Checkbox
-        mt="md"
-        label="Allow players to be in multiple teams"
-        {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
-      />
-      <Checkbox
-        mt="md"
-        label="Automatically assign courts to matches"
-        {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
-      />
-
-      {tournament != null ? <DropzoneButton tournament={tournament} /> : null}
-
-      <Center maw="50%" mx="auto">
-        <TournamentLogo tournament={tournament} />
-      </Center>
+        <DropzoneButton tournament={tournament} />
+        <Center mt="lg">
+          <div style={{ width: '50%' }}>
+            <TournamentLogo tournament={tournament} />
+          </div>
+        </Center>
+      </Fieldset>
+      <Fieldset legend="Miscellaneous" mt="lg" radius="md">
+        <Checkbox
+          label="Allow players to be in multiple teams"
+          {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
+        />
+        <Checkbox
+          mt="md"
+          label="Automatically assign courts to matches"
+          {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
+        />
+      </Fieldset>
 
       <Button fullWidth mt={24} color="green" type="submit">
         Save

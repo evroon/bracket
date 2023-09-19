@@ -72,7 +72,7 @@ export default function Scheduler({
           <SwissSettings schedulerSettings={schedulerSettings} />
         </Grid.Col>
         <Grid.Col span="content">
-          <Group position="right">
+          <Group justify="right">
             <AutoCreateMatchesButton
               swrStagesResponse={swrRoundsResponse}
               swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}

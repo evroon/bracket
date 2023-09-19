@@ -1,4 +1,4 @@
-import { Grid, MediaQuery } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -54,16 +54,12 @@ export default function CourtsPage() {
   });
   const header = (
     <Grid align="center" gutter="2rem">
-      <Grid.Col sm={2} />
-      <Grid.Col sm={5}>
-        <Grid>
-          <CourtBadge name="Current matches" color="teal" />
-        </Grid>
+      <Grid.Col span={{ sm: 2 }} />
+      <Grid.Col span={{ sm: 5 }}>
+        <CourtBadge name="Current matches" color="teal" />
       </Grid.Col>
-      <Grid.Col sm={5}>
-        <Grid>
-          <CourtBadge name="Next matches" color="gray" />
-        </Grid>
+      <Grid.Col span={{ sm: 5 }}>
+        <CourtBadge name="Next matches" color="gray" />
       </Grid.Col>
     </Grid>
   );
@@ -73,15 +69,13 @@ export default function CourtsPage() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '1rem' }} gutter="2rem">
-        <MediaQuery query="(max-width: 80em)" styles={{ display: 'none' }}>
-          <Grid.Col span={2}>
-            <TournamentTitle tournamentDataFull={tournamentDataFull} />
-            <TournamentLogo tournamentDataFull={tournamentDataFull} />
-            <TournamentQRCode tournamentDataFull={tournamentDataFull} />
-          </Grid.Col>
-        </MediaQuery>
-        <Grid.Col span={10}>
+      <Grid style={{ margin: '1rem' }} gutter="2rem">
+        <Grid.Col span={{ base: 12, lg: 2 }}>
+          <TournamentTitle tournamentDataFull={tournamentDataFull} />
+          <TournamentLogo tournamentDataFull={tournamentDataFull} />
+          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
+        </Grid.Col>
+        <Grid.Col span="auto">
           {header}
           {rows}
         </Grid.Col>
