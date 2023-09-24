@@ -9,7 +9,10 @@ export async function performLogin(username: string, password: string) {
 
   const { data } = await createAxios()
     .post('token', bodyFormData)
-    .catch((err_response: any) => handleRequestError(err_response));
+    .catch((err_response: any) => {
+      handleRequestError(err_response);
+      return { data: null };
+    });
 
   if (data == null) {
     return false;
