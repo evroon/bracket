@@ -23,6 +23,7 @@ tournaments = Table(
     Column('club_id', BigInteger, ForeignKey('clubs.id'), nullable=False),
     Column('dashboard_public', Boolean, nullable=False),
     Column('logo_path', String, nullable=True),
+    Column('dashboard_endpoint', String, nullable=True),
     Column('players_can_be_in_multiple_teams', Boolean, nullable=False, server_default='f'),
     Column('auto_assign_courts', Boolean, nullable=False, server_default='f'),
 )

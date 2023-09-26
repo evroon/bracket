@@ -41,6 +41,7 @@ function GeneralTournamentForm({
       name: tournament == null ? '' : tournament.name,
       club_id: tournament == null ? null : `${tournament.club_id}`,
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
+      dashboard_endpoint: tournament == null ? '' : tournament.dashboard_endpoint,
       players_can_be_in_multiple_teams:
         tournament == null ? true : tournament.players_can_be_in_multiple_teams,
       auto_assign_courts: tournament == null ? true : tournament.auto_assign_courts,
@@ -48,6 +49,7 @@ function GeneralTournamentForm({
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name too short'),
+      dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard endpoint too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
     },
   });
@@ -90,11 +92,19 @@ function GeneralTournamentForm({
         placeholder="Pick a club for this tournament"
         searchable
         limit={20}
-        style={{ marginTop: 10 }}
+        mt="lg"
         {...form.getInputProps('club_id')}
       />
+
+      <TextInput
+        label="Dashboard link"
+        placeholder="best_tournament"
+        mt="lg"
+        {...form.getInputProps('dashboard_endpoint')}
+      />
+
       <Checkbox
-        mt="md"
+        mt="lg"
         label="Allow anyone to see the dashboard of rounds and matches"
         {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
       />

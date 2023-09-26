@@ -24,6 +24,7 @@ async def test_tournaments_endpoint(
                 'created': DUMMY_MOCK_TIME.isoformat(),
                 'name': 'Some Cool Tournament',
                 'dashboard_public': True,
+                'dashboard_endpoint': 'cool-tournament',
                 'players_can_be_in_multiple_teams': True,
                 'auto_assign_courts': True,
             }
@@ -43,6 +44,7 @@ async def test_tournament_endpoint(
             'created': DUMMY_MOCK_TIME.isoformat(),
             'name': 'Some Cool Tournament',
             'dashboard_public': True,
+            'dashboard_endpoint': 'cool-tournament',
             'players_can_be_in_multiple_teams': True,
             'auto_assign_courts': True,
         },
