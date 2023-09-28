@@ -6,20 +6,10 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
 import StagesTab from '../../../components/utils/stages_tab';
-import {
-  getTournamentEndpointNameFromRouter,
-  getTournamentIdFromRouter,
-  responseIsValid,
-} from '../../../components/utils/util';
+import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { StageWithRounds } from '../../../interfaces/stage';
 import { Tournament } from '../../../interfaces/tournament';
-import {
-  getBaseApiUrl,
-  getCourts,
-  getStages,
-  getTournament,
-  getTournamentByEndpointName,
-} from '../../../services/adapter';
+import { getBaseApiUrl, getCourts, getStages, getTournament } from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {

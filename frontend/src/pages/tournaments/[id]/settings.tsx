@@ -63,6 +63,7 @@ function GeneralTournamentForm({
             parseInt(values.club_id, 10),
             values.name,
             values.dashboard_public,
+            values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
             values.auto_assign_courts
           );
@@ -72,6 +73,7 @@ function GeneralTournamentForm({
             tournament.id,
             values.name,
             values.dashboard_public,
+            values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
             values.auto_assign_courts
           );
