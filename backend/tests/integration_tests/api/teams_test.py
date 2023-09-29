@@ -24,6 +24,8 @@ async def test_teams_endpoint(
                     'name': 'Team 1',
                     'players': [],
                     'tournament_id': team_inserted.tournament_id,
+                    'elo_score': 0.0,
+                    'swiss_score': 0.0,
                 }
             ],
         }

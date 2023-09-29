@@ -30,6 +30,8 @@ def test_elo_calculation() -> None:
                     active=True,
                     created=DUMMY_MOCK_TIME,
                     players=[DUMMY_PLAYER1.copy(update={'id': 1})],
+                    elo_score=DUMMY_PLAYER1.elo_score,
+                    swiss_score=DUMMY_PLAYER1.swiss_score,
                 ),
                 team2=FullTeamWithPlayers(
                     name='Dummy team 2',
@@ -37,6 +39,8 @@ def test_elo_calculation() -> None:
                     active=True,
                     created=DUMMY_MOCK_TIME,
                     players=[DUMMY_PLAYER2.copy(update={'id': 2})],
+                    elo_score=DUMMY_PLAYER2.elo_score,
+                    swiss_score=DUMMY_PLAYER2.swiss_score,
                 ),
             )
         ],

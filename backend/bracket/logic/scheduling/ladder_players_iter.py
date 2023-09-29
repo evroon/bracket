@@ -89,8 +89,8 @@ async def get_possible_upcoming_matches_for_players(
         ) or team_already_scheduled_before(team2_players[0], team2_players[1]):
             continue
 
-        team1 = TeamWithPlayers(players=team1_players)
-        team2 = TeamWithPlayers(players=team2_players)
+        team1 = TeamWithPlayers.from_players(team1_players)
+        team2 = TeamWithPlayers.from_players(team2_players)
 
         suggested_match = check_team_combination_adheres_to_filter(team1, team2, filter_)
         if suggested_match:

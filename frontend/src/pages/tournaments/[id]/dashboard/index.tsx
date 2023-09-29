@@ -46,7 +46,7 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
   );
 }
 
-export default function Dashboard() {
+export default function Index() {
   const endpointName = getTournamentEndpointFromRouter();
   const swrTournamentsResponse = getTournamentByEndpointName(endpointName);
 
