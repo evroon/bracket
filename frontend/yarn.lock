@@ -1128,10 +1128,10 @@
     "@mantine/utils" "6.0.10"
     react-dropzone "14.2.3"
 
-"@mantine/form@^6.0.5":
-  version "6.0.10"
-  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-6.0.10.tgz#51472820532e99c8497c105275d1401eafb55486"
-  integrity sha512-f8Uv51zuGW1/fanjVm8HU5/kSj/5kMpWNwTWBb2zO5yFcnZWwVWclZT9euHTLpII94eKWLH18ckV48sU66uWxQ==
+"@mantine/form@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.1.0.tgz#52f831cbbddfbcaa8f49fa85969029b8da59c36d"
+  integrity sha512-Iu7Ecs2kFdvwakpvInOlmKRdMxy8XKiDAs9SjuVuRs4w/MWNEqWW6ecj1LGByfr2hyoIMyX+lhOQ/7IxgEaFjg==
   dependencies:
     fast-deep-equal "^3.1.3"
     klona "^2.0.5"
