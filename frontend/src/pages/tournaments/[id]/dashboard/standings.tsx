@@ -5,9 +5,9 @@ import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../../404';
 import StandingsTable from '../../../../components/tables/standings';
-import { getTournamentIdFromRouter } from '../../../../components/utils/util';
 import { Tournament } from '../../../../interfaces/tournament';
-import { getBaseApiUrl, getTeams, getTournament } from '../../../../services/adapter';
+import { getBaseApiUrl, getTeams } from '../../../../services/adapter';
+import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -40,16 +40,18 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
 }
 
 export default function Standings() {
-  const { tournamentData } = getTournamentIdFromRouter();
-  const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
-  const swrTournamentsResponse = getTournament(tournamentData.id);
+  const tournamentResponse = getTournamentResponseByEndpointName();
 
-  const tournamentDataFull: Tournament =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
+  // Hack to avoid unequal number of rendered hooks.
+  const tournamentId = tournamentResponse != null ? tournamentResponse[0].id : -1;
 
-  if (tournamentDataFull == null && !swrTournamentsResponse.isLoading) {
+  const swrTeamsResponse: SWRResponse = getTeams(tournamentId);
+
+  if (tournamentResponse == null) {
     return <NotFoundTitle />;
   }
+
+  const tournamentDataFull = tournamentResponse[0];
 
   return (
     <>

@@ -1,4 +1,5 @@
-import { createAxios } from './adapter';
+import { getTournamentEndpointFromRouter } from '../components/utils/util';
+import { createAxios, getTournamentByEndpointName } from './adapter';
 
 export async function createTournament(
   club_id: number,
@@ -37,4 +38,11 @@ export async function updateTournament(
     players_can_be_in_multiple_teams,
     auto_assign_courts,
   });
+}
+
+export function getTournamentResponseByEndpointName() {
+  const endpointName = getTournamentEndpointFromRouter();
+  const swrTournamentsResponse = getTournamentByEndpointName(endpointName);
+
+  return swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
 }
