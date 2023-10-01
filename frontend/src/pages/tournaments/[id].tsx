@@ -13,7 +13,7 @@ import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
-import { StageWithRounds } from '../../interfaces/stage';
+import { StageWithRounds, getActiveStage } from '../../interfaces/stage';
 import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -53,12 +53,11 @@ export default function TournamentPage() {
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
   const tournamentDataFull = tournaments.filter((tournament) => tournament.id === id)[0];
 
-  let activeStage = null;
+  const isResponseValid = responseIsValid(swrStagesResponse);
+  const activeStage = isResponseValid ? getActiveStage(swrStagesResponse) : null;
   let draftRound = null;
 
-  if (responseIsValid(swrStagesResponse)) {
-    [activeStage] = swrStagesResponse.data.data.filter((stage: StageWithRounds) => stage.is_active);
-
+  if (isResponseValid) {
     const draftRounds = swrStagesResponse.data.data.map((stage: StageWithRounds) =>
       stage.rounds.filter((round: RoundInterface) => round.is_draft)
     );

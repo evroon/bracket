@@ -1,4 +1,5 @@
 import { Center, Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
+import assert from 'assert';
 import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -62,8 +63,8 @@ export default function Match({
   match,
   readOnly,
 }: {
-  swrRoundsResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
+  swrRoundsResponse: SWRResponse | null;
+  swrCourtsResponse: SWRResponse | null;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
@@ -107,6 +108,8 @@ export default function Match({
   if (readOnly) {
     return <div className={classes.root}>{bracket}</div>;
   }
+  assert(swrRoundsResponse != null);
+  assert(swrCourtsResponse != null);
 
   return (
     <>
