@@ -3,18 +3,21 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../404';
-import Brackets from '../../../components/brackets/brackets';
-import StagesTab from '../../../components/utils/stages_tab';
-import { getTournamentEndpointFromRouter, responseIsValid } from '../../../components/utils/util';
-import { StageWithRounds } from '../../../interfaces/stage';
-import { Tournament } from '../../../interfaces/tournament';
+import NotFoundTitle from '../../../404';
+import Brackets from '../../../../components/brackets/brackets';
+import StagesTab from '../../../../components/utils/stages_tab';
+import {
+  getTournamentEndpointFromRouter,
+  responseIsValid,
+} from '../../../../components/utils/util';
+import { StageWithRounds } from '../../../../interfaces/stage';
+import { Tournament } from '../../../../interfaces/tournament';
 import {
   getBaseApiUrl,
   getCourts,
   getStages,
   getTournamentByEndpointName,
-} from '../../../services/adapter';
+} from '../../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
