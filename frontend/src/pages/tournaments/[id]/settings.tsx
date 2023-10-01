@@ -49,7 +49,7 @@ function GeneralTournamentForm({
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name too short'),
-      dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard endpoint too short'),
+      dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard link too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
     },
   });
