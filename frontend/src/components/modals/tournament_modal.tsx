@@ -30,6 +30,7 @@ function GeneralTournamentForm({
       name: '',
       club_id: null,
       dashboard_public: true,
+      dashboard_endpoint: '',
       players_can_be_in_multiple_teams: false,
       auto_assign_courts: true,
     },
@@ -48,6 +49,7 @@ function GeneralTournamentForm({
           parseInt(values.club_id, 10),
           values.name,
           values.dashboard_public,
+          values.dashboard_endpoint,
           values.players_can_be_in_multiple_teams,
           values.auto_assign_courts
         );
@@ -71,6 +73,14 @@ function GeneralTournamentForm({
         style={{ marginTop: 10 }}
         {...form.getInputProps('club_id')}
       />
+
+      <TextInput
+        label="Dashboard link"
+        placeholder="best_tournament"
+        mt="lg"
+        {...form.getInputProps('dashboard_endpoint')}
+      />
+
       <Checkbox
         mt="md"
         label="Allow anyone to see the dashboard of rounds and matches"

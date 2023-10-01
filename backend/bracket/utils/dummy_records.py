@@ -30,6 +30,7 @@ DUMMY_TOURNAMENT = Tournament(
     name='Some Cool Tournament',
     created=DUMMY_MOCK_TIME,
     dashboard_public=True,
+    dashboard_endpoint='cool-tournament',
     logo_path=None,
     players_can_be_in_multiple_teams=True,
     auto_assign_courts=True,

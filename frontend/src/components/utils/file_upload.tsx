@@ -37,6 +37,7 @@ export function DropzoneButton({ tournament }: { tournament: Tournament }) {
   return (
     <div className={classes.wrapper}>
       <Dropzone
+        mt="lg"
         openRef={openRef}
         onDrop={async (files) => uploadLogo(tournament.id, files[0])}
         className={classes.dropzone}

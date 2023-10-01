@@ -14,7 +14,7 @@ import { getTournamentIdFromRouter, responseIsValid } from '../../components/uti
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithRounds } from '../../interfaces/stage';
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
   getCourts,
@@ -113,7 +113,8 @@ export default function TournamentPage() {
               style={{ marginBottom: 10 }}
               leftIcon={<IconExternalLink size={24} />}
               onClick={() => {
-                window.open(`/tournaments/${tournamentData.id}/dashboard`, '_ blank');
+                const endpoint = getTournamentEndpoint(tournamentDataFull);
+                window.open(`/tournaments/${endpoint}/dashboard`, '_ blank');
               }}
             >
               View dashboard

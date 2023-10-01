@@ -9,6 +9,7 @@ class Tournament(BaseModelORM):
     name: str
     created: datetime_utc
     dashboard_public: bool
+    dashboard_endpoint: str | None
     logo_path: str | None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
@@ -17,6 +18,7 @@ class Tournament(BaseModelORM):
 class TournamentUpdateBody(BaseModelORM):
     name: str
     dashboard_public: bool
+    dashboard_endpoint: str | None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
 

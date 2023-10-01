@@ -15,7 +15,7 @@ import { SWRResponse } from 'swr';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
-import { Tournament } from '../../../interfaces/tournament';
+import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getClubs, getTournaments } from '../../../services/adapter';
 import { createTournament, updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
@@ -41,6 +41,7 @@ function GeneralTournamentForm({
       name: tournament == null ? '' : tournament.name,
       club_id: tournament == null ? null : `${tournament.club_id}`,
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
+      dashboard_endpoint: tournament == null ? '' : tournament.dashboard_endpoint,
       players_can_be_in_multiple_teams:
         tournament == null ? true : tournament.players_can_be_in_multiple_teams,
       auto_assign_courts: tournament == null ? true : tournament.auto_assign_courts,
@@ -48,6 +49,7 @@ function GeneralTournamentForm({
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name too short'),
+      dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard link too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
     },
   });
@@ -61,6 +63,7 @@ function GeneralTournamentForm({
             parseInt(values.club_id, 10),
             values.name,
             values.dashboard_public,
+            values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
             values.auto_assign_courts
           );
@@ -70,6 +73,7 @@ function GeneralTournamentForm({
             tournament.id,
             values.name,
             values.dashboard_public,
+            values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
             values.auto_assign_courts
           );
@@ -90,11 +94,19 @@ function GeneralTournamentForm({
         placeholder="Pick a club for this tournament"
         searchable
         limit={20}
-        style={{ marginTop: 10 }}
+        mt="lg"
         {...form.getInputProps('club_id')}
       />
+
+      <TextInput
+        label="Dashboard link"
+        placeholder="best_tournament"
+        mt="lg"
+        {...form.getInputProps('dashboard_endpoint')}
+      />
+
       <Checkbox
-        mt="md"
+        mt="lg"
         label="Allow anyone to see the dashboard of rounds and matches"
         {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
       />
@@ -120,7 +132,9 @@ function GeneralTournamentForm({
       </Button>
 
       {tournament != null ? (
-        <CopyButton value={`${getBaseURL()}/tournaments/${tournament.id}/dashboard`}>
+        <CopyButton
+          value={`${getBaseURL()}/tournaments/${getTournamentEndpoint(tournament)}/dashboard`}
+        >
           {({ copied, copy }) => (
             <Button fullWidth mt={8} color={copied ? 'teal' : 'blue'} onClick={copy}>
               {copied ? 'Copied dashboard URL' : 'Copy dashboard URL'}

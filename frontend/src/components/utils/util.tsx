@@ -44,6 +44,18 @@ export function getTournamentIdFromRouter() {
   return { id, tournamentData };
 }
 
+export function getTournamentEndpointFromRouter() {
+  const router = useRouter();
+  const { id }: any = router.query;
+  return id;
+}
+
+export function getTournamentEndpointNameFromRouter() {
+  const router = useRouter();
+  const { id: name }: any = router.query;
+  return { name };
+}
+
 export function responseIsValid(response: SWRResponse) {
   return response.data != null && response.data.data != null;
 }
