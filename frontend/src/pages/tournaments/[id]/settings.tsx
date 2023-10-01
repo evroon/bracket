@@ -15,7 +15,7 @@ import { SWRResponse } from 'swr';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
-import { Tournament } from '../../../interfaces/tournament';
+import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getClubs, getTournaments } from '../../../services/adapter';
 import { createTournament, updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
@@ -132,7 +132,9 @@ function GeneralTournamentForm({
       </Button>
 
       {tournament != null ? (
-        <CopyButton value={`${getBaseURL()}/tournaments/${tournament.id}/dashboard`}>
+        <CopyButton
+          value={`${getBaseURL()}/tournaments/${getTournamentEndpoint(tournament)}/dashboard`}
+        >
           {({ copied, copy }) => (
             <Button fullWidth mt={8} color={copied ? 'teal' : 'blue'} onClick={copy}>
               {copied ? 'Copied dashboard URL' : 'Copy dashboard URL'}

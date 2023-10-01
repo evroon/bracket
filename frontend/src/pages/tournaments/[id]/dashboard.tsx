@@ -6,10 +6,15 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../../404';
 import Brackets from '../../../components/brackets/brackets';
 import StagesTab from '../../../components/utils/stages_tab';
-import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
+import { getTournamentEndpointFromRouter, responseIsValid } from '../../../components/utils/util';
 import { StageWithRounds } from '../../../interfaces/stage';
 import { Tournament } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getCourts, getStages, getTournament } from '../../../services/adapter';
+import {
+  getBaseApiUrl,
+  getCourts,
+  getStages,
+  getTournamentByEndpointName,
+} from '../../../services/adapter';
 
 function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -42,19 +47,24 @@ function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournamen
 }
 
 export default function Dashboard() {
-  const { tournamentData } = getTournamentIdFromRouter();
-  const swrStagesResponse: SWRResponse = getStages(tournamentData.id, true);
-  const swrCourtsResponse: SWRResponse = getCourts(tournamentData.id);
+  const endpointName = getTournamentEndpointFromRouter();
+  const swrTournamentsResponse = getTournamentByEndpointName(endpointName);
 
-  const swrTournamentsResponse = getTournament(tournamentData.id);
-  const [selectedStageId, setSelectedStageId] = useState(null);
-
-  const tournamentDataFull: Tournament =
+  const tournamentResponse: Tournament[] =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
 
-  if (tournamentDataFull == null && !swrTournamentsResponse.isLoading) {
+  // Hack to avoid unequal number of rendered hooks.
+  const tournamentId = tournamentResponse != null ? tournamentResponse[0].id : -1;
+
+  const swrStagesResponse: SWRResponse = getStages(tournamentId, true);
+  const swrCourtsResponse: SWRResponse = getCourts(tournamentId);
+  const [selectedStageId, setSelectedStageId] = useState(null);
+
+  if (tournamentResponse == null) {
     return <NotFoundTitle />;
   }
+
+  const tournamentDataFull = tournamentResponse[0];
 
   if (responseIsValid(swrStagesResponse)) {
     const activeTab = swrStagesResponse.data.data.filter(
@@ -85,7 +95,7 @@ export default function Dashboard() {
             />
           </Center>
           <Brackets
-            tournamentData={tournamentData}
+            tournamentData={tournamentDataFull}
             swrStagesResponse={swrStagesResponse}
             swrCourtsResponse={swrCourtsResponse}
             swrUpcomingMatchesResponse={null}

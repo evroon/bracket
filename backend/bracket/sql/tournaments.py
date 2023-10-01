@@ -1,10 +1,34 @@
+from typing import Any
+
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
-from bracket.schema import tournaments
-from bracket.utils.db import fetch_one_parsed_certain
 
 
 async def sql_get_tournament(tournament_id: int) -> Tournament:
-    return await fetch_one_parsed_certain(
-        database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
-    )
+    query = '''
+        SELECT *
+        FROM tournaments
+        WHERE id = :tournament_id
+        '''
+    result = await database.fetch_one(query=query, values={'tournament_id': tournament_id})
+    assert result is not None
+    return Tournament.parse_obj(result._mapping)
+
+
+async def sql_get_tournaments(
+    club_ids: tuple[int, ...], endpoint_name: str | None
+) -> list[Tournament]:
+    query = '''
+        SELECT *
+        FROM tournaments
+        WHERE club_id = any(:club_ids)
+        '''
+
+    params: dict[str, Any] = {'club_ids': club_ids}
+
+    if endpoint_name is not None:
+        query += 'AND dashboard_endpoint = :endpoint_name'
+        params = {**params, 'endpoint_name': endpoint_name}
+
+    result = await database.fetch_all(query=query, values=params)
+    return [Tournament.parse_obj(x._mapping) for x in result]

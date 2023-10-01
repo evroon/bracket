@@ -17,8 +17,9 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
+from bracket.sql.tournaments import sql_get_tournaments
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
-from bracket.utils.db import fetch_all_parsed, fetch_one_parsed_certain
+from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -42,15 +43,11 @@ async def get_tournament(
 
 
 @router.get("/tournaments", response_model=TournamentsResponse)
-async def get_tournaments(user: UserPublic = Depends(user_authenticated)) -> TournamentsResponse:
-    user_clubs = await get_which_clubs_has_user_access_to(assert_some(user.id))
-    return TournamentsResponse(
-        data=await fetch_all_parsed(
-            database,
-            Tournament,
-            tournaments.select().where(tournaments.c.club_id.in_(tuple(user_clubs))),
-        )
-    )
+async def get_tournaments(
+    user: UserPublic = Depends(user_authenticated), endpoint_name: str | None = None
+) -> TournamentsResponse:
+    user_club_ids = await get_which_clubs_has_user_access_to(assert_some(user.id))
+    return TournamentsResponse(data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name))
 
 
 @router.patch("/tournaments/{tournament_id}", response_model=SuccessResponse)
