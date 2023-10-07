@@ -20,11 +20,6 @@ class Match(BaseModelORM):
     court_id: int | None
 
 
-class UpcomingMatch(BaseModel):
-    team1_id: int
-    team2_id: int
-
-
 class MatchWithDetails(Match):
     team1: FullTeamWithPlayers
     team2: FullTeamWithPlayers
@@ -55,12 +50,6 @@ class MatchCreateBody(BaseModelORM):
     team1_id: int
     team2_id: int
     court_id: int | None
-
-
-class MatchToInsert(MatchCreateBody):
-    created: datetime_utc
-    team1_score: int = 0
-    team2_score: int = 0
 
 
 class MatchFilter(BaseModel):

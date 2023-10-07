@@ -14,14 +14,6 @@ class Environment(EnumAutoStr):
     DEMO = auto()
     CI = auto()
 
-    def get_env_filepath(self) -> str:
-        return {
-            Environment.PRODUCTION: 'prod.env',
-            Environment.DEVELOPMENT: 'dev.env',
-            Environment.CI: 'ci.env',
-            Environment.DEMO: 'demo.env',
-        }[self]
-
     def get_log_level(self) -> int:
         return {
             Environment.CI: logging.WARNING,

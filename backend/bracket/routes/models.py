@@ -48,10 +48,6 @@ class SinglePlayerResponse(DataResponse[Player]):
     pass
 
 
-class RoundsResponse(DataResponse[list[Round]]):
-    pass
-
-
 class RoundsWithMatchesResponse(DataResponse[list[StageWithRounds]]):
     pass
 
@@ -61,10 +57,6 @@ class UpcomingMatchesResponse(DataResponse[list[SuggestedMatch]]):
 
 
 class SingleMatchResponse(DataResponse[Match]):
-    pass
-
-
-class TeamsResponse(DataResponse[list[Team]]):
     pass
 
 

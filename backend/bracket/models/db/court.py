@@ -10,10 +10,6 @@ class Court(BaseModelORM):
     tournament_id: int
 
 
-class CourtInDB(Court):
-    id: int
-
-
 class CourtBody(BaseModelORM):
     name: str
 

@@ -47,7 +47,7 @@ async def sql_delete_club(club_id: int) -> None:
     await database.execute(query=query, values={'club_id': club_id})
 
 
-async def sql_remove_user_from_club(club_id: int, user_id: int) -> None:
+async def todo_sql_remove_user_from_club(club_id: int, user_id: int) -> None:
     query = '''
         DELETE FROM users_x_clubs
         WHERE club_id = :club_id
@@ -66,7 +66,7 @@ async def get_clubs_for_user_id(user_id: int) -> list[Club]:
     return [Club.parse_obj(result._mapping) for result in results]
 
 
-async def get_club_for_user_id(club_id: int, user_id: int) -> Club | None:
+async def todo_get_club_for_user_id(club_id: int, user_id: int) -> Club | None:
     query = '''
         SELECT clubs.* FROM clubs
         JOIN users_x_clubs uxc on clubs.id = uxc.club_id
