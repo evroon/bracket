@@ -55,5 +55,5 @@ jobs:
         working-directory: backend
 
       - name: Run ruff
-        run: ruff check .
+        run: pipenv run ruff check .
         working-directory: backend
