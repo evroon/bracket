@@ -9,17 +9,15 @@ async def get_possible_upcoming_matches_round_robin(
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
     rounds = await get_rounds_for_stage(tournament_id, stage_id)
-    draft_round = next((round_ for round_ in rounds if round_.id == round_id))
+    draft_round = next(round_ for round_ in rounds if round_.id == round_id)
 
     teams = await get_teams_with_members(tournament_id, only_active_teams=True)
 
     for i, team1 in enumerate(teams):
         for _, team2 in enumerate(teams[i + 1 :]):
             team_already_scheduled = any(
-                (
-                    team1.id in match.team_ids or team2.id in match.team_ids
-                    for match in draft_round.matches
-                )
+                team1.id in match.team_ids or team2.id in match.team_ids
+                for match in draft_round.matches
             )
             if team_already_scheduled:
                 continue

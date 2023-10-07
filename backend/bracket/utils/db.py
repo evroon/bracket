@@ -1,5 +1,3 @@
-from typing import Type
-
 from databases import Database
 from sqlalchemy import Table
 from sqlalchemy.sql import Select
@@ -10,27 +8,27 @@ from bracket.utils.types import BaseModelT, assert_some
 
 
 async def fetch_one_parsed(
-    database: Database, model: Type[BaseModelT], query: Select
+    database: Database, model: type[BaseModelT], query: Select
 ) -> BaseModelT | None:
     record = await database.fetch_one(query)
     return model.parse_obj(record._mapping) if record is not None else None
 
 
 async def fetch_one_parsed_certain(
-    database: Database, model: Type[BaseModelT], query: Select
+    database: Database, model: type[BaseModelT], query: Select
 ) -> BaseModelT:
     return assert_some(await fetch_one_parsed(database, model, query))
 
 
 async def fetch_all_parsed(
-    database: Database, model: Type[BaseModelT], query: Select
+    database: Database, model: type[BaseModelT], query: Select
 ) -> list[BaseModelT]:
     records = await database.fetch_all(query)
     return [model.parse_obj(record._mapping) for record in records]
 
 
 async def insert_generic(
-    database: Database, data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
+    database: Database, data_model: BaseModelT, table: Table, return_type: type[BaseModelT]
 ) -> tuple[int, BaseModelT]:
     try:
         last_record_id: int = await database.execute(

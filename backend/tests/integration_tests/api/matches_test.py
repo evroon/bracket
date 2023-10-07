@@ -210,7 +210,6 @@ async def test_upcoming_matches_endpoint(
         json_response = await send_tournament_request(
             HTTPMethod.GET, f'rounds/{round_inserted.id}/upcoming_matches', auth_context, {}
         )
-        print(json_response)
         assert json_response == {
             'data': [
                 {

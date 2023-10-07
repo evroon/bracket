@@ -53,3 +53,7 @@ jobs:
       - name: Run black
         run: pipenv run black --check .
         working-directory: backend
+
+      - name: Run ruff
+        run: pipenv run ruff check .
+        working-directory: backend

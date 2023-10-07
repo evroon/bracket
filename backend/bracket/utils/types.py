@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, NewType, Sequence, TypeVar
+from typing import TYPE_CHECKING, Any, NewType, TypeVar
 
 from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 BaseModelT = TypeVar('BaseModelT', bound=BaseModel)
 T = TypeVar('T')

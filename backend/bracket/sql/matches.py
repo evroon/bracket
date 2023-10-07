@@ -12,7 +12,15 @@ async def sql_delete_match(match_id: int) -> None:
 
 async def sql_create_match(match: MatchCreateBody) -> Match:
     query = '''
-        INSERT INTO matches (round_id, team1_id, team2_id, team1_score, team2_score, court_id, created)
+        INSERT INTO matches (
+            round_id,
+            team1_id,
+            team2_id,
+            team1_score,
+            team2_score,
+            court_id,
+            created
+        )
         VALUES (:round_id, :team1_id, :team2_id, 0, 0, :court_id, NOW())
         RETURNING *
         '''

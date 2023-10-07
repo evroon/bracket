@@ -1,5 +1,6 @@
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator, Type, cast
+from typing import cast
 
 from sqlalchemy import Table
 
@@ -42,7 +43,7 @@ async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
 
 @asynccontextmanager
 async def inserted_generic(
-    data_model: BaseModelT, table: Table, return_type: Type[BaseModelT]
+    data_model: BaseModelT, table: Table, return_type: type[BaseModelT]
 ) -> AsyncIterator[BaseModelT]:
     last_record_id, row_inserted = await insert_generic(database, data_model, table, return_type)
 

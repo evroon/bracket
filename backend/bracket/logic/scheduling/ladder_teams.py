@@ -20,10 +20,8 @@ async def get_possible_upcoming_matches_for_teams(
     for i, team1 in enumerate(teams):
         for _, team2 in enumerate(teams[i + 1 :]):
             team_already_scheduled = any(
-                (
-                    team1.id in match.team_ids or team2.id in match.team_ids
-                    for match in draft_round.matches
-                )
+                team1.id in match.team_ids or team2.id in match.team_ids
+                for match in draft_round.matches
             )
             if team_already_scheduled:
                 continue

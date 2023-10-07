@@ -1,7 +1,8 @@
 import asyncio
 import socket
+from collections.abc import Sequence
 from contextlib import closing
-from typing import Final, Optional, Sequence
+from typing import Final
 
 import aiohttp
 import uvicorn
@@ -45,11 +46,11 @@ class UvicornTestServer(uvicorn.Server):
 
     def __init__(self, _app: FastAPI = app, host: str = TEST_HOST, port: int = TEST_PORT):
         self._startup_done = asyncio.Event()
-        self._serve_task: Optional[asyncio.Task[None]] = None
+        self._serve_task: asyncio.Task[None] | None = None
         self.should_exit: bool = False
         super().__init__(config=uvicorn.Config(_app, host=host, port=port))
 
-    async def startup(self, sockets: Optional[Sequence[socket.socket]] = None) -> None:
+    async def startup(self, sockets: Sequence[socket.socket] | None = None) -> None:
         sockets_list = list(sockets) if sockets is not None else sockets
         await super().startup(sockets=sockets_list)
         self.config.setup_event_loop()

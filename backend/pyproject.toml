@@ -76,6 +76,7 @@ disable = [
     'logging-fstring-interpolation',
     'too-many-arguments',
     'unspecified-encoding',
+    'wrong-import-position',
 ]
 
 [tool.bandit]
@@ -84,3 +85,34 @@ skips = [
     'B106',
     'B108'
 ]
+
+
+[tool.ruff]
+select = [
+    "E",
+    "EXE",
+#    "ERA", TODO
+    "F",
+    "FA",
+    "FIX",
+    "I",
+    "ISC",
+    "PGH",
+    "PIE",
+    "PLE",
+    "PLW",
+    "RUF100",
+    "T20",
+    "TCH",
+    "TD",
+    "TID",
+    "UP",
+    "W",
+]
+ignore = []
+line-length = 100
+respect-gitignore = false
+show-fixes = true
+show-source = true
+target-version = "py311"
+exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]

@@ -106,7 +106,7 @@ async def get_next_stage_in_tournament(
                         SELECT id FROM stages AS t
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
-                        ORDER BY id ASC 
+                        ORDER BY id ASC
                         LIMIT 1
                     ),
                     10000000000000
@@ -118,7 +118,7 @@ async def get_next_stage_in_tournament(
                         SELECT id FROM stages AS t
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
-                        ORDER BY id DESC 
+                        ORDER BY id DESC
                         LIMIT 1
                     ),
                     -1
@@ -142,7 +142,7 @@ async def sql_activate_next_stage(new_active_stage_id: int, tournament_id: int) 
         UPDATE stages
         SET is_active = (stages.id = :new_active_stage_id)
         WHERE stages.tournament_id = :tournament_id
-        
+
     '''
     await database.execute(
         query=update_query,
