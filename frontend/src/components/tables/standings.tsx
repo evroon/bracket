@@ -6,7 +6,8 @@ import PlayerList from '../info/player_list';
 import { PlayerScore } from '../info/player_score';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
-import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import TableLayoutLarge from './table_large';
 
 export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse: SWRResponse }) {
   const teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
@@ -20,7 +21,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .map((team) => (
-      <tr key={team.name}>
+      <tr key={team.id}>
         <td>{team.name}</td>
         <td>
           <PlayerList team={team} />
@@ -42,7 +43,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
   if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
 
   return (
-    <TableLayout>
+    <TableLayoutLarge display_mode="presentation">
       <thead>
         <tr>
           <ThSortable state={tableState} field="name">
@@ -58,6 +59,6 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
         </tr>
       </thead>
       <tbody>{rows}</tbody>
-    </TableLayout>
+    </TableLayoutLarge>
   );
 }

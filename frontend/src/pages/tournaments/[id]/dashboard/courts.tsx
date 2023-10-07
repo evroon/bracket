@@ -4,7 +4,7 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../../404';
-import Courts from '../../../../components/brackets/courts';
+import CourtsLarge from '../../../../components/brackets/courts_large';
 import {
   TournamentHeadTitle,
   TournamentLogo,
@@ -47,7 +47,7 @@ export default function CourtsPage() {
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span={10}>
-          <Courts tournamentData={tournamentDataFull} activeRound={activeRound} />
+          <CourtsLarge tournamentData={tournamentDataFull} activeRound={activeRound} />
         </Grid.Col>
       </Grid>
     </>

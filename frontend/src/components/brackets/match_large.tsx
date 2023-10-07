@@ -1,20 +1,19 @@
-import { Center, Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
+import { Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
 import assert from 'assert';
-import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import MatchModal from '../modals/match_modal';
-
-import Visibility = Property.Visibility;
+import { MatchBadge } from './match';
 
 const useStyles = createStyles((theme) => ({
   root: {
     width: '100%',
     marginTop: '30px',
     padding: '0px',
+    fontSize: '2rem',
   },
   divider: {
     backgroundColor: 'darkgray',
@@ -34,28 +33,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
-  const visibility: Visibility = match.court ? 'visible' : 'hidden';
-  const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[2];
-  return (
-    <Center style={{ transform: 'translateY(0%)', visibility }}>
-      <div
-        style={{
-          width: '75%',
-          backgroundColor: badgeColor,
-          borderRadius: '8px 8px 0px 0px',
-          padding: '4px 12px 4px 12px',
-        }}
-      >
-        <Center>
-          <b>{match.court?.name}</b>
-        </Center>
-      </div>
-    </Center>
-  );
-}
-
-export default function Match({
+export default function MatchLarge({
   swrRoundsResponse,
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
