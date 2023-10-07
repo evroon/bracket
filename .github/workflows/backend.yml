@@ -57,3 +57,7 @@ jobs:
       - name: Run ruff
         run: pipenv run ruff check .
         working-directory: backend
+
+      - name: Run vulture
+        run: ! pipenv run vulture |grep "unused function\|unused class\|unused method"
+        working-directory: backend

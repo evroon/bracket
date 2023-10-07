@@ -116,3 +116,16 @@ show-fixes = true
 show-source = true
 target-version = "py311"
 exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]
+
+[tool.vulture]
+min_confidence = 0
+paths = ["."]
+ignore_decorators = ["@pytest.*", "@*router*", "@app.*", "@*validator*"]
+ignore_names = [
+    "todo*",
+    "RestartableUvicornWorker",
+    "_generate_next_value_",
+    "downgrade",
+    "upgrade"
+]
+sort_by_size = true

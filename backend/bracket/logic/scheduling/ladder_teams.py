@@ -6,7 +6,7 @@ from bracket.sql.rounds import get_rounds_for_stage
 from bracket.sql.teams import get_teams_with_members
 
 
-async def get_possible_upcoming_matches_for_teams(
+async def todo_get_possible_upcoming_matches_for_teams(
     tournament_id: int, stage_id: int, filter_: MatchFilter
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
