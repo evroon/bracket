@@ -2,8 +2,8 @@
 import asyncio
 import os
 from asyncio import AbstractEventLoop
+from collections.abc import AsyncIterator
 from time import sleep
-from typing import AsyncIterator
 
 import pytest
 from databases import Database

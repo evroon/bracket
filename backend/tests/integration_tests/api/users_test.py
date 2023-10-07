@@ -42,7 +42,6 @@ async def test_update_user(
     response = await send_auth_request(
         HTTPMethod.PATCH, f'users/{auth_context.user.id}', auth_context, None, body
     )
-    print(response)
     patched_user = await fetch_one_parsed_certain(
         database, User, query=users.select().where(users.c.id == auth_context.user.id)
     )

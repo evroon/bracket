@@ -1,7 +1,7 @@
 """Add ON DELETE CASCADE to users_x_clubs
 
 Revision ID: 274385f2a757
-Revises: 
+Revises:
 Create Date: 2023-04-15 11:08:57.406407
 
 """

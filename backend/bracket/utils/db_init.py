@@ -1,5 +1,6 @@
+from typing import TYPE_CHECKING
+
 from heliclockter import datetime_utc
-from sqlalchemy import Table
 
 from bracket.config import Environment, config, environment
 from bracket.database import database, engine
@@ -64,6 +65,9 @@ from bracket.utils.dummy_records import (
 from bracket.utils.logging import logger
 from bracket.utils.security import pwd_context
 from bracket.utils.types import BaseModelT
+
+if TYPE_CHECKING:
+    from sqlalchemy import Table
 
 
 async def create_admin_user() -> int:

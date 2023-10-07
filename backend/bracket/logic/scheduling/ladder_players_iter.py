@@ -15,7 +15,7 @@ from bracket.utils.types import assert_some
 
 
 def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> bool:
-    return any((player.id in match.player_ids for match in draft_round.matches))
+    return any(player.id in match.player_ids for match in draft_round.matches)
 
 
 async def get_possible_upcoming_matches_for_players(
@@ -40,11 +40,9 @@ async def get_possible_upcoming_matches_for_players(
     @lru_cache
     def team_already_scheduled_before(player1: Player, player2: Player) -> bool:
         return any(
-            (
-                player1 in match.team1.players and player2 in match.team2.players
-                for round_ in other_rounds
-                for match in round_.matches
-            )
+            player1 in match.team1.players and player2 in match.team2.players
+            for round_ in other_rounds
+            for match in round_.matches
         )
 
     team_already_scheduled_before.cache_clear()
