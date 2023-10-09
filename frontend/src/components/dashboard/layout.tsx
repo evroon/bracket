@@ -1,4 +1,4 @@
-import { Image, Skeleton, Title } from '@mantine/core';
+import { Center, Image, Skeleton, Title } from '@mantine/core';
 import React from 'react';
 import QRCode from 'react-qr-code';
 
@@ -8,13 +8,24 @@ import { getBaseURL } from '../utils/util';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   return (
-    <div style={{ background: 'white', padding: '16px', marginTop: '3rem' }}>
-      <QRCode
-        style={{ justifyContent: 'center', maxWidth: '100%', width: '100%' }}
-        value={`${getBaseURL()}/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`}
-        // value={"hey"}
-      />
-    </div>
+    <Center>
+      <div
+        style={{
+          width: '100%',
+          background: 'white',
+          marginTop: '3rem',
+          maxWidth: '400px',
+          height: 'auto',
+        }}
+      >
+        <Center>
+          <QRCode
+            style={{ margin: '32px 0px 32px 0px' }}
+            value={`${getBaseURL()}/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`}
+          />
+        </Center>
+      </div>
+    </Center>
   );
 }
 
