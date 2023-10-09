@@ -1,18 +1,15 @@
 from __future__ import annotations
 
+# ruff: noqa: TCH001,TCH002
 import json
 from decimal import Decimal
-from typing import TYPE_CHECKING
 
+from heliclockter import datetime_utc
 from pydantic import BaseModel, validator
 
+from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.types import assert_some
-
-if TYPE_CHECKING:
-    from heliclockter import datetime_utc
-
-    from bracket.models.db.player import Player
 
 
 class Team(BaseModelORM):
