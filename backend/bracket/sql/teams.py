@@ -22,7 +22,11 @@ async def get_teams_with_members(
     active_team_filter = 'AND teams.active IS TRUE' if only_active_teams else ''
     team_id_filter = 'AND teams.id = :team_id' if team_id is not None else ''
     query = f'''
-        SELECT teams.*, to_json(array_agg(p.*)) AS players
+        SELECT
+            teams.*,
+            to_json(array_agg(p.*)) AS players,
+            COALESCE(avg(p.elo_score), 0.0) AS elo_score,
+            COALESCE(avg(p.swiss_score), 0.0) AS swiss_score
         FROM teams
         LEFT JOIN players_x_teams pt on pt.team_id = teams.id
         LEFT JOIN players p on pt.player_id = p.id

@@ -50,12 +50,6 @@ export function getTournamentEndpointFromRouter() {
   return id;
 }
 
-export function getTournamentEndpointNameFromRouter() {
-  const router = useRouter();
-  const { id: name }: any = router.query;
-  return { name };
-}
-
 export function responseIsValid(response: SWRResponse) {
   return response.data != null && response.data.data != null;
 }

@@ -37,7 +37,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-redux": "^8.0.5",
-    "swr": "^2.1.5"
+    "swr": "^2.1.5",
+    "react-qr-code": "^2.0.12"
   },
   "devDependencies": {
     "@babel/core": "^7.22.17",

@@ -20,7 +20,15 @@ async def get_stages_with_rounds_and_matches(
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
                 teams.*,
-                to_json(array_remove(array_agg(p), NULL)) as players
+                to_json(array_remove(array_agg(p), NULL)) as players,
+                (
+                    SELECT COALESCE(avg(swiss_score), 0.0)
+                    FROM players
+                ) AS swiss_score,
+                (
+                    SELECT COALESCE(avg(elo_score), 0.0)
+                    FROM players
+                ) AS elo_score
             FROM teams
             LEFT JOIN players_x_teams pt on pt.team_id = teams.id
             LEFT JOIN players p on pt.player_id = p.id

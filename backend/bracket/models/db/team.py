@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+# ruff: noqa: TCH001,TCH002
 import json
 from decimal import Decimal
 
@@ -20,6 +23,16 @@ class Team(BaseModelORM):
 class TeamWithPlayers(BaseModel):
     id: int | None = None
     players: list[Player]
+    swiss_score: Decimal
+    elo_score: Decimal
+
+    @classmethod
+    def from_players(cls, players: list[Player]) -> TeamWithPlayers:
+        return TeamWithPlayers(
+            players=players,
+            elo_score=Decimal(sum(p.elo_score for p in players) / len(players)),
+            swiss_score=Decimal(sum(p.swiss_score for p in players) / len(players)),
+        )
 
     @property
     def player_ids(self) -> list[int]:
