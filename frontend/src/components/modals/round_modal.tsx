@@ -17,16 +17,47 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
 
-export default function RoundModal({
+function RoundDeleteButton({
   tournamentData,
   round,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
+  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
+  dynamicSchedule: boolean;
+}) {
+  if (!dynamicSchedule) return null;
+  return (
+    <DeleteButton
+      fullWidth
+      onClick={async () => {
+        await deleteRound(tournamentData.id, round.id);
+        await swrRoundsResponse.mutate(null);
+        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
+      }}
+      style={{ marginTop: '15px' }}
+      size="sm"
+      title="Delete Round"
+    />
+  );
+}
+
+export default function RoundModal({
+  tournamentData,
+  round,
+  swrRoundsResponse,
+  swrUpcomingMatchesResponse,
+  dynamicSchedule,
+}: {
+  tournamentData: TournamentMinimal;
+  round: RoundInterface;
+  swrRoundsResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  dynamicSchedule: boolean;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -72,16 +103,12 @@ export default function RoundModal({
             Save
           </Button>
         </form>
-        <DeleteButton
-          fullWidth
-          onClick={async () => {
-            await deleteRound(tournamentData.id, round.id);
-            await swrRoundsResponse.mutate(null);
-            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
-          }}
-          style={{ marginTop: '15px' }}
-          size="sm"
-          title="Delete Round"
+        <RoundDeleteButton
+          swrRoundsResponse={swrRoundsResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          tournamentData={tournamentData}
+          round={round}
+          dynamicSchedule={dynamicSchedule}
         />
       </Modal>
 

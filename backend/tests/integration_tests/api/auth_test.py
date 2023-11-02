@@ -82,7 +82,7 @@ async def test_not_authenticated_for_tournament(
         ) as tournament_inserted:
             response = JsonDict(
                 await send_auth_request(
-                    HTTPMethod.GET, f'tournaments/{tournament_inserted.id}/teams', auth_context
+                    HTTPMethod.GET, f'tournaments/{tournament_inserted.id}/players', auth_context
                 )
             )
     assert response == {'detail': 'Could not validate credentials'}

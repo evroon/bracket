@@ -27,7 +27,7 @@ export async function updateTeam(
   player_ids: string[]
 ) {
   await createAxios()
-    .patch(`tournaments/${tournament_id}/teams/${team_id}`, {
+    .put(`tournaments/${tournament_id}/teams/${team_id}`, {
       name,
       active,
       player_ids,

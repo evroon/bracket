@@ -3,10 +3,12 @@ from starlette import status
 
 from bracket.database import database
 from bracket.models.db.match import Match
-from bracket.models.db.round import Round, RoundWithMatches, StageWithRounds
+from bracket.models.db.round import Round
 from bracket.models.db.team import FullTeamWithPlayers, Team
+from bracket.models.db.util import RoundWithMatches, StageItemWithRounds, StageWithStageItems
 from bracket.schema import matches, rounds, teams
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.stage_items import get_stage_item
+from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
 
@@ -28,14 +30,15 @@ async def round_dependency(tournament_id: int, round_id: int) -> Round:
 
 
 async def round_with_matches_dependency(tournament_id: int, round_id: int) -> RoundWithMatches:
-    stages = await get_stages_with_rounds_and_matches(
+    stages = await get_full_tournament_details(
         tournament_id, no_draft_rounds=False, round_id=round_id
     )
 
     for stage in stages:
-        for round_ in stage.rounds:
-            if round_ is not None:
-                return round_
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                if round_ is not None:
+                    return round_
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -43,8 +46,8 @@ async def round_with_matches_dependency(tournament_id: int, round_id: int) -> Ro
     )
 
 
-async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithRounds:
-    stages = await get_stages_with_rounds_and_matches(
+async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithStageItems:
+    stages = await get_full_tournament_details(
         tournament_id, no_draft_rounds=False, stage_id=stage_id
     )
 
@@ -55,6 +58,18 @@ async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithRounds
         )
 
     return stages[0]
+
+
+async def stage_item_dependency(tournament_id: int, stage_item_id: int) -> StageItemWithRounds:
+    stage_item = await get_stage_item(tournament_id, stage_item_id=stage_item_id)
+
+    if stage_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Could not find stage item with id {stage_item_id}",
+        )
+
+    return stage_item
 
 
 async def match_dependency(tournament_id: int, match_id: int) -> Match:

@@ -28,9 +28,7 @@ async def get_players(
     return PlayersResponse(data=await fetch_all_parsed(database, Player, query))
 
 
-@router.patch(
-    "/tournaments/{tournament_id}/players/{player_id}", response_model=SinglePlayerResponse
-)
+@router.put("/tournaments/{tournament_id}/players/{player_id}", response_model=SinglePlayerResponse)
 async def update_player_by_id(
     tournament_id: int,
     player_id: int,

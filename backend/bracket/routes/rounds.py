@@ -9,14 +9,15 @@ from bracket.models.db.round import (
     RoundCreateBody,
     RoundToInsert,
     RoundUpdateBody,
-    RoundWithMatches,
 )
 from bracket.models.db.user import UserPublic
+from bracket.models.db.util import RoundWithMatches
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse
 from bracket.routes.util import round_dependency, round_with_matches_dependency
 from bracket.schema import rounds
 from bracket.sql.rounds import get_next_round_name
+from bracket.sql.stage_items import get_stage_item
 
 router = APIRouter()
 
@@ -49,18 +50,32 @@ async def create_round(
     round_body: RoundCreateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
+    stage_item = await get_stage_item(tournament_id, stage_item_id=round_body.stage_item_id)
+
+    if stage_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Stage item doesn't exist",
+        )
+
+    if not stage_item.type.supports_dynamic_number_of_rounds:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Stage type {stage_item.type} doesn't support manual creation of rounds",
+        )
+
     await database.execute(
         query=rounds.insert(),
         values=RoundToInsert(
             created=datetime_utc.now(),
-            stage_id=round_body.stage_id,
-            name=await get_next_round_name(tournament_id, round_body.stage_id),
+            stage_item_id=round_body.stage_item_id,
+            name=await get_next_round_name(tournament_id, round_body.stage_item_id),
         ).dict(),
     )
     return SuccessResponse()
 
 
-@router.patch("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
+@router.put("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def update_round_by_id(
     tournament_id: int,
     round_id: int,
@@ -83,7 +98,8 @@ async def update_round_by_id(
         WHERE rounds.id IN (
             SELECT rounds.id
             FROM rounds
-            JOIN stages s on s.id = rounds.stage_id
+            JOIN stage_items ON rounds.stage_item_id = stage_items.id
+            JOIN stages s on s.id = stage_items.stage_id
             WHERE s.tournament_id = :tournament_id
         )
     '''
@@ -97,7 +113,8 @@ async def update_round_by_id(
         WHERE rounds.id IN (
             SELECT rounds.id
             FROM rounds
-            JOIN stages s on s.id = rounds.stage_id
+            JOIN stage_items ON rounds.stage_item_id = stage_items.id
+            JOIN stages s on s.id = stage_items.stage_id
             WHERE s.tournament_id = :tournament_id
         )
         AND rounds.id = :round_id

@@ -29,7 +29,7 @@ export async function updatePlayer(
   team_id: string | null
 ) {
   return createAxios()
-    .patch(`tournaments/${tournament_id}/players/${player_id}`, {
+    .put(`tournaments/${tournament_id}/players/${player_id}`, {
       name,
       active,
       team_id,

@@ -1,16 +1,17 @@
 import random
 from collections import defaultdict
 from functools import lru_cache
+from typing import cast
 
 from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
-from bracket.models.db.match import MatchFilter, SuggestedMatch
+from bracket.models.db.match import MatchFilter, SuggestedMatch, SuggestedVirtualMatch
 from bracket.models.db.player import Player
-from bracket.models.db.round import RoundWithMatches
 from bracket.models.db.team import TeamWithPlayers
+from bracket.models.db.util import RoundWithMatches
 from bracket.sql.players import get_active_players_in_tournament
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.stage_items import get_stage_item
 from bracket.utils.types import assert_some
 
 
@@ -19,18 +20,19 @@ def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> b
 
 
 async def get_possible_upcoming_matches_for_players(
-    tournament_id: int, filter_: MatchFilter, stage_id: int, round_id: int
-) -> list[SuggestedMatch]:
+    tournament_id: int, filter_: MatchFilter, stage_item_id: int, round_id: int
+) -> list[SuggestedMatch | SuggestedVirtualMatch]:
     random.seed(10)
     suggestions: set[SuggestedMatch] = set()
-    stages = await get_stages_with_rounds_and_matches(tournament_id, stage_id=stage_id)
+    stage_item = await get_stage_item(tournament_id, stage_item_id)
 
-    if len(stages) < 1:
-        raise HTTPException(400, 'There is no active stage, so no matches can be scheduled.')
+    if stage_item is None:
+        raise ValueError(
+            f'Could not find stage item with id {stage_item_id} for tournament {tournament_id}'
+        )
 
-    [active_stage] = stages
-    draft_round = next((round_ for round_ in active_stage.rounds if round_.id == round_id), None)
-    other_rounds = [round_ for round_ in active_stage.rounds if not round_.is_draft]
+    draft_round = next((round_ for round_ in stage_item.rounds if round_.id == round_id), None)
+    other_rounds = [round_ for round_ in stage_item.rounds if not round_.is_draft]
     max_matches_per_round = (
         max(len(other_round.matches) for other_round in other_rounds)
         if len(other_rounds) > 0
@@ -108,4 +110,4 @@ async def get_possible_upcoming_matches_for_players(
         result[i].is_recommended = True
 
     team_already_scheduled_before.cache_clear()
-    return result[: filter_.limit]
+    return cast(list[SuggestedMatch | SuggestedVirtualMatch], result[: filter_.limit])

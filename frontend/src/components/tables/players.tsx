@@ -1,5 +1,7 @@
-import { Badge } from '@mantine/core';
+import { Badge, Text } from '@mantine/core';
 import React from 'react';
+// @ts-ignore
+import EllipsisText from 'react-ellipsis-text';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
@@ -7,12 +9,35 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
 import { PlayerScore } from '../info/player_score';
-import { PlayerStatistics } from '../info/player_statistics';
+import {
+  WinDistribution,
+  getDrawColor,
+  getLossColor,
+  getWinColor,
+} from '../info/player_statistics';
 import PlayerModal from '../modals/player_modal';
 import DateTime from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+
+export function WinDistributionTitle() {
+  return (
+    <>
+      <Text span color={getWinColor()} inherit>
+        wins
+      </Text>{' '}
+      /{' '}
+      <Text span color={getDrawColor()} inherit>
+        draws
+      </Text>{' '}
+      /{' '}
+      <Text span color={getLossColor()} inherit>
+        losses
+      </Text>
+    </>
+  );
+}
 
 export default function PlayersTable({
   swrPlayersResponse,
@@ -24,6 +49,7 @@ export default function PlayersTable({
   const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 
+  const minELOScore = Math.min(...players.map((player) => player.elo_score));
   const maxELOScore = Math.max(...players.map((player) => player.elo_score));
   const maxSwissScore = Math.max(...players.map((player) => player.swiss_score));
 
@@ -40,16 +66,19 @@ export default function PlayersTable({
             <Badge color="red">Inactive</Badge>
           )}
         </td>
-        <td>{player.name}</td>
+        <td>
+          <EllipsisText text={player.name} length={15} />
+        </td>
         <td>
           <DateTime datetime={player.created} />
         </td>
         <td>
-          <PlayerStatistics wins={player.wins} draws={player.draws} losses={player.losses} />
+          <WinDistribution wins={player.wins} draws={player.draws} losses={player.losses} />
         </td>
         <td>
           <PlayerScore
             score={player.elo_score}
+            min_score={minELOScore}
             max_score={maxELOScore}
             color="indigo"
             decimals={0}
@@ -58,6 +87,7 @@ export default function PlayersTable({
         <td>
           <PlayerScore
             score={player.swiss_score}
+            min_score={0}
             max_score={maxSwissScore}
             color="grape"
             decimals={1}
@@ -95,7 +125,11 @@ export default function PlayersTable({
           <ThSortable state={tableState} field="created">
             Created
           </ThSortable>
-          <ThNotSortable>Win distribution</ThNotSortable>
+          <ThNotSortable>
+            <>
+              <WinDistributionTitle />
+            </>
+          </ThNotSortable>
           <ThSortable state={tableState} field="elo_score">
             ELO score
           </ThSortable>

@@ -1,8 +1,14 @@
 import { createAxios, handleRequestError } from './adapter';
 
-export async function createStage(tournament_id: number, type: string) {
+export async function createStage(tournament_id: number) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stages`, { type })
+    .post(`tournaments/${tournament_id}/stages`)
+    .catch((response: any) => handleRequestError(response));
+}
+
+export async function updateStage(tournament_id: number, stage_id: number, name: string) {
+  return createAxios()
+    .put(`tournaments/${tournament_id}/stages/${stage_id}`, { name })
     .catch((response: any) => handleRequestError(response));
 }
 

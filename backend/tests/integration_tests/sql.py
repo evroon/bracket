@@ -12,6 +12,7 @@ from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
+from bracket.models.db.stage_item import StageItem, StageItemToInsert
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
@@ -23,6 +24,7 @@ from bracket.schema import (
     players,
     players_x_teams,
     rounds,
+    stage_items,
     stages,
     teams,
     tournaments,
@@ -104,6 +106,12 @@ async def inserted_player_in_team(player: Player, team_id: int) -> AsyncIterator
 async def inserted_stage(stage: Stage) -> AsyncIterator[Stage]:
     async with inserted_generic(stage, stages, Stage) as row_inserted:
         yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_stage_item(stage_item: StageItemToInsert) -> AsyncIterator[StageItem]:
+    async with inserted_generic(stage_item, stage_items, StageItem) as row_inserted:
+        yield StageItem(**row_inserted.dict())
 
 
 @asynccontextmanager

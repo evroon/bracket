@@ -1,21 +1,26 @@
+import assert from 'assert';
 import { SWRResponse } from 'swr';
 
-import { RoundInterface } from './round';
+import { StageItemWithRounds } from './stage_item';
 
-export interface StageWithRounds {
+export interface StageWithStageItems {
   id: number;
   tournament_id: number;
   created: string;
-  type: string;
-  type_name: string;
+  name: string;
   is_active: boolean;
-  rounds: RoundInterface[];
+  stage_items: StageItemWithRounds[];
+}
+
+export function getActiveStages(swrStagesResponse: SWRResponse) {
+  return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.is_active);
 }
 
 export function getActiveStage(swrStagesResponse: SWRResponse) {
-  return swrStagesResponse.data.data.filter((stage: StageWithRounds) => stage.is_active)[0];
+  return getActiveStages(swrStagesResponse)[0];
 }
 
-export function getActiveRound(stage: StageWithRounds) {
-  return stage.rounds.filter((round: RoundInterface) => round.is_active)[0];
+export function getStageItem(stage: StageWithStageItems) {
+  assert(stage.stage_items.length === 1);
+  return stage.stage_items[0];
 }

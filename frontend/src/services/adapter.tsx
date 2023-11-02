@@ -65,9 +65,26 @@ export function getTeams(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/teams`, fetcher);
 }
 
+export function getTeamsLive(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/teams`, fetcher, {
+    refreshInterval: 5000,
+  });
+}
+
+export function getAvailableStageItemInputs(tournament_id: number, stage_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/stages/${stage_id}/available_inputs`, fetcher);
+}
+
 export function getStages(tournament_id: number, no_draft_rounds: boolean = false): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher);
+}
+
+export function getStagesLive(
+  tournament_id: number,
+  no_draft_rounds: boolean = false
+): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher, {
-    refreshInterval: 3000,
+    refreshInterval: 5000,
   });
 }
 

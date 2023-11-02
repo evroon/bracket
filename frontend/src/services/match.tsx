@@ -19,6 +19,6 @@ export async function updateMatch(
   match: MatchBodyInterface
 ) {
   return createAxios()
-    .patch(`tournaments/${tournament_id}/matches/${match_id}`, match)
+    .put(`tournaments/${tournament_id}/matches/${match_id}`, match)
     .catch((response: any) => handleRequestError(response));
 }

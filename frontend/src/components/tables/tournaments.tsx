@@ -1,4 +1,4 @@
-import { Anchor, Button } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -33,9 +33,7 @@ export default function TournamentsTable({
     .map((tournament) => (
       <tr key={tournament.name}>
         <td>
-          <Anchor lineClamp={1} size="sm">
-            <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
-          </Anchor>
+          <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
         </td>
         <td>
           <DateTime datetime={tournament.created} />

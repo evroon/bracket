@@ -30,7 +30,7 @@ async def delete_club(
     return SuccessResponse()
 
 
-@router.patch("/clubs/{club_id}", response_model=ClubResponse)
+@router.put("/clubs/{club_id}", response_model=ClubResponse)
 async def update_club(
     club_id: int, club: ClubUpdateBody, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> ClubResponse:

@@ -40,12 +40,12 @@ async def test_update_user(
 ) -> None:
     body = {'name': 'Some new name', 'email': 'some_email@email.com'}
     response = await send_auth_request(
-        HTTPMethod.PATCH, f'users/{auth_context.user.id}', auth_context, None, body
+        HTTPMethod.PUT, f'users/{auth_context.user.id}', auth_context, None, body
     )
-    patched_user = await fetch_one_parsed_certain(
+    updated_user = await fetch_one_parsed_certain(
         database, User, query=users.select().where(users.c.id == auth_context.user.id)
     )
-    assert patched_user.name == body['name']
+    assert updated_user.name == body['name']
     assert response['data']['name'] == body['name']
 
     await assert_row_count_and_clear(users, 1)

@@ -14,7 +14,7 @@ export async function deleteClub(club_id: number) {
 
 export async function updateClub(club_id: number, name: string) {
   return createAxios()
-    .patch(`clubs/${club_id}`, {
+    .put(`clubs/${club_id}`, {
       name,
     })
     .catch((response: any) => handleRequestError(response));

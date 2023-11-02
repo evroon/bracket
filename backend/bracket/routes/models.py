@@ -5,12 +5,16 @@ from pydantic.generics import GenericModel
 
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
-from bracket.models.db.match import Match, SuggestedMatch
+from bracket.models.db.match import Match, SuggestedMatch, SuggestedVirtualMatch
 from bracket.models.db.player import Player
-from bracket.models.db.round import StageWithRounds
+from bracket.models.db.stage_item_inputs import (
+    StageItemInputOptionFinal,
+    StageItemInputOptionTentative,
+)
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
+from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import Token
 
 DataT = TypeVar('DataT')
@@ -48,11 +52,11 @@ class SinglePlayerResponse(DataResponse[Player]):
     pass
 
 
-class RoundsWithMatchesResponse(DataResponse[list[StageWithRounds]]):
+class StagesWithStageItemsResponse(DataResponse[list[StageWithStageItems]]):
     pass
 
 
-class UpcomingMatchesResponse(DataResponse[list[SuggestedMatch]]):
+class UpcomingMatchesResponse(DataResponse[list[SuggestedMatch | SuggestedVirtualMatch]]):
     pass
 
 
@@ -81,4 +85,10 @@ class CourtsResponse(DataResponse[list[Court]]):
 
 
 class SingleCourtResponse(DataResponse[Court]):
+    pass
+
+
+class StageItemInputOptionsResponse(
+    DataResponse[list[StageItemInputOptionTentative | StageItemInputOptionFinal]]
+):
     pass

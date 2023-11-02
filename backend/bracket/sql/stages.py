@@ -1,21 +1,29 @@
 from typing import Literal, cast
 
 from bracket.database import database
-from bracket.models.db.round import StageWithRounds
-from bracket.models.db.stage import Stage, StageCreateBody
+from bracket.models.db.stage import Stage
+from bracket.models.db.util import StageWithStageItems
 from bracket.utils.types import dict_without_none
 
 
-async def get_stages_with_rounds_and_matches(
+async def get_full_tournament_details(
     tournament_id: int,
     round_id: int | None = None,
     stage_id: int | None = None,
+    stage_item_id: int | None = None,
     *,
     no_draft_rounds: bool = False,
-) -> list[StageWithRounds]:
+) -> list[StageWithStageItems]:
     draft_filter = 'AND rounds.is_draft IS FALSE' if no_draft_rounds else ''
     round_filter = 'AND rounds.id = :round_id' if round_id is not None else ''
     stage_filter = 'AND stages.id = :stage_id' if stage_id is not None else ''
+    stage_item_filter = 'AND stage_items.id = :stage_item_id' if stage_item_id is not None else ''
+    stage_item_filter_join = (
+        'LEFT JOIN stage_items on stages.id = stage_items.stage_id'
+        if stage_item_id is not None
+        else ''
+    )
+
     query = f'''
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
@@ -28,7 +36,19 @@ async def get_stages_with_rounds_and_matches(
                 (
                     SELECT COALESCE(avg(elo_score), 0.0)
                     FROM players
-                ) AS elo_score
+                ) AS elo_score,
+                (
+                    SELECT COALESCE(avg(wins), 0.0)
+                    FROM players
+                ) AS wins,
+                (
+                    SELECT COALESCE(avg(draws), 0.0)
+                    FROM players
+                ) AS draws,
+                (
+                    SELECT COALESCE(avg(losses), 0.0)
+                    FROM players
+                ) AS losses
             FROM teams
             LEFT JOIN players_x_teams pt on pt.team_id = teams.id
             LEFT JOIN players p on pt.player_id = p.id
@@ -44,55 +64,98 @@ async def get_stages_with_rounds_and_matches(
             LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
             LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
             LEFT JOIN rounds r on matches.round_id = r.id
-            LEFT JOIN stages s2 on r.stage_id = s2.id
+            LEFT JOIN stages st on r.stage_item_id = st.id
+            LEFT JOIN stage_items si on st.id = si.stage_id
             LEFT JOIN courts c on matches.court_id = c.id
-            WHERE s2.tournament_id = :tournament_id
+            WHERE st.tournament_id = :tournament_id
         ), rounds_with_matches AS (
             SELECT DISTINCT ON (rounds.id)
                 rounds.*,
                 to_json(array_agg(m.*)) AS matches
             FROM rounds
             LEFT JOIN matches_with_teams m on m.round_id = rounds.id
-            LEFT JOIN stages s2 on rounds.stage_id = s2.id
+            LEFT JOIN stages s2 on rounds.stage_item_id = s2.id
             WHERE s2.tournament_id = :tournament_id
             {draft_filter}
             {round_filter}
             GROUP BY rounds.id
+        ), stage_items_with_rounds AS (
+            SELECT DISTINCT ON (stage_items.id)
+                stage_items.*,
+                to_json(array_agg(r.*)) AS rounds
+            FROM stage_items
+            JOIN stages st on stage_items.stage_id = st.id
+            LEFT JOIN rounds_with_matches r on r.stage_item_id = stage_items.id
+            WHERE st.tournament_id = :tournament_id
+            {stage_item_filter}
+            GROUP BY stage_items.id
+        ), stage_items_with_inputs AS (
+            SELECT DISTINCT ON (stage_items.id)
+                stage_items.id,
+                to_json(array_agg(sii)) AS inputs
+            FROM stage_items
+            LEFT JOIN stage_item_inputs sii ON stage_items.id = sii.stage_item_id
+            WHERE sii.tournament_id = :tournament_id
+            {stage_item_filter}
+            GROUP BY stage_items.id
+            ORDER BY stage_items.id
+        ), stage_items_with_rounds_and_inputs AS (
+            SELECT stage_items.*, stage_items_with_inputs.inputs, stage_items_with_rounds.rounds
+            FROM stage_items
+            JOIN stage_items_with_rounds ON stage_items_with_rounds.id = stage_items.id
+            LEFT JOIN stage_items_with_inputs
+            ON stage_items_with_inputs.id = stage_items_with_rounds.id
         )
-        SELECT stages.*, to_json(array_agg(r.*)) AS rounds FROM stages
-        LEFT JOIN rounds_with_matches r on stages.id = r.stage_id
+        SELECT stages.*, to_json(array_agg(r.*)) AS stage_items
+        FROM stages
+        LEFT JOIN stage_items_with_rounds_and_inputs r on stages.id = r.stage_id
+        {stage_item_filter_join}
         WHERE stages.tournament_id = :tournament_id
         {stage_filter}
+        {stage_item_filter}
         GROUP BY stages.id
+        ORDER BY stages.id
     '''
     values = dict_without_none(
-        {'tournament_id': tournament_id, 'round_id': round_id, 'stage_id': stage_id}
+        {
+            'tournament_id': tournament_id,
+            'round_id': round_id,
+            'stage_id': stage_id,
+            'stage_item_id': stage_item_id,
+        }
     )
     result = await database.fetch_all(query=query, values=values)
-    return [StageWithRounds.parse_obj(x._mapping) for x in result]
+    return [StageWithStageItems.parse_obj(x._mapping) for x in result]
 
 
 async def sql_delete_stage(tournament_id: int, stage_id: int) -> None:
-    query = '''
-        DELETE FROM stages
-        WHERE stages.id = :stage_id
-        AND stages.tournament_id = :tournament_id
-        '''
-    await database.fetch_one(
-        query=query, values={'stage_id': stage_id, 'tournament_id': tournament_id}
-    )
-
-
-async def sql_create_stage(stage: StageCreateBody, tournament_id: int) -> Stage:
     async with database.transaction():
         query = '''
-            INSERT INTO stages (type, created, is_active, tournament_id)
-            VALUES (:stage_type, NOW(), false, :tournament_id)
-            RETURNING *
+            DELETE FROM stage_items
+            WHERE stage_items.stage_id = :stage_id
             '''
-        result = await database.fetch_one(
-            query=query, values={'stage_type': stage.type.value, 'tournament_id': tournament_id}
+        await database.execute(query=query, values={'stage_id': stage_id})
+
+        query = '''
+            DELETE FROM stages
+            WHERE stages.id = :stage_id
+            AND stages.tournament_id = :tournament_id
+            '''
+        await database.execute(
+            query=query, values={'stage_id': stage_id, 'tournament_id': tournament_id}
         )
+
+
+async def sql_create_stage(tournament_id: int) -> Stage:
+    query = '''
+        INSERT INTO stages (created, is_active, name, tournament_id)
+        VALUES (NOW(), false, :name, :tournament_id)
+        RETURNING *
+        '''
+    result = await database.fetch_one(
+        query=query,
+        values={'tournament_id': tournament_id, 'name': 'Stage'},
+    )
 
     if result is None:
         raise ValueError('Could not create stage')

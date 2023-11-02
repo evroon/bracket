@@ -30,7 +30,6 @@ def upgrade() -> None:
             'type',
             ENUM(
                 'SINGLE_ELIMINATION',
-                'DOUBLE_ELIMINATION',
                 'SWISS',
                 'SWISS_DYNAMIC_TEAMS',
                 'ROUND_ROBIN',

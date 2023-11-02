@@ -63,19 +63,20 @@ ignore_missing_imports = true
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
-    'missing-docstring',
-    'too-few-public-methods',
-    'no-name-in-module', # Gives false positives.
-    'unused-argument',  # Gives false positives.
-    'invalid-name',
     'dangerous-default-value',
     'duplicate-code',
+    'import-outside-toplevel',
+    'invalid-name',
+    'logging-fstring-interpolation',
+    'missing-docstring',
+    'no-name-in-module', # Gives false positives.
+    'protected-access',
+    'too-few-public-methods',
+    'too-many-arguments',
     'too-many-locals',
     'too-many-nested-blocks',
-    'protected-access',
-    'logging-fstring-interpolation',
-    'too-many-arguments',
     'unspecified-encoding',
+    'unused-argument',  # Gives false positives.
     'wrong-import-position',
 ]
 

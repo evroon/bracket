@@ -14,15 +14,21 @@ from bracket.routes.auth import (
     user_authenticated,
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
+    user_authenticated_or_public_dashboard_by_endpoint_name,
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
-from bracket.sql.tournaments import sql_get_tournaments
+from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name, sql_get_tournaments
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.types import assert_some
 
 router = APIRouter()
+unauthorized_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="You don't have access to this tournament",
+    headers={"WWW-Authenticate": "Bearer"},
+)
 
 
 @router.get("/tournaments/{tournament_id}", response_model=TournamentResponse)
@@ -33,24 +39,35 @@ async def get_tournament(
         database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
     )
     if user is None and not tournament.dashboard_public:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You don't have access to this tournament",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise unauthorized_exception
 
     return TournamentResponse(data=tournament)
 
 
 @router.get("/tournaments", response_model=TournamentsResponse)
 async def get_tournaments(
-    user: UserPublic = Depends(user_authenticated), endpoint_name: str | None = None
+    user: UserPublic | None = Depends(user_authenticated_or_public_dashboard_by_endpoint_name),
+    endpoint_name: str | None = None,
 ) -> TournamentsResponse:
-    user_club_ids = await get_which_clubs_has_user_access_to(assert_some(user.id))
-    return TournamentsResponse(data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name))
+    match user, endpoint_name:
+        case None, None:
+            raise unauthorized_exception
+
+        case _, str(endpoint_name):
+            return TournamentsResponse(
+                data=[await sql_get_tournament_by_endpoint_name(endpoint_name)]
+            )
+
+        case _, _ if isinstance(user, UserPublic):
+            user_club_ids = await get_which_clubs_has_user_access_to(assert_some(user.id))
+            return TournamentsResponse(
+                data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name)
+            )
+
+    raise RuntimeError()
 
 
-@router.patch("/tournaments/{tournament_id}", response_model=SuccessResponse)
+@router.put("/tournaments/{tournament_id}", response_model=SuccessResponse)
 async def update_tournament_by_id(
     tournament_id: int,
     tournament_body: TournamentUpdateBody,

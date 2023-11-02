@@ -2,26 +2,16 @@ import math
 from collections import defaultdict
 from decimal import Decimal
 
-from pydantic import BaseModel
-
 from bracket.database import database
-from bracket.models.db.round import RoundWithMatches, StageWithRounds
+from bracket.models.db.players import START_ELO, PlayerStatistics
+from bracket.models.db.util import RoundWithMatches
 from bracket.schema import players
-from bracket.sql.players import get_all_players_in_tournament
-from bracket.sql.stages import get_stages_with_rounds_and_matches
+from bracket.sql.players import get_all_players_in_tournament, update_player_stats
+from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.types import assert_some
 
-START_ELO: int = 1200
 K = 32
 D = 400
-
-
-class PlayerStatistics(BaseModel):
-    wins: int = 0
-    draws: int = 0
-    losses: int = 0
-    elo_score: int = START_ELO
-    swiss_score: Decimal = Decimal('0.00')
 
 
 def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int, PlayerStatistics]:
@@ -83,21 +73,21 @@ def calculate_elo_per_player(rounds: list[RoundWithMatches]) -> defaultdict[int,
 
 
 async def recalculate_elo_for_tournament_id(tournament_id: int) -> None:
-    stages = await get_stages_with_rounds_and_matches(tournament_id)
-    for stage in stages:
-        await recalculate_elo_for_stage(tournament_id, stage)
+    stages = await get_full_tournament_details(tournament_id)
+    rounds = [
+        round_
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+    ]
+    await recalculate_elo_for_stage(tournament_id, rounds)
 
 
-async def recalculate_elo_for_stage(tournament_id: int, stage: StageWithRounds) -> None:
-    elo_per_player = calculate_elo_per_player(stage.rounds)
+async def recalculate_elo_for_stage(tournament_id: int, rounds: list[RoundWithMatches]) -> None:
+    elo_per_player = calculate_elo_per_player(rounds)
 
     for player_id, statistics in elo_per_player.items():
-        await database.execute(
-            query=players.update().where(
-                (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
-            ),
-            values=statistics.dict(),
-        )
+        await update_player_stats(tournament_id, player_id, statistics)
 
     all_players = await get_all_players_in_tournament(tournament_id)
     for player in all_players:

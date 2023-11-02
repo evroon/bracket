@@ -8,7 +8,8 @@ from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
-from bracket.models.db.stage import Stage, StageType
+from bracket.models.db.stage import Stage
+from bracket.models.db.stage_item import StageItemToInsert, StageType
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
@@ -40,32 +41,48 @@ DUMMY_STAGE1 = Stage(
     tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_active=True,
-    type=StageType.ROUND_ROBIN,
+    name='Group Stage',
 )
 
 DUMMY_STAGE2 = Stage(
     tournament_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_active=False,
-    type=StageType.SWISS,
+    name='Knockout Stage',
+)
+
+DUMMY_STAGE_ITEM1 = StageItemToInsert(
+    stage_id=DB_PLACEHOLDER_ID,
+    created=DUMMY_MOCK_TIME,
+    type=StageType.ROUND_ROBIN,
+    team_count=4,
+    name='Group A',
+)
+
+DUMMY_STAGE_ITEM2 = StageItemToInsert(
+    stage_id=DB_PLACEHOLDER_ID,
+    created=DUMMY_MOCK_TIME,
+    type=StageType.SINGLE_ELIMINATION,
+    team_count=2,
+    name='Bracket A',
 )
 
 DUMMY_ROUND1 = Round(
-    stage_id=DB_PLACEHOLDER_ID,
+    stage_item_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name='Round 1',
 )
 
 DUMMY_ROUND2 = Round(
-    stage_id=DB_PLACEHOLDER_ID,
+    stage_item_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_draft=True,
     name='Round 2',
 )
 
 DUMMY_ROUND3 = Round(
-    stage_id=2,
+    stage_item_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name='Round 3',

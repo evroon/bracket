@@ -1,23 +1,26 @@
-import { Alert, Container, Grid, Skeleton } from '@mantine/core';
+import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
+import { StageWithStageItems } from '../../interfaces/stage';
+import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
+import { createRound } from '../../services/round';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
 function getRoundsGridCols(
-  stages_map: { [p: string]: any },
-  selectedStageId: number,
+  stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,
   swrCourtsResponse: SWRResponse,
   swrUpcomingMatchesResponse: SWRResponse | null,
   readOnly: boolean
 ) {
-  return stages_map[selectedStageId].rounds
+  let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
     .map((round: RoundInterface) => (
       <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
@@ -28,9 +31,53 @@ function getRoundsGridCols(
           swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={readOnly}
+          dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
         />
       </Grid.Col>
     ));
+
+  if (rounds.length < 1) {
+    rounds = (
+      <Alert icon={<IconAlertCircle size={16} />} title="No rounds" color="blue" radius="lg">
+        There are no rounds in this stage item yet
+      </Alert>
+    );
+  }
+
+  return (
+    <React.Fragment key={stageItem.id}>
+      <div style={{ width: '100%' }}>
+        <Grid grow>
+          <Grid.Col span={6}>
+            <h2>{stageItem.name}</h2>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Group position="right">
+              {stageItem == null || stageItemIsHandledAutomatically(stageItem) ? null : (
+                <Button
+                  color="green"
+                  size="md"
+                  style={{ marginBottom: 10, marginRight: 10, marginLeft: 10 }}
+                  leftIcon={<GoPlus size={24} />}
+                  title="Add Round"
+                  variant="outline"
+                  onClick={async () => {
+                    await createRound(tournamentData.id, stageItem.id);
+                    await swrStagesResponse.mutate();
+                  }}
+                >
+                  Add Round
+                </Button>
+              )}
+            </Group>
+          </Grid.Col>
+        </Grid>
+      </div>
+      <div style={{ width: '100%' }}>
+        <Grid>{rounds}</Grid>
+      </div>
+    </React.Fragment>
+  );
 }
 
 function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
@@ -106,24 +153,18 @@ export default function Brackets({
   }
 
   const stages_map = Object.fromEntries(
-    swrStagesResponse.data.data.map((x: RoundInterface) => [x.id, x])
+    swrStagesResponse.data.data.map((x: StageWithStageItems) => [x.id, x])
   );
-  const rounds =
-    stages_map[selectedStageId].rounds.length > 0 ? (
-      getRoundsGridCols(
-        stages_map,
-        selectedStageId,
-        tournamentData,
-        swrStagesResponse,
-        swrCourtsResponse,
-        swrUpcomingMatchesResponse,
-        readOnly
-      )
-    ) : (
-      <Alert icon={<IconAlertCircle size={16} />} title="No rounds" color="blue" radius="lg">
-        There are no rounds in this stage yet
-      </Alert>
-    );
+  const rounds = stages_map[selectedStageId].stage_items.map((stageItem: StageItemWithRounds) =>
+    getRoundsGridCols(
+      stageItem,
+      tournamentData,
+      swrStagesResponse,
+      swrCourtsResponse,
+      swrUpcomingMatchesResponse,
+      readOnly
+    )
+  );
 
   return (
     <div>
