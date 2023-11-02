@@ -242,45 +242,5 @@ async def sql_create_dev_db() -> None:
     await build_matches_for_stage_item(stage_item_1, tournament_id_1)
     await build_matches_for_stage_item(stage_item_2, tournament_id_1)
 
-    # round_id_1 = await insert_dummy(DUMMY_ROUND1.copy(update={'stage_item_id': stage_item_id_1}))
-    # round_id_2 = await insert_dummy(DUMMY_ROUND2.copy(update={'stage_item_id': stage_item_id_1}))
-    # round_id_3 = await insert_dummy(DUMMY_ROUND3.copy(update={'stage_item_id': stage_item_id_2}))
-
-    # await insert_dummy(
-    #     DUMMY_MATCH1.copy(
-    #         update={
-    #             'round_id': round_id_1,
-    #             'team1_id': team_id_1,
-    #             'team2_id': team_id_2,
-    #             'court_id': court_id_1,
-    #         }
-    #     ),
-    # )
-    # await insert_dummy(
-    #     DUMMY_MATCH2.copy(
-    #         update={
-    #             'round_id': round_id_1,
-    #             'team1_id': team_id_3,
-    #             'team2_id': team_id_4,
-    #             'court_id': court_id_2,
-    #         }
-    #     ),
-    # )
-    # await insert_dummy(
-    #     DUMMY_MATCH3.copy(
-    #         update={
-    #             'round_id': round_id_2,
-    #             'team1_id': team_id_2,
-    #             'team2_id': team_id_4,
-    #             'court_id': court_id_1,
-    #         }
-    #     ),
-    # )
-    # await insert_dummy(
-    #     DUMMY_MATCH4.copy(
-    #         update={'round_id': round_id_3, 'team1_id': team_id_3, 'team2_id': team_id_1}
-    #     ),
-    # )
-
     for tournament in await database.fetch_all(tournaments.select()):
         await recalculate_elo_for_tournament_id(tournament.id)  # type: ignore[attr-defined]
