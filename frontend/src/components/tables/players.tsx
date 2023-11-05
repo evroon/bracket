@@ -16,7 +16,7 @@ import {
   getWinColor,
 } from '../info/player_statistics';
 import PlayerModal from '../modals/player_modal';
-import DateTime from '../utils/datetime';
+import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';

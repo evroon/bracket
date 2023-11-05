@@ -22,3 +22,9 @@ export async function updateMatch(
     .put(`tournaments/${tournament_id}/matches/${match_id}`, match)
     .catch((response: any) => handleRequestError(response));
 }
+
+export async function scheduleMatches(tournament_id: number) {
+  return createAxios()
+    .post(`tournaments/${tournament_id}/schedule_matches`)
+    .catch((response: any) => handleRequestError(response));
+}

@@ -20,6 +20,7 @@ export interface MatchInterface {
   team2_winner_from_match_id: number | null;
   court_id: number | null;
   court: Court | null;
+  start_time: string;
 }
 
 export interface MatchBodyInterface {
@@ -69,7 +70,7 @@ export function formatMatchTeam1(
     }`;
   }
   assert(match.team1_winner_from_match_id != null);
-  const winner = matchesLookup[match.team1_winner_from_match_id];
+  const winner = matchesLookup[match.team1_winner_from_match_id].match;
   const match_1 = formatMatchTeam1(stageItemsLookup, matchesLookup, winner);
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const match_2 = formatMatchTeam2(stageItemsLookup, matchesLookup, winner);
@@ -89,7 +90,7 @@ export function formatMatchTeam2(
     }`;
   }
   assert(match.team2_winner_from_match_id != null);
-  const winner = matchesLookup[match.team2_winner_from_match_id];
+  const winner = matchesLookup[match.team2_winner_from_match_id].match;
   const match_1 = formatMatchTeam1(stageItemsLookup, matchesLookup, winner);
   const match_2 = formatMatchTeam2(stageItemsLookup, matchesLookup, winner);
   return `Winner of match ${match_1} - ${match_2}`;

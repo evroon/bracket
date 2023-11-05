@@ -98,6 +98,7 @@ DUMMY_ROUND3 = Round(
 
 DUMMY_MATCH1 = Match(
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     round_id=DB_PLACEHOLDER_ID,
     team1_id=DB_PLACEHOLDER_ID,
     team2_id=2,
@@ -114,6 +115,7 @@ DUMMY_MATCH1 = Match(
 
 DUMMY_MATCH2 = Match(
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     round_id=DB_PLACEHOLDER_ID,
     team1_id=3,
     team2_id=4,
@@ -130,6 +132,7 @@ DUMMY_MATCH2 = Match(
 
 DUMMY_MATCH3 = Match(
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     round_id=2,
     team1_id=DB_PLACEHOLDER_ID,
     team2_id=4,
@@ -146,6 +149,7 @@ DUMMY_MATCH3 = Match(
 
 DUMMY_MATCH4 = Match(
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     round_id=2,
     team1_id=2,
     team2_id=3,

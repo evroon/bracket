@@ -8,7 +8,7 @@ import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
 import TeamModal from '../modals/team_modal';
-import DateTime from '../utils/datetime';
+import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';

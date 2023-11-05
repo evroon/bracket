@@ -31,10 +31,10 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
   let result: any[] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
-    stage.stage_items.forEach((stage_item) => {
-      stage_item.rounds.forEach((round) => {
+    stage.stage_items.forEach((stageItem) => {
+      stageItem.rounds.forEach((round) => {
         round.matches.forEach((match) => {
-          result = result.concat([[match.id, match]]);
+          result = result.concat([[match.id, { match, stageItem }]]);
         });
       });
     })
@@ -43,7 +43,7 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
 }
 
 export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
-  const matches = Object.values(getMatchLookup(swrStagesResponse));
+  const matches = Object.values(getMatchLookup(swrStagesResponse)).map((x) => x.match);
   return groupBy(['court_id'])(matches);
 }
 

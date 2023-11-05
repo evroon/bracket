@@ -12,6 +12,7 @@ from bracket.utils.types import assert_some
 class MatchBase(BaseModelORM):
     id: int | None = None
     created: datetime_utc
+    start_time: datetime_utc | None
     round_id: int
     team1_score: int
     team2_score: int

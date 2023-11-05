@@ -8,7 +8,7 @@ import { SWRResponse } from 'swr';
 import { Tournament } from '../../interfaces/tournament';
 import { deleteTournament } from '../../services/tournament';
 import DeleteButton from '../buttons/delete';
-import DateTime from '../utils/datetime';
+import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';

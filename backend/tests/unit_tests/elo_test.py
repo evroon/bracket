@@ -25,6 +25,7 @@ def test_elo_calculation() -> None:
         matches=[
             MatchWithDetailsDefinitive(
                 created=DUMMY_MOCK_TIME,
+                start_time=DUMMY_MOCK_TIME,
                 team1_id=1,
                 team2_id=1,
                 team1_winner_from_stage_item_id=None,
