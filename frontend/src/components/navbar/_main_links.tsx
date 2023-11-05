@@ -1,6 +1,7 @@
 import { Tooltip, UnstyledButton } from '@mantine/core';
 import {
   Icon,
+  IconCalendar,
   IconSettings,
   IconSoccerField,
   IconTournament,
@@ -78,6 +79,12 @@ export function MainLinks({ tournament_id }: any) {
       icon: IconTrophy,
       label: 'Stages',
       endpoint: `${tm_prefix}/stages`,
+      router,
+    },
+    {
+      icon: IconCalendar,
+      label: 'Planning',
+      endpoint: `${tm_prefix}/schedule`,
       router,
     },
     {
