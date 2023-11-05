@@ -4,7 +4,7 @@ from heliclockter import datetime_utc
 
 from bracket.config import Environment, config, environment
 from bracket.database import database, engine
-from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
@@ -315,4 +315,4 @@ async def sql_create_dev_db() -> None:
     await build_matches_for_stage_item(stage_item_3, tournament_id_1)
 
     for tournament in await database.fetch_all(tournaments.select()):
-        await recalculate_elo_for_tournament_id(tournament.id)  # type: ignore[attr-defined]
+        await recalculate_ranking_for_tournament_id(tournament.id)  # type: ignore[attr-defined]

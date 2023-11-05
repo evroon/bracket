@@ -10,21 +10,36 @@ class StageItemInputBase(BaseModelORM):
     stage_item_id: int | None
 
 
-class StageItemInputTentative(StageItemInputBase):
+class StageItemInputGeneric(BaseModel):
+    team_id: int | None
+    winner_from_stage_item_id: int | None
+    winner_position_in_stage_item: int | None
+    winner_from_match_id: int | None
+
+    def __hash__(self) -> int:
+        return (
+            self.team_id,
+            self.winner_from_stage_item_id,
+            self.winner_position_in_stage_item,
+            self.winner_from_match_id,
+        ).__hash__()
+
+
+class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
     winner_from_match_id: None = None
     winner_from_stage_item_id: int
     winner_position_in_stage_item: int = Field(ge=1)
 
 
-class StageItemInputFinal(StageItemInputBase):
+class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: int
     winner_from_match_id: None = None
     winner_from_stage_item_id: None = None
     winner_position_in_stage_item: None = None
 
 
-class StageItemInputMatch(StageItemInputBase):
+class StageItemInputMatch(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
     winner_from_match_id: int
     winner_from_stage_item_id: None = None

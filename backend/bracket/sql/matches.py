@@ -76,3 +76,32 @@ async def sql_update_match(match_id: int, match: MatchBody) -> None:
         RETURNING *
         '''
     await database.execute(query=query, values={'match_id': match_id, **match.dict()})
+
+
+async def sql_update_team_ids_for_match(
+    match_id: int, team1_id: int | None, team2_id: int | None
+) -> None:
+    query = '''
+        UPDATE matches
+        SET team1_id = :team1_id,
+            team2_id = :team2_id
+        WHERE matches.id = :match_id
+        RETURNING *
+        '''
+    await database.execute(
+        query=query, values={'match_id': match_id, 'team1_id': team1_id, 'team2_id': team2_id}
+    )
+
+
+async def sql_get_match(match_id: int) -> Match:
+    query = '''
+        SELECT *
+        FROM matches
+        WHERE matches.id = :match_id
+        '''
+    result = await database.fetch_one(query=query, values={'match_id': match_id})
+
+    if result is None:
+        raise ValueError('Could not create stage')
+
+    return Match.parse_obj(result._mapping)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from bracket.logic.elo import recalculate_elo_for_tournament_id
 from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.upcoming_matches import (
     get_upcoming_matches_for_swiss_round,
 )
@@ -52,7 +52,7 @@ async def delete_match(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     await sql_delete_match(assert_some(match.id))
-    await recalculate_elo_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 
@@ -129,5 +129,5 @@ async def update_match_by_id(
 ) -> SuccessResponse:
     assert match.id
     await sql_update_match(match.id, match_body)
-    await recalculate_elo_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()

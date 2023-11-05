@@ -1,5 +1,5 @@
 from bracket.logic.matches import create_match_and_assign_free_court
-from bracket.models.db.match import Match, MatchCreateBody, SuggestedMatch, SuggestedVirtualMatch
+from bracket.models.db.match import Match, MatchCreateBody
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.utils.types import assert_some
@@ -60,8 +60,7 @@ def determine_matches_subsequent_round(
 
 async def build_single_elimination_stage_item(
     tournament_id: int, stage_item: StageItemWithRounds
-) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    suggestions: list[SuggestedMatch | SuggestedVirtualMatch] = []
+) -> None:
     rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
     assert len(rounds) > 0
     first_round = rounds[0]
@@ -76,8 +75,6 @@ async def build_single_elimination_stage_item(
             await create_match_and_assign_free_court(tournament_id, match)
             for match in determine_matches_subsequent_round(prev_matches, round_)
         ]
-
-    return suggestions
 
 
 def get_number_of_rounds_to_create_single_elimination(team_count: int) -> int:

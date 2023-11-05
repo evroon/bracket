@@ -3,7 +3,7 @@ from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.models.db.round import (
     Round,
     RoundCreateBody,
@@ -40,7 +40,7 @@ async def delete_round(
             rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
         ),
     )
-    await recalculate_elo_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 

@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import determine_available_inputs
+from bracket.logic.scheduling.handle_stage_activation import update_matches_in_activated_stage
 from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
@@ -66,7 +67,7 @@ async def delete_stage(
 
     await sql_delete_stage(tournament_id, stage_id)
 
-    await recalculate_elo_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 
@@ -115,6 +116,8 @@ async def activate_next_stage(
         )
 
     await sql_activate_next_stage(new_active_stage_id, tournament_id)
+    if stage_body.direction == 'next':
+        await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
     return SuccessResponse()
 
 

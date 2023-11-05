@@ -1,57 +1,58 @@
 import math
-from typing import cast
 
 from bracket.logic.matches import create_match_and_assign_free_court
-from bracket.logic.scheduling.shared import get_suggested_match
 from bracket.models.db.match import (
     MatchCreateBody,
-    SuggestedMatch,
-    SuggestedVirtualMatch,
 )
+from bracket.models.db.stage_item_inputs import StageItemInputGeneric
 from bracket.models.db.util import StageItemWithRounds
-from bracket.sql.teams import get_teams_with_members
 from bracket.utils.types import assert_some
 
 
-async def build_round_robin_stage_item(
-    tournament_id: int, stage_item: StageItemWithRounds
-) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    suggestions: list[SuggestedMatch] = []
-    teams = await get_teams_with_members(tournament_id, only_active_teams=True)
+async def build_round_robin_stage_item(tournament_id: int, stage_item: StageItemWithRounds) -> None:
+    suggestions: list[set[StageItemInputGeneric]] = []
 
     for round_ in stage_item.rounds:
-        round_suggestions: list[SuggestedMatch] = []
+        round_suggestions: list[set[StageItemInputGeneric]] = []
 
-        for i, team1 in enumerate(teams):
-            for _, team2 in enumerate(teams[i + 1 :]):
-                match_already_scheduled = any(
-                    team1.id in match.team_ids and team2.id in match.team_ids
-                    for match in suggestions
-                ) or any(
-                    team1.id in match.team_ids or team2.id in match.team_ids
-                    for match in round_suggestions
+        for i, team1 in enumerate(stage_item.inputs):
+            for _, team2 in enumerate(stage_item.inputs[i + 1 :]):
+                team1_def = StageItemInputGeneric(
+                    team_id=team1.id,
+                    winner_from_stage_item_id=team1.winner_from_stage_item_id,
+                    winner_position_in_stage_item=team1.winner_position_in_stage_item,
+                    winner_from_match_id=team1.winner_from_match_id,
                 )
+                team2_def = StageItemInputGeneric(
+                    team_id=team2.id,
+                    winner_from_stage_item_id=team2.winner_from_stage_item_id,
+                    winner_position_in_stage_item=team2.winner_position_in_stage_item,
+                    winner_from_match_id=team2.winner_from_match_id,
+                )
+                team_defs = {team1_def, team2_def}
+
+                match_already_scheduled = any(
+                    team1_def in match and team2_def in match for match in suggestions
+                ) or any(team1_def in match or team2_def in match for match in round_suggestions)
                 if match_already_scheduled:
                     continue
-
-                suggestions.append(get_suggested_match(team1, team2))
-                round_suggestions.append(get_suggested_match(team1, team2))
 
                 match = MatchCreateBody(
                     round_id=assert_some(round_.id),
                     team1_id=assert_some(team1.id),
                     team2_id=assert_some(team2.id),
-                    team1_winner_from_stage_item_id=None,
-                    team1_winner_position_in_stage_item=None,
-                    team1_winner_from_match_id=None,
-                    team2_winner_from_stage_item_id=None,
-                    team2_winner_position_in_stage_item=None,
-                    team2_winner_from_match_id=None,
+                    team1_winner_from_stage_item_id=team1.winner_from_stage_item_id,
+                    team1_winner_position_in_stage_item=team1.winner_position_in_stage_item,
+                    team1_winner_from_match_id=team1.winner_from_match_id,
+                    team2_winner_from_stage_item_id=team2.winner_from_stage_item_id,
+                    team2_winner_position_in_stage_item=team2.winner_position_in_stage_item,
+                    team2_winner_from_match_id=team2.winner_from_match_id,
                     court_id=None,
                 )
-                await create_match_and_assign_free_court(tournament_id, match)
 
-    return cast(list[SuggestedMatch | SuggestedVirtualMatch], suggestions)
+                suggestions.append(team_defs)
+                round_suggestions.append(team_defs)
+                await create_match_and_assign_free_court(tournament_id, match)
 
 
 def get_number_of_rounds_to_create_round_robin(team_count: int) -> int:

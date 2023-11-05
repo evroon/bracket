@@ -21,12 +21,18 @@ class MatchBase(BaseModelORM):
 class Match(MatchBase):
     team1_id: int | None
     team2_id: int | None
-    team1_winner_from_stage_item_id: int | None
     team1_winner_position_in_stage_item: int | None
+    team1_winner_from_stage_item_id: int | None
     team2_winner_from_stage_item_id: int | None
     team2_winner_position_in_stage_item: int | None
     team1_winner_from_match_id: int | None
     team2_winner_from_match_id: int | None
+
+    def get_winner_index(self) -> int | None:
+        if self.team1_score == self.team2_score:
+            return None
+
+        return 1 if self.team1_score > self.team2_score else 0
 
 
 class MatchWithDetails(Match):
@@ -65,9 +71,9 @@ class MatchCreateBody(BaseModelORM):
     team2_id: int | None
     team1_winner_from_stage_item_id: int | None
     team1_winner_position_in_stage_item: int | None
+    team1_winner_from_match_id: int | None
     team2_winner_from_stage_item_id: int | None
     team2_winner_position_in_stage_item: int | None
-    team1_winner_from_match_id: int | None
     team2_winner_from_match_id: int | None
 
 
