@@ -263,13 +263,13 @@ DUMMY_USER_X_CLUB = UserXClub(
 )
 
 DUMMY_COURT1 = Court(
-    name='Endor',
+    name='Court 1',
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_COURT2 = Court(
-    name='Naboo',
+    name='Court 2',
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
