@@ -41,6 +41,12 @@ async def build_round_robin_stage_item(
                     round_id=assert_some(round_.id),
                     team1_id=assert_some(team1.id),
                     team2_id=assert_some(team2.id),
+                    team1_winner_from_stage_item_id=None,
+                    team1_winner_position_in_stage_item=None,
+                    team1_winner_from_match_id=None,
+                    team2_winner_from_stage_item_id=None,
+                    team2_winner_position_in_stage_item=None,
+                    team2_winner_from_match_id=None,
                     court_id=None,
                 )
                 await create_match_and_assign_free_court(tournament_id, match)

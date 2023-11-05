@@ -34,14 +34,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function MatchLarge({
-  swrRoundsResponse,
+  swrStagesResponse,
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
   match,
   readOnly,
 }: {
-  swrRoundsResponse: SWRResponse | null;
+  swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse | null;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
@@ -56,8 +56,12 @@ export default function MatchLarge({
   const team1_style = match.team1_score > match.team2_score ? winner_style : {};
   const team2_style = match.team1_score < match.team2_score ? winner_style : {};
 
-  const team1_players = match.team1.players.map((player) => player.name).join(', ');
-  const team2_players = match.team2.players.map((player) => player.name).join(', ');
+  const team1_players = match.team1
+    ? match.team1.players.map((player) => player.name).join(', ')
+    : '';
+  const team2_players = match.team2
+    ? match.team2.players.map((player) => player.name).join(', ')
+    : '';
 
   const team1_players_label = team1_players === '' ? 'No players' : team1_players;
   const team2_players_label = team2_players === '' ? 'No players' : team2_players;
@@ -86,7 +90,7 @@ export default function MatchLarge({
   if (readOnly) {
     return <div className={classes.root}>{bracket}</div>;
   }
-  assert(swrRoundsResponse != null);
+  assert(swrStagesResponse != null);
   assert(swrCourtsResponse != null);
 
   return (
@@ -95,7 +99,7 @@ export default function MatchLarge({
         {bracket}
       </UnstyledButton>
       <MatchModal
-        swrRoundsResponse={swrRoundsResponse}
+        swrStagesResponse={swrStagesResponse}
         swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}

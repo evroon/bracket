@@ -4,21 +4,21 @@ export interface StageItemInput {
   tournament_id: number;
   stage_item_id: number;
   team_id: number | null;
-  team_stage_item_id: number | null;
-  team_position_in_group: number | null;
+  winner_from_stage_item_id: number | null;
+  winner_position_in_stage_item: number | null;
 }
 
 export interface StageItemInputCreateBody {
   slot: number;
   team_id: number | null;
-  team_stage_item_id: number | null;
-  team_position_in_group: number | null;
+  winner_from_stage_item_id: number | null;
+  winner_position_in_stage_item: number | null;
 }
 
 export interface StageItemInputOption {
   team_id: number | null;
-  team_stage_item_id: number | null;
-  team_position_in_group: number | null;
+  winner_from_stage_item_id: number | null;
+  winner_position_in_stage_item: number | null;
 }
 
 export function getPositionName(position: number) {
@@ -30,4 +30,9 @@ export function getPositionName(position: number) {
       3: '3rd',
     }[position] || `${position}th`
   );
+}
+
+export function formatStageItemInput(winner_position_in_stage_item: number, teamName: string) {
+  // @ts-ignore
+  return `${getPositionName(winner_position_in_stage_item)} of ${teamName}`;
 }

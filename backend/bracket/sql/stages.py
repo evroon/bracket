@@ -64,17 +64,18 @@ async def get_full_tournament_details(
             LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
             LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
             LEFT JOIN rounds r on matches.round_id = r.id
-            LEFT JOIN stages st on r.stage_item_id = st.id
-            LEFT JOIN stage_items si on st.id = si.stage_id
+            LEFT JOIN stage_items si on r.stage_item_id = si.id
+            LEFT JOIN stages s2 on s2.id = si.stage_id
             LEFT JOIN courts c on matches.court_id = c.id
-            WHERE st.tournament_id = :tournament_id
+            WHERE s2.tournament_id = :tournament_id
         ), rounds_with_matches AS (
             SELECT DISTINCT ON (rounds.id)
                 rounds.*,
                 to_json(array_agg(m.*)) AS matches
             FROM rounds
             LEFT JOIN matches_with_teams m on m.round_id = rounds.id
-            LEFT JOIN stages s2 on rounds.stage_item_id = s2.id
+            LEFT JOIN stage_items si on rounds.stage_item_id = si.id
+            LEFT JOIN stages s2 on s2.id = si.stage_id
             WHERE s2.tournament_id = :tournament_id
             {draft_filter}
             {round_filter}
@@ -103,8 +104,7 @@ async def get_full_tournament_details(
             SELECT stage_items.*, stage_items_with_inputs.inputs, stage_items_with_rounds.rounds
             FROM stage_items
             JOIN stage_items_with_rounds ON stage_items_with_rounds.id = stage_items.id
-            LEFT JOIN stage_items_with_inputs
-            ON stage_items_with_inputs.id = stage_items_with_rounds.id
+            LEFT JOIN stage_items_with_inputs ON stage_items_with_inputs.id = stage_items.id
         )
         SELECT stages.*, to_json(array_agg(r.*)) AS stage_items
         FROM stages
@@ -180,7 +180,7 @@ async def get_next_stage_in_tournament(
                         ORDER BY id ASC
                         LIMIT 1
                     ),
-                    10000000000000
+                    -1
                 )
             )
             ELSE (
@@ -192,7 +192,7 @@ async def get_next_stage_in_tournament(
                         ORDER BY id DESC
                         LIMIT 1
                     ),
-                    -1
+                    10000000000
                 )
             )
             END

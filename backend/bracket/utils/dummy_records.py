@@ -62,8 +62,16 @@ DUMMY_STAGE_ITEM1 = StageItemToInsert(
 DUMMY_STAGE_ITEM2 = StageItemToInsert(
     stage_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
+    type=StageType.ROUND_ROBIN,
+    team_count=4,
+    name='Group B',
+)
+
+DUMMY_STAGE_ITEM3 = StageItemToInsert(
+    stage_id=DB_PLACEHOLDER_ID,
+    created=DUMMY_MOCK_TIME,
     type=StageType.SINGLE_ELIMINATION,
-    team_count=2,
+    team_count=4,
     name='Bracket A',
 )
 
@@ -96,6 +104,12 @@ DUMMY_MATCH1 = Match(
     team1_score=11,
     team2_score=22,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position_in_stage_item=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position_in_stage_item=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH2 = Match(
@@ -106,6 +120,12 @@ DUMMY_MATCH2 = Match(
     team1_score=9,
     team2_score=6,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position_in_stage_item=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position_in_stage_item=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH3 = Match(
@@ -116,6 +136,12 @@ DUMMY_MATCH3 = Match(
     team1_score=23,
     team2_score=26,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position_in_stage_item=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position_in_stage_item=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH4 = Match(
@@ -126,6 +152,12 @@ DUMMY_MATCH4 = Match(
     team1_score=43,
     team2_score=45,
     court_id=None,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position_in_stage_item=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position_in_stage_item=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_USER = User(
@@ -215,13 +247,6 @@ DUMMY_PLAYER7 = Player(
 
 DUMMY_PLAYER8 = Player(
     name='Emperor',
-    active=True,
-    created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
-)
-
-DUMMY_PLAYER9 = Player(
-    name='R2D2',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,

@@ -10,7 +10,7 @@ from bracket.models.db.stage_item_inputs import (
 async def sql_delete_stage_item_inputs(stage_item_id: int) -> None:
     query = '''
         DELETE FROM stage_item_inputs
-        WHERE stage_item_id = :stage_item_id OR team_stage_item_id = :stage_item_id
+        WHERE stage_item_id = :stage_item_id OR winner_from_stage_item_id = :stage_item_id
         '''
     await database.execute(query=query, values={'stage_item_id': stage_item_id})
 
@@ -26,8 +26,8 @@ async def sql_create_stage_item_input(
                 tournament_id,
                 stage_item_id,
                 team_id,
-                team_stage_item_id,
-                team_position_in_group
+                winner_from_stage_item_id,
+                winner_position_in_stage_item
             )
             VALUES
             (
@@ -35,8 +35,8 @@ async def sql_create_stage_item_input(
                 :tournament_id,
                 :stage_item_id,
                 :team_id,
-                :team_stage_item_id,
-                :team_position_in_group
+                :winner_from_stage_item_id,
+                :winner_position_in_stage_item
             )
             RETURNING *
             '''
@@ -49,10 +49,10 @@ async def sql_create_stage_item_input(
                 'team_id': stage_item_input.team_id
                 if isinstance(stage_item_input, StageItemInputCreateBodyFinal)
                 else None,
-                'team_stage_item_id': stage_item_input.team_stage_item_id
+                'winner_from_stage_item_id': stage_item_input.winner_from_stage_item_id
                 if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
                 else None,
-                'team_position_in_group': stage_item_input.team_position_in_group
+                'winner_position_in_stage_item': stage_item_input.winner_position_in_stage_item
                 if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
                 else None,
             },

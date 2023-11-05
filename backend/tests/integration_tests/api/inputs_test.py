@@ -37,7 +37,7 @@ async def test_available_inputs(
     assert response == {
         'data': [
             {'team_id': team_inserted.id},
-            # {'team_stage_item_id': 1, 'team_position_in_group': 1},
-            # {'team_stage_item_id': 1, 'team_position_in_group': 2},
+            # {'winner_from_stage_item_id': 1, 'winner_position_in_stage_item': 1},
+            # {'winner_from_stage_item_id': 1, 'winner_position_in_stage_item': 2},
         ]
     }

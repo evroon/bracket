@@ -1,82 +1,81 @@
-from bracket.logic.scheduling.shared import get_suggested_match
-from bracket.models.db.match import SuggestedMatch, SuggestedVirtualMatch
-from bracket.models.db.team import FullTeamWithPlayers, TeamWithPlayers
-from bracket.models.db.util import StageItemWithRounds
+from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.models.db.match import Match, MatchCreateBody, SuggestedMatch, SuggestedVirtualMatch
+from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.rounds import get_rounds_for_stage_item
-from bracket.sql.teams import get_teams_with_members
 from bracket.utils.types import assert_some
 
 
 def determine_matches_first_round(
-    stage_item: StageItemWithRounds, teams_sorted: list[FullTeamWithPlayers]
-) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    suggestions: list[SuggestedMatch | SuggestedVirtualMatch] = []
+    round_: RoundWithMatches, stage_item: StageItemWithRounds
+) -> list[MatchCreateBody]:
+    suggestions: list[MatchCreateBody] = []
 
-    # for i in range(0, stage.team_count, 2):
-    #     match = SuggestedVirtualMatch(
-    #         team1_group_id=
-    #     )
-    #     suggestions.append(get_suggested_match(team1, team2))
+    for i in range(0, len(stage_item.inputs), 2):
+        first_input = stage_item.inputs[i + 0]
+        second_input = stage_item.inputs[i + 1]
+        suggestions.append(
+            MatchCreateBody(
+                round_id=assert_some(round_.id),
+                court_id=None,
+                team1_id=first_input.team_id,
+                team1_winner_from_stage_item_id=first_input.winner_from_stage_item_id,
+                team1_winner_position_in_stage_item=first_input.winner_position_in_stage_item,
+                team1_winner_from_match_id=first_input.winner_from_match_id,
+                team2_id=second_input.team_id,
+                team2_winner_from_stage_item_id=second_input.winner_from_stage_item_id,
+                team2_winner_position_in_stage_item=second_input.winner_position_in_stage_item,
+                team2_winner_from_match_id=second_input.winner_from_match_id,
+            )
+        )
 
     return suggestions
 
 
-def todo_determine_matches_other_round(
-    stage_item: StageItemWithRounds, teams_sorted: list[TeamWithPlayers]
-) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    suggestions: list[SuggestedMatch | SuggestedVirtualMatch] = []
-    # previous_round = sorted(
-    #     [round_ for round_ in rounds if assert_some(round_.id) < round_id],
-    #     key=lambda round_: assert_some(round_.id),
-    #     reverse=True,*
-    # )[0]
+def determine_matches_subsequent_round(
+    prev_matches: list[Match],
+    round_: RoundWithMatches,
+) -> list[MatchCreateBody]:
+    suggestions: list[MatchCreateBody] = []
 
-    # winners = []
-    # for match in previous_round.matches:
-    #     winner = match.get_winner()
-    #     assert winner is not None
-    #     winners.append(winner)
-    #
-    # assert len(winners) % 2 == 0
-    # for i in range(0, len(winners), 2):
-    #     team1, team2 = teams_sorted[i + 0], teams_sorted[i + 1]
-    #     suggestions.append(get_suggested_match(team1, team2))
+    for i in range(0, len(prev_matches), 2):
+        first_match = prev_matches[i + 0]
+        second_match = prev_matches[i + 1]
+
+        suggestions.append(
+            MatchCreateBody(
+                round_id=assert_some(round_.id),
+                court_id=None,
+                team1_id=None,
+                team1_winner_from_stage_item_id=None,
+                team1_winner_position_in_stage_item=None,
+                team2_id=None,
+                team2_winner_from_stage_item_id=None,
+                team2_winner_position_in_stage_item=None,
+                team1_winner_from_match_id=assert_some(first_match.id),
+                team2_winner_from_match_id=assert_some(second_match.id),
+            )
+        )
     return suggestions
 
 
 async def build_single_elimination_stage_item(
     tournament_id: int, stage_item: StageItemWithRounds
 ) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    stage_id = assert_some(stage_item.stage_id)
     suggestions: list[SuggestedMatch | SuggestedVirtualMatch] = []
-    rounds = await get_rounds_for_stage_item(tournament_id, stage_id)
+    rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
     assert len(rounds) > 0
+    first_round = rounds[0]
 
-    for j, round_ in enumerate(stage_item.rounds):
-        first_round_id = min(assert_some(round_.id) for round_ in rounds)
-        first_round = round_.id == first_round_id
+    prev_matches = [
+        await create_match_and_assign_free_court(tournament_id, match)
+        for match in determine_matches_first_round(first_round, stage_item)
+    ]
 
-        teams = await get_teams_with_members(tournament_id, only_active_teams=True)
-        teams_sorted = sorted(teams, key=lambda team: team.elo_score, reverse=True)
-
-        assert stage_item.team_count % 2 == 0
-        assert stage_item.team_count % 2 == 0
-
-        if first_round:
-            return determine_matches_first_round(stage_item, teams_sorted)
-
-        previous_round = stage_item.rounds[j - 1]
-
-        winners = []
-        for match in previous_round.matches:
-            winner = match.get_winner()
-            assert winner is not None
-            winners.append(winner)
-
-        assert len(winners) % 2 == 0
-        for i in range(0, len(winners), 2):
-            team1, team2 = teams_sorted[i + 0], teams_sorted[i + 1]
-            suggestions.append(get_suggested_match(team1, team2))
+    for round_ in rounds[1:]:
+        prev_matches = [
+            await create_match_and_assign_free_court(tournament_id, match)
+            for match in determine_matches_subsequent_round(prev_matches, round_)
+        ]
 
     return suggestions
 

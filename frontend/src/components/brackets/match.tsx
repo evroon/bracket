@@ -4,8 +4,9 @@ import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { MatchInterface } from '../../interfaces/match';
+import { MatchInterface, formatMatchTeam1, formatMatchTeam2 } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
+import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
 
 import Visibility = Property.Visibility;
@@ -56,7 +57,7 @@ export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any
 }
 
 export default function Match({
-  swrRoundsResponse,
+  swrStagesResponse,
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
@@ -64,7 +65,7 @@ export default function Match({
   readOnly,
   dynamicSchedule,
 }: {
-  swrRoundsResponse: SWRResponse | null;
+  swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse | null;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
@@ -79,17 +80,28 @@ export default function Match({
   };
   const showTeamMemberNames = false;
 
+  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
+  const matchesLookup = getMatchLookup(swrStagesResponse);
+
   const team1_style = match.team1_score > match.team2_score ? winner_style : {};
   const team2_style = match.team1_score < match.team2_score ? winner_style : {};
 
-  const team1_players = match.team1.players.map((player) => player.name).join(', ');
-  const team2_players = match.team2.players.map((player) => player.name).join(', ');
+  const team1_players = match.team1
+    ? match.team1.players.map((player) => player.name).join(', ')
+    : '';
+  const team2_players = match.team2
+    ? match.team2.players.map((player) => player.name).join(', ')
+    : '';
 
   const team1_players_label = team1_players === '' ? 'No players' : team1_players;
   const team2_players_label = team2_players === '' ? 'No players' : team2_players;
 
-  const team1_label = showTeamMemberNames ? team1_players_label : match.team1.name;
-  const team2_label = showTeamMemberNames ? team2_players_label : match.team2.name;
+  const team1_label = showTeamMemberNames
+    ? team1_players_label
+    : formatMatchTeam1(stageItemsLookup, matchesLookup, match);
+  const team2_label = showTeamMemberNames
+    ? team2_players_label
+    : formatMatchTeam2(stageItemsLookup, matchesLookup, match);
 
   const [opened, setOpened] = useState(false);
 
@@ -115,7 +127,7 @@ export default function Match({
   if (readOnly) {
     return <div className={classes.root}>{bracket}</div>;
   }
-  assert(swrRoundsResponse != null);
+  assert(swrStagesResponse != null);
   assert(swrCourtsResponse != null);
 
   return (
@@ -124,7 +136,7 @@ export default function Match({
         {bracket}
       </UnstyledButton>
       <MatchModal
-        swrRoundsResponse={swrRoundsResponse}
+        swrStagesResponse={swrStagesResponse}
         swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}

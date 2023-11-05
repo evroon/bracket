@@ -19,8 +19,9 @@ async def get_rounds_for_stage_item(
 async def get_next_round_name(tournament_id: int, stage_item_id: int) -> str:
     query = '''
         SELECT count(*) FROM rounds
-        JOIN stages s on s.id = rounds.stage_item_id
-        WHERE s.tournament_id = :tournament_id
+        JOIN stage_items on stage_items.id = rounds.stage_item_id
+        JOIN stages on stage_items.stage_id = stages.id
+        WHERE stages.tournament_id = :tournament_id
         AND rounds.stage_item_id = :stage_item_id
     '''
     round_count = int(

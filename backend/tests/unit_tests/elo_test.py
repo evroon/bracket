@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from bracket.logic.elo import calculate_elo_per_player
-from bracket.models.db.match import MatchWithDetails
+from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.players import PlayerStatistics
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import RoundWithMatches
@@ -16,10 +16,16 @@ def test_elo_calculation() -> None:
         is_active=False,
         name='Some round',
         matches=[
-            MatchWithDetails(
+            MatchWithDetailsDefinitive(
                 created=DUMMY_MOCK_TIME,
                 team1_id=1,
                 team2_id=1,
+                team1_winner_from_stage_item_id=None,
+                team1_winner_position_in_stage_item=None,
+                team1_winner_from_match_id=None,
+                team2_winner_from_stage_item_id=None,
+                team2_winner_position_in_stage_item=None,
+                team2_winner_from_match_id=None,
                 team1_score=3,
                 team2_score=4,
                 round_id=1,
