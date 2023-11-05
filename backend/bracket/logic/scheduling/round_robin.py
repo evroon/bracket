@@ -20,13 +20,13 @@ async def build_round_robin_stage_item(tournament_id: int, stage_item: StageItem
                 team1_def = StageItemInputGeneric(
                     team_id=team1.id,
                     winner_from_stage_item_id=team1.winner_from_stage_item_id,
-                    winner_position_in_stage_item=team1.winner_position_in_stage_item,
+                    winner_position=team1.winner_position,
                     winner_from_match_id=team1.winner_from_match_id,
                 )
                 team2_def = StageItemInputGeneric(
                     team_id=team2.id,
                     winner_from_stage_item_id=team2.winner_from_stage_item_id,
-                    winner_position_in_stage_item=team2.winner_position_in_stage_item,
+                    winner_position=team2.winner_position,
                     winner_from_match_id=team2.winner_from_match_id,
                 )
                 team_defs = {team1_def, team2_def}
@@ -42,10 +42,10 @@ async def build_round_robin_stage_item(tournament_id: int, stage_item: StageItem
                     team1_id=assert_some(team1.id),
                     team2_id=assert_some(team2.id),
                     team1_winner_from_stage_item_id=team1.winner_from_stage_item_id,
-                    team1_winner_position_in_stage_item=team1.winner_position_in_stage_item,
+                    team1_winner_position=team1.winner_position,
                     team1_winner_from_match_id=team1.winner_from_match_id,
                     team2_winner_from_stage_item_id=team2.winner_from_stage_item_id,
-                    team2_winner_position_in_stage_item=team2.winner_position_in_stage_item,
+                    team2_winner_position=team2.winner_position,
                     team2_winner_from_match_id=team2.winner_from_match_id,
                     court_id=None,
                 )

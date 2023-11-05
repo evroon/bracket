@@ -11,16 +11,16 @@ from bracket.utils.types import assert_some
 async def determine_team_id(
     tournament_id: int,
     winner_from_stage_item_id: int | None,
-    winner_position_in_stage_item: int | None,
+    winner_position: int | None,
     winner_from_match_id: int | None,
 ) -> int | None:
-    if winner_from_stage_item_id is not None and winner_position_in_stage_item is not None:
+    if winner_from_stage_item_id is not None and winner_position is not None:
         stage_item = await get_stage_item(tournament_id, winner_from_stage_item_id)
         assert stage_item is not None
 
         team_ranking = determine_team_ranking_for_stage_item(stage_item)
-        if len(team_ranking) >= winner_position_in_stage_item:
-            return team_ranking[winner_position_in_stage_item - 1][0]
+        if len(team_ranking) >= winner_position:
+            return team_ranking[winner_position - 1][0]
 
         return None
 
@@ -41,13 +41,13 @@ async def set_team_ids_for_match(tournament_id: int, match: MatchWithDetails) ->
     team1_id = await determine_team_id(
         tournament_id,
         match.team1_winner_from_stage_item_id,
-        match.team1_winner_position_in_stage_item,
+        match.team1_winner_position,
         match.team1_winner_from_match_id,
     )
     team2_id = await determine_team_id(
         tournament_id,
         match.team2_winner_from_stage_item_id,
-        match.team2_winner_position_in_stage_item,
+        match.team2_winner_position,
         match.team2_winner_from_match_id,
     )
 

@@ -13,14 +13,14 @@ class StageItemInputBase(BaseModelORM):
 class StageItemInputGeneric(BaseModel):
     team_id: int | None
     winner_from_stage_item_id: int | None
-    winner_position_in_stage_item: int | None
+    winner_position: int | None
     winner_from_match_id: int | None
 
     def __hash__(self) -> int:
         return (
             self.team_id,
             self.winner_from_stage_item_id,
-            self.winner_position_in_stage_item,
+            self.winner_position,
             self.winner_from_match_id,
         ).__hash__()
 
@@ -29,21 +29,21 @@ class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
     winner_from_match_id: None = None
     winner_from_stage_item_id: int
-    winner_position_in_stage_item: int = Field(ge=1)
+    winner_position: int = Field(ge=1)
 
 
 class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: int
     winner_from_match_id: None = None
     winner_from_stage_item_id: None = None
-    winner_position_in_stage_item: None = None
+    winner_position: None = None
 
 
 class StageItemInputMatch(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
     winner_from_match_id: int
     winner_from_stage_item_id: None = None
-    winner_position_in_stage_item: None = None
+    winner_position: None = None
 
 
 StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputMatch
@@ -52,7 +52,7 @@ StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputM
 class StageItemInputCreateBodyTentative(BaseModel):
     slot: int
     winner_from_stage_item_id: int
-    winner_position_in_stage_item: int = Field(ge=1)
+    winner_position: int = Field(ge=1)
 
 
 class StageItemInputCreateBodyFinal(BaseModel):
@@ -69,4 +69,4 @@ class StageItemInputOptionFinal(BaseModel):
 
 class StageItemInputOptionTentative(BaseModel):
     winner_from_stage_item_id: int
-    winner_position_in_stage_item: int
+    winner_position: int

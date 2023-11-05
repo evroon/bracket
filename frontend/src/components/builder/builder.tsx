@@ -34,7 +34,7 @@ function StageItemInputSectionLast({
   const content = team
     ? team.name
     : // @ts-ignore
-      formatStageItemInput(input.winner_position_in_stage_item, teamStageItem.name);
+      formatStageItemInput(input.winner_position, teamStageItem.name);
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
   return (

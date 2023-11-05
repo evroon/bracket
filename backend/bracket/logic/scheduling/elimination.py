@@ -19,11 +19,11 @@ def determine_matches_first_round(
                 court_id=None,
                 team1_id=first_input.team_id,
                 team1_winner_from_stage_item_id=first_input.winner_from_stage_item_id,
-                team1_winner_position_in_stage_item=first_input.winner_position_in_stage_item,
+                team1_winner_position=first_input.winner_position,
                 team1_winner_from_match_id=first_input.winner_from_match_id,
                 team2_id=second_input.team_id,
                 team2_winner_from_stage_item_id=second_input.winner_from_stage_item_id,
-                team2_winner_position_in_stage_item=second_input.winner_position_in_stage_item,
+                team2_winner_position=second_input.winner_position,
                 team2_winner_from_match_id=second_input.winner_from_match_id,
             )
         )
@@ -47,10 +47,10 @@ def determine_matches_subsequent_round(
                 court_id=None,
                 team1_id=None,
                 team1_winner_from_stage_item_id=None,
-                team1_winner_position_in_stage_item=None,
+                team1_winner_position=None,
                 team2_id=None,
                 team2_winner_from_stage_item_id=None,
-                team2_winner_position_in_stage_item=None,
+                team2_winner_position=None,
                 team1_winner_from_match_id=assert_some(first_match.id),
                 team2_winner_from_match_id=assert_some(second_match.id),
             )

@@ -137,12 +137,12 @@ export function CreateStageItemModal({
             label: team.name,
           };
         }
-        assert(option.winner_position_in_stage_item != null);
+        assert(option.winner_position != null);
         const stageItem = stageItemMap[option.winner_from_stage_item_id];
         if (stageItem == null) return null;
         return {
-          value: `${option.winner_from_stage_item_id}_${option.winner_position_in_stage_item}`,
-          label: `${formatStageItemInput(option.winner_position_in_stage_item, stageItem.name)}`,
+          value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
+          label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
         };
       })
     : {};
@@ -160,7 +160,7 @@ export function CreateStageItemModal({
                 team_id: Number(teamId),
                 winner_from_stage_item_id:
                   typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                winner_position_in_stage_item:
+                winner_position:
                   typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });

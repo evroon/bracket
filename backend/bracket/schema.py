@@ -73,7 +73,7 @@ stage_item_inputs = Table(
     ),
     Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=True),
     Column('winner_from_stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=True),
-    Column('winner_position_in_stage_item', Integer, nullable=True),
+    Column('winner_position', Integer, nullable=True),
 )
 
 rounds = Table(
@@ -104,8 +104,8 @@ matches = Table(
     Column(
         'team2_winner_from_stage_item_id', BigInteger, ForeignKey('stage_items.id'), nullable=True
     ),
-    Column('team1_winner_position_in_stage_item', Integer, nullable=True),
-    Column('team2_winner_position_in_stage_item', Integer, nullable=True),
+    Column('team1_winner_position', Integer, nullable=True),
+    Column('team2_winner_position', Integer, nullable=True),
     Column('team1_winner_from_match_id', BigInteger, ForeignKey('matches.id'), nullable=True),
     Column('team2_winner_from_match_id', BigInteger, ForeignKey('matches.id'), nullable=True),
     Column('court_id', BigInteger, ForeignKey('courts.id'), nullable=True),

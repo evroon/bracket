@@ -105,10 +105,10 @@ DUMMY_MATCH1 = Match(
     team2_score=22,
     court_id=DB_PLACEHOLDER_ID,
     team1_winner_from_stage_item_id=None,
-    team1_winner_position_in_stage_item=None,
+    team1_winner_position=None,
     team1_winner_from_match_id=None,
     team2_winner_from_stage_item_id=None,
-    team2_winner_position_in_stage_item=None,
+    team2_winner_position=None,
     team2_winner_from_match_id=None,
 )
 
@@ -121,10 +121,10 @@ DUMMY_MATCH2 = Match(
     team2_score=6,
     court_id=DB_PLACEHOLDER_ID,
     team1_winner_from_stage_item_id=None,
-    team1_winner_position_in_stage_item=None,
+    team1_winner_position=None,
     team1_winner_from_match_id=None,
     team2_winner_from_stage_item_id=None,
-    team2_winner_position_in_stage_item=None,
+    team2_winner_position=None,
     team2_winner_from_match_id=None,
 )
 
@@ -137,10 +137,10 @@ DUMMY_MATCH3 = Match(
     team2_score=26,
     court_id=DB_PLACEHOLDER_ID,
     team1_winner_from_stage_item_id=None,
-    team1_winner_position_in_stage_item=None,
+    team1_winner_position=None,
     team1_winner_from_match_id=None,
     team2_winner_from_stage_item_id=None,
-    team2_winner_position_in_stage_item=None,
+    team2_winner_position=None,
     team2_winner_from_match_id=None,
 )
 
@@ -153,10 +153,10 @@ DUMMY_MATCH4 = Match(
     team2_score=45,
     court_id=None,
     team1_winner_from_stage_item_id=None,
-    team1_winner_position_in_stage_item=None,
+    team1_winner_position=None,
     team1_winner_from_match_id=None,
     team2_winner_from_stage_item_id=None,
-    team2_winner_position_in_stage_item=None,
+    team2_winner_position=None,
     team2_winner_from_match_id=None,
 )
 

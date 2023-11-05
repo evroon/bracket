@@ -289,22 +289,22 @@ async def sql_create_dev_db() -> None:
                 StageItemInputCreateBodyTentative(
                     slot=1,
                     winner_from_stage_item_id=stage_item_1.id,
-                    winner_position_in_stage_item=1,
+                    winner_position=1,
                 ),
                 StageItemInputCreateBodyTentative(
                     slot=2,
                     winner_from_stage_item_id=stage_item_1.id,
-                    winner_position_in_stage_item=2,
+                    winner_position=2,
                 ),
                 StageItemInputCreateBodyTentative(
                     slot=3,
                     winner_from_stage_item_id=stage_item_2.id,
-                    winner_position_in_stage_item=1,
+                    winner_position=1,
                 ),
                 StageItemInputCreateBodyTentative(
                     slot=4,
                     winner_from_stage_item_id=stage_item_2.id,
-                    winner_position_in_stage_item=2,
+                    winner_position=2,
                 ),
             ],
         ),

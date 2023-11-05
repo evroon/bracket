@@ -5,20 +5,20 @@ export interface StageItemInput {
   stage_item_id: number;
   team_id: number | null;
   winner_from_stage_item_id: number | null;
-  winner_position_in_stage_item: number | null;
+  winner_position: number | null;
 }
 
 export interface StageItemInputCreateBody {
   slot: number;
   team_id: number | null;
   winner_from_stage_item_id: number | null;
-  winner_position_in_stage_item: number | null;
+  winner_position: number | null;
 }
 
 export interface StageItemInputOption {
   team_id: number | null;
   winner_from_stage_item_id: number | null;
-  winner_position_in_stage_item: number | null;
+  winner_position: number | null;
 }
 
 export function getPositionName(position: number) {
@@ -32,7 +32,7 @@ export function getPositionName(position: number) {
   );
 }
 
-export function formatStageItemInput(winner_position_in_stage_item: number, teamName: string) {
+export function formatStageItemInput(winner_position: number, teamName: string) {
   // @ts-ignore
-  return `${getPositionName(winner_position_in_stage_item)} of ${teamName}`;
+  return `${getPositionName(winner_position)} of ${teamName}`;
 }

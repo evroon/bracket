@@ -13,9 +13,9 @@ export interface MatchInterface {
   team1: TeamInterface | null;
   team2: TeamInterface | null;
   team1_winner_from_stage_item_id: number | null;
-  team1_winner_position_in_stage_item: number | null;
+  team1_winner_position: number | null;
   team2_winner_from_stage_item_id: number | null;
-  team2_winner_position_in_stage_item: number | null;
+  team2_winner_position: number | null;
   team1_winner_from_match_id: number | null;
   team2_winner_from_match_id: number | null;
   court_id: number | null;
@@ -63,8 +63,8 @@ export function formatMatchTeam1(
 ): string {
   if (match.team1 != null) return match.team1.name;
   if (match.team1_winner_from_stage_item_id != null) {
-    assert(match.team1_winner_position_in_stage_item != null);
-    return `${getPositionName(match.team1_winner_position_in_stage_item)} of ${
+    assert(match.team1_winner_position != null);
+    return `${getPositionName(match.team1_winner_position)} of ${
       stageItemsLookup[match.team1_winner_from_stage_item_id].name
     }`;
   }
@@ -83,8 +83,8 @@ export function formatMatchTeam2(
 ): string {
   if (match.team2 != null) return match.team2.name;
   if (match.team2_winner_from_stage_item_id != null) {
-    assert(match.team2_winner_position_in_stage_item != null);
-    return `${getPositionName(match.team2_winner_position_in_stage_item)} of ${
+    assert(match.team2_winner_position != null);
+    return `${getPositionName(match.team2_winner_position)} of ${
       stageItemsLookup[match.team2_winner_from_stage_item_id].name
     }`;
   }

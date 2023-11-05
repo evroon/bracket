@@ -27,7 +27,7 @@ async def sql_create_stage_item_input(
                 stage_item_id,
                 team_id,
                 winner_from_stage_item_id,
-                winner_position_in_stage_item
+                winner_position
             )
             VALUES
             (
@@ -36,7 +36,7 @@ async def sql_create_stage_item_input(
                 :stage_item_id,
                 :team_id,
                 :winner_from_stage_item_id,
-                :winner_position_in_stage_item
+                :winner_position
             )
             RETURNING *
             '''
@@ -52,7 +52,7 @@ async def sql_create_stage_item_input(
                 'winner_from_stage_item_id': stage_item_input.winner_from_stage_item_id
                 if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
                 else None,
-                'winner_position_in_stage_item': stage_item_input.winner_position_in_stage_item
+                'winner_position': stage_item_input.winner_position
                 if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
                 else None,
             },

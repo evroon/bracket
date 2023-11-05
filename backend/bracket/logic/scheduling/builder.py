@@ -90,10 +90,10 @@ def determine_available_inputs(
             results_tentative.extend(
                 [
                     StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id, winner_position_in_stage_item=1
+                        winner_from_stage_item_id=stage_item.id, winner_position=1
                     ),
                     StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id, winner_position_in_stage_item=2
+                        winner_from_stage_item_id=stage_item.id, winner_position=2
                     ),
                 ]
             )

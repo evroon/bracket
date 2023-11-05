@@ -21,10 +21,10 @@ class MatchBase(BaseModelORM):
 class Match(MatchBase):
     team1_id: int | None
     team2_id: int | None
-    team1_winner_position_in_stage_item: int | None
+    team1_winner_position: int | None
     team1_winner_from_stage_item_id: int | None
     team2_winner_from_stage_item_id: int | None
-    team2_winner_position_in_stage_item: int | None
+    team2_winner_position: int | None
     team1_winner_from_match_id: int | None
     team2_winner_from_match_id: int | None
 
@@ -70,10 +70,10 @@ class MatchCreateBody(BaseModelORM):
     team1_id: int | None
     team2_id: int | None
     team1_winner_from_stage_item_id: int | None
-    team1_winner_position_in_stage_item: int | None
+    team1_winner_position: int | None
     team1_winner_from_match_id: int | None
     team2_winner_from_stage_item_id: int | None
-    team2_winner_position_in_stage_item: int | None
+    team2_winner_position: int | None
     team2_winner_from_match_id: int | None
 
 
