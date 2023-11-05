@@ -238,7 +238,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -250,7 +250,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -272,7 +272,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -284,7 +284,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -312,7 +312,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -324,7 +324,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -346,7 +346,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -358,7 +358,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -386,7 +386,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -398,7 +398,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -420,7 +420,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -432,7 +432,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -460,7 +460,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -472,7 +472,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -494,7 +494,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -506,7 +506,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -534,7 +534,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -546,7 +546,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -568,7 +568,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -580,7 +580,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -608,7 +608,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -620,7 +620,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -642,7 +642,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -654,7 +654,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -682,7 +682,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,
@@ -694,7 +694,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -716,7 +716,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -728,7 +728,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -756,7 +756,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 2,
                                 'active': True,
-                                'name': 'Anakin',
+                                'name': 'Player 2',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1300.0,
@@ -768,7 +768,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 3,
                                 'active': True,
-                                'name': 'Leia',
+                                'name': 'Player 3',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1200.0,
@@ -790,7 +790,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 4,
                                 'active': True,
-                                'name': 'Yoda',
+                                'name': 'Player 4',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1400.0,
@@ -802,7 +802,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': 1,
                                 'active': True,
-                                'name': 'Luke',
+                                'name': 'Player 1',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': 1,
                                 'elo_score': 1100.0,

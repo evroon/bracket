@@ -197,56 +197,56 @@ DUMMY_TEAM4 = Team(
 
 
 DUMMY_PLAYER1 = Player(
-    name='Luke',
+    name='Player 1',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER2 = Player(
-    name='Anakin',
+    name='Player 2',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER3 = Player(
-    name='Leia',
+    name='Player 3',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER4 = Player(
-    name='Yoda',
+    name='Player 4',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER5 = Player(
-    name='Boba',
+    name='Player 5',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER6 = Player(
-    name='General',
+    name='Player 6',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER7 = Player(
-    name='Han',
+    name='Player 7',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER8 = Player(
-    name='Emperor',
+    name='Player 8',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
