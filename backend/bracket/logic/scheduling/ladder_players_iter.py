@@ -6,7 +6,12 @@ from typing import cast
 from fastapi import HTTPException
 
 from bracket.logic.scheduling.shared import check_team_combination_adheres_to_filter
-from bracket.models.db.match import MatchFilter, SuggestedMatch, SuggestedVirtualMatch
+from bracket.models.db.match import (
+    MatchFilter,
+    MatchWithDetailsDefinitive,
+    SuggestedMatch,
+    SuggestedVirtualMatch,
+)
 from bracket.models.db.player import Player
 from bracket.models.db.team import TeamWithPlayers
 from bracket.models.db.util import RoundWithMatches
@@ -14,9 +19,16 @@ from bracket.sql.players import get_active_players_in_tournament
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.types import assert_some
 
+# TODO: needs refactor
+# pylint: disable=too-many-branches
+
 
 def player_already_scheduled(player: Player, draft_round: RoundWithMatches) -> bool:
-    return any(player.id in match.player_ids for match in draft_round.matches)
+    return any(
+        player.id in match.player_ids
+        for match in draft_round.matches
+        if isinstance(match, MatchWithDetailsDefinitive)
+    )
 
 
 async def get_possible_upcoming_matches_for_players(
@@ -45,6 +57,7 @@ async def get_possible_upcoming_matches_for_players(
             player1 in match.team1.players and player2 in match.team2.players
             for round_ in other_rounds
             for match in round_.matches
+            if isinstance(match, MatchWithDetailsDefinitive)
         )
 
     team_already_scheduled_before.cache_clear()
@@ -56,8 +69,9 @@ async def get_possible_upcoming_matches_for_players(
     players_match_count: dict[int, int] = defaultdict(int)
     for round_ in other_rounds:
         for match_ in round_.matches:
-            for player_id in match_.player_ids:
-                players_match_count[player_id] += 1
+            if isinstance(match_, MatchWithDetailsDefinitive):
+                for player_id in match_.player_ids:
+                    players_match_count[player_id] += 1
 
     for player in players:
         if player.id not in players_match_count:

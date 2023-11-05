@@ -10,7 +10,7 @@ import Match from './match';
 export default function Round({
   tournamentData,
   round,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
@@ -18,7 +18,7 @@ export default function Round({
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
-  swrRoundsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
@@ -30,7 +30,7 @@ export default function Round({
       <Match
         key={match.id}
         tournamentData={tournamentData}
-        swrRoundsResponse={swrRoundsResponse}
+        swrStagesResponse={swrStagesResponse}
         swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
@@ -59,18 +59,18 @@ export default function Round({
     <RoundModal
       tournamentData={tournamentData}
       round={round}
-      swrRoundsResponse={swrRoundsResponse}
+      swrRoundsResponse={swrStagesResponse}
       swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
       dynamicSchedule={dynamicSchedule}
     />
   );
 
   return (
-    <div style={{ minHeight: 300 }}>
+    <div style={{ minHeight: 320 }}>
       <div
         style={{
           height: '100%',
-          minHeight: 300,
+          minHeight: 320,
           padding: '15px',
           borderRadius: '20px',
           ...active_round_style,

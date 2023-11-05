@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.elo import recalculate_elo_for_tournament_id
+from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import (
     build_matches_for_stage_item,
 )
@@ -37,7 +37,7 @@ async def delete_stage_item(
         await sql_delete_stage_item_inputs(stage_item_id)
         await sql_delete_stage_item(stage_item_id)
 
-    await recalculate_elo_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 

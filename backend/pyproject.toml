@@ -78,6 +78,7 @@ disable = [
     'unspecified-encoding',
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
+    'fixme',
 ]
 
 [tool.bandit]
@@ -110,7 +111,7 @@ select = [
     "UP",
     "W",
 ]
-ignore = []
+ignore = ["FIX002", "TD002", "TD003"]
 line-length = 100
 respect-gitignore = false
 show-fixes = true

@@ -4,8 +4,14 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { Court } from '../../interfaces/court';
-import { MatchBodyInterface, MatchInterface } from '../../interfaces/match';
+import {
+  MatchBodyInterface,
+  MatchInterface,
+  formatMatchTeam1,
+  formatMatchTeam2,
+} from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
+import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
 import { responseIsValid } from '../utils/util';
@@ -61,7 +67,7 @@ function MatchDeleteButton({
 export default function MatchModal({
   tournamentData,
   match,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrCourtsResponse,
   swrUpcomingMatchesResponse,
   opened,
@@ -70,7 +76,7 @@ export default function MatchModal({
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface;
-  swrRoundsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
@@ -90,6 +96,12 @@ export default function MatchModal({
     },
   });
 
+  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
+  const matchesLookup = getMatchLookup(swrStagesResponse);
+
+  const team1Name = formatMatchTeam1(stageItemsLookup, matchesLookup, match);
+  const team2Name = formatMatchTeam2(stageItemsLookup, matchesLookup, match);
+
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Match">
@@ -103,22 +115,22 @@ export default function MatchModal({
               court_id: values.court_id,
             };
             await updateMatch(tournamentData.id, match.id, updatedMatch);
-            await swrRoundsResponse.mutate(null);
+            await swrStagesResponse.mutate(null);
             if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
             setOpened(false);
           })}
         >
           <NumberInput
             withAsterisk
-            label={`Score of ${match.team1.name}`}
-            placeholder={`Score of ${match.team1.name}`}
+            label={`Score of ${team1Name}`}
+            placeholder={`Score of ${team1Name}`}
             {...form.getInputProps('team1_score')}
           />
           <NumberInput
             withAsterisk
             style={{ marginTop: 20 }}
-            label={`Score of ${match.team2.name}`}
-            placeholder={`Score of ${match.team2.name}`}
+            label={`Score of ${team2Name}`}
+            placeholder={`Score of ${team2Name}`}
             {...form.getInputProps('team2_score')}
           />
 
@@ -128,7 +140,7 @@ export default function MatchModal({
           </Button>
         </form>
         <MatchDeleteButton
-          swrRoundsResponse={swrRoundsResponse}
+          swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           tournamentData={tournamentData}
           match={match}

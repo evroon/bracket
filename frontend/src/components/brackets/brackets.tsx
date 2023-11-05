@@ -27,7 +27,7 @@ function getRoundsGridCols(
         <Round
           tournamentData={tournamentData}
           round={round}
-          swrRoundsResponse={swrStagesResponse}
+          swrStagesResponse={swrStagesResponse}
           swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={readOnly}

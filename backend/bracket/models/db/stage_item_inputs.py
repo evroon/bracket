@@ -10,25 +10,49 @@ class StageItemInputBase(BaseModelORM):
     stage_item_id: int | None
 
 
-class StageItemInputTentative(StageItemInputBase):
+class StageItemInputGeneric(BaseModel):
+    team_id: int | None
+    winner_from_stage_item_id: int | None
+    winner_position: int | None
+    winner_from_match_id: int | None
+
+    def __hash__(self) -> int:
+        return (
+            self.team_id,
+            self.winner_from_stage_item_id,
+            self.winner_position,
+            self.winner_from_match_id,
+        ).__hash__()
+
+
+class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
-    team_stage_item_id: int
-    team_position_in_group: int = Field(ge=1)
+    winner_from_match_id: None = None
+    winner_from_stage_item_id: int
+    winner_position: int = Field(ge=1)
 
 
-class StageItemInputFinal(StageItemInputBase):
+class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: int
-    team_stage_item_id: None = None
-    team_position_in_group: None = None
+    winner_from_match_id: None = None
+    winner_from_stage_item_id: None = None
+    winner_position: None = None
 
 
-StageItemInput = StageItemInputTentative | StageItemInputFinal
+class StageItemInputMatch(StageItemInputBase, StageItemInputGeneric):
+    team_id: None = None
+    winner_from_match_id: int
+    winner_from_stage_item_id: None = None
+    winner_position: None = None
+
+
+StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputMatch
 
 
 class StageItemInputCreateBodyTentative(BaseModel):
     slot: int
-    team_stage_item_id: int
-    team_position_in_group: int = Field(ge=1)
+    winner_from_stage_item_id: int
+    winner_position: int = Field(ge=1)
 
 
 class StageItemInputCreateBodyFinal(BaseModel):
@@ -44,5 +68,5 @@ class StageItemInputOptionFinal(BaseModel):
 
 
 class StageItemInputOptionTentative(BaseModel):
-    team_stage_item_id: int
-    team_position_in_group: int
+    winner_from_stage_item_id: int
+    winner_position: int

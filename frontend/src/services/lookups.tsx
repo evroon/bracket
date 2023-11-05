@@ -27,6 +27,21 @@ export function getStageItemLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
+export function getMatchLookup(swrStagesResponse: SWRResponse) {
+  let result: any[] = [];
+
+  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
+    stage.stage_items.forEach((stage_item) => {
+      stage_item.rounds.forEach((round) => {
+        round.matches.forEach((match) => {
+          result = result.concat([[match.id, match]]);
+        });
+      });
+    })
+  );
+  return Object.fromEntries(result);
+}
+
 export function getActiveRounds(swrStagesResponse: SWRResponse) {
   let result: RoundInterface[] = [];
 

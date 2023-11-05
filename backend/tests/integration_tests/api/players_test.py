@@ -29,7 +29,7 @@ async def test_players_endpoint(
                         'wins': 0,
                         'draws': 0,
                         'losses': 0,
-                        'name': 'Luke',
+                        'name': 'Player 1',
                         'tournament_id': auth_context.tournament.id,
                     }
                 ],

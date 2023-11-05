@@ -6,14 +6,14 @@ import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { StageItemInput } from '../../interfaces/stage_item_input';
+import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
 import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
 import CreateStageButton from '../buttons/create_stage';
-import { CreateStageItemModal, formatStageItemInput } from '../modals/create_stage_item';
+import { CreateStageItemModal } from '../modals/create_stage_item';
 import { UpdateStageModal } from '../modals/update_stage';
 import { UpdateStageItemModal } from '../modals/update_stage_item';
 import RequestErrorAlert from '../utils/error_alert';
@@ -34,7 +34,7 @@ function StageItemInputSectionLast({
   const content = team
     ? team.name
     : // @ts-ignore
-      formatStageItemInput(input.team_position_in_group, teamStageItem.name);
+      formatStageItemInput(input.winner_position, teamStageItem.name);
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
   return (
@@ -62,8 +62,8 @@ function StageItemRow({
     .sort((i1, i2) => (i1.slot > i2.slot ? 1 : 0))
     .map((input, i) => {
       const team = input.team_id ? teamsMap[input.team_id] : null;
-      const teamStageItem = input.team_stage_item_id
-        ? stageItemsLookup[input.team_stage_item_id]
+      const teamStageItem = input.winner_from_stage_item_id
+        ? stageItemsLookup[input.winner_from_stage_item_id]
         : null;
 
       return (

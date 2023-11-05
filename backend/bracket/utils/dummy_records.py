@@ -62,8 +62,16 @@ DUMMY_STAGE_ITEM1 = StageItemToInsert(
 DUMMY_STAGE_ITEM2 = StageItemToInsert(
     stage_id=DB_PLACEHOLDER_ID,
     created=DUMMY_MOCK_TIME,
+    type=StageType.ROUND_ROBIN,
+    team_count=4,
+    name='Group B',
+)
+
+DUMMY_STAGE_ITEM3 = StageItemToInsert(
+    stage_id=DB_PLACEHOLDER_ID,
+    created=DUMMY_MOCK_TIME,
     type=StageType.SINGLE_ELIMINATION,
-    team_count=2,
+    team_count=4,
     name='Bracket A',
 )
 
@@ -96,6 +104,12 @@ DUMMY_MATCH1 = Match(
     team1_score=11,
     team2_score=22,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH2 = Match(
@@ -106,6 +120,12 @@ DUMMY_MATCH2 = Match(
     team1_score=9,
     team2_score=6,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH3 = Match(
@@ -116,6 +136,12 @@ DUMMY_MATCH3 = Match(
     team1_score=23,
     team2_score=26,
     court_id=DB_PLACEHOLDER_ID,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_MATCH4 = Match(
@@ -126,6 +152,12 @@ DUMMY_MATCH4 = Match(
     team1_score=43,
     team2_score=45,
     court_id=None,
+    team1_winner_from_stage_item_id=None,
+    team1_winner_position=None,
+    team1_winner_from_match_id=None,
+    team2_winner_from_stage_item_id=None,
+    team2_winner_position=None,
+    team2_winner_from_match_id=None,
 )
 
 DUMMY_USER = User(
@@ -165,63 +197,56 @@ DUMMY_TEAM4 = Team(
 
 
 DUMMY_PLAYER1 = Player(
-    name='Luke',
+    name='Player 1',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER2 = Player(
-    name='Anakin',
+    name='Player 2',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER3 = Player(
-    name='Leia',
+    name='Player 3',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER4 = Player(
-    name='Yoda',
+    name='Player 4',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER5 = Player(
-    name='Boba',
+    name='Player 5',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER6 = Player(
-    name='General',
+    name='Player 6',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER7 = Player(
-    name='Han',
+    name='Player 7',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER8 = Player(
-    name='Emperor',
-    active=True,
-    created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
-)
-
-DUMMY_PLAYER9 = Player(
-    name='R2D2',
+    name='Player 8',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
@@ -238,13 +263,13 @@ DUMMY_USER_X_CLUB = UserXClub(
 )
 
 DUMMY_COURT1 = Court(
-    name='Endor',
+    name='Court 1',
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_COURT2 = Court(
-    name='Naboo',
+    name='Court 2',
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )

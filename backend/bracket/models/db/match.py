@@ -19,11 +19,27 @@ class MatchBase(BaseModelORM):
 
 
 class Match(MatchBase):
-    team1_id: int
-    team2_id: int
+    team1_id: int | None
+    team2_id: int | None
+    team1_winner_position: int | None
+    team1_winner_from_stage_item_id: int | None
+    team2_winner_from_stage_item_id: int | None
+    team2_winner_position: int | None
+    team1_winner_from_match_id: int | None
+    team2_winner_from_match_id: int | None
+
+    def get_winner_index(self) -> int | None:
+        if self.team1_score == self.team2_score:
+            return None
+
+        return 1 if self.team1_score > self.team2_score else 0
 
 
 class MatchWithDetails(Match):
+    court: Court | None
+
+
+class MatchWithDetailsDefinitive(Match):
     team1: FullTeamWithPlayers
     team2: FullTeamWithPlayers
     court: Court | None
@@ -40,11 +56,6 @@ class MatchWithDetails(Match):
     def player_ids(self) -> list[int]:
         return self.team1.player_ids + self.team2.player_ids
 
-    def get_winner(self) -> FullTeamWithPlayers | None:
-        if self.team1.elo_score == self.team2.elo_score:
-            return None
-        return self.team1 if self.team1.elo_score > self.team2.elo_score else self.team2
-
 
 class MatchBody(BaseModelORM):
     round_id: int
@@ -55,18 +66,15 @@ class MatchBody(BaseModelORM):
 
 class MatchCreateBody(BaseModelORM):
     round_id: int
-    team1_id: int
-    team2_id: int
     court_id: int | None
-
-
-class MatchVirtualCreateBody(BaseModelORM):
-    round_id: int
-    court_id: int | None
-    team1_stage_item_id: int
-    team1_position_in_group: int
-    team2_stage_item_id: int
-    team2_position_in_group: int
+    team1_id: int | None
+    team2_id: int | None
+    team1_winner_from_stage_item_id: int | None
+    team1_winner_position: int | None
+    team1_winner_from_match_id: int | None
+    team2_winner_from_stage_item_id: int | None
+    team2_winner_position: int | None
+    team2_winner_from_match_id: int | None
 
 
 class MatchFilter(BaseModel):
@@ -77,9 +85,9 @@ class MatchFilter(BaseModel):
 
 
 class SuggestedVirtualMatch(BaseModel):
-    team1_group_id: int
+    team1_winner_from_stage_item_id: int
     team1_position_in_group: int
-    team2_group_id: int
+    team2_winner_from_stage_item_id: int
     team2_position_in_group: int
 
 

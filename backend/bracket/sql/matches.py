@@ -1,5 +1,5 @@
 from bracket.database import database
-from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchVirtualCreateBody
+from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 
 
 async def sql_delete_match(match_id: int) -> None:
@@ -27,33 +27,15 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
     query = '''
         INSERT INTO matches (
             round_id,
+            court_id,
             team1_id,
             team2_id,
-            team1_score,
-            team2_score,
-            court_id,
-            created
-        )
-        VALUES (:round_id, :team1_id, :team2_id, 0, 0, :court_id, NOW())
-        RETURNING *
-    '''
-    result = await database.fetch_one(query=query, values=match.dict())
-
-    if result is None:
-        raise ValueError('Could not create stage')
-
-    return Match.parse_obj(result._mapping)
-
-
-async def todo_sql_create_virtual_match(match: MatchVirtualCreateBody) -> Match:
-    query = '''
-        INSERT INTO matches (
-            round_id,
-            court_id,
-            team1_stage_item_id,
-            team2_stage_item_id,
-            team1_position_in_group,
-            team2_position_in_group,
+            team1_winner_from_stage_item_id,
+            team2_winner_from_stage_item_id,
+            team1_winner_position,
+            team2_winner_position,
+            team1_winner_from_match_id,
+            team2_winner_from_match_id,
             team1_score,
             team2_score,
             created
@@ -61,10 +43,14 @@ async def todo_sql_create_virtual_match(match: MatchVirtualCreateBody) -> Match:
         VALUES (
             :round_id,
             :court_id,
-            :team1_stage_item_id,
-            :team2_stage_item_id,
-            :team1_position_in_group,
-            :team2_position_in_group,
+            :team1_id,
+            :team2_id,
+            :team1_winner_from_stage_item_id,
+            :team2_winner_from_stage_item_id,
+            :team1_winner_position,
+            :team2_winner_position,
+            :team1_winner_from_match_id,
+            :team2_winner_from_match_id,
             0,
             0,
             NOW()
@@ -90,3 +76,32 @@ async def sql_update_match(match_id: int, match: MatchBody) -> None:
         RETURNING *
         '''
     await database.execute(query=query, values={'match_id': match_id, **match.dict()})
+
+
+async def sql_update_team_ids_for_match(
+    match_id: int, team1_id: int | None, team2_id: int | None
+) -> None:
+    query = '''
+        UPDATE matches
+        SET team1_id = :team1_id,
+            team2_id = :team2_id
+        WHERE matches.id = :match_id
+        RETURNING *
+        '''
+    await database.execute(
+        query=query, values={'match_id': match_id, 'team1_id': team1_id, 'team2_id': team2_id}
+    )
+
+
+async def sql_get_match(match_id: int) -> Match:
+    query = '''
+        SELECT *
+        FROM matches
+        WHERE matches.id = :match_id
+        '''
+    result = await database.fetch_one(query=query, values={'match_id': match_id})
+
+    if result is None:
+        raise ValueError('Could not create stage')
+
+    return Match.parse_obj(result._mapping)

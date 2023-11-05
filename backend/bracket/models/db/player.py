@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from heliclockter import datetime_utc
+from pydantic import Field
 
 from bracket.models.db.shared import BaseModelORM
 
@@ -22,7 +23,7 @@ class Player(BaseModelORM):
 
 
 class PlayerBody(BaseModelORM):
-    name: str
+    name: str = Field(..., max_length=30)
     active: bool
 
 

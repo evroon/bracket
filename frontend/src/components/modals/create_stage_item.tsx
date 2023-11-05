@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
-import { StageItemInputOption, getPositionName } from '../../interfaces/stage_item_input';
+import { StageItemInputOption, formatStageItemInput } from '../../interfaces/stage_item_input';
 import { Tournament } from '../../interfaces/tournament';
 import { getAvailableStageItemInputs } from '../../services/adapter';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
@@ -96,11 +96,6 @@ function StageItemInputs({
   ));
 }
 
-export function formatStageItemInput(team_position_in_group: number, teamName: string) {
-  // @ts-ignore
-  return `${getPositionName(team_position_in_group)} of ${teamName}`;
-}
-
 export function CreateStageItemModal({
   tournament,
   stage,
@@ -133,7 +128,7 @@ export function CreateStageItemModal({
   );
   const availableInputs = responseIsValid(swrAvailableInputsResponse)
     ? swrAvailableInputsResponse.data.data.map((option: StageItemInputOption) => {
-        if (option.team_stage_item_id == null) {
+        if (option.winner_from_stage_item_id == null) {
           if (option.team_id == null) return null;
           const team = teamsMap[option.team_id];
           if (team == null) return null;
@@ -142,12 +137,12 @@ export function CreateStageItemModal({
             label: team.name,
           };
         }
-        assert(option.team_position_in_group != null);
-        const stageItem = stageItemMap[option.team_stage_item_id];
+        assert(option.winner_position != null);
+        const stageItem = stageItemMap[option.winner_from_stage_item_id];
         if (stageItem == null) return null;
         return {
-          value: `${option.team_stage_item_id}_${option.team_position_in_group}`,
-          label: `${formatStageItemInput(option.team_position_in_group, stageItem.name)}`,
+          value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
+          label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
         };
       })
     : {};
@@ -163,9 +158,9 @@ export function CreateStageItemModal({
               return {
                 slot: i + 1,
                 team_id: Number(teamId),
-                team_stage_item_id:
+                winner_from_stage_item_id:
                   typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                team_position_in_group:
+                winner_position:
                   typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });

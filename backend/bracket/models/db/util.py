@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import root_validator, validator
 
-from bracket.models.db.match import Match, MatchWithDetails
+from bracket.models.db.match import Match, MatchWithDetails, MatchWithDetailsDefinitive
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.stage_item import StageItem, StageType
@@ -15,7 +15,7 @@ from bracket.utils.types import assert_some
 
 
 class RoundWithMatches(Round):
-    matches: list[MatchWithDetails]
+    matches: list[MatchWithDetailsDefinitive | MatchWithDetails]
 
     @validator('matches', pre=True)
     def handle_matches(values: list[Match]) -> list[Match]:  # type: ignore[misc]
@@ -24,7 +24,12 @@ class RoundWithMatches(Round):
         return values
 
     def get_team_ids(self) -> set[int]:
-        return {assert_some(team.id) for match in self.matches for team in match.teams}
+        return {
+            assert_some(team.id)
+            for match in self.matches
+            if isinstance(match, MatchWithDetailsDefinitive)
+            for team in match.teams
+        }
 
 
 class StageItemWithRounds(StageItem):

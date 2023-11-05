@@ -5,7 +5,7 @@ import json
 from decimal import Decimal
 
 from heliclockter import datetime_utc
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, validator
 
 from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM
@@ -80,7 +80,7 @@ class FullTeamWithPlayers(TeamWithPlayers, Team):
 
 
 class TeamBody(BaseModelORM):
-    name: str
+    name: str = Field(..., max_length=30)
     active: bool
     player_ids: list[int]
 
