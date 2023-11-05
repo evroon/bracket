@@ -50,10 +50,18 @@ export function getTournamentEndpointFromRouter() {
   return id;
 }
 
-export function responseIsValid(response: SWRResponse) {
-  return response.data != null && response.data.data != null;
+export function responseIsValid(response: SWRResponse | null) {
+  return response != null && response.data != null && response.data.data != null;
 }
 
 export function getBaseURL() {
   return typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
 }
+
+export const groupBy = (keys: any) => (array: any) =>
+  array.reduce((objectsByKeyValue: any, obj: any) => {
+    const value = keys.map((key: any) => obj[key]).join('-');
+    // eslint-disable-next-line no-param-reassign
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {});

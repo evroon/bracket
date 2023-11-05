@@ -160,8 +160,7 @@ export function CreateStageItemModal({
                 team_id: Number(teamId),
                 winner_from_stage_item_id:
                   typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                winner_position:
-                  typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
+                winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });
             await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);

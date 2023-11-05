@@ -1,6 +1,6 @@
 import { SWRResponse } from 'swr';
 
-import { responseIsValid } from '../components/utils/util';
+import { groupBy, responseIsValid } from '../components/utils/util';
 import { RoundInterface } from '../interfaces/round';
 import { StageWithStageItems } from '../interfaces/stage';
 import { TeamInterface } from '../interfaces/team';
@@ -40,6 +40,11 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
     })
   );
   return Object.fromEntries(result);
+}
+
+export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
+  const matches = Object.values(getMatchLookup(swrStagesResponse));
+  return groupBy(['court_id'])(matches);
 }
 
 export function getActiveRounds(swrStagesResponse: SWRResponse) {
