@@ -7,6 +7,7 @@ async def get_all_courts_in_tournament(tournament_id: int) -> list[Court]:
         SELECT *
         FROM courts
         WHERE courts.tournament_id = :tournament_id
+        ORDER BY name
         '''
     result = await database.fetch_all(query=query, values={'tournament_id': tournament_id})
     return [Court.parse_obj(x._mapping) for x in result]

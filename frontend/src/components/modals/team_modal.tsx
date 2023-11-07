@@ -61,7 +61,7 @@ export default function TeamModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text} >
         <form
           onSubmit={form.onSubmit(async (values) => {
             if (is_create_form) {
@@ -96,9 +96,12 @@ export default function TeamModal({
             data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
             label="Team members"
             placeholder="Pick all that you like"
+            dropdownPosition="bottom"
+            maxDropdownHeight={160}
             searchable
-            limit={20}
+            mb="12rem"
             mt={12}
+            limit={25}
             {...form.getInputProps('player_ids')}
           />
 

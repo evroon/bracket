@@ -108,7 +108,7 @@ export function CreateStageItemModal({
   const [opened, setOpened] = useState(false);
 
   const form = useForm({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 2, team_count_elimination: 2 },
+    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
       team_count_round_robin: (value) => (value >= 2 ? null : 'Need at least two teams'),
       team_count_elimination: (value) => (value >= 2 ? null : 'Need at least two teams'),
