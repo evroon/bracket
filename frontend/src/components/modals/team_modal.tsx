@@ -61,7 +61,7 @@ export default function TeamModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text} >
+      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             if (is_create_form) {
