@@ -100,7 +100,6 @@ export default function MatchLarge({
       </UnstyledButton>
       <MatchModal
         swrStagesResponse={swrStagesResponse}
-        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}
         match={match}

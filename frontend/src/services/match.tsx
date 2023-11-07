@@ -1,4 +1,10 @@
-import { MatchBodyInterface, MatchCreateBodyInterface } from '../interfaces/match';
+import { showNotification } from '@mantine/notifications';
+
+import {
+  MatchBodyInterface,
+  MatchCreateBodyInterface,
+  MatchRescheduleInterface,
+} from '../interfaces/match';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createMatch(tournament_id: number, match: MatchCreateBodyInterface) {
@@ -20,5 +26,30 @@ export async function updateMatch(
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}/matches/${match_id}`, match)
+    .catch((response: any) => handleRequestError(response));
+}
+
+export async function rescheduleMatch(
+  tournament_id: number,
+  match_id: number,
+  match: MatchRescheduleInterface
+) {
+  return createAxios()
+    .post(`tournaments/${tournament_id}/matches/${match_id}/reschedule`, match)
+    .catch((response: any) => handleRequestError(response))
+    .then((response: any) => {
+      if (response != null && response.status === 200) {
+        showNotification({
+          color: 'green',
+          title: 'Successfully rescheduled match',
+          message: '',
+        });
+      }
+    });
+}
+
+export async function scheduleMatches(tournament_id: number) {
+  return createAxios()
+    .post(`tournaments/${tournament_id}/schedule_matches`)
     .catch((response: any) => handleRequestError(response));
 }

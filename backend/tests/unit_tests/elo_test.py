@@ -25,6 +25,7 @@ def test_elo_calculation() -> None:
         matches=[
             MatchWithDetailsDefinitive(
                 created=DUMMY_MOCK_TIME,
+                start_time=DUMMY_MOCK_TIME,
                 team1_id=1,
                 team2_id=1,
                 team1_winner_from_stage_item_id=None,
@@ -38,6 +39,8 @@ def test_elo_calculation() -> None:
                 round_id=1,
                 court_id=None,
                 court=None,
+                duration_minutes=10,
+                position_in_schedule=0,
                 team1=FullTeamWithPlayers(
                     id=3,
                     name='Dummy team 1',

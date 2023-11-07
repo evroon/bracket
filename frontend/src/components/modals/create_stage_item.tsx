@@ -108,7 +108,7 @@ export function CreateStageItemModal({
   const [opened, setOpened] = useState(false);
 
   const form = useForm({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 2, team_count_elimination: 2 },
+    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
       team_count_round_robin: (value) => (value >= 2 ? null : 'Need at least two teams'),
       team_count_elimination: (value) => (value >= 2 ? null : 'Need at least two teams'),
@@ -160,8 +160,7 @@ export function CreateStageItemModal({
                 team_id: Number(teamId),
                 winner_from_stage_item_id:
                   typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                winner_position:
-                  typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
+                winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });
             await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);

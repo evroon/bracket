@@ -20,6 +20,9 @@ export interface MatchInterface {
   team2_winner_from_match_id: number | null;
   court_id: number | null;
   court: Court | null;
+  start_time: string;
+  position_in_schedule: number | null;
+  duration_minutes: number | null;
 }
 
 export interface MatchBodyInterface {
@@ -28,6 +31,13 @@ export interface MatchBodyInterface {
   team1_score: number;
   team2_score: number;
   court_id: number | null;
+}
+
+export interface MatchRescheduleInterface {
+  new_court_id: number;
+  new_position: number;
+  old_court_id: number;
+  old_position: number;
 }
 
 export interface UpcomingMatchInterface {
@@ -69,7 +79,7 @@ export function formatMatchTeam1(
     }`;
   }
   assert(match.team1_winner_from_match_id != null);
-  const winner = matchesLookup[match.team1_winner_from_match_id];
+  const winner = matchesLookup[match.team1_winner_from_match_id].match;
   const match_1 = formatMatchTeam1(stageItemsLookup, matchesLookup, winner);
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const match_2 = formatMatchTeam2(stageItemsLookup, matchesLookup, winner);
@@ -89,7 +99,7 @@ export function formatMatchTeam2(
     }`;
   }
   assert(match.team2_winner_from_match_id != null);
-  const winner = matchesLookup[match.team2_winner_from_match_id];
+  const winner = matchesLookup[match.team2_winner_from_match_id].match;
   const match_1 = formatMatchTeam1(stageItemsLookup, matchesLookup, winner);
   const match_2 = formatMatchTeam2(stageItemsLookup, matchesLookup, winner);
   return `Winner of match ${match_1} - ${match_2}`;

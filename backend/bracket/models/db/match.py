@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from heliclockter import datetime_utc
+from heliclockter import datetime_utc, timedelta
 from pydantic import BaseModel
 
 from bracket.models.db.court import Court
@@ -12,10 +12,21 @@ from bracket.utils.types import assert_some
 class MatchBase(BaseModelORM):
     id: int | None = None
     created: datetime_utc
+    start_time: datetime_utc | None
+    duration_minutes: int | None
+    position_in_schedule: int | None
     round_id: int
     team1_score: int
     team2_score: int
     court_id: int | None
+
+    @property
+    def end_time(self, default_minutes: int = 15) -> datetime_utc:
+        assert self.start_time
+        return datetime_utc.from_datetime(
+            self.start_time
+            + timedelta(minutes=self.duration_minutes if self.duration_minutes else default_minutes)
+        )
 
 
 class Match(MatchBase):
@@ -75,6 +86,13 @@ class MatchCreateBody(BaseModelORM):
     team2_winner_from_stage_item_id: int | None
     team2_winner_position: int | None
     team2_winner_from_match_id: int | None
+
+
+class MatchRescheduleBody(BaseModelORM):
+    old_court_id: int
+    old_position: int
+    new_court_id: int
+    new_position: int
 
 
 class MatchFilter(BaseModel):

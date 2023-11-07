@@ -30,6 +30,7 @@ DUMMY_TOURNAMENT = Tournament(
     club_id=DB_PLACEHOLDER_ID,
     name='Some Cool Tournament',
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     dashboard_public=True,
     dashboard_endpoint='cool-tournament',
     logo_path=None,
@@ -98,6 +99,7 @@ DUMMY_ROUND3 = Round(
 
 DUMMY_MATCH1 = Match(
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     round_id=DB_PLACEHOLDER_ID,
     team1_id=DB_PLACEHOLDER_ID,
     team2_id=2,
@@ -110,54 +112,8 @@ DUMMY_MATCH1 = Match(
     team2_winner_from_stage_item_id=None,
     team2_winner_position=None,
     team2_winner_from_match_id=None,
-)
-
-DUMMY_MATCH2 = Match(
-    created=DUMMY_MOCK_TIME,
-    round_id=DB_PLACEHOLDER_ID,
-    team1_id=3,
-    team2_id=4,
-    team1_score=9,
-    team2_score=6,
-    court_id=DB_PLACEHOLDER_ID,
-    team1_winner_from_stage_item_id=None,
-    team1_winner_position=None,
-    team1_winner_from_match_id=None,
-    team2_winner_from_stage_item_id=None,
-    team2_winner_position=None,
-    team2_winner_from_match_id=None,
-)
-
-DUMMY_MATCH3 = Match(
-    created=DUMMY_MOCK_TIME,
-    round_id=2,
-    team1_id=DB_PLACEHOLDER_ID,
-    team2_id=4,
-    team1_score=23,
-    team2_score=26,
-    court_id=DB_PLACEHOLDER_ID,
-    team1_winner_from_stage_item_id=None,
-    team1_winner_position=None,
-    team1_winner_from_match_id=None,
-    team2_winner_from_stage_item_id=None,
-    team2_winner_position=None,
-    team2_winner_from_match_id=None,
-)
-
-DUMMY_MATCH4 = Match(
-    created=DUMMY_MOCK_TIME,
-    round_id=2,
-    team1_id=2,
-    team2_id=3,
-    team1_score=43,
-    team2_score=45,
-    court_id=None,
-    team1_winner_from_stage_item_id=None,
-    team1_winner_position=None,
-    team1_winner_from_match_id=None,
-    team2_winner_from_stage_item_id=None,
-    team2_winner_position=None,
-    team2_winner_from_match_id=None,
+    duration_minutes=10,
+    position_in_schedule=0,
 )
 
 DUMMY_USER = User(

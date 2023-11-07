@@ -1,11 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.logic.matches import (
+    create_match_and_assign_free_court,
+    handle_match_reschedule,
+    schedule_all_matches,
+)
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.upcoming_matches import (
     get_upcoming_matches_for_swiss_round,
 )
-from bracket.models.db.match import Match, MatchBody, MatchCreateBody, MatchFilter, SuggestedMatch
+from bracket.models.db.match import (
+    Match,
+    MatchBody,
+    MatchCreateBody,
+    MatchFilter,
+    MatchRescheduleBody,
+    SuggestedMatch,
+)
 from bracket.models.db.round import Round
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
@@ -65,6 +76,27 @@ async def create_match(
     return SingleMatchResponse(
         data=await create_match_and_assign_free_court(tournament_id, match_body)
     )
+
+
+@router.post("/tournaments/{tournament_id}/schedule_matches", response_model=SuccessResponse)
+async def schedule_matches(
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    await schedule_all_matches(tournament_id)
+    return SuccessResponse()
+
+
+@router.post(
+    "/tournaments/{tournament_id}/matches/{match_id}/reschedule", response_model=SuccessResponse
+)
+async def reschedule_match(
+    tournament_id: int,
+    body: MatchRescheduleBody,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    await handle_match_reschedule(tournament_id, body)
+    return SuccessResponse()
 
 
 @router.post(

@@ -105,6 +105,7 @@ async def get_full_tournament_details(
             FROM stage_items
             JOIN stage_items_with_rounds ON stage_items_with_rounds.id = stage_items.id
             LEFT JOIN stage_items_with_inputs ON stage_items_with_inputs.id = stage_items.id
+            ORDER BY stage_items.name
         )
         SELECT stages.*, to_json(array_agg(r.*)) AS stage_items
         FROM stages

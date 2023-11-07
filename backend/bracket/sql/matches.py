@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from heliclockter import datetime_utc
+
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 
@@ -86,10 +90,30 @@ async def sql_update_team_ids_for_match(
         SET team1_id = :team1_id,
             team2_id = :team2_id
         WHERE matches.id = :match_id
-        RETURNING *
         '''
     await database.execute(
         query=query, values={'match_id': match_id, 'team1_id': team1_id, 'team2_id': team2_id}
+    )
+
+
+async def sql_reschedule_match(
+    match_id: int, court_id: int | None, start_time: datetime_utc, position_in_schedule: int | None
+) -> None:
+    query = '''
+        UPDATE matches
+        SET court_id = :court_id,
+            start_time = :start_time,
+            position_in_schedule = :position_in_schedule
+        WHERE matches.id = :match_id
+        '''
+    await database.execute(
+        query=query,
+        values={
+            'court_id': court_id,
+            'match_id': match_id,
+            'position_in_schedule': position_in_schedule,
+            'start_time': datetime.fromisoformat(start_time.isoformat()),
+        },
     )
 
 

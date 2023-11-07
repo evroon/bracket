@@ -19,7 +19,8 @@ tournaments = Table(
     metadata,
     Column('id', BigInteger, primary_key=True, index=True),
     Column('name', String, nullable=False, index=True),
-    Column('created', DateTimeTZ, nullable=False),
+    Column('created', DateTimeTZ, nullable=False, server_default='now()'),
+    Column('start_time', DateTimeTZ, nullable=False),
     Column('club_id', BigInteger, ForeignKey('clubs.id'), index=True, nullable=False),
     Column('dashboard_public', Boolean, nullable=False),
     Column('logo_path', String, nullable=True),
@@ -111,6 +112,7 @@ matches = Table(
     Column('court_id', BigInteger, ForeignKey('courts.id'), nullable=True),
     Column('team1_score', Integer, nullable=False),
     Column('team2_score', Integer, nullable=False),
+    Column('position_in_schedule', Integer, nullable=True),
 )
 
 teams = Table(

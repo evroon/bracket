@@ -96,9 +96,12 @@ export default function TeamModal({
             data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
             label="Team members"
             placeholder="Pick all that you like"
+            dropdownPosition="bottom"
+            maxDropdownHeight={160}
             searchable
-            limit={20}
+            mb="12rem"
             mt={12}
+            limit={25}
             {...form.getInputProps('player_ids')}
           />
 
