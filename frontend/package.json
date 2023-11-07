@@ -19,7 +19,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
-    "@mantine/core": "^6.0.5",
+    "@mantine/core": "^7.2.0",
     "@mantine/dropzone": "^6.0.5",
     "@mantine/form": "^6.0.5",
     "@mantine/hooks": "^6.0.5",
