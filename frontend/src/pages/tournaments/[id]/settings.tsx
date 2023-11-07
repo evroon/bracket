@@ -8,8 +8,10 @@ import {
   Select,
   TextInput,
 } from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import assert from 'assert';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { DropzoneButton } from '../../../components/utils/file_upload';
@@ -38,6 +40,7 @@ function GeneralTournamentForm({
 }) {
   const form = useForm({
     initialValues: {
+      start_time: tournament == null ? new Date() : new Date(tournament.start_time),
       name: tournament == null ? '' : tournament.name,
       club_id: tournament == null ? null : `${tournament.club_id}`,
       dashboard_public: tournament == null ? true : tournament.dashboard_public,
@@ -51,6 +54,7 @@ function GeneralTournamentForm({
       name: (value) => (value.length > 0 ? null : 'Name too short'),
       dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard link too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
+      start_time: (value) => (value != null ? null : 'Please choose a start time'),
     },
   });
 
@@ -65,7 +69,8 @@ function GeneralTournamentForm({
             values.dashboard_public,
             values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
-            values.auto_assign_courts
+            values.auto_assign_courts,
+            values.start_time.toISOString()
           );
         } else {
           assert(tournament != null);
@@ -75,7 +80,8 @@ function GeneralTournamentForm({
             values.dashboard_public,
             values.dashboard_endpoint,
             values.players_can_be_in_multiple_teams,
-            values.auto_assign_courts
+            values.auto_assign_courts,
+            values.start_time.toISOString()
           );
         }
         await swrTournamentsResponse.mutate(null);
@@ -103,6 +109,14 @@ function GeneralTournamentForm({
         placeholder="best_tournament"
         mt="lg"
         {...form.getInputProps('dashboard_endpoint')}
+      />
+
+      <DateTimePicker
+        label="Start of tournament"
+        placeholder="Pick date and time"
+        mt="lg"
+        mx="auto"
+        {...form.getInputProps('start_time')}
       />
 
       <Checkbox

@@ -1,6 +1,6 @@
 from typing import NamedTuple
 
-from heliclockter import datetime_utc, timedelta
+from heliclockter import timedelta
 
 from bracket.models.db.match import (
     Match,
@@ -9,6 +9,7 @@ from bracket.models.db.match import (
     MatchWithDetails,
     MatchWithDetailsDefinitive,
 )
+from bracket.models.db.tournament import Tournament
 from bracket.sql.courts import get_all_courts_in_tournament, get_all_free_courts_in_round
 from bracket.sql.matches import sql_create_match, sql_reschedule_match
 from bracket.sql.stages import get_full_tournament_details
@@ -33,6 +34,7 @@ async def create_match_and_assign_free_court(
 
 
 async def schedule_all_matches(tournament_id: int) -> None:
+    tournament = await sql_get_tournament(tournament_id)
     stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
 
@@ -45,7 +47,6 @@ async def schedule_all_matches(tournament_id: int) -> None:
     ]
     match_count_per_court: dict[int, int] = {assert_some(court.id): 0 for court in courts}
     matches_per_court: dict[int, list[Match]] = {assert_some(court.id): [] for court in courts}
-    now = datetime_utc.now()
 
     for match in matches:
         court_id = sorted(match_count_per_court.items(), key=lambda x: x[1])[0][0]
@@ -55,7 +56,7 @@ async def schedule_all_matches(tournament_id: int) -> None:
             last_match = matches_per_court[court_id][-1]
             start_time = assert_some(last_match.start_time) + timedelta(minutes=15)
         except IndexError:
-            start_time = now
+            start_time = tournament.start_time
             position_in_schedule = 0
 
         await sql_reschedule_match(
@@ -76,6 +77,7 @@ class MatchPosition(NamedTuple):
 
 
 async def reorder_matches_for_court(
+    tournament: Tournament,
     scheduled_matches: list[MatchPosition],
     body: MatchRescheduleBody,
     court_id: int,
@@ -86,19 +88,15 @@ async def reorder_matches_for_court(
         key=lambda mp: mp.position,
     )
 
-    if body.new_court_id == body.old_court_id:
-        matches_this_court[body.new_position], matches_this_court[body.old_position] = (
-            matches_this_court[body.old_position],
-            matches_this_court[body.new_position],
-        )
-
+    last_start_time = tournament.start_time
     for i, match_pos in enumerate(matches_this_court):
         await sql_reschedule_match(
             assert_some(match_pos.match.id),
             court_id,
-            assert_some(match_pos.match.start_time),
+            last_start_time,
             i,
         )
+        last_start_time = last_start_time + timedelta(minutes=15)
 
 
 async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody) -> None:
@@ -106,7 +104,8 @@ async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody)
         return
 
     stages = await get_full_tournament_details(tournament_id)
-    scheduled_matches = [
+    tournament = await sql_get_tournament(tournament_id)
+    scheduled_matches_old = [
         MatchPosition(match=match, position=float(assert_some(match.position_in_schedule)))
         for stage in stages
         for stage_item in stage.stage_items
@@ -115,25 +114,28 @@ async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody)
         if match.start_time is not None
     ]
 
-    if body.new_court_id == body.old_court_id:
-        await reorder_matches_for_court(scheduled_matches, body, body.new_court_id)
-    else:
-        scheduled_matches_adjusted = []
-        for match_pos in scheduled_matches:
-            # For match in prev position: Set new position
-            if (
-                match_pos.position == body.old_position
-                and match_pos.match.court_id == body.old_court_id
-            ):
-                # match_pos.match.court_id = body.new_court_id
-                scheduled_matches_adjusted.append(
-                    MatchPosition(
-                        match=match_pos.match.copy(update={'court_id': body.new_court_id}),
-                        position=body.new_position - 0.9,
-                    )
+    # For match in prev position: set new position
+    scheduled_matches = []
+    for match_pos in scheduled_matches_old:
+        if (
+            match_pos.position == body.old_position
+            and match_pos.match.court_id == body.old_court_id
+        ):
+            offset = (
+                -0.5
+                if body.new_position < body.old_position or body.new_court_id != body.old_court_id
+                else +0.5
+            )
+            scheduled_matches.append(
+                MatchPosition(
+                    match=match_pos.match.copy(update={'court_id': body.new_court_id}),
+                    position=body.new_position + offset,
                 )
-            else:
-                scheduled_matches_adjusted.append(match_pos)
+            )
+        else:
+            scheduled_matches.append(match_pos)
 
-        await reorder_matches_for_court(scheduled_matches_adjusted, body, body.new_court_id)
-        await reorder_matches_for_court(scheduled_matches_adjusted, body, body.old_court_id)
+    await reorder_matches_for_court(tournament, scheduled_matches, body, body.new_court_id)
+
+    if body.new_court_id != body.old_court_id:
+        await reorder_matches_for_court(tournament, scheduled_matches, body, body.old_court_id)

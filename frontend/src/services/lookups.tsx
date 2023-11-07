@@ -45,6 +45,28 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
+export function stringToColour(input: string) {
+  let hash = 0;
+  for (let i = 0; i < input.length; i += 1) {
+    // eslint-disable-next-line no-bitwise
+    hash = input.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const colors = [
+    'pink',
+    'violet',
+    'green',
+    'blue',
+    'red',
+    'grape',
+    'indigo',
+    'cyan',
+    'orange',
+    'yellow',
+    'teal',
+  ];
+  return colors[Math.abs(hash) % colors.length];
+}
+
 export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
   const matches = Object.values(getMatchLookup(swrStagesResponse)).map((x) => x.match);
   return groupBy(['court_id'])(matches);

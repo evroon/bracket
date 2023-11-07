@@ -1,7 +1,6 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { Alert, Badge, Button, Card, Grid, Group, Text, Title } from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
-import assert from 'assert';
 import React from 'react';
 // @ts-ignore
 import EllipsisText from 'react-ellipsis-text';
@@ -16,6 +15,7 @@ import {
   getMatchLookupByCourt,
   getScheduleData,
   getStageItemLookup,
+  stringToColour,
 } from '../../../services/lookups';
 import { rescheduleMatch, scheduleMatches } from '../../../services/match';
 import TournamentLayout from '../_tournament_layout';
@@ -36,6 +36,9 @@ function ScheduleRow({
     matchesLookup,
     match
   )} - ${formatMatchTeam2(stageItemsLookup, matchesLookup, match)}`;
+
+  const stageItemColor = stringToColour(`${matchesLookup[match.id].stageItem.id}`);
+
   return (
     <Draggable key={match.id} index={index} draggableId={`${match.id}`}>
       {(provided) => (
@@ -55,11 +58,11 @@ function ScheduleRow({
                   <EllipsisText text={matchName} length={40} />
                 </Text>
               </Group>
-              <Badge color="indigo" variant="light" size="lg">
+              <Badge color="gray" variant="dot" size="lg">
                 <Time datetime={match.start_time} />
               </Badge>
             </Group>
-            <Badge color="indigo" variant="dot">
+            <Badge color={stageItemColor} variant="outline">
               {matchesLookup[match.id].stageItem.name}
             </Badge>
           </Card>

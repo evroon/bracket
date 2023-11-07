@@ -30,6 +30,7 @@ DUMMY_TOURNAMENT = Tournament(
     club_id=DB_PLACEHOLDER_ID,
     name='Some Cool Tournament',
     created=DUMMY_MOCK_TIME,
+    start_time=DUMMY_MOCK_TIME,
     dashboard_public=True,
     dashboard_endpoint='cool-tournament',
     logo_path=None,

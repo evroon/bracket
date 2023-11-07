@@ -1,4 +1,5 @@
 import { Button, Checkbox, Group, Image, Modal, Select, TextInput } from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import assert from 'assert';
@@ -27,6 +28,7 @@ function GeneralTournamentForm({
 }) {
   const form = useForm({
     initialValues: {
+      start_time: new Date(),
       name: '',
       club_id: null,
       dashboard_public: true,
@@ -38,6 +40,7 @@ function GeneralTournamentForm({
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
+      start_time: (value) => (value != null ? null : 'Please choose a start time'),
     },
   });
 
@@ -51,7 +54,8 @@ function GeneralTournamentForm({
           values.dashboard_public,
           values.dashboard_endpoint,
           values.players_can_be_in_multiple_teams,
-          values.auto_assign_courts
+          values.auto_assign_courts,
+          values.start_time.toISOString()
         );
         await swrTournamentsResponse.mutate(null);
         setOpened(false);
@@ -65,6 +69,7 @@ function GeneralTournamentForm({
       />
 
       <Select
+        withAsterisk
         data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
         label="Club"
         placeholder="Pick a club for this tournament"
@@ -79,6 +84,15 @@ function GeneralTournamentForm({
         placeholder="best_tournament"
         mt="lg"
         {...form.getInputProps('dashboard_endpoint')}
+      />
+
+      <DateTimePicker
+        label="Start of tournament"
+        placeholder="Pick date and time"
+        mt="lg"
+        mx="auto"
+        dropdownType="modal"
+        {...form.getInputProps('start_time')}
       />
 
       <Checkbox

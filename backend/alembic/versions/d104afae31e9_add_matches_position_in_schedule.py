@@ -19,7 +19,12 @@ depends_on: str | None = None
 
 def upgrade() -> None:
     op.add_column('matches', sa.Column('position_in_schedule', sa.Integer(), nullable=True))
+    op.add_column(
+        'tournaments',
+        sa.Column('start_time', sa.DateTime(timezone=True), nullable=False, server_default='now()'),
+    )
 
 
 def downgrade() -> None:
+    op.drop_column('tournaments', 'start_time')
     op.drop_column('matches', 'position_in_schedule')

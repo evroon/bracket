@@ -2,6 +2,7 @@ export interface Tournament {
   id: number;
   name: string;
   created: string;
+  start_time: string;
   club_id: number;
   dashboard_public: boolean;
   dashboard_endpoint: string;

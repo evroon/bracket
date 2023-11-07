@@ -1,9 +1,8 @@
-import { Button, Modal, NumberInput, Select } from '@mantine/core';
+import { Button, Modal, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { Court } from '../../interfaces/court';
 import {
   MatchBodyInterface,
   MatchInterface,
@@ -14,26 +13,6 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
-import { responseIsValid } from '../utils/util';
-
-function CourtsSelect({ form, swrCourtsResponse }: { form: any; swrCourtsResponse: SWRResponse }) {
-  const noCourtOption = { value: null, label: 'No Court' };
-  const data = responseIsValid(swrCourtsResponse)
-    ? swrCourtsResponse.data.data.map((court: Court) => ({ value: court.id, label: court.name }))
-    : [];
-  return (
-    <Select
-      label="Court"
-      placeholder="Pick a court"
-      data={data.concat(noCourtOption)}
-      searchable
-      maxDropdownHeight={400}
-      style={{ marginTop: 20 }}
-      nothingFound="No courts found"
-      {...form.getInputProps('court_id')}
-    />
-  );
-}
 
 function MatchDeleteButton({
   tournamentData,
@@ -68,7 +47,6 @@ export default function MatchModal({
   tournamentData,
   match,
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   opened,
   setOpened,
@@ -77,7 +55,6 @@ export default function MatchModal({
   tournamentData: TournamentMinimal;
   match: MatchInterface;
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
@@ -87,7 +64,6 @@ export default function MatchModal({
     initialValues: {
       team1_score: match != null ? match.team1_score : 0,
       team2_score: match != null ? match.team2_score : 0,
-      court_id: match != null ? match.court_id : null,
     },
 
     validate: {
@@ -112,7 +88,7 @@ export default function MatchModal({
               round_id: match.round_id,
               team1_score: values.team1_score,
               team2_score: values.team2_score,
-              court_id: values.court_id,
+              court_id: match.court_id,
             };
             await updateMatch(tournamentData.id, match.id, updatedMatch);
             await swrStagesResponse.mutate(null);
@@ -134,7 +110,6 @@ export default function MatchModal({
             {...form.getInputProps('team2_score')}
           />
 
-          <CourtsSelect form={form} swrCourtsResponse={swrCourtsResponse} />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             Save
           </Button>
