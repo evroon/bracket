@@ -96,13 +96,14 @@ async def sql_update_team_ids_for_match(
     )
 
 
-async def sql_update_court_id_and_start_time_for_match(
-    match_id: int, court_id: int | None, start_time: datetime_utc
+async def sql_reschedule_match(
+    match_id: int, court_id: int | None, start_time: datetime_utc, position_in_schedule: int | None
 ) -> None:
     query = '''
         UPDATE matches
         SET court_id = :court_id,
-            start_time = :start_time
+            start_time = :start_time,
+            position_in_schedule = :position_in_schedule
         WHERE matches.id = :match_id
         '''
     await database.execute(
@@ -110,6 +111,7 @@ async def sql_update_court_id_and_start_time_for_match(
         values={
             'court_id': court_id,
             'match_id': match_id,
+            'position_in_schedule': position_in_schedule,
             'start_time': datetime.fromisoformat(start_time.isoformat()),
         },
     )

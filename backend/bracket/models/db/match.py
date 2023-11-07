@@ -13,6 +13,8 @@ class MatchBase(BaseModelORM):
     id: int | None = None
     created: datetime_utc
     start_time: datetime_utc | None
+    duration_minutes: int | None
+    position_in_schedule: int | None
     round_id: int
     team1_score: int
     team2_score: int
@@ -76,6 +78,13 @@ class MatchCreateBody(BaseModelORM):
     team2_winner_from_stage_item_id: int | None
     team2_winner_position: int | None
     team2_winner_from_match_id: int | None
+
+
+class MatchRescheduleBody(BaseModelORM):
+    old_court_id: int
+    old_position: int
+    new_court_id: int
+    new_position: int
 
 
 class MatchFilter(BaseModel):

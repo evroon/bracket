@@ -39,6 +39,8 @@ def test_elo_calculation() -> None:
                 round_id=1,
                 court_id=None,
                 court=None,
+                duration_minutes=10,
+                position_in_schedule=0,
                 team1=FullTeamWithPlayers(
                     id=3,
                     name='Dummy team 1',

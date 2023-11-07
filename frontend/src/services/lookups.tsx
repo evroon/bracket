@@ -1,6 +1,9 @@
+import assert from 'assert';
 import { SWRResponse } from 'swr';
 
 import { groupBy, responseIsValid } from '../components/utils/util';
+import { Court } from '../interfaces/court';
+import { MatchInterface } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
 import { StageWithStageItems } from '../interfaces/stage';
 import { TeamInterface } from '../interfaces/team';
@@ -45,6 +48,22 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
 export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
   const matches = Object.values(getMatchLookup(swrStagesResponse)).map((x) => x.match);
   return groupBy(['court_id'])(matches);
+}
+
+export function getScheduleData(
+  swrCourtsResponse: SWRResponse,
+  matchesByCourtId: any
+): { court: Court; matches: MatchInterface[] }[] {
+  return swrCourtsResponse.data.data.map((court: Court) => ({
+    matches: (matchesByCourtId[court.id] || [])
+      .filter((match: MatchInterface) => match.start_time != null)
+      .sort((m1: MatchInterface, m2: MatchInterface) => {
+        assert(m1.position_in_schedule != null);
+        assert(m2.position_in_schedule != null);
+        return m1.position_in_schedule > m2.position_in_schedule ? 1 : 0 || [];
+      }),
+    court,
+  }));
 }
 
 export function getActiveRounds(swrStagesResponse: SWRResponse) {

@@ -21,6 +21,8 @@ export interface MatchInterface {
   court_id: number | null;
   court: Court | null;
   start_time: string;
+  position_in_schedule: number | null;
+  duration_minutes: number | null;
 }
 
 export interface MatchBodyInterface {
@@ -29,6 +31,13 @@ export interface MatchBodyInterface {
   team1_score: number;
   team2_score: number;
   court_id: number | null;
+}
+
+export interface MatchRescheduleInterface {
+  new_court_id: number;
+  new_position: number;
+  old_court_id: number;
+  old_position: number;
 }
 
 export interface UpcomingMatchInterface {
