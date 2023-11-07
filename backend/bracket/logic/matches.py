@@ -76,7 +76,7 @@ def has_conflict(
     return False
 
 
-async def schedule_all_matches_2(tournament_id: int) -> None:
+async def todo_schedule_all_matches(tournament_id: int) -> None:
     tournament = await sql_get_tournament(tournament_id)
     stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
