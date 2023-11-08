@@ -41,6 +41,7 @@ export default function TeamsTable({
           <DateTime datetime={team.created} />
         </td>
         <td>{team.swiss_score}</td>
+        <td>{team.elo_score}</td>
         <td>
           <TeamModal
             tournament_id={tournamentData.id}
@@ -76,6 +77,9 @@ export default function TeamsTable({
           </ThSortable>
           <ThSortable state={tableState} field="swiss_score">
             Swiss score
+          </ThSortable>
+          <ThSortable state={tableState} field="elo_score">
+            ELO score
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>
