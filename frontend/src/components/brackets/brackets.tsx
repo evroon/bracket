@@ -155,16 +155,18 @@ export default function Brackets({
   const stages_map = Object.fromEntries(
     swrStagesResponse.data.data.map((x: StageWithStageItems) => [x.id, x])
   );
-  const rounds = stages_map[selectedStageId].stage_items.map((stageItem: StageItemWithRounds) =>
-    getRoundsGridCols(
-      stageItem,
-      tournamentData,
-      swrStagesResponse,
-      swrCourtsResponse,
-      swrUpcomingMatchesResponse,
-      readOnly
-    )
-  );
+  const rounds = stages_map[selectedStageId].stage_items
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : 0))
+    .map((stageItem: StageItemWithRounds) =>
+      getRoundsGridCols(
+        stageItem,
+        tournamentData,
+        swrStagesResponse,
+        swrCourtsResponse,
+        swrUpcomingMatchesResponse,
+        readOnly
+      )
+    );
 
   return (
     <div>
