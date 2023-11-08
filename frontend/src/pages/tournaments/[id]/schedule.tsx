@@ -59,7 +59,7 @@ function ScheduleRow({
                 </Text>
               </Group>
               <Badge color="gray" variant="dot" size="lg">
-                <Time datetime={match.start_time} />
+                {match.start_time != null ? <Time datetime={match.start_time} /> : null}
               </Badge>
             </Group>
             <Badge color={stageItemColor} variant="outline">
