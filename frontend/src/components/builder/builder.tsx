@@ -140,15 +140,17 @@ function StageColumn({
     return null;
   }
 
-  const rows = stage.stage_items.map((stageItem: StageItemWithRounds) => (
-    <StageItemRow
-      key={stageItem.id}
-      teamsMap={teamsMap}
-      tournament={tournament}
-      stageItem={stageItem}
-      swrStagesResponse={swrStagesResponse}
-    />
-  ));
+  const rows = stage.stage_items
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : 0))
+    .map((stageItem: StageItemWithRounds) => (
+      <StageItemRow
+        key={stageItem.id}
+        teamsMap={teamsMap}
+        tournament={tournament}
+        stageItem={stageItem}
+        swrStagesResponse={swrStagesResponse}
+      />
+    ));
 
   return (
     <Grid.Col mb="1rem" sm={6} lg={4} xl={3} key={stage.id}>
