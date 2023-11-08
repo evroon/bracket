@@ -178,7 +178,7 @@ export default function SchedulePage() {
                 await swrStagesResponse.mutate(null);
               }}
             >
-              Schedule all matches
+              Schedule all unscheduled matches
             </Button>
           </Group>
         </Grid.Col>

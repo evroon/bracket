@@ -3,6 +3,7 @@ from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
+from bracket.logic.matches import update_start_times_of_matches
 from bracket.models.db.tournament import (
     Tournament,
     TournamentBody,
@@ -77,6 +78,7 @@ async def update_tournament_by_id(
         query=tournaments.update().where(tournaments.c.id == tournament_id),
         values=tournament_body.dict(),
     )
+    await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
 
 

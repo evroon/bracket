@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from bracket.logic.matches import (
     create_match_and_assign_free_court,
     handle_match_reschedule,
-    schedule_all_matches,
+    schedule_all_unscheduled_matches,
 )
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.upcoming_matches import (
@@ -83,7 +83,7 @@ async def schedule_matches(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    await schedule_all_matches(tournament_id)
+    await schedule_all_unscheduled_matches(tournament_id)
     return SuccessResponse()
 
 
