@@ -30,6 +30,29 @@ export function getStageItemLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
+export function getStageItemList(swrStagesResponse: SWRResponse) {
+  let result: any[] = [];
+
+  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
+    stage.stage_items.forEach((stage_item) => {
+      result = result.concat([[stage_item]]);
+    })
+  );
+  return result;
+}
+
+export function getStageItemTeamIdsLookup(swrStagesResponse: SWRResponse) {
+  let result: any[] = [];
+
+  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
+    stage.stage_items.forEach((stageItem) => {
+      const teamIds = stageItem.inputs.map((input) => input.team_id);
+      result = result.concat([[stageItem.id, teamIds]]);
+    })
+  );
+  return Object.fromEntries(result);
+}
+
 export function getMatchLookup(swrStagesResponse: SWRResponse) {
   let result: any[] = [];
 

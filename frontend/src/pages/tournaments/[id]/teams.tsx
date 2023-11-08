@@ -1,30 +1,93 @@
-import { Grid, Title } from '@mantine/core';
+import { Grid, Group, Select, Title } from '@mantine/core';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import TeamModal from '../../../components/modals/team_modal';
 import TeamsTable from '../../../components/tables/teams';
-import { getTournamentIdFromRouter } from '../../../components/utils/util';
-import { getTeams } from '../../../services/adapter';
+import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
+import { StageItemWithRounds } from '../../../interfaces/stage_item';
+import { StageItemInput } from '../../../interfaces/stage_item_input';
+import { TeamInterface } from '../../../interfaces/team';
+import { getStages, getTeams } from '../../../services/adapter';
+import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
 
+function StageItemSelect({
+  groupStageItems,
+  setFilteredStageItemId,
+}: {
+  groupStageItems: any;
+  setFilteredStageItemId: any;
+}) {
+  if (groupStageItems == null) return null;
+  const data = groupStageItems.map(([stage_item]: [StageItemWithRounds]) => ({
+    value: `${stage_item.id}`,
+    label: `${stage_item.name}`,
+  }));
+  return (
+    <Select
+      data={data}
+      label="Filter group stages"
+      placeholder="No filter"
+      dropdownPosition="bottom"
+      clearable
+      searchable
+      limit={25}
+      onChange={(x) => {
+        setFilteredStageItemId(x);
+      }}
+    />
+  );
+}
+
 export default function Teams() {
+  const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
   const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
+  const swrStagesResponse = getStages(tournamentData.id);
+  const stageItemInputLookup = responseIsValid(swrStagesResponse)
+    ? getStageItemList(swrStagesResponse)
+    : [];
+  const stageItemTeamLookup = responseIsValid(swrStagesResponse)
+    ? getStageItemTeamIdsLookup(swrStagesResponse)
+    : {};
+  const groupStageItems = Object.values(stageItemInputLookup).filter(
+    ([stageItem]: [StageItemWithRounds]) => stageItem.type === 'ROUND_ROBIN'
+  );
+
+  let teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
+
+  if (filteredStageItemId != null) {
+    teams = swrTeamsResponse.data.data.filter(
+      (team: StageItemInput) => stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
+    );
+  }
+
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Grid grow>
-        <Grid.Col span={9}>
+      <Grid grow mb="0.5rem">
+        <Grid.Col span={6}>
           <Title>Teams</Title>
         </Grid.Col>
-        <Grid.Col span={3}>
-          <TeamModal
-            swrTeamsResponse={swrTeamsResponse}
-            tournament_id={tournamentData.id}
-            team={null}
-          />
+        <Grid.Col span={6}>
+          <Group position="right">
+            <StageItemSelect
+              groupStageItems={groupStageItems}
+              setFilteredStageItemId={setFilteredStageItemId}
+            />
+            <TeamModal
+              swrTeamsResponse={swrTeamsResponse}
+              tournament_id={tournamentData.id}
+              team={null}
+            />
+          </Group>
         </Grid.Col>
       </Grid>
-      <TeamsTable swrTeamsResponse={swrTeamsResponse} tournamentData={tournamentData} />
+      <TeamsTable
+        swrTeamsResponse={swrTeamsResponse}
+        tournamentData={tournamentData}
+        teams={teams}
+      />
     </TournamentLayout>
   );
 }

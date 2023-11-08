@@ -16,11 +16,12 @@ import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries
 export default function TeamsTable({
   tournamentData,
   swrTeamsResponse,
+  teams,
 }: {
   tournamentData: TournamentMinimal;
   swrTeamsResponse: SWRResponse;
+  teams: TeamInterface[];
 }) {
-  const teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
   const tableState = getTableState('name');
 
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
@@ -39,6 +40,7 @@ export default function TeamsTable({
         <td>
           <DateTime datetime={team.created} />
         </td>
+        <td>{team.swiss_score}</td>
         <td>
           <TeamModal
             tournament_id={tournamentData.id}
@@ -71,6 +73,9 @@ export default function TeamsTable({
           <ThNotSortable>Members</ThNotSortable>
           <ThSortable state={tableState} field="created">
             Created
+          </ThSortable>
+          <ThSortable state={tableState} field="swiss_score">
+            Swiss score
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </tr>
