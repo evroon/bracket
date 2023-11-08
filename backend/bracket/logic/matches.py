@@ -27,7 +27,7 @@ async def create_match_and_assign_free_court(
     return await sql_create_match(match_body)
 
 
-async def schedule_all_matches(tournament_id: int) -> None:
+async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
     tournament = await sql_get_tournament(tournament_id)
     stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
@@ -46,9 +46,10 @@ async def schedule_all_matches(tournament_id: int) -> None:
                 start_time += timedelta(minutes=15)
                 position_in_schedule += 1
 
-                await sql_reschedule_match(
-                    assert_some(match.id), court.id, start_time, position_in_schedule
-                )
+                if match.start_time is None and match.position_in_schedule is None:
+                    await sql_reschedule_match(
+                        assert_some(match.id), court.id, start_time, position_in_schedule
+                    )
 
     for stage in stages[1:]:
         start_time = tournament.start_time
@@ -58,9 +59,11 @@ async def schedule_all_matches(tournament_id: int) -> None:
                 for match in round_.matches:
                     start_time += timedelta(minutes=15)
                     position_in_schedule += 1
-                    await sql_reschedule_match(
-                        assert_some(match.id), courts[-1].id, start_time, position_in_schedule
-                    )
+
+                    if match.start_time is None and match.position_in_schedule is None:
+                        await sql_reschedule_match(
+                            assert_some(match.id), courts[-1].id, start_time, position_in_schedule
+                        )
 
 
 def has_conflict(
@@ -171,10 +174,8 @@ class MatchPosition(NamedTuple):
 async def reorder_matches_for_court(
     tournament: Tournament,
     scheduled_matches: list[MatchPosition],
-    body: MatchRescheduleBody,
     court_id: int,
 ) -> None:
-    assert body.new_position is not None and body.old_position is not None
     matches_this_court = sorted(
         (match_pos for match_pos in scheduled_matches if match_pos.match.court_id == court_id),
         key=lambda mp: mp.position,
@@ -227,7 +228,23 @@ async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody)
         else:
             scheduled_matches.append(match_pos)
 
-    await reorder_matches_for_court(tournament, scheduled_matches, body, body.new_court_id)
+    await reorder_matches_for_court(tournament, scheduled_matches, body.new_court_id)
 
     if body.new_court_id != body.old_court_id:
-        await reorder_matches_for_court(tournament, scheduled_matches, body, body.old_court_id)
+        await reorder_matches_for_court(tournament, scheduled_matches, body.old_court_id)
+
+
+async def update_start_times_of_matches(tournament_id: int) -> None:
+    stages = await get_full_tournament_details(tournament_id)
+    tournament = await sql_get_tournament(tournament_id)
+    courts = await get_all_courts_in_tournament(tournament_id)
+    scheduled_matches = [
+        MatchPosition(match=match, position=float(assert_some(match.position_in_schedule)))
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+        for match in round_.matches
+        if match.start_time is not None
+    ]
+    for court in courts:
+        await reorder_matches_for_court(tournament, scheduled_matches, assert_some(court.id))
