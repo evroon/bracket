@@ -55,7 +55,8 @@ export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any
       >
         <Center>
           <b>
-            {match.court?.name} | <Time datetime={match.start_time} />
+            {match.court?.name} |{' '}
+            {match.start_time != null ? <Time datetime={match.start_time} /> : null}
           </b>
         </Center>
       </div>
