@@ -33,6 +33,7 @@ export default function TeamModal({
         onClick={() => setOpened(true)}
         leftIcon={<GoPlus size={24} />}
         title={operation_text}
+        style={{ marginTop: '1rem' }}
       />
     </Group>
   ) : (
