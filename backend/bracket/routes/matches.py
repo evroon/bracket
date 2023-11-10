@@ -36,7 +36,7 @@ router = APIRouter()
 )
 async def get_matches_to_schedule(
     tournament_id: int,
-    elo_diff_threshold: int = 100,
+    elo_diff_threshold: int = 200,
     iterations: int = 200,
     only_behind_schedule: bool = False,
     limit: int = 50,

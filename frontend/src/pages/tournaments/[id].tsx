@@ -59,9 +59,9 @@ export default function TournamentPage() {
     [activeStage] = getActiveStages(swrStagesResponse);
 
     if (activeStage != null && activeStage.stage_items != null) {
-      const draftRounds = activeStage.stage_items.map((stageItem: StageItemWithRounds) => {
-        return stageItem.rounds.filter((round: RoundInterface) => round.is_draft);
-      });
+      const draftRounds = activeStage.stage_items.map((stageItem: StageItemWithRounds) =>
+        stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
+      );
       if (draftRounds != null && draftRounds.length > 0 && draftRounds[0].length > 0) {
         [[draftRound]] = draftRounds;
       }
