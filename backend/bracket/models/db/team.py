@@ -29,17 +29,6 @@ class TeamWithPlayers(BaseModel):
     draws: int
     losses: int
 
-    @classmethod
-    def from_players(cls, players: list[Player]) -> TeamWithPlayers:
-        return TeamWithPlayers(
-            players=players,
-            elo_score=Decimal(sum(p.elo_score for p in players) / len(players)),
-            swiss_score=Decimal(sum(p.swiss_score for p in players) / len(players)),
-            wins=sum(p.wins for p in players) // len(players),
-            draws=sum(p.draws for p in players) // len(players),
-            losses=sum(p.losses for p in players) // len(players),
-        )
-
     @property
     def player_ids(self) -> list[int]:
         return [assert_some(player.id) for player in self.players]

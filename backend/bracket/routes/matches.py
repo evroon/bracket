@@ -19,9 +19,11 @@ from bracket.models.db.match import (
 )
 from bracket.models.db.round import Round
 from bracket.models.db.user import UserPublic
+from bracket.models.db.util import RoundWithMatches
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
-from bracket.routes.util import match_dependency, round_dependency
+from bracket.routes.util import match_dependency, round_dependency, round_with_matches_dependency
+from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_delete_match, sql_update_match
 from bracket.utils.types import assert_some
 
@@ -109,7 +111,7 @@ async def create_matches_automatically(
     iterations: int = 200,
     only_behind_schedule: bool = False,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    round_: Round = Depends(round_dependency),
+    round_: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
     if not round_.is_draft:
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
@@ -120,8 +122,9 @@ async def create_matches_automatically(
         limit=1,
         iterations=iterations,
     )
+    courts = await get_all_courts_in_tournament(tournament_id)
 
-    limit = 15
+    limit = len(courts) - len(round_.matches)
     for __ in range(limit):
         all_matches_to_schedule = await get_upcoming_matches_for_swiss_round(
             match_filter, round_, tournament_id

@@ -5,17 +5,16 @@ from bracket.models.db.match import (
     MatchFilter,
     MatchWithDetailsDefinitive,
     SuggestedMatch,
-    SuggestedVirtualMatch,
 )
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.teams import get_teams_with_members
 
 
-async def todo_get_possible_upcoming_matches_for_teams(
-    tournament_id: int, filter_: MatchFilter, stage_id: int
-) -> list[SuggestedMatch | SuggestedVirtualMatch]:
-    suggestions: list[SuggestedMatch | SuggestedVirtualMatch] = []
-    rounds = await get_rounds_for_stage_item(tournament_id, stage_id)  # TODO: fix stage item id
+async def get_possible_upcoming_matches_for_teams(
+    tournament_id: int, filter_: MatchFilter, stage_item_id: int
+) -> list[SuggestedMatch]:
+    suggestions: list[SuggestedMatch] = []
+    rounds = await get_rounds_for_stage_item(tournament_id, stage_item_id)
     draft_round = next((round_ for round_ in rounds if round_.is_draft), None)
     if draft_round is None:
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
