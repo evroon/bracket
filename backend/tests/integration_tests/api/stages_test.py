@@ -1,6 +1,5 @@
 import pytest
 
-from bracket.models.db.stage_item import StageType
 from bracket.schema import rounds, stage_items, stages
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
@@ -51,19 +50,17 @@ async def test_stages_endpoint(
                 HTTPMethod.GET,
                 f'tournaments/{auth_context.tournament.id}/stages?no_draft_rounds=true',
             )
-
         assert response == {
             'data': [
                 {
                     'id': stage_inserted.id,
-                    'tournament_id': 1,
+                    'tournament_id': auth_context.tournament.id,
                     'created': DUMMY_MOCK_TIME.isoformat(),
                     'is_active': True,
                     'name': 'Group Stage',
                     'stage_items': [
                         {
                             'id': stage_item_inserted.id,
-                            'inputs': [],
                             'stage_id': stage_inserted.id,
                             'name': 'Group A',
                             'created': DUMMY_MOCK_TIME.isoformat(),
@@ -80,6 +77,7 @@ async def test_stages_endpoint(
                                     'matches': [],
                                 }
                             ],
+                            'inputs': [],
                             'type_name': 'Round robin',
                         }
                     ],
@@ -153,7 +151,6 @@ async def test_update_stage(
 async def test_activate_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'type': StageType.ROUND_ROBIN.value, 'is_active': False}
     async with (
         inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
         inserted_stage(DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})),
@@ -161,7 +158,7 @@ async def test_activate_stage(
     ):
         assert (
             await send_tournament_request(
-                HTTPMethod.POST, 'stages/activate?direction=next', auth_context, None, body
+                HTTPMethod.POST, 'stages/activate?direction=next', auth_context, json={}
             )
             == SUCCESS_RESPONSE
         )

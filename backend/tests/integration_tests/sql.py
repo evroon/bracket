@@ -34,7 +34,7 @@ from bracket.schema import (
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.types import BaseModelT, assert_some
-from tests.integration_tests.mocks import MOCK_USER, get_mock_token
+from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
 
@@ -134,9 +134,10 @@ async def inserted_user_x_club(user_x_club: UserXClub) -> AsyncIterator[UserXClu
 
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
-    headers = {'Authorization': f'Bearer {get_mock_token()}'}
+    mock_user = get_mock_user()
+    headers = {'Authorization': f'Bearer {get_mock_token(mock_user)}'}
     async with (
-        inserted_user(MOCK_USER) as user_inserted,
+        inserted_user(mock_user) as user_inserted,
         inserted_club(DUMMY_CLUB) as club_inserted,
         inserted_tournament(
             DUMMY_TOURNAMENT.copy(update={'club_id': club_inserted.id})
