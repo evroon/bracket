@@ -1,0 +1,2 @@
+update or delete on table "stage_items" violates foreign key constraint "rounds_stage_item_id_fkey" on table "rounds"
+DETAIL:  Key (id)=(1) is still referenced from table "rounds".

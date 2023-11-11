@@ -8,6 +8,7 @@ from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import sql_create_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
+    DUMMY_COURT1,
     DUMMY_STAGE2,
     DUMMY_STAGE_ITEM1,
     DUMMY_STAGE_ITEM3,
@@ -21,6 +22,7 @@ from tests.integration_tests.api.shared import (
 )
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
+    inserted_court,
     inserted_stage,
     inserted_team,
 )
@@ -30,6 +32,9 @@ async def test_schedule_all_matches(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
+        inserted_court(
+            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+        ),
         inserted_stage(
             DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted_1,
