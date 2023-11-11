@@ -2,6 +2,7 @@ import { Center, Title } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
@@ -15,6 +16,7 @@ export default function Round({
   swrUpcomingMatchesResponse,
   readOnly,
   dynamicSchedule,
+  displaySettings,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
@@ -23,9 +25,16 @@ export default function Round({
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   dynamicSchedule: boolean;
+  displaySettings: BracketDisplaySettings;
 }) {
   const matches = round.matches
     .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
+    .filter(
+      (match: MatchInterface) =>
+        displaySettings.matchVisibility === 'all' ||
+        (displaySettings.matchVisibility === 'future-only' && isMatchInTheFuture(match)) ||
+        (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match))
+    )
     .map((match) => (
       <Match
         key={match.id}
@@ -64,9 +73,10 @@ export default function Round({
       dynamicSchedule={dynamicSchedule}
     />
   );
+  if (matches.length < 1) return null;
 
   return (
-    <div style={{ minHeight: 320 }}>
+    <div style={{ minHeight: 320, minWidth: 500, marginRight: '1rem' }}>
       <div
         style={{
           height: '100%',

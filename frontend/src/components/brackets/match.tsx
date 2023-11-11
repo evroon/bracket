@@ -4,7 +4,12 @@ import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { MatchInterface, formatMatchTeam1, formatMatchTeam2 } from '../../interfaces/match';
+import {
+  MatchInterface,
+  formatMatchTeam1,
+  formatMatchTeam2,
+  isMatchHappening,
+} from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
@@ -44,11 +49,7 @@ export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any
       <div
         style={{
           width: '75%',
-          backgroundColor:
-            new Date(match.start_time) < new Date() &&
-            new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date()
-              ? theme.colors.grape[9]
-              : badgeColor,
+          backgroundColor: isMatchHappening(match) ? theme.colors.grape[9] : badgeColor,
           borderRadius: '8px 8px 0px 0px',
           padding: '4px 12px 4px 12px',
         }}

@@ -1,4 +1,4 @@
-import { Button, Center, Grid, Group, Title } from '@mantine/core';
+import { Button, Center, Grid, Group, SegmentedControl, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -9,6 +9,7 @@ import { NextStageButton } from '../../components/buttons/next_stage_button';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems, getActiveStages } from '../../interfaces/stage';
@@ -35,6 +36,11 @@ export default function TournamentPage() {
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
   const [selectedStageId, setSelectedStageId] = useState<number | null>(null);
+  const [matchVisibility, setMatchVisibility] = useState('all');
+  const displaySettings: BracketDisplaySettings = {
+    matchVisibility,
+    setMatchVisibility,
+  };
 
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
@@ -108,6 +114,15 @@ export default function TournamentPage() {
         </Grid.Col>
         <Grid.Col span={6}>
           <Group position="right">
+            <SegmentedControl
+              value={matchVisibility}
+              onChange={setMatchVisibility}
+              data={[
+                { label: 'All matches', value: 'all' },
+                { label: 'Hide past matches', value: 'future-only' },
+                { label: 'Current matches only', value: 'present-only' },
+              ]}
+            />
             <Button
               color="blue"
               size="md"
@@ -143,6 +158,7 @@ export default function TournamentPage() {
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
           selectedStageId={selectedStageId}
+          displaySettings={displaySettings}
         />
         {scheduler}
       </div>
