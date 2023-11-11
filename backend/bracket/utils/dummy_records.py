@@ -113,7 +113,7 @@ DUMMY_MATCH1 = Match(
     team2_winner_position=None,
     team2_winner_from_match_id=None,
     duration_minutes=10,
-    position_in_schedule=0,
+    position_in_schedule=1,
 )
 
 DUMMY_USER = User(

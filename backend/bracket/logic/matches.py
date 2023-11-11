@@ -187,12 +187,14 @@ async def reorder_matches_for_court(
             assert_some(match_pos.match.id),
             court_id,
             last_start_time,
-            i,
+            position_in_schedule=i,
         )
         last_start_time = last_start_time + timedelta(minutes=15)
 
 
-async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody) -> None:
+async def handle_match_reschedule(
+    tournament_id: int, body: MatchRescheduleBody, match_id: int
+) -> None:
     if body.old_position == body.new_position and body.old_court_id == body.new_court_id:
         return
 
@@ -210,10 +212,13 @@ async def handle_match_reschedule(tournament_id: int, body: MatchRescheduleBody)
     # For match in prev position: set new position
     scheduled_matches = []
     for match_pos in scheduled_matches_old:
-        if (
-            match_pos.position == body.old_position
-            and match_pos.match.court_id == body.old_court_id
-        ):
+        if match_pos.match.id == match_id:
+            if (
+                match_pos.position != body.old_position
+                or match_pos.match.court_id != body.old_court_id
+            ):
+                raise ValueError('match_id doesn\t match court id or position in schedule')
+
             offset = (
                 -0.5
                 if body.new_position < body.old_position or body.new_court_id != body.old_court_id
