@@ -94,10 +94,11 @@ async def schedule_matches(
 )
 async def reschedule_match(
     tournament_id: int,
+    match_id: int,
     body: MatchRescheduleBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    await handle_match_reschedule(tournament_id, body)
+    await handle_match_reschedule(tournament_id, body, match_id)
     return SuccessResponse()
 
 

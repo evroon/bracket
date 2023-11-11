@@ -46,7 +46,10 @@ class StageItemCreateBody(BaseModelORM):
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace('_', ' ').title()
 
-    @root_validator(pre=True)
+    @root_validator
     def handle_inputs_length(cls, values: Any) -> Any:
-        assert len(values['inputs']) == values['team_count']
+        if ('inputs' in values and 'team_count' in values) and (
+            len(values['inputs']) != values['team_count']
+        ):
+            raise ValueError('team_count doesn\'t match length of inputs')
         return values
