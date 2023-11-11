@@ -1,7 +1,7 @@
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBodyFinal
-from bracket.schema import rounds, stage_items, stages, matches
-from bracket.sql.stages import get_full_tournament_details
+from bracket.schema import matches, rounds, stage_items, stages
+from bracket.sql.stage_items import get_stage_item
 from bracket.utils.dummy_records import (
     DUMMY_STAGE1,
     DUMMY_STAGE2,
@@ -9,7 +9,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM1,
 )
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_tournament_request,
@@ -88,21 +87,23 @@ async def test_update_stage_item(
 ) -> None:
     body = {'name': 'Optimus'}
     async with (
-        inserted_team(DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})),
         inserted_stage(
             DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_stage_item(DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})),
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})
+        ) as stage_item_inserted,
     ):
         assert (
             await send_tournament_request(
-                HTTPMethod.PUT, f'stage_items/{stage_inserted.id}', auth_context, None, body
+                HTTPMethod.PUT, f'stage_items/{stage_item_inserted.id}', auth_context, json=body
             )
             == SUCCESS_RESPONSE
         )
-        [updated_stage] = await get_full_tournament_details(assert_some(auth_context.tournament.id))
-        assert len(updated_stage.stage_items) == 1
-        assert updated_stage.name == body['name']
 
-        await assert_row_count_and_clear(stage_items, 1)
-        await assert_row_count_and_clear(stages, 1)
+        assert auth_context.tournament.id
+        updated_stage_item = await get_stage_item(
+            auth_context.tournament.id, stage_item_inserted.id
+        )
+        assert updated_stage_item
+        assert updated_stage_item.name == body['name']
