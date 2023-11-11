@@ -2,6 +2,7 @@ import { Center, Title } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
