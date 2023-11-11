@@ -90,9 +90,11 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
     );
   }
   return (
-    <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
-      Add a round using the top right button.
-    </Alert>
+    <Container>
+      <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
+        There are no rounds in this stage yet
+      </Alert>
+    </Container>
   );
 }
 
@@ -138,7 +140,7 @@ export default function Brackets({
   swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
-  selectedStageId: number | null;
+  selectedStageId: string | null;
   displaySettings: BracketDisplaySettings;
 }) {
   if (selectedStageId == null) {
@@ -171,6 +173,10 @@ export default function Brackets({
         displaySettings
       )
     );
+
+  if (rounds.length < 1) {
+    return <NoRoundsAlert readOnly={readOnly} />;
+  }
 
   return <div>{rounds}</div>;
 }

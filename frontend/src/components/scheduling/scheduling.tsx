@@ -80,7 +80,7 @@ export default function Scheduler({
 }) {
   const draftRound = getRoundsLookup(swrRoundsResponse)[roundId];
   return (
-    <>
+    <div style={{ marginTop: '3rem' }}>
       <h2>
         Schedule new matches for <u>{draftRound.name}</u> in <u>{activeStage.name}</u>
       </h2>
@@ -105,6 +105,6 @@ export default function Scheduler({
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
       />
-    </>
+    </div>
   );
 }

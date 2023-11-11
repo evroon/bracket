@@ -35,7 +35,7 @@ export default function TournamentPage() {
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
-  const [selectedStageId, setSelectedStageId] = useState<number | null>(null);
+  const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
@@ -93,7 +93,10 @@ export default function TournamentPage() {
   }
 
   const scheduler =
-    draftRound != null && swrUpcomingMatchesResponse != null ? (
+    draftRound != null &&
+    activeStage != null &&
+    `${activeStage.id}` === selectedStageId &&
+    swrUpcomingMatchesResponse != null ? (
       <>
         <Scheduler
           activeStage={activeStage}
