@@ -72,7 +72,7 @@ async def test_schedule_all_matches(
                 ],
             ),
         )
-        stage_item_2 = await sql_create_stage_item(
+        await sql_create_stage_item(
             assert_some(auth_context.tournament.id),
             StageItemCreateBody(
                 stage_id=assert_some(stage_inserted_1.id),
