@@ -4,11 +4,13 @@ from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
     StageItemInputCreateBodyTentative,
 )
-from bracket.schema import matches, rounds, stage_item_inputs, stage_items
+from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import sql_create_stage_item
+from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
     DUMMY_STAGE2,
     DUMMY_STAGE_ITEM1,
+    DUMMY_STAGE_ITEM3,
     DUMMY_TEAM1,
 )
 from bracket.utils.http import HTTPMethod
@@ -19,7 +21,6 @@ from tests.integration_tests.api.shared import (
 )
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
-    assert_row_count_and_clear,
     inserted_stage,
     inserted_team,
 )
@@ -45,8 +46,9 @@ async def test_schedule_all_matches(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
         ) as team_inserted_4,
     ):
+        tournament_id = assert_some(auth_context.tournament.id)
         stage_item_1 = await sql_create_stage_item(
-            assert_some(auth_context.tournament.id),
+            tournament_id,
             StageItemCreateBody(
                 stage_id=assert_some(stage_inserted_1.id),
                 name=DUMMY_STAGE_ITEM1.name,
@@ -72,13 +74,13 @@ async def test_schedule_all_matches(
                 ],
             ),
         )
-        await sql_create_stage_item(
-            assert_some(auth_context.tournament.id),
+        stage_item_2 = await sql_create_stage_item(
+            tournament_id,
             StageItemCreateBody(
                 stage_id=assert_some(stage_inserted_1.id),
-                name=DUMMY_STAGE_ITEM1.name,
+                name=DUMMY_STAGE_ITEM3.name,
                 team_count=2,
-                type=DUMMY_STAGE_ITEM1.type,
+                type=DUMMY_STAGE_ITEM3.type,
                 inputs=[
                     StageItemInputCreateBodyTentative(
                         slot=1,
@@ -93,13 +95,12 @@ async def test_schedule_all_matches(
                 ],
             ),
         )
+        await build_matches_for_stage_item(stage_item_1, tournament_id)
+        await build_matches_for_stage_item(stage_item_2, tournament_id)
+        stages = await get_full_tournament_details(tournament_id)
 
-        await build_matches_for_stage_item(stage_item_1, assert_some(auth_context.tournament.id))
-
-        await assert_row_count_and_clear(matches, 1)
-        await assert_row_count_and_clear(rounds, 1)
-        await assert_row_count_and_clear(stage_item_inputs, 1)
-        await assert_row_count_and_clear(stage_items, 1)
+        await sql_delete_stage_item_with_foreign_keys(stage_item_2.id)
+        await sql_delete_stage_item_with_foreign_keys(stage_item_1.id)
 
     assert (
         await send_tournament_request(
@@ -109,3 +110,8 @@ async def test_schedule_all_matches(
         )
         == SUCCESS_RESPONSE
     )
+
+    stage_item = stages[0].stage_items[0]
+    assert len(stage_item.rounds) == 3
+    for round_ in stage_item.rounds:
+        assert len(round_.matches) == 2

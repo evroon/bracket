@@ -14,10 +14,10 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse
 from bracket.routes.util import stage_item_dependency
-from bracket.sql.matches import sql_delete_matches_for_stage_item_id
-from bracket.sql.rounds import sql_delete_rounds_for_stage_item_id
-from bracket.sql.stage_item_inputs import sql_delete_stage_item_inputs
-from bracket.sql.stage_items import sql_create_stage_item, sql_delete_stage_item
+from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
+from bracket.sql.stage_items import (
+    sql_create_stage_item,
+)
 
 router = APIRouter()
 
@@ -31,12 +31,7 @@ async def delete_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    async with database.transaction():
-        await sql_delete_matches_for_stage_item_id(stage_item_id)
-        await sql_delete_rounds_for_stage_item_id(stage_item_id)
-        await sql_delete_stage_item_inputs(stage_item_id)
-        await sql_delete_stage_item(stage_item_id)
-
+    await sql_delete_stage_item_with_foreign_keys(stage_item_id)
     await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
