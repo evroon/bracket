@@ -32,7 +32,7 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
     stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
 
-    if len(stages) < 0 or len(courts) < 0:
+    if len(stages) < 1 or len(courts) < 1:
         return
 
     stage = stages[0]
