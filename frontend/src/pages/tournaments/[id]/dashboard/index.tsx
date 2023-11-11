@@ -13,6 +13,7 @@ import {
 } from '../../../../components/dashboard/layout';
 import StagesTab from '../../../../components/utils/stages_tab';
 import { responseIsValid } from '../../../../components/utils/util';
+import { BracketDisplaySettings } from '../../../../interfaces/brackets';
 import { StageWithStageItems } from '../../../../interfaces/stage';
 import { getCourts, getStagesLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -27,6 +28,11 @@ export default function Index() {
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
   const swrCourtsResponse: SWRResponse = getCourts(tournamentId);
   const [selectedStageId, setSelectedStageId] = useState(null);
+  const [matchVisibility, setMatchVisibility] = useState('all');
+  const displaySettings: BracketDisplaySettings = {
+    matchVisibility,
+    setMatchVisibility,
+  };
 
   if (notFound) {
     return <NotFoundTitle />;
@@ -70,6 +76,7 @@ export default function Index() {
             swrUpcomingMatchesResponse={null}
             readOnly
             selectedStageId={selectedStageId}
+            displaySettings={displaySettings}
           />
         </Grid.Col>
       </Grid>

@@ -68,6 +68,19 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
+export function getRoundsLookup(swrStagesResponse: SWRResponse) {
+  let result: any[] = [];
+
+  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
+    stage.stage_items.forEach((stageItem) => {
+      stageItem.rounds.forEach((round) => {
+        result = result.concat([[round.id, round]]);
+      });
+    })
+  );
+  return Object.fromEntries(result);
+}
+
 export function stringToColour(input: string) {
   let hash = 0;
   for (let i = 0; i < input.length; i += 1) {

@@ -4,6 +4,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
@@ -18,22 +19,22 @@ function getRoundsGridCols(
   swrStagesResponse: SWRResponse,
   swrCourtsResponse: SWRResponse,
   swrUpcomingMatchesResponse: SWRResponse | null,
-  readOnly: boolean
+  readOnly: boolean,
+  displaySettings: BracketDisplaySettings
 ) {
   let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
     .map((round: RoundInterface) => (
-      <Grid.Col sm={6} lg={4} xl={3} key={round.id}>
-        <Round
-          tournamentData={tournamentData}
-          round={round}
-          swrStagesResponse={swrStagesResponse}
-          swrCourtsResponse={swrCourtsResponse}
-          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-          readOnly={readOnly}
-          dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
-        />
-      </Grid.Col>
+      <Round
+        tournamentData={tournamentData}
+        round={round}
+        swrStagesResponse={swrStagesResponse}
+        swrCourtsResponse={swrCourtsResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        readOnly={readOnly}
+        dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
+        displaySettings={displaySettings}
+      />
     ));
 
   if (rounds.length < 1) {
@@ -89,9 +90,11 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
     );
   }
   return (
-    <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
-      Add a round using the top right button.
-    </Alert>
+    <Container>
+      <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
+        There are no rounds in this stage yet
+      </Alert>
+    </Container>
   );
 }
 
@@ -130,13 +133,15 @@ export default function Brackets({
   swrUpcomingMatchesResponse,
   readOnly,
   selectedStageId,
+  displaySettings,
 }: {
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
-  selectedStageId: number | null;
+  selectedStageId: string | null;
+  displaySettings: BracketDisplaySettings;
 }) {
   if (selectedStageId == null) {
     return <NotStartedAlert />;
@@ -164,13 +169,14 @@ export default function Brackets({
         swrStagesResponse,
         swrCourtsResponse,
         swrUpcomingMatchesResponse,
-        readOnly
+        readOnly,
+        displaySettings
       )
     );
 
-  return (
-    <div>
-      <Grid>{rounds}</Grid>
-    </div>
-  );
+  if (rounds.length < 1) {
+    return <NoRoundsAlert readOnly={readOnly} />;
+  }
+
+  return <div>{rounds}</div>;
 }

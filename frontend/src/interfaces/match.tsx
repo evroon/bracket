@@ -66,6 +66,17 @@ export interface SchedulerSettings {
   setOnlyBehindSchedule: any;
 }
 
+export function isMatchHappening(match: MatchInterface) {
+  return (
+    new Date(match.start_time) < new Date() &&
+    new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date()
+  );
+}
+
+export function isMatchInTheFuture(match: MatchInterface) {
+  return new Date(match.start_time) > new Date();
+}
+
 export function formatMatchTeam1(
   stageItemsLookup: any,
   matchesLookup: any,

@@ -40,8 +40,8 @@ export default function TeamsTable({
         <td>
           <DateTime datetime={team.created} />
         </td>
-        <td>{team.swiss_score}</td>
-        <td>{team.elo_score}</td>
+        <td>{team.swiss_score.toFixed(1)}</td>
+        <td>{team.elo_score.toFixed(0)}</td>
         <td>
           <TeamModal
             tournament_id={tournamentData.id}

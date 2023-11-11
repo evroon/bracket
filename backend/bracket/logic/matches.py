@@ -43,13 +43,13 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
         position_in_schedule = 0
         for round_ in stage_item.rounds:
             for match in round_.matches:
-                start_time += timedelta(minutes=15)
-                position_in_schedule += 1
-
                 if match.start_time is None and match.position_in_schedule is None:
                     await sql_reschedule_match(
                         assert_some(match.id), court.id, start_time, position_in_schedule
                     )
+
+                start_time += timedelta(minutes=15)
+                position_in_schedule += 1
 
     for stage in stages[1:]:
         start_time = tournament.start_time
