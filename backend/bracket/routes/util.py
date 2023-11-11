@@ -7,6 +7,7 @@ from bracket.models.db.round import Round
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds, StageWithStageItems
 from bracket.schema import matches, rounds, teams
+from bracket.sql.rounds import get_round_by_id
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_teams_with_members
@@ -30,20 +31,14 @@ async def round_dependency(tournament_id: int, round_id: int) -> Round:
 
 
 async def round_with_matches_dependency(tournament_id: int, round_id: int) -> RoundWithMatches:
-    stages = await get_full_tournament_details(
-        tournament_id, no_draft_rounds=False, round_id=round_id
-    )
+    round_ = await get_round_by_id(tournament_id, round_id)
+    if round_ is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Could not find round with id {round_id}",
+        )
 
-    for stage in stages:
-        for stage_item in stage.stage_items:
-            for round_ in stage_item.rounds:
-                if round_ is not None:
-                    return round_
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Could not find round with id {round_id}",
-    )
+    return round_
 
 
 async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithStageItems:

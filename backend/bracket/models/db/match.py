@@ -102,13 +102,6 @@ class MatchFilter(BaseModel):
     iterations: int
 
 
-class SuggestedVirtualMatch(BaseModel):
-    team1_winner_from_stage_item_id: int
-    team1_position_in_group: int
-    team2_winner_from_stage_item_id: int
-    team2_position_in_group: int
-
-
 class SuggestedMatch(BaseModel):
     team1: TeamWithPlayers
     team2: TeamWithPlayers

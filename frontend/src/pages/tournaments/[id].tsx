@@ -12,6 +12,7 @@ import { getTournamentIdFromRouter, responseIsValid } from '../../components/uti
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems, getActiveStages } from '../../interfaces/stage';
+import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -57,10 +58,12 @@ export default function TournamentPage() {
   if (isResponseValid) {
     [activeStage] = getActiveStages(swrStagesResponse);
 
-    if (activeStage != null && activeStage.rounds != null) {
-      const draftRounds = activeStage.rounds.filter((round: RoundInterface) => round.is_draft);
-      if (draftRounds != null && draftRounds.length > 0) {
-        [draftRound] = draftRounds;
+    if (activeStage != null && activeStage.stage_items != null) {
+      const draftRounds = activeStage.stage_items.map((stageItem: StageItemWithRounds) =>
+        stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
+      );
+      if (draftRounds != null && draftRounds.length > 0 && draftRounds[0].length > 0) {
+        [[draftRound]] = draftRounds;
       }
     }
 

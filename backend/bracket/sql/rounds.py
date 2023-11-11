@@ -1,6 +1,7 @@
 from bracket.database import database
 from bracket.models.db.util import RoundWithMatches
 from bracket.sql.stage_items import get_stage_item
+from bracket.sql.stages import get_full_tournament_details
 
 
 async def get_rounds_for_stage_item(
@@ -14,6 +15,20 @@ async def get_rounds_for_stage_item(
         )
 
     return stage_item.rounds
+
+
+async def get_round_by_id(tournament_id: int, round_id: int) -> RoundWithMatches | None:
+    stages = await get_full_tournament_details(
+        tournament_id, no_draft_rounds=False, round_id=round_id
+    )
+
+    for stage in stages:
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                if round_ is not None:
+                    return round_
+
+    return None
 
 
 async def get_next_round_name(tournament_id: int, stage_item_id: int) -> str:

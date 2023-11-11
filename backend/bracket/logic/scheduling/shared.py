@@ -24,7 +24,7 @@ def check_team_combination_adheres_to_filter(
 
     suggested_match = get_suggested_match(team1, team2)
 
-    if suggested_match.elo_diff < filter_.elo_diff_threshold:
+    if suggested_match.elo_diff <= filter_.elo_diff_threshold:
         return suggested_match
 
     return None
