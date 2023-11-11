@@ -32,9 +32,7 @@ async def test_schedule_all_matches(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_court(
-            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
-        ),
+        inserted_court(DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})),
         inserted_stage(
             DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
         ) as stage_inserted_1,
@@ -102,19 +100,18 @@ async def test_schedule_all_matches(
         )
         await build_matches_for_stage_item(stage_item_1, tournament_id)
         await build_matches_for_stage_item(stage_item_2, tournament_id)
+
+        response = await send_tournament_request(
+            HTTPMethod.POST,
+            'schedule_matches',
+            auth_context,
+        )
         stages = await get_full_tournament_details(tournament_id)
 
         await sql_delete_stage_item_with_foreign_keys(stage_item_2.id)
         await sql_delete_stage_item_with_foreign_keys(stage_item_1.id)
 
-    assert (
-        await send_tournament_request(
-            HTTPMethod.POST,
-            'schedule_matches',
-            auth_context,
-        )
-        == SUCCESS_RESPONSE
-    )
+    assert response == SUCCESS_RESPONSE
 
     stage_item = stages[0].stage_items[0]
     assert len(stage_item.rounds) == 3
