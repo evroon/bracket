@@ -15,7 +15,7 @@ async def test_clubs_endpoint(
         'data': [
             {
                 'created': DUMMY_MOCK_TIME.isoformat(),
-                'id': 1,
+                'id': auth_context.club.id,
                 'name': 'Some Cool Club',
             }
         ],

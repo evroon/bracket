@@ -9,7 +9,7 @@ from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict
 from tests.integration_tests.api.shared import send_auth_request, send_request
-from tests.integration_tests.mocks import MOCK_NOW, MOCK_USER, get_mock_token
+from tests.integration_tests.mocks import MOCK_NOW, get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_club, inserted_tournament, inserted_user
 
@@ -21,37 +21,40 @@ def mock_auth_time() -> Generator[None, None, None]:
 
 
 async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> None:
+    mock_user = get_mock_user()
     body = {
-        'username': MOCK_USER.email,
+        'username': mock_user.email,
         'password': 'mypassword',
     }
     with mock_auth_time():
-        async with inserted_user(MOCK_USER):
+        async with inserted_user(mock_user):
             response = JsonDict(await send_request(HTTPMethod.POST, 'token', body))
 
     assert 'access_token' in response
     assert response.get('token_type') == 'bearer'
 
     decoded = jwt.decode(response['access_token'], config.jwt_secret, algorithms=['HS256'])
-    assert decoded == {'user': MOCK_USER.email, 'exp': 7258723200}
+    assert decoded == {'user': mock_user.email, 'exp': 7258723200}
 
 
 async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server: None) -> None:
+    mock_user = get_mock_user()
     body = {
-        'username': MOCK_USER.email,
+        'username': mock_user,
         'password': 'invalid password',
     }
     with mock_auth_time():
-        async with inserted_user(MOCK_USER):
+        async with inserted_user(mock_user):
             response = JsonDict(await send_request(HTTPMethod.POST, 'token', body))
 
     assert response == {'detail': 'Incorrect email or password'}
 
 
 async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: None) -> None:
-    headers = {'Authorization': f'Bearer {get_mock_token()}'}
+    mock_user = get_mock_user()
+    headers = {'Authorization': f'Bearer {get_mock_token(mock_user)}'}
 
-    async with inserted_user(MOCK_USER) as user_inserted:
+    async with inserted_user(mock_user) as user_inserted:
         response = JsonDict(
             await send_request(HTTPMethod.GET, f'users/{user_inserted.id}', {}, None, headers)
         )
