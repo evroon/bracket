@@ -99,7 +99,6 @@ async def test_create_stage(
                 HTTPMethod.POST,
                 'stages',
                 auth_context,
-                json={'type': StageType.SINGLE_ELIMINATION.value, 'team_count': 2},
             )
             == SUCCESS_RESPONSE
         )
