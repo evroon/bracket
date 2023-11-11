@@ -1,6 +1,3 @@
-
-from bracket.models.db.stage_item import StageType
-from bracket.models.db.stage_item_inputs import StageItemInputCreateBodyFinal
 from bracket.schema import matches, rounds, stage_items, stages
 from bracket.utils.dummy_records import (
     DUMMY_STAGE2,
@@ -25,13 +22,13 @@ async def test_create_stage_item(
     async with (
         inserted_stage(
             DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
-        ) as stage_inserted_1,
+        ),
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
-        ) as team_inserted_1,
+        ),
         inserted_team(
             DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
-        ) as team_inserted_2,
+        ),
     ):
         assert (
             await send_tournament_request(
