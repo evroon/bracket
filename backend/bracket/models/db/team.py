@@ -50,7 +50,7 @@ class TeamWithPlayers(BaseModel):
         return (
             Decimal(sum(player.elo_score for player in self.players)) / len(self.players)
             if len(self.players) > 0
-            else Decimal('0.00')
+            else self.elo_score
         )
 
     def get_swiss_score(self) -> Decimal:
@@ -60,7 +60,7 @@ class TeamWithPlayers(BaseModel):
         return (
             Decimal(sum(player.swiss_score for player in self.players)) / len(self.players)
             if len(self.players) > 0
-            else Decimal('0.00')
+            else self.swiss_score
         )
 
 

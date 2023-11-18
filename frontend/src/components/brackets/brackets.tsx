@@ -26,6 +26,7 @@ function getRoundsGridCols(
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
     .map((round: RoundInterface) => (
       <Round
+        key={round.id}
         tournamentData={tournamentData}
         round={round}
         swrStagesResponse={swrStagesResponse}

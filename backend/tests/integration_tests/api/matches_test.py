@@ -233,40 +233,6 @@ async def test_upcoming_matches_endpoint(
             'data': [
                 {
                     'team1': {
-                        'id': team2_inserted.id,
-                        'players': [
-                            {
-                                'id': player_inserted_2.id,
-                                'active': True,
-                                'name': 'Player 2',
-                                'created': '2022-01-11T04:32:11+00:00',
-                                'tournament_id': auth_context.tournament.id,
-                                'elo_score': 1300,
-                                'swiss_score': 0,
-                                'wins': 0,
-                                'draws': 0,
-                                'losses': 0,
-                            },
-                            {
-                                'id': player_inserted_4.id,
-                                'active': True,
-                                'name': 'Player 4',
-                                'created': '2022-01-11T04:32:11+00:00',
-                                'tournament_id': auth_context.tournament.id,
-                                'elo_score': 1400,
-                                'swiss_score': 0,
-                                'wins': 0,
-                                'draws': 0,
-                                'losses': 0,
-                            },
-                        ],
-                        'swiss_score': 0.0,
-                        'elo_score': 1350.0,
-                        'wins': 0,
-                        'draws': 0,
-                        'losses': 0,
-                    },
-                    'team2': {
                         'id': team1_inserted.id,
                         'players': [
                             {
@@ -300,9 +266,43 @@ async def test_upcoming_matches_endpoint(
                         'draws': 0,
                         'losses': 0,
                     },
+                    'team2': {
+                        'id': team2_inserted.id,
+                        'players': [
+                            {
+                                'id': player_inserted_2.id,
+                                'active': True,
+                                'name': 'Player 2',
+                                'created': '2022-01-11T04:32:11+00:00',
+                                'tournament_id': auth_context.tournament.id,
+                                'elo_score': 1300,
+                                'swiss_score': 0,
+                                'wins': 0,
+                                'draws': 0,
+                                'losses': 0,
+                            },
+                            {
+                                'id': player_inserted_4.id,
+                                'active': True,
+                                'name': 'Player 4',
+                                'created': '2022-01-11T04:32:11+00:00',
+                                'tournament_id': auth_context.tournament.id,
+                                'elo_score': 1400,
+                                'swiss_score': 0,
+                                'wins': 0,
+                                'draws': 0,
+                                'losses': 0,
+                            },
+                        ],
+                        'swiss_score': 0.0,
+                        'elo_score': 1350.0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
+                    },
                     'elo_diff': 200,
                     'swiss_diff': 0,
-                    'is_recommended': False,
+                    'is_recommended': True,
                     'player_behind_schedule_count': 0,
                 }
             ]
