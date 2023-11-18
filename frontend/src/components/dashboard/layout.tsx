@@ -12,9 +12,11 @@ export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: T
       style={{
         width: '100%',
         background: 'white',
-        marginTop: '3rem',
+        marginTop: '2rem',
         maxWidth: '400px',
         height: 'auto',
+        borderRadius: '16px',
+        alignSelf: 'end',
       }}
     >
       <Center>

@@ -1,38 +1,55 @@
-import { Grid } from '@mantine/core';
+import { Center, Grid, MantineColor, useMantineTheme } from '@mantine/core';
 import React from 'react';
-import { SWRResponse } from 'swr';
 
-import { RoundInterface } from '../../interfaces/round';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { getStages } from '../../services/adapter';
+import { Court } from '../../interfaces/court';
+import { MatchInterface } from '../../interfaces/match';
 import MatchLarge from './match_large';
 
-function getRoundsGridCols(
-  activeRound: RoundInterface,
-) {
-  return activeRound.matches
-    .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
-    .map((match) => (
-      <Grid.Col sm={12} key={match.id}>
-        <MatchLarge key={match.id} match={match} />
-      </Grid.Col>
-    ));
+export function CourtBadge({ name, color }: { name: string; color: MantineColor }) {
+  const theme = useMantineTheme();
+  const badgeColor = theme.colorScheme === 'dark' ? theme.colors[color][7] : theme.colors[color][2];
+  return (
+    <Center
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: badgeColor,
+        borderRadius: '8px',
+        padding: '8px 16px 8px 16px',
+        fontSize: '1.5rem',
+      }}
+    >
+      <b>{name}</b>
+    </Center>
+  );
+}
+
+function getRoundsGridCols(match: MatchInterface | null) {
+  if (match == null) {
+    return null;
+  }
+  return <MatchLarge key={match.id} match={match} />;
 }
 
 export default function CourtsLarge({
-  tournamentData,
-  activeRound,
+  court,
+  activeMatch,
+  nextMatch,
 }: {
-  tournamentData: TournamentMinimal;
-  activeRound: RoundInterface;
+  court: Court;
+  activeMatch: MatchInterface | null;
+  nextMatch: MatchInterface | null;
 }) {
   return (
-    <Grid>
-      <Grid.Col sm={6}>
-        <Grid>{getRoundsGridCols(activeRound)}</Grid>
+    <Grid align="center" style={{ marginTop: '1rem' }} gutter="2rem">
+      <Grid.Col sm={2}>
+        <CourtBadge name={court.name} color="indigo" />
       </Grid.Col>
-      <Grid.Col sm={6}>
-        <Grid>{getRoundsGridCols(activeRound)}</Grid>
+      <Grid.Col sm={5}>
+        <Grid>{getRoundsGridCols(activeMatch)}</Grid>
+      </Grid.Col>
+      <Grid.Col sm={5}>
+        <Grid>{getRoundsGridCols(nextMatch)}</Grid>
       </Grid.Col>
     </Grid>
   );

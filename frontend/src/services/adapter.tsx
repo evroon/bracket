@@ -84,12 +84,18 @@ export function getStagesLive(
   no_draft_rounds: boolean = false
 ): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 5_000,
   });
 }
 
 export function getCourts(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
+}
+
+export function getCourtsLive(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/courts`, fetcher, {
+    refreshInterval: 60_000,
+  });
 }
 
 export function getUser(user_id: number): SWRResponse {

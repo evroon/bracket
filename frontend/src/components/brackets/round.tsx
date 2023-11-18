@@ -97,7 +97,9 @@ export default function Round({
 
   if (readOnly) {
     return (
-      <Grid.Col style={{ minHeight: 320, maxWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}>
+      <Grid.Col
+        style={{ minHeight: 320, maxWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}
+      >
         {item}
       </Grid.Col>
     );
