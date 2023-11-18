@@ -107,7 +107,7 @@ class MatchRescheduleBody(BaseModelORM):
 
 class MatchFilter(BaseModel):
     elo_diff_threshold: int
-    only_behind_schedule: bool
+    only_recommended: bool
     limit: int
     iterations: int
 

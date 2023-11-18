@@ -88,7 +88,11 @@ def get_possible_upcoming_matches_for_swiss(
         suggested_match = check_team_combination_adheres_to_filter(
             team1, team2, filter_, is_recommended=times_played_max < max_times_played
         )
-        if suggested_match and match_hash not in scheduled_hashes:
+        if (
+            suggested_match
+            and match_hash not in scheduled_hashes
+            and (not filter_.only_recommended or suggested_match.is_recommended)
+        ):
             suggestions.append(suggested_match)
             scheduled_hashes.append(match_hash)
             scheduled_hashes.append(get_match_hash(team2.id, team1.id))

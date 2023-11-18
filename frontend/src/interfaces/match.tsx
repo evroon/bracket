@@ -62,8 +62,8 @@ export interface SchedulerSettings {
   setLimit: any;
   iterations: number;
   setIterations: any;
-  onlyBehindSchedule: string;
-  setOnlyBehindSchedule: any;
+  onlyRecommended: string;
+  setOnlyRecommended: any;
 }
 
 export function isMatchHappening(match: MatchInterface) {

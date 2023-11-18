@@ -31,7 +31,7 @@ export default function TournamentPage() {
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
   const swrCourtsResponse: SWRResponse = getCourts(id);
-  const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
+  const [onlyRecommended, setOnlyRecommended] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
@@ -45,8 +45,8 @@ export default function TournamentPage() {
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
     setEloThreshold,
-    onlyBehindSchedule,
-    setOnlyBehindSchedule,
+    onlyRecommended,
+    setOnlyRecommended,
     limit,
     setLimit,
     iterations,

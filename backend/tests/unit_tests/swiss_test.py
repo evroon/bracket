@@ -16,9 +16,7 @@ from bracket.utils.dummy_records import (
 )
 from tests.integration_tests.mocks import MOCK_NOW
 
-MATCH_FILTER = MatchFilter(
-    elo_diff_threshold=50, iterations=100, limit=20, only_behind_schedule=False
-)
+MATCH_FILTER = MatchFilter(elo_diff_threshold=50, iterations=100, limit=20, only_recommended=False)
 
 
 def test_no_draft_round() -> None:

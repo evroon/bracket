@@ -21,12 +21,12 @@ export default function LadderFixed({
       />
       <Divider orientation="vertical" />
       <Radio.Group
-        value={schedulerSettings.onlyBehindSchedule}
-        onChange={schedulerSettings.setOnlyBehindSchedule}
+        value={schedulerSettings.onlyRecommended}
+        onChange={schedulerSettings.setOnlyRecommended}
         label="Only show teams/players who played less matches"
       >
         <Group mt={8}>
-          <Radio value="true" label="Only players who played less" />
+          <Radio value="true" label="Only recommended" />
           <Radio value="false" label="All matches" />
         </Group>
       </Radio.Group>

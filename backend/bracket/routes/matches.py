@@ -38,14 +38,14 @@ async def get_matches_to_schedule(
     tournament_id: int,
     elo_diff_threshold: int = 200,
     iterations: int = 200,
-    only_behind_schedule: bool = False,
+    only_recommended: bool = False,
     limit: int = 50,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     round_: Round = Depends(round_dependency),
 ) -> UpcomingMatchesResponse:
     match_filter = MatchFilter(
         elo_diff_threshold=elo_diff_threshold,
-        only_behind_schedule=only_behind_schedule,
+        only_recommended=only_recommended,
         limit=limit,
         iterations=iterations,
     )
@@ -110,7 +110,7 @@ async def create_matches_automatically(
     tournament_id: int,
     elo_diff_threshold: int = 100,
     iterations: int = 200,
-    only_behind_schedule: bool = False,
+    only_recommended: bool = False,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     round_: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
@@ -119,7 +119,7 @@ async def create_matches_automatically(
 
     match_filter = MatchFilter(
         elo_diff_threshold=elo_diff_threshold,
-        only_behind_schedule=only_behind_schedule,
+        only_recommended=only_recommended,
         limit=1,
         iterations=iterations,
     )
