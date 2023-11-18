@@ -23,7 +23,7 @@ export default function LadderFixed({
       <Radio.Group
         value={schedulerSettings.onlyRecommended}
         onChange={schedulerSettings.setOnlyRecommended}
-        label="Only show teams/players who played less matches"
+        label="Only show teams that played less matches"
       >
         <Group mt={8}>
           <Radio value="true" label="Only recommended" />

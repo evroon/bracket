@@ -28,6 +28,7 @@ class TeamWithPlayers(BaseModel):
     wins: int
     draws: int
     losses: int
+    name: str
 
     @property
     def player_ids(self) -> list[int]:

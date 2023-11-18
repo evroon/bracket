@@ -91,16 +91,12 @@ def determine_available_inputs(
                 if input_ in results_team_ids:
                     results_team_ids.remove(input_)
 
-            results_tentative.extend(
-                [
+            for winner_position in range(1, 5):
+                results_tentative.append(
                     StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id, winner_position=1
-                    ),
-                    StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id, winner_position=2
-                    ),
-                ]
-            )
+                        winner_from_stage_item_id=stage_item.id, winner_position=winner_position
+                    )
+                )
 
     results_final = [StageItemInputOptionFinal(team_id=team_id) for team_id in results_team_ids]
     return results_final + results_tentative

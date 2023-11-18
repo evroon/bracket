@@ -234,6 +234,7 @@ async def test_upcoming_matches_endpoint(
                 {
                     'team1': {
                         'id': team1_inserted.id,
+                        'name': team1_inserted.name,
                         'players': [
                             {
                                 'id': player_inserted_1.id,
@@ -268,6 +269,7 @@ async def test_upcoming_matches_endpoint(
                     },
                     'team2': {
                         'id': team2_inserted.id,
+                        'name': team2_inserted.name,
                         'players': [
                             {
                                 'id': player_inserted_2.id,

@@ -37,9 +37,12 @@ export default function TournamentPage() {
   const [limit, setLimit] = useState(50);
   const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
+  const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
     setMatchVisibility,
+    teamNamesDisplay,
+    setTeamNamesDisplay,
   };
 
   const schedulerSettings: SchedulerSettings = {
@@ -105,6 +108,7 @@ export default function TournamentPage() {
           swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           schedulerSettings={schedulerSettings}
+          displaySettings={displaySettings}
         />
       </>
     ) : null;
@@ -124,6 +128,14 @@ export default function TournamentPage() {
                 { label: 'All matches', value: 'all' },
                 { label: 'Future matches', value: 'future-only' },
                 { label: 'Current matches', value: 'present-only' },
+              ]}
+            />
+            <SegmentedControl
+              value={teamNamesDisplay}
+              onChange={setTeamNamesDisplay}
+              data={[
+                { label: 'Team names', value: 'team-names' },
+                { label: 'Player names', value: 'player-names' },
               ]}
             />
             <Button
