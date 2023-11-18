@@ -1,11 +1,9 @@
-import { Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
-import assert from 'assert';
-import React, { useState } from 'react';
+import { createStyles, useMantineTheme } from '@mantine/core';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { MatchInterface } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
-import MatchModal from '../modals/match_modal';
 import { MatchBadge } from './match';
 
 const useStyles = createStyles((theme) => ({
@@ -33,21 +31,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function MatchLarge({
-  swrStagesResponse,
-  swrCourtsResponse,
-  swrUpcomingMatchesResponse,
-  tournamentData,
-  match,
-  readOnly,
-}: {
-  swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse | null;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  tournamentData: TournamentMinimal;
-  match: MatchInterface;
-  readOnly: boolean;
-}) {
+export default function MatchLarge({ match }: { match: MatchInterface }) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
@@ -66,47 +50,18 @@ export default function MatchLarge({
   const team1_players_label = team1_players === '' ? 'No players' : team1_players;
   const team2_players_label = team2_players === '' ? 'No players' : team2_players;
 
-  const [opened, setOpened] = useState(false);
-
   const bracket = (
     <div>
       <MatchBadge match={match} theme={theme} />
       <div className={classes.top} style={team1_style}>
-        <Grid grow>
-          <Grid.Col span={10}>{team1_players_label}</Grid.Col>
-          <Grid.Col span={2}>{match.team1_score}</Grid.Col>
-        </Grid>
+        {team1_players_label}
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
-        <Grid grow>
-          <Grid.Col span={10}>{team2_players_label}</Grid.Col>
-          <Grid.Col span={2}>{match.team2_score}</Grid.Col>
-        </Grid>
+        {team2_players_label}
       </div>
     </div>
   );
 
-  if (readOnly) {
-    return <div className={classes.root}>{bracket}</div>;
-  }
-  assert(swrStagesResponse != null);
-  assert(swrCourtsResponse != null);
-
-  return (
-    <>
-      <UnstyledButton className={classes.root} onClick={() => setOpened(!opened)}>
-        {bracket}
-      </UnstyledButton>
-      <MatchModal
-        swrStagesResponse={swrStagesResponse}
-        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-        tournamentData={tournamentData}
-        match={match}
-        opened={opened}
-        setOpened={setOpened}
-        dynamicSchedule={false}
-      />
-    </>
-  );
+  return <div className={classes.root}>{bracket}</div>;
 }

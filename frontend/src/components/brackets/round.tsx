@@ -1,4 +1,4 @@
-import { Center, Title } from '@mantine/core';
+import { Center, Grid, Title } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -46,6 +46,7 @@ export default function Round({
         match={match}
         readOnly={readOnly}
         dynamicSchedule={dynamicSchedule}
+        displaySettings={displaySettings}
       />
     ));
   const active_round_style = round.is_active
@@ -75,20 +76,36 @@ export default function Round({
     />
   );
 
+  if (matches.length < 1 && displaySettings.matchVisibility !== 'all') {
+    return null;
+  }
+
+  const item = (
+    <div
+      style={{
+        height: '100%',
+        minHeight: 320,
+        padding: '15px',
+        borderRadius: '20px',
+        ...active_round_style,
+      }}
+    >
+      <Center>{modal}</Center>
+      {matches}
+    </div>
+  );
+
+  if (readOnly) {
+    return (
+      <Grid.Col style={{ minHeight: 320, maxWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}>
+        {item}
+      </Grid.Col>
+    );
+  }
+
   return (
-    <div style={{ minHeight: 320, minWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}>
-      <div
-        style={{
-          height: '100%',
-          minHeight: 320,
-          padding: '15px',
-          borderRadius: '20px',
-          ...active_round_style,
-        }}
-      >
-        <Center>{modal}</Center>
-        {matches}
-      </div>
+    <div style={{ minHeight: 320, width: 400, marginRight: '1rem', marginBottom: '1rem' }}>
+      {item}
     </div>
   );
 }

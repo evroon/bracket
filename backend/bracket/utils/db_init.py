@@ -211,7 +211,6 @@ async def sql_create_dev_db() -> None:
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_6, 'team_id': team_id_3})
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_7, 'team_id': team_id_4})
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_8, 'team_id': team_id_4})
-    await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_8, 'team_id': team_id_4})
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_9, 'team_id': team_id_5})
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_10, 'team_id': team_id_5})
     await insert_dummy(DUMMY_PLAYER_X_TEAM, {'player_id': player_id_11, 'team_id': team_id_6})

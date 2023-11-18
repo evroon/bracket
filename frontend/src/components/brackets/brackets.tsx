@@ -46,6 +46,8 @@ function getRoundsGridCols(
     );
   }
 
+  const showAddRoundButton = readOnly || stageItemIsHandledAutomatically(stageItem);
+
   return (
     <React.Fragment key={stageItem.id}>
       <div style={{ width: '100%' }}>
@@ -55,7 +57,7 @@ function getRoundsGridCols(
           </Grid.Col>
           <Grid.Col span={6}>
             <Group position="right">
-              {stageItem == null || stageItemIsHandledAutomatically(stageItem) ? null : (
+              {showAddRoundButton ? null : (
                 <Button
                   color="green"
                   size="md"

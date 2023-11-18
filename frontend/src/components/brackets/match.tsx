@@ -4,6 +4,7 @@ import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import {
   MatchInterface,
   formatMatchTeam1,
@@ -73,6 +74,7 @@ export default function Match({
   match,
   readOnly,
   dynamicSchedule,
+  displaySettings,
 }: {
   swrStagesResponse: SWRResponse;
   swrCourtsResponse: SWRResponse | null;
@@ -81,13 +83,15 @@ export default function Match({
   match: MatchInterface;
   readOnly: boolean;
   dynamicSchedule: boolean;
+  displaySettings?: BracketDisplaySettings | null;
 }) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
   };
-  const showTeamMemberNames = false;
+  const showTeamMemberNames =
+    displaySettings != null && displaySettings.teamNamesDisplay === 'player-names';
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);

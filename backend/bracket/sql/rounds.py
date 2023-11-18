@@ -44,7 +44,7 @@ async def get_next_round_name(tournament_id: int, stage_item_id: int) -> str:
             query=query, values={'tournament_id': tournament_id, 'stage_item_id': stage_item_id}
         )
     )
-    return f'Round {round_count + 1}'
+    return f'Round {round_count + 1:02d}'
 
 
 async def sql_delete_rounds_for_stage_item_id(stage_item_id: int) -> None:

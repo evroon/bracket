@@ -62,6 +62,10 @@ def get_possible_upcoming_matches_for_swiss(
 
     draft_round_team_ids = get_draft_round_team_ids(draft_round)
     teams_to_schedule = [team for team in teams if team.id not in draft_round_team_ids]
+
+    if len(teams_to_schedule) < 1:
+        return suggestions
+
     previous_match_team_hashes = get_previous_matches_hashes(rounds)
     times_played_per_team = get_number_of_teams_played_per_team(rounds)
     max_times_played = max(times_played_per_team.values()) if len(times_played_per_team) else 1
@@ -99,4 +103,4 @@ def get_possible_upcoming_matches_for_swiss(
 
     sorted_by_elo = sorted(suggestions, key=lambda x: x.elo_diff)
     sorted_by_times_played = sorted(sorted_by_elo, key=lambda x: x.is_recommended, reverse=True)
-    return sorted_by_times_played
+    return sorted_by_times_played[: filter_.limit]

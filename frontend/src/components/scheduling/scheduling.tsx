@@ -79,6 +79,7 @@ export default function Scheduler({
           <Group position="right">
             <AutoCreateMatchesButton
               swrStagesResponse={swrRoundsResponse}
+              swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
               tournamentData={tournamentData}
               roundId={roundId}
             />

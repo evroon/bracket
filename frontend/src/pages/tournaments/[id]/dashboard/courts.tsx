@@ -56,7 +56,7 @@ export default function CourtsPage() {
     );
   }
   const rows = activeRounds.map((activeRound: RoundInterface) => (
-    <CourtsLarge tournamentData={tournamentDataFull} activeRound={activeRound} />
+    <CourtsLarge activeRound={activeRound} />
   ));
 
   return (
