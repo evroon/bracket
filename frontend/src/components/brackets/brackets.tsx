@@ -1,6 +1,6 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconAlertCircle } from '@tabler/icons-react';
+import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -61,9 +61,7 @@ function getRoundsGridCols(
                 <Button
                   color="green"
                   size="md"
-                  style={{ marginBottom: 10, marginRight: 10, marginLeft: 10 }}
                   leftIcon={<GoPlus size={24} />}
-                  title="Add Round"
                   variant="outline"
                   onClick={async () => {
                     await createRound(tournamentData.id, stageItem.id);
@@ -71,6 +69,11 @@ function getRoundsGridCols(
                   }}
                 >
                   Add Round
+                </Button>
+              )}
+              {showAddRoundButton ? null : (
+                <Button color="indigo" size="md" leftIcon={<IconSquareArrowRight size={24} />}>
+                  Start next round
                 </Button>
               )}
             </Group>
