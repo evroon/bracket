@@ -69,7 +69,7 @@ export default function MatchLarge({
   const [opened, setOpened] = useState(false);
 
   const bracket = (
-    <>
+    <div>
       <MatchBadge match={match} theme={theme} />
       <div className={classes.top} style={team1_style}>
         <Grid grow>
@@ -84,7 +84,7 @@ export default function MatchLarge({
           <Grid.Col span={2}>{match.team2_score}</Grid.Col>
         </Grid>
       </div>
-    </>
+    </div>
   );
 
   if (readOnly) {

@@ -9,29 +9,10 @@ import { Tournament } from '../../interfaces/tournament';
 import { getRoundsLookup } from '../../services/lookups';
 import { AutoCreateMatchesButton } from '../buttons/create_matches_auto';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
-import Elimination from './settings/elimination';
-import LadderFixed from './settings/ladder_fixed';
-import SchedulingPlaceholder from './settings/placeholder';
-import RoundRobin from './settings/round_robin';
+import SwissSettings from './settings/ladder_fixed';
 
-function StageSettings({
-  activeStage,
-  schedulerSettings,
-}: {
-  activeStage?: StageWithStageItems;
-  schedulerSettings: SchedulerSettings;
-}) {
-  if (activeStage == null) {
-    return <SchedulingPlaceholder />;
-  }
-  const stageItem = getStageItem(activeStage);
-  if (stageItem.type === 'ROUND_ROBIN') {
-    return <RoundRobin />;
-  }
-  if (stageItem.type === 'SINGLE_ELIMINATION') {
-    return <Elimination />;
-  }
-  return <LadderFixed schedulerSettings={schedulerSettings} />;
+function StageSettings({ schedulerSettings }: { schedulerSettings: SchedulerSettings }) {
+  return <SwissSettings schedulerSettings={schedulerSettings} />;
 }
 
 function SchedulingSystem({
@@ -80,13 +61,13 @@ export default function Scheduler({
 }) {
   const draftRound = getRoundsLookup(swrRoundsResponse)[roundId];
   return (
-    <div style={{ marginTop: '3rem' }}>
+    <div style={{ marginTop: '1rem' }}>
       <h2>
         Schedule new matches for <u>{draftRound.name}</u> in <u>{activeStage.name}</u>
       </h2>
       <Grid>
         <Grid.Col span={6}>
-          <StageSettings activeStage={activeStage} schedulerSettings={schedulerSettings} />
+          <StageSettings schedulerSettings={schedulerSettings} />
         </Grid.Col>
         <Grid.Col span={6}>
           <Group position="right">

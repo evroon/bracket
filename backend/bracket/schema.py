@@ -27,6 +27,7 @@ tournaments = Table(
     Column('dashboard_endpoint', String, nullable=True),
     Column('players_can_be_in_multiple_teams', Boolean, nullable=False, server_default='f'),
     Column('auto_assign_courts', Boolean, nullable=False, server_default='f'),
+    Column('duration_minutes', Integer, nullable=False, server_default='15'),
 )
 
 stages = Table(
@@ -96,6 +97,7 @@ matches = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('start_time', DateTimeTZ, nullable=True),
     Column('duration_minutes', Integer, nullable=True),
+    Column('custom_duration_minutes', Integer, nullable=True),
     Column('round_id', BigInteger, ForeignKey('rounds.id'), nullable=False),
     Column('team1_id', BigInteger, ForeignKey('teams.id'), nullable=True),
     Column('team2_id', BigInteger, ForeignKey('teams.id'), nullable=True),
