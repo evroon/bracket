@@ -40,7 +40,7 @@ export default function ActivateNextRoundModal({
         >
           <Checkbox
             mt="lg"
-            label="Force start time of matches to current time"
+            label="Adjust start time of matches in this round to the current time"
             {...form.getInputProps('adjust_to_time', { type: 'checkbox' })}
           />
           <Button
