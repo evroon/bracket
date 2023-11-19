@@ -2,6 +2,7 @@ import { Divider, Grid, Group } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
 import { StageWithStageItems, getStageItem } from '../../interfaces/stage';
 import { stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
@@ -21,12 +22,14 @@ function SchedulingSystem({
   round_id,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
+  displaySettings,
 }: {
   activeStage?: StageWithStageItems;
   round_id: number;
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
+  displaySettings: BracketDisplaySettings;
 }) {
   if (activeStage == null || stageItemIsHandledAutomatically(getStageItem(activeStage))) {
     return null;
@@ -39,6 +42,7 @@ function SchedulingSystem({
         tournamentData={tournamentData}
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        displaySettings={displaySettings}
       />
     </>
   );
@@ -51,6 +55,7 @@ export default function Scheduler({
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   schedulerSettings,
+  displaySettings,
 }: {
   activeStage: StageWithStageItems;
   roundId: number;
@@ -58,6 +63,7 @@ export default function Scheduler({
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
   schedulerSettings: SchedulerSettings;
+  displaySettings: BracketDisplaySettings;
 }) {
   const draftRound = getRoundsLookup(swrRoundsResponse)[roundId];
   return (
@@ -73,6 +79,7 @@ export default function Scheduler({
           <Group position="right">
             <AutoCreateMatchesButton
               swrStagesResponse={swrRoundsResponse}
+              swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
               tournamentData={tournamentData}
               roundId={roundId}
             />
@@ -85,6 +92,7 @@ export default function Scheduler({
         tournamentData={tournamentData}
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        displaySettings={displaySettings}
       />
     </div>
   );

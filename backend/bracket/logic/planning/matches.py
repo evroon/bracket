@@ -13,6 +13,7 @@ from bracket.models.db.match import (
 )
 from bracket.models.db.stage_item_inputs import StageItemInputGeneric
 from bracket.models.db.tournament import Tournament
+from bracket.models.db.util import StageWithStageItems
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match, sql_reschedule_match
 from bracket.sql.stages import get_full_tournament_details
@@ -200,14 +201,7 @@ async def handle_match_reschedule(
 
     stages = await get_full_tournament_details(tournament_id)
     tournament = await sql_get_tournament(tournament_id)
-    scheduled_matches_old = [
-        MatchPosition(match=match, position=float(assert_some(match.position_in_schedule)))
-        for stage in stages
-        for stage_item in stage.stage_items
-        for round_ in stage_item.rounds
-        for match in round_.matches
-        if match.start_time is not None
-    ]
+    scheduled_matches_old = get_scheduled_matches(stages)
 
     # For match in prev position: set new position
     scheduled_matches = []
@@ -217,7 +211,7 @@ async def handle_match_reschedule(
                 match_pos.position != body.old_position
                 or match_pos.match.court_id != body.old_court_id
             ):
-                raise ValueError('match_id doesn\t match court id or position in schedule')
+                raise ValueError('match_id doesn\'t match court id or position in schedule')
 
             offset = (
                 -0.5
@@ -243,7 +237,14 @@ async def update_start_times_of_matches(tournament_id: int) -> None:
     stages = await get_full_tournament_details(tournament_id)
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
-    scheduled_matches = [
+    scheduled_matches = get_scheduled_matches(stages)
+
+    for court in courts:
+        await reorder_matches_for_court(tournament, scheduled_matches, assert_some(court.id))
+
+
+def get_scheduled_matches(stages: list[StageWithStageItems]) -> list[MatchPosition]:
+    return [
         MatchPosition(match=match, position=float(assert_some(match.position_in_schedule)))
         for stage in stages
         for stage_item in stage.stage_items
@@ -251,5 +252,19 @@ async def update_start_times_of_matches(tournament_id: int) -> None:
         for match in round_.matches
         if match.start_time is not None
     ]
-    for court in courts:
-        await reorder_matches_for_court(tournament, scheduled_matches, assert_some(court.id))
+
+
+def get_scheduled_matches_per_court(
+    stages: list[StageWithStageItems],
+) -> dict[int, list[MatchPosition]]:
+    scheduled_matches = get_scheduled_matches(stages)
+    matches_per_court = defaultdict(list)
+
+    for match_pos in scheduled_matches:
+        if match_pos.match.court_id is not None:
+            matches_per_court[match_pos.match.court_id].append(match_pos)
+
+    return {
+        court_id: sorted(matches, key=lambda mp: assert_some(mp.match.start_time))
+        for court_id, matches in matches_per_court.items()
+    }

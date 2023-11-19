@@ -97,7 +97,6 @@ matches = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('start_time', DateTimeTZ, nullable=True),
     Column('duration_minutes', Integer, nullable=True),
-    Column('custom_duration_minutes', Integer, nullable=True),
     Column('round_id', BigInteger, ForeignKey('rounds.id'), nullable=False),
     Column('team1_id', BigInteger, ForeignKey('teams.id'), nullable=True),
     Column('team2_id', BigInteger, ForeignKey('teams.id'), nullable=True),

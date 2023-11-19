@@ -1,6 +1,6 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconAlertCircle } from '@tabler/icons-react';
+import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -9,7 +9,7 @@ import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
-import { createRound } from '../../services/round';
+import { createRound, startNextRound } from '../../services/round';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
@@ -26,6 +26,7 @@ function getRoundsGridCols(
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
     .map((round: RoundInterface) => (
       <Round
+        key={round.id}
         tournamentData={tournamentData}
         round={round}
         swrStagesResponse={swrStagesResponse}
@@ -45,6 +46,8 @@ function getRoundsGridCols(
     );
   }
 
+  const showAddRoundButton = readOnly || stageItemIsHandledAutomatically(stageItem);
+
   return (
     <React.Fragment key={stageItem.id}>
       <div style={{ width: '100%' }}>
@@ -54,13 +57,11 @@ function getRoundsGridCols(
           </Grid.Col>
           <Grid.Col span={6}>
             <Group position="right">
-              {stageItem == null || stageItemIsHandledAutomatically(stageItem) ? null : (
+              {showAddRoundButton ? null : (
                 <Button
                   color="green"
                   size="md"
-                  style={{ marginBottom: 10, marginRight: 10, marginLeft: 10 }}
                   leftIcon={<GoPlus size={24} />}
-                  title="Add Round"
                   variant="outline"
                   onClick={async () => {
                     await createRound(tournamentData.id, stageItem.id);
@@ -68,6 +69,19 @@ function getRoundsGridCols(
                   }}
                 >
                   Add Round
+                </Button>
+              )}
+              {showAddRoundButton ? null : (
+                <Button
+                  color="indigo"
+                  size="md"
+                  leftIcon={<IconSquareArrowRight size={24} />}
+                  onClick={async () => {
+                    await startNextRound(tournamentData.id, stageItem.id);
+                    await swrStagesResponse.mutate();
+                  }}
+                >
+                  Start next round
                 </Button>
               )}
             </Group>

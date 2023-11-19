@@ -4,7 +4,12 @@ import React from 'react';
 
 import { createMatchesAuto } from '../../services/round';
 
-export function AutoCreateMatchesButton({ tournamentData, swrStagesResponse, roundId }: any) {
+export function AutoCreateMatchesButton({
+  tournamentData,
+  swrStagesResponse,
+  swrUpcomingMatchesResponse,
+  roundId,
+}: any) {
   if (roundId == null) {
     return null;
   }
@@ -18,9 +23,10 @@ export function AutoCreateMatchesButton({ tournamentData, swrStagesResponse, rou
       onClick={async () => {
         await createMatchesAuto(tournamentData.id, roundId);
         swrStagesResponse.mutate();
+        swrUpcomingMatchesResponse.mutate();
       }}
     >
-      Schedule new matches automatically
+      Add new matches automatically
     </Button>
   );
 }

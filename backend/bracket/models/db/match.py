@@ -50,6 +50,10 @@ class MatchWithDetails(Match):
     court: Court | None
 
 
+def get_match_hash(team_1_id: int | None, team_2_id: int | None) -> str:
+    return f'{team_1_id}-{team_2_id}'
+
+
 class MatchWithDetailsDefinitive(Match):
     team1: FullTeamWithPlayers
     team2: FullTeamWithPlayers
@@ -62,6 +66,12 @@ class MatchWithDetailsDefinitive(Match):
     @property
     def team_ids(self) -> list[int]:
         return [assert_some(self.team1.id), assert_some(self.team2.id)]
+
+    def get_team_ids_hashes(self) -> list[str]:
+        return [
+            get_match_hash(self.team1_id, self.team2_id),
+            get_match_hash(self.team2_id, self.team1_id),
+        ]
 
     @property
     def player_ids(self) -> list[int]:
@@ -97,7 +107,7 @@ class MatchRescheduleBody(BaseModelORM):
 
 class MatchFilter(BaseModel):
     elo_diff_threshold: int
-    only_behind_schedule: bool
+    only_recommended: bool
     limit: int
     iterations: int
 

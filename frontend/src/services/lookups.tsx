@@ -4,7 +4,6 @@ import { SWRResponse } from 'swr';
 import { groupBy, responseIsValid } from '../components/utils/util';
 import { Court } from '../interfaces/court';
 import { MatchInterface } from '../interfaces/match';
-import { RoundInterface } from '../interfaces/round';
 import { StageWithStageItems } from '../interfaces/stage';
 import { TeamInterface } from '../interfaces/team';
 import { getTeams } from './adapter';
@@ -122,17 +121,4 @@ export function getScheduleData(
       }),
     court,
   }));
-}
-
-export function getActiveRounds(swrStagesResponse: SWRResponse) {
-  let result: RoundInterface[] = [];
-
-  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
-    stage.stage_items.forEach((stage_item) => {
-      stage_item.rounds.forEach((round) => {
-        if (round.is_active) result = result.concat([round]);
-      });
-    })
-  );
-  return result;
 }

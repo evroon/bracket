@@ -84,12 +84,18 @@ export function getStagesLive(
   no_draft_rounds: boolean = false
 ): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 5_000,
   });
 }
 
 export function getCourts(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
+}
+
+export function getCourtsLive(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/courts`, fetcher, {
+    refreshInterval: 60_000,
+  });
 }
 
 export function getUser(user_id: number): SWRResponse {
@@ -102,7 +108,7 @@ export function getUpcomingMatches(
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_behind_schedule=${schedulerSettings.onlyBehindSchedule}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
+    `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher
   );
 }

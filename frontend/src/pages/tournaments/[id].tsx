@@ -31,22 +31,25 @@ export default function TournamentPage() {
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
   const swrCourtsResponse: SWRResponse = getCourts(id);
-  const [onlyBehindSchedule, setOnlyBehindSchedule] = useState('true');
+  const [onlyRecommended, setOnlyRecommended] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
   const [limit, setLimit] = useState(50);
   const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
+  const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
     setMatchVisibility,
+    teamNamesDisplay,
+    setTeamNamesDisplay,
   };
 
   const schedulerSettings: SchedulerSettings = {
     eloThreshold,
     setEloThreshold,
-    onlyBehindSchedule,
-    setOnlyBehindSchedule,
+    onlyRecommended,
+    setOnlyRecommended,
     limit,
     setLimit,
     iterations,
@@ -105,6 +108,7 @@ export default function TournamentPage() {
           swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           schedulerSettings={schedulerSettings}
+          displaySettings={displaySettings}
         />
       </>
     ) : null;
@@ -122,8 +126,16 @@ export default function TournamentPage() {
               onChange={setMatchVisibility}
               data={[
                 { label: 'All matches', value: 'all' },
-                { label: 'Future matches', value: 'future-only' },
+                { label: 'Hide past matches', value: 'future-only' },
                 { label: 'Current matches', value: 'present-only' },
+              ]}
+            />
+            <SegmentedControl
+              value={teamNamesDisplay}
+              onChange={setTeamNamesDisplay}
+              data={[
+                { label: 'Team names', value: 'team-names' },
+                { label: 'Player names', value: 'player-names' },
               ]}
             />
             <Button

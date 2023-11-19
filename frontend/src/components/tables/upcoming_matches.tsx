@@ -3,11 +3,11 @@ import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
 import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
-import { createTeam } from '../../services/team';
 import PlayerList from '../info/player_list';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
@@ -22,11 +22,13 @@ export default function UpcomingMatchesTable({
   tournamentData,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
+  displaySettings,
 }: {
   round_id: number;
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
+  displaySettings: BracketDisplaySettings;
 }) {
   const upcoming_matches: UpcomingMatchInterface[] =
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
@@ -45,34 +47,6 @@ export default function UpcomingMatchesTable({
       const match_to_schedule: MatchCreateBodyInterface = {
         team1_id: upcoming_match.team1.id,
         team2_id: upcoming_match.team2.id,
-        round_id,
-        label: '',
-      };
-
-      await createMatch(tournamentData.id, match_to_schedule);
-    } else {
-      const team1PlayerIds = getPlayerIds(upcoming_match.team1);
-      const team2PlayerIds = getPlayerIds(upcoming_match.team2);
-
-      const teamName1 = `${upcoming_match.team1.players[0].name}, ${upcoming_match.team1.players[1].name}`;
-      const teamName2 = `${upcoming_match.team2.players[0].name}, ${upcoming_match.team2.players[1].name}`;
-
-      const { data: team1Response } = await createTeam(
-        tournamentData.id,
-        teamName1,
-        true,
-        team1PlayerIds
-      );
-      const { data: team2Response } = await createTeam(
-        tournamentData.id,
-        teamName2,
-        true,
-        team2PlayerIds
-      );
-
-      const match_to_schedule: MatchCreateBodyInterface = {
-        team1_id: team1Response.data.id,
-        team2_id: team2Response.data.id,
         round_id,
         label: '',
       };
@@ -97,10 +71,10 @@ export default function UpcomingMatchesTable({
           ) : null}
         </td>
         <td>
-          <PlayerList team={upcoming_match.team1} />
+          <PlayerList team={upcoming_match.team1} displaySettings={displaySettings} />
         </td>
         <td>
-          <PlayerList team={upcoming_match.team2} />
+          <PlayerList team={upcoming_match.team2} displaySettings={displaySettings} />
         </td>
         <td>{upcoming_match.elo_diff.toFixed(0)}</td>
         <td>{upcoming_match.swiss_diff.toFixed(1)}</td>

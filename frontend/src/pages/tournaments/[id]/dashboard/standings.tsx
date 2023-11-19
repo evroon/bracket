@@ -34,7 +34,7 @@ export default function Standings() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '20px' }}>
+      <Grid grow style={{ margin: '1rem' }} gutter="2rem">
         <Grid.Col span={2}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />

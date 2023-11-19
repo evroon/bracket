@@ -29,9 +29,12 @@ export default function Index() {
   const swrCourtsResponse: SWRResponse = getCourts(tournamentId);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
+  const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
     setMatchVisibility,
+    teamNamesDisplay,
+    setTeamNamesDisplay,
   };
 
   if (notFound) {

@@ -62,8 +62,8 @@ export interface SchedulerSettings {
   setLimit: any;
   iterations: number;
   setIterations: any;
-  onlyBehindSchedule: string;
-  setOnlyBehindSchedule: any;
+  onlyRecommended: string;
+  setOnlyRecommended: any;
 }
 
 export function isMatchHappening(match: MatchInterface) {
@@ -73,8 +73,8 @@ export function isMatchHappening(match: MatchInterface) {
   );
 }
 
-export function isMatchInTheFuture(match: MatchInterface) {
-  return new Date(match.start_time) > new Date();
+export function isMatchInTheFutureOrPresent(match: MatchInterface) {
+  return new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date();
 }
 
 export function formatMatchTeam1(
