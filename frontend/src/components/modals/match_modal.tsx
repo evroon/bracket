@@ -146,8 +146,8 @@ export default function MatchModal({
                 <Checkbox
                   checked={customDurationEnabled}
                   label="Customize"
-                  onClick={() => {
-                    setCustomDurationEnabled(!customDurationEnabled);
+                  onChange={(event) => {
+                    setCustomDurationEnabled(event.currentTarget.checked);
                   }}
                 />
               </Center>
@@ -172,8 +172,8 @@ export default function MatchModal({
                 <Checkbox
                   checked={customMarginEnabled}
                   label="Customize"
-                  onClick={() => {
-                    setCustomMarginEnabled(!customMarginEnabled);
+                  onChange={(event) => {
+                    setCustomMarginEnabled(event.currentTarget.checked);
                   }}
                 />
               </Center>

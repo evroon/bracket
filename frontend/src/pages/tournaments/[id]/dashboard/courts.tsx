@@ -11,6 +11,7 @@ import {
   TournamentQRCode,
   TournamentTitle,
 } from '../../../../components/dashboard/layout';
+import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { responseIsValid } from '../../../../components/utils/util';
 import { Court } from '../../../../interfaces/court';
 import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../../../interfaces/match';
@@ -28,20 +29,19 @@ export default function CourtsPage() {
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
   const swrCourtsResponse: SWRResponse = getCourtsLive(tournamentId);
 
+  if (swrStagesResponse.isLoading || swrCourtsResponse.isLoading) {
+    return <TableSkeletonTwoColumns />;
+  }
+
   if (notFound) {
     return <NotFoundTitle />;
   }
 
-  const tournamentDataFull = tournamentResponse[0];
-  const stages = responseIsValid(swrStagesResponse) ? swrStagesResponse.data.data : [];
+  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
   const courts = responseIsValid(swrCourtsResponse) ? swrCourtsResponse.data.data : [];
   const matchesByCourtId = responseIsValid(swrStagesResponse)
     ? getMatchLookupByCourt(swrStagesResponse)
     : [];
-
-  if (courts.length < 1 || stages.length < 1) {
-    return <NotFoundTitle />;
-  }
 
   const rows = courts.map((court: Court) => {
     const matchesForCourt = matchesByCourtId[court.id] || [];

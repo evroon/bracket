@@ -3,7 +3,6 @@ import { IconExternalLink } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
@@ -90,10 +89,6 @@ export default function TournamentPage() {
     schedulerSettings
   );
 
-  if (tournamentDataFull == null) {
-    return <NotFoundTitle />;
-  }
-
   const scheduler =
     draftRound != null &&
     activeStage != null &&
@@ -116,7 +111,7 @@ export default function TournamentPage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>{tournamentDataFull.name}</Title>
+          <Title>{tournamentDataFull != null ? tournamentDataFull.name : ''}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           <Group position="right">

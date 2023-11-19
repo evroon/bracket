@@ -36,12 +36,13 @@ export default function Index() {
     teamNamesDisplay,
     setTeamNamesDisplay,
   };
+  const isLoading = swrStagesResponse.isLoading || swrCourtsResponse.isLoading;
 
-  if (notFound) {
+  if (notFound && !isLoading) {
     return <NotFoundTitle />;
   }
 
-  const tournamentDataFull = tournamentResponse[0];
+  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
 
   if (responseIsValid(swrStagesResponse)) {
     const activeTab = swrStagesResponse.data.data.filter(

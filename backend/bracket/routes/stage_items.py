@@ -3,6 +3,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.planning.rounds import (
+    MatchTimingAdjustmentInfeasible,
     get_active_and_next_rounds,
     schedule_all_matches_for_swiss_round,
 )
@@ -105,6 +106,16 @@ async def start_next_round(
             ),
         )
 
+    try:
+        await schedule_all_matches_for_swiss_round(
+            tournament_id, next_round, active_next_body.adjust_to_time
+        )
+    except MatchTimingAdjustmentInfeasible as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=exc.message,
+        ) from exc
+
     if active_round is not None and active_round.id is not None:
         await set_round_active_or_draft(
             active_round.id, tournament_id, is_active=False, is_draft=False
@@ -113,7 +124,4 @@ async def start_next_round(
     assert next_round.id is not None
     await set_round_active_or_draft(next_round.id, tournament_id, is_active=True, is_draft=False)
 
-    await schedule_all_matches_for_swiss_round(
-        tournament_id, next_round, active_next_body.adjust_to_time
-    )
     return SuccessResponse()

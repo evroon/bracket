@@ -12,7 +12,7 @@ from bracket.utils.types import assert_some
 
 
 class MatchTimingAdjustmentInfeasible(Exception):
-    pass
+    message: str
 
 
 def get_active_and_next_rounds(
@@ -93,7 +93,9 @@ async def schedule_all_matches_for_swiss_round(
                     )
 
             start_time = assert_some(last_match.match.start_time) + timedelta(
-                minutes=match.duration_minutes + match.margin_minutes + timing_difference_minutes
+                minutes=match.duration_minutes
+                + last_match.match.margin_minutes
+                + timing_difference_minutes
             )
             pos_in_schedule = assert_some(last_match.match.position_in_schedule) + 1
         else:

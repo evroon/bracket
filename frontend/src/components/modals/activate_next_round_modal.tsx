@@ -50,11 +50,6 @@ export default function ActivateNextRoundModal({
             mt="lg"
             type="submit"
             leftIcon={<IconSquareArrowRight size={24} />}
-            onClick={async () => {
-              await startNextRound(tournamentId, stageItem.id, new Date());
-              await swrStagesResponse.mutate();
-              setOpened(false);
-            }}
           >
             Start next round
           </Button>

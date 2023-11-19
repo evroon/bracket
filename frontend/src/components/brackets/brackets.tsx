@@ -125,14 +125,14 @@ function NotStartedAlert() {
 
 function LoadingSkeleton() {
   return (
-    <Grid>
-      <Grid.Col sm={6} lg={4} xl={3}>
+    <Group>
+      <div style={{ width: '400px', marginLeft: '1rem' }}>
         <Skeleton height={500} mb="xl" radius="xl" />
-      </Grid.Col>
-      <Grid.Col sm={6} lg={4} xl={3}>
+      </div>
+      <div style={{ width: '400px', marginLeft: '1rem' }}>
         <Skeleton height={500} mb="xl" radius="xl" />
-      </Grid.Col>
-    </Grid>
+      </div>
+    </Group>
   );
 }
 
@@ -153,6 +153,9 @@ export default function Brackets({
   selectedStageId: string | null;
   displaySettings: BracketDisplaySettings;
 }) {
+  if (swrStagesResponse.isLoading) {
+    return <LoadingSkeleton />;
+  }
   if (selectedStageId == null) {
     return <NotStartedAlert />;
   }
