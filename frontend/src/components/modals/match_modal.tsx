@@ -134,7 +134,7 @@ export default function MatchModal({
               <NumberInput
                 disabled={!customDurationEnabled}
                 rightSection={<Text>minutes</Text>}
-                placeholder={match.duration_minutes}
+                placeholder={`${match.duration_minutes}`}
                 rightSectionWidth={92}
                 {...form.getInputProps('custom_duration_minutes')}
               />
@@ -158,7 +158,7 @@ export default function MatchModal({
             <Grid.Col sm={8}>
               <NumberInput
                 disabled={!customMarginEnabled}
-                placeholder={match.margin_minutes}
+                placeholder={`${match.margin_minutes}`}
                 rightSection={<Text>minutes</Text>}
                 rightSectionWidth={92}
                 {...form.getInputProps('custom_margin_minutes')}
