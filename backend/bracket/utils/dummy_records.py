@@ -36,6 +36,8 @@ DUMMY_TOURNAMENT = Tournament(
     logo_path=None,
     players_can_be_in_multiple_teams=True,
     auto_assign_courts=True,
+    duration_minutes=10,
+    margin_minutes=5,
 )
 
 DUMMY_STAGE1 = Stage(
@@ -113,6 +115,9 @@ DUMMY_MATCH1 = Match(
     team2_winner_position=None,
     team2_winner_from_match_id=None,
     duration_minutes=10,
+    margin_minutes=5,
+    custom_duration_minutes=None,
+    custom_margin_minutes=None,
     position_in_schedule=1,
 )
 

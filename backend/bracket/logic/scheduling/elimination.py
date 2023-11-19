@@ -1,12 +1,14 @@
 from bracket.logic.planning.matches import create_match_and_assign_free_court
 from bracket.models.db.match import Match, MatchCreateBody
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.rounds import get_rounds_for_stage_item
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
 
 
 def determine_matches_first_round(
-    round_: RoundWithMatches, stage_item: StageItemWithRounds
+    round_: RoundWithMatches, stage_item: StageItemWithRounds, tournament: Tournament
 ) -> list[MatchCreateBody]:
     suggestions: list[MatchCreateBody] = []
 
@@ -25,6 +27,10 @@ def determine_matches_first_round(
                 team2_winner_from_stage_item_id=second_input.winner_from_stage_item_id,
                 team2_winner_position=second_input.winner_position,
                 team2_winner_from_match_id=second_input.winner_from_match_id,
+                duration_minutes=tournament.duration_minutes,
+                margin_minutes=tournament.margin_minutes,
+                custom_duration_minutes=None,
+                custom_margin_minutes=None,
             )
         )
 
@@ -34,6 +40,7 @@ def determine_matches_first_round(
 def determine_matches_subsequent_round(
     prev_matches: list[Match],
     round_: RoundWithMatches,
+    tournament: Tournament,
 ) -> list[MatchCreateBody]:
     suggestions: list[MatchCreateBody] = []
 
@@ -53,6 +60,10 @@ def determine_matches_subsequent_round(
                 team2_winner_position=None,
                 team1_winner_from_match_id=assert_some(first_match.id),
                 team2_winner_from_match_id=assert_some(second_match.id),
+                duration_minutes=tournament.duration_minutes,
+                margin_minutes=tournament.margin_minutes,
+                custom_duration_minutes=None,
+                custom_margin_minutes=None,
             )
         )
     return suggestions
@@ -62,18 +73,20 @@ async def build_single_elimination_stage_item(
     tournament_id: int, stage_item: StageItemWithRounds
 ) -> None:
     rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
+    tournament = await sql_get_tournament(tournament_id)
+
     assert len(rounds) > 0
     first_round = rounds[0]
 
     prev_matches = [
         await create_match_and_assign_free_court(tournament_id, match)
-        for match in determine_matches_first_round(first_round, stage_item)
+        for match in determine_matches_first_round(first_round, stage_item, tournament)
     ]
 
     for round_ in rounds[1:]:
         prev_matches = [
             await create_match_and_assign_free_court(tournament_id, match)
-            for match in determine_matches_subsequent_round(prev_matches, round_)
+            for match in determine_matches_subsequent_round(prev_matches, round_, tournament)
         ]
 
 

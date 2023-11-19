@@ -49,7 +49,7 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
                         assert_some(match.id), court.id, start_time, position_in_schedule
                     )
 
-                start_time += timedelta(minutes=15)
+                start_time += timedelta(minutes=match.duration_minutes)
                 position_in_schedule += 1
 
     for stage in stages[1:]:
@@ -58,7 +58,7 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
         for stage_item in stage.stage_items:
             for round_ in stage_item.rounds:
                 for match in round_.matches:
-                    start_time += timedelta(minutes=15)
+                    start_time += timedelta(minutes=match.duration_minutes)
                     position_in_schedule += 1
 
                     if match.start_time is None and match.position_in_schedule is None:
@@ -131,13 +131,14 @@ async def iterative_scheduling(
             winner_from_match_id=match.team2_winner_from_match_id,
         )
         team_defs = {match.team1_id, match.team2_id}
-
         court_id = sorted(match_count_per_court.items(), key=lambda x: x[1])[0][0]
 
         try:
             position_in_schedule = len(matches_per_court[court_id])
             last_match = matches_per_court[court_id][-1]
-            start_time = assert_some(last_match.start_time) + timedelta(minutes=15)
+            start_time = assert_some(last_match.start_time) + timedelta(
+                minutes=match.duration_minutes
+            )
         except IndexError:
             start_time = tournament.start_time
             position_in_schedule = 0
@@ -190,7 +191,7 @@ async def reorder_matches_for_court(
             last_start_time,
             position_in_schedule=i,
         )
-        last_start_time = last_start_time + timedelta(minutes=15)
+        last_start_time = last_start_time + timedelta(minutes=match_pos.match.duration_minutes)
 
 
 async def handle_match_reschedule(

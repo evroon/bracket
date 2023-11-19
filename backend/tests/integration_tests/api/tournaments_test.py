@@ -28,6 +28,8 @@ async def test_tournaments_endpoint(
                 'dashboard_endpoint': 'cool-tournament',
                 'players_can_be_in_multiple_teams': True,
                 'auto_assign_courts': True,
+                'duration_minutes': 10,
+                'margin_minutes': 5,
             }
         ],
     }
@@ -49,6 +51,8 @@ async def test_tournament_endpoint(
             'dashboard_endpoint': 'cool-tournament',
             'players_can_be_in_multiple_teams': True,
             'auto_assign_courts': True,
+            'duration_minutes': 10,
+            'margin_minutes': 5,
         },
     }
 
@@ -63,6 +67,8 @@ async def test_create_tournament(
         'dashboard_public': False,
         'players_can_be_in_multiple_teams': True,
         'auto_assign_courts': True,
+        'duration_minutes': 12,
+        'margin_minutes': 3,
     }
     assert (
         await send_auth_request(HTTPMethod.POST, 'tournaments', auth_context, json=body)
@@ -80,6 +86,8 @@ async def test_update_tournament(
         'dashboard_public': False,
         'players_can_be_in_multiple_teams': True,
         'auto_assign_courts': True,
+        'duration_minutes': 12,
+        'margin_minutes': 3,
     }
     assert (
         await send_tournament_request(HTTPMethod.PUT, '', auth_context, json=body)

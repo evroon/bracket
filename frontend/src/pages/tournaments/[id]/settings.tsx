@@ -6,6 +6,7 @@ import {
   CopyButton,
   Grid,
   Image,
+  NumberInput,
   Select,
   Text,
   TextInput,
@@ -17,12 +18,14 @@ import assert from 'assert';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
+import NotFoundTitle from '../../404';
 import { DropzoneButton } from '../../../components/utils/file_upload';
+import { GenericSkeleton } from '../../../components/utils/skeletons';
 import { getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getClubs, getTournaments } from '../../../services/adapter';
-import { createTournament, updateTournament } from '../../../services/tournament';
+import { updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
@@ -31,26 +34,25 @@ export function TournamentLogo({ tournament }: { tournament: Tournament | null }
 }
 
 function GeneralTournamentForm({
-  is_create_form,
   tournament,
   swrTournamentsResponse,
   clubs,
 }: {
-  is_create_form: boolean;
-  tournament: Tournament | null;
+  tournament: Tournament;
   swrTournamentsResponse: SWRResponse;
   clubs: Club[];
 }) {
   const form = useForm({
     initialValues: {
-      start_time: tournament == null ? new Date() : new Date(tournament.start_time),
-      name: tournament == null ? '' : tournament.name,
-      club_id: tournament == null ? null : `${tournament.club_id}`,
-      dashboard_public: tournament == null ? true : tournament.dashboard_public,
-      dashboard_endpoint: tournament == null ? '' : tournament.dashboard_endpoint,
-      players_can_be_in_multiple_teams:
-        tournament == null ? true : tournament.players_can_be_in_multiple_teams,
-      auto_assign_courts: tournament == null ? true : tournament.auto_assign_courts,
+      start_time: new Date(tournament.start_time),
+      name: tournament.name,
+      club_id: `${tournament.club_id}`,
+      dashboard_public: tournament.dashboard_public,
+      dashboard_endpoint: tournament.dashboard_endpoint,
+      players_can_be_in_multiple_teams: tournament.players_can_be_in_multiple_teams,
+      auto_assign_courts: tournament.auto_assign_courts,
+      duration_minutes: tournament.duration_minutes,
+      margin_minutes: tournament.margin_minutes,
     },
 
     validate: {
@@ -65,28 +67,19 @@ function GeneralTournamentForm({
     <form
       onSubmit={form.onSubmit(async (values) => {
         assert(values.club_id != null);
-        if (is_create_form) {
-          await createTournament(
-            parseInt(values.club_id, 10),
-            values.name,
-            values.dashboard_public,
-            values.dashboard_endpoint,
-            values.players_can_be_in_multiple_teams,
-            values.auto_assign_courts,
-            values.start_time.toISOString()
-          );
-        } else {
-          assert(tournament != null);
-          await updateTournament(
-            tournament.id,
-            values.name,
-            values.dashboard_public,
-            values.dashboard_endpoint,
-            values.players_can_be_in_multiple_teams,
-            values.auto_assign_courts,
-            values.start_time.toISOString()
-          );
-        }
+
+        await updateTournament(
+          tournament.id,
+          values.name,
+          values.dashboard_public,
+          values.dashboard_endpoint,
+          values.players_can_be_in_multiple_teams,
+          values.auto_assign_courts,
+          values.start_time.toISOString(),
+          values.duration_minutes,
+          values.margin_minutes
+        );
+
         await swrTournamentsResponse.mutate(null);
       })}
     >
@@ -142,6 +135,25 @@ function GeneralTournamentForm({
         </Grid.Col>
       </Grid>
 
+      <Grid>
+        <Grid.Col sm={6}>
+          <NumberInput
+            label="Match duration (minutes)"
+            mt="lg"
+            type="number"
+            {...form.getInputProps('duration_minutes')}
+          />
+        </Grid.Col>
+        <Grid.Col sm={6}>
+          <NumberInput
+            label="Time between matches (minutes)"
+            mt="lg"
+            type="number"
+            {...form.getInputProps('margin_minutes')}
+          />
+        </Grid.Col>
+      </Grid>
+
       <Checkbox
         mt="lg"
         label="Allow anyone to see the dashboard of rounds and matches"
@@ -185,28 +197,36 @@ function GeneralTournamentForm({
 
 export default function SettingsPage() {
   const { tournamentData } = getTournamentIdFromRouter();
-
+  const swrClubsResponse: SWRResponse = getClubs();
   const swrTournamentsResponse = getTournaments();
+
   const tournaments: Tournament[] =
     swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
   const tournamentDataFull = tournaments.filter(
     (tournament) => tournament.id === tournamentData.id
   )[0];
 
-  const is_create_form = tournamentDataFull == null;
-  const swrClubsResponse: SWRResponse = getClubs();
   const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
+
+  let content = <NotFoundTitle />;
+
+  if (swrTournamentsResponse.isLoading || swrClubsResponse.isLoading) {
+    content = <GenericSkeleton />;
+  }
+
+  if (tournamentDataFull != null) {
+    content = (
+      <GeneralTournamentForm
+        tournament={tournamentDataFull}
+        swrTournamentsResponse={swrTournamentsResponse}
+        clubs={clubs}
+      />
+    );
+  }
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Container>
-        <GeneralTournamentForm
-          is_create_form={is_create_form}
-          tournament={tournamentDataFull}
-          swrTournamentsResponse={swrTournamentsResponse}
-          clubs={clubs}
-        />
-      </Container>
+      <Container>{content}</Container>
     </TournamentLayout>
   );
 }

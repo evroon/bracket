@@ -40,6 +40,10 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             team2_winner_position,
             team1_winner_from_match_id,
             team2_winner_from_match_id,
+            duration_minutes,
+            custom_duration_minutes,
+            margin_minutes,
+            custom_margin_minutes,
             team1_score,
             team2_score,
             created
@@ -55,6 +59,10 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             :team2_winner_position,
             :team1_winner_from_match_id,
             :team2_winner_from_match_id,
+            :duration_minutes,
+            :custom_duration_minutes,
+            :margin_minutes,
+            :custom_margin_minutes,
             0,
             0,
             NOW()

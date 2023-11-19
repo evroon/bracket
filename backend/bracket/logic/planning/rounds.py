@@ -5,6 +5,7 @@ from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_reschedule_match
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
 
 
@@ -42,11 +43,20 @@ async def schedule_all_matches_for_swiss_round(
 
     for i, match in enumerate(active_round.matches):
         court_id = assert_some(courts[i].id)
-        last_match = matches_per_court[court_id][-1]
-
-        await sql_reschedule_match(
-            assert_some(match.id),
-            court_id,
-            assert_some(last_match.match.start_time) + timedelta(minutes=15),
-            assert_some(last_match.match.position_in_schedule) + 1,
+        last_match = (
+            next((m for m in matches_per_court[court_id][::-1] if m.match.id != match.id), None)
+            if court_id in matches_per_court
+            else None
         )
+
+        if last_match:
+            start_time = assert_some(last_match.match.start_time) + timedelta(
+                minutes=match.duration_minutes
+            )
+            pos_in_schedule = assert_some(last_match.match.position_in_schedule) + 1
+        else:
+            tournament = await sql_get_tournament(tournament_id)
+            start_time = tournament.start_time
+            pos_in_schedule = 1
+
+        await sql_reschedule_match(assert_some(match.id), court_id, start_time, pos_in_schedule)

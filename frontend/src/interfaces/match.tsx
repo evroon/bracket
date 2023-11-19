@@ -22,7 +22,10 @@ export interface MatchInterface {
   court: Court | null;
   start_time: string;
   position_in_schedule: number | null;
-  duration_minutes: number | null;
+  duration_minutes: number;
+  margin_minutes: number;
+  custom_duration_minutes: number | null;
+  custom_margin_minutes: number | null;
 }
 
 export interface MatchBodyInterface {
@@ -31,6 +34,8 @@ export interface MatchBodyInterface {
   team1_score: number;
   team2_score: number;
   court_id: number | null;
+  custom_duration_minutes: number | null;
+  custom_margin_minutes: number | null;
 }
 
 export interface MatchRescheduleInterface {
@@ -66,11 +71,14 @@ export interface SchedulerSettings {
   setOnlyRecommended: any;
 }
 
-export function isMatchHappening(match: MatchInterface) {
-  return (
-    new Date(match.start_time) < new Date() &&
-    new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date()
+export function getMatchEndTime(match: MatchInterface) {
+  return new Date(
+    new Date(match.start_time).getTime() + 60000 * (match.duration_minutes + match.margin_minutes)
   );
+}
+
+export function isMatchHappening(match: MatchInterface) {
+  return new Date(match.start_time) < new Date() && getMatchEndTime(match) > new Date();
 }
 
 export function isMatchInTheFutureOrPresent(match: MatchInterface) {

@@ -1,6 +1,6 @@
-import { Button, Modal, NumberInput } from '@mantine/core';
+import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react';
+import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import {
@@ -62,15 +62,28 @@ export default function MatchModal({
 }) {
   const form = useForm({
     initialValues: {
-      team1_score: match != null ? match.team1_score : 0,
-      team2_score: match != null ? match.team2_score : 0,
+      team1_score: match.team1_score,
+      team2_score: match.team2_score,
+      custom_duration_minutes: match.custom_duration_minutes,
+      custom_margin_minutes: match.custom_margin_minutes,
     },
 
     validate: {
       team1_score: (value) => (value >= 0 ? null : 'Score cannot be negative'),
       team2_score: (value) => (value >= 0 ? null : 'Score cannot be negative'),
+      custom_duration_minutes: (value) =>
+        value == null || value >= 0 ? null : 'Match duration cannot be negative',
+      custom_margin_minutes: (value) =>
+        value == null || value >= 0 ? null : 'Match margin cannot be negative',
     },
   });
+
+  const [customDurationEnabled, setCustomDurationEnabled] = useState(
+    form.values.custom_duration_minutes != null
+  );
+  const [customMarginEnabled, setCustomMarginEnabled] = useState(
+    form.values.custom_margin_minutes != null
+  );
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
@@ -89,6 +102,8 @@ export default function MatchModal({
               team1_score: values.team1_score,
               team2_score: values.team2_score,
               court_id: match.court_id,
+              custom_duration_minutes: values.custom_duration_minutes,
+              custom_margin_minutes: values.custom_margin_minutes,
             };
             await updateMatch(tournamentData.id, match.id, updatedMatch);
             await swrStagesResponse.mutate(null);
@@ -104,11 +119,62 @@ export default function MatchModal({
           />
           <NumberInput
             withAsterisk
-            style={{ marginTop: 20 }}
+            mt="lg"
             label={`Score of ${team2Name}`}
             placeholder={`Score of ${team2Name}`}
             {...form.getInputProps('team2_score')}
           />
+          <Divider mt="lg" />
+
+          <Text size="sm" mt="lg">
+            Custom match duration
+          </Text>
+          <Grid align="center">
+            <Grid.Col sm={8}>
+              <NumberInput
+                disabled={!customDurationEnabled}
+                rightSection={<Text>minutes</Text>}
+                placeholder={match.duration_minutes}
+                rightSectionWidth={92}
+                {...form.getInputProps('custom_duration_minutes')}
+              />
+            </Grid.Col>
+            <Grid.Col sm={4}>
+              <Center>
+                <Checkbox
+                  label="Customize"
+                  onClick={() => {
+                    setCustomDurationEnabled(!customDurationEnabled);
+                  }}
+                />
+              </Center>
+            </Grid.Col>
+          </Grid>
+
+          <Text size="sm" mt="lg">
+            Custom match margin
+          </Text>
+          <Grid align="center">
+            <Grid.Col sm={8}>
+              <NumberInput
+                disabled={!customMarginEnabled}
+                placeholder={match.margin_minutes}
+                rightSection={<Text>minutes</Text>}
+                rightSectionWidth={92}
+                {...form.getInputProps('custom_margin_minutes')}
+              />
+            </Grid.Col>
+            <Grid.Col sm={4}>
+              <Center>
+                <Checkbox
+                  label="Customize"
+                  onClick={() => {
+                    setCustomMarginEnabled(!customMarginEnabled);
+                  }}
+                />
+              </Center>
+            </Grid.Col>
+          </Grid>
 
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             Save
