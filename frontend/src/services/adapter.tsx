@@ -8,6 +8,14 @@ import { getLogin, performLogout, tokenPresent } from './local_storage';
 const axios = require('axios').default;
 
 export function handleRequestError(response: any) {
+  if (response.code === 'ERR_NETWORK') {
+    showNotification({
+      color: 'red',
+      title: 'An error occurred',
+      message: 'Internal server error',
+    });
+  }
+
   if (response.response != null && response.response.data.detail != null) {
     // If the detail contains an array, there is likely a pydantic validation error occurring.
     const message = Array.isArray(response.response.data.detail)

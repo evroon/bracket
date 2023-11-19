@@ -177,6 +177,8 @@ async def update_match_by_id(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     assert match.id
-    await sql_update_match(match.id, match_body)
+    tournament = await sql_get_tournament(tournament_id)
+
+    await sql_update_match(match.id, match_body, tournament)
     await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()

@@ -15,7 +15,10 @@ from bracket.models.db.stage_item_inputs import StageItemInputGeneric
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.courts import get_all_courts_in_tournament
-from bracket.sql.matches import sql_create_match, sql_reschedule_match
+from bracket.sql.matches import (
+    sql_create_match,
+    sql_reschedule_match_and_determine_duration_and_margin,
+)
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
@@ -45,8 +48,13 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
         for round_ in stage_item.rounds:
             for match in round_.matches:
                 if match.start_time is None and match.position_in_schedule is None:
-                    await sql_reschedule_match(
-                        assert_some(match.id), court.id, start_time, position_in_schedule
+                    await sql_reschedule_match_and_determine_duration_and_margin(
+                        assert_some(match.id),
+                        court.id,
+                        start_time,
+                        position_in_schedule,
+                        match,
+                        tournament,
                     )
 
                 start_time += timedelta(minutes=match.duration_minutes)
@@ -62,8 +70,13 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
                     position_in_schedule += 1
 
                     if match.start_time is None and match.position_in_schedule is None:
-                        await sql_reschedule_match(
-                            assert_some(match.id), courts[-1].id, start_time, position_in_schedule
+                        await sql_reschedule_match_and_determine_duration_and_margin(
+                            assert_some(match.id),
+                            courts[-1].id,
+                            start_time,
+                            position_in_schedule,
+                            match,
+                            tournament,
                         )
 
 
@@ -163,8 +176,8 @@ async def iterative_scheduling(
         attempts_since_last_write = 0
         random.shuffle(matches_to_schedule)
 
-        await sql_reschedule_match(
-            assert_some(match.id), court_id, start_time, position_in_schedule
+        await sql_reschedule_match_and_determine_duration_and_margin(
+            assert_some(match.id), court_id, start_time, position_in_schedule, match, tournament
         )
 
 
@@ -185,13 +198,17 @@ async def reorder_matches_for_court(
 
     last_start_time = tournament.start_time
     for i, match_pos in enumerate(matches_this_court):
-        await sql_reschedule_match(
+        await sql_reschedule_match_and_determine_duration_and_margin(
             assert_some(match_pos.match.id),
             court_id,
             last_start_time,
             position_in_schedule=i,
+            match=match_pos.match,
+            tournament=tournament,
         )
-        last_start_time = last_start_time + timedelta(minutes=match_pos.match.duration_minutes)
+        last_start_time = last_start_time + timedelta(
+            minutes=match_pos.match.duration_minutes + match_pos.match.margin_minutes
+        )
 
 
 async def handle_match_reschedule(

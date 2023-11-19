@@ -71,18 +71,26 @@ export interface SchedulerSettings {
   setOnlyRecommended: any;
 }
 
+export function getMatchStartTime(match: MatchInterface) {
+  return new Date(match.start_time);
+}
+
 export function getMatchEndTime(match: MatchInterface) {
   return new Date(
-    new Date(match.start_time).getTime() + 60000 * (match.duration_minutes + match.margin_minutes)
+    getMatchStartTime(match).getTime() + 60000 * (match.duration_minutes + match.margin_minutes)
   );
 }
 
 export function isMatchHappening(match: MatchInterface) {
-  return new Date(match.start_time) < new Date() && getMatchEndTime(match) > new Date();
+  return getMatchStartTime(match) < new Date() && getMatchEndTime(match) > new Date();
 }
 
 export function isMatchInTheFutureOrPresent(match: MatchInterface) {
-  return new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date();
+  return getMatchEndTime(match) > new Date();
+}
+
+export function isMatchInTheFuture(match: MatchInterface) {
+  return getMatchStartTime(match) > new Date();
 }
 
 export function formatMatchTeam1(

@@ -79,10 +79,10 @@ export default function MatchModal({
   });
 
   const [customDurationEnabled, setCustomDurationEnabled] = useState(
-    form.values.custom_duration_minutes != null
+    match.custom_duration_minutes != null
   );
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
-    form.values.custom_margin_minutes != null
+    match.custom_margin_minutes != null
   );
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
@@ -102,8 +102,10 @@ export default function MatchModal({
               team1_score: values.team1_score,
               team2_score: values.team2_score,
               court_id: match.court_id,
-              custom_duration_minutes: values.custom_duration_minutes,
-              custom_margin_minutes: values.custom_margin_minutes,
+              custom_duration_minutes: customDurationEnabled
+                ? values.custom_duration_minutes
+                : null,
+              custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
             };
             await updateMatch(tournamentData.id, match.id, updatedMatch);
             await swrStagesResponse.mutate(null);
@@ -142,6 +144,7 @@ export default function MatchModal({
             <Grid.Col sm={4}>
               <Center>
                 <Checkbox
+                  checked={customDurationEnabled}
                   label="Customize"
                   onClick={() => {
                     setCustomDurationEnabled(!customDurationEnabled);
@@ -167,6 +170,7 @@ export default function MatchModal({
             <Grid.Col sm={4}>
               <Center>
                 <Checkbox
+                  checked={customMarginEnabled}
                   label="Customize"
                   onClick={() => {
                     setCustomMarginEnabled(!customMarginEnabled);

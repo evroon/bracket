@@ -24,11 +24,10 @@ class MatchBase(BaseModelORM):
     court_id: int | None
 
     @property
-    def end_time(self, default_minutes: int = 15) -> datetime_utc:
+    def end_time(self) -> datetime_utc:
         assert self.start_time
         return datetime_utc.from_datetime(
-            self.start_time
-            + timedelta(minutes=self.duration_minutes if self.duration_minutes else default_minutes)
+            self.start_time + timedelta(minutes=self.duration_minutes + self.margin_minutes)
         )
 
 

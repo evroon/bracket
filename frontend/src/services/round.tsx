@@ -27,8 +27,14 @@ export async function updateRound(tournament_id: number, round_id: number, round
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function startNextRound(tournament_id: number, stage_item_id: number) {
+export async function startNextRound(
+  tournament_id: number,
+  stage_item_id: number,
+  adjust_to_time: Date | null
+) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stage_items/${stage_item_id}/start_next_round`)
+    .post(`tournaments/${tournament_id}/stage_items/${stage_item_id}/start_next_round`, {
+      adjust_to_time: adjust_to_time != null ? adjust_to_time?.toISOString() : null,
+    })
     .catch((response: any) => handleRequestError(response));
 }

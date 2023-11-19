@@ -36,6 +36,10 @@ class StageItemUpdateBody(BaseModelORM):
     name: str
 
 
+class StageItemActivateNextBody(BaseModelORM):
+    adjust_to_time: datetime_utc | None
+
+
 class StageItemCreateBody(BaseModelORM):
     stage_id: int
     name: str | None

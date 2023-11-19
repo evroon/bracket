@@ -1,6 +1,6 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
+import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -9,7 +9,8 @@ import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
-import { createRound, startNextRound } from '../../services/round';
+import { createRound } from '../../services/round';
+import ActivateNextRoundModal from '../modals/activate_next_round_modal';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
@@ -73,17 +74,11 @@ function getRoundsGridCols(
                 </Button>
               )}
               {showAddRoundButton ? null : (
-                <Button
-                  color="indigo"
-                  size="md"
-                  leftIcon={<IconSquareArrowRight size={24} />}
-                  onClick={async () => {
-                    await startNextRound(tournamentData.id, stageItem.id);
-                    await swrStagesResponse.mutate();
-                  }}
-                >
-                  Start next round
-                </Button>
+                <ActivateNextRoundModal
+                  tournamentId={tournamentData.id}
+                  swrStagesResponse={swrStagesResponse}
+                  stageItem={stageItem}
+                />
               )}
             </Group>
           </Grid.Col>

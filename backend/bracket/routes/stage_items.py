@@ -10,7 +10,11 @@ from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import (
     build_matches_for_stage_item,
 )
-from bracket.models.db.stage_item import StageItemCreateBody, StageItemUpdateBody
+from bracket.models.db.stage_item import (
+    StageItemActivateNextBody,
+    StageItemCreateBody,
+    StageItemUpdateBody,
+)
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageItemWithRounds
 from bracket.routes.auth import (
@@ -87,6 +91,7 @@ async def update_stage_item(
 async def start_next_round(
     tournament_id: int,
     stage_item_id: int,
+    active_next_body: StageItemActivateNextBody,
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -108,5 +113,7 @@ async def start_next_round(
     assert next_round.id is not None
     await set_round_active_or_draft(next_round.id, tournament_id, is_active=True, is_draft=False)
 
-    await schedule_all_matches_for_swiss_round(tournament_id, next_round)
+    await schedule_all_matches_for_swiss_round(
+        tournament_id, next_round, active_next_body.adjust_to_time
+    )
     return SuccessResponse()

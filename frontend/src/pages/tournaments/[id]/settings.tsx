@@ -113,7 +113,6 @@ function GeneralTournamentForm({
       <Grid>
         <Grid.Col sm={9}>
           <DateTimePicker
-            label=""
             icon={<IconCalendar size="1.1rem" stroke={1.5} />}
             placeholder="Pick date and time"
             mx="auto"
