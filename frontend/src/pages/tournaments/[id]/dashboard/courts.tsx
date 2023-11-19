@@ -13,7 +13,11 @@ import {
 } from '../../../../components/dashboard/layout';
 import { responseIsValid } from '../../../../components/utils/util';
 import { Court } from '../../../../interfaces/court';
-import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../../../interfaces/match';
+import {
+  MatchInterface,
+  isMatchHappening,
+  isMatchInTheFutureOrPresent,
+} from '../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookupByCourt } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -46,7 +50,9 @@ export default function CourtsPage() {
   const rows = courts.map((court: Court) => {
     const matchesForCourt = matchesByCourtId[court.id] || [];
     const activeMatch = matchesForCourt.filter((m: MatchInterface) => isMatchHappening(m))[0];
-    const futureMatch = matchesForCourt.filter((m: MatchInterface) => isMatchInTheFuture(m))[0];
+    const futureMatch = matchesForCourt.filter((m: MatchInterface) =>
+      isMatchInTheFutureOrPresent(m)
+    )[0];
 
     return (
       <CourtsLarge key={court.id} court={court} activeMatch={activeMatch} nextMatch={futureMatch} />

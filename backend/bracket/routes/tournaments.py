@@ -3,7 +3,7 @@ from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.matches import update_start_times_of_matches
+from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.models.db.tournament import (
     Tournament,
     TournamentBody,

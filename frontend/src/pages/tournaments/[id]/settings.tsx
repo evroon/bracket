@@ -4,12 +4,15 @@ import {
   Checkbox,
   Container,
   CopyButton,
+  Grid,
   Image,
   Select,
+  Text,
   TextInput,
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -111,13 +114,33 @@ function GeneralTournamentForm({
         {...form.getInputProps('dashboard_endpoint')}
       />
 
-      <DateTimePicker
-        label="Start of tournament"
-        placeholder="Pick date and time"
-        mt="lg"
-        mx="auto"
-        {...form.getInputProps('start_time')}
-      />
+      <Text fz="sm" mt="lg">
+        Start of the tournament
+      </Text>
+      <Grid>
+        <Grid.Col sm={9}>
+          <DateTimePicker
+            label=""
+            icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+            placeholder="Pick date and time"
+            mx="auto"
+            {...form.getInputProps('start_time')}
+          />
+        </Grid.Col>
+        <Grid.Col sm={3}>
+          <Button
+            fullWidth
+            color="indigo"
+            leftIcon={<IconCalendarTime size="1.1rem" stroke={1.5} />}
+            type="submit"
+            onClick={() => {
+              form.setFieldValue('start_time', new Date());
+            }}
+          >
+            Set to now
+          </Button>
+        </Grid.Col>
+      </Grid>
 
       <Checkbox
         mt="lg"

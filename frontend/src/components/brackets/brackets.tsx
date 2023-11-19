@@ -9,7 +9,7 @@ import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
-import { createRound } from '../../services/round';
+import { createRound, startNextRound } from '../../services/round';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
@@ -72,7 +72,15 @@ function getRoundsGridCols(
                 </Button>
               )}
               {showAddRoundButton ? null : (
-                <Button color="indigo" size="md" leftIcon={<IconSquareArrowRight size={24} />}>
+                <Button
+                  color="indigo"
+                  size="md"
+                  leftIcon={<IconSquareArrowRight size={24} />}
+                  onClick={async () => {
+                    await startNextRound(tournamentData.id, stageItem.id);
+                    await swrStagesResponse.mutate();
+                  }}
+                >
                   Start next round
                 </Button>
               )}

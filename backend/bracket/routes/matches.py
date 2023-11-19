@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from bracket.logic.matches import (
+from bracket.logic.planning.matches import (
     create_match_and_assign_free_court,
     handle_match_reschedule,
     schedule_all_unscheduled_matches,

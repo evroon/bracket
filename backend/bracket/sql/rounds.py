@@ -53,3 +53,36 @@ async def sql_delete_rounds_for_stage_item_id(stage_item_id: int) -> None:
         WHERE rounds.stage_item_id = :stage_item_id
         '''
     await database.execute(query=query, values={'stage_item_id': stage_item_id})
+
+
+async def set_round_active_or_draft(
+    round_id: int, tournament_id: int, *, is_active: bool, is_draft: bool
+) -> None:
+    query = '''
+        UPDATE rounds
+        SET
+            is_draft =
+                CASE WHEN rounds.id=:round_id THEN :is_draft
+                     ELSE is_draft AND NOT :is_draft
+                END,
+            is_active =
+                CASE WHEN rounds.id=:round_id THEN :is_active
+                     ELSE is_active AND NOT :is_active
+                END
+        WHERE rounds.id IN (
+            SELECT rounds.id
+            FROM rounds
+            JOIN stage_items ON rounds.stage_item_id = stage_items.id
+            JOIN stages s on s.id = stage_items.stage_id
+            WHERE s.tournament_id = :tournament_id
+        )
+    '''
+    await database.execute(
+        query=query,
+        values={
+            'tournament_id': tournament_id,
+            'round_id': round_id,
+            'is_active': is_active,
+            'is_draft': is_draft,
+        },
+    )

@@ -3,7 +3,11 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
-import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../interfaces/match';
+import {
+  MatchInterface,
+  isMatchHappening,
+  isMatchInTheFutureOrPresent,
+} from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
@@ -33,7 +37,7 @@ export default function Round({
     .filter(
       (match: MatchInterface) =>
         displaySettings.matchVisibility === 'all' ||
-        (displaySettings.matchVisibility === 'future-only' && isMatchInTheFuture(match)) ||
+        (displaySettings.matchVisibility === 'future-only' && isMatchInTheFutureOrPresent(match)) ||
         (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match))
     )
     .map((match) => (

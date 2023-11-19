@@ -14,9 +14,12 @@ from bracket.models.db.user import UserPublic
 from bracket.models.db.util import RoundWithMatches
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse
-from bracket.routes.util import round_dependency, round_with_matches_dependency
+from bracket.routes.util import (
+    round_dependency,
+    round_with_matches_dependency,
+)
 from bracket.schema import rounds
-from bracket.sql.rounds import get_next_round_name
+from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft
 from bracket.sql.stage_items import get_stage_item
 
 router = APIRouter()
@@ -83,29 +86,8 @@ async def update_round_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: Round = Depends(round_dependency),
 ) -> SuccessResponse:
-    values = {'tournament_id': tournament_id, 'round_id': round_id}
-    query = '''
-        UPDATE rounds
-        SET
-            is_draft =
-                CASE WHEN rounds.id=:round_id THEN :is_draft
-                     ELSE is_draft AND NOT :is_draft
-                END,
-            is_active =
-                CASE WHEN rounds.id=:round_id THEN :is_active
-                     ELSE is_active AND NOT :is_active
-                END
-        WHERE rounds.id IN (
-            SELECT rounds.id
-            FROM rounds
-            JOIN stage_items ON rounds.stage_item_id = stage_items.id
-            JOIN stages s on s.id = stage_items.stage_id
-            WHERE s.tournament_id = :tournament_id
-        )
-    '''
-    await database.execute(
-        query=query,
-        values={**values, 'is_active': round_body.is_active, 'is_draft': round_body.is_draft},
+    await set_round_active_or_draft(
+        round_id, tournament_id, is_active=round_body.is_active, is_draft=round_body.is_draft
     )
     query = '''
         UPDATE rounds
@@ -119,5 +101,8 @@ async def update_round_by_id(
         )
         AND rounds.id = :round_id
     '''
-    await database.execute(query=query, values={**values, 'name': round_body.name})
+    await database.execute(
+        query=query,
+        values={'tournament_id': tournament_id, 'round_id': round_id, 'name': round_body.name},
+    )
     return SuccessResponse()

@@ -73,8 +73,8 @@ export function isMatchHappening(match: MatchInterface) {
   );
 }
 
-export function isMatchInTheFuture(match: MatchInterface) {
-  return new Date(match.start_time) > new Date();
+export function isMatchInTheFutureOrPresent(match: MatchInterface) {
+  return new Date(new Date(match.start_time).getTime() + 60000 * 15) > new Date();
 }
 
 export function formatMatchTeam1(

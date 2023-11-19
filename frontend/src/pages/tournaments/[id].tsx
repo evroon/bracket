@@ -126,7 +126,7 @@ export default function TournamentPage() {
               onChange={setMatchVisibility}
               data={[
                 { label: 'All matches', value: 'all' },
-                { label: 'Future matches', value: 'future-only' },
+                { label: 'Hide past matches', value: 'future-only' },
                 { label: 'Current matches', value: 'present-only' },
               ]}
             />

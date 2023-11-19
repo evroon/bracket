@@ -1,4 +1,4 @@
-from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.logic.planning.matches import create_match_and_assign_free_court
 from bracket.models.db.match import Match, MatchCreateBody
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.rounds import get_rounds_for_stage_item

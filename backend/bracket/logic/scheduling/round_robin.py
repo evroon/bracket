@@ -1,4 +1,4 @@
-from bracket.logic.matches import create_match_and_assign_free_court
+from bracket.logic.planning.matches import create_match_and_assign_free_court
 from bracket.models.db.match import (
     MatchCreateBody,
 )
