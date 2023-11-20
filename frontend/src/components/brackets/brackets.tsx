@@ -46,7 +46,8 @@ function getRoundsGridCols(
     );
   }
 
-  const showAddRoundButton = readOnly || stageItemIsHandledAutomatically(stageItem);
+  const showAddRoundButton =
+    tournamentData != null && (readOnly || stageItemIsHandledAutomatically(stageItem));
 
   return (
     <React.Fragment key={stageItem.id}>

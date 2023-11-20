@@ -140,9 +140,8 @@ export default function TournamentPage() {
             />
             <Button
               color="blue"
-              size="md"
+              size="sm"
               variant="outline"
-              style={{ marginBottom: 10 }}
               leftIcon={<IconExternalLink size={24} />}
               onClick={() => {
                 const endpoint = getTournamentEndpoint(tournamentDataFull);
@@ -151,10 +150,6 @@ export default function TournamentPage() {
             >
               View dashboard
             </Button>
-            <NextStageButton
-              tournamentData={tournamentData}
-              swrStagesResponse={swrStagesResponse}
-            />
           </Group>
         </Grid.Col>
       </Grid>
