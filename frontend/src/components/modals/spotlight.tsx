@@ -86,6 +86,6 @@ export function Spotlight() {
       searchPlaceholder="Search..."
       shortcut="mod + k"
       nothingFoundMessage="Nothing found..."
-    ></SpotlightProvider>
+    />
   );
 }

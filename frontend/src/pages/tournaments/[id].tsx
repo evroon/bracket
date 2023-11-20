@@ -5,7 +5,6 @@ import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
-import { NextStageButton } from '../../components/buttons/next_stage_button';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
