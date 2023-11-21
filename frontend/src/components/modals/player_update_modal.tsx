@@ -34,6 +34,9 @@ export default function PlayerUpdateModal({
       name: player == null ? '' : player.name,
       active: player == null ? true : player.active,
     },
+    validate: {
+      name: (value) => (value.length > 0 ? null : 'Name too short'),
+    },
   });
 
   return (

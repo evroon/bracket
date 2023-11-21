@@ -2,7 +2,7 @@ import { Grid, Group, Select, Title } from '@mantine/core';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import TeamModal from '../../../components/modals/team_modal';
+import TeamCreateModal from '../../../components/modals/team_create_modal';
 import TeamsTable from '../../../components/tables/teams';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { StageItemWithRounds } from '../../../interfaces/stage_item';
@@ -75,7 +75,7 @@ export default function Teams() {
               groupStageItems={groupStageItems}
               setFilteredStageItemId={setFilteredStageItemId}
             />
-            <TeamModal
+            <TeamCreateModal
               swrTeamsResponse={swrTeamsResponse}
               tournament_id={tournamentData.id}
               team={null}

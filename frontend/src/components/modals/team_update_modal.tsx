@@ -1,52 +1,26 @@
-import { Button, Checkbox, Group, Modal, MultiSelect, TextInput } from '@mantine/core';
+import { Button, Checkbox, Modal, MultiSelect, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
-import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
 import { TeamInterface } from '../../interfaces/team';
 import { getPlayers } from '../../services/adapter';
-import { createTeam, updateTeam } from '../../services/team';
-import SaveButton from '../buttons/save';
+import { updateTeam } from '../../services/team';
 
-export default function TeamModal({
+export default function TeamUpdateModal({
   tournament_id,
   team,
   swrTeamsResponse,
 }: {
   tournament_id: number;
-  team: TeamInterface | null;
+  team: TeamInterface;
   swrTeamsResponse: SWRResponse;
 }) {
   const { data } = getPlayers(tournament_id, false);
   const players: Player[] = data != null ? data.data : [];
-
-  const is_create_form = team == null;
-  const operation_text = is_create_form ? 'Create Team' : 'Edit Team';
-  const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
   const [opened, setOpened] = useState(false);
-  const modalOpenButton = is_create_form ? (
-    <Group position="right">
-      <SaveButton
-        onClick={() => setOpened(true)}
-        leftIcon={<GoPlus size={24} />}
-        title={operation_text}
-        style={{ marginTop: '1rem' }}
-      />
-    </Group>
-  ) : (
-    <Button
-      color="green"
-      size="xs"
-      style={{ marginRight: 10 }}
-      onClick={() => setOpened(true)}
-      leftIcon={icon}
-    >
-      {operation_text}
-    </Button>
-  );
 
   const form = useForm({
     initialValues: {
@@ -62,21 +36,12 @@ export default function TeamModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Team">
         <form
           onSubmit={form.onSubmit(async (values) => {
-            if (is_create_form) {
-              await createTeam(tournament_id, values.name, values.active, values.player_ids);
-            } else {
-              await updateTeam(
-                tournament_id,
-                team.id,
-                values.name,
-                values.active,
-                values.player_ids
-              );
-            }
-            swrTeamsResponse.mutate(null);
+            await updateTeam(tournament_id, team.id, values.name, values.active, values.player_ids);
+
+            await swrTeamsResponse.mutate(null);
             setOpened(false);
           })}
         >
@@ -112,7 +77,15 @@ export default function TeamModal({
         </form>
       </Modal>
 
-      {modalOpenButton}
+      <Button
+        color="green"
+        size="xs"
+        style={{ marginRight: 10 }}
+        onClick={() => setOpened(true)}
+        leftIcon={<BiEditAlt size={20} />}
+      >
+        Edit Team
+      </Button>
     </>
   );
 }

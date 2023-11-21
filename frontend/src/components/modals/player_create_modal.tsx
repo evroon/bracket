@@ -7,7 +7,7 @@ import { SWRResponse } from 'swr';
 import { Player } from '../../interfaces/player';
 import { createMultiplePlayers, createPlayer } from '../../services/player';
 import SaveButton from '../buttons/save';
-import { PlayerCreateCSVInput } from '../forms/player_create_csv_input';
+import { MultiPlayersInput } from '../forms/player_create_csv_input';
 
 export default function PlayerCreateModal({
   tournament_id,
@@ -37,15 +37,6 @@ export default function PlayerCreateModal({
     },
   });
 
-  const singlePlayerInput = (
-    <TextInput
-      withAsterisk
-      label="Name"
-      placeholder="Best Player Ever"
-      {...form.getInputProps('name')}
-    />
-  );
-
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="Add Player">
@@ -71,11 +62,16 @@ export default function PlayerCreateModal({
             </Tabs.List>
 
             <Tabs.Panel value="single" pt="xs">
-              {singlePlayerInput}
+              <TextInput
+                withAsterisk
+                label="Name"
+                placeholder="Best Player Ever"
+                {...form.getInputProps('name')}
+              />
             </Tabs.Panel>
 
             <Tabs.Panel value="multi" pt="xs">
-              <PlayerCreateCSVInput form={form} />
+              <MultiPlayersInput form={form} />
             </Tabs.Panel>
           </Tabs>
 
