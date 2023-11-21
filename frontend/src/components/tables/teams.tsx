@@ -7,7 +7,7 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
-import TeamModal from '../modals/team_modal';
+import TeamUpdateModal from '../modals/team_update_modal';
 import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
@@ -43,7 +43,7 @@ export default function TeamsTable({
         <td>{team.swiss_score.toFixed(1)}</td>
         <td>{team.elo_score.toFixed(0)}</td>
         <td>
-          <TeamModal
+          <TeamUpdateModal
             tournament_id={tournamentData.id}
             team={team}
             swrTeamsResponse={swrTeamsResponse}

@@ -43,6 +43,17 @@ async def test_create_team(
     await assert_row_count_and_clear(teams, 1)
 
 
+async def test_create_teams(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'names': 'Team -1\nTeam -2', 'active': True}
+    response = await send_tournament_request(
+        HTTPMethod.POST, 'teams_multi', auth_context, None, body
+    )
+    assert response['success'] is True
+    await assert_row_count_and_clear(teams, 2)
+
+
 async def test_delete_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

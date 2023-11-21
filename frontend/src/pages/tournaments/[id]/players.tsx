@@ -1,6 +1,6 @@
 import { Grid, Title } from '@mantine/core';
 
-import PlayerModal from '../../../components/modals/player_modal';
+import PlayerCreateModal from '../../../components/modals/player_create_modal';
 import PlayersTable from '../../../components/tables/players';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { getPlayers } from '../../../services/adapter';
@@ -16,10 +16,9 @@ export default function Players() {
           <Title>Players</Title>
         </Grid.Col>
         <Grid.Col span={3}>
-          <PlayerModal
+          <PlayerCreateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}
-            player={null}
           />
         </Grid.Col>
       </Grid>

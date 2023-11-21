@@ -13,6 +13,10 @@ export async function createTeam(
   });
 }
 
+export async function createTeams(tournament_id: number, names: string, active: boolean) {
+  return createAxios().post(`tournaments/${tournament_id}/teams_multi`, { names, active });
+}
+
 export async function deleteTeam(tournament_id: number, team_id: number) {
   await createAxios()
     .delete(`tournaments/${tournament_id}/teams/${team_id}`)

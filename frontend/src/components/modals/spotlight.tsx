@@ -84,7 +84,7 @@ export function Spotlight() {
       actions={allActions}
       searchIcon={<IconSearch size="1.2rem" />}
       searchPlaceholder="Search..."
-      shortcut="mod + k"
+      shortcut={['mod + k', 'mod + y', '/']}
       nothingFoundMessage="Nothing found..."
     />
   );

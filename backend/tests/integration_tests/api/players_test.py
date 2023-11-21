@@ -41,8 +41,19 @@ async def test_create_player(
 ) -> None:
     body = {'name': 'Some new name', 'active': True}
     response = await send_tournament_request(HTTPMethod.POST, 'players', auth_context, json=body)
-    assert response['data']['name'] == body['name']
+    assert response['success'] is True
     await assert_row_count_and_clear(players, 1)
+
+
+async def test_create_players(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'names': 'Player x\nPlayer y', 'active': True}
+    response = await send_tournament_request(
+        HTTPMethod.POST, 'players_multi', auth_context, json=body
+    )
+    assert response['success'] is True
+    await assert_row_count_and_clear(players, 2)
 
 
 async def test_delete_player(

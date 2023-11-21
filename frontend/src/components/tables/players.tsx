@@ -15,7 +15,7 @@ import {
   getLossColor,
   getWinColor,
 } from '../info/player_statistics';
-import PlayerModal from '../modals/player_modal';
+import PlayerUpdateModal from '../modals/player_update_modal';
 import { DateTime } from '../utils/datetime';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
@@ -94,7 +94,7 @@ export default function PlayersTable({
           />
         </td>
         <td>
-          <PlayerModal
+          <PlayerUpdateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}
             player={player}

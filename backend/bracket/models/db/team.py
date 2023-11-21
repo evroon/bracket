@@ -70,9 +70,14 @@ class FullTeamWithPlayers(TeamWithPlayers, Team):
 
 
 class TeamBody(BaseModelORM):
-    name: str = Field(..., max_length=30)
+    name: str = Field(..., min_length=1, max_length=30)
     active: bool
-    player_ids: list[int]
+    player_ids: list[int] = Field(..., unique_items=True)
+
+
+class TeamMultiBody(BaseModelORM):
+    names: str = Field(..., min_length=1, max_length=30)
+    active: bool
 
 
 class TeamToInsert(BaseModelORM):

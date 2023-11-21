@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
 
 from bracket.database import database
-from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
+from bracket.models.db.player import Player, PlayerBody, PlayerMultiBody, PlayerToInsert
+from bracket.models.db.players import START_ELO
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
@@ -66,30 +67,37 @@ async def delete_player(
     return SuccessResponse()
 
 
-@router.post("/tournaments/{tournament_id}/players", response_model=SinglePlayerResponse)
-async def create_player(
+@router.post("/tournaments/{tournament_id}/players", response_model=SuccessResponse)
+async def create_single_player(
     player_body: PlayerBody,
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-) -> SinglePlayerResponse:
-    last_record_id = await database.execute(
+) -> SuccessResponse:
+    await insert_player(player_body, tournament_id)
+    return SuccessResponse()
+
+
+async def insert_player(player_body: PlayerBody, tournament_id: int) -> None:
+    await database.execute(
         query=players.insert(),
         values=PlayerToInsert(
             **player_body.dict(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-            elo_score=Decimal('0.0'),
+            elo_score=Decimal(START_ELO),
             swiss_score=Decimal('0.0'),
         ).dict(),
     )
-    return SinglePlayerResponse(
-        data=assert_some(
-            await fetch_one_parsed(
-                database,
-                Player,
-                players.select().where(
-                    players.c.id == last_record_id and players.c.tournament_id == tournament_id
-                ),
-            )
-        )
-    )
+
+
+@router.post("/tournaments/{tournament_id}/players_multi", response_model=SuccessResponse)
+async def create_multiple_players(
+    player_body: PlayerMultiBody,
+    tournament_id: int,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    player_names = [player.strip() for player in player_body.names.split('\n') if len(player) > 0]
+    for player_name in player_names:
+        await insert_player(PlayerBody(name=player_name, active=player_body.active), tournament_id)
+
+    return SuccessResponse()
