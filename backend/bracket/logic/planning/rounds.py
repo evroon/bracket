@@ -12,7 +12,7 @@ from bracket.utils.types import assert_some
 
 
 class MatchTimingAdjustmentInfeasible(Exception):
-    message: str
+    pass
 
 
 def get_active_and_next_rounds(
@@ -58,14 +58,11 @@ async def schedule_all_matches_for_swiss_round(
         )
 
         if last_match is not None:
-            timing_difference_minutes = 0
+            timing_difference_minutes = 0.0
             if adjust_to_time is not None:
                 last_match_end = last_match.match.end_time
-                timing_difference_minutes = (
-                    (adjust_to_time - last_match_end).seconds // 60
-                    if adjust_to_time > last_match_end
-                    else -(last_match_end - adjust_to_time).seconds // 60
-                )
+                timing_difference_minutes = (adjust_to_time - last_match_end).total_seconds() // 60
+
                 if (
                     timing_difference_minutes < 0
                     and -timing_difference_minutes > last_match.match.margin_minutes

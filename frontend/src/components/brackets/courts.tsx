@@ -20,7 +20,6 @@ function getRoundsGridCols(
           key={match.id}
           tournamentData={tournamentData}
           swrStagesResponse={swrStagesResponse}
-          swrCourtsResponse={null}
           swrUpcomingMatchesResponse={null}
           match={match}
           readOnly

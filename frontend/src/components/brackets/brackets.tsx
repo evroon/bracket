@@ -18,7 +18,6 @@ function getRoundsGridCols(
   stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,
-  swrCourtsResponse: SWRResponse,
   swrUpcomingMatchesResponse: SWRResponse | null,
   readOnly: boolean,
   displaySettings: BracketDisplaySettings
@@ -31,7 +30,6 @@ function getRoundsGridCols(
         tournamentData={tournamentData}
         round={round}
         swrStagesResponse={swrStagesResponse}
-        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         readOnly={readOnly}
         dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
@@ -47,8 +45,8 @@ function getRoundsGridCols(
     );
   }
 
-  const showAddRoundButton =
-    tournamentData != null && (readOnly || stageItemIsHandledAutomatically(stageItem));
+  const hideAddRoundButton =
+    tournamentData == null || readOnly || stageItemIsHandledAutomatically(stageItem);
 
   return (
     <React.Fragment key={stageItem.id}>
@@ -59,7 +57,7 @@ function getRoundsGridCols(
           </Grid.Col>
           <Grid.Col span={6}>
             <Group position="right">
-              {showAddRoundButton ? null : (
+              {hideAddRoundButton ? null : (
                 <Button
                   color="green"
                   size="md"
@@ -73,7 +71,7 @@ function getRoundsGridCols(
                   Add Round
                 </Button>
               )}
-              {showAddRoundButton ? null : (
+              {hideAddRoundButton ? null : (
                 <ActivateNextRoundModal
                   tournamentId={tournamentData.id}
                   swrStagesResponse={swrStagesResponse}
@@ -139,7 +137,6 @@ function LoadingSkeleton() {
 export default function Brackets({
   tournamentData,
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
   selectedStageId,
@@ -147,7 +144,6 @@ export default function Brackets({
 }: {
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   selectedStageId: string | null;
@@ -180,7 +176,6 @@ export default function Brackets({
         stageItem,
         tournamentData,
         swrStagesResponse,
-        swrCourtsResponse,
         swrUpcomingMatchesResponse,
         readOnly,
         displaySettings

@@ -113,7 +113,7 @@ async def start_next_round(
     except MatchTimingAdjustmentInfeasible as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=exc.message,
+            detail=str(exc),
         ) from exc
 
     if active_round is not None and active_round.id is not None:

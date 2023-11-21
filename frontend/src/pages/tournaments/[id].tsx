@@ -3,6 +3,7 @@ import { IconExternalLink } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
+import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import Scheduler from '../../components/scheduling/scheduling';
 import StagesTab from '../../components/utils/stages_tab';
@@ -15,7 +16,6 @@ import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
-  getCourts,
   getStages,
   getTournaments,
   getUpcomingMatches,
@@ -28,7 +28,6 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
-  const swrCourtsResponse: SWRResponse = getCourts(id);
   const [onlyRecommended, setOnlyRecommended] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
@@ -107,6 +106,10 @@ export default function TournamentPage() {
       </>
     ) : null;
 
+  if (!swrTournamentsResponse.isLoading && tournamentDataFull == null) {
+    return <NotFoundTitle />;
+  }
+
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
@@ -158,7 +161,6 @@ export default function TournamentPage() {
         <Brackets
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
-          swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
           selectedStageId={selectedStageId}

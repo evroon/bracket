@@ -15,7 +15,7 @@ import StagesTab from '../../../../components/utils/stages_tab';
 import { responseIsValid } from '../../../../components/utils/util';
 import { BracketDisplaySettings } from '../../../../interfaces/brackets';
 import { StageWithStageItems } from '../../../../interfaces/stage';
-import { getCourts, getStagesLive } from '../../../../services/adapter';
+import { getStagesLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 export default function Index() {
@@ -26,7 +26,6 @@ export default function Index() {
   const tournamentId = !notFound ? tournamentResponse[0].id : -1;
 
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
-  const swrCourtsResponse: SWRResponse = getCourts(tournamentId);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
   const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
@@ -36,9 +35,7 @@ export default function Index() {
     teamNamesDisplay,
     setTeamNamesDisplay,
   };
-  const isLoading = swrStagesResponse.isLoading || swrCourtsResponse.isLoading;
-
-  if (notFound && !isLoading) {
+  if (notFound && !swrStagesResponse.isLoading) {
     return <NotFoundTitle />;
   }
 
@@ -76,7 +73,6 @@ export default function Index() {
           <Brackets
             tournamentData={tournamentDataFull}
             swrStagesResponse={swrStagesResponse}
-            swrCourtsResponse={swrCourtsResponse}
             swrUpcomingMatchesResponse={null}
             readOnly
             selectedStageId={selectedStageId}
