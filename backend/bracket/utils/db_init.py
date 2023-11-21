@@ -179,7 +179,7 @@ async def sql_create_dev_db() -> None:
     player_id_8 = await insert_dummy(DUMMY_PLAYER8, {'tournament_id': tournament_id_1})
 
     player_id_9 = await insert_dummy(
-        DUMMY_PLAYER8, {'name': 'Player 9', 'tournament_id': tournament_id_1}
+        DUMMY_PLAYER8, {'name': 'Player 09', 'tournament_id': tournament_id_1}
     )
     player_id_10 = await insert_dummy(
         DUMMY_PLAYER8, {'name': 'Player 10', 'tournament_id': tournament_id_1}

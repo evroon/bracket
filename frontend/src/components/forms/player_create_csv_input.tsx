@@ -6,7 +6,7 @@ export function MultiPlayersInput({ form }: { form: UseFormReturnType<any> }) {
   return (
     <Textarea
       label="Add multiple players. Put every player on a separate line"
-      placeholder="Player 1"
+      placeholder="Player 01"
       minRows={10}
       {...form.getInputProps('names')}
     />
