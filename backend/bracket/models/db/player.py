@@ -23,7 +23,12 @@ class Player(BaseModelORM):
 
 
 class PlayerBody(BaseModelORM):
-    name: str = Field(..., max_length=30)
+    name: str = Field(..., min_length=1, max_length=30)
+    active: bool
+
+
+class PlayerMultiBody(BaseModelORM):
+    names: str
     active: bool
 
 
