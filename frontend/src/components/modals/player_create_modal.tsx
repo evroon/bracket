@@ -48,7 +48,7 @@ export default function PlayerCreateModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Create Player">
+      <Modal opened={opened} onClose={() => setOpened(false)} title="Add Player">
         <form
           onSubmit={form.onSubmit(async (values) => {
             if (values.names !== '') {
