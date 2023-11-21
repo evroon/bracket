@@ -7,6 +7,9 @@ import { getBaseApiUrl } from '../../services/adapter';
 import { getBaseURL } from '../utils/util';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
+  if (tournamentDataFull == null) {
+    return null;
+  }
   return (
     <div
       style={{

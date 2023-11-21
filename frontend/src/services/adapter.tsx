@@ -8,6 +8,14 @@ import { getLogin, performLogout, tokenPresent } from './local_storage';
 const axios = require('axios').default;
 
 export function handleRequestError(response: any) {
+  if (response.code === 'ERR_NETWORK') {
+    showNotification({
+      color: 'red',
+      title: 'An error occurred',
+      message: 'Internal server error',
+    });
+  }
+
   if (response.response != null && response.response.data.detail != null) {
     // If the detail contains an array, there is likely a pydantic validation error occurring.
     const message = Array.isArray(response.response.data.detail)
@@ -67,7 +75,7 @@ export function getTeams(tournament_id: number): SWRResponse {
 
 export function getTeamsLive(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/teams`, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 5_000,
   });
 }
 
@@ -76,16 +84,27 @@ export function getAvailableStageItemInputs(tournament_id: number, stage_id: num
 }
 
 export function getStages(tournament_id: number, no_draft_rounds: boolean = false): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher);
+  return useSWR(
+    tournament_id === -1
+      ? null
+      : `tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`,
+    fetcher
+  );
 }
 
 export function getStagesLive(
   tournament_id: number,
   no_draft_rounds: boolean = false
 ): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`, fetcher, {
-    refreshInterval: 5_000,
-  });
+  return useSWR(
+    tournament_id === -1
+      ? null
+      : `tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`,
+    fetcher,
+    {
+      refreshInterval: 5_000,
+    }
+  );
 }
 
 export function getCourts(tournament_id: number): SWRResponse {
@@ -108,7 +127,9 @@ export function getUpcomingMatches(
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
+    round_id === -1
+      ? null
+      : `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher
   );
 }

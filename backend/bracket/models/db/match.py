@@ -13,7 +13,10 @@ class MatchBase(BaseModelORM):
     id: int | None = None
     created: datetime_utc
     start_time: datetime_utc | None
-    duration_minutes: int | None
+    duration_minutes: int
+    margin_minutes: int
+    custom_duration_minutes: int | None
+    custom_margin_minutes: int | None
     position_in_schedule: int | None
     round_id: int
     team1_score: int
@@ -21,11 +24,10 @@ class MatchBase(BaseModelORM):
     court_id: int | None
 
     @property
-    def end_time(self, default_minutes: int = 15) -> datetime_utc:
+    def end_time(self) -> datetime_utc:
         assert self.start_time
         return datetime_utc.from_datetime(
-            self.start_time
-            + timedelta(minutes=self.duration_minutes if self.duration_minutes else default_minutes)
+            self.start_time + timedelta(minutes=self.duration_minutes + self.margin_minutes)
         )
 
 
@@ -83,9 +85,11 @@ class MatchBody(BaseModelORM):
     team1_score: int = 0
     team2_score: int = 0
     court_id: int | None
+    custom_duration_minutes: int | None
+    custom_margin_minutes: int | None
 
 
-class MatchCreateBody(BaseModelORM):
+class MatchCreateBodyFrontend(BaseModelORM):
     round_id: int
     court_id: int | None
     team1_id: int | None
@@ -96,6 +100,13 @@ class MatchCreateBody(BaseModelORM):
     team2_winner_from_stage_item_id: int | None
     team2_winner_position: int | None
     team2_winner_from_match_id: int | None
+
+
+class MatchCreateBody(MatchCreateBodyFrontend):
+    duration_minutes: int
+    margin_minutes: int
+    custom_duration_minutes: int | None
+    custom_margin_minutes: int | None
 
 
 class MatchRescheduleBody(BaseModelORM):

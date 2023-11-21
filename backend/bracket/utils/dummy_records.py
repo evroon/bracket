@@ -36,6 +36,8 @@ DUMMY_TOURNAMENT = Tournament(
     logo_path=None,
     players_can_be_in_multiple_teams=True,
     auto_assign_courts=True,
+    duration_minutes=10,
+    margin_minutes=5,
 )
 
 DUMMY_STAGE1 = Stage(
@@ -113,6 +115,9 @@ DUMMY_MATCH1 = Match(
     team2_winner_position=None,
     team2_winner_from_match_id=None,
     duration_minutes=10,
+    margin_minutes=5,
+    custom_duration_minutes=None,
+    custom_margin_minutes=None,
     position_in_schedule=1,
 )
 
@@ -153,56 +158,56 @@ DUMMY_TEAM4 = Team(
 
 
 DUMMY_PLAYER1 = Player(
-    name='Player 1',
+    name='Player 01',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER2 = Player(
-    name='Player 2',
+    name='Player 02',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER3 = Player(
-    name='Player 3',
+    name='Player 03',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER4 = Player(
-    name='Player 4',
+    name='Player 04',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER5 = Player(
-    name='Player 5',
+    name='Player 05',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER6 = Player(
-    name='Player 6',
+    name='Player 06',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER7 = Player(
-    name='Player 7',
+    name='Player 07',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_PLAYER8 = Player(
-    name='Player 8',
+    name='Player 08',
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=DB_PLACEHOLDER_ID,

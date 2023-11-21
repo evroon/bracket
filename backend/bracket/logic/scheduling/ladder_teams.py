@@ -61,7 +61,9 @@ def get_possible_upcoming_matches_for_swiss(
         raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
 
     draft_round_team_ids = get_draft_round_team_ids(draft_round)
-    teams_to_schedule = [team for team in teams if team.id not in draft_round_team_ids]
+    teams_to_schedule = [
+        team for team in teams if team.id not in draft_round_team_ids and team.active
+    ]
 
     if len(teams_to_schedule) < 1:
         return suggestions

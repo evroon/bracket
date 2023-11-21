@@ -68,7 +68,6 @@ export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any
 
 export default function Match({
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   tournamentData,
   match,
@@ -77,7 +76,6 @@ export default function Match({
   displaySettings,
 }: {
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse | null;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
@@ -141,7 +139,6 @@ export default function Match({
     return <div className={classes.root}>{bracket}</div>;
   }
   assert(swrStagesResponse != null);
-  assert(swrCourtsResponse != null);
 
   return (
     <>

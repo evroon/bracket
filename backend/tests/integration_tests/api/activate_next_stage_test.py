@@ -111,7 +111,9 @@ async def test_activate_next_stage(
         assert isinstance(match1, MatchWithDetailsDefinitive)
         assert match1.team2.id == team_inserted_2.id
         await sql_update_match(
-            assert_some(match1.id), MatchBody(**match1.copy(update={'team2_score': 42}).dict())
+            assert_some(match1.id),
+            MatchBody(**match1.copy(update={'team2_score': 42}).dict()),
+            auth_context.tournament,
         )
 
         response = await send_tournament_request(

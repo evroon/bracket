@@ -17,7 +17,6 @@ export default function Round({
   tournamentData,
   round,
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
   dynamicSchedule,
@@ -26,7 +25,6 @@ export default function Round({
   tournamentData: TournamentMinimal;
   round: RoundInterface;
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   dynamicSchedule: boolean;
@@ -45,7 +43,6 @@ export default function Round({
         key={match.id}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
-        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
         readOnly={readOnly}

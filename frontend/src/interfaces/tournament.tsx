@@ -9,6 +9,8 @@ export interface Tournament {
   players_can_be_in_multiple_teams: boolean;
   auto_assign_courts: boolean;
   logo_path: string;
+  duration_minutes: number;
+  margin_minutes: number;
 }
 export interface TournamentMinimal {
   id: number;

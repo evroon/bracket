@@ -1,6 +1,6 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
+import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -9,7 +9,8 @@ import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
-import { createRound, startNextRound } from '../../services/round';
+import { createRound } from '../../services/round';
+import ActivateNextRoundModal from '../modals/activate_next_round_modal';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
@@ -17,7 +18,6 @@ function getRoundsGridCols(
   stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,
-  swrCourtsResponse: SWRResponse,
   swrUpcomingMatchesResponse: SWRResponse | null,
   readOnly: boolean,
   displaySettings: BracketDisplaySettings
@@ -30,7 +30,6 @@ function getRoundsGridCols(
         tournamentData={tournamentData}
         round={round}
         swrStagesResponse={swrStagesResponse}
-        swrCourtsResponse={swrCourtsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         readOnly={readOnly}
         dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
@@ -46,8 +45,8 @@ function getRoundsGridCols(
     );
   }
 
-  const showAddRoundButton =
-    tournamentData != null && (readOnly || stageItemIsHandledAutomatically(stageItem));
+  const hideAddRoundButton =
+    tournamentData == null || readOnly || stageItemIsHandledAutomatically(stageItem);
 
   return (
     <React.Fragment key={stageItem.id}>
@@ -58,7 +57,7 @@ function getRoundsGridCols(
           </Grid.Col>
           <Grid.Col span={6}>
             <Group position="right">
-              {showAddRoundButton ? null : (
+              {hideAddRoundButton ? null : (
                 <Button
                   color="green"
                   size="md"
@@ -72,18 +71,12 @@ function getRoundsGridCols(
                   Add Round
                 </Button>
               )}
-              {showAddRoundButton ? null : (
-                <Button
-                  color="indigo"
-                  size="md"
-                  leftIcon={<IconSquareArrowRight size={24} />}
-                  onClick={async () => {
-                    await startNextRound(tournamentData.id, stageItem.id);
-                    await swrStagesResponse.mutate();
-                  }}
-                >
-                  Start next round
-                </Button>
+              {hideAddRoundButton ? null : (
+                <ActivateNextRoundModal
+                  tournamentId={tournamentData.id}
+                  swrStagesResponse={swrStagesResponse}
+                  stageItem={stageItem}
+                />
               )}
             </Group>
           </Grid.Col>
@@ -130,21 +123,20 @@ function NotStartedAlert() {
 
 function LoadingSkeleton() {
   return (
-    <Grid>
-      <Grid.Col sm={6} lg={4} xl={3}>
+    <Group>
+      <div style={{ width: '400px', marginLeft: '1rem' }}>
         <Skeleton height={500} mb="xl" radius="xl" />
-      </Grid.Col>
-      <Grid.Col sm={6} lg={4} xl={3}>
+      </div>
+      <div style={{ width: '400px', marginLeft: '1rem' }}>
         <Skeleton height={500} mb="xl" radius="xl" />
-      </Grid.Col>
-    </Grid>
+      </div>
+    </Group>
   );
 }
 
 export default function Brackets({
   tournamentData,
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
   readOnly,
   selectedStageId,
@@ -152,12 +144,14 @@ export default function Brackets({
 }: {
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   selectedStageId: string | null;
   displaySettings: BracketDisplaySettings;
 }) {
+  if (swrStagesResponse.isLoading) {
+    return <LoadingSkeleton />;
+  }
   if (selectedStageId == null) {
     return <NotStartedAlert />;
   }
@@ -182,7 +176,6 @@ export default function Brackets({
         stageItem,
         tournamentData,
         swrStagesResponse,
-        swrCourtsResponse,
         swrUpcomingMatchesResponse,
         readOnly,
         displaySettings

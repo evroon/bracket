@@ -16,7 +16,6 @@ import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
-  getCourts,
   getStages,
   getTournaments,
   getUpcomingMatches,
@@ -29,7 +28,6 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
-  const swrCourtsResponse: SWRResponse = getCourts(id);
   const [onlyRecommended, setOnlyRecommended] = useState('true');
   const [eloThreshold, setEloThreshold] = useState(100);
   const [iterations, setIterations] = useState(200);
@@ -90,10 +88,6 @@ export default function TournamentPage() {
     schedulerSettings
   );
 
-  if (tournamentDataFull == null) {
-    return <NotFoundTitle />;
-  }
-
   const scheduler =
     draftRound != null &&
     activeStage != null &&
@@ -112,11 +106,15 @@ export default function TournamentPage() {
       </>
     ) : null;
 
+  if (!swrTournamentsResponse.isLoading && tournamentDataFull == null) {
+    return <NotFoundTitle />;
+  }
+
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>{tournamentDataFull.name}</Title>
+          <Title>{tournamentDataFull != null ? tournamentDataFull.name : ''}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           <Group position="right">
@@ -163,7 +161,6 @@ export default function TournamentPage() {
         <Brackets
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
-          swrCourtsResponse={swrCourtsResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
           selectedStageId={selectedStageId}

@@ -13,6 +13,7 @@ from bracket.models.db.match import (
     Match,
     MatchBody,
     MatchCreateBody,
+    MatchCreateBodyFrontend,
     MatchFilter,
     MatchRescheduleBody,
     SuggestedMatch,
@@ -24,7 +25,8 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import match_dependency, round_dependency, round_with_matches_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
-from bracket.sql.matches import sql_delete_match, sql_update_match
+from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -72,12 +74,17 @@ async def delete_match(
 @router.post("/tournaments/{tournament_id}/matches", response_model=SingleMatchResponse)
 async def create_match(
     tournament_id: int,
-    match_body: MatchCreateBody,
+    match_body: MatchCreateBodyFrontend,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
-    return SingleMatchResponse(
-        data=await create_match_and_assign_free_court(tournament_id, match_body)
+    tournament = await sql_get_tournament(tournament_id)
+    body_with_durations = MatchCreateBody(
+        **match_body.dict(),
+        duration_minutes=tournament.duration_minutes,
+        margin_minutes=tournament.margin_minutes,
     )
+
+    return SingleMatchResponse(data=await sql_create_match(body_with_durations))
 
 
 @router.post("/tournaments/{tournament_id}/schedule_matches", response_model=SuccessResponse)
@@ -123,7 +130,9 @@ async def create_matches_automatically(
         limit=1,
         iterations=iterations,
     )
+
     courts = await get_all_courts_in_tournament(tournament_id)
+    tournament = await sql_get_tournament(tournament_id)
 
     limit = len(courts) - len(round_.matches)
     for __ in range(limit):
@@ -150,6 +159,10 @@ async def create_matches_automatically(
                 team2_winner_from_stage_item_id=None,
                 team2_winner_position=None,
                 team2_winner_from_match_id=None,
+                duration_minutes=tournament.duration_minutes,
+                margin_minutes=tournament.margin_minutes,
+                custom_duration_minutes=None,
+                custom_margin_minutes=None,
             ),
         )
 
@@ -164,6 +177,8 @@ async def update_match_by_id(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     assert match.id
-    await sql_update_match(match.id, match_body)
+    tournament = await sql_get_tournament(tournament_id)
+
+    await sql_update_match(match.id, match_body, tournament)
     await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()

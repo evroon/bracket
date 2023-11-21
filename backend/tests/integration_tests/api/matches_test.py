@@ -239,7 +239,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': player_inserted_1.id,
                                 'active': True,
-                                'name': 'Player 1',
+                                'name': 'Player 01',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': auth_context.tournament.id,
                                 'elo_score': 1100,
@@ -251,7 +251,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': player_inserted_3.id,
                                 'active': True,
-                                'name': 'Player 3',
+                                'name': 'Player 03',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': auth_context.tournament.id,
                                 'elo_score': 1200,
@@ -274,7 +274,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': player_inserted_2.id,
                                 'active': True,
-                                'name': 'Player 2',
+                                'name': 'Player 02',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': auth_context.tournament.id,
                                 'elo_score': 1300,
@@ -286,7 +286,7 @@ async def test_upcoming_matches_endpoint(
                             {
                                 'id': player_inserted_4.id,
                                 'active': True,
-                                'name': 'Player 4',
+                                'name': 'Player 04',
                                 'created': '2022-01-11T04:32:11+00:00',
                                 'tournament_id': auth_context.tournament.id,
                                 'elo_score': 1400,

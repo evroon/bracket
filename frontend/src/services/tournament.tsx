@@ -36,7 +36,9 @@ export async function updateTournament(
   dashboard_endpoint: string,
   players_can_be_in_multiple_teams: boolean,
   auto_assign_courts: boolean,
-  start_time: string
+  start_time: string,
+  duration_minutes: number,
+  margin_minutes: number
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}`, {
@@ -46,6 +48,8 @@ export async function updateTournament(
       players_can_be_in_multiple_teams,
       auto_assign_courts,
       start_time,
+      duration_minutes,
+      margin_minutes,
     })
     .catch((response: any) => handleRequestError(response));
 }

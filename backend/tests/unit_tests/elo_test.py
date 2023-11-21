@@ -40,6 +40,9 @@ def test_elo_calculation() -> None:
                 court_id=None,
                 court=None,
                 duration_minutes=10,
+                margin_minutes=5,
+                custom_duration_minutes=None,
+                custom_margin_minutes=None,
                 position_in_schedule=0,
                 team1=FullTeamWithPlayers(
                     id=3,

@@ -4,6 +4,7 @@ from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
+from bracket.models.db.tournament import Tournament
 
 
 async def sql_delete_match(match_id: int) -> None:
@@ -40,6 +41,10 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             team2_winner_position,
             team1_winner_from_match_id,
             team2_winner_from_match_id,
+            duration_minutes,
+            custom_duration_minutes,
+            margin_minutes,
+            custom_margin_minutes,
             team1_score,
             team2_score,
             created
@@ -55,6 +60,10 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             :team2_winner_position,
             :team1_winner_from_match_id,
             :team2_winner_from_match_id,
+            :duration_minutes,
+            :custom_duration_minutes,
+            :margin_minutes,
+            :custom_margin_minutes,
             0,
             0,
             NOW()
@@ -69,17 +78,40 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
     return Match.parse_obj(result._mapping)
 
 
-async def sql_update_match(match_id: int, match: MatchBody) -> None:
+async def sql_update_match(match_id: int, match: MatchBody, tournament: Tournament) -> None:
     query = '''
         UPDATE matches
         SET round_id = :round_id,
             team1_score = :team1_score,
             team2_score = :team2_score,
-            court_id = :court_id
+            court_id = :court_id,
+            custom_duration_minutes = :custom_duration_minutes,
+            custom_margin_minutes = :custom_margin_minutes,
+            duration_minutes = :duration_minutes,
+            margin_minutes = :margin_minutes
         WHERE matches.id = :match_id
         RETURNING *
         '''
-    await database.execute(query=query, values={'match_id': match_id, **match.dict()})
+
+    duration_minutes = (
+        match.custom_duration_minutes
+        if match.custom_duration_minutes is not None
+        else tournament.duration_minutes
+    )
+    margin_minutes = (
+        match.custom_margin_minutes
+        if match.custom_margin_minutes is not None
+        else tournament.margin_minutes
+    )
+    await database.execute(
+        query=query,
+        values={
+            'match_id': match_id,
+            **match.dict(),
+            'duration_minutes': duration_minutes,
+            'margin_minutes': margin_minutes,
+        },
+    )
 
 
 async def sql_update_team_ids_for_match(
@@ -97,13 +129,24 @@ async def sql_update_team_ids_for_match(
 
 
 async def sql_reschedule_match(
-    match_id: int, court_id: int | None, start_time: datetime_utc, position_in_schedule: int | None
+    match_id: int,
+    court_id: int | None,
+    start_time: datetime_utc,
+    position_in_schedule: int | None,
+    duration_minutes: int,
+    margin_minutes: int,
+    custom_duration_minutes: int | None,
+    custom_margin_minutes: int | None,
 ) -> None:
     query = '''
         UPDATE matches
         SET court_id = :court_id,
             start_time = :start_time,
-            position_in_schedule = :position_in_schedule
+            position_in_schedule = :position_in_schedule,
+            duration_minutes = :duration_minutes,
+            margin_minutes = :margin_minutes,
+            custom_duration_minutes = :custom_duration_minutes,
+            custom_margin_minutes = :custom_margin_minutes
         WHERE matches.id = :match_id
         '''
     await database.execute(
@@ -113,7 +156,41 @@ async def sql_reschedule_match(
             'match_id': match_id,
             'position_in_schedule': position_in_schedule,
             'start_time': datetime.fromisoformat(start_time.isoformat()),
+            'duration_minutes': duration_minutes,
+            'margin_minutes': margin_minutes,
+            'custom_duration_minutes': custom_duration_minutes,
+            'custom_margin_minutes': custom_margin_minutes,
         },
+    )
+
+
+async def sql_reschedule_match_and_determine_duration_and_margin(
+    match_id: int,
+    court_id: int | None,
+    start_time: datetime_utc,
+    position_in_schedule: int | None,
+    match: Match,
+    tournament: Tournament,
+) -> None:
+    duration_minutes = (
+        tournament.duration_minutes
+        if match.custom_duration_minutes is None
+        else match.custom_duration_minutes
+    )
+    margin_minutes = (
+        tournament.margin_minutes
+        if match.custom_margin_minutes is None
+        else match.custom_margin_minutes
+    )
+    await sql_reschedule_match(
+        match_id,
+        court_id,
+        start_time,
+        position_in_schedule,
+        duration_minutes,
+        margin_minutes,
+        match.custom_duration_minutes,
+        match.custom_margin_minutes,
     )
 
 

@@ -11,6 +11,7 @@ import {
   TournamentTitle,
 } from '../../../../components/dashboard/layout';
 import StandingsTable from '../../../../components/tables/standings';
+import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { getTeamsLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
@@ -22,6 +23,10 @@ export default function Standings() {
   const tournamentId = !notFound ? tournamentResponse[0].id : -1;
 
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
+
+  if (swrTeamsResponse.isLoading) {
+    return <TableSkeletonTwoColumns />;
+  }
 
   if (notFound) {
     return <NotFoundTitle />;
