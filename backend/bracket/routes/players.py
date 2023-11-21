@@ -96,7 +96,8 @@ async def create_multiple_players(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    for player in '\n'.split(player_body.names):
-        await insert_player(PlayerBody(name=player, active=player_body.active), tournament_id)
+    player_names = [player.strip() for player in player_body.names.split('\n') if len(player) > 0]
+    for player_name in player_names:
+        await insert_player(PlayerBody(name=player_name, active=player_body.active), tournament_id)
 
     return SuccessResponse()

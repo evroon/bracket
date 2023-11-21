@@ -78,7 +78,6 @@ export default function Teams() {
             <TeamCreateModal
               swrTeamsResponse={swrTeamsResponse}
               tournament_id={tournamentData.id}
-              team={null}
             />
           </Group>
         </Grid.Col>

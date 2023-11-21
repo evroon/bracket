@@ -24,9 +24,9 @@ export default function TeamUpdateModal({
 
   const form = useForm({
     initialValues: {
-      name: team == null ? '' : team.name,
-      active: team == null ? true : team.active,
-      player_ids: team == null ? [] : team.players.map((player) => `${player.id}`),
+      name: team.name,
+      active: team.active,
+      player_ids: team.players.map((player) => `${player.id}`),
     },
 
     validate: {

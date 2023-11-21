@@ -4,7 +4,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
-from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamToInsert, TeamMultiBody
+from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
@@ -135,27 +135,22 @@ async def create_team(
     return SingleTeamResponse(data=team_result)
 
 
-
 @router.post("/tournaments/{tournament_id}/teams_multi", response_model=SuccessResponse)
-async def create_multiple_team(
-    team_to_insert: TeamMultiBody,
+async def create_multiple_teams(
+    team_body: TeamMultiBody,
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    tournament_teams = await get_teams_with_members(tournament_id)
-    for team in tournament_teams:
-        if team.player_ids != [] and sorted(team.player_ids) == sorted(team_to_insert.player_ids):
-            return SingleTeamResponse(data=team)
+    team_names = [team.strip() for team in team_body.names.split('\n') if len(team) > 0]
+    for team_name in team_names:
+        await database.execute(
+            query=teams.insert(),
+            values=TeamToInsert(
+                name=team_name,
+                active=team_body.active,
+                created=datetime_utc.now(),
+                tournament_id=tournament_id,
+            ).dict(),
+        )
 
-    last_record_id = await database.execute(
-        query=teams.insert(),
-        values=TeamToInsert(
-            **team_to_insert.dict(exclude={'player_ids'}),
-            created=datetime_utc.now(),
-            tournament_id=tournament_id,
-        ).dict(),
-    )
-
-    team_result = await get_team_by_id(last_record_id, tournament_id)
-    assert team_result is not None
     return SuccessResponse()

@@ -19,7 +19,6 @@ export default function Players() {
           <PlayerCreateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}
-            player={null}
           />
         </Grid.Col>
       </Grid>
