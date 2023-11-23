@@ -17,7 +17,7 @@ export default function PlayerList({
   }
 
   const playerNames = team.players
-    .map((player) => truncateString(player.name, 20))
+    .map((player) => truncateString(player.name, 15))
     .sort()
     .join(', ');
   return <span>{playerNames}</span>;
