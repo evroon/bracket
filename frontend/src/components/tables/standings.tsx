@@ -27,7 +27,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
     .sort((p1: TeamInterface, p2: TeamInterface) => (p1.draws > p2.draws ? 1 : 0))
     .sort((p1: TeamInterface, p2: TeamInterface) => (p1.wins > p2.wins ? 1 : 0))
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
-    .slice(0, 15)
+    .slice(0, 14)
     .map((team, index) => (
       <tr key={team.id}>
         <td>{index + 1}</td>
