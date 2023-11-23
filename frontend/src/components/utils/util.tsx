@@ -66,7 +66,6 @@ export const groupBy = (keys: any) => (array: any) =>
     return objectsByKeyValue;
   }, {});
 
-
 export function truncateString(input: string, length: number) {
   if (input.length > length + 3) {
     return `${input.slice(0, length)}...`;

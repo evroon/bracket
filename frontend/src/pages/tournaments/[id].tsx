@@ -29,13 +29,13 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
-  const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only_recommended', 'true');
-  const [eloThreshold, setEloThreshold] = useRouterQueryState('max_elo_diff', 100);
+  const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only-recommended', 'true');
+  const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 100);
   const [iterations, setIterations] = useRouterQueryState('iterations', 1000);
   const [limit, setLimit] = useRouterQueryState('limit', 50);
   const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
-  const [matchVisibility, setMatchVisibility] = useRouterQueryState('all');
-  const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('team-names');
+  const [matchVisibility, setMatchVisibility] = useRouterQueryState('match-visibility', 'all');
+  const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('which-names', 'team-names');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
     setMatchVisibility,

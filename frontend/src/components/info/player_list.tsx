@@ -1,6 +1,6 @@
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { TeamInterface } from '../../interfaces/team';
-import {truncateString} from "../utils/util";
+import { truncateString } from '../utils/util';
 
 export default function PlayerList({
   team,
