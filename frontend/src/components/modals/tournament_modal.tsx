@@ -1,7 +1,18 @@
-import { Button, Checkbox, Group, Image, Modal, Select, TextInput } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Grid,
+  Group,
+  Image,
+  Modal,
+  NumberInput,
+  Select,
+  TextInput,
+} from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -35,12 +46,18 @@ function GeneralTournamentForm({
       dashboard_endpoint: '',
       players_can_be_in_multiple_teams: false,
       auto_assign_courts: true,
+      duration_minutes: 10,
+      margin_minutes: 5,
     },
 
     validate: {
       name: (value) => (value.length > 0 ? null : 'Name too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
       start_time: (value) => (value != null ? null : 'Please choose a start time'),
+      duration_minutes: (value) =>
+        value != null && value > 0 ? null : 'Please choose a duration of the matches',
+      margin_minutes: (value) =>
+        value != null && value > 0 ? null : 'Please choose a margin of the matches',
     },
   });
 
@@ -55,7 +72,9 @@ function GeneralTournamentForm({
           values.dashboard_endpoint,
           values.players_can_be_in_multiple_teams,
           values.auto_assign_courts,
-          values.start_time.toISOString()
+          values.start_time.toISOString(),
+          values.duration_minutes,
+          values.margin_minutes
         );
         await swrTournamentsResponse.mutate(null);
         setOpened(false);
@@ -85,15 +104,47 @@ function GeneralTournamentForm({
         mt="lg"
         {...form.getInputProps('dashboard_endpoint')}
       />
+      <Grid mt="1rem">
+        <Grid.Col sm={9}>
+          <DateTimePicker
+            icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+            placeholder="Pick date and time"
+            mx="auto"
+            {...form.getInputProps('start_time')}
+          />
+        </Grid.Col>
+        <Grid.Col sm={3}>
+          <Button
+            fullWidth
+            color="indigo"
+            leftIcon={<IconCalendarTime size="1.1rem" stroke={1.5} />}
+            onClick={() => {
+              form.setFieldValue('start_time', new Date());
+            }}
+          >
+            NOW
+          </Button>
+        </Grid.Col>
+      </Grid>
 
-      <DateTimePicker
-        label="Start of tournament"
-        placeholder="Pick date and time"
-        mt="lg"
-        mx="auto"
-        dropdownType="modal"
-        {...form.getInputProps('start_time')}
-      />
+      <Grid>
+        <Grid.Col sm={6}>
+          <NumberInput
+            label="Match duration (minutes)"
+            mt="lg"
+            type="number"
+            {...form.getInputProps('duration_minutes')}
+          />
+        </Grid.Col>
+        <Grid.Col sm={6}>
+          <NumberInput
+            label="Time between matches (minutes)"
+            mt="lg"
+            type="number"
+            {...form.getInputProps('margin_minutes')}
+          />
+        </Grid.Col>
+      </Grid>
 
       <Checkbox
         mt="md"
@@ -130,7 +181,7 @@ export default function TournamentModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={operation_text} size="50rem">
         <GeneralTournamentForm
           setOpened={setOpened}
           swrTournamentsResponse={swrTournamentsResponse}

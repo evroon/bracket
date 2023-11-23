@@ -20,8 +20,8 @@ def set_statistics_for_player_or_team(
     stats: defaultdict[int, PlayerStatistics],
     match: MatchWithDetailsDefinitive,
     team_or_player_id: int,
-    rating_team1_before: float | int,
-    rating_team2_before: float | int,
+    rating_team1_before: float,
+    rating_team2_before: float,
 ) -> None:
     is_team1 = team_index == 0
     team_score = match.team1_score if is_team1 else match.team2_score

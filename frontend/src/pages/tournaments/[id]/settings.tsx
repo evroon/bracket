@@ -124,7 +124,6 @@ function GeneralTournamentForm({
             fullWidth
             color="indigo"
             leftIcon={<IconCalendarTime size="1.1rem" stroke={1.5} />}
-            type="submit"
             onClick={() => {
               form.setFieldValue('start_time', new Date());
             }}
