@@ -60,6 +60,10 @@ function GeneralTournamentForm({
       dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard link too short'),
       club_id: (value) => (value != null ? null : 'Please choose a club'),
       start_time: (value) => (value != null ? null : 'Please choose a start time'),
+      duration_minutes: (value) =>
+        value != null && value > 0 ? null : 'Please choose a duration of the matches',
+      margin_minutes: (value) =>
+        value != null && value > 0 ? null : 'Please choose a margin of the matches',
     },
   });
 
