@@ -1,6 +1,5 @@
+import { Text } from '@mantine/core';
 import React from 'react';
-// @ts-ignore
-import EllipsisText from 'react-ellipsis-text';
 import { SWRResponse } from 'swr';
 
 import { TeamInterface } from '../../interfaces/team';
@@ -32,7 +31,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
       <tr key={team.id}>
         <td>{index + 1}</td>
         <td>
-          <EllipsisText text={team.name} length={50} />
+          <Text>{team.name}</Text>
         </td>
         <td>
           <PlayerList team={team} />

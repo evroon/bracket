@@ -67,7 +67,7 @@ async def create_round(
             detail=f"Stage type {stage_item.type} doesn't support manual creation of rounds",
         )
 
-    await database.execute(
+    round_id = await database.execute(
         query=rounds.insert(),
         values=RoundToInsert(
             created=datetime_utc.now(),
@@ -75,6 +75,8 @@ async def create_round(
             name=await get_next_round_name(tournament_id, round_body.stage_item_id),
         ).dict(),
     )
+
+    await set_round_active_or_draft(round_id, tournament_id, is_active=False, is_draft=True)
     return SuccessResponse()
 
 

@@ -72,10 +72,10 @@ export default function Scheduler({
         Schedule new matches for <u>{draftRound.name}</u> in <u>{activeStage.name}</u>
       </h2>
       <Grid>
-        <Grid.Col span={6}>
+        <Grid.Col span="auto">
           <StageSettings schedulerSettings={schedulerSettings} />
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col span="content">
           <Group position="right">
             <AutoCreateMatchesButton
               swrStagesResponse={swrRoundsResponse}

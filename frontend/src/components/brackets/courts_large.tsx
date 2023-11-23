@@ -16,7 +16,7 @@ export function CourtBadge({ name, color }: { name: string; color: MantineColor 
         backgroundColor: badgeColor,
         borderRadius: '8px',
         padding: '8px 16px 8px 16px',
-        fontSize: '1.5rem',
+        fontSize: '1.8rem',
       }}
     >
       <b>{name}</b>
