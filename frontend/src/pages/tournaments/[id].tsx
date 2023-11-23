@@ -6,6 +6,7 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import Scheduler from '../../components/scheduling/scheduling';
+import { useRouterQueryState, useRouterReady } from '../../components/utils/query_parameters';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
 import { BracketDisplaySettings } from '../../interfaces/brackets';
@@ -28,10 +29,10 @@ export default function TournamentPage() {
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
-  const [onlyRecommended, setOnlyRecommended] = useState('true');
-  const [eloThreshold, setEloThreshold] = useState(100);
-  const [iterations, setIterations] = useState(200);
-  const [limit, setLimit] = useState(50);
+  const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only_recommended', 'true');
+  const [eloThreshold, setEloThreshold] = useRouterQueryState('max_elo_diff', 100);
+  const [iterations, setIterations] = useRouterQueryState('iterations', 1000);
+  const [limit, setLimit] = useRouterQueryState('limit', 50);
   const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
   const [matchVisibility, setMatchVisibility] = useState('all');
   const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
@@ -108,6 +109,10 @@ export default function TournamentPage() {
 
   if (!swrTournamentsResponse.isLoading && tournamentDataFull == null) {
     return <NotFoundTitle />;
+  }
+
+  if (!useRouterReady()) {
+    return null;
   }
 
   return (
