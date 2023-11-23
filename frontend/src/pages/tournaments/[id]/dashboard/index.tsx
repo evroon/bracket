@@ -60,7 +60,6 @@ export default function Index() {
         <Grid.Col span={2}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
-          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span={10}>
           <Center>
