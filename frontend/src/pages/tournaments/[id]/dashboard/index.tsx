@@ -55,7 +55,7 @@ export default function Index() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '20px' }}>
+      <Grid grow style={{ margin: '0.5rem' }}>
         <Grid.Col span={2}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
