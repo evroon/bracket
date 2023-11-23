@@ -8,7 +8,6 @@ import Brackets from '../../../../components/brackets/brackets';
 import {
   TournamentHeadTitle,
   TournamentLogo,
-  TournamentQRCode,
   TournamentTitle,
 } from '../../../../components/dashboard/layout';
 import StagesTab from '../../../../components/utils/stages_tab';
@@ -56,11 +55,10 @@ export default function Index() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '20px' }}>
+      <Grid grow style={{ margin: '0.5rem' }}>
         <Grid.Col span={2}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
-          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span={10}>
           <Center>

@@ -115,7 +115,7 @@ function NotStartedAlert() {
         color="blue"
         radius="lg"
       >
-        Please go to the next stage to start the tournament.
+        Please wait for the tournament to start.
       </Alert>
     </Container>
   );
