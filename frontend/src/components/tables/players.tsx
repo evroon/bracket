@@ -1,7 +1,5 @@
 import { Badge, Text } from '@mantine/core';
 import React from 'react';
-// @ts-ignore
-import EllipsisText from 'react-ellipsis-text';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
@@ -67,7 +65,7 @@ export default function PlayersTable({
           )}
         </td>
         <td>
-          <EllipsisText text={player.name} length={15} />
+          <Text>{player.name}</Text>
         </td>
         <td>
           <DateTime datetime={player.created} />

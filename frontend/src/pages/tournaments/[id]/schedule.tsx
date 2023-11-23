@@ -1,9 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { Alert, Badge, Button, Card, Grid, Group, Text, Title } from '@mantine/core';
+import { Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
 import React from 'react';
-// @ts-ignore
-import EllipsisText from 'react-ellipsis-text';
 
 import { Time } from '../../../components/utils/datetime';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
@@ -31,12 +29,6 @@ function ScheduleRow({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
-  const matchName = `${formatMatchTeam1(
-    stageItemsLookup,
-    matchesLookup,
-    match
-  )} - ${formatMatchTeam2(stageItemsLookup, matchesLookup, match)}`;
-
   const stageItemColor = stringToColour(`${matchesLookup[match.id].stageItem.id}`);
 
   return (
@@ -51,20 +43,22 @@ function ScheduleRow({
             mt="md"
             {...provided.dragHandleProps}
           >
-            <Group position="apart">
-              <Group>
-                {/*<IconGripVertical stroke={1.5} />*/}
-                <Text weight={500}>
-                  <EllipsisText text={matchName} length={40} />
-                </Text>
-              </Group>
-              <Badge color="gray" variant="dot" size="lg">
-                {match.start_time != null ? <Time datetime={match.start_time} /> : null}
-              </Badge>
-            </Group>
-            <Badge color={stageItemColor} variant="outline">
-              {matchesLookup[match.id].stageItem.name}
-            </Badge>
+            <Grid>
+              <Grid.Col span="auto">
+                <Text weight={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, match)}</Text>
+                <Text weight={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
+              </Grid.Col>
+              <Grid.Col span="content">
+                <Stack spacing="xs">
+                  <Badge color="gray" variant="dot" size="lg">
+                    {match.start_time != null ? <Time datetime={match.start_time} /> : null}
+                  </Badge>
+                  <Badge color={stageItemColor} variant="outline">
+                    {matchesLookup[match.id].stageItem.name}
+                  </Badge>
+                </Stack>
+              </Grid.Col>
+            </Grid>
           </Card>
         </div>
       )}

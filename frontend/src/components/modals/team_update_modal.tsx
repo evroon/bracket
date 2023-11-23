@@ -6,7 +6,7 @@ import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
 import { TeamInterface } from '../../interfaces/team';
-import { getPlayers } from '../../services/adapter';
+import { getPlayers, requestSucceeded } from '../../services/adapter';
 import { updateTeam } from '../../services/team';
 
 export default function TeamUpdateModal({
@@ -39,10 +39,17 @@ export default function TeamUpdateModal({
       <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Team">
         <form
           onSubmit={form.onSubmit(async (values) => {
-            await updateTeam(tournament_id, team.id, values.name, values.active, values.player_ids);
-
-            await swrTeamsResponse.mutate(null);
-            setOpened(false);
+            const result = await updateTeam(
+              tournament_id,
+              team.id,
+              values.name,
+              values.active,
+              values.player_ids
+            );
+            if (requestSucceeded(result)) {
+              await swrTeamsResponse.mutate(null);
+              setOpened(false);
+            }
           })}
         >
           <TextInput

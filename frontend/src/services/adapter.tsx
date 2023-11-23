@@ -1,4 +1,5 @@
 import { showNotification } from '@mantine/notifications';
+import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
@@ -7,27 +8,43 @@ import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 const axios = require('axios').default;
 
-export function handleRequestError(response: any) {
+export function handleRequestError(response: AxiosError) {
   if (response.code === 'ERR_NETWORK') {
     showNotification({
       color: 'red',
       title: 'An error occurred',
       message: 'Internal server error',
+      autoClose: 10000,
     });
+    return;
   }
 
+  // @ts-ignore
   if (response.response != null && response.response.data.detail != null) {
     // If the detail contains an array, there is likely a pydantic validation error occurring.
-    const message = Array.isArray(response.response.data.detail)
-      ? 'Unknown error'
-      : response.response.data.detail.toString();
+    // @ts-ignore
+    const { detail } = response.response.data;
+    let message: string;
+
+    if (Array.isArray(detail)) {
+      const firstError = detail[0];
+      message = `${firstError.loc.slice(1).join(' - ')}: ${firstError.msg}`;
+    } else {
+      message = detail.toString();
+    }
 
     showNotification({
       color: 'red',
       title: 'An error occurred',
       message,
+      autoClose: 10000,
     });
   }
+}
+
+export function requestSucceeded(result: AxiosResponse | AxiosError) {
+  // @ts-ignore
+  return result.name !== 'AxiosError';
 }
 
 export function getBaseApiUrl() {
@@ -46,6 +63,22 @@ export function createAxios() {
       Accept: 'application/json',
     },
   });
+}
+
+export async function awaitRequestAndHandleError(
+  requestFunction: (instance: AxiosInstance) => Promise<AxiosResponse>
+): Promise<AxiosError | AxiosResponse> {
+  let response = null;
+  try {
+    response = await requestFunction(createAxios());
+  } catch (exc: any) {
+    if (exc.name === 'AxiosError') {
+      handleRequestError(exc);
+      return exc;
+    }
+    throw exc;
+  }
+  return response;
 }
 
 const fetcher = (url: string) =>

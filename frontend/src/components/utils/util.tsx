@@ -65,3 +65,11 @@ export const groupBy = (keys: any) => (array: any) =>
     objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
     return objectsByKeyValue;
   }, {});
+
+
+export function truncateString(input: string, length: number) {
+  if (input.length > length + 3) {
+    return `${input.slice(0, length)}...`;
+  }
+  return input;
+}

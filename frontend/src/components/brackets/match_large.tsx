@@ -1,4 +1,4 @@
-import { Card, Center, Grid } from '@mantine/core';
+import { Card, Center, Grid, Text } from '@mantine/core';
 import assert from 'assert';
 import React from 'react';
 
@@ -14,8 +14,8 @@ export default function MatchLarge({ match }: { match: MatchInterface }) {
       <Card padding="md" shadow="sm" radius="lg" withBorder>
         <Grid align="center">
           <Grid.Col sm={9}>
-            <div>{match.team1.name}</div>
-            <div>{match.team2.name}</div>
+            <Text lineClamp={1}>{match.team1.name}</Text>
+            <Text lineClamp={1}>{match.team2.name}</Text>
           </Grid.Col>
           <Grid.Col sm={3}>
             <Center>
@@ -32,7 +32,7 @@ export default function MatchLarge({ match }: { match: MatchInterface }) {
       style={{
         width: '100%',
         padding: '0px',
-        fontSize: '2rem',
+        fontSize: '1.8rem',
       }}
     >
       {bracket}

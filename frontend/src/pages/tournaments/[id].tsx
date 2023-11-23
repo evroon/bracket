@@ -34,8 +34,8 @@ export default function TournamentPage() {
   const [iterations, setIterations] = useRouterQueryState('iterations', 1000);
   const [limit, setLimit] = useRouterQueryState('limit', 50);
   const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
-  const [matchVisibility, setMatchVisibility] = useState('all');
-  const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
+  const [matchVisibility, setMatchVisibility] = useRouterQueryState('all');
+  const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('team-names');
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
     setMatchVisibility,

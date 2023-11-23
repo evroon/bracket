@@ -1,5 +1,6 @@
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { TeamInterface } from '../../interfaces/team';
+import {truncateString} from "../utils/util";
 
 export default function PlayerList({
   team,
@@ -16,7 +17,7 @@ export default function PlayerList({
   }
 
   const playerNames = team.players
-    .map((player) => player.name)
+    .map((player) => truncateString(player.name, 20))
     .sort()
     .join(', ');
   return <span>{playerNames}</span>;
