@@ -8,7 +8,6 @@ import Brackets from '../../../../components/brackets/brackets';
 import {
   TournamentHeadTitle,
   TournamentLogo,
-  TournamentQRCode,
   TournamentTitle,
 } from '../../../../components/dashboard/layout';
 import StagesTab from '../../../../components/utils/stages_tab';
