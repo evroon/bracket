@@ -70,12 +70,8 @@ export default function UpcomingMatchesTable({
             </Badge>
           ) : null}
         </td>
-        <td>
-          {upcoming_match.team1.name}
-        </td>
-        <td>
-          {upcoming_match.team2.name}
-        </td>
+        <td>{upcoming_match.team1.name}</td>
+        <td>{upcoming_match.team2.name}</td>
         <td>{upcoming_match.elo_diff.toFixed(0)}</td>
         <td>{upcoming_match.swiss_diff.toFixed(1)}</td>
         <td>
