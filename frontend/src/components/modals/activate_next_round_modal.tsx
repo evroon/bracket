@@ -52,7 +52,7 @@ export default function ActivateNextRoundModal({
             <ul>
               <li>
                 <b>Unchecked</b>: Use default timing (the next matches will be planned tightly after
-                the matches of the active round end)
+                the matches of the active round end, taking margin into account)
               </li>
               <li>
                 <b>Checked</b>: Adjust the start times of the next matches to start immediately
