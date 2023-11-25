@@ -67,22 +67,23 @@ def test_constraints() -> None:
     teams = [team1, team2, team3, team4]
     result = get_possible_upcoming_matches_for_swiss(MATCH_FILTER, rounds, teams)
 
-    # Team 3 and 4 haven't played yet, so that suggested match is recommended.
+    # Team 3 and 4 haven't played yet, so any suggested match with one or more of those teams
+    # is recommended.
     assert result == [
+        SuggestedMatch(
+            team1=team3,
+            team2=team2,
+            elo_diff=Decimal('25'),
+            swiss_diff=Decimal('0.0'),
+            is_recommended=True,
+            player_behind_schedule_count=0,
+        ),
         SuggestedMatch(
             team1=team4,
             team2=team3,
             elo_diff=Decimal('50'),
             swiss_diff=Decimal('0.0'),
             is_recommended=True,
-            player_behind_schedule_count=0,
-        ),
-        SuggestedMatch(
-            team1=team3,
-            team2=team2,
-            elo_diff=Decimal('25'),
-            swiss_diff=Decimal('0.0'),
-            is_recommended=False,
             player_behind_schedule_count=0,
         ),
     ]

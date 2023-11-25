@@ -36,14 +36,17 @@ def get_previous_matches_hashes(rounds: list[RoundWithMatches]) -> frozenset[str
     )
 
 
-def get_number_of_teams_played_per_team(rounds: list[RoundWithMatches]) -> dict[int, int]:
+def get_number_of_teams_played_per_team(
+    rounds: list[RoundWithMatches], excluded_team_ids: frozenset[int]
+) -> dict[int, int]:
     result: dict[int, int] = defaultdict(int)
 
     for round_ in rounds:
         for match in round_.matches:
             if isinstance(match, MatchWithDetailsDefinitive):
-                for team_id in match.team_ids:
-                    result[assert_some(team_id)] += 1
+                for team in match.teams:
+                    if team.active and team.id not in excluded_team_ids:
+                        result[assert_some(team.id)] += 1
 
     return result
 
@@ -66,11 +69,19 @@ def get_possible_upcoming_matches_for_swiss(
     ]
 
     if len(teams_to_schedule) < 1:
-        return suggestions
+        return []
 
     previous_match_team_hashes = get_previous_matches_hashes(rounds)
-    times_played_per_team = get_number_of_teams_played_per_team(rounds)
-    max_times_played = max(times_played_per_team.values()) if len(times_played_per_team) else 1
+    times_played_per_team = dict(
+        get_number_of_teams_played_per_team(
+            rounds, excluded_team_ids=frozenset(draft_round_team_ids)
+        )
+    )
+    for team in teams_to_schedule:
+        if team.id not in times_played_per_team:
+            times_played_per_team[assert_some(team.id)] = 0
+
+    min_times_played = min(times_played_per_team.values()) if len(times_played_per_team) > 0 else 0
 
     teams1_random = random.choices(teams_to_schedule, k=filter_.iterations)
     teams2_random = random.choices(teams_to_schedule, k=filter_.iterations)
@@ -87,12 +98,12 @@ def get_possible_upcoming_matches_for_swiss(
         if get_match_hash(team1.id, team2.id) in previous_match_team_hashes:
             continue
 
-        times_played_max = max(
+        times_played_min = min(
             times_played_per_team[assert_some(team1.id)],
             times_played_per_team[assert_some(team2.id)],
         )
         suggested_match = check_team_combination_adheres_to_filter(
-            team1, team2, filter_, is_recommended=times_played_max < max_times_played
+            team1, team2, filter_, is_recommended=times_played_min <= min_times_played
         )
         if (
             suggested_match
