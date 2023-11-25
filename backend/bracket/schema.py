@@ -134,7 +134,7 @@ players = Table(
     'players',
     metadata,
     Column('id', BigInteger, primary_key=True, index=True),
-    Column('name', String, nullable=False, index=True, unique=True),
+    Column('name', String, nullable=False, index=True),
     Column('created', DateTimeTZ, nullable=False),
     Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
     Column('elo_score', Float, nullable=False),
