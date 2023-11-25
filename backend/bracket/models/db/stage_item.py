@@ -25,7 +25,7 @@ class StageItemToInsert(BaseModelORM):
     name: str
     created: datetime_utc
     type: StageType
-    team_count: int = Field(ge=2, le=16)
+    team_count: int = Field(ge=2, le=64)
 
 
 class StageItem(StageItemToInsert):
@@ -44,7 +44,7 @@ class StageItemCreateBody(BaseModelORM):
     stage_id: int
     name: str | None
     type: StageType
-    team_count: int = Field(ge=2, le=16)
+    team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]
 
     def get_name_or_default_name(self) -> str:
