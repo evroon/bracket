@@ -1,4 +1,4 @@
-import { Grid } from '@mantine/core';
+import { Grid, MediaQuery } from '@mantine/core';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -74,11 +74,13 @@ export default function CourtsPage() {
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
       <Grid grow style={{ margin: '1rem' }} gutter="2rem">
-        <Grid.Col span={2}>
-          <TournamentTitle tournamentDataFull={tournamentDataFull} />
-          <TournamentLogo tournamentDataFull={tournamentDataFull} />
-          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
-        </Grid.Col>
+        <MediaQuery query="(max-width: 80em)" styles={{ display: 'none' }}>
+          <Grid.Col span={2}>
+            <TournamentTitle tournamentDataFull={tournamentDataFull} />
+            <TournamentLogo tournamentDataFull={tournamentDataFull} />
+            <TournamentQRCode tournamentDataFull={tournamentDataFull} />
+          </Grid.Col>
+        </MediaQuery>
         <Grid.Col span={10}>
           {header}
           {rows}

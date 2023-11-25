@@ -81,10 +81,22 @@ export async function awaitRequestAndHandleError(
   return response;
 }
 
+function getTimeState() {
+  // Used to force a refresh on SWRResponse, even when the response stays the same.
+  // For example, when the page layout depends on time, but the response contains
+  // timestamps that don't change, this is necessary.
+  return { time: new Date() };
+}
+
 const fetcher = (url: string) =>
   createAxios()
     .get(url)
     .then((res: { data: any }) => res.data);
+
+const fetcherWithTimestamp = (url: string) =>
+  createAxios()
+    .get(url)
+    .then((res: { data: any }) => ({ ...res.data, ...getTimeState() }));
 
 export function getClubs(): SWRResponse {
   return useSWR('clubs', fetcher);
@@ -133,7 +145,7 @@ export function getStagesLive(
     tournament_id === -1
       ? null
       : `tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`,
-    fetcher,
+    fetcherWithTimestamp,
     {
       refreshInterval: 5_000,
     }

@@ -96,7 +96,7 @@ async def start_next_round(
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    active_round, next_round = get_active_and_next_rounds(stage_item)
+    __, next_round = get_active_and_next_rounds(stage_item)
     if next_round is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -116,12 +116,7 @@ async def start_next_round(
             detail=str(exc),
         ) from exc
 
-    if active_round is not None and active_round.id is not None:
-        await set_round_active_or_draft(
-            active_round.id, tournament_id, is_active=False, is_draft=False
-        )
-
     assert next_round.id is not None
-    await set_round_active_or_draft(next_round.id, tournament_id, is_active=True, is_draft=False)
+    await set_round_active_or_draft(next_round.id, tournament_id, is_active=False, is_draft=False)
 
     return SuccessResponse()
