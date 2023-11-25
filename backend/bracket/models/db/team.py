@@ -76,7 +76,7 @@ class TeamBody(BaseModelORM):
 
 
 class TeamMultiBody(BaseModelORM):
-    names: str = Field(..., min_length=1, max_length=30)
+    names: str = Field(..., min_length=1)
     active: bool
 
 
