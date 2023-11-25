@@ -27,7 +27,7 @@ function StageItemSelect({
   return (
     <Select
       data={data}
-      label="Filter group stages"
+      label="Filter on stage item"
       placeholder="No filter"
       dropdownPosition="bottom"
       clearable
@@ -51,9 +51,6 @@ export default function Teams() {
   const stageItemTeamLookup = responseIsValid(swrStagesResponse)
     ? getStageItemTeamIdsLookup(swrStagesResponse)
     : {};
-  const groupStageItems = Object.values(stageItemInputLookup).filter(
-    ([stageItem]: [StageItemWithRounds]) => stageItem.type === 'ROUND_ROBIN'
-  );
 
   let teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
 
@@ -72,7 +69,7 @@ export default function Teams() {
         <Grid.Col span={6}>
           <Group position="right">
             <StageItemSelect
-              groupStageItems={groupStageItems}
+              groupStageItems={Object.values(stageItemInputLookup)}
               setFilteredStageItemId={setFilteredStageItemId}
             />
             <TeamCreateModal

@@ -29,7 +29,7 @@ export default function TeamsTable({
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .map((team) => (
-      <tr key={team.name}>
+      <tr key={team.id}>
         <td>
           {team.active ? <Badge color="green">Active</Badge> : <Badge color="red">Inactive</Badge>}
         </td>

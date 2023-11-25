@@ -31,7 +31,7 @@ export default function TournamentsTable({
   const rows = tournaments
     .sort((p1: Tournament, p2: Tournament) => sortTableEntries(p1, p2, tableState))
     .map((tournament) => (
-      <tr key={tournament.name}>
+      <tr key={tournament.id}>
         <td>
           <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
         </td>
