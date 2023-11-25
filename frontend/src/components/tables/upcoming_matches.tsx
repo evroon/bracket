@@ -62,7 +62,7 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={`${getPlayerIds(upcoming_match.team1)} - ${getPlayerIds(upcoming_match.team2)}`}>
+      <tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
         <td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">
@@ -71,10 +71,10 @@ export default function UpcomingMatchesTable({
           ) : null}
         </td>
         <td>
-          <PlayerList team={upcoming_match.team1} displaySettings={displaySettings} />
+          {upcoming_match.team1.name}
         </td>
         <td>
-          <PlayerList team={upcoming_match.team2} displaySettings={displaySettings} />
+          {upcoming_match.team2.name}
         </td>
         <td>{upcoming_match.elo_diff.toFixed(0)}</td>
         <td>{upcoming_match.swiss_diff.toFixed(1)}</td>

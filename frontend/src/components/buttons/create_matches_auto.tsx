@@ -1,7 +1,10 @@
 import { Button } from '@mantine/core';
 import { IconTool } from '@tabler/icons-react';
 import React from 'react';
+import { SWRResponse } from 'swr';
 
+import { SchedulerSettings } from '../../interfaces/match';
+import { Tournament } from '../../interfaces/tournament';
 import { createMatchesAuto } from '../../services/round';
 
 export function AutoCreateMatchesButton({
@@ -9,7 +12,14 @@ export function AutoCreateMatchesButton({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   roundId,
-}: any) {
+  schedulerSettings,
+}: {
+  schedulerSettings: SchedulerSettings;
+  roundId: number;
+  tournamentData: Tournament;
+  swrStagesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse;
+}) {
   if (roundId == null) {
     return null;
   }
@@ -21,9 +31,15 @@ export function AutoCreateMatchesButton({
       color="indigo"
       leftIcon={<IconTool size={24} />}
       onClick={async () => {
-        await createMatchesAuto(tournamentData.id, roundId);
-        swrStagesResponse.mutate();
-        swrUpcomingMatchesResponse.mutate();
+        await createMatchesAuto(
+          tournamentData.id,
+          roundId,
+          schedulerSettings.eloThreshold,
+          schedulerSettings.onlyRecommended,
+          schedulerSettings.iterations
+        );
+        await swrStagesResponse.mutate();
+        await swrUpcomingMatchesResponse.mutate();
       }}
     >
       Add new matches automatically

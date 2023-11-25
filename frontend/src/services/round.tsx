@@ -9,9 +9,19 @@ export async function createRound(tournament_id: number, stage_item_id: number) 
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function createMatchesAuto(tournament_id: number, round_id: number) {
+export async function createMatchesAuto(
+  tournament_id: number,
+  round_id: number,
+  elo_diff_threshold: number,
+  only_recommended: string,
+  iterations: number
+) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/rounds/${round_id}/schedule_auto`)
+    .post(`tournaments/${tournament_id}/rounds/${round_id}/schedule_auto`, {
+      elo_diff_threshold,
+      only_recommended,
+      iterations,
+    })
     .catch((response: any) => handleRequestError(response));
 }
 

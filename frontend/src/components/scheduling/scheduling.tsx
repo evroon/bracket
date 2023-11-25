@@ -12,10 +12,6 @@ import { AutoCreateMatchesButton } from '../buttons/create_matches_auto';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
 import SwissSettings from './settings/ladder_fixed';
 
-function StageSettings({ schedulerSettings }: { schedulerSettings: SchedulerSettings }) {
-  return <SwissSettings schedulerSettings={schedulerSettings} />;
-}
-
 function SchedulingSystem({
   activeStage,
   tournamentData,
@@ -73,7 +69,7 @@ export default function Scheduler({
       </h2>
       <Grid>
         <Grid.Col span="auto">
-          <StageSettings schedulerSettings={schedulerSettings} />
+          <SwissSettings schedulerSettings={schedulerSettings} />
         </Grid.Col>
         <Grid.Col span="content">
           <Group position="right">
@@ -82,6 +78,7 @@ export default function Scheduler({
               swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
               tournamentData={tournamentData}
               roundId={roundId}
+              schedulerSettings={schedulerSettings}
             />
           </Group>
         </Grid.Col>
