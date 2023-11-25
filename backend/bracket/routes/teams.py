@@ -115,11 +115,6 @@ async def create_team(
     tournament_id: int,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
-    tournament_teams = await get_teams_with_members(tournament_id)
-    for team in tournament_teams:
-        if team.player_ids != [] and sorted(team.player_ids) == sorted(team_to_insert.player_ids):
-            return SingleTeamResponse(data=team)
-
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(
