@@ -18,7 +18,7 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
   const rows = clubs
     .sort((p1: Club, p2: Club) => sortTableEntries(p1, p2, tableState))
     .map((club) => (
-      <tr key={club.name}>
+      <tr key={club.id}>
         <td>{club.name}</td>
         <td>
           <ClubModal swrClubsResponse={swrClubsResponse} club={club} />

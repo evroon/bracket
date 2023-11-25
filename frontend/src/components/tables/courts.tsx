@@ -24,7 +24,7 @@ export default function CourtsTable({
   const rows = courts
     .sort((s1: Court, s2: Court) => sortTableEntries(s1, s2, tableState))
     .map((court) => (
-      <tr key={court.name}>
+      <tr key={court.id}>
         <td>{court.name}</td>
         <td>
           <DeleteButton

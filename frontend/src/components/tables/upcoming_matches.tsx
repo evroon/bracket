@@ -5,17 +5,12 @@ import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
-import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import PlayerList from '../info/player_list';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
-
-function getPlayerIds(team: TeamInterface) {
-  return team.players.map((p) => p.id.toString());
-}
 
 export default function UpcomingMatchesTable({
   round_id,
@@ -62,7 +57,7 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={`${getPlayerIds(upcoming_match.team1)} - ${getPlayerIds(upcoming_match.team2)}`}>
+      <tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
         <td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">

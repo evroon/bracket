@@ -9,11 +9,11 @@ export default function PlayerList({
   team: TeamInterface;
   displaySettings?: BracketDisplaySettings | null;
 }) {
-  if (team.players.length < 1) {
-    return <i>No members</i>;
-  }
   if (displaySettings != null && displaySettings.teamNamesDisplay === 'team-names') {
     return <span>{team.name}</span>;
+  }
+  if (team.players.length < 1) {
+    return <i>No members</i>;
   }
 
   const playerNames = team.players

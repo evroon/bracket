@@ -56,7 +56,7 @@ export default function PlayersTable({
   const rows = players
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))
     .map((player) => (
-      <tr key={player.name}>
+      <tr key={player.id}>
         <td>
           {player.active ? (
             <Badge color="green">Active</Badge>
