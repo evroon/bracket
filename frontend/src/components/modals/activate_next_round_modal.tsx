@@ -1,6 +1,6 @@
-import { Button, Checkbox, Modal } from '@mantine/core';
+import { Alert, Button, Checkbox, Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconSquareArrowRight } from '@tabler/icons-react';
+import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -26,7 +26,12 @@ export default function ActivateNextRoundModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Activate next round">
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Assign times and courts to matches of next round"
+        size="40rem"
+      >
         <form
           onSubmit={form.onSubmit(async (values) => {
             await startNextRound(
@@ -38,6 +43,25 @@ export default function ActivateNextRoundModal({
             setOpened(false);
           })}
         >
+          <Alert icon={<IconAlertCircle size={16} />} color="gray" radius="lg">
+            This will assign times and courts to matches of next round, which is the round after the
+            current activated (green) round.
+            <br />
+            <br />
+            You can choose to either (check the checkbox or not):
+            <ul>
+              <li>
+                <b>Unchecked</b>: Use default timing (the next matches will be planned tightly after
+                the matches of the active round end, taking margin into account)
+              </li>
+              <li>
+                <b>Checked</b>: Adjust the start times of the next matches to start immediately
+                (now). This will be done by modifying the margin times of the matches in the
+                previous round.
+              </li>
+            </ul>
+          </Alert>
+
           <Checkbox
             mt="lg"
             label="Adjust start time of matches in this round to the current time"
@@ -51,7 +75,7 @@ export default function ActivateNextRoundModal({
             type="submit"
             leftIcon={<IconSquareArrowRight size={24} />}
           >
-            Start next round
+            Plan next round
           </Button>
         </form>
       </Modal>
@@ -62,7 +86,7 @@ export default function ActivateNextRoundModal({
         leftIcon={<IconSquareArrowRight size={24} />}
         onClick={() => setOpened(true)}
       >
-        Activate next round
+        Plan next round
       </Button>
     </>
   );
