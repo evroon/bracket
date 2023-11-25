@@ -28,7 +28,7 @@ class PlayerBody(BaseModelORM):
 
 
 class PlayerMultiBody(BaseModelORM):
-    names: str
+    names: str = Field(..., min_length=1)
     active: bool
 
 
