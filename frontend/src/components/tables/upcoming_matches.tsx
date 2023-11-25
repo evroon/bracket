@@ -5,17 +5,12 @@ import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
-import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import PlayerList from '../info/player_list';
 import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
-
-function getPlayerIds(team: TeamInterface) {
-  return team.players.map((p) => p.id.toString());
-}
 
 export default function UpcomingMatchesTable({
   round_id,
@@ -70,8 +65,12 @@ export default function UpcomingMatchesTable({
             </Badge>
           ) : null}
         </td>
-        <td>{upcoming_match.team1.name}</td>
-        <td>{upcoming_match.team2.name}</td>
+        <td>
+          <PlayerList team={upcoming_match.team1} displaySettings={displaySettings} />
+        </td>
+        <td>
+          <PlayerList team={upcoming_match.team2} displaySettings={displaySettings} />
+        </td>
         <td>{upcoming_match.elo_diff.toFixed(0)}</td>
         <td>{upcoming_match.swiss_diff.toFixed(1)}</td>
         <td>
