@@ -59,7 +59,7 @@ function StageItemRow({
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   const inputs = stageItem.inputs
-    .sort((i1, i2) => (i1.slot > i2.slot ? 1 : 0))
+    .sort((i1, i2) => (i1.slot > i2.slot ? 1 : -1))
     .map((input, i) => {
       const team = input.team_id ? teamsMap[input.team_id] : null;
       const teamStageItem = input.winner_from_stage_item_id
@@ -141,7 +141,7 @@ function StageColumn({
   }
 
   const rows = stage.stage_items
-    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : 0))
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) => (
       <StageItemRow
         key={stageItem.id}
@@ -223,7 +223,7 @@ export default function Builder({
   if (swrStagesResponse.error) return <RequestErrorAlert error={swrStagesResponse.error} />;
 
   const cols = stages
-    .sort((s1: StageWithStageItems, s2: StageWithStageItems) => (s1.id > s2.id ? 1 : 0))
+    .sort((s1: StageWithStageItems, s2: StageWithStageItems) => (s1.id > s2.id ? 1 : -1))
     .map((stage) => (
       <StageColumn
         key={stage.id}

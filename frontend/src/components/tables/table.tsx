@@ -71,7 +71,7 @@ export const getTableState = (
 
 export function sortTableEntries(r1: any, r2: any, tableState: TableState) {
   const order = r1[tableState.sortField] > r2[tableState.sortField];
-  return (tableState.reversed ? order : !order) ? 1 : 0;
+  return (tableState.reversed ? order : !order) ? 1 : -1;
 }
 
 export function getSortIcon(sorted: boolean, reversed: boolean) {

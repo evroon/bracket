@@ -22,9 +22,9 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
   const maxELOScore = Math.max(...teams.map((team) => team.elo_score));
 
   const rows = teams
-    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.name < p2.name ? 1 : 0))
-    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.draws > p2.draws ? 1 : 0))
-    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.wins > p2.wins ? 1 : 0))
+    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.name < p2.name ? 1 : -1))
+    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.draws > p2.draws ? 1 : -1))
+    .sort((p1: TeamInterface, p2: TeamInterface) => (p1.wins > p2.wins ? 1 : -1))
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .slice(0, 14)
     .map((team, index) => (
