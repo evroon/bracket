@@ -9,15 +9,22 @@
 
 <br/>
 
-> **Warning** This project is still under construction and considered beta software.
-> Release v1.0.0 will be the first out-of-beta release.
-
-Ladder tournament system meant to be easy to use.
+Tournament system meant to be easy to use.
 Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
 
+It has the following features: 
+- Supports **single elimination, round-robin and swiss** formats.
+- **Build your tournament structure** with multiple stages that can have multiple groups/brackets in them.
+- **Drag-and-drop matches** to different courts or reschedule them to another start time.
+- Various **dashboard pages** are available that can be presented to the public, customized with a logo.
+- Create/update **teams**, and add players to **teams**.
+- Create **multiple clubs**, with **multiple tournaments** per club.
+- **Swiss tournaments** can be handled dynamically, with automatic scheduling of matches.
 
 ### Preview
-<img alt="" src="misc/img/schedule_preview.png" width="100%" />
+<img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt="" src="docs/static/img/planning_preview.png" width="50%" />
+<img alt="" src="docs/static/img/builder_preview.png" width="50%" /><img alt="" src="docs/static/img/standings_preview.png" width="50%" />
+
 
 # Quickstart
 To quickly run bracket to see how it works, clone it and run `docker-compose up`:
