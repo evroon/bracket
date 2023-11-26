@@ -31,7 +31,9 @@ export default function Round({
   displaySettings: BracketDisplaySettings;
 }) {
   const matches = round.matches
-    .sort((m1, m2) => ((m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : 0))
+    .sort((m1, m2) =>
+      (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
+    )
     .filter(
       (match: MatchInterface) =>
         displaySettings.matchVisibility === 'all' ||

@@ -23,7 +23,7 @@ function getRoundsGridCols(
   displaySettings: BracketDisplaySettings
 ) {
   let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
-    .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : 0))
+    .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .map((round: RoundInterface) => (
       <Round
         key={round.id}
@@ -170,7 +170,7 @@ export default function Brackets({
     swrStagesResponse.data.data.map((x: StageWithStageItems) => [x.id, x])
   );
   const rounds = stages_map[selectedStageId].stage_items
-    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : 0))
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) =>
       getRoundsGridCols(
         stageItem,

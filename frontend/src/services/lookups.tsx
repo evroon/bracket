@@ -117,7 +117,7 @@ export function getScheduleData(
       .sort((m1: MatchInterface, m2: MatchInterface) => {
         assert(m1.position_in_schedule != null);
         assert(m2.position_in_schedule != null);
-        return m1.position_in_schedule > m2.position_in_schedule ? 1 : 0 || [];
+        return m1.position_in_schedule > m2.position_in_schedule ? 1 : -1 || [];
       }),
     court,
   }));
