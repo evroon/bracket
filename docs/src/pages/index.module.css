@@ -3,49 +3,42 @@
  * and scoped locally.
  */
 
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background-color: #3c4a67;
-}
+.title {
+  font-size: rem(34px);
+  font-weight: 900;
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: rem(24px);
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.description {
+  max-width: rem(600px);
+  margin: auto;
+
+  &::after {
+    content: '';
+    display: block;
+    background-color: #674ad6;
+    width: rem(45px);
+    height: rem(2px);
+    margin-top: var(--mantine-spacing-sm);
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
-/* Create two equal columns that floats next to each other */
-.heroColumn {
-  float: left;
-  color: white;
-  padding: 1rem;
-}
-.heroColumn4 {
-  width: 40%;
-}
-.heroColumn6 {
-  width: 60%;
+.card {
+  border: rem(1px) solid light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
 }
 
-/* Clear floats after the columns */
-.heroRow:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 900px) {
-  .heroColumn {
-    width: 100%;
+.cardTitle {
+  &::after {
+    content: '';
+    display: block;
+    background-color: #674ad6;
+    width: rem(45px);
+    height: rem(2px);
+    margin-top: var(--mantine-spacing-sm);
   }
 }
