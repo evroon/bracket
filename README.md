@@ -10,7 +10,7 @@
 <br/>
 
 Tournament system meant to be easy to use.
-Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and Next.js as frontend using the [Mantine](https://mantine.dev/) library.
+Bracket is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and [Next.js](https://nextjs.org/) as frontend using the [Mantine](https://mantine.dev/) library.
 
 It has the following features: 
 - Supports **single elimination, round-robin and swiss** formats.
