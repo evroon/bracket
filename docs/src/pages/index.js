@@ -26,7 +26,7 @@ export default function Home() {
                 Features
               </Title>
               <FeaturesCards/>
-              <Container size='50%' mt="lg">
+              <Container  mt="lg">
                   <Title order={2} className={classes.title} ta="center" my="lg">
                       Preview
                   </Title>
