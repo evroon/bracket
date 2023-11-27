@@ -52,21 +52,7 @@ export function FeaturesCards() {
 
   return (
     <Container size="lg" py="xl">
-      {/*<Group justify="center">*/}
-      {/*  <Badge variant="filled" size="lg">*/}
-      {/*    Best company ever*/}
-      {/*  </Badge>*/}
-      {/*</Group>*/}
-
-
-      <Title order={2} className={classes.title} ta="center" mt="sm">
-        Features
-      </Title>
-
-      <Text c="dimmed" className={classes.description} ta="center" mt="md">
-      </Text>
-
-      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>
+      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={0}>
         {features}
       </SimpleGrid>
     </Container>

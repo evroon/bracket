@@ -22,6 +22,9 @@ export default function Home() {
           description="Description will go into a meta tag in <head />">
             <HeroTitle/>
           <main>
+              <Title order={2} className={classes.title} ta="center" mt="lg">
+                Features
+              </Title>
               <FeaturesCards/>
               <Container size='50%' mt="lg">
                   <Title order={2} className={classes.title} ta="center" my="lg">
