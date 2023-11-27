@@ -1,6 +1,9 @@
 name: backend
-
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'backend/**'
 
 jobs:
   build:

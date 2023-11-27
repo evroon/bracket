@@ -16,7 +16,7 @@ Copy `ci.env` to `prod.env` and fill in the values:
 
 ## Example configuration file
 This is an example of how the config file should look like:
-```
+```bash
 PG_DSN='postgresql://bracket_ci:bracket_ci@localhost:5532/bracket_ci'
 JWT_SECRET='60eed5c5dc7a919b8595a23d6c42ddd8274e4feea651dc028d9bee495bbb9acd'
 CORS_ORIGINS='https://bracket.mydomain.com'

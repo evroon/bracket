@@ -1,10 +1,10 @@
-name: frontend
+name: docs
 
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'frontend/**'
+    branches:
+      - 'master'
 
 jobs:
   build:
@@ -22,8 +22,14 @@ jobs:
 
       - name: Install npm modules
         run: yarn
-        working-directory: frontend
+        working-directory: docs
 
-      - name: Run prettier, lint, jest checks
-        run: yarn test
-        working-directory: frontend
+      - name: Build docs
+        run: yarn build
+        working-directory: docs
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          branch: gh-pages
+          folder: docs/build
