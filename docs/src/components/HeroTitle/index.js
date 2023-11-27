@@ -1,22 +1,28 @@
-import { Container, Text, Button, Group } from '@mantine/core';
-import { GithubIcon } from '@mantinex/dev-icons';
-import classes from './styles.module.css';
-import React from 'react';
+import { Container, Text, Button, Group } from "@mantine/core";
+import { GithubIcon } from "@mantinex/dev-icons";
+import classes from "./styles.module.css";
+import React from "react";
 
 export function HeroTitle() {
   return (
     <div className={classes.wrapper}>
-      <Container maxSize={'400px'} className={classes.inner}>
+      <Container maxSize={"400px"} className={classes.inner}>
         <h1 className={classes.title}>
-          Free and open source{' '}
-          <Text component="span" variant="gradient" gradient={{ from: 'indigo', to: '#674ad6' }} inherit>
+          Free and open source{" "}
+          <Text
+            component="span"
+            variant="gradient"
+            gradient={{ from: "indigo", to: "#674ad6" }}
+            inherit
+          >
             tournament scheduling
-          </Text>{' '}
+          </Text>{" "}
           system
         </h1>
 
         <Text className={classes.description} color="dimmed">
-            Build tournament setups, add teams, schedule matches, keep track of scores and present ranking live to the public.
+          Build tournament setups, add teams, schedule matches, keep track of
+          scores and present ranking live to the public.
         </Text>
 
         <Group className={classes.controls}>
@@ -24,8 +30,10 @@ export function HeroTitle() {
             size="xl"
             className={classes.control}
             variant="gradient"
-            gradient={{ from: 'indigo', to: '#674ad6' }}
-            onClick={() => {open('docs/getting-started/quickstart', '_self')}}
+            gradient={{ from: "indigo", to: "#674ad6" }}
+            onClick={() => {
+              open("docs/getting-started/quickstart", "_self");
+            }}
           >
             Get started
           </Button>
