@@ -1,6 +1,5 @@
 import { Center, Grid, UnstyledButton, createStyles, useMantineTheme } from '@mantine/core';
 import assert from 'assert';
-import { Property } from 'csstype';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -15,8 +14,6 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
 import { Time } from '../utils/datetime';
-
-import Visibility = Property.Visibility;
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -43,7 +40,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
-  const visibility: Visibility = match.court ? 'visible' : 'hidden';
+  const visibility = match.court ? 'visible' : 'hidden';
   const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[2];
   return (
     <Center style={{ transform: 'translateY(0%)', visibility }}>
