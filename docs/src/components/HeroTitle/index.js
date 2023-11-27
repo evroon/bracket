@@ -8,8 +8,7 @@ export function HeroTitle() {
     <div className={classes.wrapper}>
       <Container maxSize={'400px'} className={classes.inner}>
         <h1 className={classes.title}>
-          Free and open source
-            <br/>
+          Free and open source{' '}
           <Text component="span" variant="gradient" gradient={{ from: 'indigo', to: '#674ad6' }} inherit>
             tournament scheduling
           </Text>{' '}
