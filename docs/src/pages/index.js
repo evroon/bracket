@@ -2,12 +2,12 @@ import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import {Container, createTheme, MantineProvider, Title} from "@mantine/core";
-import {FeaturesCards} from "./feature_cards";
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import {HeroTitle} from "../components/HeroTitle";
 import {HomeCarousel} from "../components/HomeCarousel";
 import classes from "./index.module.css";
+import FeaturesCards from "../components/feature_cards";
 
 
 const theme = createTheme({});

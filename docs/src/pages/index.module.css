@@ -3,7 +3,6 @@
  * and scoped locally.
  */
 
-
 .title {
   font-size: rem(34px);
   font-weight: 900;
@@ -20,7 +19,7 @@
   &::after {
     content: '';
     display: block;
-    background-color: var(--mantine-color-blue-filled);
+    background-color: #674ad6;
     width: rem(45px);
     height: rem(2px);
     margin-top: var(--mantine-spacing-sm);
@@ -37,7 +36,7 @@
   &::after {
     content: '';
     display: block;
-    background-color: var(--mantine-color-blue-filled);
+    background-color: #674ad6;
     width: rem(45px);
     height: rem(2px);
     margin-top: var(--mantine-spacing-sm);

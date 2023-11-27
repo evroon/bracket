@@ -58,6 +58,8 @@ const config = {
     ],
   ],
 
+  plugins: [require.resolve('docusaurus-lunr-search')],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -66,7 +68,7 @@ const config = {
       navbar: {
         title: 'Bracket',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Bracket Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -83,6 +85,11 @@ const config = {
           },
         ],
       },
+      colorMode: {
+        defaultMode: 'dark',
+        respectPrefersColorScheme: false,
+        disableSwitch: true
+      },
       footer: {
         style: 'dark',
         links: [
@@ -95,23 +102,23 @@ const config = {
               },
             ],
           },
-          // {
-          //   title: 'Community',
-          //   items: [
-          //     {
-          //       label: 'Stack Overflow',
-          //       href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-          //     },
-          //     {
-          //       label: 'Discord',
-          //       href: 'https://discordapp.com/invite/docusaurus',
-          //     },
-          //     {
-          //       label: 'Twitter',
-          //       href: 'https://twitter.com/docusaurus',
-          //     },
-          //   ],
-          // },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              },
+              {
+                label: 'Discord',
+                href: 'https://discordapp.com/invite/docusaurus',
+              },
+              {
+                label: 'Twitter',
+                href: 'https://twitter.com/docusaurus',
+              },
+            ],
+          },
           {
             title: 'More',
             items: [

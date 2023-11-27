@@ -10,7 +10,7 @@ export function HeroTitle() {
         <h1 className={classes.title}>
           Free and open source
             <br/>
-          <Text component="span" variant="gradient" gradient={{ from: 'blue', to: 'indigo' }} inherit>
+          <Text component="span" variant="gradient" gradient={{ from: 'indigo', to: '#674ad6' }} inherit>
             tournament scheduling
           </Text>{' '}
           system
@@ -25,7 +25,7 @@ export function HeroTitle() {
             size="xl"
             className={classes.control}
             variant="gradient"
-            gradient={{ from: 'blue', to: 'indigo' }}
+            gradient={{ from: 'indigo', to: '#674ad6' }}
             onClick={() => {open('/bracket/docs/intro', '_self')}}
           >
             Get started
