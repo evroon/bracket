@@ -1,6 +1,11 @@
 name: docker
 
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
 
 jobs:
   build:

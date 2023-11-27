@@ -25,7 +25,7 @@ export function HeroTitle() {
             className={classes.control}
             variant="gradient"
             gradient={{ from: 'indigo', to: '#674ad6' }}
-            onClick={() => {open('/bracket/docs/intro', '_self')}}
+            onClick={() => {open('docs/getting-started/quickstart', '_self')}}
           >
             Get started
           </Button>

@@ -4,10 +4,9 @@ import {Carousel} from "@mantine/carousel";
 
 export function HomeCarousel() {
   return (
-    <Container width={'100%'}>
+    <Container width={'100%'} mb="md">
         <Carousel
           withIndicators
-          height={540}
           slideSize={'100%'}
           slideGap="md"
           loop
