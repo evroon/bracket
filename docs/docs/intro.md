@@ -9,7 +9,9 @@ is written in async Python (with [FastAPI](https://fastapi.tiangolo.com)) and
 [Next.js](https://nextjs.org/) as frontend using the [Mantine](https://mantine.dev/) library.
 
 ## Overview of features
+
 It has the following features:
+
 - Supports **single elimination, round-robin and swiss** formats.
 - **Build your tournament structure** with multiple stages that can have multiple groups/brackets in
   them.
@@ -21,6 +23,7 @@ It has the following features:
 - **Swiss tournaments** can be handled dynamically, with automatic scheduling of matches.
 
 ## Why does this exist?
+
 There are plenty of tournament systems to be found online. So why does Bracket exist?
 
 **Firstly**, there are **no complete open-source tournament systems to be found** [on
@@ -38,4 +41,5 @@ starts with Swiss and determines a winner based on a knockoff (elimination) stag
 experience to a project with a real purpose.
 
 ## Quickstart
+
 To get started, follow the steps described in [quickstart](getting-started/quickstart.md)

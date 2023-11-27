@@ -1,33 +1,45 @@
-import {Card, Container, rem, SimpleGrid, Text, useMantineTheme,} from '@mantine/core';
-import {IconBrandOpenSource, IconCloud, IconTool, IconUser} from '@tabler/icons-react';
-import classes from '../pages/index.module.css';
-import React from 'react';
+import {
+  Card,
+  Container,
+  rem,
+  SimpleGrid,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
+import {
+  IconBrandOpenSource,
+  IconCloud,
+  IconTool,
+  IconUser,
+} from "@tabler/icons-react";
+import classes from "../pages/index.module.css";
+import React from "react";
 
 const mockdata = [
   {
-    title: 'Open-source and free',
+    title: "Open-source and free",
     description:
-      'Bracket is fully open source and free to use, licensed under the MIT license.',
+      "Bracket is fully open source and free to use, licensed under the AGPL-3.0 license.",
     icon: IconBrandOpenSource,
   },
   {
-    title: 'Flexible',
+    title: "Flexible",
     description:
-      'Bracket supports the standard tournament types, teams can be added/changed\n' +
-        '        during the tournament and new matches can be scheduled dynamically.',
+      "Bracket supports the standard tournament types, teams can be added/changed\n" +
+      "        during the tournament and new matches can be scheduled dynamically.",
     icon: IconTool,
   },
   {
-    title: 'Easy to use',
+    title: "Easy to use",
     description:
-      'The UI is meant to be easy to use while providing maximum flexibility.',
+      "The UI is meant to be easy to use while providing maximum flexibility.",
     icon: IconUser,
   },
   {
-    title: 'Self-hosted',
+    title: "Self-hosted",
     description:
-      'You are free to host it yourself. Setup is easy; either run it in Docker or run it the\n' +
-        '        natively on the host. The only external dependency is a PostgreSQL database.',
+      "You are free to host it yourself. Setup is easy; either run it in Docker or run it the\n" +
+      "        natively on the host. The only external dependency is a PostgreSQL database.",
     icon: IconCloud,
   },
 ];
@@ -35,11 +47,17 @@ const mockdata = [
 export default function FeaturesCards() {
   const theme = useMantineTheme();
   const features = mockdata.map((feature) => (
-    <Card key={feature.title} shadow="md" radius="md" className={classes.card} padding="xl">
+    <Card
+      key={feature.title}
+      shadow="md"
+      radius="md"
+      className={classes.card}
+      padding="xl"
+    >
       <feature.icon
         style={{ width: rem(50), height: rem(50) }}
         stroke={2}
-        color={'#674ad6'}
+        color={"#674ad6"}
       />
       <Text fz="lg" fw={500} className={classes.cardTitle} mt="md">
         {feature.title}
