@@ -37,7 +37,7 @@ async def get_teams_with_members(
         {active_team_filter}
         {team_id_filter}
         GROUP BY teams.id
-        ORDER BY elo_score DESC, wins DESC, name ASC
+        ORDER BY teams.elo_score DESC, teams.wins DESC, name ASC
         '''
     values = dict_without_none({'tournament_id': tournament_id, 'team_id': team_id})
     result = await database.fetch_all(query=query, values=values)

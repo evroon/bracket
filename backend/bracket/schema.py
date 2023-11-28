@@ -128,6 +128,11 @@ teams = Table(
     Column('created', DateTimeTZ, nullable=False),
     Column('tournament_id', BigInteger, ForeignKey('tournaments.id'), index=True, nullable=False),
     Column('active', Boolean, nullable=False, index=True, server_default='t'),
+    Column('elo_score', Float, nullable=False, server_default='0'),
+    Column('swiss_score', Float, nullable=False, server_default='0'),
+    Column('wins', Integer, nullable=False, server_default='0'),
+    Column('draws', Integer, nullable=False, server_default='0'),
+    Column('losses', Integer, nullable=False, server_default='0'),
 )
 
 players = Table(
