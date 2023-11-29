@@ -1184,12 +1184,12 @@
     "@mantine/utils" "6.0.10"
     react-transition-group "4.4.2"
 
-"@mantine/spotlight@^6.0.5":
-  version "6.0.21"
-  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-6.0.21.tgz#98f507bd3429fee1f2b57ad5ef9f88d1d8d8ff32"
-  integrity sha512-xJqF2Vpn8s6I4mSF+iCi7IzqL8iaqbvq0RcYlF1usLZYW2HrArX31s1r11DmzqM1PIuBQUhquW8jUXx/MZy3oA==
+"@mantine/spotlight@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.2.2.tgz#5b8b4f2e7ffb447c2036854f52b8a196bba3facb"
+  integrity sha512-6RSxEnjEJZpsiM940/d/jLY3eMFadFGvVwHGEqAf8fjO7wtxtR3Pl9UWmmhuRMWAk2qYduzhQ+Npis8eTZEYtg==
   dependencies:
-    "@mantine/utils" "6.0.21"
+    "@mantine/store" "7.2.2"
 
 "@mantine/ssr@6.0.10":
   version "6.0.10"
@@ -1198,6 +1198,11 @@
   dependencies:
     "@mantine/styles" "6.0.10"
     html-react-parser "1.4.12"
+
+"@mantine/store@7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.2.2.tgz#d5948fcc1bb3a4c4ae706692f2a636a9367696b5"
+  integrity sha512-j8vR8whB332pGI8OXkM2/3rdh4LJxELJQTG+rTsCCd3VQuEJiRTQDKVaOvp9ONja3GU5b1Tk3zhKOrkpgxTJBA==
 
 "@mantine/styles@6.0.10":
   version "6.0.10"
