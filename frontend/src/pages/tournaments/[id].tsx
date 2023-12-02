@@ -6,7 +6,8 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../404';
 import Brackets from '../../components/brackets/brackets';
 import Scheduler from '../../components/scheduling/scheduling';
-import { useRouterQueryState, useRouterReady } from '../../components/utils/query_parameters';
+import classes from '../../components/utility.module.css';
+import { useRouterQueryState } from '../../components/utils/query_parameters';
 import StagesTab from '../../components/utils/stages_tab';
 import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
 import { BracketDisplaySettings } from '../../interfaces/brackets';
@@ -111,10 +112,6 @@ export default function TournamentPage() {
     return <NotFoundTitle />;
   }
 
-  if (!useRouterReady()) {
-    return null;
-  }
-
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
@@ -124,6 +121,7 @@ export default function TournamentPage() {
         <Grid.Col span={6}>
           <Group justify="right">
             <SegmentedControl
+              className={classes.fullWithMobile}
               value={matchVisibility}
               onChange={setMatchVisibility}
               data={[
@@ -133,6 +131,7 @@ export default function TournamentPage() {
               ]}
             />
             <SegmentedControl
+              className={classes.fullWithMobile}
               value={teamNamesDisplay}
               onChange={setTeamNamesDisplay}
               data={[
@@ -141,6 +140,7 @@ export default function TournamentPage() {
               ]}
             />
             <Button
+              className={classes.fullWithMobile}
               color="blue"
               size="sm"
               variant="outline"

@@ -62,7 +62,7 @@ export default function TournamentsTable({
   if (rows.length < 1) return <EmptyTableInfo entity_name="tournaments" />;
 
   return (
-    <TableLayout>
+    <TableLayout miw={550}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="name">

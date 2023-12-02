@@ -1,7 +1,13 @@
-import { Tooltip, UnstyledButton } from '@mantine/core';
+import { Center, Divider, Group, Tooltip, UnstyledButton } from '@mantine/core';
 import {
   Icon,
+  IconBook,
+  IconBrandGithub,
+  IconBrowser,
   IconCalendar,
+  IconDots,
+  IconHome,
+  IconLogout,
   IconSettings,
   IconSoccerField,
   IconTournament,
@@ -12,30 +18,104 @@ import {
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
+import { getBaseApiUrl } from '../../services/adapter';
 import classes from './_main_links.module.css';
 
 interface MainLinkProps {
   icon: Icon;
   label: string;
-  endpoint: string;
-  router: NextRouter;
+  link: string;
+  links?: MainLinkProps[] | null;
 }
 
-function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String }) {
+function MainLinkMobile({
+  router,
+  item,
+  pathName,
+}: {
+  router: NextRouter;
+  item: MainLinkProps;
+  pathName: String;
+}) {
   return (
-    <Tooltip position="right" label={item.label} transitionProps={{ duration: 0 }}>
+    <>
       <UnstyledButton
-        onClick={() => item.router.push(item.endpoint)}
-        className={classes.link}
-        data-active={pathName === item.endpoint || undefined}
+        hiddenFrom="sm"
+        className={classes.mobileLink}
+        style={{ width: '100%' }}
+        onClick={() => router.push(item.link)}
+        data-active={pathName === item.link || undefined}
       >
-        <item.icon stroke={1.5} />
+        <Group className={classes.mobileLinkGroup}>
+          <item.icon stroke={1.5} />
+          <p style={{ marginLeft: '0.5rem' }}>{item.label}</p>
+        </Group>
+        <Divider />
       </UnstyledButton>
-    </Tooltip>
+    </>
   );
 }
 
-export function MainLinks({ tournament_id }: any) {
+function MainLink({
+  router,
+  item,
+  pathName,
+}: {
+  router: NextRouter;
+  item: MainLinkProps;
+  pathName: String;
+}) {
+  return (
+    <>
+      <Tooltip position="right" label={item.label} transitionProps={{ duration: 0 }}>
+        <UnstyledButton
+          visibleFrom="sm"
+          onClick={() => router.push(item.link)}
+          className={classes.link}
+          data-active={pathName === item.link || undefined}
+        >
+          <item.icon stroke={1.5} />
+        </UnstyledButton>
+      </Tooltip>
+      <MainLinkMobile router={router} item={item} pathName={pathName} />
+    </>
+  );
+}
+
+export function getBaseLinksDict() {
+  return [
+    { link: '/clubs', label: 'Clubs', links: [], icon: IconUsers },
+    { link: '/', label: 'Tournaments', links: [], icon: IconHome },
+    {
+      link: '/user',
+      label: 'User',
+      links: [{ link: '/user', label: 'Logout', icon: IconLogout }],
+      icon: IconUser,
+    },
+    {
+      icon: IconDots,
+      link: '',
+      label: 'More',
+      links: [
+        { link: 'https://evroon.github.io/bracket/', label: 'Website', icon: IconBrowser },
+        { link: 'https://github.com/evroon/bracket', label: 'GitHub', icon: IconBrandGithub },
+        { link: `${getBaseApiUrl()}/docs`, label: 'API docs', icon: IconBook },
+      ],
+    },
+  ];
+}
+
+export function getBaseLinks() {
+  const router = useRouter();
+  const pathName = router.pathname.replace(/\/+$/, '');
+  return getBaseLinksDict()
+    .filter((link) => link.links.length < 1)
+    .map((link) => (
+      <MainLinkMobile router={router} key={link.label} item={link} pathName={pathName} />
+    ));
+}
+
+export function TournamentLinks({ tournament_id }: any) {
   const router = useRouter();
   const tm_prefix = `/tournaments/${tournament_id}`;
   const pathName = router.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
@@ -44,47 +124,50 @@ export function MainLinks({ tournament_id }: any) {
     {
       icon: IconTournament,
       label: 'Schedule',
-      endpoint: `${tm_prefix}`,
-      router,
+      link: `${tm_prefix}`,
     },
     {
       icon: IconUser,
       label: 'Players',
-      endpoint: `${tm_prefix}/players`,
-      router,
+      link: `${tm_prefix}/players`,
     },
     {
       icon: IconUsers,
       label: 'Teams',
-      endpoint: `${tm_prefix}/teams`,
-      router,
+      link: `${tm_prefix}/teams`,
     },
     {
       icon: IconSoccerField,
       label: 'Courts',
-      endpoint: `${tm_prefix}/courts`,
-      router,
+      link: `${tm_prefix}/courts`,
     },
     {
       icon: IconTrophy,
       label: 'Stages',
-      endpoint: `${tm_prefix}/stages`,
-      router,
+      link: `${tm_prefix}/stages`,
     },
     {
       icon: IconCalendar,
       label: 'Planning',
-      endpoint: `${tm_prefix}/schedule`,
-      router,
+      link: `${tm_prefix}/schedule`,
     },
     {
       icon: IconSettings,
       label: 'Tournament Settings',
-      endpoint: `${tm_prefix}/settings`,
-      router,
+      link: `${tm_prefix}/settings`,
     },
   ];
 
-  const links = data.map((link) => <MainLink key={link.label} item={link} pathName={pathName} />);
-  return <div>{links}</div>;
+  const links = data.map((link) => (
+    <MainLink router={router} key={link.label} item={link} pathName={pathName} />
+  ));
+  return (
+    <>
+      <Center hiddenFrom="sm">
+        <h2>Tournament</h2>
+      </Center>
+      <Divider hiddenFrom="sm" />
+      {links}
+    </>
+  );
 }

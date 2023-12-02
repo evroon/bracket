@@ -11,11 +11,11 @@ export default function Players() {
   const swrPlayersResponse = getPlayers(tournamentData.id);
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Grid grow>
-        <Grid.Col span={9}>
+      <Grid justify="space-between">
+        <Grid.Col span="auto">
           <Title>Players</Title>
         </Grid.Col>
-        <Grid.Col span={3}>
+        <Grid.Col span="content">
           <PlayerCreateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}

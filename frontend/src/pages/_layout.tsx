@@ -6,49 +6,38 @@ import {
   Container,
   Group,
   Menu,
-  Text,
   UnstyledButton,
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { FaGithub } from '@react-icons/all-files/fa/FaGithub';
-import { IconMoonStars, IconSun } from '@tabler/icons-react';
+import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
 import { NextRouter, useRouter } from 'next/router';
-import React, { Component, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 import { Brand } from '../components/navbar/_brand';
-import { getBaseApiUrl } from '../services/adapter';
+import { getBaseLinks, getBaseLinksDict } from '../components/navbar/_main_links';
 import classes from './_layout.module.css';
-
-const LINKS = [
-  { link: '/clubs', label: 'Clubs', links: null },
-  { link: '/', label: 'Tournaments', links: null },
-  { link: '/user', label: 'User', links: [{ link: '/user', label: 'Logout', icon: null }] },
-  {
-    link: null,
-    label: 'More',
-    links: [
-      { link: 'https://evroon.github.io/bracket/', label: 'Website', icon: null },
-      { link: 'https://github.com/evroon/bracket', label: 'GitHub', icon: <FaGithub size={20} /> },
-      { link: `${getBaseApiUrl()}/docs`, label: 'API docs', icon: null },
-    ],
-  },
-];
 
 interface HeaderActionLink {
   link: string | null;
   label: string;
-  icon?: Component | null;
-  links?: { link: string; label: string; icon?: ReactNode }[] | null;
+  icon: Icon;
+  links: { link: string; label: string; icon: Icon }[];
 }
 
 interface HeaderActionProps {
   links: HeaderActionLink[];
   navbarState: any;
+  breadcrumbs: ReactNode;
 }
 
-function getMenuItemsForLink(link: HeaderActionLink, _classes: any, router: NextRouter) {
+function getMenuItemsForLink(
+  link: HeaderActionLink,
+  _classes: any,
+  router: NextRouter,
+  pathName: string
+) {
   const menuItems = link.links?.map((item) => (
     <UnstyledButton
       key={item.label}
@@ -56,8 +45,12 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, router: Next
       onClick={async () => {
         await router.push(item.link);
       }}
+      data-active={pathName === item.link || undefined}
     >
-      {item.label}
+      <Center>
+        <item.icon />
+        <span style={{ marginLeft: '0.25rem', marginTop: '0.2rem' }}>{item.label}</span>
+      </Center>
     </UnstyledButton>
   ));
   return (
@@ -68,31 +61,27 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, router: Next
           onClick={async () => {
             if (link.link) await router.push(link.link);
           }}
+          data-active={pathName === link.link || undefined}
         >
-          <>
-            {link.icon}
-            <Text span className={classes.linkLabel}>
-              {link.label}
-            </Text>
-          </>
+          <>{link.label}</>
         </UnstyledButton>
       </Menu.Target>
-      <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+      {menuItems.length > 0 ? <Menu.Dropdown>{menuItems}</Menu.Dropdown> : null}
     </Menu>
   );
 }
 
-export function HeaderAction({ links, navbarState }: HeaderActionProps) {
-  // const { classes } = useStyles();
+export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionProps) {
+  const router = useRouter();
+  const pathName = router.pathname;
 
   const [opened, { toggle }] = navbarState != null ? navbarState : [false, { toggle: () => {} }];
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
-  const router = useRouter();
 
   const items = links.map((link) => {
     if (link.links) {
-      return getMenuItemsForLink(link, classes, router);
+      return getMenuItemsForLink(link, classes, router, pathName);
     }
 
     return (
@@ -102,6 +91,7 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
         onClick={async () => {
           if (link.link) await router.push(link.link);
         }}
+        data-active={pathName === link.link || undefined}
       >
         {link.label}
       </UnstyledButton>
@@ -111,10 +101,13 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
     <AppShell.Header>
       <Container className={classes.inner} fluid>
         <Center>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" mr="xs" />
           <Brand />
+          <Group visibleFrom="md" mt="0.2rem">
+            {breadcrumbs}
+          </Group>
         </Center>
-        <Group gap={5} className={classes.links}>
+        <Group gap={5} className={classes.links} visibleFrom="sm">
           {items}
           <ActionIcon
             variant="default"
@@ -131,21 +124,50 @@ export function HeaderAction({ links, navbarState }: HeaderActionProps) {
   );
 }
 
-export default function Layout({ children, navbar }: any) {
+function NavBar({ links }: any) {
+  return (
+    <AppShell.Navbar p="md">
+      {links == null ? (
+        <AppShell.Section grow>
+          <div />
+        </AppShell.Section>
+      ) : (
+        links
+      )}
+    </AppShell.Navbar>
+  );
+}
+
+export default function Layout({ children, additionalNavbarLinks, breadcrumbs }: any) {
   const navbarState = useDisclosure();
   const [opened] = navbarState;
+
+  const linksComponent = (
+    <AppShell.Section grow>
+      {getBaseLinks()}
+      {additionalNavbarLinks}
+    </AppShell.Section>
+  );
+
   return (
     <AppShell
       header={{ height: 60 }}
       navbar={{
         width: 80,
         breakpoint: 'sm',
-        collapsed: { desktop: navbar == null, mobile: navbar == null || !opened },
+        collapsed: {
+          desktop: additionalNavbarLinks == null || additionalNavbarLinks.length < 1,
+          mobile: !opened,
+        },
       }}
       padding="md"
     >
-      <HeaderAction links={LINKS} navbarState={navbarState} />
-      {navbar}
+      <HeaderAction
+        links={getBaseLinksDict()}
+        navbarState={navbarState}
+        breadcrumbs={breadcrumbs}
+      />
+      <NavBar links={linksComponent} />
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );

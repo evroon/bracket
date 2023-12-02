@@ -2,7 +2,6 @@ import {
   Button,
   Checkbox,
   Grid,
-  Group,
   Image,
   Modal,
   NumberInput,
@@ -186,13 +185,12 @@ export default function TournamentModal({
           clubs={clubs}
         />
       </Modal>
-      <Group justify="right">
-        <SaveButton
-          onClick={() => setOpened(true)}
-          leftSection={<GoPlus size={24} />}
-          title={operation_text}
-        />
-      </Group>
+      <SaveButton
+        fullWidth
+        onClick={() => setOpened(true)}
+        leftSection={<GoPlus size={24} />}
+        title={operation_text}
+      />
     </>
   );
 }
