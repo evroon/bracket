@@ -28,27 +28,7 @@ async def get_full_tournament_details(
         WITH teams_with_players AS (
             SELECT DISTINCT ON (teams.id)
                 teams.*,
-                to_json(array_remove(array_agg(p), NULL)) as players,
-                (
-                    SELECT COALESCE(avg(swiss_score), 0.0)
-                    FROM players
-                ) AS swiss_score,
-                (
-                    SELECT COALESCE(avg(elo_score), 0.0)
-                    FROM players
-                ) AS elo_score,
-                (
-                    SELECT COALESCE(avg(wins), 0.0)
-                    FROM players
-                ) AS wins,
-                (
-                    SELECT COALESCE(avg(draws), 0.0)
-                    FROM players
-                ) AS draws,
-                (
-                    SELECT COALESCE(avg(losses), 0.0)
-                    FROM players
-                ) AS losses
+                to_json(array_remove(array_agg(p), NULL)) as players
             FROM teams
             LEFT JOIN players_x_teams pt on pt.team_id = teams.id
             LEFT JOIN players p on pt.player_id = p.id

@@ -1,4 +1,5 @@
 from bracket.database import database
+from bracket.models.db.players import PlayerStatistics
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.utils.types import dict_without_none
 
@@ -24,12 +25,7 @@ async def get_teams_with_members(
     query = f'''
         SELECT
             teams.*,
-            to_json(array_agg(p.*)) AS players,
-            COALESCE(avg(p.elo_score), 1200.0) AS elo_score,
-            COALESCE(avg(p.swiss_score), 0.0) AS swiss_score,
-            COALESCE(avg(p.wins), 0.0) AS wins,
-            COALESCE(avg(p.draws), 0.0) AS draws,
-            COALESCE(avg(p.losses), 0.0) AS losses
+            to_json(array_agg(p.*)) AS players
         FROM teams
         LEFT JOIN players_x_teams pt on pt.team_id = teams.id
         LEFT JOIN players p on pt.player_id = p.id
@@ -37,8 +33,36 @@ async def get_teams_with_members(
         {active_team_filter}
         {team_id_filter}
         GROUP BY teams.id
-        ORDER BY elo_score DESC, wins DESC, name ASC
+        ORDER BY teams.elo_score DESC, teams.wins DESC, name ASC
         '''
     values = dict_without_none({'tournament_id': tournament_id, 'team_id': team_id})
     result = await database.fetch_all(query=query, values=values)
     return [FullTeamWithPlayers.parse_obj(x._mapping) for x in result]
+
+
+async def update_team_stats(
+    tournament_id: int, team_id: int, team_statistics: PlayerStatistics
+) -> None:
+    query = '''
+        UPDATE teams
+        SET
+            wins = :wins,
+            draws = :draws,
+            losses = :losses,
+            elo_score = :elo_score,
+            swiss_score = :swiss_score
+        WHERE teams.tournament_id = :tournament_id
+        AND teams.id = :team_id
+        '''
+    await database.execute(
+        query=query,
+        values={
+            'tournament_id': tournament_id,
+            'team_id': team_id,
+            'wins': team_statistics.wins,
+            'draws': team_statistics.draws,
+            'losses': team_statistics.losses,
+            'elo_score': team_statistics.elo_score,
+            'swiss_score': float(team_statistics.swiss_score),
+        },
+    )

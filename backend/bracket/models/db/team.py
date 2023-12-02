@@ -8,6 +8,7 @@ from heliclockter import datetime_utc
 from pydantic import BaseModel, Field, validator
 
 from bracket.models.db.player import Player
+from bracket.models.db.players import START_ELO
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.types import assert_some
 
@@ -18,16 +19,21 @@ class Team(BaseModelORM):
     name: str
     tournament_id: int
     active: bool
+    elo_score: Decimal = Decimal(START_ELO)
+    swiss_score: Decimal = Decimal('0.0')
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
 
 
 class TeamWithPlayers(BaseModel):
     id: int | None = None
     players: list[Player]
-    swiss_score: Decimal
-    elo_score: Decimal
-    wins: int
-    draws: int
-    losses: int
+    elo_score: Decimal = Decimal(START_ELO)
+    swiss_score: Decimal = Decimal('0.0')
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
     name: str
 
     @property
@@ -85,3 +91,8 @@ class TeamToInsert(BaseModelORM):
     name: str
     tournament_id: int
     active: bool
+    elo_score: Decimal = Decimal('0.0')
+    swiss_score: Decimal = Decimal('0.0')
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0

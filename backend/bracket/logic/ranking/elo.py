@@ -9,6 +9,7 @@ from bracket.models.db.util import StageItemWithRounds
 from bracket.schema import players
 from bracket.sql.players import get_all_players_in_tournament, update_player_stats
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.teams import update_team_stats
 from bracket.utils.types import assert_some
 
 K = 32
@@ -113,10 +114,13 @@ async def recalculate_ranking_for_tournament_id(tournament_id: int) -> None:
 async def recalculate_ranking_for_stage_items(
     tournament_id: int, stage_items: list[StageItemWithRounds]
 ) -> None:
-    elo_per_player, _ = determine_ranking_for_stage_items(stage_items)
+    elo_per_player, elo_per_team = determine_ranking_for_stage_items(stage_items)
 
     for player_id, statistics in elo_per_player.items():
         await update_player_stats(tournament_id, player_id, statistics)
+
+    for team_id, statistics in elo_per_team.items():
+        await update_team_stats(tournament_id, team_id, statistics)
 
     all_players = await get_all_players_in_tournament(tournament_id)
     for player in all_players:

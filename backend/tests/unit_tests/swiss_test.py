@@ -24,16 +24,11 @@ def test_no_draft_round() -> None:
         get_possible_upcoming_matches_for_swiss(MATCH_FILTER, [], [])
 
 
-def get_team(team: Team, team_id: int, elo_score: Decimal) -> FullTeamWithPlayers:
+def get_team(team: Team, team_id: int) -> FullTeamWithPlayers:
     return FullTeamWithPlayers(
         id=team_id,
         **team.dict(),
         players=[],
-        swiss_score=Decimal('0.0'),
-        elo_score=elo_score,
-        wins=0,
-        draws=0,
-        losses=0,
     )
 
 
@@ -49,10 +44,10 @@ def get_match(
 
 
 def test_constraints() -> None:
-    team1 = get_team(DUMMY_TEAM1, team_id=-1, elo_score=Decimal('1125'))
-    team2 = get_team(DUMMY_TEAM2, team_id=-2, elo_score=Decimal('1175'))
-    team3 = get_team(DUMMY_TEAM3, team_id=-3, elo_score=Decimal('1200'))
-    team4 = get_team(DUMMY_TEAM4, team_id=-4, elo_score=Decimal('1250'))
+    team1 = get_team(DUMMY_TEAM1.copy(update={'elo_score': 1125}), team_id=-1)
+    team2 = get_team(DUMMY_TEAM2.copy(update={'elo_score': 1175}), team_id=-2)
+    team3 = get_team(DUMMY_TEAM3.copy(update={'elo_score': 1200}), team_id=-3)
+    team4 = get_team(DUMMY_TEAM4.copy(update={'elo_score': 1250}), team_id=-4)
 
     rounds = [
         RoundWithMatches(

@@ -196,10 +196,14 @@ async def test_upcoming_matches_endpoint(
             )
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(
+                update={'tournament_id': auth_context.tournament.id, 'elo_score': 1150}
+            )
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM2.copy(
+                update={'tournament_id': auth_context.tournament.id, 'elo_score': 1350}
+            )
         ) as team2_inserted,
         inserted_player_in_team(
             DUMMY_PLAYER1.copy(
