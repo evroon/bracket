@@ -90,7 +90,7 @@ export default function UpcomingMatchesTable({
   if (rows.length < 1) return <EmptyTableInfo entity_name="upcoming matches" />;
 
   return (
-    <TableLayout>
+    <TableLayout miw={850}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="is_recommended">

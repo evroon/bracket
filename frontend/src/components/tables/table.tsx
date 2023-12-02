@@ -81,12 +81,19 @@ export function ThNotSortable({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function TableLayout({ children }: any) {
+export default function TableLayout(props: any) {
   return (
     <>
       <ScrollArea>
-        <Table horizontalSpacing="md" verticalSpacing="xs" striped highlightOnHover>
-          {children}
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          striped
+          highlightOnHover
+          layout="fixed"
+          {...props}
+        >
+          {props.children}
         </Table>
       </ScrollArea>
     </>

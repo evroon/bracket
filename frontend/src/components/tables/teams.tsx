@@ -62,7 +62,7 @@ export default function TeamsTable({
   if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
 
   return (
-    <TableLayout>
+    <TableLayout miw={850}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="active">

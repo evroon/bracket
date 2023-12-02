@@ -1,4 +1,4 @@
-import { Grid, Group, Select, Title } from '@mantine/core';
+import { Grid, Select, Title } from '@mantine/core';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -60,21 +60,25 @@ export default function Teams() {
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Grid grow mb="0.5rem">
-        <Grid.Col span={6}>
+      <Grid justify="space-between" mb="1rem">
+        <Grid.Col span="auto">
           <Title>Teams</Title>
         </Grid.Col>
-        <Grid.Col span={6}>
-          <Group justify="right">
-            <StageItemSelect
-              groupStageItems={Object.values(stageItemInputLookup)}
-              setFilteredStageItemId={setFilteredStageItemId}
-            />
-            <TeamCreateModal
-              swrTeamsResponse={swrTeamsResponse}
-              tournament_id={tournamentData.id}
-            />
-          </Group>
+        <Grid.Col span="content">
+          <Grid align="flex-end">
+            <Grid.Col span="auto">
+              <StageItemSelect
+                groupStageItems={Object.values(stageItemInputLookup)}
+                setFilteredStageItemId={setFilteredStageItemId}
+              />
+            </Grid.Col>
+            <Grid.Col span="auto">
+              <TeamCreateModal
+                swrTeamsResponse={swrTeamsResponse}
+                tournament_id={tournamentData.id}
+              />
+            </Grid.Col>
+          </Grid>
         </Grid.Col>
       </Grid>
       <TeamsTable

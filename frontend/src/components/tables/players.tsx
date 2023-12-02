@@ -104,7 +104,7 @@ export default function PlayersTable({
   if (rows.length < 1) return <EmptyTableInfo entity_name="players" />;
 
   return (
-    <TableLayout>
+    <TableLayout miw={900}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="active">

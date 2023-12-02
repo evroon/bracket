@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, MultiSelect, Tabs, TextInput } from '@mantine/core';
+import { Button, Checkbox, Modal, MultiSelect, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser, IconUsers, IconUsersPlus } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -150,14 +150,12 @@ export default function TeamCreateModal({
         </Tabs>
       </Modal>
 
-      <Group justify="right">
-        <SaveButton
-          onClick={() => setOpened(true)}
-          leftSection={<IconUsersPlus size={24} />}
-          title="Add Team"
-          mt="1.5rem"
-        />
-      </Group>
+      <SaveButton
+        onClick={() => setOpened(true)}
+        leftSection={<IconUsersPlus size={24} />}
+        title="Add Team"
+        mb={0}
+      />
     </>
   );
 }

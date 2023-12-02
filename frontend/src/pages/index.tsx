@@ -11,11 +11,11 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <Grid grow>
-        <Grid.Col span={9}>
+      <Grid justify="space-between">
+        <Grid.Col span="auto">
           <Title>Tournaments</Title>
         </Grid.Col>
-        <Grid.Col span={3}>
+        <Grid.Col span="content">
           <TournamentModal swrTournamentsResponse={swrTournamentsResponse} />
         </Grid.Col>
       </Grid>

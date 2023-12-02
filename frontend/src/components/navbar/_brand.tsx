@@ -6,7 +6,7 @@ export function Brand() {
   const router = useRouter();
 
   return (
-    <Center style={{ height: '50px' }}>
+    <Center mr="1rem">
       <UnstyledButton
         onClick={async () => {
           await router.push('/');

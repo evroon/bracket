@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, Tabs, TextInput } from '@mantine/core';
+import { Button, Checkbox, Modal, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser, IconUserPlus, IconUsers } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -135,14 +135,11 @@ export default function PlayerCreateModal({
         </Tabs>
       </Modal>
 
-      <Group justify="right">
-        <SaveButton
-          onClick={() => setOpened(true)}
-          leftSection={<IconUserPlus size={24} />}
-          title="Add Player"
-          mt="1.5rem"
-        />
-      </Group>
+      <SaveButton
+        onClick={() => setOpened(true)}
+        leftSection={<IconUserPlus size={24} />}
+        title="Add Player"
+      />
     </>
   );
 }

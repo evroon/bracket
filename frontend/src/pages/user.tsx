@@ -21,7 +21,7 @@ export default function HomePage() {
   return (
     <Layout>
       <Title>Edit profile</Title>
-      <Stack style={{ width: '400px' }}>{form}</Stack>
+      <Stack style={{ maxWidth: '400px' }}>{form}</Stack>
     </Layout>
   );
 }
