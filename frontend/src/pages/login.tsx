@@ -13,13 +13,13 @@ import { showNotification } from '@mantine/notifications';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-import useStyles from '../components/login/login.styles';
+// import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
 import { performLogin } from '../services/user';
 import Layout from './_layout';
 
 export default function Login() {
-  const { classes } = useStyles();
+  // const { classes } = useStyles();
   const router = useRouter();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <Layout>
-      <Title className={classes.title} align="center" mt={100}>
+      <Title ta="center" mt={100}>
         Welcome to{' '}
         <Text inherit variant="gradient" component="span">
           Bracket
@@ -69,8 +69,8 @@ export default function Login() {
           {/*  fullWidth*/}
           {/*  mt="lg"*/}
           {/*  type="submit"*/}
-          {/*  color="gray"*/}
-          {/*  leftIcon={<FaGithub size={20} />}*/}
+          {/*  c="gray"*/}
+          {/*  leftSection={<FaGithub size={20} />}*/}
           {/*>*/}
           {/*  Continue with GitHub*/}
           {/*</Button>*/}
@@ -79,8 +79,8 @@ export default function Login() {
           {/*  fullWidth*/}
           {/*  mt="lg"*/}
           {/*  type="submit"*/}
-          {/*  color="indigo"*/}
-          {/*  leftIcon={<FaGoogle size={20} />}*/}
+          {/*  c="indigo"*/}
+          {/*  leftSection={<FaGoogle size={20} />}*/}
           {/*>*/}
           {/*  Continue with Google*/}
           {/*</Button>*/}
@@ -107,7 +107,7 @@ export default function Login() {
               Sign in
             </Button>
           </form>
-          <Text color="dimmed" size="sm" align="center" mt={15}>
+          <Text c="dimmed" size="sm" ta="center" mt={15}>
             <Anchor<'a'> onClick={() => router.push('/create_account')} size="sm">
               Create account
             </Anchor>

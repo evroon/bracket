@@ -29,7 +29,7 @@ export function AutoCreateMatchesButton({
       mt="1rem"
       mb="1rem"
       color="indigo"
-      leftIcon={<IconTool size={24} />}
+      leftSection={<IconTool size={24} />}
       onClick={async () => {
         await createMatchesAuto(
           tournamentData.id,

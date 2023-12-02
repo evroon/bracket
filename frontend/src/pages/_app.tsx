@@ -1,49 +1,34 @@
-import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/dropzone/styles.css';
 import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
 import { Analytics } from '@vercel/analytics/react';
-import { getCookie, setCookie } from 'cookies-next';
-import NextApp, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
-import { useState } from 'react';
 
-import { Spotlight } from '../components/modals/spotlight';
+import { BracketSpotlight } from '../components/modals/spotlight';
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
-  const { Component, pageProps } = props;
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
-
-  const toggleColorScheme = (value?: ColorScheme) => {
-    const nextColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark');
-    setColorScheme(nextColorScheme);
-    setCookie('mantine-color-scheme', nextColorScheme, {
-      maxAge: 60 * 60 * 24 * 30,
-    });
-  };
-
+export default function App({ Component, pageProps }: any) {
   return (
     <>
       <Head>
         <title>Bracket</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href="/favicon.svg" />
+
+        <ColorSchemeScript defaultColorScheme="auto" />
       </Head>
 
-      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-          <Spotlight />
-          <Notifications />
-          <Component {...pageProps} />
-          <Analytics />
-        </MantineProvider>
-      </ColorSchemeProvider>
+      <MantineProvider defaultColorScheme="auto">
+        <BracketSpotlight />
+        <Notifications />
+        <Component {...pageProps} />
+        <Analytics />
+      </MantineProvider>
     </>
   );
 }
-
-App.getInitialProps = async (appContext: AppContext) => {
-  const appProps = await NextApp.getInitialProps(appContext);
-  return {
-    ...appProps,
-    colorScheme: getCookie('mantine-color-scheme', appContext.ctx) || 'dark',
-  };
-};

@@ -7,13 +7,12 @@ import MatchLarge from './match_large';
 
 export function CourtBadge({ name, color }: { name: string; color: MantineColor }) {
   const theme = useMantineTheme();
-  const badgeColor = theme.colorScheme === 'dark' ? theme.colors[color][7] : theme.colors[color][2];
   return (
     <Center
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: badgeColor,
+        backgroundColor: theme.colors[color][7],
         borderRadius: '8px',
         padding: '8px 16px 8px 16px',
         fontSize: '1.8rem',
@@ -42,13 +41,13 @@ export default function CourtsLarge({
 }) {
   return (
     <Grid align="center" style={{ marginTop: '1rem' }} gutter="2rem">
-      <Grid.Col sm={2}>
+      <Grid.Col span={{ sm: 2 }}>
         <CourtBadge name={court.name} color="indigo" />
       </Grid.Col>
-      <Grid.Col sm={5}>
+      <Grid.Col span={{ sm: 5 }}>
         <Grid>{getRoundsGridCols(activeMatch)}</Grid>
       </Grid.Col>
-      <Grid.Col sm={5}>
+      <Grid.Col span={{ sm: 5 }}>
         <Grid>{getRoundsGridCols(nextMatch)}</Grid>
       </Grid.Col>
     </Grid>

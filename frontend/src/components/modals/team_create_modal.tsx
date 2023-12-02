@@ -97,7 +97,6 @@ function SingleTeamTab({
         data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
         label="Team members"
         placeholder="Pick all that you like"
-        dropdownPosition="bottom"
         maxDropdownHeight={160}
         searchable
         mb="12rem"
@@ -124,11 +123,11 @@ export default function TeamCreateModal({
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="Create Team">
         <Tabs defaultValue="single">
-          <Tabs.List position="center" grow>
-            <Tabs.Tab value="single" icon={<IconUser size="0.8rem" />}>
+          <Tabs.List justify="center" grow>
+            <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
               Single team
             </Tabs.Tab>
-            <Tabs.Tab value="multi" icon={<IconUsers size="0.8rem" />}>
+            <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
               Multiple teams
             </Tabs.Tab>
           </Tabs.List>
@@ -151,10 +150,10 @@ export default function TeamCreateModal({
         </Tabs>
       </Modal>
 
-      <Group position="right">
+      <Group justify="right">
         <SaveButton
           onClick={() => setOpened(true)}
-          leftIcon={<IconUsersPlus size={24} />}
+          leftSection={<IconUsersPlus size={24} />}
           title="Add Team"
           mt="1.5rem"
         />

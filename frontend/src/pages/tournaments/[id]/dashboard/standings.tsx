@@ -1,4 +1,4 @@
-import { Grid, MediaQuery } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -39,15 +39,13 @@ export default function Standings() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Grid grow style={{ margin: '1rem' }} gutter="2rem">
-        <MediaQuery query="(max-width: 80em)" styles={{ display: 'none' }}>
-          <Grid.Col span={2}>
-            <TournamentTitle tournamentDataFull={tournamentDataFull} />
-            <TournamentLogo tournamentDataFull={tournamentDataFull} />
-            <TournamentQRCode tournamentDataFull={tournamentDataFull} />
-          </Grid.Col>
-        </MediaQuery>
-        <Grid.Col span={10}>
+      <Grid style={{ margin: '1rem' }} gutter="2rem">
+        <Grid.Col span={{ base: 12, lg: 2 }}>
+          <TournamentTitle tournamentDataFull={tournamentDataFull} />
+          <TournamentLogo tournamentDataFull={tournamentDataFull} />
+          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
+        </Grid.Col>
+        <Grid.Col span="auto">
           <StandingsTable swrTeamsResponse={swrTeamsResponse} />
         </Grid.Col>
       </Grid>

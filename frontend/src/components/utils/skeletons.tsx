@@ -16,12 +16,12 @@ export function TableSkeletonTwoColumns() {
     <Center>
       <div style={{ minWidth: '1500px', marginTop: '2rem' }}>
         <Grid>
-          <Grid.Col sm={6}>
+          <Grid.Col span={{ sm: 6 }}>
             <Skeleton height={75} radius="lg" mb="xl" />
             <Skeleton height={75} radius="lg" mb="xl" />
             <Skeleton height={75} radius="lg" mb="xl" />
           </Grid.Col>
-          <Grid.Col sm={6}>
+          <Grid.Col span={{ sm: 6 }}>
             <Skeleton height={75} radius="lg" mb="xl" />
             <Skeleton height={75} radius="lg" mb="xl" />
             <Skeleton height={75} radius="lg" mb="xl" />

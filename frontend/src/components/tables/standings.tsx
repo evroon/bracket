@@ -1,4 +1,4 @@
-import { Text } from '@mantine/core';
+import { Table, Text } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -28,35 +28,34 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .slice(0, 14)
     .map((team, index) => (
-      <tr key={team.id}>
-        <td>{index + 1}</td>
-        <td>
+      <Table.Tr key={team.id}>
+        <Table.Td>{index + 1}</Table.Td>
+        <Table.Td>
           <Text>{team.name}</Text>
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerList team={team} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerScore
             score={team.elo_score}
             min_score={minELOScore}
             max_score={maxELOScore}
-            color="indigo"
             decimals={0}
           />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <WinDistribution wins={team.wins} draws={team.draws} losses={team.losses} />
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
 
   return (
     <TableLayoutLarge display_mode="presentation">
-      <thead>
-        <tr>
+      <Table.Thead>
+        <Table.Tr>
           <ThNotSortable>#</ThNotSortable>
           <ThSortable state={tableState} field="name">
             Name
@@ -68,9 +67,9 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
           <ThNotSortable>
             <WinDistributionTitle />
           </ThNotSortable>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{rows}</Table.Tbody>
     </TableLayoutLarge>
   );
 }

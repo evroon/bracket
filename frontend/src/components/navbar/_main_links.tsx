@@ -12,7 +12,7 @@ import {
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
-import { useNavbarStyles } from './_user';
+import classes from './_main_links.module.css';
 
 interface MainLinkProps {
   icon: Icon;
@@ -22,26 +22,16 @@ interface MainLinkProps {
 }
 
 function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String }) {
-  const { classes, cx } = useNavbarStyles();
   return (
-    <Tooltip label={item.label} position="right" transitionProps={{ duration: 0 }}>
+    <Tooltip position="right" label={item.label} transitionProps={{ duration: 0 }}>
       <UnstyledButton
         onClick={() => item.router.push(item.endpoint)}
-        className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
+        className={classes.link}
+        data-active={pathName === item.endpoint || undefined}
       >
-        {/*<Icon size="1.2rem" stroke={1.5} />*/}
-        <item.icon className={classes.linkIcon} stroke={1.5} />
+        <item.icon stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
-    // <a
-    //   href="#"
-    //   key={item.endpoint}
-    //   className={cx(classes.link, { [classes.linkActive]: pathName === item.endpoint })}
-    //   onClick={() => item.router.push(item.endpoint)}
-    // >
-    //   <item.icon className={classes.linkIcon} stroke={1.5} />
-    //   <span style={{ marginLeft: '10px' }}>{item.label}</span>
-    // </a>
   );
 }
 

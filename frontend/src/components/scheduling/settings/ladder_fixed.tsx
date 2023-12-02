@@ -17,7 +17,7 @@ export default function LadderFixed({
         label="Max ELO difference"
         min={0}
         step={10}
-        icon={<IconMedal size={18} />}
+        leftSection={<IconMedal size={18} />}
       />
       <Divider orientation="vertical" />
       <Radio.Group
@@ -38,7 +38,7 @@ export default function LadderFixed({
         label="Max results"
         min={0}
         step={10}
-        icon={<IconListNumbers size={18} />}
+        leftSection={<IconListNumbers size={18} />}
       />
       <NumberInput
         value={schedulerSettings.iterations}
@@ -47,7 +47,7 @@ export default function LadderFixed({
         label="Iterations"
         min={0}
         step={100}
-        icon={<IconRepeat size={18} />}
+        leftSection={<IconRepeat size={18} />}
       />
     </Flex>
   );

@@ -23,7 +23,7 @@ export default function PlayerUpdateModal({
       size="xs"
       style={{ marginRight: 10 }}
       onClick={() => setOpened(true)}
-      leftIcon={<BiEditAlt size={20} />}
+      leftSection={<BiEditAlt size={20} />}
     >
       Edit Player
     </Button>

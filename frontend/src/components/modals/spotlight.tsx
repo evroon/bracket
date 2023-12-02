@@ -1,4 +1,5 @@
-import { SpotlightAction, SpotlightProvider } from '@mantine/spotlight';
+import { rem } from '@mantine/core';
+import { Spotlight, SpotlightActionData } from '@mantine/spotlight';
 import {
   IconCalendarEvent,
   IconHome,
@@ -15,77 +16,89 @@ import React from 'react';
 
 import { getTournamentIdFromRouter } from '../utils/util';
 
-export function Spotlight() {
+export function BracketSpotlight() {
   const router = useRouter();
   const { id: tournamentId } = getTournamentIdFromRouter();
 
-  const actions: SpotlightAction[] = [
+  const actions: SpotlightActionData[] = [
     {
+      id: 'home',
       title: 'Home',
       description: 'Get to home page',
-      onTrigger: () => router.push('/'),
-      icon: <IconHome size="1.2rem" />,
+      onClick: () => router.push('/'),
+      leftSection: <IconHome size="1.2rem" />,
     },
     {
+      id: 'clubs',
       title: 'Clubs',
       description: 'View, add or delete clubs',
-      onTrigger: () => router.push('/clubs'),
-      icon: <IconUsersGroup size="1.2rem" />,
+      onClick: () => router.push('/clubs'),
+      leftSection: <IconUsersGroup size="1.2rem" />,
     },
     {
+      id: 'user settings',
       title: 'User Settings',
       description: 'Change name, email, password etc.',
-      onTrigger: () => router.push('/user'),
-      icon: <IconUser size="1.2rem" />,
+      onClick: () => router.push('/user'),
+      leftSection: <IconUser size="1.2rem" />,
     },
   ];
 
-  const tournamentActions: SpotlightAction[] = [
+  const tournamentActions: SpotlightActionData[] = [
     {
+      id: 'planning',
       title: 'Planning',
       description: 'Change planning of matches',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/schedule`),
-      icon: <IconCalendarEvent size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/schedule`),
+      leftSection: <IconCalendarEvent size="1.2rem" />,
     },
     {
+      id: 'teams',
       title: 'Teams',
       description: 'View, add or delete teams',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/teams`),
-      icon: <IconUsers size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/teams`),
+      leftSection: <IconUsers size="1.2rem" />,
     },
     {
+      id: 'players',
       title: 'Players',
       description: 'View, add or delete players',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/players`),
-      icon: <IconUsers size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/players`),
+      leftSection: <IconUsers size="1.2rem" />,
     },
     {
+      id: 'stages',
       title: 'Stages',
       description: 'Change the layout of the tournament',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/stages`),
-      icon: <IconTrophy size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/stages`),
+      leftSection: <IconTrophy size="1.2rem" />,
     },
     {
+      id: 'courts',
       title: 'Courts',
       description: 'View, add or delete courts',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/courts`),
-      icon: <IconSoccerField size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/courts`),
+      leftSection: <IconSoccerField size="1.2rem" />,
     },
     {
+      id: 'tournament settings',
       title: 'Tournament settings',
       description: 'Change settings of the tournament',
-      onTrigger: () => router.push(`/tournaments/${tournamentId}/settings`),
-      icon: <IconSettings size="1.2rem" />,
+      onClick: () => router.push(`/tournaments/${tournamentId}/settings`),
+      leftSection: <IconSettings size="1.2rem" />,
     },
   ];
   const allActions = tournamentId >= 0 ? actions.concat(tournamentActions) : actions;
   return (
-    <SpotlightProvider
+    <Spotlight
       actions={allActions}
-      searchIcon={<IconSearch size="1.2rem" />}
-      searchPlaceholder="Search..."
       shortcut={['mod + k', 'mod + y', '/']}
-      nothingFoundMessage="Nothing found..."
+      nothingFound="Nothing found..."
+      highlightQuery
+      searchProps={{
+        leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,
+        placeholder: 'Search...',
+      }}
     />
   );
 }

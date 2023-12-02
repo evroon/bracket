@@ -17,7 +17,7 @@ function getRoundsGridCols(
       (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
     )
     .map((match) => (
-      <Grid.Col sm={6} lg={4} xl={4} key={match.id}>
+      <Grid.Col span={{ sm: 6 }} key={match.id}>
         <Match
           key={match.id}
           tournamentData={tournamentData}

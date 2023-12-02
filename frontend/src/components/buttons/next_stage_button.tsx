@@ -10,7 +10,7 @@ export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
       size="md"
       style={{ marginBottom: 10 }}
       color="indigo"
-      leftIcon={<IconSquareArrowRight size={24} />}
+      leftSection={<IconSquareArrowRight size={24} />}
       onClick={async () => {
         await activateNextStage(tournamentData.id, 'next');
         swrStagesResponse.mutate();
@@ -27,7 +27,7 @@ export function PreviousStageButton({ tournamentData, swrStagesResponse }: any) 
       size="md"
       style={{ marginBottom: 10 }}
       color="indigo"
-      leftIcon={<IconSquareArrowLeft size={24} />}
+      leftSection={<IconSquareArrowLeft size={24} />}
       onClick={async () => {
         await activateNextStage(tournamentData.id, 'previous');
         swrStagesResponse.mutate();

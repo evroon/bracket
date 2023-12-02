@@ -69,7 +69,6 @@ export default function TeamUpdateModal({
             data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
             label="Team members"
             placeholder="Pick all that you like"
-            dropdownPosition="bottom"
             maxDropdownHeight={160}
             searchable
             mb="12rem"
@@ -89,7 +88,7 @@ export default function TeamUpdateModal({
         size="xs"
         style={{ marginRight: 10 }}
         onClick={() => setOpened(true)}
-        leftIcon={<BiEditAlt size={20} />}
+        leftSection={<BiEditAlt size={20} />}
       >
         Edit Team
       </Button>

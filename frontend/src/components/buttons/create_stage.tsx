@@ -23,7 +23,7 @@ export default function CreateStageButton({
         await createStage(tournament.id);
         await swrStagesResponse.mutate(null);
       }}
-      leftIcon={<GoPlus size={24} />}
+      leftSection={<GoPlus size={24} />}
     >
       Add stage
     </Button>

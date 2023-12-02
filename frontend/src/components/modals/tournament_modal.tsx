@@ -105,19 +105,19 @@ function GeneralTournamentForm({
         {...form.getInputProps('dashboard_endpoint')}
       />
       <Grid mt="1rem">
-        <Grid.Col sm={9}>
+        <Grid.Col span={{ sm: 9 }}>
           <DateTimePicker
-            icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+            leftSection={<IconCalendar size="1.1rem" stroke={1.5} />}
             placeholder="Pick date and time"
             mx="auto"
             {...form.getInputProps('start_time')}
           />
         </Grid.Col>
-        <Grid.Col sm={3}>
+        <Grid.Col span={{ sm: 3 }}>
           <Button
             fullWidth
             color="indigo"
-            leftIcon={<IconCalendarTime size="1.1rem" stroke={1.5} />}
+            leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
             onClick={() => {
               form.setFieldValue('start_time', new Date());
             }}
@@ -128,19 +128,17 @@ function GeneralTournamentForm({
       </Grid>
 
       <Grid>
-        <Grid.Col sm={6}>
+        <Grid.Col span={{ sm: 6 }}>
           <NumberInput
             label="Match duration (minutes)"
             mt="lg"
-            type="number"
             {...form.getInputProps('duration_minutes')}
           />
         </Grid.Col>
-        <Grid.Col sm={6}>
+        <Grid.Col span={{ sm: 6 }}>
           <NumberInput
             label="Time between matches (minutes)"
             mt="lg"
-            type="number"
             {...form.getInputProps('margin_minutes')}
           />
         </Grid.Col>
@@ -188,10 +186,10 @@ export default function TournamentModal({
           clubs={clubs}
         />
       </Modal>
-      <Group position="right">
+      <Group justify="right">
         <SaveButton
           onClick={() => setOpened(true)}
-          leftIcon={<GoPlus size={24} />}
+          leftSection={<GoPlus size={24} />}
           title={operation_text}
         />
       </Group>

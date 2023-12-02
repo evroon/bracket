@@ -1,0 +1,23 @@
+
+.root {
+  width: 100%;
+  margin-top: 30px;
+  padding: 0px;
+}
+
+.divider {
+  background-color: darkgray;
+  height: 1px;
+}
+
+.top {
+  background-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  padding: 8px 8px 8px 15px;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.bottom {
+  background-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  padding: 8px 8px 8px 15px;
+  border-radius: 0px 0px 8px 8px;
+}

@@ -45,12 +45,12 @@ function ScheduleRow({
           >
             <Grid>
               <Grid.Col span="auto">
-                <Text weight={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, match)}</Text>
-                <Text weight={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
+                <Text fw={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, match)}</Text>
+                <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
               </Grid.Col>
               <Grid.Col span="content">
-                <Stack spacing="xs">
-                  <Badge color="gray" variant="dot" size="lg">
+                <Stack gap="xs">
+                  <Badge variant="default" size="lg">
                     {match.start_time != null ? <Time datetime={match.start_time} /> : null}
                   </Badge>
                   <Badge color={stageItemColor} variant="outline">
@@ -128,7 +128,7 @@ function Schedule({
       matches={item.matches}
     />
   ));
-  return <Grid>{columns}</Grid>;
+  return <Group>{columns}</Group>;
 }
 
 export default function SchedulePage() {
@@ -160,13 +160,13 @@ export default function SchedulePage() {
           <Title>Schedule</Title>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Group position="right">
+          <Group justify="right">
             <Button
               color="indigo"
               size="md"
               variant="filled"
               style={{ marginBottom: 10 }}
-              leftIcon={<IconCalendarPlus size={24} />}
+              leftSection={<IconCalendarPlus size={24} />}
               onClick={async () => {
                 await scheduleMatches(tournamentData.id);
                 await swrStagesResponse.mutate(null);

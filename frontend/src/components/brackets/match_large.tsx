@@ -13,11 +13,11 @@ export default function MatchLarge({ match }: { match: MatchInterface }) {
     <div>
       <Card padding="md" shadow="sm" radius="lg" withBorder>
         <Grid align="center">
-          <Grid.Col sm={9}>
+          <Grid.Col span={{ sm: 9 }}>
             <Text lineClamp={1}>{match.team1.name}</Text>
             <Text lineClamp={1}>{match.team2.name}</Text>
           </Grid.Col>
-          <Grid.Col sm={3}>
+          <Grid.Col span={{ sm: 3 }}>
             <Center>
               <Time datetime={match.start_time} />
             </Center>

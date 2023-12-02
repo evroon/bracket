@@ -21,10 +21,10 @@ export default function ClubModal({
   const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
   const [opened, setOpened] = useState(false);
   const modalOpenButton = is_create_form ? (
-    <Group position="right">
+    <Group justify="right">
       <SaveButton
         onClick={() => setOpened(true)}
-        leftIcon={<GoPlus size={24} />}
+        leftSection={<GoPlus size={24} />}
         title={operation_text}
       />
     </Group>
@@ -34,7 +34,7 @@ export default function ClubModal({
       size="xs"
       style={{ marginRight: 10 }}
       onClick={() => setOpened(true)}
-      leftIcon={icon}
+      leftSection={icon}
     >
       {operation_text}
     </Button>

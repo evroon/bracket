@@ -132,7 +132,7 @@ export default function MatchModal({
             Custom match duration
           </Text>
           <Grid align="center">
-            <Grid.Col sm={8}>
+            <Grid.Col span={{ sm: 8 }}>
               <NumberInput
                 disabled={!customDurationEnabled}
                 rightSection={<Text>minutes</Text>}
@@ -141,7 +141,7 @@ export default function MatchModal({
                 {...form.getInputProps('custom_duration_minutes')}
               />
             </Grid.Col>
-            <Grid.Col sm={4}>
+            <Grid.Col span={{ sm: 4 }}>
               <Center>
                 <Checkbox
                   checked={customDurationEnabled}
@@ -158,7 +158,7 @@ export default function MatchModal({
             Custom match margin
           </Text>
           <Grid align="center">
-            <Grid.Col sm={8}>
+            <Grid.Col span={{ sm: 8 }}>
               <NumberInput
                 disabled={!customMarginEnabled}
                 placeholder={`${match.margin_minutes}`}
@@ -167,7 +167,7 @@ export default function MatchModal({
                 {...form.getInputProps('custom_margin_minutes')}
               />
             </Grid.Col>
-            <Grid.Col sm={4}>
+            <Grid.Col span={{ sm: 4 }}>
               <Center>
                 <Checkbox
                   checked={customMarginEnabled}

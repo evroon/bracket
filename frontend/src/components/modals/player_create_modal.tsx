@@ -108,11 +108,11 @@ export default function PlayerCreateModal({
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="Create Player">
         <Tabs defaultValue="single">
-          <Tabs.List position="center" grow>
-            <Tabs.Tab value="single" icon={<IconUser size="0.8rem" />}>
+          <Tabs.List justify="center" grow>
+            <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
               Single player
             </Tabs.Tab>
-            <Tabs.Tab value="multi" icon={<IconUsers size="0.8rem" />}>
+            <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
               Multiple players
             </Tabs.Tab>
           </Tabs.List>
@@ -135,10 +135,10 @@ export default function PlayerCreateModal({
         </Tabs>
       </Modal>
 
-      <Group position="right">
+      <Group justify="right">
         <SaveButton
           onClick={() => setOpened(true)}
-          leftIcon={<IconUserPlus size={24} />}
+          leftSection={<IconUserPlus size={24} />}
           title="Add Player"
           mt="1.5rem"
         />
