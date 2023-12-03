@@ -25,6 +25,7 @@ filterwarnings = [
     'ignore:pkg_resources is deprecated as an API.*:DeprecationWarning',
     'ignore:Deprecated call to `pkg_resources.declare_namespace(.*)`.*:DeprecationWarning',
     'ignore:reinit_database is asynchronous and explicitly requests the "event_loop" fixture.*:pytest.PytestDeprecationWarning',
+    'ignore:The event_loop fixture provided by pytest-asyncio has been redefined.*:DeprecationWarning',
 ]
 
 [tool.mypy]
