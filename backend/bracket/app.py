@@ -1,20 +1,23 @@
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from starlette.exceptions import HTTPException
+from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.cors import CORSMiddleware
-from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
 from bracket.database import database
+from bracket.models.metrics import RequestDefinition, get_request_metrics
 from bracket.routes import (
     auth,
     clubs,
     courts,
     matches,
+    metrics,
     players,
     rounds,
     stage_items,
@@ -58,6 +61,17 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next: RequestResponseEndpoint) -> Response:
+    start_time = time.time()
+    request_metrics = get_request_metrics()
+    request_metrics.request_count[RequestDefinition.from_request(request)] += 1
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    request_metrics.response_time[RequestDefinition.from_request(request)] = process_time
+    return response
+
+
 @app.get('/ping', summary="Healthcheck ping")
 async def ping() -> str:
     return 'ping'
@@ -75,6 +89,7 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+app.include_router(metrics.router, tags=['metrics'])
 app.include_router(auth.router, tags=['auth'])
 app.include_router(clubs.router, tags=['clubs'])
 app.include_router(courts.router, tags=['courts'])
