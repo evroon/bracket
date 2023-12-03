@@ -86,6 +86,15 @@ async def send_request(
             return response
 
 
+async def send_request_raw(method: HTTPMethod, endpoint: str) -> str:
+    async with aiohttp.ClientSession() as session:
+        async with session.request(
+            method=method.value,
+            url=get_root_uvicorn_url() + endpoint,
+        ) as resp:
+            return await resp.text()
+
+
 async def send_auth_request(
     method: HTTPMethod,
     endpoint: str,

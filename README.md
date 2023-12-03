@@ -70,6 +70,8 @@ You can do the same but replace the user and database name with:
 
 The database URL can be specified per environment in the `.env` files (see [config](#config)).
 
+Read the full documentation about setting up Bracket [in the docs](https://evroon.github.io/bracket/docs/getting-started/installation).
+
 ## Config
 Copy [ci.env](backend/ci.env) to `prod.env` and fill in the values:
 - `PG_DSN`: The URL of the PostgreSQL database
@@ -79,8 +81,10 @@ Copy [ci.env](backend/ci.env) to `prod.env` and fill in the values:
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when
   initializing the database
 
+Read more about configuration [in the docs](https://evroon.github.io/bracket/docs/getting-started/configuration).
 
-## Running the frontend and backend
+
+## Running the frontend and backend for development
 The following starts the frontend and backend for local development:
 ### Frontend
 ```bash
@@ -95,3 +99,7 @@ pipenv install -d
 pipenv shell
 ./run.sh
 ```
+
+# License
+Bracket is licensed under AGPL-v3.0
+See [LICENSE](LICENSE)
