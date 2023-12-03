@@ -24,6 +24,7 @@ filterwarnings = [
     'ignore:The SelectBase.c and SelectBase.columns attributes are deprecated.*:DeprecationWarning',
     'ignore:pkg_resources is deprecated as an API.*:DeprecationWarning',
     'ignore:Deprecated call to `pkg_resources.declare_namespace(.*)`.*:DeprecationWarning',
+    'ignore:reinit_database is asynchronous and explicitly requests the "event_loop" fixture.*:pytest.PytestDeprecationWarning',
 ]
 
 [tool.mypy]
