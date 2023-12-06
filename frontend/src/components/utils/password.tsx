@@ -48,8 +48,8 @@ export function PasswordStrength({ form }: { form: any }) {
           form.values.password.length > 0 && index === 0
             ? 100
             : strength >= ((index + 1) / 4) * 100
-            ? 100
-            : 0
+              ? 100
+              : 0
         }
         c={strength > 80 ? 'teal' : strength > 50 ? 'yellow' : 'red'}
         key={index}

@@ -58,14 +58,14 @@ export default function Round({
         borderColor: 'green',
       }
     : round.is_draft
-    ? {
-        borderStyle: 'dashed',
-        borderColor: 'gray',
-      }
-    : {
-        borderStyle: 'solid',
-        borderColor: 'gray',
-      };
+      ? {
+          borderStyle: 'dashed',
+          borderColor: 'gray',
+        }
+      : {
+          borderStyle: 'solid',
+          borderColor: 'gray',
+        };
 
   const modal = readOnly ? (
     <Title order={3}>{round.name}</Title>
