@@ -133,7 +133,7 @@ export function CreateStageItemModal({
           const team = teamsMap[option.team_id];
           if (team == null) return null;
           return {
-            value: option.team_id,
+            value: `${option.team_id}`,
             label: team.name,
           };
         }
