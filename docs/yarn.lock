@@ -2207,12 +2207,12 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@mantine/carousel@^7.3.0":
+"@mantine/carousel@^7.2.2":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@mantine/carousel/-/carousel-7.3.0.tgz#281d553db9ea355b4ac213160a76e02fc9b50664"
   integrity sha512-rpp10tQtiHftJ0Y2JLsvsxCypF3KzjgLIw3oQ3wsNW8diMCsIn9HjwYEwCY7gchy2j7tvLmN0gERm+FiyQjxhQ==
 
-"@mantine/core@^7.3.0":
+"@mantine/core@^7.2.2":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@mantine/core/-/core-7.3.0.tgz#04a449367e45af4e742fd42e6cc290b7e385f9ef"
   integrity sha512-RU8txZtfAu7mbb0mzKHFysVgteHP3ClAFmQzMPBf86p+JCOu+e6i5eq+qqv9iiGzrE50ZGuw/WtWYNi5VeJQ7w==
@@ -2224,12 +2224,12 @@
     react-textarea-autosize "8.5.3"
     type-fest "^3.13.1"
 
-"@mantine/hooks@^7.3.0":
+"@mantine/hooks@^7.2.2":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.3.0.tgz#82a3b2df51cac1a9c5ea416f60162cf879928254"
   integrity sha512-TL/9o4SpJogW5dJ4qvsZImsha6mOsCirIHlGP8dR00K72NjFgEqFPAy85HU68LQTG+GtMFRwk3tjpKneHF3uEA==
 
-"@mantine/spotlight@^7.3.0":
+"@mantine/spotlight@^7.2.2":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.3.0.tgz#79f2a694e0f65e56047f0bb68f77551376ae44de"
   integrity sha512-4w62G7Qqf20ACk/f7l9KagmFJnAHI73GeMUTnxgMqmlzkx+t1fjvCScdXhIVbv6u2KkuBKv+wDQzgAQE5N2uXA==
