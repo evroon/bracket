@@ -82,7 +82,7 @@ function getRoundsGridCols(
           </Grid.Col>
         </Grid>
       </div>
-      <Group>{rounds}</Group>
+      <Group align="top">{rounds}</Group>
     </React.Fragment>
   );
 }

@@ -170,6 +170,7 @@ export function CreateStageItemModal({
           <Select
             withAsterisk
             label="Stage Type"
+            allowDeselect={false}
             data={[
               { value: 'ROUND_ROBIN', label: 'Round Robin' },
               { value: 'SINGLE_ELIMINATION', label: 'Single Elimination' },
