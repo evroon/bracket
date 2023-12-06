@@ -1,4 +1,4 @@
-import { Container, Group } from '@mantine/core';
+import { Group } from '@mantine/core';
 import React from 'react';
 
 import Builder from '../../../components/builder/builder';
@@ -24,16 +24,16 @@ export default function StagesPage() {
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Container size="1600px">
+      <Group grow mt="1rem" maw="30rem">
+        <PreviousStageButton
+          tournamentData={tournamentData}
+          swrStagesResponse={swrStagesResponse}
+        />
+        <NextStageButton tournamentData={tournamentData} swrStagesResponse={swrStagesResponse} />
+      </Group>
+      <Group mt="1rem" align="top">
         <Builder tournament={tournamentDataFull} swrStagesResponse={swrStagesResponse} />
-        <Group grow mt="1rem">
-          <PreviousStageButton
-            tournamentData={tournamentData}
-            swrStagesResponse={swrStagesResponse}
-          />
-          <NextStageButton tournamentData={tournamentData} swrStagesResponse={swrStagesResponse} />
-        </Group>
-      </Container>
+      </Group>
     </TournamentLayout>
   );
 }

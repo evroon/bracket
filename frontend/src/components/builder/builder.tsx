@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Card, Grid, Group, Menu, Text, rem } from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Menu, Stack, Text, rem } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
 import React, { useState } from 'react';
@@ -153,7 +153,7 @@ function StageColumn({
     ));
 
   return (
-    <Grid.Col mb="1rem" span={{ sm: 6, lg: 4, xl: 3 }} key={stage.id}>
+    <Stack miw="24rem" align="top" key={stage.id}>
       <UpdateStageModal
         swrStagesResponse={swrStagesResponse}
         stage={stage}
@@ -206,7 +206,7 @@ function StageColumn({
         stage={stage}
         swrStagesResponse={swrStagesResponse}
       />
-    </Grid.Col>
+    </Stack>
   );
 }
 
@@ -234,13 +234,11 @@ export default function Builder({
     ));
 
   const button = (
-    <Grid.Col mb="1rem" span={{ sm: 6, lg: 4, xl: 4 }} key={-1}>
+    <Stack miw="24rem" align="top" key={-1}>
       <h4>
         <CreateStageButton tournament={tournament} swrStagesResponse={swrStagesResponse} />
       </h4>
-    </Grid.Col>
+    </Stack>
   );
-  const colsWithButton = cols.concat([button]);
-
-  return <Grid>{colsWithButton}</Grid>;
+  return cols.concat([button]);
 }

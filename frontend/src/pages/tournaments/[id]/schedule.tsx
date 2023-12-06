@@ -128,7 +128,7 @@ function Schedule({
       matches={item.matches}
     />
   ));
-  return <Group>{columns}</Group>;
+  return <Group align="top">{columns}</Group>;
 }
 
 export default function SchedulePage() {
