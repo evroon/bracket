@@ -14,9 +14,8 @@ import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem } from '../../services/stage_item';
 import { responseIsValid } from '../utils/util';
 
-const { t } = useTranslation();
-
 function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) {
+  const { t } = useTranslation();
   const data = [
     { value: '2', label: '2' },
     { value: '4', label: '4' },
@@ -37,6 +36,7 @@ function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) 
 }
 
 function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
+  const { t } = useTranslation();
   return (
     <NumberInput
       withAsterisk
@@ -65,6 +65,7 @@ function StageItemInput({
   index: number;
   possibleOptions: any[];
 }) {
+  const { t } = useTranslation();
   return (
     <Select
       withAsterisk
@@ -108,6 +109,7 @@ export function CreateStageItemModal({
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
 
   const form = useForm({

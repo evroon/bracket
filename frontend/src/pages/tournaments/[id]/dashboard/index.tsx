@@ -1,4 +1,5 @@
 import { Center, Grid } from '@mantine/core';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -81,3 +82,9 @@ export default function Index() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

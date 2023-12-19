@@ -18,8 +18,6 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
 
-const { t } = useTranslation();
-
 function RoundDeleteButton({
   tournamentData,
   round,
@@ -33,6 +31,7 @@ function RoundDeleteButton({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   if (!dynamicSchedule) return null;
   return (
     <DeleteButton
@@ -62,6 +61,7 @@ export default function RoundModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
 
   const form = useForm({

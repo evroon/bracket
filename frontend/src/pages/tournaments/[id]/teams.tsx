@@ -1,5 +1,6 @@
 import { Grid, Select, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -13,8 +14,6 @@ import { getStages, getTeams } from '../../../services/adapter';
 import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
 
-const { t } = useTranslation();
-
 function StageItemSelect({
   groupStageItems,
   setFilteredStageItemId,
@@ -22,6 +21,7 @@ function StageItemSelect({
   groupStageItems: any;
   setFilteredStageItemId: any;
 }) {
+  const { t } = useTranslation();
   if (groupStageItems == null) return null;
   const data = groupStageItems.map(([stage_item]: [StageItemWithRounds]) => ({
     value: `${stage_item.id}`,
@@ -42,6 +42,7 @@ function StageItemSelect({
 }
 
 export default function Teams() {
+  const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
   const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
@@ -92,3 +93,9 @@ export default function Teams() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

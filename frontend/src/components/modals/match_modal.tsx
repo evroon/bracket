@@ -15,8 +15,6 @@ import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
 
-const { t } = useTranslation();
-
 function MatchDeleteButton({
   tournamentData,
   match,
@@ -30,6 +28,7 @@ function MatchDeleteButton({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   if (!dynamicSchedule) return null;
   return (
     <DeleteButton
@@ -63,6 +62,7 @@ export default function MatchModal({
   setOpened: any;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       team1_score: match.team1_score,

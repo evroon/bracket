@@ -1,6 +1,7 @@
 import { Button, Center, Grid, Group, SegmentedControl, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -24,6 +25,12 @@ import {
   getUpcomingMatches,
 } from '../../services/adapter';
 import TournamentLayout from './_tournament_layout';
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});
 
 export default function TournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();

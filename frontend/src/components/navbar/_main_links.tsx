@@ -151,7 +151,7 @@ export function TournamentLinks({ tournament_id }: any) {
     },
     {
       icon: IconTrophy,
-      label: t('stages_title'),
+      label: t('stage_title'),
       link: `${tm_prefix}/stages`,
     },
     {

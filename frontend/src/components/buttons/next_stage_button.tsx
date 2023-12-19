@@ -5,8 +5,8 @@ import React from 'react';
 
 import { activateNextStage } from '../../services/stage';
 
-const { t } = useTranslation();
 export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
+  const { t } = useTranslation();
   return (
     <Button
       size="md"
@@ -24,6 +24,8 @@ export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
 }
 
 export function PreviousStageButton({ tournamentData, swrStagesResponse }: any) {
+  const { t } = useTranslation();
+
   return (
     <Button
       size="md"

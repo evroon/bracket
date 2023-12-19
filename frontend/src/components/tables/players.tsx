@@ -15,8 +15,8 @@ import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
-const { t } = useTranslation();
 export function WinDistributionTitle() {
+  const { t } = useTranslation();
   return (
     <>
       <Text span color="teal" inherit>
@@ -41,6 +41,7 @@ export default function PlayersTable({
   swrPlayersResponse: SWRResponse;
   tournamentData: TournamentMinimal;
 }) {
+  const { t } = useTranslation();
   const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 

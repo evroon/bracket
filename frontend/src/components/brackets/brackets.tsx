@@ -15,8 +15,6 @@ import ActivateNextRoundModal from '../modals/activate_next_round_modal';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
-const { t } = useTranslation();
-
 function getRoundsGridCols(
   stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
@@ -25,6 +23,7 @@ function getRoundsGridCols(
   readOnly: boolean,
   displaySettings: BracketDisplaySettings
 ) {
+  const { t } = useTranslation();
   let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .map((round: RoundInterface) => (
@@ -96,6 +95,7 @@ function getRoundsGridCols(
 }
 
 function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
+  const { t } = useTranslation();
   if (readOnly) {
     return (
       <Alert
@@ -123,6 +123,8 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
 }
 
 function NotStartedAlert() {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <Alert

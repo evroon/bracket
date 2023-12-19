@@ -9,7 +9,6 @@ import { createMultiplePlayers, createPlayer } from '../../services/player';
 import SaveButton from '../buttons/save';
 import { MultiPlayersInput } from '../forms/player_create_csv_input';
 
-const { t } = useTranslation();
 function MultiPlayerTab({
   tournament_id,
   swrPlayersResponse,
@@ -19,6 +18,7 @@ function MultiPlayerTab({
   swrPlayersResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       names: '',
@@ -60,6 +60,7 @@ function SinglePlayerTab({
   swrPlayersResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       name: '',
@@ -105,6 +106,7 @@ export default function PlayerCreateModal({
   tournament_id: number;
   swrPlayersResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   return (
     <>

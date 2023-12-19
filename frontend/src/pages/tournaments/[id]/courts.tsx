@@ -1,6 +1,7 @@
 import { Button, Container, Divider, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { SWRResponse } from 'swr';
 
 import CourtsTable from '../../../components/tables/courts';
@@ -61,3 +62,9 @@ export default function CourtsPage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

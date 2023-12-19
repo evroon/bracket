@@ -17,6 +17,7 @@ import { useForm } from '@mantine/form';
 import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -238,3 +239,9 @@ export default function SettingsPage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

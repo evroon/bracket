@@ -2,6 +2,7 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 
 import { Time } from '../../../components/utils/datetime';
@@ -18,8 +19,6 @@ import {
 } from '../../../services/lookups';
 import { rescheduleMatch, scheduleMatches } from '../../../services/match';
 import TournamentLayout from '../_tournament_layout';
-
-const { t } = useTranslation();
 
 function ScheduleRow({
   index,
@@ -80,6 +79,7 @@ function ScheduleColumn({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
+  const { t } = useTranslation();
   const rows = matches.map((match: MatchInterface, index: number) => (
     <ScheduleRow
       index={index}
@@ -140,6 +140,7 @@ function Schedule({
 }
 
 export default function SchedulePage() {
+  const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
 
@@ -208,3 +209,9 @@ export default function SchedulePage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

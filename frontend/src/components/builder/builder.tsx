@@ -19,7 +19,6 @@ import { UpdateStageModal } from '../modals/update_stage';
 import { UpdateStageItemModal } from '../modals/update_stage_item';
 import RequestErrorAlert from '../utils/error_alert';
 
-const { t } = useTranslation();
 function StageItemInputSectionLast({
   input,
   team,
@@ -57,6 +56,7 @@ function StageItemRow({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
@@ -135,6 +135,7 @@ function StageColumn({
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
 

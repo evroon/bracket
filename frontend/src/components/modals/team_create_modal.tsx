@@ -11,7 +11,6 @@ import { createTeam, createTeams } from '../../services/team';
 import SaveButton from '../buttons/save';
 import { MultiTeamsInput } from '../forms/player_create_csv_input';
 
-const { t } = useTranslation();
 function MultiTeamTab({
   tournament_id,
   swrTeamsResponse,
@@ -21,6 +20,7 @@ function MultiTeamTab({
   swrTeamsResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       names: '',
@@ -62,6 +62,7 @@ function SingleTeamTab({
   swrTeamsResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);
   const players: Player[] = data != null ? data.data : [];
   const form = useForm({
@@ -120,6 +121,7 @@ export default function TeamCreateModal({
   tournament_id: number;
   swrTeamsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   return (
     <>
