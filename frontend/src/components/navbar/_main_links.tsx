@@ -15,6 +15,7 @@ import {
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
@@ -83,23 +84,29 @@ function MainLink({
 }
 
 export function getBaseLinksDict() {
+  const { t } = useTranslation();
+
   return [
-    { link: '/clubs', label: 'Clubs', links: [], icon: IconUsers },
-    { link: '/', label: 'Tournaments', links: [], icon: IconHome },
+    { link: '/clubs', label: t('clubs_title'), links: [], icon: IconUsers },
+    { link: '/', label: t('tournaments_title'), links: [], icon: IconHome },
     {
       link: '/user',
-      label: 'User',
-      links: [{ link: '/user', label: 'Logout', icon: IconLogout }],
+      label: t('user_title'),
+      links: [{ link: '/user', label: t('logout_title'), icon: IconLogout }],
       icon: IconUser,
     },
     {
       icon: IconDots,
       link: '',
-      label: 'More',
+      label: t('more_title'),
       links: [
-        { link: 'https://evroon.github.io/bracket/', label: 'Website', icon: IconBrowser },
-        { link: 'https://github.com/evroon/bracket', label: 'GitHub', icon: IconBrandGithub },
-        { link: `${getBaseApiUrl()}/docs`, label: 'API docs', icon: IconBook },
+        { link: 'https://evroon.github.io/bracket/', label: t('website_title'), icon: IconBrowser },
+        {
+          link: 'https://github.com/evroon/bracket',
+          label: t('github_title'),
+          icon: IconBrandGithub,
+        },
+        { link: `${getBaseApiUrl()}/docs`, label: t('api_docs_title'), icon: IconBook },
       ],
     },
   ];
@@ -117,43 +124,44 @@ export function getBaseLinks() {
 
 export function TournamentLinks({ tournament_id }: any) {
   const router = useRouter();
+  const { t } = useTranslation();
   const tm_prefix = `/tournaments/${tournament_id}`;
   const pathName = router.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
 
   const data = [
     {
       icon: IconTournament,
-      label: 'Schedule',
+      label: t('schedule_title'),
       link: `${tm_prefix}`,
     },
     {
       icon: IconUser,
-      label: 'Players',
+      label: t('player_title'),
       link: `${tm_prefix}/players`,
     },
     {
       icon: IconUsers,
-      label: 'Teams',
+      label: t('teams_title'),
       link: `${tm_prefix}/teams`,
     },
     {
       icon: IconSoccerField,
-      label: 'Courts',
+      label: t('court_title'),
       link: `${tm_prefix}/courts`,
     },
     {
       icon: IconTrophy,
-      label: 'Stages',
+      label: t('stages_title'),
       link: `${tm_prefix}/stages`,
     },
     {
       icon: IconCalendar,
-      label: 'Planning',
+      label: t('planning_title'),
       link: `${tm_prefix}/schedule`,
     },
     {
       icon: IconSettings,
-      label: 'Tournament Settings',
+      label: t('tournament_setting_title'),
       link: `${tm_prefix}/settings`,
     },
   ];
@@ -164,7 +172,7 @@ export function TournamentLinks({ tournament_id }: any) {
   return (
     <>
       <Center hiddenFrom="sm">
-        <h2>Tournament</h2>
+        <h2>{t('tournament_title')}</h2>
       </Center>
       <Divider hiddenFrom="sm" />
       {links}

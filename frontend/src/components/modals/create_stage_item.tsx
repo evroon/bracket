@@ -2,6 +2,7 @@ import { Button, Divider, Modal, NumberInput, Select } from '@mantine/core';
 import { UseFormReturnType, useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import assert from 'assert';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -13,6 +14,8 @@ import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem } from '../../services/stage_item';
 import { responseIsValid } from '../utils/util';
 
+const { t } = useTranslation();
+
 function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) {
   const data = [
     { value: '2', label: '2' },
@@ -23,8 +26,8 @@ function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) 
     <Select
       withAsterisk
       data={data}
-      label="Number of teams advancing from the previous stage"
-      placeholder="2, 4, 8 etc."
+      label={t('team_count_select_elimination_label')}
+      placeholder={t('team_count_select_elimination_placeholder')}
       searchable
       limit={20}
       mt={24}
@@ -37,7 +40,7 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
   return (
     <NumberInput
       withAsterisk
-      label="Number of teams advancing from the previous stage"
+      label={t('team_count_input_round_robin_label')}
       placeholder=""
       mt={24}
       {...form.getInputProps('team_count_round_robin')}
@@ -66,8 +69,8 @@ function StageItemInput({
     <Select
       withAsterisk
       data={possibleOptions}
-      label={`Team ${index}`}
-      placeholder="None"
+      label={`${t('team_title')} ${index}`}
+      placeholder={t('none')}
       searchable
       limit={20}
       mt={24}
@@ -110,8 +113,8 @@ export function CreateStageItemModal({
   const form = useForm({
     initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
-      team_count_round_robin: (value) => (value >= 2 ? null : 'Need at least two teams'),
-      team_count_elimination: (value) => (value >= 2 ? null : 'Need at least two teams'),
+      team_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
+      team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
     },
   });
 
@@ -149,7 +152,11 @@ export function CreateStageItemModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Add stage item">
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={t('add_stage_item_modal_title')}
+      >
         <form
           onSubmit={form.onSubmit(async (values) => {
             const teamCount = getTeamCount(values);
@@ -169,12 +176,12 @@ export function CreateStageItemModal({
         >
           <Select
             withAsterisk
-            label="Stage Type"
+            label={t('stage_type_select_label')}
             allowDeselect={false}
             data={[
-              { value: 'ROUND_ROBIN', label: 'Round Robin' },
-              { value: 'SINGLE_ELIMINATION', label: 'Single Elimination' },
-              { value: 'SWISS', label: 'Swiss' },
+              { value: 'ROUND_ROBIN', label: t('round_robin_label') },
+              { value: 'SINGLE_ELIMINATION', label: t('single_elimination_label') },
+              { value: 'SWISS', label: t('swiss_label') },
             ]}
             {...form.getInputProps('type')}
           />
@@ -183,7 +190,7 @@ export function CreateStageItemModal({
           <StageItemInputs form={form} possibleOptions={availableInputs} />
 
           <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-            Create Stage Item
+            {t('create_stage_item_button')}
           </Button>
         </form>
       </Modal>

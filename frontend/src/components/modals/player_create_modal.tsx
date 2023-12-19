@@ -1,6 +1,7 @@
 import { Button, Checkbox, Modal, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser, IconUserPlus, IconUsers } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -8,6 +9,7 @@ import { createMultiplePlayers, createPlayer } from '../../services/player';
 import SaveButton from '../buttons/save';
 import { MultiPlayersInput } from '../forms/player_create_csv_input';
 
+const { t } = useTranslation();
 function MultiPlayerTab({
   tournament_id,
   swrPlayersResponse,
@@ -24,7 +26,7 @@ function MultiPlayerTab({
     },
 
     validate: {
-      names: (value) => (value.length > 0 ? null : 'Enter at least one player'),
+      names: (value) => (value.length > 0 ? null : t('at_least_one_player_validation')),
     },
   });
   return (
@@ -39,11 +41,11 @@ function MultiPlayerTab({
 
       <Checkbox
         mt="md"
-        label="These players are active"
+        label={t('active_players_checkbox_label')}
         {...form.getInputProps('active', { type: 'checkbox' })}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        Save players
+        {t('save_players_button')}
       </Button>
     </form>
   );
@@ -65,7 +67,7 @@ function SinglePlayerTab({
       player_ids: [],
     },
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
   return (
@@ -78,19 +80,19 @@ function SinglePlayerTab({
     >
       <TextInput
         withAsterisk
-        label="Name"
-        placeholder="Best Player Ever"
+        label={t('name_input_label')}
+        placeholder={t('player_name_input_placeholder')}
         {...form.getInputProps('name')}
       />
 
       <Checkbox
         mt="md"
-        label="This player is active"
+        label={t('active_player_checkbox_label')}
         {...form.getInputProps('active', { type: 'checkbox' })}
       />
 
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        Save player
+        {t('save_players_button')}
       </Button>
     </form>
   );
@@ -106,14 +108,18 @@ export default function PlayerCreateModal({
   const [opened, setOpened] = useState(false);
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Create Player">
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={t('create_player_modal_title')}
+      >
         <Tabs defaultValue="single">
           <Tabs.List justify="center" grow>
             <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
-              Single player
+              {t('single_player_title')}
             </Tabs.Tab>
             <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
-              Multiple players
+              {t('multiple_players_title')}
             </Tabs.Tab>
           </Tabs.List>
 
@@ -138,7 +144,7 @@ export default function PlayerCreateModal({
       <SaveButton
         onClick={() => setOpened(true)}
         leftSection={<IconUserPlus size={24} />}
-        title="Add Player"
+        title={t('add_player_button')}
       />
     </>
   );

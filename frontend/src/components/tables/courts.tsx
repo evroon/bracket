@@ -1,4 +1,5 @@
 import { Table } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -17,6 +18,7 @@ export default function CourtsTable({
   tournament: Tournament;
   swrCourtsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const courts: Court[] = swrCourtsResponse.data != null ? swrCourtsResponse.data.data : [];
   const tableState = getTableState('id');
 
@@ -33,19 +35,19 @@ export default function CourtsTable({
               await deleteCourt(tournament.id, court.id);
               await swrCourtsResponse.mutate(null);
             }}
-            title="Delete Court"
+            title={t('delete_court_button')}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="courts" />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('clubs_title')} />;
 
   return (
     <TableLayout>
       <Table.Thead>
         <Table.Tr>
-          <ThNotSortable>Title</ThNotSortable>
+          <ThNotSortable>{t('title')}</ThNotSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>
       </Table.Thead>

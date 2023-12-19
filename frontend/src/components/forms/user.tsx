@@ -1,6 +1,7 @@
 import { Button, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconHash, IconUser } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { UserInterface } from '../../interfaces/user';
@@ -8,6 +9,7 @@ import { updatePassword, updateUser } from '../../services/user';
 import { PasswordStrength } from '../utils/password';
 
 export default function UserForm({ user }: { user: UserInterface }) {
+  const { t } = useTranslation();
   const details_form = useForm({
     initialValues: {
       name: user != null ? user.name : '',
@@ -16,8 +18,8 @@ export default function UserForm({ user }: { user: UserInterface }) {
     },
 
     validate: {
-      name: (value) => (value !== '' ? null : 'Name cannot be empty'),
-      email: (value) => (value !== '' ? null : 'Email cannot be empty'),
+      name: (value) => (value !== '' ? null : t('empty_name_validation')),
+      email: (value) => (value !== '' ? null : t('empty_email_validation')),
     },
   });
   const password_form = useForm({
@@ -26,7 +28,7 @@ export default function UserForm({ user }: { user: UserInterface }) {
     },
 
     validate: {
-      password: (value) => (value.length >= 8 ? null : 'Password too short'),
+      password: (value) => (value.length >= 8 ? null : t('too_short_password_validation')),
     },
   });
 
@@ -34,10 +36,10 @@ export default function UserForm({ user }: { user: UserInterface }) {
     <Tabs defaultValue="details">
       <Tabs.List>
         <Tabs.Tab value="details" leftSection={<IconUser size="1.0rem" />}>
-          Edit details
+          {t('edit_details_tab_title')}
         </Tabs.Tab>
         <Tabs.Tab value="password" leftSection={<IconHash size="1.0rem" />}>
-          Edit password
+          {t('edit_password_tab_title')}
         </Tabs.Tab>
         {/*<Tabs.Tab value="settings" icon={<IconSettings size="1.0rem" />}>*/}
         {/*  Settings*/}
@@ -52,18 +54,18 @@ export default function UserForm({ user }: { user: UserInterface }) {
           <TextInput
             withAsterisk
             mt="1.0rem"
-            label="Name"
+            label={t('name_input_label')}
             {...details_form.getInputProps('name')}
           />
           <TextInput
             withAsterisk
             mt="1.0rem"
-            label="Email"
+            label={t('email_input_label')}
             type="email"
             {...details_form.getInputProps('email')}
           />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
       </Tabs.Panel>
@@ -75,7 +77,7 @@ export default function UserForm({ user }: { user: UserInterface }) {
         >
           <PasswordStrength form={password_form} />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
       </Tabs.Panel>

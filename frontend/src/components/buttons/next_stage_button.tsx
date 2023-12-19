@@ -1,9 +1,11 @@
 import { Button } from '@mantine/core';
 import { IconSquareArrowLeft, IconSquareArrowRight } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { activateNextStage } from '../../services/stage';
 
+const { t } = useTranslation();
 export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
   return (
     <Button
@@ -16,7 +18,7 @@ export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
         swrStagesResponse.mutate();
       }}
     >
-      Go to next stage
+      {t('next_stage_button')}
     </Button>
   );
 }
@@ -33,7 +35,7 @@ export function PreviousStageButton({ tournamentData, swrStagesResponse }: any) 
         swrStagesResponse.mutate();
       }}
     >
-      Go to previous stage
+      {t('previous_stage_button')}
     </Button>
   );
 }

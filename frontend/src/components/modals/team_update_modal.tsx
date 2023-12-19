@@ -1,6 +1,7 @@
 import { Button, Checkbox, Modal, MultiSelect, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -18,6 +19,7 @@ export default function TeamUpdateModal({
   team: TeamInterface;
   swrTeamsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);
   const players: Player[] = data != null ? data.data : [];
   const [opened, setOpened] = useState(false);
@@ -30,13 +32,13 @@ export default function TeamUpdateModal({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Team">
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_team_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             const result = await updateTeam(
@@ -54,21 +56,21 @@ export default function TeamUpdateModal({
         >
           <TextInput
             withAsterisk
-            label="Name"
-            placeholder="Best Team Ever"
+            label={t('name_input_label')}
+            placeholder={t('team_name_input_placeholder')}
             {...form.getInputProps('name')}
           />
 
           <Checkbox
             mt="md"
-            label="This team is active"
+            label={t('active_team_checkbox_label')}
             {...form.getInputProps('active', { type: 'checkbox' })}
           />
 
           <MultiSelect
             data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
-            label="Team members"
-            placeholder="Pick all that you like"
+            label={t('team_member_select_title')}
+            placeholder={t('team_member_select_placeholder')}
             maxDropdownHeight={160}
             searchable
             mb="12rem"
@@ -78,7 +80,7 @@ export default function TeamUpdateModal({
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
       </Modal>
@@ -90,7 +92,7 @@ export default function TeamUpdateModal({
         onClick={() => setOpened(true)}
         leftSection={<BiEditAlt size={20} />}
       >
-        Edit Team
+        {t('edit_team_title')}
       </Button>
     </>
   );

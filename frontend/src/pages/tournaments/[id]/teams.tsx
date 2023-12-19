@@ -1,4 +1,5 @@
 import { Grid, Select, Title } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -11,6 +12,8 @@ import { TeamInterface } from '../../../interfaces/team';
 import { getStages, getTeams } from '../../../services/adapter';
 import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
+
+const { t } = useTranslation();
 
 function StageItemSelect({
   groupStageItems,
@@ -27,8 +30,8 @@ function StageItemSelect({
   return (
     <Select
       data={data}
-      label="Filter on stage item"
-      placeholder="No filter"
+      label={t('filter_stage_item_label')}
+      placeholder={t('filter_stage_item_placeholder')}
       searchable
       limit={25}
       onChange={(x) => {
@@ -62,7 +65,7 @@ export default function Teams() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between" mb="1rem">
         <Grid.Col span="auto">
-          <Title>Teams</Title>
+          <Title>{t('team_title')}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <Grid align="flex-end">

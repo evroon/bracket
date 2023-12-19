@@ -1,4 +1,5 @@
 import { Badge, Table } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -22,8 +23,8 @@ export default function TeamsTable({
   swrTeamsResponse: SWRResponse;
   teams: TeamInterface[];
 }) {
+  const { t } = useTranslation();
   const tableState = getTableState('name');
-
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const rows = teams
@@ -31,7 +32,11 @@ export default function TeamsTable({
     .map((team) => (
       <Table.Tr key={team.id}>
         <Table.Td>
-          {team.active ? <Badge color="green">Active</Badge> : <Badge color="red">Inactive</Badge>}
+          {team.active ? (
+            <Badge color="green">{t('active')}</Badge>
+          ) : (
+            <Badge color="red">{t('inactive')}</Badge>
+          )}
         </Table.Td>
         <Table.Td>{team.name}</Table.Td>
         <Table.Td>
@@ -53,33 +58,33 @@ export default function TeamsTable({
               await deleteTeam(tournamentData.id, team.id);
               await swrTeamsResponse.mutate(null);
             }}
-            title="Delete Team"
+            title={t('delete_team_button')}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('teams_title')} />;
 
   return (
     <TableLayout miw={850}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="active">
-            Status
+            {t('status')}
           </ThSortable>
           <ThSortable state={tableState} field="name">
-            Name
+            {t('name_table_header')}
           </ThSortable>
-          <ThNotSortable>Members</ThNotSortable>
+          <ThNotSortable>{t('member_table_header')}</ThNotSortable>
           <ThSortable state={tableState} field="created">
-            Created
+            {t('created')}
           </ThSortable>
           <ThSortable state={tableState} field="swiss_score">
-            Swiss score
+            {t('swiss_score')}
           </ThSortable>
           <ThSortable state={tableState} field="elo_score">
-            ELO score
+            {t('elo_score')}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

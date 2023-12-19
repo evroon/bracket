@@ -1,5 +1,6 @@
 import { Badge, Button, Table } from '@mantine/core';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -25,6 +26,7 @@ export default function UpcomingMatchesTable({
   swrUpcomingMatchesResponse: SWRResponse;
   displaySettings: BracketDisplaySettings;
 }) {
+  const { t } = useTranslation();
   const upcoming_matches: UpcomingMatchInterface[] =
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
   const tableState = getTableState('elo_diff');
@@ -61,7 +63,7 @@ export default function UpcomingMatchesTable({
         <td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">
-              Recommended
+              {t('recommended_badge_title')}
             </Badge>
           ) : null}
         </td>
@@ -81,32 +83,33 @@ export default function UpcomingMatchesTable({
             onClick={() => scheduleMatch(upcoming_match)}
             leftSection={<IconCalendarPlus size={20} />}
           >
-            Schedule
+            {t('schedule_title')}
           </Button>
         </td>
       </tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="upcoming matches" />;
+  if (rows.length < 1)
+    return <EmptyTableInfo entity_name={t('upcoming_matches_empty_table_info')} />;
 
   return (
     <TableLayout miw={850}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="is_recommended">
-            Recommended
+            {t('recommended_badge_title')}
           </ThSortable>
           <ThSortable state={tableState} field="team1.name">
-            Team 1
+            {t('team_title')} 1
           </ThSortable>
           <ThSortable state={tableState} field="team2.name">
-            Team 2
+            {t('team_title')} 2
           </ThSortable>
           <ThSortable state={tableState} field="elo_diff">
-            ELO Difference
+            {t('elo_difference')}
           </ThSortable>
           <ThSortable state={tableState} field="swiss_diff">
-            Swiss Difference
+            {t('swiss_difference')}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

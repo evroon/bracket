@@ -1,6 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { Time } from '../../../components/utils/datetime';
@@ -17,6 +18,8 @@ import {
 } from '../../../services/lookups';
 import { rescheduleMatch, scheduleMatches } from '../../../services/match';
 import TournamentLayout from '../_tournament_layout';
+
+const { t } = useTranslation();
 
 function ScheduleRow({
   index,
@@ -89,8 +92,13 @@ function ScheduleColumn({
 
   const noItemsAlert =
     matches.length < 1 ? (
-      <Alert icon={<IconAlertCircle size={16} />} title="No matches yet" color="gray" radius="md">
-        Drop a match here
+      <Alert
+        icon={<IconAlertCircle size={16} />}
+        title={t('no_matches_description')}
+        color="gray"
+        radius="md"
+      >
+        {t('drop_match_alert_title')}
       </Alert>
     ) : null;
 
@@ -157,7 +165,7 @@ export default function SchedulePage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>Schedule</Title>
+          <Title>{t('schedule_title')}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           <Group justify="right">
@@ -172,7 +180,7 @@ export default function SchedulePage() {
                 await swrStagesResponse.mutate(null);
               }}
             >
-              Schedule all unscheduled matches
+              {t('schedule_description')}
             </Button>
           </Group>
         </Grid.Col>

@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
@@ -21,7 +22,7 @@ import Layout from './_layout';
 export default function Login() {
   // const { classes } = useStyles();
   const router = useRouter();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (tokenPresent()) {
       router.replace('/');
@@ -33,7 +34,7 @@ export default function Login() {
     if (success) {
       showNotification({
         color: 'green',
-        title: 'Login successful',
+        title: t('login_success_title'),
         message: '',
       });
 
@@ -48,16 +49,15 @@ export default function Login() {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      password: (value) =>
-        value.length >= 8 ? null : 'Password needs to contain at least 8 characters',
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('invalid_email_validation')),
+      password: (value) => (value.length >= 8 ? null : t('invalid_password_validation')),
     },
   });
 
   return (
     <Layout>
       <Title ta="center" mt={100}>
-        Welcome to{' '}
+        {t('welcome_title')}{' '}
         <Text inherit variant="gradient" component="span">
           Bracket
         </Text>
@@ -89,31 +89,31 @@ export default function Login() {
             onSubmit={form.onSubmit(async (values) => attemptLogin(values.email, values.password))}
           >
             <TextInput
-              label="Email"
-              placeholder="Your email"
+              label={t('email_input_label')}
+              placeholder={t('email_input_placeholder')}
               required
               my="lg"
               type="email"
               {...form.getInputProps('email')}
             />
             <PasswordInput
-              label="Password"
-              placeholder="Your password"
+              label={t('password_input_label')}
+              placeholder={t('password_input_placeholder')}
               required
               mt="md"
               {...form.getInputProps('password')}
             />
             <Button fullWidth mt="xl" type="submit">
-              Sign in
+              {t('sign_in_title')}
             </Button>
           </form>
           <Text c="dimmed" size="sm" ta="center" mt={15}>
             <Anchor<'a'> onClick={() => router.push('/create_account')} size="sm">
-              Create account
+              {t('create_account_button')}
             </Anchor>
             {' - '}
             <Anchor<'a'> onClick={() => router.push('/password_reset')} size="sm">
-              Forgot password?
+              {t('forgot_password_button')}
             </Anchor>
           </Text>
         </Paper>

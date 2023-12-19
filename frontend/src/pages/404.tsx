@@ -1,22 +1,23 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 import classes from './404.module.css';
 
 export default function NotFoundTitle() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <Container className={classes.root}>
       <div className={classes.label}>404</div>
-      <Title className={classes.title}>You have found a secret place.</Title>
+      <Title className={classes.title}> {t('not_found_title')}</Title>
       <Text c="dimmed" size="lg" ta="center" className={classes.description}>
-        Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has
-        been moved to another URL.
+        {t('not_found_description')}
       </Text>
       <Group justify="center">
         <Button variant="subtle" size="md" onClick={() => router.push('/')}>
-          Take me back to home page
+          {t('back_home_nav')}
         </Button>
       </Group>
     </Container>

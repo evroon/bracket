@@ -1,6 +1,7 @@
 import { Group, Text } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import { useRef } from 'react';
 
 import { Tournament } from '../../interfaces/tournament';
@@ -9,6 +10,7 @@ import { uploadLogo } from '../../services/adapter';
 export function DropzoneButton({ tournament }: { tournament: Tournament }) {
   // const { classes, theme } = useStyles();
   const openRef = useRef<() => void>(null);
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -35,12 +37,12 @@ export function DropzoneButton({ tournament }: { tournament: Tournament }) {
           </Group>
 
           <Text ta="center" fw={700} size="lg" mt="xl">
-            <Dropzone.Accept>Drop files here</Dropzone.Accept>
-            <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-            <Dropzone.Idle>Upload logo</Dropzone.Idle>
+            <Dropzone.Accept>{t('dropzone_accept_text')}</Dropzone.Accept>
+            <Dropzone.Reject>{t('dropzone_reject_text')}</Dropzone.Reject>
+            <Dropzone.Idle>{t('dropzone_idle_text')}</Dropzone.Idle>
           </Text>
           <Text ta="center" size="sm" mt="xs" c="dimmed">
-            Drop a file here to upload as tournament logo.
+            {t('upload_placeholder')}
           </Text>
         </div>
       </Dropzone>

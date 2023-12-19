@@ -1,5 +1,6 @@
 import { Button, Center, Grid, Group, SegmentedControl, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -26,6 +27,7 @@ import TournamentLayout from './_tournament_layout';
 
 export default function TournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();
+  const { t } = useTranslation();
 
   const swrTournamentsResponse = getTournaments();
   checkForAuthError(swrTournamentsResponse);
@@ -125,9 +127,9 @@ export default function TournamentPage() {
               value={matchVisibility}
               onChange={setMatchVisibility}
               data={[
-                { label: 'All matches', value: 'all' },
-                { label: 'Hide past matches', value: 'future-only' },
-                { label: 'Current matches', value: 'present-only' },
+                { label: t('match_filter_option_all'), value: 'all' },
+                { label: t('match_filter_option_past'), value: 'future-only' },
+                { label: t('match_filter_option_current'), value: 'present-only' },
               ]}
             />
             <SegmentedControl
@@ -135,8 +137,8 @@ export default function TournamentPage() {
               value={teamNamesDisplay}
               onChange={setTeamNamesDisplay}
               data={[
-                { label: 'Team names', value: 'team-names' },
-                { label: 'Player names', value: 'player-names' },
+                { label: t('name_filter_options_team'), value: 'team-names' },
+                { label: t('name_filter_options_player'), value: 'player-names' },
               ]}
             />
             <Button
@@ -150,7 +152,7 @@ export default function TournamentPage() {
                 window.open(`/tournaments/${endpoint}/dashboard`, '_ blank');
               }}
             >
-              View dashboard
+              {t('view_dashboard_button')}
             </Button>
           </Group>
         </Grid.Col>

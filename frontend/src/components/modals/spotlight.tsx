@@ -11,34 +11,36 @@ import {
   IconUsers,
   IconUsersGroup,
 } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { getTournamentIdFromRouter } from '../utils/util';
 
 export function BracketSpotlight() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id: tournamentId } = getTournamentIdFromRouter();
 
   const actions: SpotlightActionData[] = [
     {
       id: 'home',
-      title: 'Home',
-      description: 'Get to home page',
+      title: t('home_title'),
+      description: t('home_spotlight_description'),
       onClick: () => router.push('/'),
       leftSection: <IconHome size="1.2rem" />,
     },
     {
       id: 'clubs',
-      title: 'Clubs',
-      description: 'View, add or delete clubs',
+      title: t('clubs_title'),
+      description: t('clubs_spotlight_description'),
       onClick: () => router.push('/clubs'),
       leftSection: <IconUsersGroup size="1.2rem" />,
     },
     {
       id: 'user settings',
-      title: 'User Settings',
-      description: 'Change name, email, password etc.',
+      title: t('user_settings_title'),
+      description: t('user_settings_spotlight_description'),
       onClick: () => router.push('/user'),
       leftSection: <IconUser size="1.2rem" />,
     },
@@ -47,43 +49,43 @@ export function BracketSpotlight() {
   const tournamentActions: SpotlightActionData[] = [
     {
       id: 'planning',
-      title: 'Planning',
-      description: 'Change planning of matches',
+      title: t('planning_title'),
+      description: t('planning_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/schedule`),
       leftSection: <IconCalendarEvent size="1.2rem" />,
     },
     {
       id: 'teams',
-      title: 'Teams',
-      description: 'View, add or delete teams',
+      title: t('teams_title'),
+      description: t('teams_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/teams`),
       leftSection: <IconUsers size="1.2rem" />,
     },
     {
       id: 'players',
-      title: 'Players',
-      description: 'View, add or delete players',
+      title: t('player_title'),
+      description: t('players_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/players`),
       leftSection: <IconUsers size="1.2rem" />,
     },
     {
       id: 'stages',
-      title: 'Stages',
-      description: 'Change the layout of the tournament',
+      title: t('stage_title'),
+      description: t('stage_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/stages`),
       leftSection: <IconTrophy size="1.2rem" />,
     },
     {
       id: 'courts',
-      title: 'Courts',
-      description: 'View, add or delete courts',
+      title: t('court_title'),
+      description: t('court_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/courts`),
       leftSection: <IconSoccerField size="1.2rem" />,
     },
     {
       id: 'tournament settings',
-      title: 'Tournament settings',
-      description: 'Change settings of the tournament',
+      title: t('tournament_setting_title'),
+      description: t('tournament_setting_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/settings`),
       leftSection: <IconSettings size="1.2rem" />,
     },
@@ -93,11 +95,11 @@ export function BracketSpotlight() {
     <Spotlight
       actions={allActions}
       shortcut={['mod + k', 'mod + y', '/']}
-      nothingFound="Nothing found..."
+      nothingFound={t('nothing_found_placeholder')}
       highlightQuery
       searchProps={{
         leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,
-        placeholder: 'Search...',
+        placeholder: t('search_placeholder'),
       }}
     />
   );
