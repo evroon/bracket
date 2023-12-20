@@ -30,7 +30,7 @@ class Config(BaseSettings):
     allow_user_registration: bool = True
     base_url: str = 'http://localhost:8400'
     cors_origin_regex: str = ''
-    cors_origins: str = ''
+    cors_origins: str = '*'
     jwt_secret: str
     pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
     sentry_dsn: str | None = None
