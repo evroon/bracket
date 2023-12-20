@@ -277,7 +277,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.22.5"
 
-"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.23.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.23.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.5.tgz#11edb98f8aeec529b82b211028177679144242db"
   integrity sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w==
@@ -2070,12 +2070,10 @@ data-urls@^3.0.2:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-date-fns@^2.30.0:
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
-  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
-  dependencies:
-    "@babel/runtime" "^7.21.0"
+date-fns@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.0.1.tgz#a95b3e8296e72cf57c99819f37679aa27ca65ec4"
+  integrity sha512-cr9igCUa0QSqgAMj7JOrYTY6Nh1rmyGrFDko7ADqfmaQqP/I2N4rlfrLl7AWuzDaoIpz6MNjoEcTPzgZYIrhnA==
 
 dayjs@^1.11.10:
   version "1.11.10"
