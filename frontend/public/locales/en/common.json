@@ -51,7 +51,6 @@
   "club_select_placeholder": "Pick a club for this tournament",
   "planning_of_matches_legend": "Planning of matches",
   "planning_of_matches_description": "Start of the tournament",
-  "date_time_picker_placeholder": "Pick date and time",
   "match_duration_label": "Match duration (minutes)",
   "time_between_matches_label": "Time between matches (minutes)",
   "dashboard_settings_title": "Dashboard Settings",

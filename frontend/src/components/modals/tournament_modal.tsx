@@ -109,7 +109,6 @@ function GeneralTournamentForm({
         <Grid.Col span={{ sm: 9 }}>
           <DateTimePicker
             leftSection={<IconCalendar size="1.1rem" stroke={1.5} />}
-            placeholder={t('date_time_picker_placeholder')}
             mx="auto"
             {...form.getInputProps('start_time')}
           />
