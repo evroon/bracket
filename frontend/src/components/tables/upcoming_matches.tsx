@@ -89,8 +89,9 @@ export default function UpcomingMatchesTable({
       </tr>
     ));
 
-  if (rows.length < 1)
+  if (rows.length < 1) {
     return <EmptyTableInfo entity_name={t('upcoming_matches_empty_table_info')} />;
+  }
 
   return (
     <TableLayout miw={850}>
