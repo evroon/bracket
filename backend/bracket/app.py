@@ -27,6 +27,7 @@ from bracket.routes import (
     users,
 )
 from bracket.utils.db_init import init_db_when_empty
+from bracket.utils.logging import logger
 
 init_sentry()
 
@@ -35,6 +36,9 @@ init_sentry()
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
     await init_db_when_empty()
+
+    if environment is Environment.PRODUCTION and config.cors_origins == '*':
+        logger.warning("It's advised to set the `CORS_ORIGINS` environment variable in production")
 
     yield
 
@@ -49,11 +53,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-origins = ["http://localhost", "http://localhost:3000", *config.cors_origins.split(',')]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=config.cors_origins,
     allow_origin_regex=config.cors_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
