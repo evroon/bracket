@@ -11,7 +11,7 @@
   "too_short_password_validation": "Password is too short",
   "invalid_email_validation": "Invalid email",
   "invalid_password_validation": "Invalid password",
-  "create_account_title": "Create a new Count",
+  "create_account_title": "Create a new account",
   "create_account_alert_title": "Unavailable",
   "create_account_alert_description": "Account creation is disabled on this domain for now since bracket is still in beta phase",
   "create_account_button": "Create Account",
