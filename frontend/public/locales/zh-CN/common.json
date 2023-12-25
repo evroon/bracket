@@ -206,7 +206,7 @@
   "swiss_difference": "瑞士差值",
   "could_not_find_any_alert": "找不到任何",
   "dropzone_accept_text": "在此处放置文件",
-  "dropzone_reject_text": "PDF 文件必须小于 10MB",
+  "dropzone_reject_text": "图片必须小于 10MB",
   "dropzone_idle_text": "上传标志",
   "upload_placeholder": "在此处放置文件以上传为锦标赛标志。",
   "number_required": "包含数字",
