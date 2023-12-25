@@ -18,7 +18,7 @@
   "email_input_label": "电子邮件地址",
   "email_input_placeholder": "你的电子邮件",
   "name_input_label": "名称",
-  "name_input_placeholder": "你的名字",
+  "name_input_placeholder": "你的名称",
   "password_input_label": "密码",
   "password_input_placeholder": "你的密码",
   "back_to_login_nav": "返回登录页面",
