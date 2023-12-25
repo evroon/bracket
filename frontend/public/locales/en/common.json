@@ -206,7 +206,7 @@
   "swiss_difference": "Swiss Difference",
   "could_not_find_any_alert": "Could not find any",
   "dropzone_accept_text": "Drop files here",
-  "dropzone_reject_text": "PDF file must be less than 10MB",
+  "dropzone_reject_text": "Image must be less than 10MB",
   "dropzone_idle_text": "Upload logo",
   "upload_placeholder": "Drop a file here to upload as tournament logo.",
   "number_required": "Includes number",
