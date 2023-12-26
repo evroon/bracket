@@ -13,6 +13,7 @@ import { showNotification } from '@mantine/notifications';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 // import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
@@ -121,3 +122,9 @@ export default function Login() {
     </Layout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

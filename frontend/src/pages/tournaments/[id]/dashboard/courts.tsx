@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import NotFoundTitle from '../../../404';
 import CourtsLarge, { CourtBadge } from '../../../../components/brackets/courts_large';
@@ -85,3 +86,9 @@ export default function CourtsPage() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

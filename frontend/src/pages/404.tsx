@@ -1,7 +1,7 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import classes from './404.module.css';
 
 export default function NotFoundTitle() {
@@ -23,3 +23,9 @@ export default function NotFoundTitle() {
     </Container>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});
