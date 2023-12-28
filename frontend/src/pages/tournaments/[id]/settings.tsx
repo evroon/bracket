@@ -16,6 +16,8 @@ import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -43,6 +45,8 @@ function GeneralTournamentForm({
   swrTournamentsResponse: SWRResponse;
   clubs: Club[];
 }) {
+  const { t } = useTranslation();
+
   const form = useForm({
     initialValues: {
       start_time: new Date(tournament.start_time),
@@ -57,14 +61,15 @@ function GeneralTournamentForm({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
-      dashboard_endpoint: (value) => (value.length > 0 ? null : 'Dashboard link too short'),
-      club_id: (value) => (value != null ? null : 'Please choose a club'),
-      start_time: (value) => (value != null ? null : 'Please choose a start time'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
+      dashboard_endpoint: (value) =>
+        value.length > 0 ? null : t('too_short_dashboard_link_validation'),
+      club_id: (value) => (value != null ? null : t('club_choose_title')),
+      start_time: (value) => (value != null ? null : t('start_time_choose_title')),
       duration_minutes: (value) =>
-        value != null && value > 0 ? null : 'Please choose a duration of the matches',
+        value != null && value > 0 ? null : t('duration_minutes_choose_title'),
       margin_minutes: (value) =>
-        value != null && value > 0 ? null : 'Please choose a margin of the matches',
+        value != null && value > 0 ? null : t('margin_minutes_choose_title'),
     },
   });
 
@@ -90,29 +95,28 @@ function GeneralTournamentForm({
     >
       <TextInput
         withAsterisk
-        label="Name"
-        placeholder="Best Tournament Ever"
+        label={t('name_input_label')}
+        placeholder={t('tournament_name_input_placeholder')}
         {...form.getInputProps('name')}
       />
 
       <Select
         withAsterisk
         data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label="Club"
-        placeholder="Pick a club for this tournament"
+        label={t('clubs_title')}
+        placeholder={t('club_select_placeholder')}
         searchable
         limit={20}
         mt="lg"
         {...form.getInputProps('club_id')}
       />
 
-      <Fieldset legend="Planning of matches" mt="lg" radius="md">
-        <Text fz="sm">Start of the tournament</Text>
+      <Fieldset legend={t('planning_of_matches_legend')} mt="lg" radius="md">
+        <Text fz="sm">{t('planning_of_matches_description')}</Text>
         <Grid>
           <Grid.Col span={{ sm: 9 }}>
             <DateTimePicker
               rightSection={<IconCalendar size="1.1rem" stroke={1.5} />}
-              placeholder="Pick date and time"
               mx="auto"
               {...form.getInputProps('start_time')}
             />
@@ -134,30 +138,30 @@ function GeneralTournamentForm({
         <Grid>
           <Grid.Col span={{ sm: 6 }}>
             <NumberInput
-              label="Match duration (minutes)"
+              label={t('match_duration_label')}
               mt="lg"
               {...form.getInputProps('duration_minutes')}
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 6 }}>
             <NumberInput
-              label="Time between matches (minutes)"
+              label={t('time_between_matches_label')}
               mt="lg"
               {...form.getInputProps('margin_minutes')}
             />
           </Grid.Col>
         </Grid>
       </Fieldset>
-      <Fieldset legend="Dashboard settings" mt="lg" radius="md">
+      <Fieldset legend={t('dashboard_settings_title')} mt="lg" radius="md">
         <TextInput
-          label="Dashboard link"
-          placeholder="best_tournament"
+          label={t('dashboard_link_label')}
+          placeholder={t('dashboard_link_placeholder')}
           {...form.getInputProps('dashboard_endpoint')}
         />
 
         <Checkbox
           mt="lg"
-          label="Allow anyone to see the dashboard of rounds and matches"
+          label={t('dashboard_public_description')}
           {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
         />
 
@@ -168,20 +172,20 @@ function GeneralTournamentForm({
           </div>
         </Center>
       </Fieldset>
-      <Fieldset legend="Miscellaneous" mt="lg" radius="md">
+      <Fieldset legend={t('miscellaneous_title')} mt="lg" radius="md">
         <Checkbox
-          label="Allow players to be in multiple teams"
+          label={t('miscellaneous_label')}
           {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
         />
         <Checkbox
           mt="md"
-          label="Automatically assign courts to matches"
+          label={t('auto_assign_courts_label')}
           {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
         />
       </Fieldset>
 
       <Button fullWidth mt={24} color="green" type="submit">
-        Save
+        {t('save_button')}
       </Button>
 
       {tournament != null ? (
@@ -190,7 +194,7 @@ function GeneralTournamentForm({
         >
           {({ copied, copy }) => (
             <Button fullWidth mt={8} color={copied ? 'teal' : 'blue'} onClick={copy}>
-              {copied ? 'Copied dashboard URL' : 'Copy dashboard URL'}
+              {copied ? t('copied_dashboard_url_button') : t('copy_dashboard_url_button')}
             </Button>
           )}
         </CopyButton>
@@ -234,3 +238,9 @@ export default function SettingsPage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

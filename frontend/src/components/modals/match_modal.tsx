@@ -1,5 +1,6 @@
 import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -27,6 +28,7 @@ function MatchDeleteButton({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   if (!dynamicSchedule) return null;
   return (
     <DeleteButton
@@ -38,7 +40,7 @@ function MatchDeleteButton({
       }}
       style={{ marginTop: '1rem' }}
       size="sm"
-      title="Remove Match"
+      title={t('remove_match_button')}
     />
   );
 }
@@ -60,6 +62,7 @@ export default function MatchModal({
   setOpened: any;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       team1_score: match.team1_score,
@@ -69,12 +72,12 @@ export default function MatchModal({
     },
 
     validate: {
-      team1_score: (value) => (value >= 0 ? null : 'Score cannot be negative'),
-      team2_score: (value) => (value >= 0 ? null : 'Score cannot be negative'),
+      team1_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
+      team2_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
       custom_duration_minutes: (value) =>
-        value == null || value >= 0 ? null : 'Match duration cannot be negative',
+        value == null || value >= 0 ? null : t('negative_match_duration_validation'),
       custom_margin_minutes: (value) =>
-        value == null || value >= 0 ? null : 'Match margin cannot be negative',
+        value == null || value >= 0 ? null : t('negative_match_margin_validation'),
     },
   });
 
@@ -93,7 +96,7 @@ export default function MatchModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Match">
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_match_modal_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             const updatedMatch: MatchBodyInterface = {
@@ -115,27 +118,27 @@ export default function MatchModal({
         >
           <NumberInput
             withAsterisk
-            label={`Score of ${team1Name}`}
-            placeholder={`Score of ${team1Name}`}
+            label={`${t('score_of_label')} ${team1Name}`}
+            placeholder={`${t('score_of_label')} ${team1Name}`}
             {...form.getInputProps('team1_score')}
           />
           <NumberInput
             withAsterisk
             mt="lg"
-            label={`Score of ${team2Name}`}
-            placeholder={`Score of ${team2Name}`}
+            label={`${t('score_of_label')} ${team2Name}`}
+            placeholder={`${t('score_of_label')} ${team2Name}`}
             {...form.getInputProps('team2_score')}
           />
           <Divider mt="lg" />
 
           <Text size="sm" mt="lg">
-            Custom match duration
+            {t('custom_match_duration_label')}
           </Text>
           <Grid align="center">
             <Grid.Col span={{ sm: 8 }}>
               <NumberInput
                 disabled={!customDurationEnabled}
-                rightSection={<Text>minutes</Text>}
+                rightSection={<Text>{t('minutes')}</Text>}
                 placeholder={`${match.duration_minutes}`}
                 rightSectionWidth={92}
                 {...form.getInputProps('custom_duration_minutes')}
@@ -145,7 +148,7 @@ export default function MatchModal({
               <Center>
                 <Checkbox
                   checked={customDurationEnabled}
-                  label="Customize"
+                  label={t('customize_checkbox_label')}
                   onChange={(event) => {
                     setCustomDurationEnabled(event.currentTarget.checked);
                   }}
@@ -155,14 +158,14 @@ export default function MatchModal({
           </Grid>
 
           <Text size="sm" mt="lg">
-            Custom match margin
+            {t('custom_match_margin_label')}
           </Text>
           <Grid align="center">
             <Grid.Col span={{ sm: 8 }}>
               <NumberInput
                 disabled={!customMarginEnabled}
                 placeholder={`${match.margin_minutes}`}
-                rightSection={<Text>minutes</Text>}
+                rightSection={<Text>{t('minutes')}</Text>}
                 rightSectionWidth={92}
                 {...form.getInputProps('custom_margin_minutes')}
               />
@@ -171,7 +174,7 @@ export default function MatchModal({
               <Center>
                 <Checkbox
                   checked={customMarginEnabled}
-                  label="Customize"
+                  label={t('customize_checkbox_label')}
                   onChange={(event) => {
                     setCustomMarginEnabled(event.currentTarget.checked);
                   }}
@@ -181,7 +184,7 @@ export default function MatchModal({
           </Grid>
 
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
         <MatchDeleteButton

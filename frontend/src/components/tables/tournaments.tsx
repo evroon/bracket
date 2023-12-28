@@ -1,5 +1,6 @@
 import { Button, Table } from '@mantine/core';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -18,6 +19,7 @@ export default function TournamentsTable({
 }: {
   swrTournamentsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const tableState = getTableState('name');
 
@@ -46,30 +48,30 @@ export default function TournamentsTable({
             onClick={() => router.push(`/tournaments/${tournament.id}/settings`)}
             leftSection={<BiEditAlt size={20} />}
           >
-            Edit Tournament
+            {t('edit_tournament_button')}
           </Button>
           <DeleteButton
             onClick={async () => {
               await deleteTournament(tournament.id);
               await swrTournamentsResponse.mutate(null);
             }}
-            title="Delete Tournament"
+            title={t('delete_tournament_button')}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="tournaments" />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('tournaments_title')} />;
 
   return (
     <TableLayout miw={550}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="name">
-            Title
+            {t('title')}
           </ThSortable>
           <ThSortable state={tableState} field="created">
-            Created
+            {t('created')}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

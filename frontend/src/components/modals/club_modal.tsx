@@ -2,6 +2,7 @@ import { Button, Group, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -16,8 +17,9 @@ export default function ClubModal({
   club: Club | null;
   swrClubsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const is_create_form = club == null;
-  const operation_text = is_create_form ? 'Create Club' : 'Edit Club';
+  const operation_text = is_create_form ? t('create_club_button') : t('edit_club_button');
   const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
   const [opened, setOpened] = useState(false);
   const modalOpenButton = is_create_form ? (
@@ -46,7 +48,7 @@ export default function ClubModal({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
@@ -63,13 +65,13 @@ export default function ClubModal({
         >
           <TextInput
             withAsterisk
-            label="Name"
-            placeholder="Best Club Ever"
+            label={t('name_input_label')}
+            placeholder={t('club_name_input_placeholder')}
             {...form.getInputProps('name')}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
       </Modal>

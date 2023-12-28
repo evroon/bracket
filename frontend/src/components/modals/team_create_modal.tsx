@@ -1,6 +1,7 @@
 import { Button, Checkbox, Modal, MultiSelect, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser, IconUsers, IconUsersPlus } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -19,6 +20,7 @@ function MultiTeamTab({
   swrTeamsResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       names: '',
@@ -26,7 +28,7 @@ function MultiTeamTab({
     },
 
     validate: {
-      names: (value) => (value.length > 0 ? null : 'Enter at least one team'),
+      names: (value) => (value.length > 0 ? null : t('at_least_one_team_validation')),
     },
   });
   return (
@@ -41,11 +43,11 @@ function MultiTeamTab({
 
       <Checkbox
         mt="md"
-        label="These teams are active"
+        label={t('active_teams_checkbox_label')}
         {...form.getInputProps('active', { type: 'checkbox' })}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        Save
+        {t('save_button')}
       </Button>
     </form>
   );
@@ -60,6 +62,7 @@ function SingleTeamTab({
   swrTeamsResponse: SWRResponse;
   setOpened: any;
 }) {
+  const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);
   const players: Player[] = data != null ? data.data : [];
   const form = useForm({
@@ -69,7 +72,7 @@ function SingleTeamTab({
       player_ids: [],
     },
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
   return (
@@ -82,21 +85,21 @@ function SingleTeamTab({
     >
       <TextInput
         withAsterisk
-        label="Name"
-        placeholder="Best Team Ever"
+        label={t('name_input_label')}
+        placeholder={t('team_name_input_placeholder')}
         {...form.getInputProps('name')}
       />
 
       <Checkbox
         mt="md"
-        label="This team is active"
+        label={t('active_teams_checkbox_label')}
         {...form.getInputProps('active', { type: 'checkbox' })}
       />
 
       <MultiSelect
         data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label="Team members"
-        placeholder="Pick all that you like"
+        label={t('team_member_select_title')}
+        placeholder={t('team_member_select_placeholder')}
         maxDropdownHeight={160}
         searchable
         mb="12rem"
@@ -105,7 +108,7 @@ function SingleTeamTab({
         {...form.getInputProps('player_ids')}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        Save
+        {t('save_button')}
       </Button>
     </form>
   );
@@ -118,6 +121,7 @@ export default function TeamCreateModal({
   tournament_id: number;
   swrTeamsResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   return (
     <>
@@ -125,10 +129,10 @@ export default function TeamCreateModal({
         <Tabs defaultValue="single">
           <Tabs.List justify="center" grow>
             <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
-              Single team
+              {t('single_team')}
             </Tabs.Tab>
             <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
-              Multiple teams
+              {t('multiple_teams')}
             </Tabs.Tab>
           </Tabs.List>
 
@@ -153,7 +157,7 @@ export default function TeamCreateModal({
       <SaveButton
         onClick={() => setOpened(true)}
         leftSection={<IconUsersPlus size={24} />}
-        title="Add Team"
+        title={t('add_team_button')}
         mb={0}
       />
     </>

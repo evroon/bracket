@@ -1,4 +1,6 @@
 import { Grid, Select, Title } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -19,6 +21,7 @@ function StageItemSelect({
   groupStageItems: any;
   setFilteredStageItemId: any;
 }) {
+  const { t } = useTranslation();
   if (groupStageItems == null) return null;
   const data = groupStageItems.map(([stage_item]: [StageItemWithRounds]) => ({
     value: `${stage_item.id}`,
@@ -27,8 +30,8 @@ function StageItemSelect({
   return (
     <Select
       data={data}
-      label="Filter on stage item"
-      placeholder="No filter"
+      label={t('filter_stage_item_label')}
+      placeholder={t('filter_stage_item_placeholder')}
       searchable
       limit={25}
       onChange={(x) => {
@@ -39,6 +42,7 @@ function StageItemSelect({
 }
 
 export default function Teams() {
+  const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
   const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
@@ -62,7 +66,7 @@ export default function Teams() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between" mb="1rem">
         <Grid.Col span="auto">
-          <Title>Teams</Title>
+          <Title>{t('team_title')}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <Grid align="flex-end">
@@ -89,3 +93,9 @@ export default function Teams() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

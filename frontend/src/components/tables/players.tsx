@@ -1,4 +1,5 @@
 import { Badge, Table, Text } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -15,18 +16,19 @@ import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export function WinDistributionTitle() {
+  const { t } = useTranslation();
   return (
     <>
       <Text span color="teal" inherit>
-        wins
+        {t('win_distribution_text_win')}
       </Text>{' '}
       /{' '}
       <Text span color="orange" inherit>
-        draws
+        {t('win_distribution_text_draws')}
       </Text>{' '}
       /{' '}
       <Text span color="red" inherit>
-        losses
+        {t('win_distribution_text_losses')}
       </Text>
     </>
   );
@@ -39,6 +41,7 @@ export default function PlayersTable({
   swrPlayersResponse: SWRResponse;
   tournamentData: TournamentMinimal;
 }) {
+  const { t } = useTranslation();
   const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 
@@ -95,26 +98,26 @@ export default function PlayersTable({
               await deletePlayer(tournamentData.id, player.id);
               await swrPlayersResponse.mutate(null);
             }}
-            title="Delete Player"
+            title={t('delete_player_button')}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="players" />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('players_title')} />;
 
   return (
     <TableLayout miw={900}>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="active">
-            Status
+            {t('status')}
           </ThSortable>
           <ThSortable state={tableState} field="name">
-            Title
+            {t('title')}
           </ThSortable>
           <ThSortable state={tableState} field="created">
-            Created
+            {t('created')}
           </ThSortable>
           <ThNotSortable>
             <>
@@ -122,10 +125,10 @@ export default function PlayersTable({
             </>
           </ThNotSortable>
           <ThSortable state={tableState} field="elo_score">
-            ELO score
+            {t('elo_score')}
           </ThSortable>
           <ThSortable state={tableState} field="swiss_score">
-            Swiss score
+            {t('swiss_score')}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

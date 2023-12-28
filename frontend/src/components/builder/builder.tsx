@@ -1,6 +1,7 @@
 import { ActionIcon, Badge, Card, Group, Menu, Stack, Text, rem } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -55,6 +56,7 @@ function StageItemRow({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
@@ -103,7 +105,7 @@ function StageItemRow({
                   setOpened(true);
                 }}
               >
-                Edit name
+                {t('edit_name_button')}
               </Menu.Item>
               <Menu.Item
                 leftSection={<IconTrash size={rem(14)} />}
@@ -113,7 +115,7 @@ function StageItemRow({
                 }}
                 color="red"
               >
-                Delete
+                {t('delete_button')}
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
@@ -133,6 +135,7 @@ function StageColumn({
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
 
@@ -166,7 +169,7 @@ function StageColumn({
           {stage.name}
           {stage.is_active ? (
             <Badge ml="1rem" color="green">
-              Active
+              {t('active_badge_label')}
             </Badge>
           ) : null}
         </h4>
@@ -184,7 +187,7 @@ function StageColumn({
                 setOpened(true);
               }}
             >
-              Edit name
+              {t('edit_name_button')}
             </Menu.Item>
             <Menu.Item
               leftSection={<IconTrash size={rem(14)} />}
@@ -194,7 +197,7 @@ function StageColumn({
               }}
               color="red"
             >
-              Delete
+              {t('delete_button')}
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

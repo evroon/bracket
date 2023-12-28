@@ -1,4 +1,5 @@
 import { Group } from '@mantine/core';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 
 import Builder from '../../../components/builder/builder';
@@ -37,3 +38,9 @@ export default function StagesPage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

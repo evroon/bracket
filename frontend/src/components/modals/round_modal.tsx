@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -30,6 +31,7 @@ function RoundDeleteButton({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   if (!dynamicSchedule) return null;
   return (
     <DeleteButton
@@ -41,7 +43,7 @@ function RoundDeleteButton({
       }}
       style={{ marginTop: '15px' }}
       size="sm"
-      title="Delete Round"
+      title={t('delete_round_button')}
     />
   );
 }
@@ -59,6 +61,7 @@ export default function RoundModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   dynamicSchedule: boolean;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
 
   const form = useForm({
@@ -69,13 +72,13 @@ export default function RoundModal({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Edit Round">
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_round')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updateRound(tournamentData.id, round.id, values as RoundInterface);
@@ -85,22 +88,22 @@ export default function RoundModal({
         >
           <TextInput
             withAsterisk
-            label="Name"
-            placeholder="Best Round Ever"
+            label={t('name_input_label')}
+            placeholder={t('round_name_input_placeholder')}
             {...form.getInputProps('name')}
           />
           <Checkbox
             mt="md"
-            label="This round is active"
+            label={t('active_round_checkbox_label')}
             {...form.getInputProps('is_active', { type: 'checkbox' })}
           />
           <Checkbox
             mt="md"
-            label="This round is a draft round"
+            label={t('draft_round_checkbox_label')}
             {...form.getInputProps('is_draft', { type: 'checkbox' })}
           />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
-            Save
+            {t('save_button')}
           </Button>
         </form>
         <RoundDeleteButton

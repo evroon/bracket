@@ -1,5 +1,6 @@
 import { Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 export function EmptyTableInfo({
@@ -9,6 +10,7 @@ export function EmptyTableInfo({
   entity_name: string;
   message?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <Alert
       icon={<IconAlertCircle size={16} />}
@@ -17,7 +19,7 @@ export function EmptyTableInfo({
       radius="lg"
       mt={8}
     >
-      Could not find any {entity_name}
+      {t('could_not_find_any_alert')} {entity_name}
       {message}
     </Alert>
   );

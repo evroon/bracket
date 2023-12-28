@@ -1,4 +1,6 @@
 import { Grid } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -20,6 +22,7 @@ import { getMatchLookupByCourt } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 export default function CourtsPage() {
+  const { t } = useTranslation();
   const tournamentResponse = getTournamentResponseByEndpointName();
 
   // Hack to avoid unequal number of rendered hooks.
@@ -56,10 +59,10 @@ export default function CourtsPage() {
     <Grid align="center" gutter="2rem">
       <Grid.Col span={{ sm: 2 }} />
       <Grid.Col span={{ sm: 5 }}>
-        <CourtBadge name="Current matches" color="teal" />
+        <CourtBadge name={t('current_matches_badge')} color="teal" />
       </Grid.Col>
       <Grid.Col span={{ sm: 5 }}>
-        <CourtBadge name="Next matches" color="gray" />
+        <CourtBadge name={t('next_matches_badge')} color="gray" />
       </Grid.Col>
     </Grid>
   );
@@ -83,3 +86,9 @@ export default function CourtsPage() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core';
 import { IconTool } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -20,6 +21,7 @@ export function AutoCreateMatchesButton({
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   if (roundId == null) {
     return null;
   }
@@ -42,7 +44,7 @@ export function AutoCreateMatchesButton({
         await swrUpcomingMatchesResponse.mutate();
       }}
     >
-      Add new matches automatically
+      {t('auto_create_matches_button')}
     </Button>
   );
 }

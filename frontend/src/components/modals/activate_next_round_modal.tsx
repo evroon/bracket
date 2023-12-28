@@ -1,6 +1,7 @@
 import { Alert, Button, Checkbox, Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -16,6 +17,7 @@ export default function ActivateNextRoundModal({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
 
   const form = useForm({
@@ -29,7 +31,7 @@ export default function ActivateNextRoundModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Assign times and courts to matches of next round"
+        title={t('active_next_round_modal_title')}
         size="40rem"
       >
         <form
@@ -44,27 +46,25 @@ export default function ActivateNextRoundModal({
           })}
         >
           <Alert icon={<IconAlertCircle size={16} />} color="gray" radius="lg">
-            This will assign times and courts to matches of next round, which is the round after the
-            current activated (green) round.
+            {t('active_next_round_modal_description')}
             <br />
             <br />
-            You can choose to either (check the checkbox or not):
+            {t('active_next_round_modal_choose_description')}
             <ul>
               <li>
-                <b>Unchecked</b>: Use default timing (the next matches will be planned tightly after
-                the matches of the active round end, taking margin into account)
+                <b>{t('checkbox_status_unchecked')}</b>:{' '}
+                {t('active_next_round_modal_choose_option_unchecked')}
               </li>
               <li>
-                <b>Checked</b>: Adjust the start times of the next matches to start immediately
-                (now). This will be done by modifying the margin times of the matches in the
-                previous round.
+                <b>{t('checkbox_status_checked')}</b>:{' '}
+                {t('active_next_round_modal_choose_option_checked')}
               </li>
             </ul>
           </Alert>
 
           <Checkbox
             mt="lg"
-            label="Adjust start time of matches in this round to the current time"
+            label={t('adjust_start_times_checkbox_label')}
             {...form.getInputProps('adjust_to_time', { type: 'checkbox' })}
           />
           <Button
@@ -75,7 +75,7 @@ export default function ActivateNextRoundModal({
             type="submit"
             leftSection={<IconSquareArrowRight size={24} />}
           >
-            Plan next round
+            {t('plan_next_round_button')}
           </Button>
         </form>
       </Modal>
@@ -86,7 +86,7 @@ export default function ActivateNextRoundModal({
         leftSection={<IconSquareArrowRight size={24} />}
         onClick={() => setOpened(true)}
       >
-        Plan next round
+        {t('plan_next_round_button')}
       </Button>
     </>
   );

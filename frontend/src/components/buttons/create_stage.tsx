@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -13,6 +14,8 @@ export default function CreateStageButton({
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Button
       variant="outline"
@@ -25,7 +28,7 @@ export default function CreateStageButton({
       }}
       leftSection={<GoPlus size={24} />}
     >
-      Add stage
+      {t('add_stage_button')}
     </Button>
   );
 }

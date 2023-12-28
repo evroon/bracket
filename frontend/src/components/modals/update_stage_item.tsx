@@ -1,5 +1,6 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -20,6 +21,7 @@ export function UpdateStageItemModal({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: { name: stageItem.name },
     validate: {},
@@ -34,7 +36,7 @@ export function UpdateStageItemModal({
         })}
       >
         <TextInput
-          label="Name"
+          label={t('name_input_label')}
           placeholder=""
           required
           my="lg"
@@ -42,7 +44,7 @@ export function UpdateStageItemModal({
           {...form.getInputProps('name')}
         />
         <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-          Save
+          {t('save_button')}
         </Button>
       </form>
     </Modal>

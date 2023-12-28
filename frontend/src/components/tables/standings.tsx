@@ -1,4 +1,5 @@
 import { Table, Text } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -13,6 +14,7 @@ import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './ta
 import TableLayoutLarge from './table_large';
 
 export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse: SWRResponse }) {
+  const { t } = useTranslation();
   const teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
   const tableState = getTableState('elo_score', false);
 
@@ -50,7 +52,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name="teams" />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('teams_title')} />;
 
   return (
     <TableLayoutLarge display_mode="presentation" miw={850}>
@@ -58,11 +60,11 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
         <Table.Tr>
           <ThNotSortable>#</ThNotSortable>
           <ThSortable state={tableState} field="name">
-            Name
+            {t('name_table_header')}
           </ThSortable>
-          <ThNotSortable>Members</ThNotSortable>
+          <ThNotSortable>{t('members_table_header')}</ThNotSortable>
           <ThSortable state={tableState} field="elo_score">
-            ELO score
+            {t('elo_score')}
           </ThSortable>
           <ThNotSortable>
             <WinDistributionTitle />

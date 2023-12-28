@@ -1,5 +1,7 @@
 import { Button, Container, Divider, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { SWRResponse } from 'swr';
 
 import CourtsTable from '../../../components/tables/courts';
@@ -10,10 +12,11 @@ import { createCourt } from '../../../services/court';
 import TournamentLayout from '../_tournament_layout';
 
 function CreateCourtForm(tournament: Tournament, swrCourtsResponse: SWRResponse) {
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: { name: '' },
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Name too short'),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
@@ -25,15 +28,15 @@ function CreateCourtForm(tournament: Tournament, swrCourtsResponse: SWRResponse)
       })}
     >
       <Divider mt={12} />
-      <h3>Add Court</h3>
+      <h3>{t('add_court_title')}</h3>
       <TextInput
         withAsterisk
-        label="Name"
-        placeholder="Best Court Ever"
+        label={t('name_input_label')}
+        placeholder={t('court_name_input_placeholder')}
         {...form.getInputProps('name')}
       />
       <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-        Create Court
+        {t('create_court_button')}
       </Button>
     </form>
   );
@@ -59,3 +62,9 @@ export default function CourtsPage() {
     </TournamentLayout>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});

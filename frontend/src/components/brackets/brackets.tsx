@@ -1,6 +1,7 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -22,6 +23,7 @@ function getRoundsGridCols(
   readOnly: boolean,
   displaySettings: BracketDisplaySettings
 ) {
+  const { t } = useTranslation();
   let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .map((round: RoundInterface) => (
@@ -39,8 +41,13 @@ function getRoundsGridCols(
 
   if (rounds.length < 1) {
     rounds = (
-      <Alert icon={<IconAlertCircle size={16} />} title="No rounds" color="blue" radius="lg">
-        There are no rounds in this stage item yet
+      <Alert
+        icon={<IconAlertCircle size={16} />}
+        title={t('no_round_title')}
+        color="blue"
+        radius="lg"
+      >
+        {t('no_round_description')}
       </Alert>
     );
   }
@@ -68,7 +75,7 @@ function getRoundsGridCols(
                     await swrStagesResponse.mutate();
                   }}
                 >
-                  Add Round
+                  {t('add_round_button')}
                 </Button>
               )}
               {hideAddRoundButton ? null : (
@@ -88,32 +95,45 @@ function getRoundsGridCols(
 }
 
 function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
+  const { t } = useTranslation();
   if (readOnly) {
     return (
-      <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
-        Please wait for the organiser to add them.
+      <Alert
+        icon={<IconAlertCircle size={16} />}
+        title={t('no_round_found_title')}
+        color="blue"
+        radius="lg"
+      >
+        {t('no_round_found_description')}
       </Alert>
     );
   }
   return (
     <Container>
-      <Alert icon={<IconAlertCircle size={16} />} title="No rounds found" color="blue" radius="lg">
-        There are no rounds in this stage yet
+      <Alert
+        icon={<IconAlertCircle size={16} />}
+        title={t('no_round_found_title')}
+        color="blue"
+        radius="lg"
+      >
+        {t('no_round_found_in_stage_description')}
       </Alert>
     </Container>
   );
 }
 
 function NotStartedAlert() {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title="Tournament has not started yet"
+        title={t('tournament_not_started_title')}
         color="blue"
         radius="lg"
       >
-        Please wait for the tournament to start.
+        {t('tournament_not_started_description')}
       </Alert>
     </Container>
   );
