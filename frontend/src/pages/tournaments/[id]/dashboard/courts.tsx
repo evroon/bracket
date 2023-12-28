@@ -1,9 +1,9 @@
 import { Grid } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import NotFoundTitle from '../../../404';
 import CourtsLarge, { CourtBadge } from '../../../../components/brackets/courts_large';

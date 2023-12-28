@@ -11,9 +11,9 @@ import {
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 // import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
