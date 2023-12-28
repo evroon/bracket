@@ -1,11 +1,28 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
+import { SSRConfig, i18n as globali18n, useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import classes from './404.module.css';
+import { useEffect, useState } from 'react';
 
-export default function NotFoundTitle() {
+import classes from './404.module.css';
+import { getStaticProps } from './index';
+
+export default function NotFoundTitle(props: SSRConfig) {
   const router = useRouter();
+  const [lastData, setLastData] = useState<SSRConfig>();
+  useEffect(() => {
+    if (!props._nextI18Next) {
+      if (lastData?._nextI18Next?.initialI18nStore) {
+        Object.keys(lastData._nextI18Next.initialI18nStore).forEach((l) => {
+          Object.keys(lastData?._nextI18Next?.initialI18nStore[l]).forEach((n) => {
+            globali18n?.addResourceBundle(l, n, lastData?._nextI18Next?.initialI18nStore[l][n]);
+          });
+        });
+        globali18n?.changeLanguage(lastData._nextI18Next.initialLocale);
+      }
+      return;
+    }
+    setLastData(props);
+  }, [props]);
   const { t } = useTranslation();
 
   return (
@@ -24,8 +41,4 @@ export default function NotFoundTitle() {
   );
 }
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});
+export { getStaticProps };
