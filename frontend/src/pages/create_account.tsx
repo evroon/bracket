@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   Alert,
   Anchor,
@@ -26,6 +27,16 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
     ...(await serverSideTranslations(locale, ['common'])),
   },
 });
+
+function HCaptchaInput() {
+  if (typeof window !== 'undefined' || process.env.HCAPTCHA_SITE_KEY == null) return null;
+  return (
+    <HCaptcha
+      sitekey={process.env.HCAPTCHA_SITE_KEY}
+      onVerify={(token) => console.log(`Verified: ${token}`)}
+    />
+  );
+}
 
 export default function CreateAccount() {
   const router = useRouter();
@@ -100,6 +111,7 @@ export default function CreateAccount() {
                 </Box>
               </Center>
             </Anchor>
+            <HCaptchaInput />
             <Button className={classes.control} type="submit">
               {t('create_account_button')}
             </Button>
