@@ -1,15 +1,15 @@
-import { Box, Center, Group, PasswordInput, Progress, Text } from '@mantine/core';
+import { Center, Group, PasswordInput, Progress, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
-    <Text c={meets ? 'teal' : 'red'} mt={5} size="sm">
-      <Center inline>
+    <Center inline>
+      <Text c={meets ? 'teal' : 'red'} mt={5} size="sm">
         {meets ? <IconCheck size={14} stroke={1.5} /> : <IconX size={14} stroke={1.5} />}
-        <Box ml={7}>{label}</Box>
-      </Center>
-    </Text>
+        {label}
+      </Text>
+    </Center>
   );
 }
 

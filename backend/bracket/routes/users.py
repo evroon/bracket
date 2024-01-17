@@ -24,7 +24,7 @@ from bracket.sql.users import (
     update_user,
     update_user_password,
 )
-from bracket.utils.security import pwd_context
+from bracket.utils.security import pwd_context, verify_captcha_token
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -71,6 +71,9 @@ async def put_user_password(
 async def register_user(user_to_register: UserToRegister) -> TokenResponse:
     if not config.allow_user_registration:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Account creation is unavailable for now')
+
+    if not await verify_captcha_token(user_to_register.captcha_token):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Failed to validate captcha')
 
     user = User(
         email=user_to_register.email,

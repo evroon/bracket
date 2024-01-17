@@ -16,3 +16,8 @@
       text-align: center;
   }
 }
+
+.hcaptcha {
+    width: 100%;
+    height: 100%;
+}

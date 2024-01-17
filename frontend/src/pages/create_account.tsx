@@ -16,9 +16,10 @@ import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { PasswordStrength } from '../components/utils/password';
+import { ClientOnly } from '../components/utils/react';
 import { registerUser } from '../services/user';
 import classes from './create_account.module.css';
 
@@ -28,22 +29,28 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   },
 });
 
-function HCaptchaInput() {
-  if (typeof window !== 'undefined' || process.env.HCAPTCHA_SITE_KEY == null) return null;
+function HCaptchaInput({
+  siteKey,
+  setCaptchaToken,
+}: {
+  siteKey: string | undefined;
+  setCaptchaToken: any;
+}) {
+  if (siteKey == null) return null;
   return (
-    <HCaptcha
-      sitekey={process.env.HCAPTCHA_SITE_KEY}
-      onVerify={(token) => console.log(`Verified: ${token}`)}
-    />
+    <Center className={classes.hcaptcha}>
+      <HCaptcha sitekey={siteKey} onVerify={setCaptchaToken} theme="dark" />
+    </Center>
   );
 }
 
 export default function CreateAccount() {
   const router = useRouter();
   const { t } = useTranslation();
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   async function registerAndRedirect(values: any) {
-    const response = await registerUser(values);
+    const response = await registerUser(values, captchaToken);
 
     if (response != null && response.data != null && response.data.data != null) {
       localStorage.setItem('login', JSON.stringify(response.data.data));
@@ -102,6 +109,12 @@ export default function CreateAccount() {
           />
           <PasswordStrength form={form} />
           <Group justify="apart" mt="lg" className={classes.controls}>
+            <ClientOnly>
+              <HCaptchaInput
+                siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
+                setCaptchaToken={setCaptchaToken}
+              />
+            </ClientOnly>
             <Anchor c="dimmed" size="sm" className={classes.control}>
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
@@ -111,7 +124,6 @@ export default function CreateAccount() {
                 </Box>
               </Center>
             </Anchor>
-            <HCaptchaInput />
             <Button className={classes.control} type="submit">
               {t('create_account_button')}
             </Button>
