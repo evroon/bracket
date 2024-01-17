@@ -21,7 +21,7 @@ Copy `ci.env` to `prod.env` and fill in the values:
 - `ALLOW_INSECURE_HTTP_SSO`: Should not be used in production. Allows use of INSECURE requests for
   SSO auth.
 
-### Example configuration file
+### Backend: Example configuration file
 
 This is an example of how the config file should look like:
 
@@ -39,18 +39,21 @@ CAPTCHA_SECRET='xxx'
 ```
 
 ## Frontend
+
 - `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha.
 - `NEXT_PUBLIC_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
 
+### Frontend: Example configuration file
 
-### Example configuration file
-You can store the config in `.env.local` (as described in the [Next docs](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#loading-environment-variables)).
+You can store the config in `.env.local` (as described in the [Next docs][next-config-url]).
 
 This is an example of how the config file should look like:
 
-```
+```shell
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
 NEXT_PUBLIC_API_BASE_URL='https://api.bracket.com'
 ```
+
+[next-config-url]: https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#loading-environment-variables
