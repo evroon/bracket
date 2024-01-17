@@ -108,7 +108,7 @@ export default function CreateAccount() {
             {...form.getInputProps('name')}
           />
           <PasswordStrength form={form} />
-          <Group justify="apart" mt="lg" className={classes.controls}>
+          <Group justify="space-between" mt="lg" className={classes.controls}>
             <ClientOnly>
               <HCaptchaInput
                 siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}

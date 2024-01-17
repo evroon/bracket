@@ -1,15 +1,12 @@
-import { Center, Group, PasswordInput, Progress, Text } from '@mantine/core';
+import { Group, PasswordInput, Progress, Stack, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
-    <Center inline>
-      <Text c={meets ? 'teal' : 'red'} mt={5} size="sm">
-        {meets ? <IconCheck size={14} stroke={1.5} /> : <IconX size={14} stroke={1.5} />}
-        {label}
-      </Text>
-    </Center>
+    <Text c={meets ? 'teal' : 'red'} pt="0rem" size="sm">
+      {meets ? <IconCheck size={12} stroke={1.5} /> : <IconX size={12} stroke={1.5} />} {label}
+    </Text>
   );
 }
 
@@ -74,11 +71,13 @@ export function PasswordStrength({ form }: { form: any }) {
         {bars}
       </Group>
 
-      <PasswordRequirement
-        label={t('8_characters_required')}
-        meets={form.values.password.length >= 8}
-      />
-      {checks}
+      <Stack gap="xs">
+        <PasswordRequirement
+          label={t('8_characters_required')}
+          meets={form.values.password.length >= 8}
+        />
+        {checks}
+      </Stack>
     </div>
   );
 }
