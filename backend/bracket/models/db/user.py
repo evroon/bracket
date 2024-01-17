@@ -32,6 +32,7 @@ class UserToRegister(BaseModelORM):
     email: str
     name: str
     password: str
+    captcha_token: str
 
 
 class UserInDB(User):

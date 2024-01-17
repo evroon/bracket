@@ -27,7 +27,12 @@ async def test_users_endpoint(
 async def test_create_user(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'name': 'Some new name', 'email': 'some_email@email.com', 'password': 'my test pass'}
+    body = {
+        'name': 'Some new name',
+        'email': 'some_email@email.com',
+        'password': 'my test pass',
+        'captcha_token': 'my token',
+    }
     response = await send_request(HTTPMethod.POST, 'users/register', None, body)
     assert response['data']['token_type'] == 'bearer'
     assert response['data']['user_id']

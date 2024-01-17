@@ -39,8 +39,13 @@ export async function updatePassword(user_id: number, password: string) {
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function registerUser(user: UserToRegisterInterface) {
+export async function registerUser(user: UserToRegisterInterface, captchaToken: string | null) {
   return createAxios()
-    .post('users/register', user)
+    .post('users/register', {
+      email: user.email,
+      name: user.name,
+      password: user.password,
+      captcha_token: captchaToken,
+    })
     .catch((response: any) => handleRequestError(response));
 }
