@@ -20,18 +20,18 @@ to deploy Bracket using Docker.
 The following configuration variables need to be adjusted for the backend to run it in production:
 
 - `JWT_SECRET`: Create a random secret using `openssl rand -hex 32`
-- `PG_DSN`: The URL of the PostgreSQL database
-- `CORS_ORIGINS` and `CORS_ORIGIN_REGEX`: Specify allowed frontend domain names for CORS (see the
-  [FastAPI docs](https://fastapi.tiangolo.com/tutorial/cors/)).
+- `CORS_ORIGINS`: Set frontend domain names for CORS.
   For example: `CORS_ORIGINS=https://frontend.bracket.com`.
-- `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when
-  initializing the database. It's important to not leave it to the default values.
+- `ADMIN_EMAIL` and `ADMIN_PASSWORD`: It's important to not leave the admin credentials to the
+  default values.
 - `ALLOW_INSECURE_HTTP_SSO`: Must be set to `false`
 
 Optional:
 
 - `SENTRY_DSN`: The [Sentry](https://sentry.io) DSN  for monitoring and error tracking
 - `BASE_URL`: The base url of the API used for SSO
+
+See [the config docs](configuration.md) for more information.
 
 ### Frontend configuration
 
