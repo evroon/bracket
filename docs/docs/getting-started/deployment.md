@@ -11,7 +11,12 @@ please read [quickstart.md](quickstart.md).
 
 Use the
 [template docker-compose.yml](https://github.com/evroon/bracket/blob/master/docker-compose.yml)
-to deploy Bracket using Docker.
+to deploy Bracket using Docker. You can run it with:
+```bash
+git clone git@github.com:evroon/bracket.git
+cd bracket
+sudo docker-compose up -d
+```
 
 ## Configuration
 
