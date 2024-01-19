@@ -13,27 +13,6 @@ Use the
 [template docker-compose.yml](https://github.com/evroon/bracket/blob/master/docker-compose.yml)
 to deploy Bracket using Docker.
 
-## As systemd services
-
-The following starts the frontend and backend for local development:
-
-### Frontend
-
-```bash
-cd frontend
-yarn
-npm run dev
-```
-
-### Backend
-
-```bash
-cd backend
-pipenv install
-pipenv shell
-./run.sh
-```
-
 ## Configuration
 
 ### Backend configuration
