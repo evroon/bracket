@@ -28,6 +28,7 @@ class Config(BaseSettings):
     admin_password: str | None = None
     allow_insecure_http_sso: bool = False
     allow_user_registration: bool = True
+    allow_demo_user_registration: bool = True
     captcha_secret: str | None = None
     base_url: str = 'http://localhost:8400'
     cors_origin_regex: str = ''

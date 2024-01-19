@@ -17,8 +17,8 @@ async def create_club(club: ClubCreateBody, user_id: int) -> Club:
         club_created = Club.parse_obj(result._mapping)
 
         query_many_to_many = '''
-            INSERT INTO users_x_clubs (club_id, user_id)
-            VALUES (:club_id, :user_id)
+            INSERT INTO users_x_clubs (club_id, user_id, relation)
+            VALUES (:club_id, :user_id, 'OWNER')
             '''
         await database.execute(
             query=query_many_to_many,

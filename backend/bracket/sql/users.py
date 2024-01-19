@@ -62,10 +62,21 @@ async def get_user_by_id(user_id: int) -> UserPublic | None:
     return UserPublic.parse_obj(result._mapping) if result is not None else None
 
 
+async def get_expired_demo_users() -> list[UserPublic]:
+    query = '''
+        SELECT *
+        FROM users
+        WHERE account_type='DEMO'
+        AND created <= NOW() - INTERVAL '30 minutes'
+        '''
+    result = await database.fetch_all(query=query)
+    return [UserPublic.parse_obj(demo_user._mapping) for demo_user in result]
+
+
 async def create_user(user: User) -> User:
     query = '''
-        INSERT INTO users (email, name, password_hash, created)
-        VALUES (:email, :name, :password_hash, :created)
+        INSERT INTO users (email, name, password_hash, created, account_type)
+        VALUES (:email, :name, :password_hash, :created, :account_type)
         RETURNING *
         '''
     result = await database.fetch_one(
@@ -75,6 +86,7 @@ async def create_user(user: User) -> User:
             'name': user.name,
             'email': user.email,
             'created': datetime.fromisoformat(user.created.isoformat()),
+            'account_type': user.account_type.value,
         },
     )
     return User.parse_obj(assert_some(result)._mapping)

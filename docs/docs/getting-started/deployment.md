@@ -1,17 +1,18 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
-# Deploying Bracket
+# Deployment
 
-This guide explains how to run Bracket in production with Docker. If you quickly want to get up and running,
-please read [quickstart.md](quickstart.md).
+This guide explains how to run Bracket in production with Docker. If you quickly want to get up and
+running, please read [quickstart.md](quickstart.md).
 
 ## Docker
 
 Use the
 [template docker-compose.yml](https://github.com/evroon/bracket/blob/master/docker-compose.yml)
 to deploy Bracket using Docker. You can run it with:
+
 ```bash
 git clone git@github.com:evroon/bracket.git
 cd bracket

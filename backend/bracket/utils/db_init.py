@@ -6,6 +6,7 @@ from bracket.config import Environment, config, environment
 from bracket.database import database, engine
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match
@@ -21,7 +22,7 @@ from bracket.models.db.stage_item_inputs import (
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
-from bracket.models.db.user_x_club import UserXClub
+from bracket.models.db.user_x_club import UserXClub, UserXClubRelation
 from bracket.schema import (
     clubs,
     courts,
@@ -82,6 +83,7 @@ async def create_admin_user() -> int:
         email=config.admin_email,
         password_hash=pwd_context.hash(config.admin_password),
         created=datetime_utc.now(),
+        account_type=UserAccountType.REGULAR,
     )
 
     user: int = await database.execute(query=users.insert(), values=admin.dict())
@@ -143,10 +145,14 @@ async def sql_create_dev_db() -> None:
     user_id_1 = await insert_dummy(DUMMY_USER)
     club_id_1 = await insert_dummy(DUMMY_CLUB)
 
-    await insert_dummy(UserXClub(user_id=user_id_1, club_id=club_id_1))
+    await insert_dummy(
+        UserXClub(user_id=user_id_1, club_id=club_id_1, relation=UserXClubRelation.OWNER)
+    )
 
     if real_user_id is not None:
-        await insert_dummy(UserXClub(user_id=real_user_id, club_id=club_id_1))
+        await insert_dummy(
+            UserXClub(user_id=real_user_id, club_id=club_id_1, relation=UserXClubRelation.OWNER)
+        )
 
     tournament_id_1 = await insert_dummy(DUMMY_TOURNAMENT, {'club_id': club_id_1})
     stage_id_1 = await insert_dummy(DUMMY_STAGE1, {'tournament_id': tournament_id_1})

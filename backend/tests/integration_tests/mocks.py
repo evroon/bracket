@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 
 from heliclockter import datetime_utc, timedelta
 
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User
 from bracket.routes.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 
@@ -22,6 +23,7 @@ def get_mock_user() -> User:
         # hash of 'mypassword'
         password_hash='$2b$12$.LcTJuoOtwU4CfK8UgEtIu5BRmTdvZv6IH.6IvGshDCgwJsvOMLeu',
         created=MOCK_NOW,
+        account_type=UserAccountType.REGULAR,
     )
 
 

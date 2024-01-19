@@ -5,6 +5,7 @@ from unittest.mock import Mock, patch
 import jwt
 
 from bracket.config import config
+from bracket.models.db.account import UserAccountType
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict
@@ -65,6 +66,7 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
                 'email': user_inserted.email,
                 'name': user_inserted.name,
                 'created': '2200-01-01T00:00:00+00:00',
+                'account_type': UserAccountType.REGULAR.value,
             }
         }
 

@@ -1,9 +1,13 @@
+from uuid import uuid4
+
 from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc, timedelta
 from starlette import status
 
 from bracket.config import config
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import (
+    DemoUserToRegister,
     User,
     UserPasswordToUpdate,
     UserPublic,
@@ -80,6 +84,40 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
         password_hash=pwd_context.hash(user_to_register.password),
         name=user_to_register.name,
         created=datetime_utc.now(),
+        account_type=UserAccountType.REGULAR,
+    )
+    if await check_whether_email_is_in_use(user.email):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Email address already in use')
+
+    user_created = await create_user(user)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"user": user_created.email}, expires_delta=access_token_expires
+    )
+    return TokenResponse(
+        data=Token(
+            access_token=access_token, token_type='bearer', user_id=assert_some(user_created.id)
+        )
+    )
+
+
+@router.post("/users/register_demo", response_model=TokenResponse)
+async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenResponse:
+    if not config.allow_user_registration:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED, 'Demo account creation is unavailable for now'
+        )
+
+    if not await verify_captcha_token(user_to_register.captcha_token):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Failed to validate captcha')
+
+    username = f'demo-{uuid4()}'
+    user = User(
+        email=f'{username}@example.org',
+        password_hash=pwd_context.hash(str(uuid4())),
+        name=username,
+        created=datetime_utc.now(),
+        account_type=UserAccountType.DEMO,
     )
     if await check_whether_email_is_in_use(user.email):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Email address already in use')

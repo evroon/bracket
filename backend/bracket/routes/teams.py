@@ -4,6 +4,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
@@ -14,7 +15,7 @@ from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWith
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
 from bracket.sql.stages import get_full_tournament_details
-from bracket.sql.teams import get_team_by_id, get_teams_with_members
+from bracket.sql.teams import get_team_by_id, get_teams_with_members, sql_delete_team
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
 
@@ -100,11 +101,7 @@ async def delete_team(
             detail="Could not delete team that still has players in it",
         )
 
-    await database.execute(
-        query=teams.delete().where(
-            teams.c.id == team.id and teams.c.tournament_id == tournament_id
-        ),
-    )
+    await sql_delete_team(tournament_id, assert_some(team.id))
     await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
@@ -113,8 +110,11 @@ async def delete_team(
 async def create_team(
     team_to_insert: TeamBody,
     tournament_id: int,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
+    existing_teams = await get_teams_with_members(tournament_id)
+    check_requirement(existing_teams, user, "max_teams")
+
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(
@@ -134,9 +134,12 @@ async def create_team(
 async def create_multiple_teams(
     team_body: TeamMultiBody,
     tournament_id: int,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     team_names = [team.strip() for team in team_body.names.split('\n') if len(team) > 0]
+    existing_teams = await get_teams_with_members(tournament_id)
+    check_requirement(existing_teams, user, "max_teams", additions=len(team_names))
+
     for team_name in team_names:
         await database.execute(
             query=teams.insert(),

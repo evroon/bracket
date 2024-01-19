@@ -16,11 +16,6 @@ export function getActiveStages(swrStagesResponse: SWRResponse) {
   return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.is_active);
 }
 
-export function getActiveStage(swrStagesResponse: SWRResponse) {
-  return getActiveStages(swrStagesResponse)[0];
-}
-
 export function getStageItem(stage: StageWithStageItems) {
-  assert(stage.stage_items.length === 1);
   return stage.stage_items[0];
 }

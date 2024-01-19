@@ -62,8 +62,6 @@ function GeneralTournamentForm({
 
     validate: {
       name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
-      dashboard_endpoint: (value) =>
-        value.length > 0 ? null : t('too_short_dashboard_link_validation'),
       club_id: (value) => (value != null ? null : t('club_choose_title')),
       start_time: (value) => (value != null ? null : t('start_time_choose_title')),
       duration_minutes: (value) =>
