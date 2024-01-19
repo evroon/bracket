@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Deploying Bracket
 
-This guide explains how to run Bracket without Docker. If you quickly want to get up and running,
+This guide explains how to run Bracket in production with Docker. If you quickly want to get up and running,
 please read [quickstart.md](quickstart.md).
 
 ## Docker
