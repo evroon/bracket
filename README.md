@@ -53,8 +53,8 @@ sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ## Database
 First create a `bracket` cluster:
 ```bash
-sudo pg_createcluster -u postgres -p 5532 13 bracket
-pg_ctlcluster 13 bracket start
+sudo pg_createcluster -u postgres -p 5532 16 bracket
+pg_ctlcluster 16 bracket start
 ```
 
 Subsequently, create a new `bracket_dev` database:
