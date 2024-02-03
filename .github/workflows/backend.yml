@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'backend/**'
+    branches:
+      - 'master'
 
 jobs:
   build:
