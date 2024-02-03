@@ -11,7 +11,7 @@ from bracket.logger import get_logger
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import pwd_context
 
-logger = get_logger('cli')
+logger = get_logger("cli")
 
 
 def run_async(f: Any) -> Any:
@@ -25,7 +25,7 @@ def run_async(f: Any) -> Any:
                 await f(*args, **kwargs)
 
             except KeyboardInterrupt:
-                logger.debug('Closing the process.')
+                logger.debug("Closing the process.")
             except Exception as e:
                 logger.error(e, exc_info=True)
                 raise e
@@ -45,10 +45,10 @@ def cli() -> None:
 @click.command()
 def hash_password() -> None:
     if config.admin_password is None:
-        logger.error('No admin password is given')
+        logger.error("No admin password is given")
     else:
         hashed_pwd = pwd_context.hash(config.admin_password)
-        logger.info('Hashed password:')
+        logger.info("Hashed password:")
         logger.info(hashed_pwd)
 
 

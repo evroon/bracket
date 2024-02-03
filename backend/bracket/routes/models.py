@@ -17,7 +17,7 @@ from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import Token
 
-DataT = TypeVar('DataT')
+DataT = TypeVar("DataT")
 
 
 class SuccessResponse(BaseModel):

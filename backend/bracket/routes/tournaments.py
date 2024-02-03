@@ -129,11 +129,11 @@ async def upload_logo(
     contents = await file.read()
 
     # TODO: Make non-blocking
-    with open(f'static/{file.filename}', 'wb') as f:
+    with open(f"static/{file.filename}", "wb") as f:
         f.write(contents)
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
-        values={'logo_path': file.filename},
+        values={"logo_path": file.filename},
     )
     return SuccessResponse()

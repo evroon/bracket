@@ -39,7 +39,7 @@ async def get_user(
     user_id: int, user_public: UserPublic = Depends(user_authenticated)
 ) -> UserPublicResponse:
     if user_public.id != user_id:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Can\'t view details of this user')
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Can't view details of this user")
 
     return UserPublicResponse(data=user_public)
 
@@ -51,7 +51,7 @@ async def put_user(
     user_public: UserPublic = Depends(user_authenticated),
 ) -> UserPublicResponse:
     if user_public.id != user_id:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Can\'t change details of this user')
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Can't change details of this user")
 
     await update_user(assert_some(user_public.id), user_to_update)
     user_updated = await get_user_by_id(user_id)
@@ -74,10 +74,10 @@ async def put_user_password(
 @router.post("/users/register", response_model=TokenResponse)
 async def register_user(user_to_register: UserToRegister) -> TokenResponse:
     if not config.allow_user_registration:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Account creation is unavailable for now')
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Account creation is unavailable for now")
 
     if not await verify_captcha_token(user_to_register.captcha_token):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Failed to validate captcha')
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
     user = User(
         email=user_to_register.email,
@@ -87,7 +87,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
         account_type=UserAccountType.REGULAR,
     )
     if await check_whether_email_is_in_use(user.email):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Email address already in use')
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Email address already in use")
 
     user_created = await create_user(user)
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -96,7 +96,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
     )
     return TokenResponse(
         data=Token(
-            access_token=access_token, token_type='bearer', user_id=assert_some(user_created.id)
+            access_token=access_token, token_type="bearer", user_id=assert_some(user_created.id)
         )
     )
 
@@ -105,22 +105,22 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
 async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenResponse:
     if not config.allow_user_registration:
         raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED, 'Demo account creation is unavailable for now'
+            status.HTTP_401_UNAUTHORIZED, "Demo account creation is unavailable for now"
         )
 
     if not await verify_captcha_token(user_to_register.captcha_token):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Failed to validate captcha')
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
-    username = f'demo-{uuid4()}'
+    username = f"demo-{uuid4()}"
     user = User(
-        email=f'{username}@example.org',
+        email=f"{username}@example.org",
         password_hash=pwd_context.hash(str(uuid4())),
         name=username,
         created=datetime_utc.now(),
         account_type=UserAccountType.DEMO,
     )
     if await check_whether_email_is_in_use(user.email):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Email address already in use')
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Email address already in use")
 
     user_created = await create_user(user)
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -129,6 +129,6 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
     )
     return TokenResponse(
         data=Token(
-            access_token=access_token, token_type='bearer', user_id=assert_some(user_created.id)
+            access_token=access_token, token_type="bearer", user_id=assert_some(user_created.id)
         )
     )

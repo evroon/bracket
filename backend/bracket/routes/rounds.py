@@ -102,7 +102,7 @@ async def update_round_by_id(
     await set_round_active_or_draft(
         round_id, tournament_id, is_active=round_body.is_active, is_draft=round_body.is_draft
     )
-    query = '''
+    query = """
         UPDATE rounds
         SET name = :name
         WHERE rounds.id IN (
@@ -113,9 +113,9 @@ async def update_round_by_id(
             WHERE s.tournament_id = :tournament_id
         )
         AND rounds.id = :round_id
-    '''
+    """
     await database.execute(
         query=query,
-        values={'tournament_id': tournament_id, 'round_id': round_id, 'name': round_body.name},
+        values={"tournament_id": tournament_id, "round_id": round_id, "name": round_body.name},
     )
     return SuccessResponse()

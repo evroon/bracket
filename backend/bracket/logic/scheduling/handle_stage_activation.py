@@ -34,7 +34,7 @@ async def determine_team_id(
 
         return None
 
-    raise ValueError('Unexpected match type')
+    raise ValueError("Unexpected match type")
 
 
 async def set_team_ids_for_match(tournament_id: int, match: MatchWithDetails) -> None:

@@ -74,7 +74,7 @@ async def schedule_all_matches_for_swiss_round(
                 if timing_difference_minutes != 0:
                     last_match_adjusted = last_match.match.copy(
                         update={
-                            'custom_margin_minutes': last_match.match.margin_minutes
+                            "custom_margin_minutes": last_match.match.margin_minutes
                             + timing_difference_minutes
                         }
                     )

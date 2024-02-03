@@ -1,18 +1,3 @@
-[tool.black]
-  py310 = true
-  line-length = 100
-  skip-string-normalization = true
-  exclude = '(^\..+|local_cache)'
-
-[tool.isort]
-    profile = "black"
-    multi_line_output = 3
-    line_length = 100
-    atomic = true
-    skip_gitignore = true
-    case_sensitive = true
-
-
 [tool.pytest.ini_options]
 addopts = [
     '--junitxml=.junit_report.xml',
@@ -89,8 +74,15 @@ skips = [
     'B108'
 ]
 
-
 [tool.ruff]
+line-length = 100
+respect-gitignore = false
+show-fixes = true
+output-format = "full"
+target-version = "py311"
+exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]
+
+[tool.ruff.lint]
 select = [
     "E",
     "EXE",
@@ -112,13 +104,7 @@ select = [
     "UP",
     "W",
 ]
-ignore = ["FIX002", "TD002", "TD003", "TCH001", "TCH002", "TCH003"]
-line-length = 100
-respect-gitignore = false
-show-fixes = true
-show-source = true
-target-version = "py311"
-exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]
+ignore = ["FIX002", "TD002", "TD003", "TCH001", "TCH002", "TCH003", "ISC001"]
 
 [tool.vulture]
 min_confidence = 0

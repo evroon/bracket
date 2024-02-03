@@ -8,15 +8,15 @@ from bracket.models.db.tournament import Tournament
 
 
 async def sql_delete_match(match_id: int) -> None:
-    query = '''
+    query = """
         DELETE FROM matches
         WHERE matches.id = :match_id
-        '''
-    await database.execute(query=query, values={'match_id': match_id})
+        """
+    await database.execute(query=query, values={"match_id": match_id})
 
 
 async def sql_delete_matches_for_stage_item_id(stage_item_id: int) -> None:
-    query = '''
+    query = """
         DELETE FROM matches
         WHERE matches.id IN (
             SELECT matches.id
@@ -24,12 +24,12 @@ async def sql_delete_matches_for_stage_item_id(stage_item_id: int) -> None:
             LEFT JOIN rounds ON matches.round_id = rounds.id
             WHERE rounds.stage_item_id = :stage_item_id
         )
-        '''
-    await database.execute(query=query, values={'stage_item_id': stage_item_id})
+        """
+    await database.execute(query=query, values={"stage_item_id": stage_item_id})
 
 
 async def sql_create_match(match: MatchCreateBody) -> Match:
-    query = '''
+    query = """
         INSERT INTO matches (
             round_id,
             court_id,
@@ -69,17 +69,17 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             NOW()
         )
         RETURNING *
-    '''
+    """
     result = await database.fetch_one(query=query, values=match.dict())
 
     if result is None:
-        raise ValueError('Could not create stage')
+        raise ValueError("Could not create stage")
 
     return Match.parse_obj(result._mapping)
 
 
 async def sql_update_match(match_id: int, match: MatchBody, tournament: Tournament) -> None:
-    query = '''
+    query = """
         UPDATE matches
         SET round_id = :round_id,
             team1_score = :team1_score,
@@ -91,7 +91,7 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
             margin_minutes = :margin_minutes
         WHERE matches.id = :match_id
         RETURNING *
-        '''
+        """
 
     duration_minutes = (
         match.custom_duration_minutes
@@ -106,10 +106,10 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
     await database.execute(
         query=query,
         values={
-            'match_id': match_id,
+            "match_id": match_id,
             **match.dict(),
-            'duration_minutes': duration_minutes,
-            'margin_minutes': margin_minutes,
+            "duration_minutes": duration_minutes,
+            "margin_minutes": margin_minutes,
         },
     )
 
@@ -117,14 +117,14 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
 async def sql_update_team_ids_for_match(
     match_id: int, team1_id: int | None, team2_id: int | None
 ) -> None:
-    query = '''
+    query = """
         UPDATE matches
         SET team1_id = :team1_id,
             team2_id = :team2_id
         WHERE matches.id = :match_id
-        '''
+        """
     await database.execute(
-        query=query, values={'match_id': match_id, 'team1_id': team1_id, 'team2_id': team2_id}
+        query=query, values={"match_id": match_id, "team1_id": team1_id, "team2_id": team2_id}
     )
 
 
@@ -138,7 +138,7 @@ async def sql_reschedule_match(
     custom_duration_minutes: int | None,
     custom_margin_minutes: int | None,
 ) -> None:
-    query = '''
+    query = """
         UPDATE matches
         SET court_id = :court_id,
             start_time = :start_time,
@@ -148,18 +148,18 @@ async def sql_reschedule_match(
             custom_duration_minutes = :custom_duration_minutes,
             custom_margin_minutes = :custom_margin_minutes
         WHERE matches.id = :match_id
-        '''
+        """
     await database.execute(
         query=query,
         values={
-            'court_id': court_id,
-            'match_id': match_id,
-            'position_in_schedule': position_in_schedule,
-            'start_time': datetime.fromisoformat(start_time.isoformat()),
-            'duration_minutes': duration_minutes,
-            'margin_minutes': margin_minutes,
-            'custom_duration_minutes': custom_duration_minutes,
-            'custom_margin_minutes': custom_margin_minutes,
+            "court_id": court_id,
+            "match_id": match_id,
+            "position_in_schedule": position_in_schedule,
+            "start_time": datetime.fromisoformat(start_time.isoformat()),
+            "duration_minutes": duration_minutes,
+            "margin_minutes": margin_minutes,
+            "custom_duration_minutes": custom_duration_minutes,
+            "custom_margin_minutes": custom_margin_minutes,
         },
     )
 
@@ -195,14 +195,14 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
 
 
 async def sql_get_match(match_id: int) -> Match:
-    query = '''
+    query = """
         SELECT *
         FROM matches
         WHERE matches.id = :match_id
-        '''
-    result = await database.fetch_one(query=query, values={'match_id': match_id})
+        """
+    result = await database.fetch_one(query=query, values={"match_id": match_id})
 
     if result is None:
-        raise ValueError('Could not create stage')
+        raise ValueError("Could not create stage")
 
     return Match.parse_obj(result._mapping)

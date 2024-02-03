@@ -14,7 +14,7 @@ from bracket.config import config
 from bracket.schema import Base
 
 ALEMBIC_CONFIG = context.config
-logger = logging.getLogger('alembic')
+logger = logging.getLogger("alembic")
 
 
 def run_migrations_offline() -> None:
@@ -27,9 +27,9 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     config_ini_section = ALEMBIC_CONFIG.get_section(ALEMBIC_CONFIG.config_ini_section)
-    config_ini_section['sqlalchemy.url'] = str(config.pg_dsn)  # type: ignore[index]
+    config_ini_section["sqlalchemy.url"] = str(config.pg_dsn)  # type: ignore[index]
 
-    engine = engine_from_config(config_ini_section, prefix='sqlalchemy.', poolclass=pool.NullPool)
+    engine = engine_from_config(config_ini_section, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
     connection = engine.connect()
     context.configure(connection=connection, target_metadata=Base.metadata, compare_type=True)

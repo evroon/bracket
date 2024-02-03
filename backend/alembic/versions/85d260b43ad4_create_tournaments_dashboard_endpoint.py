@@ -11,15 +11,15 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str | None = '85d260b43ad4'
-down_revision: str | None = '42683f6c1c45'
+revision: str | None = "85d260b43ad4"
+down_revision: str | None = "42683f6c1c45"
 branch_labels: str | None = None
 depends_on: str | None = None
 
 
 def upgrade() -> None:
-    op.add_column('tournaments', sa.Column('dashboard_endpoint', sa.String(), nullable=True))
+    op.add_column("tournaments", sa.Column("dashboard_endpoint", sa.String(), nullable=True))
 
 
 def downgrade() -> None:
-    op.drop_column('tournaments', 'dashboard_endpoint')
+    op.drop_column("tournaments", "dashboard_endpoint")

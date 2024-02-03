@@ -32,7 +32,8 @@ async def insert_generic(
 ) -> tuple[int, BaseModelT]:
     try:
         last_record_id: int = await database.execute(
-            query=table.insert(), values=to_string_mapping(data_model)  # type: ignore[arg-type]
+            query=table.insert(),
+            values=to_string_mapping(data_model),  # type: ignore[arg-type]
         )
         row_inserted = await fetch_one_parsed(
             database, return_type, table.select().where(table.c.id == last_record_id)
@@ -40,5 +41,5 @@ async def insert_generic(
         assert isinstance(row_inserted, return_type)
         return last_record_id, row_inserted
     except Exception:
-        logger.exception(f'Could not insert {type(data_model).__name__}')
+        logger.exception(f"Could not insert {type(data_model).__name__}")
         raise

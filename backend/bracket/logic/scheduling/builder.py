@@ -34,7 +34,7 @@ async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: Stage
         case StageType.SWISS:
             return None
         case other:
-            raise NotImplementedError(f'No round creation implementation for {other}')
+            raise NotImplementedError(f"No round creation implementation for {other}")
 
     now = datetime_utc.now()
     for _ in range(rounds_count):
@@ -54,7 +54,7 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: int
 
     if stage_item_with_rounds is None:
         raise ValueError(
-            f'Could not find stage item with id {stage_item.id} for tournament {tournament_id}'
+            f"Could not find stage item with id {stage_item.id} for tournament {tournament_id}"
         )
 
     match stage_item.type:
@@ -67,7 +67,7 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: int
 
         case _:
             raise HTTPException(
-                400, f'Cannot automatically create matches for stage type {stage_item.type}'
+                400, f"Cannot automatically create matches for stage type {stage_item.type}"
             )
 
 

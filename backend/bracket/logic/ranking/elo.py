@@ -31,13 +31,13 @@ def set_statistics_for_player_or_team(
 
     if has_won:
         stats[team_or_player_id].wins += 1
-        swiss_score_diff = Decimal('1.00')
+        swiss_score_diff = Decimal("1.00")
     elif was_draw:
         stats[team_or_player_id].draws += 1
-        swiss_score_diff = Decimal('0.50')
+        swiss_score_diff = Decimal("0.50")
     else:
         stats[team_or_player_id].losses += 1
-        swiss_score_diff = Decimal('0.00')
+        swiss_score_diff = Decimal("0.00")
 
     stats[team_or_player_id].swiss_score += swiss_score_diff
 

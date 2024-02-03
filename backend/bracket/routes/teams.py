@@ -30,7 +30,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
         if player_id not in team.player_ids:
             await database.execute(
                 query=players_x_teams.insert(),
-                values={'team_id': team_id, 'player_id': player_id},
+                values={"team_id": team_id, "player_id": player_id},
             )
 
     # Remove old members from the team
@@ -47,7 +47,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
 async def get_teams(
     tournament_id: int, _: UserPublic = Depends(user_authenticated_or_public_dashboard)
 ) -> TeamsWithPlayersResponse:
-    return TeamsWithPlayersResponse.parse_obj({'data': await get_teams_with_members(tournament_id)})
+    return TeamsWithPlayersResponse.parse_obj({"data": await get_teams_with_members(tournament_id)})
 
 
 @router.put("/tournaments/{tournament_id}/teams/{team_id}", response_model=SingleTeamResponse)
@@ -61,7 +61,7 @@ async def update_team_by_id(
         query=teams.update().where(
             (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
         ),
-        values=team_body.dict(exclude={'player_ids'}),
+        values=team_body.dict(exclude={"player_ids"}),
     )
     await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
     await recalculate_ranking_for_tournament_id(tournament_id)
@@ -118,7 +118,7 @@ async def create_team(
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(
-            **team_to_insert.dict(exclude={'player_ids'}),
+            **team_to_insert.dict(exclude={"player_ids"}),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
         ).dict(),
@@ -136,7 +136,7 @@ async def create_multiple_teams(
     tournament_id: int,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    team_names = [team.strip() for team in team_body.names.split('\n') if len(team) > 0]
+    team_names = [team.strip() for team in team_body.names.split("\n") if len(team) > 0]
     existing_teams = await get_teams_with_members(tournament_id)
     check_requirement(existing_teams, user, "max_teams", additions=len(team_names))
 

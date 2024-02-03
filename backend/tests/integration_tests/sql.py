@@ -135,12 +135,12 @@ async def inserted_user_x_club(user_x_club: UserXClub) -> AsyncIterator[UserXClu
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
     mock_user = get_mock_user()
-    headers = {'Authorization': f'Bearer {get_mock_token(mock_user)}'}
+    headers = {"Authorization": f"Bearer {get_mock_token(mock_user)}"}
     async with (
         inserted_user(mock_user) as user_inserted,
         inserted_club(DUMMY_CLUB) as club_inserted,
         inserted_tournament(
-            DUMMY_TOURNAMENT.copy(update={'club_id': club_inserted.id})
+            DUMMY_TOURNAMENT.copy(update={"club_id": club_inserted.id})
         ) as tournament_inserted,
         inserted_user_x_club(
             UserXClub(

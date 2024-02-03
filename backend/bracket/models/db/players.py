@@ -10,4 +10,4 @@ class PlayerStatistics(BaseModel):
     draws: int = 0
     losses: int = 0
     elo_score: int = START_ELO
-    swiss_score: Decimal = Decimal('0.00')
+    swiss_score: Decimal = Decimal("0.00")
