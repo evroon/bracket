@@ -2,10 +2,6 @@ name: backend
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'backend/**'
-    branches:
-      - 'master'
 
 jobs:
   build:
