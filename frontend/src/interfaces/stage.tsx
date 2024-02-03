@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { SWRResponse } from 'swr';
 
 import { StageItemWithRounds } from './stage_item';

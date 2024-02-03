@@ -1,14 +1,14 @@
-import {Alert, Button, Checkbox, Container, Paper, Title} from '@mantine/core';
-import {useForm} from '@mantine/form';
-import {IconAlertCircle} from '@tabler/icons-react';
-import {useTranslation} from 'next-i18next';
-import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import { Alert, Button, Checkbox, Container, Paper, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconAlertCircle } from '@tabler/icons-react';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
-import {ClientOnly} from '../components/utils/react';
-import {HCaptchaInput} from '../components/utils/util';
-import {registerDemoUser} from '../services/user';
+import { ClientOnly } from '../components/utils/react';
+import { HCaptchaInput } from '../components/utils/util';
+import { registerDemoUser } from '../services/user';
 import classes from './create_account.module.css';
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => ({
@@ -65,9 +65,7 @@ export default function CreateDemoAccount() {
         >
           {t('demo_description')}
         </Alert>
-        <form
-          onSubmit={form.onSubmit(registerAndRedirect)}
-        >
+        <form onSubmit={form.onSubmit(registerAndRedirect)}>
           <ClientOnly>
             <HCaptchaInput
               siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
