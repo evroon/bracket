@@ -50,15 +50,6 @@ export default function CreateDemoAccount() {
         <Alert
           icon={<IconAlertCircle size={16} />}
           mb={16}
-          title={t('create_account_alert_title')}
-          color="red"
-          radius="md"
-        >
-          {t('create_account_alert_description')}
-        </Alert>
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          mb={16}
           title={t('demo_policy_title')}
           color="blue"
           radius="md"

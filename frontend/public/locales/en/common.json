@@ -15,7 +15,7 @@
   "create_demo_account_title": "Create demo account",
   "start_demo_button": "Start demo",
   "demo_policy_title": "Demo policy",
-  "demo_description": "To test Bracket, you can start a demo. A demo will last for 30 minutes, after which your demo account be deleted. Please don't abuse it.",
+  "demo_description": "To test Bracket, you can start a demo. A demo will last for 30 minutes, after which your demo account be deleted. Please make fair use of it.",
   "create_account_alert_title": "Unavailable",
   "create_account_alert_description": "Account creation is disabled on this domain for now since bracket is still in beta phase",
   "create_account_button": "Create Account",
