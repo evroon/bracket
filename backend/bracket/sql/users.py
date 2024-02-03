@@ -8,23 +8,23 @@ from bracket.utils.types import assert_some
 
 
 async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:
-    query = '''
+    query = """
         SELECT DISTINCT t.id
         FROM users_x_clubs
         JOIN tournaments t ON t.club_id = users_x_clubs.club_id
         WHERE user_id = :user_id
-        '''
-    result = await database.fetch_all(query=query, values={'user_id': user_id})
+        """
+    result = await database.fetch_all(query=query, values={"user_id": user_id})
     return tournament_id in {tournament.id for tournament in result}  # type: ignore[attr-defined]
 
 
 async def get_which_clubs_has_user_access_to(user_id: int) -> set[int]:
-    query = '''
+    query = """
         SELECT club_id
         FROM users_x_clubs
         WHERE user_id = :user_id
-        '''
-    result = await database.fetch_all(query=query, values={'user_id': user_id})
+        """
+    result = await database.fetch_all(query=query, values={"user_id": user_id})
     return {club.club_id for club in result}  # type: ignore[attr-defined]
 
 
@@ -33,80 +33,80 @@ async def get_user_access_to_club(club_id: int, user_id: int) -> bool:
 
 
 async def update_user(user_id: int, user: UserToUpdate) -> None:
-    query = '''
+    query = """
         UPDATE users
         SET name = :name, email = :email
         WHERE id = :user_id
-        '''
+        """
     await database.execute(
-        query=query, values={'user_id': user_id, 'name': user.name, 'email': user.email}
+        query=query, values={"user_id": user_id, "name": user.name, "email": user.email}
     )
 
 
 async def update_user_password(user_id: int, password_hash: str) -> None:
-    query = '''
+    query = """
         UPDATE users
         SET password_hash = :password_hash
         WHERE id = :user_id
-        '''
-    await database.execute(query=query, values={'user_id': user_id, 'password_hash': password_hash})
+        """
+    await database.execute(query=query, values={"user_id": user_id, "password_hash": password_hash})
 
 
 async def get_user_by_id(user_id: int) -> UserPublic | None:
-    query = '''
+    query = """
         SELECT *
         FROM users
         WHERE id = :user_id
-        '''
-    result = await database.fetch_one(query=query, values={'user_id': user_id})
+        """
+    result = await database.fetch_one(query=query, values={"user_id": user_id})
     return UserPublic.parse_obj(result._mapping) if result is not None else None
 
 
 async def get_expired_demo_users() -> list[UserPublic]:
-    query = '''
+    query = """
         SELECT *
         FROM users
         WHERE account_type='DEMO'
         AND created <= NOW() - INTERVAL '30 minutes'
-        '''
+        """
     result = await database.fetch_all(query=query)
     return [UserPublic.parse_obj(demo_user._mapping) for demo_user in result]
 
 
 async def create_user(user: User) -> User:
-    query = '''
+    query = """
         INSERT INTO users (email, name, password_hash, created, account_type)
         VALUES (:email, :name, :password_hash, :created, :account_type)
         RETURNING *
-        '''
+        """
     result = await database.fetch_one(
         query=query,
         values={
-            'password_hash': user.password_hash,
-            'name': user.name,
-            'email': user.email,
-            'created': datetime.fromisoformat(user.created.isoformat()),
-            'account_type': user.account_type.value,
+            "password_hash": user.password_hash,
+            "name": user.name,
+            "email": user.email,
+            "created": datetime.fromisoformat(user.created.isoformat()),
+            "account_type": user.account_type.value,
         },
     )
     return User.parse_obj(assert_some(result)._mapping)
 
 
 async def delete_user(user_id: int) -> None:
-    query = '''
+    query = """
         DELETE FROM users
         WHERE id = :user_id
-        '''
-    await database.fetch_one(query=query, values={'user_id': user_id})
+        """
+    await database.fetch_one(query=query, values={"user_id": user_id})
 
 
 async def check_whether_email_is_in_use(email: str) -> bool:
-    query = '''
+    query = """
         SELECT id
         FROM users
         WHERE email = :email
-        '''
-    result = await database.fetch_one(query=query, values={'email': email})
+        """
+    result = await database.fetch_one(query=query, values={"email": email})
     return result is not None
 
 

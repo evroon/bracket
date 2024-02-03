@@ -21,7 +21,7 @@ def test_elo_calculation() -> None:
         created=DUMMY_MOCK_TIME,
         is_draft=False,
         is_active=False,
-        name='Some round',
+        name="Some round",
         matches=[
             MatchWithDetailsDefinitive(
                 created=DUMMY_MOCK_TIME,
@@ -46,11 +46,11 @@ def test_elo_calculation() -> None:
                 position_in_schedule=0,
                 team1=FullTeamWithPlayers(
                     id=3,
-                    name='Dummy team 1',
+                    name="Dummy team 1",
                     tournament_id=1,
                     active=True,
                     created=DUMMY_MOCK_TIME,
-                    players=[DUMMY_PLAYER1.copy(update={'id': 1})],
+                    players=[DUMMY_PLAYER1.copy(update={"id": 1})],
                     elo_score=DUMMY_PLAYER1.elo_score,
                     swiss_score=DUMMY_PLAYER1.swiss_score,
                     wins=DUMMY_PLAYER1.wins,
@@ -59,11 +59,11 @@ def test_elo_calculation() -> None:
                 ),
                 team2=FullTeamWithPlayers(
                     id=4,
-                    name='Dummy team 2',
+                    name="Dummy team 2",
                     tournament_id=1,
                     active=True,
                     created=DUMMY_MOCK_TIME,
-                    players=[DUMMY_PLAYER2.copy(update={'id': 2})],
+                    players=[DUMMY_PLAYER2.copy(update={"id": 2})],
                     elo_score=DUMMY_PLAYER2.elo_score,
                     swiss_score=DUMMY_PLAYER2.swiss_score,
                     wins=DUMMY_PLAYER2.wins,
@@ -74,16 +74,16 @@ def test_elo_calculation() -> None:
         ],
     )
     stage_item = StageItemWithRounds(
-        **DUMMY_STAGE_ITEM1.copy(update={'rounds': [round_]}).dict(),
+        **DUMMY_STAGE_ITEM1.copy(update={"rounds": [round_]}).dict(),
         id=-1,
         inputs=[],
     )
     player_stats, team_stats = determine_ranking_for_stage_items([stage_item])
     assert player_stats == {
-        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal('0.00')),
-        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal('1.00')),
+        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
+        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
     }
     assert team_stats == {
-        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal('0.00')),
-        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal('1.00')),
+        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
+        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
     }

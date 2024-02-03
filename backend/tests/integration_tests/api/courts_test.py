@@ -13,18 +13,18 @@ async def test_courts_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
-            assert await send_tournament_request(HTTPMethod.GET, 'courts', auth_context, {}) == {
-                'data': [
+            assert await send_tournament_request(HTTPMethod.GET, "courts", auth_context, {}) == {
+                "data": [
                     {
-                        'created': DUMMY_MOCK_TIME.isoformat(),
-                        'id': court_inserted.id,
-                        'name': 'Court 1',
-                        'tournament_id': auth_context.tournament.id,
+                        "created": DUMMY_MOCK_TIME.isoformat(),
+                        "id": court_inserted.id,
+                        "name": "Court 1",
+                        "tournament_id": auth_context.tournament.id,
                     }
                 ],
             }
@@ -33,9 +33,9 @@ async def test_courts_endpoint(
 async def test_create_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'name': 'Some new name', 'active': True}
-    response = await send_tournament_request(HTTPMethod.POST, 'courts', auth_context, json=body)
-    assert response['data']['name'] == body['name']
+    body = {"name": "Some new name", "active": True}
+    response = await send_tournament_request(HTTPMethod.POST, "courts", auth_context, json=body)
+    assert response["data"]["name"] == body["name"]
     await assert_row_count_and_clear(courts, 1)
 
 
@@ -43,14 +43,14 @@ async def test_delete_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
             assert (
                 await send_tournament_request(
-                    HTTPMethod.DELETE, f'courts/{court_inserted.id}', auth_context
+                    HTTPMethod.DELETE, f"courts/{court_inserted.id}", auth_context
                 )
                 == SUCCESS_RESPONSE
             )
@@ -60,20 +60,20 @@ async def test_delete_court(
 async def test_update_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {'name': 'Some new name'}
+    body = {"name": "Some new name"}
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
             response = await send_tournament_request(
-                HTTPMethod.PUT, f'courts/{court_inserted.id}', auth_context, json=body
+                HTTPMethod.PUT, f"courts/{court_inserted.id}", auth_context, json=body
             )
             updated_court = await fetch_one_parsed_certain(
                 database, Court, query=courts.select().where(courts.c.id == court_inserted.id)
             )
-            assert updated_court.name == body['name']
-            assert response['data']['name'] == body['name']
+            assert updated_court.name == body["name"]
+            assert response["data"]["name"] == body["name"]
 
             await assert_row_count_and_clear(courts, 1)

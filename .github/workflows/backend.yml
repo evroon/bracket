@@ -55,8 +55,8 @@ jobs:
         run: pipenv run pylint alembic bracket tests
         working-directory: backend
 
-      - name: Run black
-        run: pipenv run black --check .
+      - name: Run ruff format
+        run: pipenv run ruff format --check .
         working-directory: backend
 
       - name: Run ruff

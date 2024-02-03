@@ -53,7 +53,7 @@ async def get_matches_to_schedule(
     )
 
     if not round_.is_draft:
-        raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
+        raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
     return UpcomingMatchesResponse(
         data=await get_upcoming_matches_for_swiss_round(match_filter, round_, tournament_id)
@@ -122,7 +122,7 @@ async def create_matches_automatically(
     round_: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
     if not round_.is_draft:
-        raise HTTPException(400, 'There is no draft round, so no matches can be scheduled.')
+        raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
     match_filter = MatchFilter(
         elo_diff_threshold=elo_diff_threshold,

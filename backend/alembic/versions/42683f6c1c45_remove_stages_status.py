@@ -12,26 +12,26 @@ from sqlalchemy.dialects.postgresql import ENUM
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str | None = '42683f6c1c45'
-down_revision: str | None = '3469289a7e06'
+revision: str | None = "42683f6c1c45"
+down_revision: str | None = "3469289a7e06"
 branch_labels: str | None = None
 depends_on: str | None = None
 
 
 def upgrade() -> None:
-    op.drop_column('stages', 'status')
+    op.drop_column("stages", "status")
 
 
 def downgrade() -> None:
     op.add_column(
-        'stages',
+        "stages",
         sa.Column(
-            'status',
+            "status",
             ENUM(
-                'COMPLETED',
-                'ACTIVE',
-                'INACTIVE',
-                name='stage_status',
+                "COMPLETED",
+                "ACTIVE",
+                "INACTIVE",
+                name="stage_status",
                 create_type=True,
             ),
             nullable=False,

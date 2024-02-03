@@ -31,33 +31,33 @@ async def test_reschedule_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted.id})
+            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={'stage_item_id': stage_item_inserted.id})
+            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_court(
-            DUMMY_COURT2.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_COURT2.copy(update={"tournament_id": auth_context.tournament.id})
         ) as court2_inserted,
         inserted_match(
             DUMMY_MATCH1.copy(
                 update={
-                    'round_id': round_inserted.id,
-                    'team1_id': team1_inserted.id,
-                    'team2_id': team2_inserted.id,
-                    'court_id': court1_inserted.id,
+                    "round_id": round_inserted.id,
+                    "team1_id": team1_inserted.id,
+                    "team2_id": team2_inserted.id,
+                    "court_id": court1_inserted.id,
                 }
             )
         ) as match_inserted,
@@ -71,7 +71,7 @@ async def test_reschedule_match(
         assert (
             await send_tournament_request(
                 HTTPMethod.POST,
-                f'matches/{match_inserted.id}/reschedule',
+                f"matches/{match_inserted.id}/reschedule",
                 auth_context,
                 json=body.dict(),
             )

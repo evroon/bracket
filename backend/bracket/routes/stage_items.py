@@ -79,14 +79,14 @@ async def update_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    query = '''
+    query = """
         UPDATE stage_items
         SET name = :name
         WHERE stage_items.id = :stage_item_id
-    '''
+    """
     await database.execute(
         query=query,
-        values={'stage_item_id': stage_item_id, 'name': stage_item_body.name},
+        values={"stage_item_id": stage_item_id, "name": stage_item_body.name},
     )
     return SuccessResponse()
 

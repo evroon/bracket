@@ -77,7 +77,7 @@ async def create_multiple_players(
     tournament_id: int,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    player_names = [player.strip() for player in player_body.names.split('\n') if len(player) > 0]
+    player_names = [player.strip() for player in player_body.names.split("\n") if len(player) > 0]
     existing_players = await get_all_players_in_tournament(tournament_id)
     check_requirement(existing_players, user, "max_players", additions=len(player_names))
 

@@ -92,16 +92,16 @@ async def update_stage(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage: Stage = Depends(stage_dependency),  # pylint: disable=redefined-builtin
 ) -> SuccessResponse:
-    values = {'tournament_id': tournament_id, 'stage_id': stage_id}
-    query = '''
+    values = {"tournament_id": tournament_id, "stage_id": stage_id}
+    query = """
         UPDATE stages
         SET name = :name
         WHERE stages.id = :stage_id
         AND stages.tournament_id = :tournament_id
-    '''
+    """
     await database.execute(
         query=query,
-        values={**values, 'name': stage_body.name},
+        values={**values, "name": stage_body.name},
     )
     return SuccessResponse()
 
@@ -120,7 +120,7 @@ async def activate_next_stage(
         )
 
     await sql_activate_next_stage(new_active_stage_id, tournament_id)
-    if stage_body.direction == 'next':
+    if stage_body.direction == "next":
         await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
     return SuccessResponse()
 

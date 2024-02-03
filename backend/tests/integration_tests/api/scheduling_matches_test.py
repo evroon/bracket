@@ -32,21 +32,21 @@ async def test_schedule_all_matches(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_court(DUMMY_COURT1.copy(update={'tournament_id': auth_context.tournament.id})),
+        inserted_court(DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})),
         inserted_stage(
-            DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_STAGE2.copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted_1,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_1,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_2,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_3,
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_4,
     ):
         tournament_id = assert_some(auth_context.tournament.id)
@@ -103,7 +103,7 @@ async def test_schedule_all_matches(
 
         response = await send_tournament_request(
             HTTPMethod.POST,
-            'schedule_matches',
+            "schedule_matches",
             auth_context,
         )
         stages = await get_full_tournament_details(tournament_id)

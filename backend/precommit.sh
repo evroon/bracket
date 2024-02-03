@@ -1,7 +1,7 @@
 #!/bin/bash
 set -evo pipefail
 
-black .
+ruff format .
 ruff --fix .
 ! vulture | grep "unused function\|unused class\|unused method"
 dmypy run -- --follow-imports=normal --junit-xml= .

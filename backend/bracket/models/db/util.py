@@ -17,7 +17,7 @@ from bracket.utils.types import assert_some
 class RoundWithMatches(Round):
     matches: list[MatchWithDetailsDefinitive | MatchWithDetails]
 
-    @validator('matches', pre=True)
+    @validator("matches", pre=True)
     def handle_matches(values: list[Match]) -> list[Match]:  # type: ignore[misc]
         if values == [None]:
             return []
@@ -39,15 +39,15 @@ class StageItemWithRounds(StageItem):
 
     @root_validator(pre=True)
     def fill_type_name(cls, values: Any) -> Any:
-        match values['type']:
+        match values["type"]:
             case str() as type_:
-                values['type_name'] = type_.lower().capitalize().replace('_', ' ')
+                values["type_name"] = type_.lower().capitalize().replace("_", " ")
             case StageType() as type_:
-                values['type_name'] = type_.value.lower().capitalize().replace('_', ' ')
+                values["type_name"] = type_.value.lower().capitalize().replace("_", " ")
 
         return values
 
-    @validator('rounds', 'inputs', pre=True)
+    @validator("rounds", "inputs", pre=True)
     def handle_empty_list_elements(values: list[Any] | None) -> list[Any]:  # type: ignore[misc]
         if values is None:
             return []
@@ -57,7 +57,7 @@ class StageItemWithRounds(StageItem):
 class StageWithStageItems(Stage):
     stage_items: list[StageItemWithRounds]
 
-    @validator('stage_items', pre=True)
+    @validator("stage_items", pre=True)
     def handle_stage_items(values: list[StageItemWithRounds]) -> list[StageItemWithRounds]:  # type: ignore[misc]
         if isinstance(values, str):
             values_json = json.loads(values)

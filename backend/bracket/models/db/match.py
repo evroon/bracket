@@ -53,7 +53,7 @@ class MatchWithDetails(Match):
 
 
 def get_match_hash(team_1_id: int | None, team_2_id: int | None) -> str:
-    return f'{team_1_id}-{team_2_id}'
+    return f"{team_1_id}-{team_2_id}"
 
 
 class MatchWithDetailsDefinitive(Match):

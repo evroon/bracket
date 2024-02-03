@@ -20,23 +20,23 @@ async def test_available_inputs(
 ) -> None:
     async with (
         inserted_team(
-            DUMMY_TEAM1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted,
         inserted_stage(
-            DUMMY_STAGE1.copy(update={'tournament_id': auth_context.tournament.id})
+            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted_1,
         # inserted_stage(
         #     DUMMY_STAGE2.copy(update={'tournament_id': auth_context.tournament.id})
         # ) as stage_inserted_2,
-        inserted_stage_item(DUMMY_STAGE_ITEM1.copy(update={'stage_id': stage_inserted_1.id})),
+        inserted_stage_item(DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted_1.id})),
     ):
         response = await send_tournament_request(
-            HTTPMethod.GET, f'stages/{stage_inserted_1.id}/available_inputs', auth_context
+            HTTPMethod.GET, f"stages/{stage_inserted_1.id}/available_inputs", auth_context
         )
 
     assert response == {
-        'data': [
-            {'team_id': team_inserted.id},
+        "data": [
+            {"team_id": team_inserted.id},
             # {'winner_from_stage_item_id': 1, 'winner_position': 1},
             # {'winner_from_stage_item_id': 1, 'winner_position': 2},
         ]

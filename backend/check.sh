@@ -1,6 +1,5 @@
 #!/bin/bash
 set -evo pipefail
 
-black backend/**/*.py
-python3 -m isort backend
+ruff format --check .
 python3 -m mypy backend

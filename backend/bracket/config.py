@@ -30,40 +30,40 @@ class Config(BaseSettings):
     allow_user_registration: bool = True
     allow_demo_user_registration: bool = True
     captcha_secret: str | None = None
-    base_url: str = 'http://localhost:8400'
-    cors_origin_regex: str = ''
-    cors_origins: str = '*'
+    base_url: str = "http://localhost:8400"
+    cors_origin_regex: str = ""
+    cors_origins: str = "*"
     jwt_secret: str
-    pg_dsn: PostgresDsn = 'postgresql://user:pass@localhost:5432/db'  # type: ignore[assignment]
+    pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
     sentry_dsn: str | None = None
 
 
 class CIConfig(Config):
     class Config:
-        env_file = 'ci.env'
+        env_file = "ci.env"
 
 
 class DevelopmentConfig(Config):
-    admin_email = 'test@example.org'
-    admin_password = 'aeGhoe1ahng2Aezai0Dei6Aih6dieHoo'
+    admin_email = "test@example.org"
+    admin_password = "aeGhoe1ahng2Aezai0Dei6Aih6dieHoo"
     allow_insecure_http_sso = True
-    jwt_secret = '7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7'
+    jwt_secret = "7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7"
 
     class Config:
-        env_file = 'dev.env'
+        env_file = "dev.env"
 
 
 class ProductionConfig(Config):
     class Config:
-        env_file = 'prod.env'
+        env_file = "prod.env"
 
 
 class DemoConfig(Config):
     class Config:
-        env_file = 'demo.env'
+        env_file = "demo.env"
 
 
-environment = Environment(os.getenv('ENVIRONMENT', 'CI').upper())
+environment = Environment(os.getenv("ENVIRONMENT", "CI").upper())
 config: Config
 
 match environment:

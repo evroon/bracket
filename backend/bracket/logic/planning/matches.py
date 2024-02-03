@@ -103,7 +103,7 @@ async def todo_schedule_all_matches(tournament_id: int) -> None:
     matches_per_team: dict[int | None, list[Match]] = defaultdict(list)
 
     matches_to_schedule = [
-        match.copy(update={'court_id': None, 'position_in_schedule': None})
+        match.copy(update={"court_id": None, "position_in_schedule": None})
         for stage in stages
         for stage_item in stage.stage_items
         for round_ in stage_item.rounds
@@ -158,9 +158,9 @@ async def iterative_scheduling(
 
         updated_match = match.copy(
             update={
-                'start_time': start_time,
-                'position_in_schedule': position_in_schedule,
-                'court_id': court_id,
+                "start_time": start_time,
+                "position_in_schedule": position_in_schedule,
+                "court_id": court_id,
             }
         )
 
@@ -229,7 +229,7 @@ async def handle_match_reschedule(
                 match_pos.position != body.old_position
                 or match_pos.match.court_id != body.old_court_id
             ):
-                raise ValueError('match_id doesn\'t match court id or position in schedule')
+                raise ValueError("match_id doesn't match court id or position in schedule")
 
             offset = (
                 -0.5
@@ -238,7 +238,7 @@ async def handle_match_reschedule(
             )
             scheduled_matches.append(
                 MatchPosition(
-                    match=match_pos.match.copy(update={'court_id': body.new_court_id}),
+                    match=match_pos.match.copy(update={"court_id": body.new_court_id}),
                     position=body.new_position + offset,
                 )
             )

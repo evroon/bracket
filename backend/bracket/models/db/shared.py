@@ -10,7 +10,7 @@ class BaseModelORM(BaseModel):
         orm_mode = True
 
     def dict(self, **kwargs: Any) -> Any:
-        kwargs['exclude_none'] = True
+        kwargs["exclude_none"] = True
         result = super().dict(**kwargs)
         for k, v in result.items():
             if isinstance(v, datetime_utc):

@@ -20,7 +20,7 @@ class Team(BaseModelORM):
     tournament_id: int
     active: bool
     elo_score: Decimal = Decimal(START_ELO)
-    swiss_score: Decimal = Decimal('0.0')
+    swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
     losses: int = 0
@@ -30,7 +30,7 @@ class TeamWithPlayers(BaseModel):
     id: int | None = None
     players: list[Player]
     elo_score: Decimal = Decimal(START_ELO)
-    swiss_score: Decimal = Decimal('0.0')
+    swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
     losses: int = 0
@@ -40,7 +40,7 @@ class TeamWithPlayers(BaseModel):
     def player_ids(self) -> list[int]:
         return [assert_some(player.id) for player in self.players]
 
-    @validator('players', pre=True)
+    @validator("players", pre=True)
     def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]
         if isinstance(values, str):
             values_json = json.loads(values)
@@ -91,8 +91,8 @@ class TeamToInsert(BaseModelORM):
     name: str
     tournament_id: int
     active: bool
-    elo_score: Decimal = Decimal('0.0')
-    swiss_score: Decimal = Decimal('0.0')
+    elo_score: Decimal = Decimal("0.0")
+    swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
     losses: int = 0

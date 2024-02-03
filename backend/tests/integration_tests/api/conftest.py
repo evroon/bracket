@@ -15,7 +15,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 async def startup_and_shutdown_uvicorn_server() -> AsyncIterator[None]:
     """
     Start server as test fixture and tear down after test
@@ -39,7 +39,7 @@ def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
     loop.close()
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> AsyncIterator[Database]:
     """
     Creates the test database on the first test run in the session.
@@ -50,7 +50,7 @@ async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> Asyn
     """
     await database.connect()
 
-    if worker_id == 'master':
+    if worker_id == "master":
         metadata.drop_all(engine)
         metadata.create_all(engine)
 
@@ -61,12 +61,12 @@ async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> Asyn
 
         return
 
-    lock_path = '/tmp/tm_test_lock'
+    lock_path = "/tmp/tm_test_lock"
 
-    if worker_id == 'gw0':
+    if worker_id == "gw0":
         try:
-            with open(lock_path, mode='w') as file:
-                file.write('')
+            with open(lock_path, mode="w") as file:
+                file.write("")
 
             metadata.drop_all(engine)
             metadata.create_all(engine)

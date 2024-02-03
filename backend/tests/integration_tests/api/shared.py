@@ -24,18 +24,18 @@ def find_free_port() -> int:
     a port to something and accidentally collide.
     """
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.bind(('', 0))
+        s.bind(("", 0))
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         port: int = s.getsockname()[1]
         return port
 
 
-TEST_HOST: Final[str] = '127.0.0.1'
+TEST_HOST: Final[str] = "127.0.0.1"
 TEST_PORT: Final[int] = find_free_port()
 
 
 def get_root_uvicorn_url() -> str:
-    return f'http://{TEST_HOST}:{TEST_PORT}/'
+    return f"http://{TEST_HOST}:{TEST_PORT}/"
 
 
 class UvicornTestServer(uvicorn.Server):
@@ -116,7 +116,7 @@ async def send_tournament_request(
 ) -> JsonDict:
     return await send_request(
         method=method,
-        endpoint=f'tournaments/{auth_context.tournament.id}/{endpoint}',
+        endpoint=f"tournaments/{auth_context.tournament.id}/{endpoint}",
         body=body,
         json=json,
         headers=auth_context.headers,

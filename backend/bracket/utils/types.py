@@ -8,13 +8,13 @@ from pydantic import BaseModel
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-BaseModelT = TypeVar('BaseModelT', bound=BaseModel)
-T = TypeVar('T')
+BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
+T = TypeVar("T")
 JsonDict = dict[str, Any]
 JsonList = list[Any]
 JsonObject = JsonDict | JsonList
 
-ELO = NewType('ELO', int)
+ELO = NewType("ELO", int)
 
 
 class EnumValues(Enum):

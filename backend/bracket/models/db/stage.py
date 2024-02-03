@@ -18,4 +18,4 @@ class StageUpdateBody(BaseModelORM):
 
 
 class StageActivateBody(BaseModelORM):
-    direction: Literal['next', 'previous'] = 'next'
+    direction: Literal["next", "previous"] = "next"

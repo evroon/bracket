@@ -33,10 +33,10 @@ class RequestDefinition(BaseModel):
         )
 
     def to_value_lookup(self, value: float) -> tuple[dict[str, str], float]:
-        return {'url': self.url, 'method': self.method.value}, value
+        return {"url": self.url, "method": self.method.value}, value
 
     def __hash__(self) -> int:
-        return str.__hash__(f'{self.method}-{self.url}')
+        return str.__hash__(f"{self.method}-{self.url}")
 
 
 class MetricDefinition(BaseModel):
@@ -46,36 +46,36 @@ class MetricDefinition(BaseModel):
 
     def format_for_prometheus(self, value: float) -> str:
         return (
-            f'# HELP {self.name} {self.description}\n'
-            f'# TYPE {self.name} {self.type_.value}\n'
-            f'{self.name} {value:.06f}\n'
+            f"# HELP {self.name} {self.description}\n"
+            f"# TYPE {self.name} {self.type_.value}\n"
+            f"{self.name} {value:.06f}\n"
         )
 
     def format_for_prometheus_per_label(self, values: list[tuple[dict[str, str], float]]) -> str:
-        result = f'# HELP {self.name} {self.description}\n# TYPE {self.name} {self.type_.value}\n'
+        result = f"# HELP {self.name} {self.description}\n# TYPE {self.name} {self.type_.value}\n"
         for labels, value in values:
-            key_value = ','.join(
+            key_value = ",".join(
                 [f'{label}="{label_value}"' for label, label_value in labels.items()]
             )
-            result += f'{self.name}{{{key_value}}} {value}\n'
+            result += f"{self.name}{{{key_value}}} {value}\n"
 
         return result
 
 
 METRIC_DEFINITIONS = [
     MetricDefinition(
-        name='bracket_response_time',
-        description='Latest response time per endpoint',
+        name="bracket_response_time",
+        description="Latest response time per endpoint",
         type_=PrometheusMetricType.gauge,
     ),
     MetricDefinition(
-        name='bracket_request_count',
-        description='Requests count per endpoint',
+        name="bracket_request_count",
+        description="Requests count per endpoint",
         type_=PrometheusMetricType.counter,
     ),
     MetricDefinition(
-        name='bracket_version',
-        description='Requests count per endpoint',
+        name="bracket_version",
+        description="Requests count per endpoint",
         type_=PrometheusMetricType.counter,
     ),
 ]
@@ -95,7 +95,7 @@ class RequestMetrics(BaseModel):
             ),
             METRIC_DEFINITIONS[2].format_for_prometheus(1.0),
         ]
-        return '\n'.join(metrics)
+        return "\n".join(metrics)
 
 
 @cache
