@@ -103,7 +103,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
 
 @router.post("/users/register_demo", response_model=TokenResponse)
 async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenResponse:
-    if not config.allow_user_registration:
+    if not config.allow_demo_user_registration:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED, "Demo account creation is unavailable for now"
         )
