@@ -1,5 +1,10 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Center } from '@mantine/core';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { SWRResponse } from 'swr';
+
+import classes from '../../pages/create_account.module.css';
 
 export function getItemColor(theme: any) {
   const darkTheme = theme.colorScheme === 'dark';
@@ -71,4 +76,19 @@ export function truncateString(input: string, length: number) {
     return `${input.slice(0, length)}...`;
   }
   return input;
+}
+
+export function HCaptchaInput({
+  siteKey,
+  setCaptchaToken,
+}: {
+  siteKey: string | undefined;
+  setCaptchaToken: any;
+}) {
+  if (siteKey == null) return null;
+  return (
+    <Center className={classes.hcaptcha}>
+      <HCaptcha sitekey={siteKey} onVerify={setCaptchaToken} theme="dark" />
+    </Center>
+  );
 }

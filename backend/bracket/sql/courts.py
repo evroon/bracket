@@ -25,3 +25,15 @@ async def update_court(tournament_id: int, court_id: int, court_body: CourtBody)
         values={'tournament_id': tournament_id, 'court_id': court_id, 'name': court_body.name},
     )
     return [Court.parse_obj(x._mapping) for x in result]
+
+
+async def sql_delete_court(tournament_id: int, court_id: int) -> None:
+    query = 'DELETE FROM courts WHERE id = :court_id AND tournament_id = :tournament_id'
+    await database.fetch_one(
+        query=query, values={'court_id': court_id, 'tournament_id': tournament_id}
+    )
+
+
+async def sql_delete_courts_of_tournament(tournament_id: int) -> None:
+    query = 'DELETE FROM courts WHERE tournament_id = :tournament_id'
+    await database.fetch_one(query=query, values={'tournament_id': tournament_id})

@@ -158,6 +158,15 @@ users = Table(
     Column('name', String, nullable=False),
     Column('password_hash', String, nullable=False),
     Column('created', DateTimeTZ, nullable=False),
+    Column(
+        'account_type',
+        Enum(
+            'REGULAR',
+            'DEMO',
+            name='account_type',
+        ),
+        nullable=False,
+    ),
 )
 
 users_x_clubs = Table(
@@ -166,14 +175,24 @@ users_x_clubs = Table(
     Column('id', BigInteger, primary_key=True, index=True),
     Column('club_id', BigInteger, ForeignKey('clubs.id', ondelete='CASCADE'), nullable=False),
     Column('user_id', BigInteger, ForeignKey('users.id', ondelete='CASCADE'), nullable=False),
+    Column(
+        'relation',
+        Enum(
+            'OWNER',
+            'COLLABORATOR',
+            name='user_x_club_relation',
+        ),
+        nullable=False,
+        default='OWNER',
+    ),
 )
 
 players_x_teams = Table(
     'players_x_teams',
     metadata,
     Column('id', BigInteger, primary_key=True, index=True),
-    Column('player_id', BigInteger, ForeignKey('players.id'), nullable=False),
-    Column('team_id', BigInteger, ForeignKey('teams.id'), nullable=False),
+    Column('player_id', BigInteger, ForeignKey('players.id', ondelete='CASCADE'), nullable=False),
+    Column('team_id', BigInteger, ForeignKey('teams.id', ondelete='CASCADE'), nullable=False),
 )
 
 courts = Table(

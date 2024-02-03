@@ -5,6 +5,7 @@ from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import update_matches_in_activated_stage
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
@@ -74,8 +75,11 @@ async def delete_stage(
 @router.post("/tournaments/{tournament_id}/stages", response_model=SuccessResponse)
 async def create_stage(
     tournament_id: int,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
+    existing_stages = await get_full_tournament_details(tournament_id)
+    check_requirement(existing_stages, user, "max_stages")
+
     await sql_create_stage(tournament_id)
     return SuccessResponse()
 

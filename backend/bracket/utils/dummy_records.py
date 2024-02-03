@@ -2,6 +2,7 @@ from zoneinfo import ZoneInfo
 
 from heliclockter import datetime_utc
 
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match
@@ -13,7 +14,6 @@ from bracket.models.db.stage_item import StageItemToInsert, StageType
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
-from bracket.models.db.user_x_club import UserXClub
 from bracket.utils.security import pwd_context
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo('UTC'))
@@ -126,6 +126,7 @@ DUMMY_USER = User(
     name='Admin',
     password_hash=pwd_context.hash('adminadmin'),
     created=DUMMY_MOCK_TIME,
+    account_type=UserAccountType.REGULAR,
 )
 
 DUMMY_TEAM1 = Team(
@@ -216,11 +217,6 @@ DUMMY_PLAYER8 = Player(
 DUMMY_PLAYER_X_TEAM = PlayerXTeam(
     player_id=DB_PLACEHOLDER_ID,
     team_id=DB_PLACEHOLDER_ID,
-)
-
-DUMMY_USER_X_CLUB = UserXClub(
-    user_id=DB_PLACEHOLDER_ID,
-    club_id=DB_PLACEHOLDER_ID,
 )
 
 DUMMY_COURT1 = Court(

@@ -11,6 +11,7 @@ from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.scheduling.builder import (
     build_matches_for_stage_item,
 )
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.stage_item import (
     StageItemActivateNextBody,
     StageItemCreateBody,
@@ -28,6 +29,7 @@ from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
     sql_create_stage_item,
 )
+from bracket.sql.stages import get_full_tournament_details
 
 router = APIRouter()
 
@@ -50,13 +52,17 @@ async def delete_stage_item(
 async def create_stage_item(
     tournament_id: int,
     stage_body: StageItemCreateBody,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     if stage_body.team_count != len(stage_body.inputs):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Team count doesn't match number of inputs",
         )
+
+    stages = await get_full_tournament_details(tournament_id)
+    existing_stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
+    check_requirement(existing_stage_items, user, "max_stage_items")
 
     stage_item = await sql_create_stage_item(tournament_id, stage_body)
     await build_matches_for_stage_item(stage_item, tournament_id)

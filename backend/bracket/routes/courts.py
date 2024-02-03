@@ -3,6 +3,7 @@ from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.court import Court, CourtBody, CourtToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
@@ -11,7 +12,7 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import CourtsResponse, SingleCourtResponse, SuccessResponse
 from bracket.schema import courts
-from bracket.sql.courts import get_all_courts_in_tournament, update_court
+from bracket.sql.courts import get_all_courts_in_tournament, sql_delete_court, update_court
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
@@ -71,11 +72,7 @@ async def delete_court(
             detail=f"Could not delete court since it's used by {used_in_matches_count} matches",
         )
 
-    await database.execute(
-        query=courts.delete().where(
-            courts.c.id == court_id and courts.c.tournament_id == tournament_id
-        ),
-    )
+    await sql_delete_court(tournament_id, court_id)
     return SuccessResponse()
 
 
@@ -83,8 +80,11 @@ async def delete_court(
 async def create_court(
     court_body: CourtBody,
     tournament_id: int,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleCourtResponse:
+    existing_courts = await get_all_courts_in_tournament(tournament_id)
+    check_requirement(existing_courts, user, "max_courts")
+
     last_record_id = await database.execute(
         query=courts.insert(),
         values=CourtToInsert(

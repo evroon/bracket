@@ -16,7 +16,7 @@ from bracket.models.db.stage_item import StageItem, StageItemToInsert
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User, UserInDB
-from bracket.models.db.user_x_club import UserXClub
+from bracket.models.db.user_x_club import UserXClub, UserXClubRelation
 from bracket.schema import (
     clubs,
     courts,
@@ -143,7 +143,11 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
             DUMMY_TOURNAMENT.copy(update={'club_id': club_inserted.id})
         ) as tournament_inserted,
         inserted_user_x_club(
-            UserXClub(user_id=user_inserted.id, club_id=assert_some(club_inserted.id))
+            UserXClub(
+                user_id=user_inserted.id,
+                club_id=assert_some(club_inserted.id),
+                relation=UserXClubRelation.OWNER,
+            )
         ) as user_x_club_inserted,
     ):
         yield AuthContext(

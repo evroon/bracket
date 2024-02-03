@@ -1,4 +1,3 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   Alert,
   Anchor,
@@ -20,6 +19,7 @@ import React, { useState } from 'react';
 
 import { PasswordStrength } from '../components/utils/password';
 import { ClientOnly } from '../components/utils/react';
+import { HCaptchaInput } from '../components/utils/util';
 import { registerUser } from '../services/user';
 import classes from './create_account.module.css';
 
@@ -28,21 +28,6 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
     ...(await serverSideTranslations(locale, ['common'])),
   },
 });
-
-function HCaptchaInput({
-  siteKey,
-  setCaptchaToken,
-}: {
-  siteKey: string | undefined;
-  setCaptchaToken: any;
-}) {
-  if (siteKey == null) return null;
-  return (
-    <Center className={classes.hcaptcha}>
-      <HCaptcha sitekey={siteKey} onVerify={setCaptchaToken} theme="dark" />
-    </Center>
-  );
-}
 
 export default function CreateAccount() {
   const router = useRouter();
@@ -83,7 +68,7 @@ export default function CreateAccount() {
           mb={16}
           title={t('create_account_alert_title')}
           color="red"
-          radius="lg"
+          radius="md"
         >
           {t('create_account_alert_description')}
         </Alert>

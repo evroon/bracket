@@ -46,15 +46,21 @@ async def sql_create_stage_item_input(
                 'slot': stage_item_input.slot,
                 'tournament_id': tournament_id,
                 'stage_item_id': stage_item_id,
-                'team_id': stage_item_input.team_id
-                if isinstance(stage_item_input, StageItemInputCreateBodyFinal)
-                else None,
-                'winner_from_stage_item_id': stage_item_input.winner_from_stage_item_id
-                if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
-                else None,
-                'winner_position': stage_item_input.winner_position
-                if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
-                else None,
+                'team_id': (
+                    stage_item_input.team_id
+                    if isinstance(stage_item_input, StageItemInputCreateBodyFinal)
+                    else None
+                ),
+                'winner_from_stage_item_id': (
+                    stage_item_input.winner_from_stage_item_id
+                    if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
+                    else None
+                ),
+                'winner_position': (
+                    stage_item_input.winner_position
+                    if isinstance(stage_item_input, StageItemInputCreateBodyTentative)
+                    else None
+                ),
             },
         )
 

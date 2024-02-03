@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.club import ClubCreateBody, ClubUpdateBody
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated, user_authenticated_for_club
@@ -19,6 +20,8 @@ async def get_clubs(user: UserPublic = Depends(user_authenticated)) -> ClubsResp
 async def create_new_club(
     club: ClubCreateBody, user: UserPublic = Depends(user_authenticated)
 ) -> ClubResponse:
+    existing_clubs = await get_clubs_for_user_id(assert_some(user.id))
+    check_requirement(existing_clubs, user, "max_clubs")
     return ClubResponse(data=await create_club(club, assert_some(user.id)))
 
 

@@ -4,6 +4,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.tournament import (
     Tournament,
     TournamentBody,
@@ -19,7 +20,11 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
-from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name, sql_get_tournaments
+from bracket.sql.tournaments import (
+    sql_delete_tournament,
+    sql_get_tournament_by_endpoint_name,
+    sql_get_tournaments,
+)
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.types import assert_some
@@ -86,11 +91,7 @@ async def update_tournament_by_id(
 async def delete_tournament(
     tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
-    await database.execute(
-        query=tournaments.delete().where(
-            tournaments.c.id == tournament_id and tournaments.c.tournament_id == tournament_id
-        ),
-    )
+    await sql_delete_tournament(tournament_id)
     return SuccessResponse()
 
 
@@ -98,6 +99,9 @@ async def delete_tournament(
 async def create_tournament(
     tournament_to_insert: TournamentBody, user: UserPublic = Depends(user_authenticated)
 ) -> SuccessResponse:
+    existing_tournaments = await sql_get_tournaments((tournament_to_insert.club_id,))
+    check_requirement(existing_tournaments, user, "max_tournaments")
+
     has_access_to_club = await get_user_access_to_club(
         tournament_to_insert.club_id, assert_some(user.id)
     )
@@ -119,10 +123,12 @@ async def create_tournament(
 
 
 @router.post("/tournaments/{tournament_id}/logo")
-async def create_upload_logo(
+async def upload_logo(
     file: UploadFile, tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     contents = await file.read()
+
+    # TODO: Make non-blocking
     with open(f'static/{file.filename}', 'wb') as f:
         f.write(contents)
 

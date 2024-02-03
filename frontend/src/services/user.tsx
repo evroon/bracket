@@ -49,3 +49,11 @@ export async function registerUser(user: UserToRegisterInterface, captchaToken: 
     })
     .catch((response: any) => handleRequestError(response));
 }
+
+export async function registerDemoUser(captchaToken: string | null) {
+  return createAxios()
+    .post('users/register_demo', {
+      captcha_token: captchaToken,
+    })
+    .catch((response: any) => handleRequestError(response));
+}

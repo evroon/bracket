@@ -1,4 +1,4 @@
-from bracket.models.db.user_x_club import UserXClub
+from bracket.models.db.user_x_club import UserXClub, UserXClubRelation
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_MOCK_TIME
 from bracket.utils.http import HTTPMethod
@@ -44,7 +44,9 @@ async def test_delete_club(
     async with inserted_club(DUMMY_CLUB) as club_inserted:
         async with inserted_user_x_club(
             UserXClub(
-                user_id=assert_some(auth_context.user.id), club_id=assert_some(club_inserted.id)
+                user_id=assert_some(auth_context.user.id),
+                club_id=assert_some(club_inserted.id),
+                relation=UserXClubRelation.OWNER,
             )
         ):
             response = await send_auth_request(

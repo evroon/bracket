@@ -66,3 +66,15 @@ async def update_team_stats(
             'swiss_score': float(team_statistics.swiss_score),
         },
     )
+
+
+async def sql_delete_team(tournament_id: int, team_id: int) -> None:
+    query = 'DELETE FROM teams WHERE id = :team_id AND tournament_id = :tournament_id'
+    await database.fetch_one(
+        query=query, values={'team_id': team_id, 'tournament_id': tournament_id}
+    )
+
+
+async def sql_delete_teams_of_tournament(tournament_id: int) -> None:
+    query = 'DELETE FROM teams WHERE tournament_id = :tournament_id'
+    await database.fetch_one(query=query, values={'tournament_id': tournament_id})

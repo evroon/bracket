@@ -1,4 +1,5 @@
 from bracket.database import database
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User
 from bracket.schema import users
 from bracket.sql.users import delete_user
@@ -20,6 +21,7 @@ async def test_users_endpoint(
             'created': '2200-01-01T00:00:00+00:00',
             'id': auth_context.user.id,
             'name': 'Donald Duck',
+            'account_type': UserAccountType.REGULAR.value,
         },
     }
 
@@ -34,6 +36,16 @@ async def test_create_user(
         'captcha_token': 'my token',
     }
     response = await send_request(HTTPMethod.POST, 'users/register', None, body)
+    assert response['data']['token_type'] == 'bearer'
+    assert response['data']['user_id']
+    await delete_user(response['data']['user_id'])
+
+
+async def test_create_demo_user(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {'captcha_token': 'my token'}
+    response = await send_request(HTTPMethod.POST, 'users/register_demo', None, body)
     assert response['data']['token_type'] == 'bearer'
     assert response['data']['user_id']
     await delete_user(response['data']['user_id'])

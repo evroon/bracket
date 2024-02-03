@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse, Response
 from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
+from bracket.cronjobs.scheduling import start_cronjobs
 from bracket.database import database
 from bracket.models.metrics import RequestDefinition, get_request_metrics
 from bracket.routes import (
@@ -26,6 +27,7 @@ from bracket.routes import (
     tournaments,
     users,
 )
+from bracket.utils.asyncio import AsyncioTasksManager
 from bracket.utils.db_init import init_db_when_empty
 from bracket.utils.logging import logger
 
@@ -36,6 +38,7 @@ init_sentry()
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
     await init_db_when_empty()
+    start_cronjobs()
 
     if environment is Environment.PRODUCTION and config.cors_origins == '*':
         logger.warning("It's advised to set the `CORS_ORIGINS` environment variable in production")
@@ -44,6 +47,8 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
     if environment != Environment.CI:
         await database.disconnect()
+
+    await AsyncioTasksManager.gather()
 
 
 app = FastAPI(

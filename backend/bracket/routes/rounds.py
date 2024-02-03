@@ -4,6 +4,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
+from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.round import (
     Round,
     RoundCreateBody,
@@ -21,6 +22,7 @@ from bracket.routes.util import (
 from bracket.schema import rounds
 from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft
 from bracket.sql.stage_items import get_stage_item
+from bracket.sql.stages import get_full_tournament_details
 
 router = APIRouter()
 
@@ -51,8 +53,17 @@ async def delete_round(
 async def create_round(
     tournament_id: int,
     round_body: RoundCreateBody,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
+    stages = await get_full_tournament_details(tournament_id)
+    existing_rounds = [
+        round_
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+    ]
+    check_requirement(existing_rounds, user, "max_rounds")
+
     stage_item = await get_stage_item(tournament_id, stage_item_id=round_body.stage_item_id)
 
     if stage_item is None:
