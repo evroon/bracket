@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import PlayerCreateModal from '../../../components/modals/player_create_modal';
 import PlayersTable from '../../../components/tables/players';
-import { getTournamentIdFromRouter } from '../../../components/utils/util';
+import { capitalize, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { getPlayers } from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
 
@@ -16,7 +16,7 @@ export default function Players() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between">
         <Grid.Col span="auto">
-          <Title>{t('player_title')}</Title>
+          <Title>{capitalize(t('players_title'))}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <PlayerCreateModal

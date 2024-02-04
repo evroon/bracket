@@ -6,7 +6,11 @@ import { SWRResponse } from 'swr';
 
 import TeamCreateModal from '../../../components/modals/team_create_modal';
 import TeamsTable from '../../../components/tables/teams';
-import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
+import {
+  capitalize,
+  getTournamentIdFromRouter,
+  responseIsValid,
+} from '../../../components/utils/util';
 import { StageItemWithRounds } from '../../../interfaces/stage_item';
 import { StageItemInput } from '../../../interfaces/stage_item_input';
 import { TeamInterface } from '../../../interfaces/team';
@@ -66,7 +70,7 @@ export default function Teams() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between" mb="1rem">
         <Grid.Col span="auto">
-          <Title>{t('team_title')}</Title>
+          <Title>{capitalize(t('teams_title'))}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <Grid align="flex-end">

@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import ClubModal from '../components/modals/club_modal';
 import ClubsTable from '../components/tables/clubs';
+import { capitalize } from '../components/utils/util';
 import { checkForAuthError, getClubs } from '../services/adapter';
 import Layout from './_layout';
 
@@ -17,7 +18,7 @@ export default function HomePage() {
     <Layout>
       <Grid grow>
         <Grid.Col span={9}>
-          <Title>{t('clubs_title')}</Title>
+          <Title>{capitalize(t('clubs_title'))}</Title>
         </Grid.Col>
         <Grid.Col span={3}>
           <ClubModal swrClubsResponse={swrClubsResponse} club={null} />

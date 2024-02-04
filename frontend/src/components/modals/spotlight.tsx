@@ -63,7 +63,7 @@ export function BracketSpotlight() {
     },
     {
       id: 'players',
-      title: t('player_title'),
+      title: t('players_title'),
       description: t('players_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/players`),
       leftSection: <IconUsers size="1.2rem" />,
@@ -77,7 +77,7 @@ export function BracketSpotlight() {
     },
     {
       id: 'courts',
-      title: t('court_title'),
+      title: t('courts_title'),
       description: t('court_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/courts`),
       leftSection: <IconSoccerField size="1.2rem" />,
