@@ -128,7 +128,7 @@ function GeneralTournamentForm({
                 form.setFieldValue('start_time', new Date());
               }}
             >
-              Set to now
+              {t('set_to_new_button')}
             </Button>
           </Grid.Col>
         </Grid>

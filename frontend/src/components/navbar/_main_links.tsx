@@ -20,6 +20,7 @@ import { NextRouter, useRouter } from 'next/router';
 import React from 'react';
 
 import { getBaseApiUrl } from '../../services/adapter';
+import { capitalize } from '../utils/util';
 import classes from './_main_links.module.css';
 
 interface MainLinkProps {
@@ -87,8 +88,8 @@ export function getBaseLinksDict() {
   const { t } = useTranslation();
 
   return [
-    { link: '/clubs', label: t('clubs_title'), links: [], icon: IconUsers },
-    { link: '/', label: t('tournaments_title'), links: [], icon: IconHome },
+    { link: '/clubs', label: capitalize(t('clubs_title')), links: [], icon: IconUsers },
+    { link: '/', label: capitalize(t('tournaments_title')), links: [], icon: IconHome },
     {
       link: '/user',
       label: t('user_title'),
@@ -131,37 +132,37 @@ export function TournamentLinks({ tournament_id }: any) {
   const data = [
     {
       icon: IconTournament,
-      label: t('schedule_title'),
+      label: capitalize(t('schedule_title')),
       link: `${tm_prefix}`,
     },
     {
       icon: IconUser,
-      label: t('player_title'),
+      label: capitalize(t('players_title')),
       link: `${tm_prefix}/players`,
     },
     {
       icon: IconUsers,
-      label: t('teams_title'),
+      label: capitalize(t('teams_title')),
       link: `${tm_prefix}/teams`,
     },
     {
       icon: IconSoccerField,
-      label: t('court_title'),
+      label: capitalize(t('courts_title')),
       link: `${tm_prefix}/courts`,
     },
     {
       icon: IconTrophy,
-      label: t('stage_title'),
+      label: capitalize(t('stage_title')),
       link: `${tm_prefix}/stages`,
     },
     {
       icon: IconCalendar,
-      label: t('planning_title'),
+      label: capitalize(t('planning_title')),
       link: `${tm_prefix}/schedule`,
     },
     {
       icon: IconSettings,
-      label: t('tournament_setting_title'),
+      label: capitalize(t('tournament_setting_title')),
       link: `${tm_prefix}/settings`,
     },
   ];

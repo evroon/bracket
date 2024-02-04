@@ -205,7 +205,7 @@ export function CreateStageItemModal({
         onClick={() => setOpened(true)}
         leftSection={<GoPlus size={24} />}
       >
-        Add stage item
+        {t('add_stage_item_modal_title')}
       </Button>
     </>
   );
