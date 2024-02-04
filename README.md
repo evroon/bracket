@@ -26,9 +26,7 @@ It has the following features:
 - **Swiss tournaments** can be handled dynamically, with automatic scheduling of matches.
 
 ### Preview
-
-[//]: # (  <a href="url"><img src="https://desmond75.github.io/img/IMG_20171214_095012.jpg" height="auto" width="200" style="border-radius:50%"></a>)
-<img alt="" src="docs/static/img/bracket-screenshot-design.png" height="auto" width="100%" style="border-radius:1rem"/>
+<img alt="" src="docs/static/img/bracket-screenshot-design.png" width="100%" />
 
 
 # Quickstart
