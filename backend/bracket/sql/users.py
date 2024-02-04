@@ -3,6 +3,8 @@ from datetime import datetime
 from bracket.database import database
 from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
 from bracket.schema import users
+from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
+from bracket.sql.tournaments import sql_delete_tournament_completely, sql_get_tournaments
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
 
@@ -112,3 +114,16 @@ async def check_whether_email_is_in_use(email: str) -> bool:
 
 async def get_user(email: str) -> UserInDB | None:
     return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))
+
+
+async def delete_user_and_owned_clubs(user_id: int) -> None:
+    for club in await get_clubs_for_user_id(user_id):
+        club_id = assert_some(club.id)
+
+        for tournament in await sql_get_tournaments((club_id,), None):
+            tournament_id = assert_some(tournament.id)
+            await sql_delete_tournament_completely(tournament_id)
+
+        await sql_delete_club(club_id)
+
+    await delete_user(user_id)

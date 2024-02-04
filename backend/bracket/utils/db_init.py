@@ -39,7 +39,7 @@ from bracket.schema import (
     users_x_clubs,
 )
 from bracket.sql.stage_items import sql_create_stage_item
-from bracket.sql.users import get_user
+from bracket.sql.users import create_user, get_user
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import (
     DUMMY_CLUB,
@@ -68,7 +68,7 @@ from bracket.utils.dummy_records import (
 )
 from bracket.utils.logging import logger
 from bracket.utils.security import pwd_context
-from bracket.utils.types import BaseModelT
+from bracket.utils.types import BaseModelT, assert_some
 
 if TYPE_CHECKING:
     from sqlalchemy import Table
@@ -78,16 +78,16 @@ async def create_admin_user() -> int:
     assert config.admin_email
     assert config.admin_password
 
-    admin = User(
-        name="Admin",
-        email=config.admin_email,
-        password_hash=pwd_context.hash(config.admin_password),
-        created=datetime_utc.now(),
-        account_type=UserAccountType.REGULAR,
+    user = await create_user(
+        User(
+            name="Admin",
+            email=config.admin_email,
+            password_hash=pwd_context.hash(config.admin_password),
+            created=datetime_utc.now(),
+            account_type=UserAccountType.REGULAR,
+        )
     )
-
-    user: int = await database.execute(query=users.insert(), values=admin.dict())
-    return user
+    return assert_some(user.id)
 
 
 async def init_db_when_empty() -> int | None:
@@ -107,10 +107,10 @@ async def init_db_when_empty() -> int | None:
     return None
 
 
-async def sql_create_dev_db() -> None:
+async def sql_create_dev_db() -> int:
     # TODO: refactor into smaller functions
     # pylint: disable=too-many-statements
-    assert environment is Environment.DEVELOPMENT
+    assert environment is not Environment.PRODUCTION
 
     logger.warning("Initializing database with dummy records")
     await database.connect()
@@ -321,3 +321,5 @@ async def sql_create_dev_db() -> None:
 
     for tournament in await database.fetch_all(tournaments.select()):
         await recalculate_ranking_for_tournament_id(tournament.id)  # type: ignore[attr-defined]
+
+    return user_id_1
