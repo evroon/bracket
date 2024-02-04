@@ -98,11 +98,10 @@ pipenv shell
 ```
 
 # More screenshots
-
-<img alt="" src="docs/static/img/schedule_preview.png" width="50%" />
-<img alt="" src="docs/static/img/planning_preview.png" width="50%" />
-<img alt="" src="docs/static/img/builder_preview.png" width="50%" />
-<img alt="" src="docs/static/img/standings_preview.png" width="50%" />
+<img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
+src="docs/static/img/planning_preview.png" width="50%" /> <img alt=""
+src="docs/static/img/builder_preview.png" width="50%" /><img alt=""
+src="docs/static/img/standings_preview.png" width="50%" />
 
 # License
 Bracket is licensed under AGPL-v3.0
