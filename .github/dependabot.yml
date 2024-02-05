@@ -9,6 +9,8 @@ updates:
     directory: "/backend"
     schedule:
       interval: "daily"
+    reviewers:
+      - "evroon"
     ignore:
       - dependency-name: "*"    
         update-types: ["version-update:semver-patch"]
@@ -17,6 +19,8 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "daily"
+    reviewers:
+      - "evroon"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
@@ -25,6 +29,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    reviewers:
+      - "evroon"
     ignore:
         - dependency-name: "*"
           update-types: ["version-update:semver-patch"]
