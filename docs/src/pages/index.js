@@ -1,6 +1,13 @@
 import React from "react";
 import Layout from "@theme/Layout";
-import { Container, createTheme, MantineProvider, Title } from "@mantine/core";
+import {
+  Center,
+  Container,
+  createTheme,
+  Image,
+  MantineProvider,
+  Title,
+} from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import { HeroTitle } from "../components/HeroTitle";
@@ -19,13 +26,23 @@ export default function Home() {
       >
         <HeroTitle />
         <main>
+          <Center>
+            <Container mt="lg" px="0px" mx="1rem">
+              <Image
+                src={
+                  require("@site/static/img/bracket-screenshot-design.png")
+                    .default
+                }
+              />
+            </Container>
+          </Center>
           <Title order={2} className={classes.title} ta="center" mt="lg">
             Features
           </Title>
           <FeaturesCards />
           <Container mt="lg" px="0px">
             <Title order={2} className={classes.title} ta="center" my="lg">
-              Preview
+              Screenshots
             </Title>
             <HomeCarousel />
           </Container>
