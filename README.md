@@ -77,8 +77,9 @@ Based on your browser settings, your language should be automatically detected a
 there's no manual way of choosing a different language.
 
 ## Supported Languages
-- 🇺🇸 English `en-US` - *Default*
+- 🇺🇸 English `en` - *Default*
 - 🇨🇳 Chinese `zh-CN` - Contributed by [@Sevichecc](https://github.com/Sevichecc)
+- 🇳🇱 Dutch `nl` - Contributed by [@evroon](https://github.com/evroon)
 
 # More screenshots
 <img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""

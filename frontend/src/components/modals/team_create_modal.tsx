@@ -99,7 +99,6 @@ function SingleTeamTab({
       <MultiSelect
         data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
         label={t('team_member_select_title')}
-        placeholder={t('team_member_select_placeholder')}
         maxDropdownHeight={160}
         searchable
         mb="12rem"
