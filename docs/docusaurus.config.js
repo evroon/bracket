@@ -77,7 +77,12 @@ const config = {
             type: "docSidebar",
             sidebarId: "tutorialSidebar",
             position: "left",
-            label: "Docs",
+            label: "Documentation",
+          },
+          {
+            label: "Quickstart",
+            href: "/docs/running-bracket/quickstart",
+            position: "left",
           },
           {
             href: "https://github.com/evroon/bracket",
