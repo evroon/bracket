@@ -38,64 +38,44 @@ sudo docker-compose up -d
 ```
 
 This will start the backend and frontend of Bracket, as well as a postgres instance. You should now
-be able to view bracket at http://localhost:3000. You can log in with username `test@example.org`
-and password `aeGhoe1ahng2Aezai0Dei6Aih6dieHoo`.
+be able to view bracket at http://localhost:3000. You can log in with the following credentials:
+
+- Username: `test@example.org`
+- Password: `aeGhoe1ahng2Aezai0Dei6Aih6dieHoo`.
 
 To insert dummy rows into the database, run:
 ```bash
 sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ```
 
-# Setup
-## Database
-First create a `bracket` cluster:
-```bash
-sudo pg_createcluster -u postgres -p 5532 16 bracket
-pg_ctlcluster 16 bracket start
-```
+See also the [quickstart docs](http://localhost:3000/bracket/docs/running-bracket/quickstart).
 
-Subsequently, create a new `bracket_dev` database:
-```bash
-sudo -Hu postgres psql  -p 5532
-CREATE USER bracket_dev WITH PASSWORD 'bracket_dev';
-CREATE DATABASE bracket_dev OWNER bracket_dev;
-```
+# Development setup
+Read the [development docs](https://evroon.github.io/bracket/docs/running-bracket/development) for how to run Bracket for development.
 
-You can do the same but replace the user and database name with:
-- `bracket_ci`: for running tests
-- `bracket_prod`: for a production database
+Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
 
-The database URL can be specified per environment in the `.env` files (see [config](#config)).
+# Configuration
+Read the [configuration](https://evroon.github.io/bracket/docs/running-bracket/configuration) for how to configure Bracket.
 
-Read the full documentation about setting up Bracket [in the docs](https://evroon.github.io/bracket/docs/getting-started/installation).
+Bracket's backend is configured using `.env` files (`prod.env` for production, `dev.env` for development etc.).
+But you can also configure Bracket using environment variables directly, for example by specifying them in the `docker-compose.yml`.
 
-## Config
-Copy [ci.env](backend/ci.env) to `prod.env` and fill in the values:
-- `PG_DSN`: The URL of the PostgreSQL database
-- `JWT_SECRET`: Create a random secret using `openssl rand -hex 32`
-- `CORS_ORIGINS` and `CORS_ORIGIN_REGEX`: Specify allowed frontend domain names for CORS (see the
-  [FastAPI docs](https://fastapi.tiangolo.com/tutorial/cors/))
-- `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when
-  initializing the database
+The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
 
-Read more about configuration [in the docs](https://evroon.github.io/bracket/docs/getting-started/configuration).
+# Running Bracket in production
+Read the [deployment](https://evroon.github.io/bracket/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
 
+Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 
-## Running the frontend and backend for development
-The following starts the frontend and backend for local development:
-### Frontend
-```bash
-cd frontend
-yarn run dev
-```
+# Translations
+Based on your browser settings, your language should be automatically detected and loaded. For now,
+there's no manual way of choosing a different language.
 
-### Backend
-```bash
-cd backend
-pipenv install -d
-pipenv shell
-./run.sh
-```
+## Supported Languages
+
+- 🇺🇸 English `en-US` - *Default*
+- 🇨🇳 Chinese `zh-CN` - Contributed by [@Sevichecc](https://github.com/Sevichecc)
 
 # More screenshots
 <img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
@@ -103,6 +83,20 @@ src="docs/static/img/planning_preview.png" width="50%" /> <img alt=""
 src="docs/static/img/builder_preview.png" width="50%" /><img alt=""
 src="docs/static/img/standings_preview.png" width="50%" />
 
+# Help
+If you're having trouble getting Bracket up and running, or have a question about usage or configuration, feel free to ask.
+The best place to do this is by creating a [Discussion](https://github.com/evroon/bracket/discussions).
+
+# Supporting Bracket
+If you're using Bracket and would like to help support its development, that would be greatly appreciated!
+
+Several areas that we need a bit of help with at the moment are:
+- ⭐ **Star Bracket** on GitHub
+- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language
+- 📣 **Spread the word** by sharing Bracket to help new users discover it
+- 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
+
 # License
-Bracket is licensed under AGPL-v3.0
+Bracket is licensed under AGPL-v3.0.
+
 See [LICENSE](LICENSE)

@@ -103,7 +103,7 @@ const config = {
               },
               {
                 label: "Configuration",
-                to: "/docs/getting-started/configuration",
+                to: "/docs/running-bracket/configuration",
               },
             ],
           },

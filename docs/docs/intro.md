@@ -42,4 +42,4 @@ experience to a project with a real purpose.
 
 ## Quickstart
 
-To get started, follow the steps described in [quickstart](getting-started/quickstart.md)
+To get started, follow the steps described in [quickstart](running-bracket/quickstart.md)

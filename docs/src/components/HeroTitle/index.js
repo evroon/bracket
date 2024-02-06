@@ -32,7 +32,7 @@ export function HeroTitle() {
             variant="gradient"
             gradient={{ from: "indigo", to: "#674ad6" }}
             onClick={() => {
-              open("docs/getting-started/quickstart", "_self");
+              open("docs/running-bracket/quickstart", "_self");
             }}
           >
             Get started
