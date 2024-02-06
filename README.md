@@ -38,8 +38,10 @@ sudo docker-compose up -d
 ```
 
 This will start the backend and frontend of Bracket, as well as a postgres instance. You should now
-be able to view bracket at http://localhost:3000. You can log in with username `test@example.org`
-and password `aeGhoe1ahng2Aezai0Dei6Aih6dieHoo`.
+be able to view bracket at http://localhost:3000. You can log in with the following credentials:
+
+- Username: `test@example.org`
+- Password: `aeGhoe1ahng2Aezai0Dei6Aih6dieHoo`.
 
 To insert dummy rows into the database, run:
 ```bash
