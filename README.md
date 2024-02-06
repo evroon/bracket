@@ -75,7 +75,7 @@ there's no manual way of choosing a different language.
 ## Supported Languages
 
 - 🇺🇸 English `en-US` - *Default*
-- 🇨🇳 Chinese `zh-CN` - Contributed by @Sevichecc
+- 🇨🇳 Chinese `zh-CN` - Contributed by [@Sevichecc](https://github.com/Sevichecc)**
 
 # More screenshots
 <img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
