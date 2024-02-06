@@ -6,8 +6,7 @@
 [![frontend](https://github.com/evroon/bracket/actions/workflows/frontend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/frontend.yml)
 [![last
 commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.shields.io/github/last-commit/evroon/bracket)
-[![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)
-
+[![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)<br/>
 [Documentation](https://evroon.github.io/bracket) |
 [Quickstart](https://evroon.github.io/bracket/docs/running-bracket/quickstart) |
 [GitHub](https://github.com/evroon/bracket)
