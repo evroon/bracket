@@ -8,6 +8,10 @@
 commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.shields.io/github/last-commit/evroon/bracket)
 [![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)
 
+[Documentation](https://evroon.github.io/bracket) |
+[Quickstart](https://evroon.github.io/bracket/docs/running-bracket/quickstart) |
+[GitHub](https://github.com/evroon/bracket)
+
 <br/>
 
 Tournament system meant to be easy to use. Bracket is written in async Python (with
@@ -56,7 +60,7 @@ Read the [development docs](https://evroon.github.io/bracket/docs/running-bracke
 Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
 
 # Configuration
-Read the [configuration](https://evroon.github.io/bracket/docs/running-bracket/configuration) for how to configure Bracket.
+Read the [configuration docs](https://evroon.github.io/bracket/docs/running-bracket/configuration) for how to configure Bracket.
 
 Bracket's backend is configured using `.env` files (`prod.env` for production, `dev.env` for development etc.).
 But you can also configure Bracket using environment variables directly, for example by specifying them in the `docker-compose.yml`.
@@ -64,7 +68,7 @@ But you can also configure Bracket using environment variables directly, for exa
 The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
 
 # Running Bracket in production
-Read the [deployment](https://evroon.github.io/bracket/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
+Read the [deployment docs](https://evroon.github.io/bracket/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
 
 Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 
@@ -73,7 +77,6 @@ Based on your browser settings, your language should be automatically detected a
 there's no manual way of choosing a different language.
 
 ## Supported Languages
-
 - 🇺🇸 English `en-US` - *Default*
 - 🇨🇳 Chinese `zh-CN` - Contributed by [@Sevichecc](https://github.com/Sevichecc)
 
