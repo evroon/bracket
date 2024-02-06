@@ -46,73 +46,17 @@ To insert dummy rows into the database, run:
 sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ```
 
-# Setup for development
-The following sections describe how to run Bracket locally without Docker. They cover
-database setup, configuration and how to run the frontend and backend.
+See also the [quickstart docs](http://localhost:3000/bracket/docs/running-bracket/quickstart).
 
-## Database
-First create a `bracket` cluster:
-```bash
-sudo pg_createcluster -u postgres -p 5532 16 bracket
-pg_ctlcluster 16 bracket start
-```
+# Development setup
+Read the [development docs](https://evroon.github.io/bracket/docs/running-bracket/development) for how to run Bracket for development.
 
-Subsequently, create a new `bracket_dev` database:
-```bash
-sudo -Hu postgres psql  -p 5532
-CREATE USER bracket_dev WITH PASSWORD 'bracket_dev';
-CREATE DATABASE bracket_dev OWNER bracket_dev;
-```
+# Configuration
+Read the [configuration](https://evroon.github.io/bracket/docs/running-bracket/configuration) for how to configure Bracket
 
-You can do the same but replace the user and database name with:
-- `bracket_ci`: for running tests
-- `bracket_prod`: for a production database
-
-The database URL can be specified per environment in the `.env` files (see [config](#config)).
-
-Read the full documentation about setting up Bracket [in the docs](https://evroon.github.io/bracket/docs/getting-started/installation).
-
-## Config
-Copy [ci.env](backend/ci.env) to `prod.env` and fill in the values:
-- `PG_DSN`: The URL of the PostgreSQL database
-- `JWT_SECRET`: Create a random secret using `openssl rand -hex 32`
-- `CORS_ORIGINS` and `CORS_ORIGIN_REGEX`: Specify allowed frontend domain names for CORS (see the
-  [FastAPI docs](https://fastapi.tiangolo.com/tutorial/cors/))
-- `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when
-  initializing the database
-
-Read more about configuration [in the docs](https://evroon.github.io/bracket/docs/getting-started/configuration).
-
-
-## Running the frontend and backend for development
-To run Bracket (frontend and backend) locally without Docker, one needs `yarn` and `pipenv`.
-
-The following starts the frontend and backend for local development in the root
-directory of Bracket:
-
-```shell
-./run.sh
-```
-
-If either the frontend or backend doesn't shut down correctly, you can run (on Linux) `killall gunicorn node`.
-But **be careful** that this will also kill other gunicorn and node processes.
-
-In case you want to run the frontend and backend yourself, see the following
-two sections.
-
-### Frontend
-```bash
-cd frontend
-yarn run dev
-```
-
-### Backend
-```bash
-cd backend
-pipenv install -d
-pipenv shell
-./run.sh
-```
+# Running Bracket in production
+Read the [deployment](https://evroon.github.io/bracket/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
+Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 
 # Translations
 Based on your browser settings, your language should be automatically detected and loaded. For now,
