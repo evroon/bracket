@@ -9,7 +9,7 @@ commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.s
 [![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)<br/>
 [Documentation](https://evroon.github.io/bracket) |
 [Quickstart](https://evroon.github.io/bracket/docs/running-bracket/quickstart) |
-[GitHub](https://github.com/evroon/bracket)
+[GitHub](https://github.com/evroon/bracket) |
 [Releases](https://github.com/evroon/bracket/releases)
 
 <br/>
