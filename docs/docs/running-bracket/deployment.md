@@ -8,6 +8,7 @@ This guide explains how to run Bracket in production with Docker. If you quickly
 running, please read [quickstart.md](quickstart.md).
 
 ## Docker
+
 First, make sure you have docker and docker-compose installed.
 
 Then, store the following YAML in a file called `docker-compose.yml` and run it using
@@ -49,7 +50,6 @@ services:
           POSTGRES_PASSWORD: bracket_prod
 ```
 
-
 ## Configuration
 
 ### Backend configuration
@@ -83,10 +83,10 @@ Optional:
   accounts. You get the secret when you create a new site in HCaptcha. If left blank, HCaptcha will
   be disabled for your site.
 
-# Deploy to cloud service
-
+## Deploy to cloud service
 
 ## Vercel
+
 To deploy the frontend to Vercel, use the following link:
 
 ```text
