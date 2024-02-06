@@ -85,7 +85,7 @@ Optional:
 
 ## Deploy to cloud service
 
-## Vercel
+### Vercel
 
 To deploy the frontend to Vercel, use the following link:
 
