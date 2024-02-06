@@ -27,6 +27,7 @@ services:
             NEXT_PUBLIC_API_BASE_URL: "https://bracket.mywebsite.com"
             # Go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
             NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "xxxxx"
+            NODE_ENV: "production"
         restart: unless-stopped
 
     bracket-backend:
