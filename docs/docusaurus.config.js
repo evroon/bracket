@@ -77,12 +77,17 @@ const config = {
             type: "docSidebar",
             sidebarId: "tutorialSidebar",
             position: "left",
-            label: "Docs",
+            label: "Documentation",
+          },
+          {
+            label: "Quickstart",
+            href: "/docs/running-bracket/quickstart",
+            position: "left",
           },
           {
             href: "https://github.com/evroon/bracket",
             label: "GitHub",
-            position: "right",
+            position: "left",
           },
         ],
       },
@@ -95,15 +100,41 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Intro",
             items: [
               {
                 label: "Introduction",
                 to: "/docs/intro",
               },
               {
+                label: "Quickstart",
+                to: "/docs/running-bracket/quickstart",
+              },
+            ],
+          },
+          {
+            title: "Running Bracket",
+            items: [
+              {
                 label: "Configuration",
                 to: "/docs/running-bracket/configuration",
+              },
+              {
+                label: "Deployment",
+                to: "/docs/running-bracket/deployment",
+              },
+            ],
+          },
+          {
+            title: "Community",
+            items: [
+              {
+                label: "Contributing",
+                to: "/docs/community/contributing",
+              },
+              {
+                label: "Developing",
+                to: "/docs/community/development",
               },
             ],
           },
@@ -115,13 +146,17 @@ const config = {
                 href: "https://github.com/evroon/bracket",
               },
               {
+                label: "License",
+                href: "https://github.com/evroon/bracket/blob/master/LICENSE",
+              },
+              {
                 label: "Changelog",
                 href: "https://github.com/evroon/bracket/releases",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Bracket. Built with Docusaurus.`,
+        copyright: `Bracket - Self-Hosted Tournament System.<br/> Licensed under AGPL-v3.0. Copyright © ${new Date().getFullYear()} Bracket. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
