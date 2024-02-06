@@ -6,6 +6,6 @@ WORKDIR /app
 RUN cd /app \
     && yarn \
     && yarn next telemetry disable \
-    && yarn build
+    && yarn next build
 
 CMD yarn start
