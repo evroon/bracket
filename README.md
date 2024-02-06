@@ -97,11 +97,30 @@ pipenv shell
 ./run.sh
 ```
 
+# Translations
+- 🇺🇸 English `en-US` - *Default*
+- 🇨🇳 Chinese `zh-CN` - Contributed by @Sevichecc
+
+[//]: # (- 🇳🇱 Dutch `nl-NL` - Contributed by @evroon)
+
 # More screenshots
 <img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
 src="docs/static/img/planning_preview.png" width="50%" /> <img alt=""
 src="docs/static/img/builder_preview.png" width="50%" /><img alt=""
 src="docs/static/img/standings_preview.png" width="50%" />
+
+# Help
+If you're having trouble getting Bracket up and running, or have a question about usage or configuration, feel free to ask.
+The best place to do this is by creating a [Discussion](https://github.com/evroon/bracket/discussions).
+
+# Supporting Bracket
+If you're using Bracket and would like to help support its development, that would be greatly appreciated!
+
+Several areas that we need a bit of help with at the moment are:
+- ⭐ **Star Bracket** on GitHub
+- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language
+- 📣 **Spread the word** by sharing Bracket to help new users discover it
+- 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
 
 # License
 Bracket is licensed under AGPL-v3.0
