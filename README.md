@@ -46,7 +46,10 @@ To insert dummy rows into the database, run:
 sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ```
 
-# Setup
+# Setup for development
+The following sections describe how to run Bracket locally without Docker. They cover
+database setup, configuration and how to run the frontend and backend.
+
 ## Database
 First create a `bracket` cluster:
 ```bash
@@ -82,7 +85,21 @@ Read more about configuration [in the docs](https://evroon.github.io/bracket/doc
 
 
 ## Running the frontend and backend for development
-The following starts the frontend and backend for local development:
+To run Bracket (frontend and backend) locally without Docker, one needs `yarn` and `pipenv`.
+
+The following starts the frontend and backend for local development in the root
+directory of Bracket:
+
+```shell
+./run.sh
+```
+
+If either the frontend or backend doesn't shut down correctly, you can run (on Linux) `killall gunicorn node`.
+But **be careful** that this will also kill other gunicorn and node processes.
+
+In case you want to run the frontend and backend yourself, see the following
+two sections.
+
 ### Frontend
 ```bash
 cd frontend
@@ -98,10 +115,13 @@ pipenv shell
 ```
 
 # Translations
+Based on your browser settings, your language should be automatically detected and loaded. For now,
+there's no manual way of choosing a different language.
+
+## Supported Languages
+
 - 🇺🇸 English `en-US` - *Default*
 - 🇨🇳 Chinese `zh-CN` - Contributed by @Sevichecc
-
-[//]: # (- 🇳🇱 Dutch `nl-NL` - Contributed by @evroon)
 
 # More screenshots
 <img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
