@@ -1,12 +1,12 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
-# Installation
+# Developing Bracket
 
 This guide explains how to run Bracket without Docker. They cover database setup, configuration and
 how to run the frontend and backend. If you quickly want to get up and running, please read
-[quickstart.md](quickstart.md).
+[quickstart.md](running-bracket/quickstart.md).
 
 ## Database
 
@@ -31,7 +31,7 @@ You can do the same but replace the user and database name with:
 - `bracket_prod`: for a production database
 
 The database URL can be specified per environment in the `.env` files (see
-[config](configuration.md)).
+[config](running-bracket/configuration.md)).
 
 ## Running the frontend and backend
 

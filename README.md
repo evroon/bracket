@@ -97,5 +97,6 @@ Several areas that we need a bit of help with at the moment are:
 - 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
 
 # License
-Bracket is licensed under AGPL-v3.0
+Bracket is licensed under AGPL-v3.0.
+
 See [LICENSE](LICENSE)

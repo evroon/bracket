@@ -8,16 +8,47 @@ This guide explains how to run Bracket in production with Docker. If you quickly
 running, please read [quickstart.md](quickstart.md).
 
 ## Docker
+First, make sure you have docker and docker-compose installed.
 
-Use the
-[template docker-compose.yml](https://github.com/evroon/bracket/blob/master/docker-compose.yml)
-to deploy Bracket using Docker. You can run it with:
+Then, store the following YAML in a file called `docker-compose.yml` and run it using
+`docker-compose up -d` in the same directory as the file:
 
-```bash
-git clone git@github.com:evroon/bracket.git
-cd bracket
-sudo docker-compose up -d
+```yaml
+version: '3.1'
+
+services:
+    bracket-frontend:
+        image: ghcr.io/evroon/bracket-frontend
+        container_name: bracket-frontend
+        ports:
+            - "3000:3000"
+        environment:
+            NEXT_PUBLIC_API_BASE_URL: "https://bracket.mywebsite.com"
+            # Go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
+            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "xxxxx"
+        restart: unless-stopped
+
+    bracket-backend:
+        image: ghcr.io/evroon/bracket-backend
+        container_name: bracket-backend
+        ports:
+            - "8400:8400"
+        environment:
+            ENVIRONMENT: "PRODUCTION"
+            PG_DSN: "postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod"
+        restart: unless-stopped
+        depends_on:
+          - postgres
+
+    postgres:
+        image: postgres
+        restart: always
+        environment:
+          POSTGRES_DB: bracket_prod
+          POSTGRES_USER: bracket_prod
+          POSTGRES_PASSWORD: bracket_prod
 ```
+
 
 ## Configuration
 
@@ -51,3 +82,15 @@ Optional:
 - `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha. If left blank, HCaptcha will
   be disabled for your site.
+
+# Deploy to cloud service
+
+
+## Vercel
+To deploy the frontend to Vercel, use the following link:
+
+```text
+https://vercel.com/new/project?template=https://github.com/evroon/bracket
+```
+
+Make sure to select the `frontend` directory as root directory, and use Next.js as framework.
