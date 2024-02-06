@@ -1,4 +1,4 @@
-<img align="left" alt="Favicon of Bracket" src="frontend/public/favicon.svg" height="150" />
+<img align="left" alt="Favicon of Bracket" src="frontend/public/favicon.svg" height="140" />
 
 # Bracket
 [![codecov](https://codecov.io/gh/evroon/bracket/branch/master/graph/badge.svg?token=YJL0DVPFFG)](https://codecov.io/gh/evroon/bracket)
