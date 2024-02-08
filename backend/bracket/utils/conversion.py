@@ -32,4 +32,6 @@ def _handle_datetime(value: Any) -> Any:
 
 
 def to_database_mapping(obj: BaseModel) -> Mapping[str, Any]:
-    return {key: _handle_datetime(value) for key, value in obj.model_dump(exclude_none=True).items()}
+    return {
+        key: _handle_datetime(value) for key, value in obj.model_dump(exclude_none=True).items()
+    }

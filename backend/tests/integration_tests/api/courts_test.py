@@ -21,7 +21,7 @@ async def test_courts_endpoint(
             assert await send_tournament_request(HTTPMethod.GET, "courts", auth_context, {}) == {
                 "data": [
                     {
-                        "created": DUMMY_MOCK_TIME.isoformat(),
+                        "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                         "id": court_inserted.id,
                         "name": "Court 1",
                         "tournament_id": auth_context.tournament.id,

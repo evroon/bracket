@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from bracket.database import database
 from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
 from bracket.schema import users

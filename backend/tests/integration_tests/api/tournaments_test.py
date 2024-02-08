@@ -21,9 +21,10 @@ async def test_tournaments_endpoint(
             {
                 "id": auth_context.tournament.id,
                 "club_id": auth_context.club.id,
-                "created": DUMMY_MOCK_TIME.isoformat(),
-                "start_time": DUMMY_MOCK_TIME.isoformat(),
+                "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
+                "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                 "name": "Some Cool Tournament",
+                "logo_path": None,
                 "dashboard_public": True,
                 "dashboard_endpoint": "cool-tournament",
                 "players_can_be_in_multiple_teams": True,
@@ -44,8 +45,9 @@ async def test_tournament_endpoint(
         "data": {
             "id": auth_context.tournament.id,
             "club_id": auth_context.club.id,
-            "created": DUMMY_MOCK_TIME.isoformat(),
-            "start_time": DUMMY_MOCK_TIME.isoformat(),
+            "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
+            "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
+            "logo_path": None,
             "name": "Some Cool Tournament",
             "dashboard_public": True,
             "dashboard_endpoint": "cool-tournament",
@@ -62,7 +64,7 @@ async def test_create_tournament(
 ) -> None:
     body = {
         "name": "Some new name",
-        "start_time": DUMMY_MOCK_TIME.isoformat(),
+        "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
         "club_id": auth_context.club.id,
         "dashboard_public": False,
         "players_can_be_in_multiple_teams": True,
@@ -82,7 +84,7 @@ async def test_update_tournament(
 ) -> None:
     body = {
         "name": "Some new name",
-        "start_time": DUMMY_MOCK_TIME.isoformat(),
+        "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
         "dashboard_public": False,
         "players_can_be_in_multiple_teams": True,
         "auto_assign_courts": True,

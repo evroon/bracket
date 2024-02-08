@@ -55,7 +55,7 @@ async def test_stages_endpoint(
                 {
                     "id": stage_inserted.id,
                     "tournament_id": auth_context.tournament.id,
-                    "created": DUMMY_MOCK_TIME.isoformat(),
+                    "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                     "is_active": True,
                     "name": "Group Stage",
                     "stage_items": [
@@ -63,14 +63,14 @@ async def test_stages_endpoint(
                             "id": stage_item_inserted.id,
                             "stage_id": stage_inserted.id,
                             "name": "Group A",
-                            "created": DUMMY_MOCK_TIME.isoformat(),
+                            "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                             "type": "ROUND_ROBIN",
                             "team_count": 4,
                             "rounds": [
                                 {
                                     "id": round_inserted.id,
                                     "stage_item_id": stage_item_inserted.id,
-                                    "created": DUMMY_MOCK_TIME.isoformat(),
+                                    "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                                     "is_draft": False,
                                     "is_active": False,
                                     "name": "Round 1",
