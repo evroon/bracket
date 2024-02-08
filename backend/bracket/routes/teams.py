@@ -63,7 +63,7 @@ async def update_team_by_id(
         query=teams.update().where(
             (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
         ),
-        values=team_body.dict(exclude={"player_ids"}),
+        values=team_body.model_dump(exclude={"player_ids"}),
     )
     await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
     await recalculate_ranking_for_tournament_id(tournament_id)
@@ -120,10 +120,10 @@ async def create_team(
     last_record_id = await database.execute(
         query=teams.insert(),
         values=TeamToInsert(
-            **team_to_insert.dict(exclude={"player_ids"}),
+            **team_to_insert.model_dump(exclude={"player_ids"}),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-        ).dict(),
+        ).model_dump(),
     )
     await update_team_members(last_record_id, tournament_id, team_to_insert.player_ids)
 
@@ -150,7 +150,7 @@ async def create_multiple_teams(
                 active=team_body.active,
                 created=datetime_utc.now(),
                 tournament_id=tournament_id,
-            ).dict(),
+            ).model_dump(),
         )
 
     return SuccessResponse()

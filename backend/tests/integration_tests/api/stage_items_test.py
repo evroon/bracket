@@ -38,8 +38,8 @@ async def test_create_stage_item(
     ):
         assert team_inserted_1.id and team_inserted_2.id
         inputs = [
-            StageItemInputCreateBodyFinal(slot=1, team_id=team_inserted_1.id).dict(),
-            StageItemInputCreateBodyFinal(slot=2, team_id=team_inserted_2.id).dict(),
+            StageItemInputCreateBodyFinal(slot=1, team_id=team_inserted_1.id).model_dump(),
+            StageItemInputCreateBodyFinal(slot=2, team_id=team_inserted_2.id).model_dump(),
         ]
         assert (
             await send_tournament_request(

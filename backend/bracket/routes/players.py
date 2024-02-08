@@ -36,7 +36,7 @@ async def update_player_by_id(
         query=players.update().where(
             (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
         ),
-        values=player_body.dict(),
+        values=player_body.model_dump(),
     )
     return SinglePlayerResponse(
         data=assert_some(

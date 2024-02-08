@@ -37,7 +37,7 @@ async def get_teams_with_members(
         """
     values = dict_without_none({"tournament_id": tournament_id, "team_id": team_id})
     result = await database.fetch_all(query=query, values=values)
-    return [FullTeamWithPlayers.model_validate(x._mapping) for x in result]
+    return [FullTeamWithPlayers.model_validate(dict(x._mapping)) for x in result]
 
 
 async def update_team_stats(

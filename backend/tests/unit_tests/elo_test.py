@@ -74,9 +74,10 @@ def test_elo_calculation() -> None:
         ],
     )
     stage_item = StageItemWithRounds(
-        **DUMMY_STAGE_ITEM1.model_copy(update={"rounds": [round_]}).dict(),
+        **DUMMY_STAGE_ITEM1.model_dump(exclude={'id'}),
         id=-1,
         inputs=[],
+        rounds=[round_],
     )
     player_stats, team_stats = determine_ranking_for_stage_items([stage_item])
     assert player_stats == {

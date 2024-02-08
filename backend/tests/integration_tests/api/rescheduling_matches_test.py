@@ -73,7 +73,7 @@ async def test_reschedule_match(
                 HTTPMethod.POST,
                 f"matches/{match_inserted.id}/reschedule",
                 auth_context,
-                json=body.dict(),
+                json=body.model_dump(),
             )
             == SUCCESS_RESPONSE
         )

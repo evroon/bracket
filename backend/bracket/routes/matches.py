@@ -79,7 +79,7 @@ async def create_match(
 ) -> SingleMatchResponse:
     tournament = await sql_get_tournament(tournament_id)
     body_with_durations = MatchCreateBody(
-        **match_body.dict(),
+        **match_body.model_dump(),
         duration_minutes=tournament.duration_minutes,
         margin_minutes=tournament.margin_minutes,
     )

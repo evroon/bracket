@@ -111,7 +111,7 @@ async def inserted_stage(stage: Stage) -> AsyncIterator[Stage]:
 @asynccontextmanager
 async def inserted_stage_item(stage_item: StageItemToInsert) -> AsyncIterator[StageItem]:
     async with inserted_generic(stage_item, stage_items, StageItem) as row_inserted:
-        yield StageItem(**row_inserted.dict())
+        yield StageItem(**row_inserted.model_dump())
 
 
 @asynccontextmanager

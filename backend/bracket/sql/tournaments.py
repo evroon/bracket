@@ -23,7 +23,7 @@ async def sql_get_tournament(tournament_id: int) -> Tournament:
         """
     result = await database.fetch_one(query=query, values={"tournament_id": tournament_id})
     assert result is not None
-    return Tournament.model_validate(result._mapping)
+    return Tournament.model_validate(dict(result._mapping))
 
 
 async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament:
@@ -35,7 +35,7 @@ async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament:
         """
     result = await database.fetch_one(query=query, values={"endpoint_name": endpoint_name})
     assert result is not None
-    return Tournament.model_validate(result._mapping)
+    return Tournament.model_validate(dict(result._mapping))
 
 
 async def sql_get_tournaments(
@@ -54,7 +54,7 @@ async def sql_get_tournaments(
         params = {**params, "endpoint_name": endpoint_name}
 
     result = await database.fetch_all(query=query, values=params)
-    return [Tournament.model_validate(x._mapping) for x in result]
+    return [Tournament.model_validate(dict(x._mapping)) for x in result]
 
 
 async def sql_delete_tournament(tournament_id: int) -> None:

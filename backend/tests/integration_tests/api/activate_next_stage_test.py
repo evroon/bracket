@@ -114,7 +114,7 @@ async def test_activate_next_stage(
         assert match1.team2.id == team_inserted_2.id
         await sql_update_match(
             assert_some(match1.id),
-            MatchBody(**match1.model_copy(update={"team2_score": 42}).dict()),
+            MatchBody(**match1.model_copy(update={"team2_score": 42}).model_dump()),
             auth_context.tournament,
         )
 

@@ -36,7 +36,7 @@ def get_active_and_next_rounds(
 
 
 async def schedule_all_matches_for_swiss_round(
-    tournament_id: int, active_round: RoundWithMatches, adjust_to_time: datetime_utc | None
+    tournament_id: int, active_round: RoundWithMatches, adjust_to_time: datetime_utc | None = None
 ) -> None:
     courts = await get_all_courts_in_tournament(tournament_id)
     stages = await get_full_tournament_details(tournament_id)

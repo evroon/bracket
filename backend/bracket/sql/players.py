@@ -20,7 +20,7 @@ async def get_all_players_in_tournament(
         query += "AND players.team_id IS NULL"
 
     result = await database.fetch_all(query=query, values={"tournament_id": tournament_id})
-    return [Player.model_validate(x._mapping) for x in result]
+    return [Player.model_validate(dict(x._mapping)) for x in result]
 
 
 async def update_player_stats(
@@ -67,10 +67,10 @@ async def insert_player(player_body: PlayerBody, tournament_id: int) -> None:
     await database.execute(
         query=players.insert(),
         values=PlayerToInsert(
-            **player_body.dict(),
+            **player_body.model_dump(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
             elo_score=Decimal(START_ELO),
             swiss_score=Decimal("0.0"),
-        ).dict(),
+        ).model_dump(),
     )

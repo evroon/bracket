@@ -63,7 +63,7 @@ class DemoConfig(Config):
     model_config = SettingsConfigDict(env_file="demo.env")
 
 
-environment = Environment(os.getenv("ENVIRONMENT", "CI").upper())
+environment = Environment(os.getenv("ENVIRONMENT", "DEVELOPMENT").upper())
 config: Config
 
 match environment:

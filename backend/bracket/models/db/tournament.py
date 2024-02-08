@@ -13,8 +13,8 @@ class Tournament(BaseModelORM):
     duration_minutes: int = Field(..., ge=1)
     margin_minutes: int = Field(..., ge=0)
     dashboard_public: bool
-    dashboard_endpoint: str | None
-    logo_path: str | None
+    dashboard_endpoint: str | None = None
+    logo_path: str | None = None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
 
@@ -23,7 +23,7 @@ class TournamentUpdateBody(BaseModelORM):
     start_time: datetime_utc
     name: str
     dashboard_public: bool
-    dashboard_endpoint: str | None
+    dashboard_endpoint: str | None = None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
     duration_minutes: int = Field(..., ge=1)

@@ -19,7 +19,7 @@ class RoundUpdateBody(BaseModelORM):
 
 
 class RoundCreateBody(BaseModelORM):
-    name: str | None
+    name: str | None = None
     stage_item_id: int
 
 

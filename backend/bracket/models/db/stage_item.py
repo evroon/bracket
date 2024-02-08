@@ -37,12 +37,12 @@ class StageItemUpdateBody(BaseModelORM):
 
 
 class StageItemActivateNextBody(BaseModelORM):
-    adjust_to_time: datetime_utc | None
+    adjust_to_time: datetime_utc | None = None
 
 
 class StageItemCreateBody(BaseModelORM):
     stage_id: int
-    name: str | None
+    name: str | None = None
     type: StageType
     team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]

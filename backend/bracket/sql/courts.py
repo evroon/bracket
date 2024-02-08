@@ -10,7 +10,7 @@ async def get_all_courts_in_tournament(tournament_id: int) -> list[Court]:
         ORDER BY name
         """
     result = await database.fetch_all(query=query, values={"tournament_id": tournament_id})
-    return [Court.model_validate(x._mapping) for x in result]
+    return [Court.model_validate(dict(x._mapping)) for x in result]
 
 
 async def update_court(tournament_id: int, court_id: int, court_body: CourtBody) -> list[Court]:
@@ -24,7 +24,7 @@ async def update_court(tournament_id: int, court_id: int, court_body: CourtBody)
         query=query,
         values={"tournament_id": tournament_id, "court_id": court_id, "name": court_body.name},
     )
-    return [Court.model_validate(x._mapping) for x in result]
+    return [Court.model_validate(dict(x._mapping)) for x in result]
 
 
 async def sql_delete_court(tournament_id: int, court_id: int) -> None:
