@@ -74,7 +74,7 @@ def test_elo_calculation() -> None:
         ],
     )
     stage_item = StageItemWithRounds(
-        **DUMMY_STAGE_ITEM1.model_dump(exclude={'id'}),
+        **DUMMY_STAGE_ITEM1.model_dump(exclude={"id"}),
         id=-1,
         inputs=[],
         rounds=[round_],

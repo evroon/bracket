@@ -87,7 +87,7 @@ async def create_user(user: User) -> User:
             "password_hash": user.password_hash,
             "name": user.name,
             "email": user.email,
-            "created": datetime.fromisoformat(user.created.isoformat()),
+            "created": user.created,
             "account_type": user.account_type.value,
         },
     )

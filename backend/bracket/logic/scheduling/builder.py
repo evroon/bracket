@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from fastapi import HTTPException
 from heliclockter import datetime_utc
 
@@ -40,19 +38,16 @@ async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: Stage
 
     now = datetime_utc.now()
     for _ in range(rounds_count):
-        values = RoundToInsert(
-            created=now,
-            stage_item_id=assert_some(stage_item.id),
-            name=await get_next_round_name(tournament_id, assert_some(stage_item.id)),
-        ).model_dump()
-        values['created'] = datetime.fromisoformat(values['created'].isoformat())
-
         await database.execute(
             query='''
                 INSERT INTO rounds (created, stage_item_id, name, is_draft, is_active)
-                VALUES (:created, :stage_item_id, :name, :is_draft, :is_active)
+                VALUES ($1, $2, $3, $4, $5)
             ''',
-            values=values,
+            values=RoundToInsert(
+            created=now,
+            stage_item_id=assert_some(stage_item.id),
+            name=await get_next_round_name(tournament_id, assert_some(stage_item.id)),
+        ).model_dump(),
         )
 
 

@@ -27,7 +27,7 @@ def test_no_draft_round() -> None:
 def get_team(team: Team, team_id: int) -> FullTeamWithPlayers:
     return FullTeamWithPlayers(
         id=team_id,
-        **team.model_dump(exclude={'id'}),
+        **team.model_dump(exclude={"id"}),
         players=[],
     )
 
@@ -44,10 +44,10 @@ def get_match(
 
 
 def test_constraints() -> None:
-    team1 = get_team(DUMMY_TEAM1.model_copy(update={"elo_score": Decimal('1125.0')}), team_id=-1)
-    team2 = get_team(DUMMY_TEAM2.model_copy(update={"elo_score": Decimal('1175.0')}), team_id=-2)
-    team3 = get_team(DUMMY_TEAM3.model_copy(update={"elo_score": Decimal('1200.0')}), team_id=-3)
-    team4 = get_team(DUMMY_TEAM4.model_copy(update={"elo_score": Decimal('1250.0')}), team_id=-4)
+    team1 = get_team(DUMMY_TEAM1.model_copy(update={"elo_score": Decimal("1125.0")}), team_id=-1)
+    team2 = get_team(DUMMY_TEAM2.model_copy(update={"elo_score": Decimal("1175.0")}), team_id=-2)
+    team3 = get_team(DUMMY_TEAM3.model_copy(update={"elo_score": Decimal("1200.0")}), team_id=-3)
+    team4 = get_team(DUMMY_TEAM4.model_copy(update={"elo_score": Decimal("1250.0")}), team_id=-4)
 
     rounds = [
         RoundWithMatches(
