@@ -14,7 +14,7 @@ async def get_team_by_id(team_id: int, tournament_id: int) -> Team | None:
     result = await database.fetch_one(
         query=query, values={"team_id": team_id, "tournament_id": tournament_id}
     )
-    return Team.parse_obj(result._mapping) if result is not None else None
+    return Team.model_validate(dict(result._mapping)) if result is not None else None
 
 
 async def get_teams_with_members(
@@ -37,7 +37,7 @@ async def get_teams_with_members(
         """
     values = dict_without_none({"tournament_id": tournament_id, "team_id": team_id})
     result = await database.fetch_all(query=query, values=values)
-    return [FullTeamWithPlayers.parse_obj(x._mapping) for x in result]
+    return [FullTeamWithPlayers.model_validate(x._mapping) for x in result]
 
 
 async def update_team_stats(

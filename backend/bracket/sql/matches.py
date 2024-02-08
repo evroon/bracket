@@ -75,7 +75,7 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
     if result is None:
         raise ValueError("Could not create stage")
 
-    return Match.parse_obj(result._mapping)
+    return Match.model_validate(result._mapping)
 
 
 async def sql_update_match(match_id: int, match: MatchBody, tournament: Tournament) -> None:
@@ -205,4 +205,4 @@ async def sql_get_match(match_id: int) -> Match:
     if result is None:
         raise ValueError("Could not create stage")
 
-    return Match.parse_obj(result._mapping)
+    return Match.model_validate(result._mapping)

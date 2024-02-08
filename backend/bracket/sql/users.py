@@ -61,7 +61,7 @@ async def get_user_by_id(user_id: int) -> UserPublic | None:
         WHERE id = :user_id
         """
     result = await database.fetch_one(query=query, values={"user_id": user_id})
-    return UserPublic.parse_obj(result._mapping) if result is not None else None
+    return UserPublic.model_validate(result._mapping) if result is not None else None
 
 
 async def get_expired_demo_users() -> list[UserPublic]:
@@ -72,7 +72,7 @@ async def get_expired_demo_users() -> list[UserPublic]:
         AND created <= NOW() - INTERVAL '30 minutes'
         """
     result = await database.fetch_all(query=query)
-    return [UserPublic.parse_obj(demo_user._mapping) for demo_user in result]
+    return [UserPublic.model_validate(demo_user._mapping) for demo_user in result]
 
 
 async def create_user(user: User) -> User:
@@ -91,7 +91,7 @@ async def create_user(user: User) -> User:
             "account_type": user.account_type.value,
         },
     )
-    return User.parse_obj(assert_some(result)._mapping)
+    return User.model_validate(assert_some(result)._mapping)
 
 
 async def delete_user(user_id: int) -> None:

@@ -25,7 +25,7 @@ async def sql_create_stage_item(tournament_id: int, stage_item: StageItemCreateB
         if result is None:
             raise ValueError("Could not create stage")
 
-        stage_item_result = StageItem.parse_obj(result._mapping)
+        stage_item_result = StageItem.model_validate(result._mapping)
 
         for input_ in stage_item.inputs:
             await sql_create_stage_item_input(tournament_id, stage_item_result.id, input_)

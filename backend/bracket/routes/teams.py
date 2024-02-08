@@ -22,7 +22,7 @@ from bracket.utils.types import assert_some
 router = APIRouter()
 
 
-async def update_team_members(team_id: int, tournament_id: int, player_ids: list[int]) -> None:
+async def update_team_members(team_id: int, tournament_id: int, player_ids: set[int]) -> None:
     [team] = await get_teams_with_members(tournament_id, team_id=team_id)
 
     # Add members to the team
@@ -47,7 +47,9 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: list
 async def get_teams(
     tournament_id: int, _: UserPublic = Depends(user_authenticated_or_public_dashboard)
 ) -> TeamsWithPlayersResponse:
-    return TeamsWithPlayersResponse.parse_obj({"data": await get_teams_with_members(tournament_id)})
+    return TeamsWithPlayersResponse.model_validate(
+        {"data": await get_teams_with_members(tournament_id)}
+    )
 
 
 @router.put("/tournaments/{tournament_id}/teams/{team_id}", response_model=SingleTeamResponse)

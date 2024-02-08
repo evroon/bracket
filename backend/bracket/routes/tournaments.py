@@ -81,7 +81,7 @@ async def update_tournament_by_id(
 ) -> SuccessResponse:
     await database.execute(
         query=tournaments.update().where(tournaments.c.id == tournament_id),
-        values=tournament_body.dict(),
+        values=tournament_body.model_dump(),
     )
     await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
@@ -115,9 +115,9 @@ async def create_tournament(
     await database.execute(
         query=tournaments.insert(),
         values=TournamentToInsert(
-            **tournament_to_insert.dict(),
+            **tournament_to_insert.model_dump(),
             created=datetime_utc.now(),
-        ).dict(),
+        ).model_dump(),
     )
     return SuccessResponse()
 

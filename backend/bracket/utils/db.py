@@ -11,7 +11,7 @@ async def fetch_one_parsed(
     database: Database, model: type[BaseModelT], query: Select
 ) -> BaseModelT | None:
     record = await database.fetch_one(query)
-    return model.parse_obj(record._mapping) if record is not None else None
+    return model.model_validate(dict(record._mapping)) if record is not None else None
 
 
 async def fetch_one_parsed_certain(
@@ -24,7 +24,7 @@ async def fetch_all_parsed(
     database: Database, model: type[BaseModelT], query: Select
 ) -> list[BaseModelT]:
     records = await database.fetch_all(query)
-    return [model.parse_obj(record._mapping) for record in records]
+    return [model.model_validate(dict(record._mapping)) for record in records]
 
 
 async def insert_generic(

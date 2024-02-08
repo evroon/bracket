@@ -108,11 +108,13 @@ async def test_delete_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_tournament(
-        DUMMY_TOURNAMENT.copy(update={"club_id": auth_context.club.id})
+        DUMMY_TOURNAMENT.model_copy(update={"club_id": auth_context.club.id})
     ) as tournament_inserted:
         assert (
             await send_tournament_request(
-                HTTPMethod.DELETE, "", auth_context.copy(update={"tournament": tournament_inserted})
+                HTTPMethod.DELETE,
+                "",
+                auth_context.model_copy(update={"tournament": tournament_inserted}),
             )
             == SUCCESS_RESPONSE
         )

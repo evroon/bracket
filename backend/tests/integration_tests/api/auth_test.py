@@ -83,7 +83,7 @@ async def test_not_authenticated_for_tournament(
 ) -> None:
     async with inserted_club(DUMMY_CLUB) as club_inserted:
         async with inserted_tournament(
-            DUMMY_TOURNAMENT.copy(update={"club_id": club_inserted.id})
+            DUMMY_TOURNAMENT.model_copy(update={"club_id": club_inserted.id})
         ) as tournament_inserted:
             response = JsonDict(
                 await send_auth_request(

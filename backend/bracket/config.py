@@ -1,9 +1,11 @@
 import logging
 import os
 from enum import auto
+from typing import Annotated
 
 import sentry_sdk
-from pydantic import BaseSettings, PostgresDsn
+from pydantic import Field, PostgresDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from bracket.utils.types import EnumAutoStr
 
@@ -39,28 +41,26 @@ class Config(BaseSettings):
 
 
 class CIConfig(Config):
-    class Config:
-        env_file = "ci.env"
+    model_config = SettingsConfigDict(env_file="ci.env")
 
 
 class DevelopmentConfig(Config):
-    admin_email = "test@example.org"
-    admin_password = "aeGhoe1ahng2Aezai0Dei6Aih6dieHoo"
-    allow_insecure_http_sso = True
-    jwt_secret = "7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7"
+    admin_email: Annotated[str, Field("test@example.org")]
+    admin_password: Annotated[str, Field("aeGhoe1ahng2Aezai0Dei6Aih6dieHoo")]
+    allow_insecure_http_sso: Annotated[bool, Field(True)]
+    jwt_secret: Annotated[
+        str, Field("7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7")
+    ]
 
-    class Config:
-        env_file = "dev.env"
+    model_config = SettingsConfigDict(env_file="dev.env")
 
 
 class ProductionConfig(Config):
-    class Config:
-        env_file = "prod.env"
+    model_config = SettingsConfigDict(env_file="prod.env")
 
 
 class DemoConfig(Config):
-    class Config:
-        env_file = "demo.env"
+    model_config = SettingsConfigDict(env_file="demo.env")
 
 
 environment = Environment(os.getenv("ENVIRONMENT", "CI").upper())

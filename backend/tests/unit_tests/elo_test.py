@@ -50,7 +50,7 @@ def test_elo_calculation() -> None:
                     tournament_id=1,
                     active=True,
                     created=DUMMY_MOCK_TIME,
-                    players=[DUMMY_PLAYER1.copy(update={"id": 1})],
+                    players=[DUMMY_PLAYER1.model_copy(update={"id": 1})],
                     elo_score=DUMMY_PLAYER1.elo_score,
                     swiss_score=DUMMY_PLAYER1.swiss_score,
                     wins=DUMMY_PLAYER1.wins,
@@ -63,7 +63,7 @@ def test_elo_calculation() -> None:
                     tournament_id=1,
                     active=True,
                     created=DUMMY_MOCK_TIME,
-                    players=[DUMMY_PLAYER2.copy(update={"id": 2})],
+                    players=[DUMMY_PLAYER2.model_copy(update={"id": 2})],
                     elo_score=DUMMY_PLAYER2.elo_score,
                     swiss_score=DUMMY_PLAYER2.swiss_score,
                     wins=DUMMY_PLAYER2.wins,
@@ -74,7 +74,7 @@ def test_elo_calculation() -> None:
         ],
     )
     stage_item = StageItemWithRounds(
-        **DUMMY_STAGE_ITEM1.copy(update={"rounds": [round_]}).dict(),
+        **DUMMY_STAGE_ITEM1.model_copy(update={"rounds": [round_]}).dict(),
         id=-1,
         inputs=[],
     )

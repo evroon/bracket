@@ -20,7 +20,7 @@ async def get_all_players_in_tournament(
         query += "AND players.team_id IS NULL"
 
     result = await database.fetch_all(query=query, values={"tournament_id": tournament_id})
-    return [Player.parse_obj(x._mapping) for x in result]
+    return [Player.model_validate(x._mapping) for x in result]
 
 
 async def update_player_stats(

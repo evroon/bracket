@@ -37,22 +37,22 @@ async def test_create_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
     ):
         body = {
@@ -74,25 +74,25 @@ async def test_delete_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_match(
-            DUMMY_MATCH1.copy(
+            DUMMY_MATCH1.model_copy(
                 update={
                     "round_id": round_inserted.id,
                     "team1_id": team1_inserted.id,
@@ -116,25 +116,25 @@ async def test_update_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_match(
-            DUMMY_MATCH1.copy(
+            DUMMY_MATCH1.model_copy(
                 update={
                     "round_id": round_inserted.id,
                     "team1_id": team1_inserted.id,
@@ -177,7 +177,7 @@ async def test_upcoming_matches_endpoint(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(
+            DUMMY_STAGE1.model_copy(
                 update={
                     "is_active": True,
                     "tournament_id": auth_context.tournament.id,
@@ -185,10 +185,12 @@ async def test_upcoming_matches_endpoint(
             )
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id, "type": StageType.SWISS})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "type": StageType.SWISS}
+            )
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(
+            DUMMY_ROUND1.model_copy(
                 update={
                     "is_draft": True,
                     "stage_item_id": stage_item_inserted.id,
@@ -196,35 +198,35 @@ async def test_upcoming_matches_endpoint(
             )
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(
+            DUMMY_TEAM1.model_copy(
                 update={"tournament_id": auth_context.tournament.id, "elo_score": 1150}
             )
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(
+            DUMMY_TEAM2.model_copy(
                 update={"tournament_id": auth_context.tournament.id, "elo_score": 1350}
             )
         ) as team2_inserted,
         inserted_player_in_team(
-            DUMMY_PLAYER1.copy(
+            DUMMY_PLAYER1.model_copy(
                 update={"elo_score": 1100, "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team1_inserted.id),
         ) as player_inserted_1,
         inserted_player_in_team(
-            DUMMY_PLAYER2.copy(
+            DUMMY_PLAYER2.model_copy(
                 update={"elo_score": 1300, "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team2_inserted.id),
         ) as player_inserted_2,
         inserted_player_in_team(
-            DUMMY_PLAYER3.copy(
+            DUMMY_PLAYER3.model_copy(
                 update={"elo_score": 1200, "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team1_inserted.id),
         ) as player_inserted_3,
         inserted_player_in_team(
-            DUMMY_PLAYER4.copy(
+            DUMMY_PLAYER4.model_copy(
                 update={"elo_score": 1400, "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team2_inserted.id),

@@ -1,7 +1,6 @@
 from typing import Generic, TypeVar
 
 from pydantic import BaseModel
-from pydantic.generics import GenericModel
 
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
@@ -24,7 +23,7 @@ class SuccessResponse(BaseModel):
     success: bool = True
 
 
-class DataResponse(GenericModel, Generic[DataT]):
+class DataResponse(BaseModel, Generic[DataT]):
     data: DataT
 
 

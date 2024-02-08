@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from pydantic import root_validator, validator
+from pydantic import field_validator, model_validator
 
 from bracket.models.db.match import Match, MatchWithDetails, MatchWithDetailsDefinitive
 from bracket.models.db.round import Round
@@ -17,7 +17,7 @@ from bracket.utils.types import assert_some
 class RoundWithMatches(Round):
     matches: list[MatchWithDetailsDefinitive | MatchWithDetails]
 
-    @validator("matches", pre=True)
+    @field_validator("matches", mode="before")
     def handle_matches(values: list[Match]) -> list[Match]:  # type: ignore[misc]
         if values == [None]:
             return []
@@ -37,7 +37,7 @@ class StageItemWithRounds(StageItem):
     inputs: list[StageItemInput]
     type_name: str
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def fill_type_name(cls, values: Any) -> Any:
         match values["type"]:
             case str() as type_:
@@ -47,7 +47,7 @@ class StageItemWithRounds(StageItem):
 
         return values
 
-    @validator("rounds", "inputs", pre=True)
+    @field_validator("rounds", "inputs", mode="before")
     def handle_empty_list_elements(values: list[Any] | None) -> list[Any]:  # type: ignore[misc]
         if values is None:
             return []
@@ -57,7 +57,7 @@ class StageItemWithRounds(StageItem):
 class StageWithStageItems(Stage):
     stage_items: list[StageItemWithRounds]
 
-    @validator("stage_items", pre=True)
+    @field_validator("stage_items", mode="before")
     def handle_stage_items(values: list[StageItemWithRounds]) -> list[StageItemWithRounds]:  # type: ignore[misc]
         if isinstance(values, str):
             values_json = json.loads(values)

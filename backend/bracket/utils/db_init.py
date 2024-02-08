@@ -136,7 +136,7 @@ async def sql_create_dev_db() -> int:
     async def insert_dummy(obj_to_insert: BaseModelT, update_data: dict[str, Any] = {}) -> int:
         record_id, _ = await insert_generic(
             database,
-            obj_to_insert.copy(update=update_data),
+            obj_to_insert.model_copy(update=update_data),
             table_lookup[type(obj_to_insert)],
             type(obj_to_insert),
         )
