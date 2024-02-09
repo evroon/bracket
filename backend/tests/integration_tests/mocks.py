@@ -22,16 +22,7 @@ def get_mock_user() -> User:
         name="Donald Duck",
         # hash of 'mypassword'
         password_hash="$2b$12$.LcTJuoOtwU4CfK8UgEtIu5BRmTdvZv6IH.6IvGshDCgwJsvOMLeu",
-        created=datetime_utc(
-            year=2000,
-            month=1,
-            day=1,
-            hour=0,
-            minute=0,
-            microsecond=0,
-            second=0,
-            tzinfo=ZoneInfo("UTC"),
-        ),
+        created=datetime_utc(year=2000, month=1, day=1, tzinfo=ZoneInfo("UTC")),
         account_type=UserAccountType.REGULAR,
     )
 
