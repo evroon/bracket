@@ -38,7 +38,9 @@ init_sentry()
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
     await init_db_when_empty()
-    start_cronjobs()
+
+    if environment is Environment.PRODUCTION:
+        start_cronjobs()
 
     if environment is Environment.PRODUCTION and config.cors_origins == "*":
         logger.warning("It's advised to set the `CORS_ORIGINS` environment variable in production")
