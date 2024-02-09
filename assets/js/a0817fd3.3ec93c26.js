@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[579],{4384:t=>{t.exports=JSON.parse('{"title":"Running Bracket","slug":"/category/running-bracket","permalink":"/docs/category/running-bracket","navigation":{"previous":{"title":"Introduction","permalink":"/docs/intro"},"next":{"title":"Quickstart","permalink":"/docs/running-bracket/quickstart"}}}')}}]);
