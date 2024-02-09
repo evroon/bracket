@@ -45,9 +45,9 @@ export default function PlayersTable({
   const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
   const tableState = getTableState('name');
 
-  const minELOScore = Math.min(...players.map((player) => player.elo_score));
-  const maxELOScore = Math.max(...players.map((player) => player.elo_score));
-  const maxSwissScore = Math.max(...players.map((player) => player.swiss_score));
+  const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
+  const maxELOScore = Math.max(...players.map((player) => Number(player.elo_score)));
+  const maxSwissScore = Math.max(...players.map((player) => Number(player.swiss_score)));
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
@@ -73,7 +73,7 @@ export default function PlayersTable({
         </Table.Td>
         <Table.Td>
           <PlayerScore
-            score={player.elo_score}
+            score={Number(player.elo_score)}
             min_score={minELOScore}
             max_score={maxELOScore}
             decimals={0}
@@ -81,7 +81,7 @@ export default function PlayersTable({
         </Table.Td>
         <Table.Td>
           <PlayerScore
-            score={player.swiss_score}
+            score={Number(player.swiss_score)}
             min_score={0}
             max_score={maxSwissScore}
             decimals={1}
