@@ -7,8 +7,8 @@
 [![last
 commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.shields.io/github/last-commit/evroon/bracket)
 [![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)<br/>
-[Documentation](https://evroon.github.io/bracket) |
-[Quickstart](https://evroon.github.io/bracket/docs/running-bracket/quickstart) |
+[Documentation](https://docs.bracketapp.nl) |
+[Quickstart](https://docs.bracketapp.nl/docs/running-bracket/quickstart) |
 [GitHub](https://github.com/evroon/bracket) |
 [Releases](https://github.com/evroon/bracket/releases)
 
@@ -55,12 +55,12 @@ sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 See also the [quickstart docs](http://localhost:3000/bracket/docs/running-bracket/quickstart).
 
 # Development setup
-Read the [development docs](https://evroon.github.io/bracket/docs/running-bracket/development) for how to run Bracket for development.
+Read the [development docs](https://docs.bracketapp.nl/docs/running-bracket/development) for how to run Bracket for development.
 
 Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
 
 # Configuration
-Read the [configuration docs](https://evroon.github.io/bracket/docs/running-bracket/configuration) for how to configure Bracket.
+Read the [configuration docs](https://docs.bracketapp.nl/docs/running-bracket/configuration) for how to configure Bracket.
 
 Bracket's backend is configured using `.env` files (`prod.env` for production, `dev.env` for development etc.).
 But you can also configure Bracket using environment variables directly, for example by specifying them in the `docker-compose.yml`.
@@ -68,7 +68,7 @@ But you can also configure Bracket using environment variables directly, for exa
 The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
 
 # Running Bracket in production
-Read the [deployment docs](https://evroon.github.io/bracket/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
+Read the [deployment docs](https://docs.bracketapp.nl/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
 
 Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 
