@@ -67,7 +67,7 @@ from bracket.utils.dummy_records import (
     DUMMY_USER,
 )
 from bracket.utils.logging import logger
-from bracket.utils.security import pwd_context
+from bracket.utils.security import hash_password
 from bracket.utils.types import BaseModelT, assert_some
 
 if TYPE_CHECKING:
@@ -82,7 +82,7 @@ async def create_admin_user() -> int:
         User(
             name="Admin",
             email=config.admin_email,
-            password_hash=pwd_context.hash(config.admin_password),
+            password_hash=hash_password(config.admin_password),
             created=datetime_utc.now(),
             account_type=UserAccountType.REGULAR,
         )
