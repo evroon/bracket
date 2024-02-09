@@ -1,6 +1,7 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { TFunction } from 'i18next';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -16,6 +17,7 @@ import { responseIsValid } from '../utils/util';
 import Round from './round';
 
 function getRoundsGridCols(
+  t: TFunction<'translation', undefined>,
   stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,
@@ -23,7 +25,6 @@ function getRoundsGridCols(
   readOnly: boolean,
   displaySettings: BracketDisplaySettings
 ) {
-  const { t } = useTranslation();
   let rounds: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .map((round: RoundInterface) => (
@@ -167,6 +168,8 @@ export default function Brackets({
   selectedStageId: string | null;
   displaySettings: BracketDisplaySettings;
 }) {
+  const { t } = useTranslation();
+
   if (swrStagesResponse.isLoading) {
     return <LoadingSkeleton />;
   }
@@ -191,6 +194,7 @@ export default function Brackets({
     .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) =>
       getRoundsGridCols(
+        t,
         stageItem,
         tournamentData,
         swrStagesResponse,

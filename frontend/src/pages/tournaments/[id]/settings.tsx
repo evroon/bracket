@@ -24,7 +24,7 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../../404';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeleton } from '../../../components/utils/skeletons';
-import { getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
+import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
 import { getBaseApiUrl, getClubs, getTournaments } from '../../../services/adapter';
@@ -101,7 +101,7 @@ function GeneralTournamentForm({
       <Select
         withAsterisk
         data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label={t('clubs_title')}
+        label={capitalize(t('clubs_title'))}
         placeholder={t('club_select_placeholder')}
         searchable
         limit={20}
