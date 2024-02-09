@@ -9,6 +9,8 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, Response
 from starlette.staticfiles import StaticFiles
 
+from alembic import command
+from alembic.config import Config
 from bracket.config import Environment, config, environment, init_sentry
 from bracket.cronjobs.scheduling import start_cronjobs
 from bracket.database import database
@@ -34,10 +36,19 @@ from bracket.utils.logging import logger
 init_sentry()
 
 
+def run_migrations() -> None:
+    logger.info("Running migrations")
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
     await init_db_when_empty()
+
+    if config.auto_run_migrations and environment is not Environment.CI:
+        run_migrations()
 
     if environment is Environment.PRODUCTION:
         start_cronjobs()
