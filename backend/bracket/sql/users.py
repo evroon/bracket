@@ -1,4 +1,5 @@
 from bracket.database import database
+from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
 from bracket.schema import users
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
@@ -42,6 +43,16 @@ async def update_user(user_id: int, user: UserToUpdate) -> None:
         query=query, values={"user_id": user_id, "name": user.name, "email": user.email}
     )
 
+async def update_user_account_type(user_id: int, account_type: UserAccountType) -> None:
+    query = """
+        UPDATE users
+        SET account_type = :account_type
+        WHERE id = :user_id
+        """
+    await database.execute(
+        query=query, values={"user_id": user_id, "account_type": account_type.value}
+    )
+
 
 async def update_user_password(user_id: int, password_hash: str) -> None:
     query = """
@@ -70,7 +81,7 @@ async def get_expired_demo_users() -> list[UserPublic]:
         AND created <= NOW() - INTERVAL '30 minutes'
         """
     result = await database.fetch_all(query=query)
-    return [UserPublic.model_validate(demo_user._mapping) for demo_user in result]
+    return [UserPublic.model_validate(demo_user) for demo_user in result]
 
 
 async def create_user(user: User) -> User:
