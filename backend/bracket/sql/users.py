@@ -43,6 +43,7 @@ async def update_user(user_id: int, user: UserToUpdate) -> None:
         query=query, values={"user_id": user_id, "name": user.name, "email": user.email}
     )
 
+
 async def update_user_account_type(user_id: int, account_type: UserAccountType) -> None:
     query = """
         UPDATE users
