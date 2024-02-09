@@ -101,7 +101,7 @@ export function getBaseLinksDict() {
       link: '',
       label: t('more_title'),
       links: [
-        { link: 'https://evroon.github.io/bracket/', label: t('website_title'), icon: IconBrowser },
+        { link: 'https://docs.bracketapp.nl/', label: t('website_title'), icon: IconBrowser },
         {
           link: 'https://github.com/evroon/bracket',
           label: t('github_title'),
