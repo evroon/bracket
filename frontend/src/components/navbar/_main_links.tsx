@@ -173,7 +173,7 @@ export function TournamentLinks({ tournament_id }: any) {
   return (
     <>
       <Center hiddenFrom="sm">
-        <h2>{t('tournament_title')}</h2>
+        <h2>{capitalize(t('tournament_title'))}</h2>
       </Center>
       <Divider hiddenFrom="sm" />
       {links}
