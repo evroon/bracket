@@ -86,7 +86,7 @@ async def check_jwt_and_get_user(token: str) -> UserPublic | None:
     if user is None:
         return None
 
-    return UserPublic.parse_obj(user.dict())
+    return UserPublic.model_validate(user.model_dump())
 
 
 async def user_authenticated(token: str = Depends(oauth2_scheme)) -> UserPublic:
@@ -98,7 +98,7 @@ async def user_authenticated(token: str = Depends(oauth2_scheme)) -> UserPublic:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return UserPublic.parse_obj(user.dict())
+    return UserPublic.model_validate(user.model_dump())
 
 
 async def user_authenticated_for_tournament(
@@ -113,7 +113,7 @@ async def user_authenticated_for_tournament(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return UserPublic.parse_obj(user.dict())
+    return UserPublic.model_validate(user.model_dump())
 
 
 async def user_authenticated_for_club(
@@ -128,7 +128,7 @@ async def user_authenticated_for_club(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return UserPublic.parse_obj(user.dict())
+    return UserPublic.model_validate(user.model_dump())
 
 
 async def user_authenticated_or_public_dashboard(

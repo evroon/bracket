@@ -129,5 +129,5 @@ async def recalculate_ranking_for_stage_items(
                 query=players.update().where(
                     (players.c.id == player.id) & (players.c.tournament_id == tournament_id)
                 ),
-                values=PlayerStatistics().dict(),
+                values=PlayerStatistics().model_dump(),
             )

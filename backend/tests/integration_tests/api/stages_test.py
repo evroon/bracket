@@ -32,15 +32,15 @@ async def test_stages_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext, with_auth: bool
 ) -> None:
     async with (
-        inserted_team(DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_team(DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})),
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
     ):
         if with_auth:
@@ -55,7 +55,7 @@ async def test_stages_endpoint(
                 {
                     "id": stage_inserted.id,
                     "tournament_id": auth_context.tournament.id,
-                    "created": DUMMY_MOCK_TIME.isoformat(),
+                    "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                     "is_active": True,
                     "name": "Group Stage",
                     "stage_items": [
@@ -63,14 +63,14 @@ async def test_stages_endpoint(
                             "id": stage_item_inserted.id,
                             "stage_id": stage_inserted.id,
                             "name": "Group A",
-                            "created": DUMMY_MOCK_TIME.isoformat(),
+                            "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                             "type": "ROUND_ROBIN",
                             "team_count": 4,
                             "rounds": [
                                 {
                                     "id": round_inserted.id,
                                     "stage_item_id": stage_item_inserted.id,
-                                    "created": DUMMY_MOCK_TIME.isoformat(),
+                                    "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                                     "is_draft": False,
                                     "is_active": False,
                                     "name": "Round 1",
@@ -90,7 +90,7 @@ async def test_create_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ):
         assert (
             await send_tournament_request(
@@ -109,9 +109,9 @@ async def test_delete_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_team(DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_team(DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})),
         inserted_stage(
-            DUMMY_STAGE2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
     ):
         assert (
@@ -128,11 +128,11 @@ async def test_update_stage(
 ) -> None:
     body = {"name": "Optimus"}
     async with (
-        inserted_team(DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_team(DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})),
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_stage_item(DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})),
+        inserted_stage_item(DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})),
     ):
         assert (
             await send_tournament_request(
@@ -152,9 +152,13 @@ async def test_activate_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
-        inserted_team(DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})),
-        inserted_stage(DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})),
-        inserted_stage(DUMMY_STAGE2.copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_team(DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_stage(
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ),
+        inserted_stage(
+            DUMMY_STAGE2.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ),
     ):
         assert (
             await send_tournament_request(

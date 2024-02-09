@@ -67,4 +67,4 @@ async def sql_create_stage_item_input(
     if result is None:
         raise ValueError("Could not create stage")
 
-    return StageItemInputBase.parse_obj(result._mapping)
+    return StageItemInputBase.model_validate(dict(result._mapping))

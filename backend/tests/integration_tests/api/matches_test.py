@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from bracket.database import database
 from bracket.models.db.match import Match
 from bracket.models.db.stage_item import StageType
@@ -37,22 +39,22 @@ async def test_create_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
     ):
         body = {
@@ -74,25 +76,25 @@ async def test_delete_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_match(
-            DUMMY_MATCH1.copy(
+            DUMMY_MATCH1.model_copy(
                 update={
                     "round_id": round_inserted.id,
                     "team1_id": team1_inserted.id,
@@ -116,25 +118,25 @@ async def test_update_match(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
         inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
         inserted_match(
-            DUMMY_MATCH1.copy(
+            DUMMY_MATCH1.model_copy(
                 update={
                     "round_id": round_inserted.id,
                     "team1_id": team1_inserted.id,
@@ -177,7 +179,7 @@ async def test_upcoming_matches_endpoint(
 ) -> None:
     async with (
         inserted_stage(
-            DUMMY_STAGE1.copy(
+            DUMMY_STAGE1.model_copy(
                 update={
                     "is_active": True,
                     "tournament_id": auth_context.tournament.id,
@@ -185,10 +187,12 @@ async def test_upcoming_matches_endpoint(
             )
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.copy(update={"stage_id": stage_inserted.id, "type": StageType.SWISS})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "type": StageType.SWISS}
+            )
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.copy(
+            DUMMY_ROUND1.model_copy(
                 update={
                     "is_draft": True,
                     "stage_item_id": stage_item_inserted.id,
@@ -196,36 +200,36 @@ async def test_upcoming_matches_endpoint(
             )
         ) as round_inserted,
         inserted_team(
-            DUMMY_TEAM1.copy(
-                update={"tournament_id": auth_context.tournament.id, "elo_score": 1150}
+            DUMMY_TEAM1.model_copy(
+                update={"tournament_id": auth_context.tournament.id, "elo_score": Decimal("1150.0")}
             )
         ) as team1_inserted,
         inserted_team(
-            DUMMY_TEAM2.copy(
-                update={"tournament_id": auth_context.tournament.id, "elo_score": 1350}
+            DUMMY_TEAM2.model_copy(
+                update={"tournament_id": auth_context.tournament.id, "elo_score": Decimal("1350.0")}
             )
         ) as team2_inserted,
         inserted_player_in_team(
-            DUMMY_PLAYER1.copy(
-                update={"elo_score": 1100, "tournament_id": auth_context.tournament.id}
+            DUMMY_PLAYER1.model_copy(
+                update={"elo_score": Decimal("1100.0"), "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team1_inserted.id),
         ) as player_inserted_1,
         inserted_player_in_team(
-            DUMMY_PLAYER2.copy(
-                update={"elo_score": 1300, "tournament_id": auth_context.tournament.id}
+            DUMMY_PLAYER2.model_copy(
+                update={"elo_score": Decimal("1300.0"), "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team2_inserted.id),
         ) as player_inserted_2,
         inserted_player_in_team(
-            DUMMY_PLAYER3.copy(
-                update={"elo_score": 1200, "tournament_id": auth_context.tournament.id}
+            DUMMY_PLAYER3.model_copy(
+                update={"elo_score": Decimal("1200.0"), "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team1_inserted.id),
         ) as player_inserted_3,
         inserted_player_in_team(
-            DUMMY_PLAYER4.copy(
-                update={"elo_score": 1400, "tournament_id": auth_context.tournament.id}
+            DUMMY_PLAYER4.model_copy(
+                update={"elo_score": Decimal("1400.0"), "tournament_id": auth_context.tournament.id}
             ),
             assert_some(team2_inserted.id),
         ) as player_inserted_4,
@@ -244,10 +248,10 @@ async def test_upcoming_matches_endpoint(
                                 "id": player_inserted_1.id,
                                 "active": True,
                                 "name": "Player 01",
-                                "created": "2022-01-11T04:32:11+00:00",
+                                "created": "2022-01-11T04:32:11Z",
                                 "tournament_id": auth_context.tournament.id,
-                                "elo_score": 1100,
-                                "swiss_score": 0,
+                                "elo_score": "1100",
+                                "swiss_score": "0",
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
@@ -256,17 +260,17 @@ async def test_upcoming_matches_endpoint(
                                 "id": player_inserted_3.id,
                                 "active": True,
                                 "name": "Player 03",
-                                "created": "2022-01-11T04:32:11+00:00",
+                                "created": "2022-01-11T04:32:11Z",
                                 "tournament_id": auth_context.tournament.id,
-                                "elo_score": 1200,
-                                "swiss_score": 0,
+                                "elo_score": "1200",
+                                "swiss_score": "0",
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
                             },
                         ],
-                        "swiss_score": 0.0,
-                        "elo_score": 1150.0,
+                        "swiss_score": "0.0",
+                        "elo_score": "1150.0",
                         "wins": 0,
                         "draws": 0,
                         "losses": 0,
@@ -279,10 +283,10 @@ async def test_upcoming_matches_endpoint(
                                 "id": player_inserted_2.id,
                                 "active": True,
                                 "name": "Player 02",
-                                "created": "2022-01-11T04:32:11+00:00",
+                                "created": "2022-01-11T04:32:11Z",
                                 "tournament_id": auth_context.tournament.id,
-                                "elo_score": 1300,
-                                "swiss_score": 0,
+                                "elo_score": "1300",
+                                "swiss_score": "0",
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
@@ -291,23 +295,23 @@ async def test_upcoming_matches_endpoint(
                                 "id": player_inserted_4.id,
                                 "active": True,
                                 "name": "Player 04",
-                                "created": "2022-01-11T04:32:11+00:00",
+                                "created": "2022-01-11T04:32:11Z",
                                 "tournament_id": auth_context.tournament.id,
-                                "elo_score": 1400,
-                                "swiss_score": 0,
+                                "elo_score": "1400",
+                                "swiss_score": "0",
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
                             },
                         ],
-                        "swiss_score": 0.0,
-                        "elo_score": 1350.0,
+                        "swiss_score": "0.0",
+                        "elo_score": "1350.0",
                         "wins": 0,
                         "draws": 0,
                         "losses": 0,
                     },
-                    "elo_diff": 200,
-                    "swiss_diff": 0,
+                    "elo_diff": "200",
+                    "swiss_diff": "0",
                     "is_recommended": True,
                     "player_behind_schedule_count": 0,
                 }

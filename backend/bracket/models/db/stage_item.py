@@ -2,7 +2,7 @@ from enum import auto
 from typing import Any
 
 from heliclockter import datetime_utc
-from pydantic import Field, root_validator
+from pydantic import Field, model_validator
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBody
@@ -37,12 +37,12 @@ class StageItemUpdateBody(BaseModelORM):
 
 
 class StageItemActivateNextBody(BaseModelORM):
-    adjust_to_time: datetime_utc | None
+    adjust_to_time: datetime_utc | None = None
 
 
 class StageItemCreateBody(BaseModelORM):
     stage_id: int
-    name: str | None
+    name: str | None = None
     type: StageType
     team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]
@@ -50,7 +50,7 @@ class StageItemCreateBody(BaseModelORM):
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()
 
-    @root_validator
+    @model_validator(mode="before")
     def handle_inputs_length(cls, values: Any) -> Any:
         if ("inputs" in values and "team_count" in values) and (
             len(values["inputs"]) != values["team_count"]

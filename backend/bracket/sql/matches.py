@@ -70,12 +70,12 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
         )
         RETURNING *
     """
-    result = await database.fetch_one(query=query, values=match.dict())
+    result = await database.fetch_one(query=query, values=match.model_dump())
 
     if result is None:
         raise ValueError("Could not create stage")
 
-    return Match.parse_obj(result._mapping)
+    return Match.model_validate(dict(result._mapping))
 
 
 async def sql_update_match(match_id: int, match: MatchBody, tournament: Tournament) -> None:
@@ -107,7 +107,7 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
         query=query,
         values={
             "match_id": match_id,
-            **match.dict(),
+            **match.model_dump(),
             "duration_minutes": duration_minutes,
             "margin_minutes": margin_minutes,
         },
@@ -115,7 +115,7 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
 
 
 async def sql_update_team_ids_for_match(
-    match_id: int, team1_id: int | None, team2_id: int | None
+    match_id: int, team1_id: int | None, team2_id: int | None = None
 ) -> None:
     query = """
         UPDATE matches
@@ -205,4 +205,4 @@ async def sql_get_match(match_id: int) -> Match:
     if result is None:
         raise ValueError("Could not create stage")
 
-    return Match.parse_obj(result._mapping)
+    return Match.model_validate(dict(result._mapping))

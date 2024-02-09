@@ -4,17 +4,17 @@ from bracket.models.db.shared import BaseModelORM
 
 
 class StageItemInputBase(BaseModelORM):
-    id: int | None
+    id: int | None = None
     slot: int
     tournament_id: int
-    stage_item_id: int | None
+    stage_item_id: int | None = None
 
 
 class StageItemInputGeneric(BaseModel):
-    team_id: int | None
-    winner_from_stage_item_id: int | None
-    winner_position: int | None
-    winner_from_match_id: int | None
+    team_id: int | None = None
+    winner_from_stage_item_id: int | None = None
+    winner_position: int | None = None
+    winner_from_match_id: int | None = None
 
     def __hash__(self) -> int:
         return (

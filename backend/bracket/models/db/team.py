@@ -3,9 +3,10 @@ from __future__ import annotations
 # ruff: noqa: TCH001,TCH002
 import json
 from decimal import Decimal
+from typing import Annotated
 
 from heliclockter import datetime_utc
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, StringConstraints, field_validator
 
 from bracket.models.db.player import Player
 from bracket.models.db.players import START_ELO
@@ -40,7 +41,7 @@ class TeamWithPlayers(BaseModel):
     def player_ids(self) -> list[int]:
         return [assert_some(player.id) for player in self.players]
 
-    @validator("players", pre=True)
+    @field_validator("players", mode="before")
     def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]
         if isinstance(values, str):
             values_json = json.loads(values)
@@ -76,9 +77,9 @@ class FullTeamWithPlayers(TeamWithPlayers, Team):
 
 
 class TeamBody(BaseModelORM):
-    name: str = Field(..., min_length=1, max_length=30)
+    name: Annotated[str, StringConstraints(min_length=1, max_length=30)]
     active: bool
-    player_ids: list[int] = Field(..., unique_items=True)
+    player_ids: set[int]
 
 
 class TeamMultiBody(BaseModelORM):

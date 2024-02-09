@@ -65,7 +65,7 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
                 "id": user_inserted.id,
                 "email": user_inserted.email,
                 "name": user_inserted.name,
-                "created": "2200-01-01T00:00:00+00:00",
+                "created": "2200-01-01T00:00:00Z",
                 "account_type": UserAccountType.REGULAR.value,
             }
         }
@@ -83,7 +83,7 @@ async def test_not_authenticated_for_tournament(
 ) -> None:
     async with inserted_club(DUMMY_CLUB) as club_inserted:
         async with inserted_tournament(
-            DUMMY_TOURNAMENT.copy(update={"club_id": club_inserted.id})
+            DUMMY_TOURNAMENT.model_copy(update={"club_id": club_inserted.id})
         ) as tournament_inserted:
             response = JsonDict(
                 await send_auth_request(

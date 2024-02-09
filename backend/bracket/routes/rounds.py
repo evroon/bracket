@@ -84,7 +84,7 @@ async def create_round(
             created=datetime_utc.now(),
             stage_item_id=round_body.stage_item_id,
             name=await get_next_round_name(tournament_id, round_body.stage_item_id),
-        ).dict(),
+        ).model_dump(),
     )
 
     await set_round_active_or_draft(round_id, tournament_id, is_active=False, is_draft=True)

@@ -18,7 +18,6 @@ from bracket.models.db.stage_item_inputs import (
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
-from bracket.schema import rounds
 from bracket.sql.rounds import get_next_round_name
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.types import assert_some
@@ -39,12 +38,15 @@ async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: Stage
     now = datetime_utc.now()
     for _ in range(rounds_count):
         await database.execute(
-            query=rounds.insert(),
+            query="""
+                INSERT INTO rounds (created, stage_item_id, name, is_draft, is_active)
+                VALUES (:created, :stage_item_id, :name, :is_draft, :is_active)
+            """,
             values=RoundToInsert(
                 created=now,
                 stage_item_id=assert_some(stage_item.id),
                 name=await get_next_round_name(tournament_id, assert_some(stage_item.id)),
-            ).dict(),
+            ).model_dump(),
         )
 
 

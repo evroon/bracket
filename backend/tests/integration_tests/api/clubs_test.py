@@ -14,7 +14,7 @@ async def test_clubs_endpoint(
     assert await send_auth_request(HTTPMethod.GET, "clubs", auth_context, {}) == {
         "data": [
             {
-                "created": DUMMY_MOCK_TIME.isoformat(),
+                "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                 "id": auth_context.club.id,
                 "name": "Some Cool Club",
             }

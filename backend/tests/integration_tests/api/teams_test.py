@@ -13,19 +13,19 @@ async def test_teams_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ) as team_inserted:
         assert await send_tournament_request(HTTPMethod.GET, "teams", auth_context, {}) == {
             "data": [
                 {
                     "active": True,
-                    "created": DUMMY_MOCK_TIME.isoformat(),
+                    "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                     "id": team_inserted.id,
                     "name": "Team 1",
                     "players": [],
                     "tournament_id": team_inserted.tournament_id,
-                    "elo_score": 1200.0,
-                    "swiss_score": 0.0,
+                    "elo_score": "1200.0",
+                    "swiss_score": "0.0",
                     "wins": 0,
                     "draws": 0,
                     "losses": 0,
@@ -58,7 +58,7 @@ async def test_delete_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ) as team_inserted:
         assert (
             await send_tournament_request(
@@ -74,7 +74,7 @@ async def test_update_team(
 ) -> None:
     body = {"name": "Some new name", "active": True, "player_ids": []}
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ) as team_inserted:
         response = await send_tournament_request(
             HTTPMethod.PUT, f"teams/{team_inserted.id}", auth_context, None, body

@@ -111,7 +111,7 @@ async def inserted_stage(stage: Stage) -> AsyncIterator[Stage]:
 @asynccontextmanager
 async def inserted_stage_item(stage_item: StageItemToInsert) -> AsyncIterator[StageItem]:
     async with inserted_generic(stage_item, stage_items, StageItem) as row_inserted:
-        yield StageItem(**row_inserted.dict())
+        yield StageItem(**row_inserted.model_dump())
 
 
 @asynccontextmanager
@@ -140,7 +140,7 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         inserted_user(mock_user) as user_inserted,
         inserted_club(DUMMY_CLUB) as club_inserted,
         inserted_tournament(
-            DUMMY_TOURNAMENT.copy(update={"club_id": club_inserted.id})
+            DUMMY_TOURNAMENT.model_copy(update={"club_id": club_inserted.id})
         ) as tournament_inserted,
         inserted_user_x_club(
             UserXClub(

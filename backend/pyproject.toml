@@ -9,6 +9,9 @@ filterwarnings = [
     'ignore:The SelectBase.c and SelectBase.columns attributes are deprecated.*:DeprecationWarning',
     'ignore:pkg_resources is deprecated as an API.*:DeprecationWarning',
     'ignore:Deprecated call to `pkg_resources.declare_namespace(.*)`.*:DeprecationWarning',
+    'ignore:.*:pytest.PytestDeprecationWarning',
+    'ignore:.*pytest-asyncio detected an unclosed event loop.*:DeprecationWarning',
+    'ignore:.*The event_loop fixture provided by pytest-asyncio has been redefined.*:DeprecationWarning',
 ]
 
 [tool.mypy]

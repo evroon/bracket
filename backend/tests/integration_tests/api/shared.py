@@ -14,7 +14,7 @@ from bracket.utils.http import HTTPMethod
 from bracket.utils.types import JsonDict
 from tests.integration_tests.models import AuthContext
 
-SUCCESS_RESPONSE = SuccessResponse().dict()
+SUCCESS_RESPONSE = SuccessResponse().model_dump()
 
 
 def find_free_port() -> int:

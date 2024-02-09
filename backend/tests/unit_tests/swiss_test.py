@@ -27,7 +27,7 @@ def test_no_draft_round() -> None:
 def get_team(team: Team, team_id: int) -> FullTeamWithPlayers:
     return FullTeamWithPlayers(
         id=team_id,
-        **team.dict(),
+        **team.model_dump(exclude={"id"}),
         players=[],
     )
 
@@ -36,7 +36,7 @@ def get_match(
     match: Match, team1: FullTeamWithPlayers, team2: FullTeamWithPlayers
 ) -> MatchWithDetailsDefinitive:
     return MatchWithDetailsDefinitive(
-        **match.copy(update={"team1_id": team1.id, "team2_id": team2.id}).dict(),
+        **match.model_copy(update={"team1_id": team1.id, "team2_id": team2.id}).model_dump(),
         team1=team1,
         team2=team2,
         court=None,
@@ -44,10 +44,10 @@ def get_match(
 
 
 def test_constraints() -> None:
-    team1 = get_team(DUMMY_TEAM1.copy(update={"elo_score": 1125}), team_id=-1)
-    team2 = get_team(DUMMY_TEAM2.copy(update={"elo_score": 1175}), team_id=-2)
-    team3 = get_team(DUMMY_TEAM3.copy(update={"elo_score": 1200}), team_id=-3)
-    team4 = get_team(DUMMY_TEAM4.copy(update={"elo_score": 1250}), team_id=-4)
+    team1 = get_team(DUMMY_TEAM1.model_copy(update={"elo_score": Decimal("1125.0")}), team_id=-1)
+    team2 = get_team(DUMMY_TEAM2.model_copy(update={"elo_score": Decimal("1175.0")}), team_id=-2)
+    team3 = get_team(DUMMY_TEAM3.model_copy(update={"elo_score": Decimal("1200.0")}), team_id=-3)
+    team4 = get_team(DUMMY_TEAM4.model_copy(update={"elo_score": Decimal("1250.0")}), team_id=-4)
 
     rounds = [
         RoundWithMatches(

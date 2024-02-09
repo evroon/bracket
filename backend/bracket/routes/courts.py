@@ -88,10 +88,10 @@ async def create_court(
     last_record_id = await database.execute(
         query=courts.insert(),
         values=CourtToInsert(
-            **court_body.dict(),
+            **court_body.model_dump(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-        ).dict(),
+        ).model_dump(),
     )
     return SingleCourtResponse(
         data=assert_some(

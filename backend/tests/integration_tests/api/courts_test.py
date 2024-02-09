@@ -13,15 +13,15 @@ async def test_courts_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
             assert await send_tournament_request(HTTPMethod.GET, "courts", auth_context, {}) == {
                 "data": [
                     {
-                        "created": DUMMY_MOCK_TIME.isoformat(),
+                        "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                         "id": court_inserted.id,
                         "name": "Court 1",
                         "tournament_id": auth_context.tournament.id,
@@ -43,10 +43,10 @@ async def test_delete_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
             assert (
                 await send_tournament_request(
@@ -62,10 +62,10 @@ async def test_update_court(
 ) -> None:
     body = {"name": "Some new name"}
     async with inserted_team(
-        DUMMY_TEAM1.copy(update={"tournament_id": auth_context.tournament.id})
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
     ):
         async with inserted_court(
-            DUMMY_COURT1.copy(update={"tournament_id": auth_context.tournament.id})
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court_inserted:
             response = await send_tournament_request(
                 HTTPMethod.PUT, f"courts/{court_inserted.id}", auth_context, json=body

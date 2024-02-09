@@ -14,7 +14,7 @@ async def create_club(club: ClubCreateBody, user_id: int) -> Club:
         if result is None:
             raise ValueError("Could not create club")
 
-        club_created = Club.parse_obj(result._mapping)
+        club_created = Club.model_validate(dict(result._mapping))
 
         query_many_to_many = """
             INSERT INTO users_x_clubs (club_id, user_id, relation)
@@ -36,7 +36,7 @@ async def sql_update_club(club_id: int, club: ClubUpdateBody) -> Club | None:
         RETURNING *
         """
     result = await database.fetch_one(query=query, values={"name": club.name, "club_id": club_id})
-    return Club.parse_obj(result) if result is not None else None
+    return Club.model_validate(result) if result is not None else None
 
 
 async def sql_delete_club(club_id: int) -> None:
@@ -63,7 +63,7 @@ async def get_clubs_for_user_id(user_id: int) -> list[Club]:
         WHERE uxc.user_id = :user_id
         """
     results = await database.fetch_all(query=query, values={"user_id": user_id})
-    return [Club.parse_obj(result._mapping) for result in results]
+    return [Club.model_validate(dict(result._mapping)) for result in results]
 
 
 async def todo_get_club_for_user_id(club_id: int, user_id: int) -> Club | None:
@@ -74,4 +74,4 @@ async def todo_get_club_for_user_id(club_id: int, user_id: int) -> Club | None:
         AND club_id = :club_id
         """
     result = await database.fetch_one(query=query, values={"user_id": user_id, "club_id": club_id})
-    return Club.parse_obj(result._mapping) if result is not None else None
+    return Club.model_validate(dict(result._mapping)) if result is not None else None
