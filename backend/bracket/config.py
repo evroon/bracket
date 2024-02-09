@@ -63,7 +63,13 @@ class DemoConfig(Config):
     model_config = SettingsConfigDict(env_file="demo.env")
 
 
-environment = Environment(os.getenv("ENVIRONMENT", "DEVELOPMENT").upper())
+def currently_testing() -> bool:
+    return "PYTEST_CURRENT_TEST" in os.environ
+
+
+environment = Environment(
+    os.getenv("ENVIRONMENT", "CI" if currently_testing() else "DEVELOPMENT").upper()
+)
 config: Config
 
 match environment:

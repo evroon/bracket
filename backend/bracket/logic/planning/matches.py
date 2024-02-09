@@ -41,6 +41,8 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
 
     stage = stages[0]
     stage_items = sorted(stage.stage_items, key=lambda x: x.name)
+
+    # First schedule all matches from the first stage
     for i, stage_item in enumerate(stage_items):
         court = courts[min(i, len(courts) - 1)]
         start_time = tournament.start_time
@@ -60,6 +62,7 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
                 start_time += timedelta(minutes=match.duration_minutes)
                 position_in_schedule += 1
 
+    # Then, all other stages
     for stage in stages[1:]:
         start_time = tournament.start_time
         position_in_schedule = 0
@@ -78,6 +81,8 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
                             match,
                             tournament,
                         )
+
+    await update_start_times_of_matches(tournament_id)
 
 
 def has_conflict(
