@@ -10,22 +10,8 @@ from databases import Database
 
 from bracket.database import database, engine
 from bracket.schema import metadata
-from tests.integration_tests.api.shared import UvicornTestServer
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
-
-
-@pytest.fixture(scope="module")
-async def startup_and_shutdown_uvicorn_server() -> AsyncIterator[None]:
-    """
-    Start server as test fixture and tear down after test
-    """
-    server = UvicornTestServer()
-    try:
-        await server.up()
-        yield
-    finally:
-        await server.down()
 
 
 @pytest.fixture(scope="session")
