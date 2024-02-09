@@ -28,7 +28,7 @@ from bracket.sql.users import (
     update_user,
     update_user_password,
 )
-from bracket.utils.security import pwd_context, verify_captcha_token
+from bracket.utils.security import hash_password, verify_captcha_token
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -65,9 +65,7 @@ async def put_user_password(
     user_public: UserPublic = Depends(user_authenticated),
 ) -> SuccessResponse:
     assert user_public.id == user_id
-    await update_user_password(
-        assert_some(user_public.id), pwd_context.hash(user_to_update.password)
-    )
+    await update_user_password(assert_some(user_public.id), hash_password(user_to_update.password))
     return SuccessResponse()
 
 
@@ -81,7 +79,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
 
     user = User(
         email=user_to_register.email,
-        password_hash=pwd_context.hash(user_to_register.password),
+        password_hash=hash_password(user_to_register.password),
         name=user_to_register.name,
         created=datetime_utc.now(),
         account_type=UserAccountType.REGULAR,
@@ -114,7 +112,7 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
     username = f"demo-{uuid4()}"
     user = User(
         email=f"{username}@example.org",
-        password_hash=pwd_context.hash(str(uuid4())),
+        password_hash=hash_password(str(uuid4())),
         name=username,
         created=datetime_utc.now(),
         account_type=UserAccountType.DEMO,

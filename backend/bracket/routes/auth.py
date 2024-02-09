@@ -16,7 +16,7 @@ from bracket.schema import tournaments
 from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name
 from bracket.sql.users import get_user, get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed
-from bracket.utils.security import pwd_context
+from bracket.utils.security import verify_password
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -50,10 +50,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: str | None = None
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
 
 
 async def authenticate_user(email: str, password: str) -> UserInDB | None:

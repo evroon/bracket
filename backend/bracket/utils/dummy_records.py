@@ -14,7 +14,7 @@ from bracket.models.db.stage_item import StageItemToInsert, StageType
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
-from bracket.utils.security import pwd_context
+from bracket.utils.security import hash_password
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo("UTC"))
 
@@ -124,7 +124,7 @@ DUMMY_MATCH1 = Match(
 DUMMY_USER = User(
     email="admin@example.com",
     name="Admin",
-    password_hash=pwd_context.hash("adminadmin"),
+    password_hash=hash_password("adminadmin"),
     created=DUMMY_MOCK_TIME,
     account_type=UserAccountType.REGULAR,
 )

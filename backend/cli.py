@@ -9,7 +9,6 @@ from bracket.config import config
 from bracket.database import database
 from bracket.logger import get_logger
 from bracket.utils.db_init import sql_create_dev_db
-from bracket.utils.security import pwd_context
 
 logger = get_logger("cli")
 
@@ -47,7 +46,7 @@ def hash_password() -> None:
     if config.admin_password is None:
         logger.error("No admin password is given")
     else:
-        hashed_pwd = pwd_context.hash(config.admin_password)
+        hashed_pwd = hash_password(config.admin_password)
         logger.info("Hashed password:")
         logger.info(hashed_pwd)
 
