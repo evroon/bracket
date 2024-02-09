@@ -18,7 +18,7 @@ async def test_users_endpoint(
     ) == {
         "data": {
             "email": auth_context.user.email,
-            "created": "2200-01-01T00:00:00Z",
+            "created": "2000-01-01T00:00:00Z",
             "id": auth_context.user.id,
             "name": "Donald Duck",
             "account_type": UserAccountType.REGULAR.value,
