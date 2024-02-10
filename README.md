@@ -34,7 +34,7 @@ It has the following features:
 <img alt="" src="docs/static/img/bracket-screenshot-design.png" width="100%" />
 
 # Live Demo
-A demo is available for free at https://www.bracketapp.nl/demo. The demo lasts for 30 minutes, after which
+A demo is available for free at <https://www.bracketapp.nl/demo>. The demo lasts for 30 minutes, after which
 your data will de deleted. 
 
 # Quickstart
