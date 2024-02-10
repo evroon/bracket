@@ -18,7 +18,7 @@ async def get_upcoming_matches_for_swiss_round(
     [stage_item] = stage.stage_items
 
     if stage_item.type is not StageType.SWISS:
-        raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
+        raise HTTPException(400, "Expected stage item to be of type SWISS.")
 
     rounds = await get_rounds_for_stage_item(tournament_id, assert_some(stage_item.id))
     teams = await get_teams_with_members(tournament_id, only_active_teams=True)

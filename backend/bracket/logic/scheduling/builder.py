@@ -1,7 +1,5 @@
 from fastapi import HTTPException
-from heliclockter import datetime_utc
 
-from bracket.database import database
 from bracket.logic.scheduling.elimination import (
     build_single_elimination_stage_item,
     get_number_of_rounds_to_create_single_elimination,
@@ -18,7 +16,7 @@ from bracket.models.db.stage_item_inputs import (
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
-from bracket.sql.rounds import get_next_round_name
+from bracket.sql.rounds import get_next_round_name, sql_create_round
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.types import assert_some
 
@@ -35,18 +33,12 @@ async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: Stage
         case other:
             raise NotImplementedError(f"No round creation implementation for {other}")
 
-    now = datetime_utc.now()
     for _ in range(rounds_count):
-        await database.execute(
-            query="""
-                INSERT INTO rounds (created, stage_item_id, name, is_draft, is_active)
-                VALUES (:created, :stage_item_id, :name, :is_draft, :is_active)
-            """,
-            values=RoundToInsert(
-                created=now,
+        await sql_create_round(
+            RoundToInsert(
                 stage_item_id=assert_some(stage_item.id),
                 name=await get_next_round_name(tournament_id, assert_some(stage_item.id)),
-            ).model_dump(),
+            ),
         )
 
 

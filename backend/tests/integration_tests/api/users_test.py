@@ -36,6 +36,7 @@ async def test_create_user(
         "captcha_token": "my token",
     }
     response = await send_request(HTTPMethod.POST, "users/register", None, body)
+    assert "data" in response, response
     assert response["data"]["token_type"] == "bearer"
     assert response["data"]["user_id"]
     await delete_user(response["data"]["user_id"])
@@ -46,6 +47,7 @@ async def test_create_demo_user(
 ) -> None:
     body = {"captcha_token": "my token"}
     response = await send_request(HTTPMethod.POST, "users/register_demo", None, body)
+    assert "data" in response, response
     assert response["data"]["token_type"] == "bearer"
     assert response["data"]["user_id"]
     await delete_user(response["data"]["user_id"])

@@ -58,7 +58,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
     yield
 
-    if environment != Environment.CI:
+    if environment is not Environment.CI:
         await database.disconnect()
 
     await AsyncioTasksManager.gather()

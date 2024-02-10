@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
@@ -20,7 +19,7 @@ from bracket.routes.util import (
     round_with_matches_dependency,
 )
 from bracket.schema import rounds
-from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft
+from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft, sql_create_round
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 
@@ -78,13 +77,11 @@ async def create_round(
             detail=f"Stage type {stage_item.type} doesn't support manual creation of rounds",
         )
 
-    round_id = await database.execute(
-        query=rounds.insert(),
-        values=RoundToInsert(
-            created=datetime_utc.now(),
+    round_id = await sql_create_round(
+        RoundToInsert(
             stage_item_id=round_body.stage_item_id,
             name=await get_next_round_name(tournament_id, round_body.stage_item_id),
-        ).model_dump(),
+        ),
     )
 
     await set_round_active_or_draft(round_id, tournament_id, is_active=False, is_draft=True)
