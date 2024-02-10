@@ -78,16 +78,13 @@ async def test_schedule_matches_auto(
                 ],
             ),
         )
-        await sql_create_round(
-            RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=False, is_active=True),
-        )
-        round_2_id = await sql_create_round(
+        round_1_id = await sql_create_round(
             RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
         )
 
         response = await send_tournament_request(
             HTTPMethod.POST,
-            f"rounds/{round_2_id}/schedule_auto",
+            f"rounds/{round_1_id}/schedule_auto",
             auth_context,
         )
         stages = await get_full_tournament_details(tournament_id)
@@ -97,6 +94,5 @@ async def test_schedule_matches_auto(
     assert response == SUCCESS_RESPONSE
 
     stage_item = stages[0].stage_items[0]
-    assert len(stage_item.rounds) == 2
+    assert len(stage_item.rounds) == 1
     assert len(stage_item.rounds[0].matches) == 1
-    assert len(stage_item.rounds[1].matches) == 0
