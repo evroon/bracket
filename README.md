@@ -106,6 +106,23 @@ Several areas that we need a bit of help with at the moment are:
 
 # Contributors
 <!-- readme: collaborators,contributors,dependabot/- -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/evroon">
+            <img src="https://avatars.githubusercontent.com/u/11857441?v=4" width="100;" alt="evroon"/>
+            <br />
+            <sub><b>Erik Vroon</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Sevichecc">
+            <img src="https://avatars.githubusercontent.com/u/91365763?v=4" width="100;" alt="Sevichecc"/>
+            <br />
+            <sub><b>SevicheCC</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: collaborators,contributors,dependabot/- -end -->
 
 # License
