@@ -1,7 +1,7 @@
-from bracket.logic.planning.matches import create_match_and_assign_free_court
 from bracket.models.db.match import Match, MatchCreateBody
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
+from bracket.sql.matches import sql_create_match
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
@@ -79,13 +79,13 @@ async def build_single_elimination_stage_item(
     first_round = rounds[0]
 
     prev_matches = [
-        await create_match_and_assign_free_court(tournament_id, match)
+        await sql_create_match(match)
         for match in determine_matches_first_round(first_round, stage_item, tournament)
     ]
 
     for round_ in rounds[1:]:
         prev_matches = [
-            await create_match_and_assign_free_court(tournament_id, match)
+            await sql_create_match(match)
             for match in determine_matches_subsequent_round(prev_matches, round_, tournament)
         ]
 

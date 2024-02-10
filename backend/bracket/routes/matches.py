@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from bracket.logic.planning.matches import (
-    create_match_and_assign_free_court,
     handle_match_reschedule,
     schedule_all_unscheduled_matches,
 )
@@ -146,8 +145,7 @@ async def create_matches_automatically(
         assert isinstance(match, SuggestedMatch)
 
         assert round_.id and match.team1.id and match.team2.id
-        await create_match_and_assign_free_court(
-            tournament_id,
+        await sql_create_match(
             MatchCreateBody(
                 round_id=round_.id,
                 team1_id=match.team1.id,
