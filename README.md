@@ -7,6 +7,7 @@
 [![last
 commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.shields.io/github/last-commit/evroon/bracket)
 [![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)<br/>
+[Demo](https://www.bracketapp.nl/demo) |
 [Documentation](https://docs.bracketapp.nl) |
 [Quickstart](https://docs.bracketapp.nl/docs/running-bracket/quickstart) |
 [GitHub](https://github.com/evroon/bracket) |
@@ -32,6 +33,9 @@ It has the following features:
 ### Preview
 <img alt="" src="docs/static/img/bracket-screenshot-design.png" width="100%" />
 
+# Live Demo
+A demo is available for free at https://www.bracketapp.nl/demo. The demo lasts for 30 minutes, after which
+your data will de deleted. 
 
 # Quickstart
 To quickly run bracket to see how it works, clone it and run `docker-compose up`:

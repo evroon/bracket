@@ -1,7 +1,18 @@
-import { Container, Text, Button, Group } from "@mantine/core";
+import { Container, Text, Button, Group, Center } from "@mantine/core";
 import { GithubIcon } from "@mantinex/dev-icons";
 import classes from "./styles.module.css";
 import React from "react";
+import {
+  IconBracketsContainStart,
+  IconLibrary,
+  IconLivePhoto,
+  IconLiveView,
+  IconPlayCard,
+  IconPlayerPlay,
+  IconRocket,
+  IconRun,
+  IconStar,
+} from "@tabler/icons-react";
 
 export function HeroTitle() {
   return (
@@ -32,21 +43,26 @@ export function HeroTitle() {
             variant="gradient"
             gradient={{ from: "indigo", to: "#674ad6" }}
             onClick={() => {
+              open("https://www.bracketapp.nl/demo", "_self");
+            }}
+          >
+            <Center inline>
+              <IconRocket size="32px" style={{ marginRight: "0.5rem" }} />
+              Demo
+            </Center>
+          </Button>
+          <Button
+            size="xl"
+            className={classes.control}
+            variant="default"
+            onClick={() => {
               open("docs/running-bracket/quickstart", "_self");
             }}
           >
-            Get started
-          </Button>
-
-          <Button
-            component="a"
-            href="https://github.com/evroon/bracket"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            leftSection={<GithubIcon size={20} />}
-          >
-            GitHub
+            <Center inline>
+              <IconLibrary size="32px" style={{ marginRight: "0.5rem" }} />
+              Get started
+            </Center>
           </Button>
         </Group>
       </Container>
