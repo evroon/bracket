@@ -36,6 +36,7 @@ class Config(BaseSettings):
     cors_origin_regex: str = ""
     cors_origins: str = "*"
     jwt_secret: str
+    auto_run_migrations: bool = True
     pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
     sentry_dsn: str | None = None
 
