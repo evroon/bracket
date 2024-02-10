@@ -4,7 +4,6 @@ from typing import NamedTuple
 from heliclockter import timedelta
 
 from bracket.models.db.match import (
-    Match,
     MatchRescheduleBody,
     MatchWithDetails,
     MatchWithDetailsDefinitive,
