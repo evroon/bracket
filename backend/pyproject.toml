@@ -68,6 +68,7 @@ disable = [
     'wrong-import-position',
     'fixme',
     'broad-except',
+    'consider-iterating-dictionary',
 ]
 
 [tool.bandit]

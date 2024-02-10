@@ -1,3 +1,4 @@
+import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
@@ -27,6 +28,7 @@ from bracket.sql.tournaments import (
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.db import fetch_one_parsed_certain
+from bracket.utils.errors import check_constraint_and_raise_http_exception
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -79,10 +81,14 @@ async def update_tournament_by_id(
     tournament_body: TournamentUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    await database.execute(
-        query=tournaments.update().where(tournaments.c.id == tournament_id),
-        values=tournament_body.model_dump(),
-    )
+    try:
+        await database.execute(
+            query=tournaments.update().where(tournaments.c.id == tournament_id),
+            values=tournament_body.model_dump(),
+        )
+    except asyncpg.exceptions.UniqueViolationError as exc:
+        check_constraint_and_raise_http_exception(exc)
+
     await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
 
