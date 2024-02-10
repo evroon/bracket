@@ -74,19 +74,6 @@ async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
     await update_start_times_of_matches(tournament_id)
 
 
-def has_conflict(
-    match: MatchWithDetailsDefinitive | MatchWithDetails,
-    team_defs: set[int | None],
-    matches_per_team: dict[int | None, list[Match]],
-) -> bool:
-    for team in team_defs:
-        for existing_match in matches_per_team[team]:
-            if existing_match.start_time == match.start_time:
-                return True
-
-    return False
-
-
 class MatchPosition(NamedTuple):
     match: MatchWithDetailsDefinitive | MatchWithDetails
     position: float

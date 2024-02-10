@@ -1,3 +1,5 @@
+from heliclockter import datetime_utc
+
 from bracket.models.db.round import RoundToInsert
 from bracket.models.db.stage_item import StageItemCreateBody, StageType
 from bracket.models.db.stage_item_inputs import (
@@ -128,13 +130,14 @@ async def test_start_next_round(
             RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
         )
 
-        response = await send_tournament_request(
-            HTTPMethod.POST,
-            f"stage_items/{stage_item_1.id}/start_next_round",
-            auth_context,
-            json={},
-        )
         try:
+            response = await send_tournament_request(
+                HTTPMethod.POST,
+                f"stage_items/{stage_item_1.id}/start_next_round",
+                auth_context,
+                json={},
+            )
+
             assert response == SUCCESS_RESPONSE
             round_1 = await get_round_by_id(tournament_id, round_1_id)
             assert assert_some(round_1).is_active
@@ -143,7 +146,7 @@ async def test_start_next_round(
                 HTTPMethod.POST,
                 f"stage_items/{stage_item_1.id}/start_next_round",
                 auth_context,
-                json={},
+                json={"adjust_to_time": datetime_utc.now().isoformat()},
             )
             assert response == SUCCESS_RESPONSE
             round_2 = await get_round_by_id(tournament_id, round_2_id)
