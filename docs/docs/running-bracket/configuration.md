@@ -20,7 +20,7 @@ Copy `ci.env` to `prod.env` and fill in the values:
   used for production while bracket is still in beta
 - `ALLOW_INSECURE_HTTP_SSO`: Should not be used in production. Allows use of INSECURE requests for
   SSO auth.
-- `AUTO_RUN_MIGRATIONS`: Whether to run (alembic) migrations automatically on startup or not. 
+- `AUTO_RUN_MIGRATIONS`: Whether to run (alembic) migrations automatically on startup or not.
   Migrations can be applied manually using `pipenv run alembic upgrade head`.
 
 ### Backend: Example configuration file
