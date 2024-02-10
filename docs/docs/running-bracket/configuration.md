@@ -20,6 +20,8 @@ Copy `ci.env` to `prod.env` and fill in the values:
   used for production while bracket is still in beta
 - `ALLOW_INSECURE_HTTP_SSO`: Should not be used in production. Allows use of INSECURE requests for
   SSO auth.
+- `AUTO_RUN_MIGRATIONS`: Whether to run (alembic) migrations automatically on startup or not. 
+  Migrations can be applied manually using `pipenv run alembic upgrade head`.
 
 ### Backend: Example configuration file
 
@@ -36,6 +38,7 @@ SENTRY_DSN='my sentry dsn'
 ALLOW_USER_REGISTRATION=false
 ALLOW_INSECURE_HTTP_SSO=false
 CAPTCHA_SECRET='xxx'
+AUTO_RUN_MIGRATIONS=true
 ```
 
 ## Frontend
