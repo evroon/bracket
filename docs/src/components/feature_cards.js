@@ -15,7 +15,7 @@ import {
 import classes from "../pages/index.module.css";
 import React from "react";
 
-const mockdata = [
+const cardData = [
   {
     title: "Open-source and free",
     description:
@@ -45,8 +45,7 @@ const mockdata = [
 ];
 
 export default function FeaturesCards() {
-  const theme = useMantineTheme();
-  const features = mockdata.map((feature) => (
+  const features = cardData.map((feature) => (
     <Card
       key={feature.title}
       shadow="md"

@@ -42,3 +42,30 @@
     margin-top: var(--mantine-spacing-sm);
   }
 }
+
+.social_card {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 150ms ease,
+    box-shadow 100ms ease;
+  padding: var(--mantine-spacing-xl);
+  padding-left: calc(var(--mantine-spacing-xl) * 1);
+  margin-bottom: 1rem;
+  background-color: #000;
+
+  @mixin hover {
+    box-shadow: var(--mantine-shadow-md);
+    transform: scale(1.02);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: rem(6px);
+  }
+}
