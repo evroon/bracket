@@ -66,7 +66,6 @@ class DemoConfig(Config):
 
 
 def currently_testing() -> bool:
-    print("pytest" in sys.modules)
     return "pytest" in sys.modules
 
 
