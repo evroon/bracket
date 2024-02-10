@@ -50,7 +50,7 @@ jobs:
         working-directory: backend
 
       - name: Run pylint
-        run: pipenv run pylint alembics bracket tests
+        run: pipenv run pylint alembic bracket tests
         working-directory: backend
 
       - name: Run ruff format
