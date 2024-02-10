@@ -123,6 +123,7 @@ async def start_next_round(
         ) from exc
 
     assert next_round.id is not None
-    await set_round_active_or_draft(next_round.id, tournament_id, is_active=False, is_draft=False)
+    print('asdaskldjhashdlkj', next_round)
+    await set_round_active_or_draft(next_round.id, tournament_id, is_active=True, is_draft=False)
 
     return SuccessResponse()

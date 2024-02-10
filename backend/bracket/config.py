@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from enum import auto
 from typing import Annotated
 
@@ -65,7 +66,8 @@ class DemoConfig(Config):
 
 
 def currently_testing() -> bool:
-    return "PYTEST_CURRENT_TEST" in os.environ
+    print("pytest" in sys.modules)
+    return "pytest" in sys.modules
 
 
 environment = Environment(

@@ -43,7 +43,8 @@ async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> Asyn
         try:
             yield database
         finally:
-            await database.disconnect()
+            pass
+            # await database.disconnect()
 
         return
 
@@ -67,7 +68,8 @@ async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> Asyn
     try:
         yield database
     finally:
-        await database.disconnect()
+        pass
+        # await database.disconnect()
 
 
 @pytest.fixture(scope="session")
