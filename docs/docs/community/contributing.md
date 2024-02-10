@@ -23,6 +23,10 @@ Rename the directory to the name of your locale, and start translating the `comm
 the directory. It might be useful to use an online tool (Google `translate json file`) to do the
 translation for you, and then carefully check and correct any mistakes.
 
+## Contributors
+<!-- readme: collaborators,contributors,dependabot/- -start -->
+<!-- readme: collaborators,contributors,dependabot/- -end -->
+
 ## Star History
 
 <!-- markdownlint-disable line-length no-inline-html -->

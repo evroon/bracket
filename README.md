@@ -104,6 +104,10 @@ Several areas that we need a bit of help with at the moment are:
 - 📣 **Spread the word** by sharing Bracket to help new users discover it
 - 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
 
+# Contributors
+<!-- readme: collaborators,contributors,dependabot/- -start -->
+<!-- readme: collaborators,contributors,dependabot/- -end -->
+
 # License
 Bracket is licensed under AGPL-v3.0.
 
