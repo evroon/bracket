@@ -5,7 +5,6 @@ from heliclockter import timedelta
 
 from bracket.models.db.match import (
     Match,
-    MatchCreateBody,
     MatchRescheduleBody,
     MatchWithDetails,
     MatchWithDetailsDefinitive,
@@ -14,19 +13,11 @@ from bracket.models.db.tournament import Tournament
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import (
-    sql_create_match,
     sql_reschedule_match_and_determine_duration_and_margin,
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.types import assert_some
-
-
-async def create_match_and_assign_free_court(
-    tournament_id: int,
-    match_body: MatchCreateBody,
-) -> Match:
-    return await sql_create_match(match_body)
 
 
 async def schedule_all_unscheduled_matches(tournament_id: int) -> None:

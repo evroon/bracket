@@ -24,7 +24,6 @@ class RoundCreateBody(BaseModelORM):
 
 
 class RoundToInsert(RoundUpdateBody):
-    created: datetime_utc
     stage_item_id: int
     is_draft: bool = False
     is_active: bool = False
