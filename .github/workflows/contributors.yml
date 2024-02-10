@@ -1,0 +1,31 @@
+name: contributors
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+    update-contributors-readme:
+        runs-on: ubuntu-latest
+        name: Update contributors in README.md
+        steps:
+            - name: Contribute List
+              uses: akhilmhdh/contributors-readme-action@v2.3.6
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  commit_message: "Update contributors in README.md"
+
+    update-contributors-docs:
+        runs-on: ubuntu-latest
+        name: Update contributors in docs
+        steps:
+            - name: Contribute List
+              uses: akhilmhdh/contributors-readme-action@v2.3.6
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  readme_path: "docs/docs/community/contributing.md"
+                  commit_message: "Update contributors in docs"
