@@ -17,6 +17,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   commit_message: "Update contributors in README.md"
+                  pr_title_on_protected: "Update contributors in README.md"
 
     update-contributors-docs:
         runs-on: ubuntu-latest
@@ -29,3 +30,4 @@ jobs:
               with:
                   readme_path: "docs/docs/community/contributing.md"
                   commit_message: "Update contributors in docs"
+                  pr_title_on_protected: "Update contributors in docs"
