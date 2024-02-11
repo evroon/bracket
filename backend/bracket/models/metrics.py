@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel
 
 from bracket.utils.http import HTTPMethod
+from bracket.utils.starlette import get_route_path
 from bracket.utils.types import EnumAutoStr
 
 if TYPE_CHECKING:
@@ -28,7 +29,7 @@ class RequestDefinition(BaseModel):
     @staticmethod
     def from_request(request: Request) -> RequestDefinition:
         return RequestDefinition(
-            url=str(request.url.path),
+            url=get_route_path(request),
             method=HTTPMethod(request.method),
         )
 
