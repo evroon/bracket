@@ -136,7 +136,6 @@
     "negative_score_validation": "Score cannot be negative",
     "next_matches_badge": "Next matches",
     "next_stage_button": "Go to Next Stage",
-    "no": "No matches yet",
     "no_matches_description": "First, add matches by creating stages and stage items. Then, schedule them using the button in the topright corner.",
     "no_matches_title": "No matches scheduled yet",
     "no_round_description": "There are no rounds in this stage item yet",
