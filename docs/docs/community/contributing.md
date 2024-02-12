@@ -24,6 +24,7 @@ the directory. It might be useful to use an online tool (Google `translate json 
 translation for you, and then carefully check and correct any mistakes.
 
 ## Contributors
+<!-- markdownlint-disable line-length no-inline-html -->
 <!-- readme: collaborators,contributors,dependabot/- -start -->
 <table>
 <tr>
@@ -45,8 +46,6 @@ translation for you, and then carefully check and correct any mistakes.
 <!-- readme: collaborators,contributors,dependabot/- -end -->
 
 ## Star History
-
-<!-- markdownlint-disable line-length no-inline-html -->
 
 [![stargazers](https://img.shields.io/github/stars/evroon/bracket)](https://github.com/evroon/bracket/stargazers)
 
