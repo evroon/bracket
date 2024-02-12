@@ -8,6 +8,7 @@ from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
 from bracket.models.db.players import START_ELO, PlayerStatistics
 from bracket.schema import players
 from bracket.utils.pagination import Pagination
+from bracket.utils.types import dict_without_none
 
 
 async def get_all_players_in_tournament(
@@ -31,12 +32,16 @@ async def get_all_players_in_tournament(
         {offset_filter}
         """
 
-    values = {"tournament_id": tournament_id}
-    if pagination is not None:
-        values["offset"] = pagination.offset if pagination is not None else None
-        values["limit"] = pagination.limit if pagination is not None else None
-
-    result = await database.fetch_all(query=query, values=values)
+    result = await database.fetch_all(
+        query=query,
+        values=dict_without_none(
+            {
+                "tournament_id": tournament_id,
+                "offset": pagination.offset if pagination is not None else None,
+                "limit": pagination.limit if pagination is not None else None,
+            }
+        ),
+    )
     return [Player.model_validate(x) for x in result]
 
 
