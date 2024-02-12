@@ -21,7 +21,7 @@ export default function TeamUpdateModal({
 }) {
   const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);
-  const players: Player[] = data != null ? data.data : [];
+  const players: Player[] = data != null ? data.data.players : [];
   const [opened, setOpened] = useState(false);
 
   const form = useForm({

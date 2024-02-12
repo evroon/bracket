@@ -15,7 +15,8 @@ import TableLayoutLarge from './table_large';
 
 export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse: SWRResponse }) {
   const { t } = useTranslation();
-  const teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
+  const teams: TeamInterface[] =
+    swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
   const tableState = getTableState('elo_score', false);
 
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;

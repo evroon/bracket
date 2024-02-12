@@ -96,3 +96,8 @@ export function HCaptchaInput({
     </Center>
   );
 }
+
+export interface Pagination {
+  offset: number;
+  limit: number;
+}

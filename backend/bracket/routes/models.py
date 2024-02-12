@@ -43,7 +43,12 @@ class TournamentsResponse(DataResponse[list[Tournament]]):
     pass
 
 
-class PlayersResponse(DataResponse[list[Player]]):
+class PaginatedPlayers(BaseModel):
+    count: int
+    players: list[Player]
+
+
+class PlayersResponse(DataResponse[PaginatedPlayers]):
     pass
 
 
@@ -63,7 +68,12 @@ class SingleMatchResponse(DataResponse[Match]):
     pass
 
 
-class TeamsWithPlayersResponse(DataResponse[list[FullTeamWithPlayers]]):
+class PaginatedTeams(BaseModel):
+    count: int
+    teams: list[FullTeamWithPlayers]
+
+
+class TeamsWithPlayersResponse(DataResponse[PaginatedTeams]):
     pass
 
 

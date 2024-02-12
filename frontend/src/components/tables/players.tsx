@@ -42,7 +42,8 @@ export default function PlayersTable({
   tournamentData: TournamentMinimal;
 }) {
   const { t } = useTranslation();
-  const players: Player[] = swrPlayersResponse.data != null ? swrPlayersResponse.data.data : [];
+  const players: Player[] =
+    swrPlayersResponse.data != null ? swrPlayersResponse.data.data.players : [];
   const tableState = getTableState('name');
 
   const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
