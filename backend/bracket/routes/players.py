@@ -34,7 +34,9 @@ async def get_players(
 ) -> PlayersResponse:
     return PlayersResponse(
         data=PaginatedPlayers(
-            players=await get_all_players_in_tournament(tournament_id, not_in_team=not_in_team, pagination=pagination),
+            players=await get_all_players_in_tournament(
+                tournament_id, not_in_team=not_in_team, pagination=pagination
+            ),
             count=await get_player_count(tournament_id, not_in_team=not_in_team),
         )
     )

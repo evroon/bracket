@@ -1,14 +1,14 @@
-import {Grid, Title} from '@mantine/core';
-import {useTranslation} from 'next-i18next';
-import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import { Grid, Title } from '@mantine/core';
+import { Center, Pagination } from '@mantine/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import React, { useState } from 'react';
 
 import PlayerCreateModal from '../../../components/modals/player_create_modal';
 import PlayersTable from '../../../components/tables/players';
-import {capitalize, getTournamentIdFromRouter} from '../../../components/utils/util';
-import {getPlayersPaginated} from '../../../services/adapter';
+import { capitalize, getTournamentIdFromRouter } from '../../../components/utils/util';
+import { getPlayersPaginated } from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
-import React, {useState} from "react";
-import {Center, Pagination} from "@mantine/core";
 
 export default function Players() {
   const pageSize = 25;

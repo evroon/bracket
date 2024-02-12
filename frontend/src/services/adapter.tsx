@@ -115,9 +115,11 @@ export function getPlayers(tournament_id: number, not_in_team: boolean = false):
   return useSWR(`tournaments/${tournament_id}/players?not_in_team=${not_in_team}`, fetcher);
 }
 
-
 export function getPlayersPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/players?limit=${pagination.limit}&offset=${pagination.offset}`, fetcher);
+  return useSWR(
+    `tournaments/${tournament_id}/players?limit=${pagination.limit}&offset=${pagination.offset}`,
+    fetcher
+  );
 }
 
 export function getTeams(tournament_id: number): SWRResponse {

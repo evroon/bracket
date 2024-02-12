@@ -33,8 +33,8 @@ async def get_all_players_in_tournament(
 
     values = {"tournament_id": tournament_id}
     if pagination is not None:
-        values["offset"]= pagination.offset if pagination is not None else None
-        values["limit"]= pagination.limit if pagination is not None else None
+        values["offset"] = pagination.offset if pagination is not None else None
+        values["limit"] = pagination.limit if pagination is not None else None
 
     result = await database.fetch_all(query=query, values=values)
     return [Player.model_validate(x) for x in result]

@@ -63,7 +63,8 @@ export default function Teams() {
     ? getStageItemTeamIdsLookup(swrStagesResponse)
     : {};
 
-  let teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
+  let teams: TeamInterface[] =
+    swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
   const teamCount = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.count : 1;
 
   if (filteredStageItemId != null) {
