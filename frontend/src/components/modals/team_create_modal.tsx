@@ -64,7 +64,7 @@ function SingleTeamTab({
 }) {
   const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);
-  const players: Player[] = data != null ? data.data : [];
+  const players: Player[] = data != null ? data.data.players : [];
   const form = useForm({
     initialValues: {
       name: '',

@@ -11,12 +11,23 @@ from bracket.routes.auth import (
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
 )
-from bracket.routes.models import SingleTeamResponse, SuccessResponse, TeamsWithPlayersResponse
+from bracket.routes.models import (
+    PaginatedTeams,
+    SingleTeamResponse,
+    SuccessResponse,
+    TeamsWithPlayersResponse,
+)
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
 from bracket.sql.stages import get_full_tournament_details
-from bracket.sql.teams import get_team_by_id, get_teams_with_members, sql_delete_team
+from bracket.sql.teams import (
+    get_team_by_id,
+    get_team_count,
+    get_teams_with_members,
+    sql_delete_team,
+)
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.pagination import Pagination
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -45,10 +56,15 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: set[
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
 async def get_teams(
-    tournament_id: int, _: UserPublic = Depends(user_authenticated_or_public_dashboard)
+    tournament_id: int,
+    pagination: Pagination = Depends(),
+    _: UserPublic = Depends(user_authenticated_or_public_dashboard),
 ) -> TeamsWithPlayersResponse:
-    return TeamsWithPlayersResponse.model_validate(
-        {"data": await get_teams_with_members(tournament_id)}
+    return TeamsWithPlayersResponse(
+        data=PaginatedTeams(
+            teams=await get_teams_with_members(tournament_id, pagination=pagination),
+            count=await get_team_count(tournament_id),
+        )
     )
 
 

@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import cast
 
 from heliclockter import datetime_utc
 
@@ -6,21 +7,52 @@ from bracket.database import database
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
 from bracket.models.db.players import START_ELO, PlayerStatistics
 from bracket.schema import players
+from bracket.utils.pagination import Pagination
 
 
 async def get_all_players_in_tournament(
-    tournament_id: int, *, not_in_team: bool = False
+    tournament_id: int,
+    *,
+    not_in_team: bool = False,
+    pagination: Pagination | None = None,
 ) -> list[Player]:
-    query = """
+    not_in_team_filter = "AND players.team_id IS NULL" if not_in_team else ""
+    limit_filter = "LIMIT :limit" if pagination is not None and pagination.limit is not None else ""
+    offset_filter = (
+        "OFFSET :offset" if pagination is not None and pagination.offset is not None else ""
+    )
+    query = f"""
         SELECT *
         FROM players
         WHERE players.tournament_id = :tournament_id
+        {not_in_team_filter}
+        ORDER BY name
+        {limit_filter}
+        {offset_filter}
         """
-    if not_in_team:
-        query += "AND players.team_id IS NULL"
 
-    result = await database.fetch_all(query=query, values={"tournament_id": tournament_id})
-    return [Player.model_validate(dict(x._mapping)) for x in result]
+    values = {"tournament_id": tournament_id}
+    if pagination is not None:
+        values["offset"]= pagination.offset if pagination is not None else None
+        values["limit"]= pagination.limit if pagination is not None else None
+
+    result = await database.fetch_all(query=query, values=values)
+    return [Player.model_validate(x) for x in result]
+
+
+async def get_player_count(
+    tournament_id: int,
+    *,
+    not_in_team: bool = False,
+) -> int:
+    not_in_team_filter = "AND players.team_id IS NULL" if not_in_team else ""
+    query = f"""
+        SELECT count(*)
+        FROM players
+        WHERE players.tournament_id = :tournament_id
+        {not_in_team_filter}
+        """
+    return cast(int, await database.fetch_val(query=query, values={"tournament_id": tournament_id}))
 
 
 async def update_player_stats(

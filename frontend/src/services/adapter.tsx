@@ -3,6 +3,7 @@ import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
+import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
@@ -114,8 +115,20 @@ export function getPlayers(tournament_id: number, not_in_team: boolean = false):
   return useSWR(`tournaments/${tournament_id}/players?not_in_team=${not_in_team}`, fetcher);
 }
 
+
+export function getPlayersPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/players?limit=${pagination.limit}&offset=${pagination.offset}`, fetcher);
+}
+
 export function getTeams(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/teams`, fetcher);
+}
+
+export function getTeamsPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
+  return useSWR(
+    `tournaments/${tournament_id}/teams?limit=${pagination.limit}&offset=${pagination.offset}`,
+    fetcher
+  );
 }
 
 export function getTeamsLive(tournament_id: number): SWRResponse {

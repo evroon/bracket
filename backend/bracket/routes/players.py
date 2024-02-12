@@ -5,10 +5,21 @@ from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.player import Player, PlayerBody, PlayerMultiBody
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
-from bracket.routes.models import PlayersResponse, SinglePlayerResponse, SuccessResponse
+from bracket.routes.models import (
+    PaginatedPlayers,
+    PlayersResponse,
+    SinglePlayerResponse,
+    SuccessResponse,
+)
 from bracket.schema import players
-from bracket.sql.players import get_all_players_in_tournament, insert_player, sql_delete_player
+from bracket.sql.players import (
+    get_all_players_in_tournament,
+    get_player_count,
+    insert_player,
+    sql_delete_player,
+)
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.pagination import Pagination
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -18,10 +29,14 @@ router = APIRouter()
 async def get_players(
     tournament_id: int,
     not_in_team: bool = False,
+    pagination: Pagination = Depends(),
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> PlayersResponse:
     return PlayersResponse(
-        data=await get_all_players_in_tournament(tournament_id, not_in_team=not_in_team)
+        data=PaginatedPlayers(
+            players=await get_all_players_in_tournament(tournament_id, not_in_team=not_in_team, pagination=pagination),
+            count=await get_player_count(tournament_id, not_in_team=not_in_team),
+        )
     )
 
 

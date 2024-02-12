@@ -1,4 +1,4 @@
-import { Grid, Select, Title } from '@mantine/core';
+import { Center, Grid, Pagination, Select, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
@@ -14,7 +14,7 @@ import {
 import { StageItemWithRounds } from '../../../interfaces/stage_item';
 import { StageItemInput } from '../../../interfaces/stage_item_input';
 import { TeamInterface } from '../../../interfaces/team';
-import { getStages, getTeams } from '../../../services/adapter';
+import { getStages, getTeamsPaginated } from '../../../services/adapter';
 import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
 
@@ -46,10 +46,15 @@ function StageItemSelect({
 }
 
 export default function Teams() {
+  const pageSize = 25;
+  const [page, setPage] = useState(1);
   const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
-  const swrTeamsResponse: SWRResponse = getTeams(tournamentData.id);
+  const swrTeamsResponse: SWRResponse = getTeamsPaginated(tournamentData.id, {
+    limit: pageSize,
+    offset: pageSize * (page - 1),
+  });
   const swrStagesResponse = getStages(tournamentData.id);
   const stageItemInputLookup = responseIsValid(swrStagesResponse)
     ? getStageItemList(swrStagesResponse)
@@ -58,10 +63,11 @@ export default function Teams() {
     ? getStageItemTeamIdsLookup(swrStagesResponse)
     : {};
 
-  let teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data : [];
+  let teams: TeamInterface[] = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
+  const teamCount = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.count : 1;
 
   if (filteredStageItemId != null) {
-    teams = swrTeamsResponse.data.data.filter(
+    teams = swrTeamsResponse.data.data.teams.filter(
       (team: StageItemInput) => stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
     );
   }
@@ -94,6 +100,9 @@ export default function Teams() {
         tournamentData={tournamentData}
         teams={teams}
       />
+      <Center mt="1rem">
+        <Pagination value={page} onChange={setPage} total={1 + teamCount / pageSize} size="lg" />
+      </Center>
     </TournamentLayout>
   );
 }
