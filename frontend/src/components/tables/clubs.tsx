@@ -7,7 +7,7 @@ import { Club } from '../../interfaces/club';
 import { deleteClub } from '../../services/club';
 import DeleteButton from '../buttons/delete';
 import ClubModal from '../modals/club_modal';
-import { EmptyTableInfo } from '../utils/empty_table_info';
+import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 

@@ -7,7 +7,7 @@ import { TeamInterface } from '../../interfaces/team';
 import PlayerList from '../info/player_list';
 import { PlayerScore } from '../info/player_score';
 import { WinDistribution } from '../info/player_statistics';
-import { EmptyTableInfo } from '../utils/empty_table_info';
+import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import { WinDistributionTitle } from './players';
 import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';

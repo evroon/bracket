@@ -9,8 +9,8 @@ import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
 import TeamUpdateModal from '../modals/team_update_modal';
+import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
-import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 

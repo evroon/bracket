@@ -120,6 +120,7 @@ export function CreateStageItemModal({
     },
   });
 
+  // TODO: Refactor lookups into one request.
   const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
   const stageItemMap = getStageItemLookup(swrStagesResponse);
 

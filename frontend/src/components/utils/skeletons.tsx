@@ -31,3 +31,22 @@ export function TableSkeletonTwoColumns() {
     </Center>
   );
 }
+
+export function TableSkeletonTwoColumnsSmall() {
+  return (
+    <div style={{ width: '48rem', marginTop: '2rem' }}>
+      <Grid>
+        <Grid.Col span={{ sm: 6 }}>
+          <Skeleton height={125} radius="lg" mb="xl" />
+          <Skeleton height={125} radius="lg" mb="xl" />
+          <Skeleton height={125} radius="lg" mb="xl" />
+        </Grid.Col>
+        <Grid.Col span={{ sm: 6 }}>
+          <Skeleton height={125} radius="lg" mb="xl" />
+          <Skeleton height={125} radius="lg" mb="xl" />
+          <Skeleton height={125} radius="lg" mb="xl" />
+        </Grid.Col>
+      </Grid>
+    </div>
+  );
+}

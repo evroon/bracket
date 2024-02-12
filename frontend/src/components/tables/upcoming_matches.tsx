@@ -9,7 +9,7 @@ import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfac
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
 import PlayerList from '../info/player_list';
-import { EmptyTableInfo } from '../utils/empty_table_info';
+import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 

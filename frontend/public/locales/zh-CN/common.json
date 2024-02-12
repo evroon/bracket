@@ -132,7 +132,7 @@
     "negative_score_validation": "分数不能为负",
     "next_matches_badge": "下一场比赛",
     "next_stage_button": "前往下一阶段",
-    "no_matches_description": "还没有比赛",
+    "no_matches_title": "还没有比赛",
     "no_round_description": "此阶段项目尚无轮次",
     "no_round_found_description": "请等待组织者添加。",
     "no_round_found_in_stage_description": "此阶段尚无轮次",
