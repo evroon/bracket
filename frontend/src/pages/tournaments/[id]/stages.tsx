@@ -13,21 +13,16 @@ import { NoContent } from '../../../components/no_content/empty_table_info';
 import { TableSkeletonTwoColumnsSmall } from '../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { StageWithStageItems } from '../../../interfaces/stage';
-import { Tournament } from '../../../interfaces/tournament';
-import { getStages, getTournaments } from '../../../services/adapter';
+import { getStages, getTournamentById } from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
 
 export default function StagesPage() {
   const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
-
-  const swrTournamentsResponse = getTournaments();
-  const tournaments: Tournament[] =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
-  const tournamentDataFull = tournaments.filter(
-    (tournament) => tournament.id === tournamentData.id
-  )[0];
+  const swrTournamentResponse = getTournamentById(tournamentData.id);
+  const tournamentDataFull =
+    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
   const stages: StageWithStageItems[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
@@ -35,9 +30,9 @@ export default function StagesPage() {
   let content;
   if (
     swrStagesResponse.isLoading ||
-    swrTournamentsResponse.isLoading ||
+    swrTournamentResponse.isLoading ||
     swrStagesResponse.isValidating ||
-    swrTournamentsResponse.isValidating
+    swrTournamentResponse.isValidating
   ) {
     content = <TableSkeletonTwoColumnsSmall />;
   } else if (stages.length < 1) {

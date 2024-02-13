@@ -107,6 +107,10 @@ export function getTournamentByEndpointName(tournament_endpoint_name: string): S
   return useSWR(`tournaments?endpoint_name=${tournament_endpoint_name}`, fetcher);
 }
 
+export function getTournamentById(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}`, fetcher);
+}
+
 export function getTournaments(): SWRResponse {
   return useSWR('tournaments', fetcher);
 }

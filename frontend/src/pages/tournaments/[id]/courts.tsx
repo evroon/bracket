@@ -9,7 +9,7 @@ import CourtsTable from '../../../components/tables/courts';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
-import { getCourts, getTournaments } from '../../../services/adapter';
+import { getCourts, getTournamentById } from '../../../services/adapter';
 import { createCourt } from '../../../services/court';
 import TournamentLayout from '../_tournament_layout';
 
@@ -47,12 +47,9 @@ export default function CourtsPage() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrCourtsResponse = getCourts(tournamentData.id);
 
-  const swrTournamentsResponse = getTournaments();
-  const tournaments: Tournament[] =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
-  const tournamentDataFull = tournaments.filter(
-    (tournament) => tournament.id === tournamentData.id
-  )[0];
+  const swrTournamentResponse = getTournamentById(tournamentData.id);
+  const tournamentDataFull =
+    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
   const { t } = useTranslation();
 
   return (

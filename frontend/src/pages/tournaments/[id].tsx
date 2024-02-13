@@ -17,11 +17,11 @@ import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems, getActiveStages } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
+import { getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
   getStages,
-  getTournaments,
+  getTournamentById,
   getUpcomingMatches,
 } from '../../services/adapter';
 import TournamentLayout from './_tournament_layout';
@@ -36,8 +36,8 @@ export default function TournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();
   const { t } = useTranslation();
 
-  const swrTournamentsResponse = getTournaments();
-  checkForAuthError(swrTournamentsResponse);
+  const swrTournamentResponse = getTournamentById(tournamentData.id);
+  checkForAuthError(swrTournamentResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
   const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only-recommended', 'true');
   const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 100);
@@ -64,9 +64,8 @@ export default function TournamentPage() {
     setIterations,
   };
 
-  const tournaments: Tournament[] =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
-  const tournamentDataFull = tournaments.filter((tournament) => tournament.id === id)[0];
+  const tournamentDataFull =
+    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
   const isResponseValid = responseIsValid(swrStagesResponse);
   let activeStage = null;
@@ -117,7 +116,7 @@ export default function TournamentPage() {
       </>
     ) : null;
 
-  if (!swrTournamentsResponse.isLoading && tournamentDataFull == null) {
+  if (!swrTournamentResponse.isLoading && tournamentDataFull == null) {
     return <NotFoundTitle />;
   }
 

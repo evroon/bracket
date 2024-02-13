@@ -27,7 +27,7 @@ import { GenericSkeleton } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getClubs, getTournaments } from '../../../services/adapter';
+import { getBaseApiUrl, getClubs, getTournamentById } from '../../../services/adapter';
 import { updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
@@ -38,11 +38,11 @@ export function TournamentLogo({ tournament }: { tournament: Tournament | null }
 
 function GeneralTournamentForm({
   tournament,
-  swrTournamentsResponse,
+  swrTournamentResponse,
   clubs,
 }: {
   tournament: Tournament;
-  swrTournamentsResponse: SWRResponse;
+  swrTournamentResponse: SWRResponse;
   clubs: Club[];
 }) {
   const { t } = useTranslation();
@@ -88,7 +88,7 @@ function GeneralTournamentForm({
           values.margin_minutes
         );
 
-        await swrTournamentsResponse.mutate(null);
+        await swrTournamentResponse.mutate(null);
       })}
     >
       <TextInput
@@ -204,19 +204,15 @@ function GeneralTournamentForm({
 export default function SettingsPage() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrClubsResponse: SWRResponse = getClubs();
-  const swrTournamentsResponse = getTournaments();
-
-  const tournaments: Tournament[] =
-    swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : [];
-  const tournamentDataFull = tournaments.filter(
-    (tournament) => tournament.id === tournamentData.id
-  )[0];
+  const swrTournamentResponse = getTournamentById(tournamentData.id);
+  const tournamentDataFull =
+    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
   const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
 
   let content = <NotFoundTitle />;
 
-  if (swrTournamentsResponse.isLoading || swrClubsResponse.isLoading) {
+  if (swrTournamentResponse.isLoading || swrClubsResponse.isLoading) {
     content = <GenericSkeleton />;
   }
 
@@ -224,7 +220,7 @@ export default function SettingsPage() {
     content = (
       <GeneralTournamentForm
         tournament={tournamentDataFull}
-        swrTournamentsResponse={swrTournamentsResponse}
+        swrTournamentResponse={swrTournamentResponse}
         clubs={clubs}
       />
     );
