@@ -62,9 +62,14 @@ async def get_tournaments(
             raise unauthorized_exception
 
         case _, str(endpoint_name):
-            return TournamentsResponse(
-                data=[await sql_get_tournament_by_endpoint_name(endpoint_name)]
-            )
+            tournament = await sql_get_tournament_by_endpoint_name(endpoint_name)
+            if tournament is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Can't find this tournament",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            return TournamentsResponse(data=[tournament])
 
         case _, _ if isinstance(user, UserPublic):
             user_club_ids = await get_which_clubs_has_user_access_to(assert_some(user.id))

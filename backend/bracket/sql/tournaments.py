@@ -26,7 +26,7 @@ async def sql_get_tournament(tournament_id: int) -> Tournament:
     return Tournament.model_validate(dict(result._mapping))
 
 
-async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament:
+async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament | None:
     query = """
         SELECT *
         FROM tournaments
@@ -34,8 +34,7 @@ async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament:
         AND dashboard_public IS TRUE
         """
     result = await database.fetch_one(query=query, values={"endpoint_name": endpoint_name})
-    assert result is not None
-    return Tournament.model_validate(dict(result._mapping))
+    return Tournament.model_validate(result) if result is not None else None
 
 
 async def sql_get_tournaments(
