@@ -1,10 +1,10 @@
-import { Stack, Title } from '@mantine/core';
+import { Group, Stack, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import UserForm from '../components/forms/user';
-import { checkForAuthError, getTournaments, getUser } from '../services/adapter';
-import { getLogin } from '../services/local_storage';
+import { TableSkeletonSingleColumn } from '../components/utils/skeletons';
+import { checkForAuthError, getUser } from '../services/adapter';
 import Layout from './_layout';
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => ({
@@ -14,23 +14,27 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
 });
 
 export default function HomePage() {
-  let user = null;
   const { t } = useTranslation();
 
-  const swrTournamentsResponse = getTournaments();
-  checkForAuthError(swrTournamentsResponse);
+  const swrUserResponse = getUser();
+  checkForAuthError(swrUserResponse);
+  const user = swrUserResponse.data != null ? swrUserResponse.data.data : null;
 
-  if (typeof window !== 'undefined') {
-    const swrUserResponse = getUser(getLogin().user_id);
-    user = swrUserResponse.data != null ? swrUserResponse.data.data : null;
+  let content;
+  content = user != null ? <UserForm user={user} /> : null;
+
+  if (swrUserResponse.isValidating || swrUserResponse.isLoading) {
+    content = (
+      <Group maw="40rem">
+        <TableSkeletonSingleColumn />
+      </Group>
+    );
   }
-
-  const form = user != null ? <UserForm user={user} /> : null;
 
   return (
     <Layout>
       <Title>{t('edit_profile_title')}</Title>
-      <Stack style={{ maxWidth: '400px' }}>{form}</Stack>
+      <Stack style={{ maxWidth: '400px' }}>{content}</Stack>
     </Layout>
   );
 }

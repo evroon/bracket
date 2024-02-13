@@ -13,9 +13,7 @@ from tests.integration_tests.sql import assert_row_count_and_clear
 async def test_users_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    assert await send_auth_request(
-        HTTPMethod.GET, f"users/{auth_context.user.id}", auth_context, {}
-    ) == {
+    expected_data = {
         "data": {
             "email": auth_context.user.email,
             "created": "2000-01-01T00:00:00Z",
@@ -24,6 +22,13 @@ async def test_users_endpoint(
             "account_type": UserAccountType.REGULAR.value,
         },
     }
+
+    assert (
+        await send_auth_request(HTTPMethod.GET, f"users/{auth_context.user.id}", auth_context, {})
+        == expected_data
+    )
+
+    assert await send_auth_request(HTTPMethod.GET, "users/me", auth_context, {}) == expected_data
 
 
 async def test_create_user(

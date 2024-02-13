@@ -5,7 +5,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 
+import { NoContent } from '../../../components/no_content/empty_table_info';
 import { Time } from '../../../components/utils/datetime';
+import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { Court } from '../../../interfaces/court';
 import { MatchInterface, formatMatchTeam1, formatMatchTeam2 } from '../../../interfaces/match';
@@ -94,7 +96,7 @@ function ScheduleColumn({
     matches.length < 1 ? (
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_matches_description')}
+        title={t('no_matches_title')}
         color="gray"
         radius="md"
       >
@@ -119,10 +121,12 @@ function ScheduleColumn({
 }
 
 function Schedule({
+  t,
   stageItemsLookup,
   matchesLookup,
   schedule,
 }: {
+  t: Translator;
   stageItemsLookup: any;
   matchesLookup: any;
   schedule: { court: Court; matches: MatchInterface[] }[];
@@ -136,6 +140,11 @@ function Schedule({
       matches={item.matches}
     />
   ));
+
+  if (columns.length < 1) {
+    return <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />;
+  }
+
   return <Group align="top">{columns}</Group>;
 }
 
@@ -200,6 +209,7 @@ export default function SchedulePage() {
           }}
         >
           <Schedule
+            t={t}
             schedule={data}
             stageItemsLookup={stageItemsLookup}
             matchesLookup={matchesLookup}

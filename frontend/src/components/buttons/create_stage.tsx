@@ -32,3 +32,29 @@ export default function CreateStageButton({
     </Button>
   );
 }
+
+export function CreateStageButtonLarge({
+  tournament,
+  swrStagesResponse,
+}: {
+  tournament: Tournament;
+  swrStagesResponse: SWRResponse;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <Button
+      variant="outline"
+      color="green"
+      size="lg"
+      style={{ marginRight: 10, width: '25%' }}
+      onClick={async () => {
+        await createStage(tournament.id);
+        await swrStagesResponse.mutate(null);
+      }}
+      leftSection={<GoPlus size={24} />}
+    >
+      {t('add_stage_button')}
+    </Button>
+  );
+}

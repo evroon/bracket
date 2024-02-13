@@ -2,17 +2,18 @@ import { Button, Container, Divider, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
 import CourtsTable from '../../../components/tables/courts';
+import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
 import { getCourts, getTournaments } from '../../../services/adapter';
 import { createCourt } from '../../../services/court';
 import TournamentLayout from '../_tournament_layout';
 
-function CreateCourtForm(tournament: Tournament, swrCourtsResponse: SWRResponse) {
-  const { t } = useTranslation();
+function CreateCourtForm(t: Translator, tournament: Tournament, swrCourtsResponse: SWRResponse) {
   const form = useForm({
     initialValues: { name: '' },
     validate: {
@@ -52,12 +53,13 @@ export default function CourtsPage() {
   const tournamentDataFull = tournaments.filter(
     (tournament) => tournament.id === tournamentData.id
   )[0];
+  const { t } = useTranslation();
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
       <Container>
-        <CourtsTable tournament={tournamentDataFull} swrCourtsResponse={swrCourtsResponse} />
-        {CreateCourtForm(tournamentDataFull, swrCourtsResponse)}
+        <CourtsTable t={t} tournament={tournamentDataFull} swrCourtsResponse={swrCourtsResponse} />
+        {CreateCourtForm(t, tournamentDataFull, swrCourtsResponse)}
       </Container>
     </TournamentLayout>
   );

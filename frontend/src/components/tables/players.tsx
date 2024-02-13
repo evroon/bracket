@@ -10,9 +10,10 @@ import DeleteButton from '../buttons/delete';
 import { PlayerScore } from '../info/player_score';
 import { WinDistribution } from '../info/player_statistics';
 import PlayerUpdateModal from '../modals/player_update_modal';
+import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
-import { EmptyTableInfo } from '../utils/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
+import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export function WinDistributionTitle() {
@@ -51,6 +52,10 @@ export default function PlayersTable({
   const maxSwissScore = Math.max(...players.map((player) => Number(player.swiss_score)));
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
+
+  if (swrPlayersResponse.isLoading || swrPlayersResponse.isValidating) {
+    return <TableSkeletonSingleColumn />;
+  }
 
   const rows = players
     .sort((p1: Player, p2: Player) => sortTableEntries(p1, p2, tableState))

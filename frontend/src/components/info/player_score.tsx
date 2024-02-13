@@ -13,7 +13,7 @@ export function PlayerScore({ score, min_score, max_score, decimals }: ScoreProp
   return (
     <Progress.Root size={20}>
       <Progress.Section value={percentageScale * (score - min_score)} color="indigo">
-        <Progress.Label>{score.toFixed(decimals)}</Progress.Label>
+        <Progress.Label>{Number(score).toFixed(decimals)}</Progress.Label>
       </Progress.Section>
     </Progress.Root>
   );
