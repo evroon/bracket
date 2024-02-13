@@ -11,6 +11,16 @@ export function GenericSkeleton() {
   );
 }
 
+export function TableSkeletonSingleColumn() {
+  return (
+    <>
+      <Skeleton height="3rem" radius="md" mb="sm" />
+      <Skeleton height="3rem" radius="md" mb="sm" />
+      <Skeleton height="3rem" radius="md" mb="sm" />
+    </>
+  );
+}
+
 export function TableSkeletonTwoColumns() {
   return (
     <Center>

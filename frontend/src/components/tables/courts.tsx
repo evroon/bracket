@@ -1,5 +1,4 @@
 import { Table } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -9,18 +8,25 @@ import { deleteCourt } from '../../services/court';
 import DeleteButton from '../buttons/delete';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
+import { TableSkeletonSingleColumn } from '../utils/skeletons';
+import { Translator } from '../utils/types';
 import TableLayout, { ThNotSortable, getTableState, sortTableEntries } from './table';
 
 export default function CourtsTable({
+  t,
   tournament,
   swrCourtsResponse,
 }: {
+  t: Translator;
   tournament: Tournament;
   swrCourtsResponse: SWRResponse;
 }) {
-  const { t } = useTranslation();
   const courts: Court[] = swrCourtsResponse.data != null ? swrCourtsResponse.data.data : [];
   const tableState = getTableState('id');
+
+  if (swrCourtsResponse.isLoading || swrCourtsResponse.isValidating) {
+    return <TableSkeletonSingleColumn />;
+  }
 
   if (swrCourtsResponse.error) return <RequestErrorAlert error={swrCourtsResponse.error} />;
 

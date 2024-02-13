@@ -34,8 +34,13 @@ from bracket.utils.types import assert_some
 router = APIRouter()
 
 
+@router.get("/users/me", response_model=UserPublicResponse)
+async def get_user(user_public: UserPublic = Depends(user_authenticated)) -> UserPublicResponse:
+    return UserPublicResponse(data=user_public)
+
+
 @router.get("/users/{user_id}", response_model=UserPublicResponse)
-async def get_user(
+async def get_me(
     user_id: int, user_public: UserPublic = Depends(user_authenticated)
 ) -> UserPublicResponse:
     if user_public.id != user_id:

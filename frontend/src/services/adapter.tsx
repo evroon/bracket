@@ -180,8 +180,8 @@ export function getCourtsLive(tournament_id: number): SWRResponse {
   });
 }
 
-export function getUser(user_id: number): SWRResponse {
-  return useSWR(`users/${user_id}`, fetcher);
+export function getUser(): SWRResponse {
+  return useSWR('users/me', fetcher);
 }
 
 export function getUpcomingMatches(
@@ -223,7 +223,7 @@ export function checkForAuthError(response: any) {
   }
   if (responseHasAuthError(response)) {
     createAxios()
-      .get('clubs')
+      .get('users/me')
       .then(() => {})
       .catch((error: any) => {
         if (error.toJSON().status === 401) {

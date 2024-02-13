@@ -33,7 +33,12 @@ export default function StagesPage() {
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
 
   let content;
-  if (swrStagesResponse.isLoading) {
+  if (
+    swrStagesResponse.isLoading ||
+    swrTournamentsResponse.isLoading ||
+    swrStagesResponse.isValidating ||
+    swrTournamentsResponse.isValidating
+  ) {
     content = <TableSkeletonTwoColumnsSmall />;
   } else if (stages.length < 1) {
     content = (

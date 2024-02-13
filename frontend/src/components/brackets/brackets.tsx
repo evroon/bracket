@@ -1,7 +1,6 @@
 import { Alert, Button, Container, Grid, Group, Skeleton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { TFunction } from 'i18next';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -13,11 +12,12 @@ import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../inte
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { createRound } from '../../services/round';
 import ActivateNextRoundModal from '../modals/activate_next_round_modal';
+import { Translator } from '../utils/types';
 import { responseIsValid } from '../utils/util';
 import Round from './round';
 
 function getRoundsGridCols(
-  t: TFunction<'translation', undefined>,
+  t: Translator,
   stageItem: StageItemWithRounds,
   tournamentData: TournamentMinimal,
   swrStagesResponse: SWRResponse,

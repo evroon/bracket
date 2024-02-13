@@ -7,6 +7,7 @@ import React from 'react';
 
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { Time } from '../../../components/utils/datetime';
+import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { Court } from '../../../interfaces/court';
 import { MatchInterface, formatMatchTeam1, formatMatchTeam2 } from '../../../interfaces/match';
@@ -125,7 +126,7 @@ function Schedule({
   matchesLookup,
   schedule,
 }: {
-  t: any;
+  t: Translator;
   stageItemsLookup: any;
   matchesLookup: any;
   schedule: { court: Court; matches: MatchInterface[] }[];

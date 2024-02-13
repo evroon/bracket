@@ -12,6 +12,7 @@ import TeamUpdateModal from '../modals/team_update_modal';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
+import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function TeamsTable({
@@ -26,6 +27,10 @@ export default function TeamsTable({
   const { t } = useTranslation();
   const tableState = getTableState('name');
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
+
+  if (swrTeamsResponse.isLoading || swrTeamsResponse.isValidating) {
+    return <TableSkeletonSingleColumn />;
+  }
 
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))

@@ -9,6 +9,7 @@ import DeleteButton from '../buttons/delete';
 import ClubModal from '../modals/club_modal';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
+import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWRResponse }) {
@@ -17,6 +18,9 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
   const { t } = useTranslation();
 
   if (swrClubsResponse.error) return <RequestErrorAlert error={swrClubsResponse.error} />;
+  if (swrClubsResponse.isLoading || swrClubsResponse.isValidating) {
+    return <TableSkeletonSingleColumn />;
+  }
 
   const rows = clubs
     .sort((p1: Club, p2: Club) => sortTableEntries(p1, p2, tableState))

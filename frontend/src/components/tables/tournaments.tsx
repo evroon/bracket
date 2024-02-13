@@ -12,6 +12,7 @@ import DeleteButton from '../buttons/delete';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
+import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function TournamentsTable({
@@ -25,6 +26,9 @@ export default function TournamentsTable({
 
   if (swrTournamentsResponse.error) {
     return <RequestErrorAlert error={swrTournamentsResponse.error} />;
+  }
+  if (swrTournamentsResponse.isLoading || swrTournamentsResponse.isValidating) {
+    return <TableSkeletonSingleColumn />;
   }
 
   const tournaments: Tournament[] =
