@@ -23,7 +23,7 @@ export default function HomePage() {
   let content;
   content = user != null ? <UserForm user={user} /> : null;
 
-  if (swrUserResponse.isValidating || swrUserResponse.isLoading) {
+  if (swrUserResponse.isLoading) {
     content = (
       <Group maw="40rem">
         <TableSkeletonSingleColumn />

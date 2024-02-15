@@ -28,7 +28,7 @@ export default function TeamsTable({
   const tableState = getTableState('name');
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
-  if (swrTeamsResponse.isLoading || swrTeamsResponse.isValidating) {
+  if (swrTeamsResponse.isLoading) {
     return <TableSkeletonSingleColumn />;
   }
 

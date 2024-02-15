@@ -18,7 +18,7 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
   const { t } = useTranslation();
 
   if (swrClubsResponse.error) return <RequestErrorAlert error={swrClubsResponse.error} />;
-  if (swrClubsResponse.isLoading || swrClubsResponse.isValidating) {
+  if (swrClubsResponse.isLoading) {
     return <TableSkeletonSingleColumn />;
   }
 
