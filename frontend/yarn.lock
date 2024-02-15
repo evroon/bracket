@@ -518,18 +518,18 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
-"@hcaptcha/loader@^1.0.10":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-1.1.2.tgz#512d8ce528c7e7393924c3f188fa98425aa4313f"
-  integrity sha512-YEBXCGNUBpPJUd5UZg64jBU6YMOhDjGdzS6dUCI9P8uIJttuQz3P76wVmK9kdKOuvLUaB7HwVBBmNv/bkAaIEw==
+"@hcaptcha/loader@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-1.2.1.tgz#02162dd8a41dceff49a2a34e09e6c1545a0a567b"
+  integrity sha512-O16E7mAByRR+uuzwtA3ROaOT4Er/TasHRZBTLyhZ2ksMRsmaaXChGkdE/dws4meTJYjcItqZNyc3NpJv9/jgAw==
 
-"@hcaptcha/react-hcaptcha@^1.9.3":
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.9.3.tgz#26892c2b8a16a56d41629d085dda609e8038cb45"
-  integrity sha512-3aaXKT2tEXr317eWYNXm7JGC9z6FkhuDX46uLSFAevtVB3grxgwVxcVQuZy/Y5p6+TeQ6iDTAD0Ca2xwe4Muvw==
+"@hcaptcha/react-hcaptcha@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.10.1.tgz#c9c4a913cde4fd6e9c09180f1aa6f65d9f136263"
+  integrity sha512-P0en4gEZAecah7Pt3WIaJO2gFlaLZKkI0+Tfdg8fNqsDxqT9VytZWSkH4WAkiPRULK1QcGgUZK+J56MXYmPifw==
   dependencies:
     "@babel/runtime" "^7.17.9"
-    "@hcaptcha/loader" "^1.0.10"
+    "@hcaptcha/loader" "^1.2.1"
 
 "@hello-pangea/dnd@^16.5.0":
   version "16.5.0"
