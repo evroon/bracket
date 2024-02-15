@@ -28,10 +28,7 @@ export default function StagesPage() {
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
 
   let content;
-  if (
-    swrStagesResponse.isLoading ||
-    swrTournamentResponse.isLoading
-  ) {
+  if (swrStagesResponse.isLoading || swrTournamentResponse.isLoading) {
     content = <TableSkeletonTwoColumnsSmall />;
   } else if (stages.length < 1) {
     content = (
