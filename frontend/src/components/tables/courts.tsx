@@ -24,7 +24,7 @@ export default function CourtsTable({
   const courts: Court[] = swrCourtsResponse.data != null ? swrCourtsResponse.data.data : [];
   const tableState = getTableState('id');
 
-  if (swrCourtsResponse.isLoading || swrCourtsResponse.isValidating) {
+  if (swrCourtsResponse.isLoading) {
     return <TableSkeletonSingleColumn />;
   }
 

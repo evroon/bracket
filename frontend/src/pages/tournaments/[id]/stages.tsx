@@ -30,9 +30,7 @@ export default function StagesPage() {
   let content;
   if (
     swrStagesResponse.isLoading ||
-    swrTournamentResponse.isLoading ||
-    swrStagesResponse.isValidating ||
-    swrTournamentResponse.isValidating
+    swrTournamentResponse.isLoading
   ) {
     content = <TableSkeletonTwoColumnsSmall />;
   } else if (stages.length < 1) {

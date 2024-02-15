@@ -53,7 +53,7 @@ export default function PlayersTable({
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
-  if (swrPlayersResponse.isLoading || swrPlayersResponse.isValidating) {
+  if (swrPlayersResponse.isLoading) {
     return <TableSkeletonSingleColumn />;
   }
 

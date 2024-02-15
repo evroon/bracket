@@ -27,7 +27,7 @@ export default function TournamentsTable({
   if (swrTournamentsResponse.error) {
     return <RequestErrorAlert error={swrTournamentsResponse.error} />;
   }
-  if (swrTournamentsResponse.isLoading || swrTournamentsResponse.isValidating) {
+  if (swrTournamentsResponse.isLoading) {
     return <TableSkeletonSingleColumn />;
   }
 
