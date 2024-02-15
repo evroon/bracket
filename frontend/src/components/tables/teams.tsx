@@ -81,7 +81,7 @@ export default function TeamsTable({
           <ThSortable state={tableState} field="name">
             {t('name_table_header')}
           </ThSortable>
-          <ThNotSortable>{t('member_table_header')}</ThNotSortable>
+          <ThNotSortable>{t('members_table_header')}</ThNotSortable>
           <ThSortable state={tableState} field="created">
             {t('created')}
           </ThSortable>
