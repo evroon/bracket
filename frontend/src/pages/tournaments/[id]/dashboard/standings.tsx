@@ -14,6 +14,7 @@ import StandingsTable from '../../../../components/tables/standings';
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { getTeamsLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export default function Standings() {
   const tournamentResponse = getTournamentResponseByEndpointName();
@@ -52,3 +53,9 @@ export default function Standings() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+  },
+});
