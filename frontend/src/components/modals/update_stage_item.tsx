@@ -32,7 +32,7 @@ export function UpdateStageItemModal({
       <form
         onSubmit={form.onSubmit(async (values) => {
           await updateStageItem(tournament.id, stageItem.id, values.name);
-          await swrStagesResponse.mutate(null);
+          await swrStagesResponse.mutate();
         })}
       >
         <TextInput

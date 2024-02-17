@@ -111,7 +111,7 @@ function StageItemRow({
                 leftSection={<IconTrash size={rem(14)} />}
                 onClick={async () => {
                   await deleteStageItem(tournament.id, stageItem.id);
-                  await swrStagesResponse.mutate(null);
+                  await swrStagesResponse.mutate();
                 }}
                 color="red"
               >
@@ -193,7 +193,7 @@ function StageColumn({
               leftSection={<IconTrash size={rem(14)} />}
               onClick={async () => {
                 await deleteStage(tournament.id, stage.id);
-                await swrStagesResponse.mutate(null);
+                await swrStagesResponse.mutate();
               }}
               color="red"
             >

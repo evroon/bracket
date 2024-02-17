@@ -24,7 +24,7 @@ export default function CreateStageButton({
       style={{ marginRight: 10 }}
       onClick={async () => {
         await createStage(tournament.id);
-        await swrStagesResponse.mutate(null);
+        await swrStagesResponse.mutate();
       }}
       leftSection={<GoPlus size={24} />}
     >
@@ -50,7 +50,7 @@ export function CreateStageButtonLarge({
       style={{ marginRight: 10, width: '25%' }}
       onClick={async () => {
         await createStage(tournament.id);
-        await swrStagesResponse.mutate(null);
+        await swrStagesResponse.mutate();
       }}
       leftSection={<GoPlus size={24} />}
     >

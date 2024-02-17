@@ -77,7 +77,7 @@ function GeneralTournamentForm({
           values.duration_minutes,
           values.margin_minutes
         );
-        await swrTournamentsResponse.mutate(null);
+        await swrTournamentsResponse.mutate();
         setOpened(false);
       })}
     >

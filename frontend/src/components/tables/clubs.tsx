@@ -32,7 +32,7 @@ export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWR
           <DeleteButton
             onClick={async () => {
               await deleteClub(club.id);
-              await swrClubsResponse.mutate(null);
+              await swrClubsResponse.mutate();
             }}
             title={t('delete_club_button')}
           />

@@ -174,7 +174,7 @@ export function CreateStageItemModal({
               };
             });
             await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
-            await swrStagesResponse.mutate(null);
+            await swrStagesResponse.mutate();
           })}
         >
           <Select

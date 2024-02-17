@@ -25,7 +25,7 @@ function CreateCourtForm(t: Translator, tournament: Tournament, swrCourtsRespons
     <form
       onSubmit={form.onSubmit(async (values) => {
         await createCourt(tournament.id, values.name);
-        await swrCourtsResponse.mutate(null);
+        await swrCourtsResponse.mutate();
       })}
     >
       <Divider mt={12} />

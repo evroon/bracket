@@ -62,7 +62,7 @@ export default function TeamsTable({
           <DeleteButton
             onClick={async () => {
               await deleteTeam(tournamentData.id, team.id);
-              await swrTeamsResponse.mutate(null);
+              await swrTeamsResponse.mutate();
             }}
             title={t('delete_team_button')}
           />
