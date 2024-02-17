@@ -46,7 +46,7 @@ def check_unique_constraint_violation(
 
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail=unique_index_violation_error_lookup[UniqueIndex(constraint_name)],
+        detail=unique_index_violation_error_lookup[constraint],
     )
 
 
@@ -66,5 +66,5 @@ def check_foreign_key_violation(
 
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail=foreign_key_violation_error_lookup[ForeignKey(constraint_name)],
+        detail=foreign_key_violation_error_lookup[constraint],
     )
