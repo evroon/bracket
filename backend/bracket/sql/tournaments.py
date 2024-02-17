@@ -1,7 +1,7 @@
 from typing import Any
 
 from bracket.database import database
-from bracket.logic.planning.tournaments import delete_tournament_logo
+from bracket.logic.tournaments import delete_tournament_logo
 from bracket.models.db.tournament import Tournament
 from bracket.sql.courts import sql_delete_courts_of_tournament
 from bracket.sql.players import sql_delete_players_of_tournament

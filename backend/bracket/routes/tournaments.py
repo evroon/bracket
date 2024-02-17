@@ -1,4 +1,4 @@
-import aiofiles
+import aiofiles.os
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
@@ -6,8 +6,8 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
-from bracket.logic.planning.tournaments import delete_tournament_logo
 from bracket.logic.subscriptions import check_requirement
+from bracket.logic.tournaments import get_tournament_logo_path
 from bracket.models.db.tournament import (
     Tournament,
     TournamentBody,
@@ -36,6 +36,7 @@ from bracket.utils.errors import (
     check_foreign_key_violation,
     check_unique_constraint_violation,
 )
+from bracket.utils.logging import logger
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -154,13 +155,18 @@ async def upload_logo(
     file: UploadFile | None = None,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    if file:
-        contents = await file.read()
+    old_logo_path = await get_tournament_logo_path(tournament_id)
+    new_logo_path = f"static/{file.filename}" if file is not None else None
 
-        async with aiofiles.open(f"static/{file.filename}", "wb") as f:
-            await f.write(contents)
-    else:
-        await delete_tournament_logo(tournament_id)
+    if file:
+        async with aiofiles.open(new_logo_path, "wb") as f:
+            await f.write(await file.read())
+
+    if old_logo_path and old_logo_path != new_logo_path:
+        try:
+            await aiofiles.os.remove(old_logo_path)
+        except Exception as exc:
+            logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
