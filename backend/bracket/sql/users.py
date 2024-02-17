@@ -1,9 +1,10 @@
 from bracket.database import database
+from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
 from bracket.schema import users
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
-from bracket.sql.tournaments import sql_delete_tournament_completely, sql_get_tournaments
+from bracket.sql.tournaments import sql_get_tournaments
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.types import assert_some
 

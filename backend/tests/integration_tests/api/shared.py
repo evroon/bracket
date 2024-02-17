@@ -1,6 +1,6 @@
 import asyncio
 import socket
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Sequence
 from contextlib import closing
 from typing import Final
 
@@ -70,7 +70,7 @@ class UvicornTestServer(uvicorn.Server):
 async def send_request(
     method: HTTPMethod,
     endpoint: str,
-    body: JsonDict | None = None,
+    body: JsonDict | AsyncIterator[bytes] | None = None,
     json: JsonDict | None = None,
     headers: JsonDict = {},
 ) -> JsonDict:
@@ -111,7 +111,7 @@ async def send_tournament_request(
     method: HTTPMethod,
     endpoint: str,
     auth_context: AuthContext,
-    body: JsonDict | None = None,
+    body: JsonDict | AsyncIterator[bytes] | None = None,
     json: JsonDict | None = None,
 ) -> JsonDict:
     return await send_request(

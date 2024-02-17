@@ -27,7 +27,7 @@ import { GenericSkeleton } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getClubs, getTournamentById } from '../../../services/adapter';
+import { getBaseApiUrl, getClubs, getTournamentById, removeLogo } from '../../../services/adapter';
 import { updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
@@ -163,12 +163,23 @@ function GeneralTournamentForm({
           {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
         />
 
-        <DropzoneButton tournament={tournament} />
-        <Center mt="lg">
+        <DropzoneButton tournament={tournament} swrTournamentResponse={swrTournamentResponse} />
+        <Center my="lg">
           <div style={{ width: '50%' }}>
             <TournamentLogo tournament={tournament} />
           </div>
         </Center>
+        <Button
+          variant="outline"
+          color="red"
+          fullWidth
+          onClick={async () => {
+            await removeLogo(tournament.id);
+            await swrTournamentResponse.mutate();
+          }}
+        >
+          {t('remove_logo')}
+        </Button>
       </Fieldset>
       <Fieldset legend={t('miscellaneous_title')} mt="lg" radius="md">
         <Checkbox
