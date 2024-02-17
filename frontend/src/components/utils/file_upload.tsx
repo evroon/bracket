@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
-import {handleRequestError, uploadLogo} from '../../services/adapter';
+import { handleRequestError, uploadLogo } from '../../services/adapter';
 
 export function DropzoneButton({
   tournament,
