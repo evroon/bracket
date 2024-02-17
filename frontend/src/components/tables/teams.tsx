@@ -13,13 +13,7 @@ import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
-import TableLayout, {
-  TableState,
-  ThNotSortable,
-  ThSortable,
-  getTableState,
-  sortTableEntries,
-} from './table';
+import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export default function TeamsTable({
   tournamentData,
