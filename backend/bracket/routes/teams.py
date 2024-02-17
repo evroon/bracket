@@ -27,7 +27,7 @@ from bracket.sql.teams import (
     sql_delete_team,
 )
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.pagination import Pagination
+from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -57,7 +57,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: set[
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
 async def get_teams(
     tournament_id: int,
-    pagination: Pagination = Depends(),
+    pagination: PaginationTeams = Depends(),
     _: UserPublic = Depends(user_authenticated_or_public_dashboard),
 ) -> TeamsWithPlayersResponse:
     return TeamsWithPlayersResponse(

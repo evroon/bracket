@@ -7,7 +7,7 @@ from bracket.database import database
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
 from bracket.models.db.players import START_ELO, PlayerStatistics
 from bracket.schema import players
-from bracket.utils.pagination import Pagination
+from bracket.utils.pagination import PaginationPlayers
 from bracket.utils.types import dict_without_none
 
 
@@ -15,19 +15,21 @@ async def get_all_players_in_tournament(
     tournament_id: int,
     *,
     not_in_team: bool = False,
-    pagination: Pagination | None = None,
+    pagination: PaginationPlayers | None = None,
 ) -> list[Player]:
     not_in_team_filter = "AND players.team_id IS NULL" if not_in_team else ""
     limit_filter = "LIMIT :limit" if pagination is not None and pagination.limit is not None else ""
     offset_filter = (
         "OFFSET :offset" if pagination is not None and pagination.offset is not None else ""
     )
+    sort_by = pagination.sort_by if pagination is not None else "name"
+    sort_direction = pagination.sort_direction if pagination is not None else ""
     query = f"""
         SELECT *
         FROM players
         WHERE players.tournament_id = :tournament_id
         {not_in_team_filter}
-        ORDER BY name
+        ORDER BY {sort_by} {sort_direction}
         {limit_filter}
         {offset_filter}
         """
@@ -42,6 +44,7 @@ async def get_all_players_in_tournament(
             }
         ),
     )
+
     return [Player.model_validate(x) for x in result]
 
 

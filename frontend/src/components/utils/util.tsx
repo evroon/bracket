@@ -100,4 +100,6 @@ export function HCaptchaInput({
 export interface Pagination {
   offset: number;
   limit: number;
+  sort_by: string;
+  sort_direction: 'asc' | 'desc';
 }

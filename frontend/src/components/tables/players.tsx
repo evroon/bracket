@@ -14,7 +14,7 @@ import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
-import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export function WinDistributionTitle() {
   const { t } = useTranslation();
@@ -38,14 +38,15 @@ export function WinDistributionTitle() {
 export default function PlayersTable({
   swrPlayersResponse,
   tournamentData,
+  tableState,
 }: {
   swrPlayersResponse: SWRResponse;
   tournamentData: TournamentMinimal;
+  tableState: TableState;
 }) {
   const { t } = useTranslation();
   const players: Player[] =
     swrPlayersResponse.data != null ? swrPlayersResponse.data.data.players : [];
-  const tableState = getTableState('name');
 
   const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
   const maxELOScore = Math.max(...players.map((player) => Number(player.elo_score)));

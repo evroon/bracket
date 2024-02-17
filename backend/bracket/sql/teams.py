@@ -3,7 +3,7 @@ from typing import cast
 from bracket.database import database
 from bracket.models.db.players import PlayerStatistics
 from bracket.models.db.team import FullTeamWithPlayers, Team
-from bracket.utils.pagination import Pagination
+from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import dict_without_none
 
 
@@ -17,7 +17,7 @@ async def get_team_by_id(team_id: int, tournament_id: int) -> Team | None:
     result = await database.fetch_one(
         query=query, values={"team_id": team_id, "tournament_id": tournament_id}
     )
-    return Team.model_validate(dict(result._mapping)) if result is not None else None
+    return Team.model_validate(result) if result is not None else None
 
 
 async def get_teams_with_members(
@@ -25,13 +25,18 @@ async def get_teams_with_members(
     *,
     only_active_teams: bool = False,
     team_id: int | None = None,
-    pagination: Pagination | None = None,
+    pagination: PaginationTeams | None = None,
 ) -> list[FullTeamWithPlayers]:
     active_team_filter = "AND teams.active IS TRUE" if only_active_teams else ""
     team_id_filter = "AND teams.id = :team_id" if team_id is not None else ""
     limit_filter = "LIMIT :limit" if pagination is not None and pagination.limit is not None else ""
     offset_filter = (
         "OFFSET :offset" if pagination is not None and pagination.offset is not None else ""
+    )
+    sort = (
+        f"teams.{pagination.sort_by} {pagination.sort_direction}"
+        if pagination is not None
+        else "teams.elo_score DESC, teams.wins DESC, name ASC"
     )
     query = f"""
         SELECT
@@ -44,7 +49,7 @@ async def get_teams_with_members(
         {active_team_filter}
         {team_id_filter}
         GROUP BY teams.id
-        ORDER BY teams.elo_score DESC, teams.wins DESC, name ASC
+        ORDER BY {sort}
         {limit_filter}
         {offset_filter}
         """
