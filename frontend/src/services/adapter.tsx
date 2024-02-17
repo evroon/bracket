@@ -208,6 +208,10 @@ export async function uploadLogo(tournament_id: number, file: any) {
   return createAxios().post(`tournaments/${tournament_id}/logo`, bodyFormData);
 }
 
+export async function removeLogo(tournament_id: number) {
+  return createAxios().post(`tournaments/${tournament_id}/logo`);
+}
+
 export function checkForAuthError(response: any) {
   if (typeof window !== 'undefined' && !tokenPresent()) {
     const router = useRouter();
