@@ -14,11 +14,11 @@ import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, {
+  TableState,
   ThNotSortable,
   ThSortable,
   getTableState,
   sortTableEntries,
-  TableState
 } from './table';
 
 export default function TeamsTable({
