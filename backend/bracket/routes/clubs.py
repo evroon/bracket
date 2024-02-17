@@ -1,3 +1,4 @@
+import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends
 
 from bracket.logic.subscriptions import check_requirement
@@ -6,6 +7,7 @@ from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated, user_authenticated_for_club
 from bracket.routes.models import ClubResponse, ClubsResponse, SuccessResponse
 from bracket.sql.clubs import create_club, get_clubs_for_user_id, sql_delete_club, sql_update_club
+from bracket.utils.errors import ForeignKey, check_foreign_key_violation
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -29,7 +31,11 @@ async def create_new_club(
 async def delete_club(
     club_id: int, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> SuccessResponse:
-    await sql_delete_club(club_id)
+    try:
+        await sql_delete_club(club_id)
+    except asyncpg.exceptions.ForeignKeyViolationError as exc:
+        check_foreign_key_violation(exc, {ForeignKey.tournaments_club_id_fkey})
+
     return SuccessResponse()
 
 

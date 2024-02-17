@@ -28,7 +28,12 @@ from bracket.sql.tournaments import (
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.db import fetch_one_parsed_certain
-from bracket.utils.errors import check_constraint_and_raise_http_exception
+from bracket.utils.errors import (
+    ForeignKey,
+    UniqueIndex,
+    check_foreign_key_violation,
+    check_unique_constraint_violation,
+)
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -92,7 +97,7 @@ async def update_tournament_by_id(
             values=tournament_body.model_dump(),
         )
     except asyncpg.exceptions.UniqueViolationError as exc:
-        check_constraint_and_raise_http_exception(exc)
+        check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 
     await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
@@ -102,7 +107,11 @@ async def update_tournament_by_id(
 async def delete_tournament(
     tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
-    await sql_delete_tournament(tournament_id)
+    try:
+        await sql_delete_tournament(tournament_id)
+    except asyncpg.exceptions.ForeignKeyViolationError as exc:
+        check_foreign_key_violation(exc, {ForeignKey.stages_tournament_id_fkey})
+
     return SuccessResponse()
 
 
@@ -123,13 +132,17 @@ async def create_tournament(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    await database.execute(
-        query=tournaments.insert(),
-        values=TournamentToInsert(
-            **tournament_to_insert.model_dump(),
-            created=datetime_utc.now(),
-        ).model_dump(),
-    )
+    try:
+        await database.execute(
+            query=tournaments.insert(),
+            values=TournamentToInsert(
+                **tournament_to_insert.model_dump(),
+                created=datetime_utc.now(),
+            ).model_dump(),
+        )
+    except asyncpg.exceptions.UniqueViolationError as exc:
+        check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
+
     return SuccessResponse()
 
 
