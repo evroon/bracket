@@ -6,6 +6,7 @@ from starlette import status
 
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
+from bracket.logic.planning.tournaments import delete_tournament_logo
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.tournament import (
     Tournament,
@@ -24,7 +25,6 @@ from bracket.routes.models import SuccessResponse, TournamentResponse, Tournamen
 from bracket.schema import tournaments
 from bracket.sql.tournaments import (
     sql_delete_tournament,
-    sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
 )
@@ -160,9 +160,7 @@ async def upload_logo(
         async with aiofiles.open(f"static/{file.filename}", "wb") as f:
             await f.write(contents)
     else:
-        tournament = await sql_get_tournament(tournament_id)
-        if tournament.logo_path is not None and await aiofiles.os.path.exists(tournament.logo_path):
-            await aiofiles.os.remove(tournament.logo_path)
+        await delete_tournament_logo(tournament_id)
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),

@@ -1,6 +1,7 @@
 from typing import Any
 
 from bracket.database import database
+from bracket.logic.planning.tournaments import delete_tournament_logo
 from bracket.models.db.tournament import Tournament
 from bracket.sql.courts import sql_delete_courts_of_tournament
 from bracket.sql.players import sql_delete_players_of_tournament
@@ -23,7 +24,7 @@ async def sql_get_tournament(tournament_id: int) -> Tournament:
         """
     result = await database.fetch_one(query=query, values={"tournament_id": tournament_id})
     assert result is not None
-    return Tournament.model_validate(dict(result._mapping))
+    return Tournament.model_validate(result)
 
 
 async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament | None:
@@ -53,7 +54,7 @@ async def sql_get_tournaments(
         params = {**params, "endpoint_name": endpoint_name}
 
     result = await database.fetch_all(query=query, values=params)
-    return [Tournament.model_validate(dict(x._mapping)) for x in result]
+    return [Tournament.model_validate(x) for x in result]
 
 
 async def sql_delete_tournament(tournament_id: int) -> None:
@@ -66,6 +67,7 @@ async def sql_delete_tournament(tournament_id: int) -> None:
 
 async def sql_delete_tournament_completely(tournament_id: int) -> None:
     stages = await get_full_tournament_details(tournament_id)
+    await delete_tournament_logo(tournament_id)
 
     for stage in stages:
         for stage_item in stage.stage_items:
