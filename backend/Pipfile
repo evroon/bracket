@@ -29,6 +29,7 @@ starlette = ">=0.22.0"
 types-passlib = "*"
 types-simplejson = ">=3.18.0"
 uvicorn = ">=0.20.0"
+aiofile = "*"
 
 [dev-packages]
 aioresponses = ">=0.7.4"
