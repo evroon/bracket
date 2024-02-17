@@ -158,11 +158,11 @@ async def upload_logo(
     old_logo_path = await get_tournament_logo_path(tournament_id)
     new_logo_path = f"static/{file.filename}" if file is not None else None
 
-    if file:
+    if file and new_logo_path:
         async with aiofiles.open(new_logo_path, "wb") as f:
             await f.write(await file.read())
 
-    if old_logo_path and old_logo_path != new_logo_path:
+    if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
             await aiofiles.os.remove(old_logo_path)
         except Exception as exc:
