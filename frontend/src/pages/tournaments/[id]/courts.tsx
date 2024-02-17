@@ -1,4 +1,4 @@
-import { Button, Container, Divider, TextInput } from '@mantine/core';
+import { Button, Container, Fieldset, Grid, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -28,17 +28,17 @@ function CreateCourtForm(t: Translator, tournament: Tournament, swrCourtsRespons
         await swrCourtsResponse.mutate();
       })}
     >
-      <Divider mt={12} />
-      <h3>{t('add_court_title')}</h3>
-      <TextInput
-        withAsterisk
-        label={t('name_input_label')}
-        placeholder={t('court_name_input_placeholder')}
-        {...form.getInputProps('name')}
-      />
-      <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-        {t('create_court_button')}
-      </Button>
+      <Fieldset legend={t('add_court_title')} radius="md">
+        <TextInput
+          withAsterisk
+          label={t('name_input_label')}
+          placeholder={t('court_name_input_placeholder')}
+          {...form.getInputProps('name')}
+        />
+        <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
+          {t('create_court_button')}
+        </Button>
+      </Fieldset>
     </form>
   );
 }
@@ -54,9 +54,19 @@ export default function CourtsPage() {
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
-      <Container>
-        <CourtsTable t={t} tournament={tournamentDataFull} swrCourtsResponse={swrCourtsResponse} />
-        {CreateCourtForm(t, tournamentDataFull, swrCourtsResponse)}
+      <Container maw="100rem">
+        <Grid grow>
+          <Grid.Col span={{ lg: 8 }}>
+            <CourtsTable
+              t={t}
+              tournament={tournamentDataFull}
+              swrCourtsResponse={swrCourtsResponse}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ lg: 4 }}>
+            {CreateCourtForm(t, tournamentDataFull, swrCourtsResponse)}
+          </Grid.Col>
+        </Grid>
       </Container>
     </TournamentLayout>
   );

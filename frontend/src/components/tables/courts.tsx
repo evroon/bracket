@@ -42,6 +42,7 @@ export default function CourtsTable({
               await swrCourtsResponse.mutate();
             }}
             title={t('delete_court_button')}
+            style={{ float: 'right' }}
           />
         </Table.Td>
       </Table.Tr>

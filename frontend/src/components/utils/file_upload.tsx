@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
-import { uploadLogo } from '../../services/adapter';
+import { handleRequestError, uploadLogo } from '../../services/adapter';
 
 export function DropzoneButton({
   tournament,
@@ -25,8 +25,9 @@ export function DropzoneButton({
         mt="lg"
         openRef={openRef}
         onDrop={async (files) => {
-          await uploadLogo(tournament.id, files[0]);
+          const response = await uploadLogo(tournament.id, files[0]);
           await swrTournamentResponse.mutate();
+          handleRequestError(response);
         }}
         // className={classes.dropzone}
         radius="md"
