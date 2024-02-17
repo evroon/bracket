@@ -47,7 +47,7 @@ export default function PlayerUpdateModal({
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updatePlayer(tournament_id, player.id, values.name, values.active, null);
-            await swrPlayersResponse.mutate(null);
+            await swrPlayersResponse.mutate();
             setOpened(false);
           })}
         >

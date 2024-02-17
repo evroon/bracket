@@ -88,7 +88,7 @@ function GeneralTournamentForm({
           values.margin_minutes
         );
 
-        await swrTournamentResponse.mutate(null);
+        await swrTournamentResponse.mutate();
       })}
     >
       <TextInput

@@ -38,8 +38,8 @@ function RoundDeleteButton({
       fullWidth
       onClick={async () => {
         await deleteRound(tournamentData.id, round.id);
-        await swrRoundsResponse.mutate(null);
-        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
+        await swrRoundsResponse.mutate();
+        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
       }}
       style={{ marginTop: '15px' }}
       size="sm"
@@ -82,7 +82,7 @@ export default function RoundModal({
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updateRound(tournamentData.id, round.id, values as RoundInterface);
-            await swrRoundsResponse.mutate(null);
+            await swrRoundsResponse.mutate();
             setOpened(false);
           })}
         >

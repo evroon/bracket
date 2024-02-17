@@ -187,7 +187,7 @@ export default function SchedulePage() {
               leftSection={<IconCalendarPlus size={24} />}
               onClick={async () => {
                 await scheduleMatches(tournamentData.id);
-                await swrStagesResponse.mutate(null);
+                await swrStagesResponse.mutate();
               }}
             >
               {t('schedule_description')}
@@ -205,7 +205,7 @@ export default function SchedulePage() {
               new_court_id: +destination.droppableId,
               new_position: destination.index,
             });
-            await swrStagesResponse.mutate(null);
+            await swrStagesResponse.mutate();
           }}
         >
           <Schedule

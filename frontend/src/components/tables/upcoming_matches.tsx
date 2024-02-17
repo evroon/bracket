@@ -50,8 +50,8 @@ export default function UpcomingMatchesTable({
 
       await createMatch(tournamentData.id, match_to_schedule);
     }
-    await swrRoundsResponse.mutate(null);
-    await swrUpcomingMatchesResponse.mutate(null);
+    await swrRoundsResponse.mutate();
+    await swrUpcomingMatchesResponse.mutate();
   }
 
   const rows = upcoming_matches

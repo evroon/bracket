@@ -33,7 +33,7 @@ function MultiPlayerTab({
     <form
       onSubmit={form.onSubmit(async (values) => {
         await createMultiplePlayers(tournament_id, values.names, values.active);
-        await swrPlayersResponse.mutate(null);
+        await swrPlayersResponse.mutate();
         setOpened(false);
       })}
     >
@@ -75,7 +75,7 @@ function SinglePlayerTab({
     <form
       onSubmit={form.onSubmit(async (values) => {
         await createPlayer(tournament_id, values.name, values.active);
-        await swrPlayersResponse.mutate(null);
+        await swrPlayersResponse.mutate();
         setOpened(false);
       })}
     >

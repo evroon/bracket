@@ -59,7 +59,7 @@ export default function ClubModal({
           onSubmit={form.onSubmit(async (values) => {
             if (is_create_form) await createClub(values.name);
             else await updateClub(club.id, values.name);
-            await swrClubsResponse.mutate(null);
+            await swrClubsResponse.mutate();
             setOpened(false);
           })}
         >

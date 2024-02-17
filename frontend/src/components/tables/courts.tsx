@@ -39,7 +39,7 @@ export default function CourtsTable({
           <DeleteButton
             onClick={async () => {
               await deleteCourt(tournament.id, court.id);
-              await swrCourtsResponse.mutate(null);
+              await swrCourtsResponse.mutate();
             }}
             title={t('delete_court_button')}
           />

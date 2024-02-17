@@ -49,7 +49,7 @@ export default function TeamUpdateModal({
               values.player_ids
             );
             if (requestSucceeded(result)) {
-              await swrTeamsResponse.mutate(null);
+              await swrTeamsResponse.mutate();
               setOpened(false);
             }
           })}

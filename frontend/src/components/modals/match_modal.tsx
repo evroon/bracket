@@ -35,8 +35,8 @@ function MatchDeleteButton({
       fullWidth
       onClick={async () => {
         await deleteMatch(tournamentData.id, match.id);
-        await swrRoundsResponse.mutate(null);
-        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
+        await swrRoundsResponse.mutate();
+        if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
       }}
       style={{ marginTop: '1rem' }}
       size="sm"
@@ -111,8 +111,8 @@ export default function MatchModal({
               custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
             };
             await updateMatch(tournamentData.id, match.id, updatedMatch);
-            await swrStagesResponse.mutate(null);
-            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate(null);
+            await swrStagesResponse.mutate();
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
             setOpened(false);
           })}
         >
