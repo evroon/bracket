@@ -2,6 +2,7 @@ from heliclockter import datetime_utc
 from pydantic import Field
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.pydantic import EmptyStrToNone
 
 
 class Tournament(BaseModelORM):
@@ -23,7 +24,7 @@ class TournamentUpdateBody(BaseModelORM):
     start_time: datetime_utc
     name: str
     dashboard_public: bool
-    dashboard_endpoint: str | None = None
+    dashboard_endpoint: EmptyStrToNone | str = None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
     duration_minutes: int = Field(..., ge=1)
