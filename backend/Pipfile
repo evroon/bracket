@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+aiofile = ">=3.8.8"
 aiohttp = ">=3.8.3"
 aiopg = ">=1.4.0"
 alembic = ">=1.13.1"
@@ -29,7 +30,6 @@ starlette = ">=0.22.0"
 types-passlib = "*"
 types-simplejson = ">=3.18.0"
 uvicorn = ">=0.20.0"
-aiofile = "*"
 
 [dev-packages]
 aioresponses = ">=0.7.4"
