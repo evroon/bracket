@@ -19,7 +19,7 @@ from bracket.sql.players import (
     sql_delete_player,
 )
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.pagination import Pagination
+from bracket.utils.pagination import PaginationPlayers
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -29,7 +29,7 @@ router = APIRouter()
 async def get_players(
     tournament_id: int,
     not_in_team: bool = False,
-    pagination: Pagination = Depends(),
+    pagination: PaginationPlayers = Depends(),
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> PlayersResponse:
     return PlayersResponse(

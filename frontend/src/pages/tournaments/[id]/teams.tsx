@@ -2,9 +2,9 @@ import { Center, Grid, Pagination, Select, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
-import { SWRResponse } from 'swr';
 
 import TeamCreateModal from '../../../components/modals/team_create_modal';
+import { getTableState, tableStateToPagination } from '../../../components/tables/table';
 import TeamsTable from '../../../components/tables/teams';
 import {
   capitalize,
@@ -38,23 +38,17 @@ function StageItemSelect({
       placeholder={t('filter_stage_item_placeholder')}
       searchable
       limit={25}
-      onChange={(x) => {
-        setFilteredStageItemId(x);
-      }}
+      onChange={setFilteredStageItemId}
     />
   );
 }
 
 export default function Teams() {
-  const pageSize = 25;
-  const [page, setPage] = useState(1);
+  const tableState = getTableState('name');
   const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
-  const swrTeamsResponse: SWRResponse = getTeamsPaginated(tournamentData.id, {
-    limit: pageSize,
-    offset: pageSize * (page - 1),
-  });
+  const swrTeamsResponse = getTeamsPaginated(tournamentData.id, tableStateToPagination(tableState));
   const swrStagesResponse = getStages(tournamentData.id);
   const stageItemInputLookup = responseIsValid(swrStagesResponse)
     ? getStageItemList(swrStagesResponse)
@@ -100,9 +94,15 @@ export default function Teams() {
         swrTeamsResponse={swrTeamsResponse}
         tournamentData={tournamentData}
         teams={teams}
+        tableState={tableState}
       />
       <Center mt="1rem">
-        <Pagination value={page} onChange={setPage} total={1 + teamCount / pageSize} size="lg" />
+        <Pagination
+          value={tableState.page}
+          onChange={tableState.setPage}
+          total={1 + teamCount / tableState.pageSize}
+          size="lg"
+        />
       </Center>
     </TournamentLayout>
   );

@@ -13,19 +13,20 @@ import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
-import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export default function TeamsTable({
   tournamentData,
   swrTeamsResponse,
   teams,
+  tableState,
 }: {
   tournamentData: TournamentMinimal;
   swrTeamsResponse: SWRResponse;
   teams: TeamInterface[];
+  tableState: TableState;
 }) {
   const { t } = useTranslation();
-  const tableState = getTableState('name');
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   if (swrTeamsResponse.isLoading) {

@@ -11,6 +11,9 @@ export interface TableState {
   reversed: boolean;
   setReversed: any;
   setSortField: any;
+  pageSize: number;
+  page: any;
+  setPage: any;
 }
 
 export interface ThProps {
@@ -33,13 +36,28 @@ export const getTableState = (
 ) => {
   const [reversed, setReversed] = useState(initial_sort_direction);
   const [sortField, setSortField] = useState(initial_sort_field);
+  const [page, setPage] = useState(1);
+  const pageSize = 25;
   return {
     sortField,
     setSortField,
     reversed,
     setReversed,
+    pageSize,
+    page,
+    setPage,
   };
 };
+
+export function tableStateToPagination(tableState: TableState) {
+  const sort_direction: 'asc' | 'desc' = tableState.reversed ? 'asc' : 'desc';
+  return {
+    limit: tableState.pageSize,
+    offset: tableState.pageSize * (tableState.page - 1),
+    sort_by: tableState.sortField,
+    sort_direction,
+  };
+}
 
 export function sortTableEntries(r1: any, r2: any, tableState: TableState) {
   const order = r1[tableState.sortField] > r2[tableState.sortField];
