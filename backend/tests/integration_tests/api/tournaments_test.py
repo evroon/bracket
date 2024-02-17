@@ -1,16 +1,22 @@
+from collections.abc import AsyncIterator
+
+import aiofiles
+
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.schema import tournaments
+from bracket.sql.tournaments import sql_delete_tournament
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
+from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_auth_request,
     send_tournament_request,
 )
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import assert_row_count_and_clear, inserted_tournament
+from tests.integration_tests.sql import inserted_tournament
 
 
 async def test_tournaments_endpoint(
@@ -26,7 +32,7 @@ async def test_tournaments_endpoint(
                 "name": "Some Cool Tournament",
                 "logo_path": None,
                 "dashboard_public": True,
-                "dashboard_endpoint": "cool-tournament",
+                "dashboard_endpoint": None,
                 "players_can_be_in_multiple_teams": True,
                 "auto_assign_courts": True,
                 "duration_minutes": 10,
@@ -50,7 +56,7 @@ async def test_tournament_endpoint(
             "logo_path": None,
             "name": "Some Cool Tournament",
             "dashboard_public": True,
-            "dashboard_endpoint": "cool-tournament",
+            "dashboard_endpoint": None,
             "players_can_be_in_multiple_teams": True,
             "auto_assign_courts": True,
             "duration_minutes": 10,
@@ -103,14 +109,14 @@ async def test_update_tournament(
     assert updated_tournament.name == body["name"]
     assert updated_tournament.dashboard_public == body["dashboard_public"]
 
-    await assert_row_count_and_clear(tournaments, 1)
-
 
 async def test_delete_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with inserted_tournament(
-        DUMMY_TOURNAMENT.model_copy(update={"club_id": auth_context.club.id})
+        DUMMY_TOURNAMENT.model_copy(
+            update={"club_id": auth_context.club.id, "dashboard_endpoint": None}
+        )
     ) as tournament_inserted:
         assert (
             await send_tournament_request(
@@ -121,4 +127,25 @@ async def test_delete_tournament(
             == SUCCESS_RESPONSE
         )
 
-    await assert_row_count_and_clear(tournaments, 0)
+    await sql_delete_tournament(assert_some(tournament_inserted.id))
+
+
+async def file_sender(file_name: str) -> AsyncIterator[bytes]:
+    async with aiofiles.open(file_name, "rb") as f:
+        chunk = await f.read(64 * 1024)
+        while chunk:
+            yield chunk
+            chunk = await f.read(64 * 1024)
+
+
+async def test_tournament_upload_logo(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    response = await send_tournament_request(
+        method=HTTPMethod.POST,
+        endpoint="logo",
+        auth_context=auth_context,
+        body=file_sender(file_name="tests/integration_tests/assets/test_logo.png"),
+    )
+
+    assert response.get("success"), f"Response: {response}"

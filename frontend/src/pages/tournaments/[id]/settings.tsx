@@ -163,7 +163,7 @@ function GeneralTournamentForm({
           {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
         />
 
-        <DropzoneButton tournament={tournament} />
+        <DropzoneButton tournament={tournament} swrTournamentResponse={swrTournamentResponse} />
         <Center mt="lg">
           <div style={{ width: '50%' }}>
             <TournamentLogo tournament={tournament} />

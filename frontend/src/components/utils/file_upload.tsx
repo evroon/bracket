@@ -3,11 +3,18 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { useRef } from 'react';
+import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
 import { uploadLogo } from '../../services/adapter';
 
-export function DropzoneButton({ tournament }: { tournament: Tournament }) {
+export function DropzoneButton({
+  tournament,
+  swrTournamentResponse,
+}: {
+  tournament: Tournament;
+  swrTournamentResponse: SWRResponse;
+}) {
   // const { classes, theme } = useStyles();
   const openRef = useRef<() => void>(null);
   const { t } = useTranslation();
@@ -17,7 +24,10 @@ export function DropzoneButton({ tournament }: { tournament: Tournament }) {
       <Dropzone
         mt="lg"
         openRef={openRef}
-        onDrop={async (files) => uploadLogo(tournament.id, files[0])}
+        onDrop={async (files) => {
+          await uploadLogo(tournament.id, files[0]);
+          await swrTournamentResponse.mutate();
+        }}
         // className={classes.dropzone}
         radius="md"
         accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}

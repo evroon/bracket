@@ -1,5 +1,5 @@
+import aiofiles
 import asyncpg  # type: ignore[import-untyped]
-from aiofile import async_open
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
@@ -24,6 +24,7 @@ from bracket.routes.models import SuccessResponse, TournamentResponse, Tournamen
 from bracket.schema import tournaments
 from bracket.sql.tournaments import (
     sql_delete_tournament,
+    sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
 )
@@ -149,15 +150,22 @@ async def create_tournament(
 
 @router.post("/tournaments/{tournament_id}/logo")
 async def upload_logo(
-    file: UploadFile, tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: int,
+    file: UploadFile | None = None,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    contents = await file.read()
+    if file:
+        contents = await file.read()
 
-    async with async_open(f"static/{file.filename}", "wb") as f:
-        await f.write(contents)
+        async with aiofiles.open(f"static/{file.filename}", "wb") as f:
+            await f.write(contents)
+    else:
+        tournament = await sql_get_tournament(tournament_id)
+        if tournament.logo_path is not None and await aiofiles.os.path.exists(tournament.logo_path):
+            await aiofiles.os.remove(tournament.logo_path)
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
-        values={"logo_path": file.filename},
+        values={"logo_path": file.filename if file else None},
     )
     return SuccessResponse()
