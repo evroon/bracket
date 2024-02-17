@@ -1,8 +1,9 @@
 import asyncpg  # type: ignore[import-untyped]
+from aiofile import async_open
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
-from aiofile import async_open
+
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.subscriptions import check_requirement
@@ -152,8 +153,8 @@ async def upload_logo(
 ) -> SuccessResponse:
     contents = await file.read()
 
-    with async_open(f"static/{file.filename}", "wb") as f:
-        f.write(contents)
+    async with async_open(f"static/{file.filename}", "wb") as f:
+        await f.write(contents)
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
