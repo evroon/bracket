@@ -1,4 +1,3 @@
-from collections.abc import AsyncIterator
 
 import aiofiles
 import aiohttp
@@ -131,21 +130,14 @@ async def test_delete_tournament(
     await sql_delete_tournament(assert_some(tournament_inserted.id))
 
 
-async def file_sender(file_name: str) -> AsyncIterator[bytes]:
-    async with aiofiles.open(file_name, "rb") as f:
-        chunk = await f.read(64 * 1024)
-        while chunk:
-            yield chunk
-            chunk = await f.read(64 * 1024)
-
-
 async def test_tournament_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
+    test_file_path = "tests/integration_tests/assets/test_logo.png"
     data = aiohttp.FormData()
     data.add_field(
         "file",
-        open("tests/integration_tests/assets/test_logo.png", "rb"),
+        open(test_file_path, "rb"),  # pylint: disable=consider-using-with
         filename="test_logo.png",
         content_type="image/png",
     )
