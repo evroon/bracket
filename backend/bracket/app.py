@@ -19,8 +19,8 @@ from bracket.routes import (
     auth,
     clubs,
     courts,
+    internals,
     matches,
-    metrics,
     players,
     rounds,
     stage_items,
@@ -64,11 +64,61 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await AsyncioTasksManager.gather()
 
 
+routers = {
+    "Internals": internals.router,
+    "Auth": auth.router,
+    "Clubs": clubs.router,
+    "Courts": courts.router,
+    "Matches": matches.router,
+    "Players": players.router,
+    "Rounds": rounds.router,
+    "Stage Items": stage_items.router,
+    "Stages": stages.router,
+    "Teams": teams.router,
+    "Tournaments": tournaments.router,
+    "Users": users.router,
+}
+
+table_of_contents = "\n\n".join(
+    [f"[{tag}](#tag/{tag.replace(' ', '-')})" for tag in routers.keys()]
+)
+
+
+description = f"""
+### Description
+This API allows you to do everything the frontend of [Bracket](https://github.com/evroon/bracket)
+allows you to do (the frontend uses this API as well).
+
+Fore more information, see the [documentation](https://docs.bracketapp.nl).
+
+### Table of Contents
+*(links only work for [ReDoc](https://api.bracketapp.nl/redoc), not for Swagger UI)*
+
+{table_of_contents}
+
+### Links
+GitHub: <https://github.com/evroon/bracket>
+
+Docs: <https://docs.bracketapp.nl>
+
+Demo: <https://www.bracketapp.nl/demo>
+
+API docs (Redoc): <https://api.bracketapp.nl/redoc>
+
+API docs (Swagger UI): <https://api.bracketapp.nl/docs>
+"""
+
 app = FastAPI(
     title="Bracket API",
     docs_url="/docs",
     version="1.0.0",
     lifespan=lifespan,
+    summary="API for Bracket, an open source tournament system.",
+    description=description,
+    license_info={
+        "name": "AGPL-3.0",
+        "url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
+    },
 )
 
 app.add_middleware(
@@ -92,11 +142,6 @@ async def add_process_time_header(request: Request, call_next: RequestResponseEn
     return response
 
 
-@app.get("/ping", summary="Healthcheck ping")
-async def ping() -> str:
-    return "ping"
-
-
 @app.exception_handler(HTTPException)
 async def validation_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
     return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
@@ -109,15 +154,5 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.include_router(metrics.router, tags=["metrics"])
-app.include_router(auth.router, tags=["auth"])
-app.include_router(clubs.router, tags=["clubs"])
-app.include_router(courts.router, tags=["courts"])
-app.include_router(matches.router, tags=["matches"])
-app.include_router(players.router, tags=["players"])
-app.include_router(rounds.router, tags=["rounds"])
-app.include_router(stage_items.router, tags=["stage_items"])
-app.include_router(stages.router, tags=["stages"])
-app.include_router(teams.router, tags=["teams"])
-app.include_router(tournaments.router, tags=["tournaments"])
-app.include_router(users.router, tags=["users"])
+for tag, router in routers.items():
+    app.include_router(router, tags=[tag])

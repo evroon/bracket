@@ -9,3 +9,8 @@ router = APIRouter()
 @router.get("/metrics", response_class=PlainTextResponse)
 async def get_metrics() -> PlainTextResponse:
     return PlainTextResponse(get_request_metrics().to_prometheus())
+
+
+@router.get("/ping", summary="Healthcheck ping")
+async def ping() -> str:
+    return "ping"
