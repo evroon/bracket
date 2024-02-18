@@ -147,7 +147,7 @@ async def test_tournament_upload_and_remove_logo(
         "file",
         open("tests/integration_tests/assets/test_logo.png", "rb"),
         filename="test_logo.png",
-        content_type="application/image+png",
+        content_type="image/png",
     )
 
     response = await send_tournament_request(
