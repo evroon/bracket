@@ -75,7 +75,7 @@
   "drop_match_alert_title": "Plaats hier een wedstrijd",
   "dropzone_accept_text": "Upload hier bestanden",
   "dropzone_idle_text": "Logo uploaden",
-  "dropzone_reject_text": "De afbeelding moet kleiner zijn dan 10 MB",
+  "dropzone_reject_text": "De afbeelding moet kleiner zijn dan 5 MB.",
   "duration_minutes_choose_title": "Vul de duur van de wedstrijden in",
   "edit_club_button": "Club bewerken",
   "edit_details_tab_title": "Details bewerken",

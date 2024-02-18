@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 import aiofiles.os
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
@@ -156,11 +159,18 @@ async def upload_logo(
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     old_logo_path = await get_tournament_logo_path(tournament_id)
-    new_logo_path = f"static/{file.filename}" if file is not None else None
+    filename: str | None = None
+    new_logo_path: str | None = None
 
-    if file and new_logo_path:
-        async with aiofiles.open(new_logo_path, "wb") as f:
-            await f.write(await file.read())
+    if file:
+        assert file.filename is not None
+        extension = os.path.splitext(file.filename)[1]
+        filename = f"{uuid4()}.{extension}"
+        new_logo_path = f"static/{filename}" if file is not None else None
+
+        if new_logo_path:
+            async with aiofiles.open(new_logo_path, "wb") as f:
+                await f.write(await file.read())
 
     if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
@@ -170,6 +180,6 @@ async def upload_logo(
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
-        values={"logo_path": file.filename if file else None},
+        values={"logo_path": filename},
     )
     return SuccessResponse()

@@ -71,7 +71,7 @@
     "drop_match_alert_title": "在这里放下一场比赛",
     "dropzone_accept_text": "在此处放置文件",
     "dropzone_idle_text": "上传标志",
-    "dropzone_reject_text": "图片必须小于 10MB",
+    "dropzone_reject_text": "图片必须小于 5MB",
     "duration_minutes_choose_title": "请选择比赛的持续时间",
     "edit_club_button": "编辑俱乐部",
     "edit_details_tab_title": "编辑详情",
