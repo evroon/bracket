@@ -2,7 +2,6 @@ import os
 from uuid import uuid4
 
 import aiofiles.os
-import aiohttp
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc

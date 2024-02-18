@@ -143,10 +143,12 @@ async def test_tournament_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     data = aiohttp.FormData()
-    data.add_field('file',
-                   open("tests/integration_tests/assets/test_logo.png", 'rb'),
-                   filename='test_logo.png',
-                   content_type='application/image+png')
+    data.add_field(
+        "file",
+        open("tests/integration_tests/assets/test_logo.png", "rb"),
+        filename="test_logo.png",
+        content_type="application/image+png",
+    )
 
     response = await send_tournament_request(
         method=HTTPMethod.POST,
@@ -155,14 +157,11 @@ async def test_tournament_upload_and_remove_logo(
         body=data,
     )
 
-    assert response['data']["logo_path"], f"Response: {response}"
+    assert response["data"]["logo_path"], f"Response: {response}"
     assert await aiofiles.os.path.exists(f"static/{response['data']['logo_path']}")
 
     response = await send_tournament_request(
-        method=HTTPMethod.POST,
-        endpoint="logo",
-        auth_context=auth_context,
-        body=aiohttp.FormData()
+        method=HTTPMethod.POST, endpoint="logo", auth_context=auth_context, body=aiohttp.FormData()
     )
 
     assert response["data"]["logo_path"] is None, f"Response: {response}"
