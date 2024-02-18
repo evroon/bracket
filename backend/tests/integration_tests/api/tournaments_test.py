@@ -1,6 +1,5 @@
-from collections.abc import AsyncIterator
-
 import aiofiles
+import aiohttp
 
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
@@ -130,22 +129,31 @@ async def test_delete_tournament(
     await sql_delete_tournament(assert_some(tournament_inserted.id))
 
 
-async def file_sender(file_name: str) -> AsyncIterator[bytes]:
-    async with aiofiles.open(file_name, "rb") as f:
-        chunk = await f.read(64 * 1024)
-        while chunk:
-            yield chunk
-            chunk = await f.read(64 * 1024)
-
-
-async def test_tournament_upload_logo(
+async def test_tournament_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
+    test_file_path = "tests/integration_tests/assets/test_logo.png"
+    data = aiohttp.FormData()
+    data.add_field(
+        "file",
+        open(test_file_path, "rb"),  # pylint: disable=consider-using-with
+        filename="test_logo.png",
+        content_type="image/png",
+    )
+
     response = await send_tournament_request(
         method=HTTPMethod.POST,
         endpoint="logo",
         auth_context=auth_context,
-        body=file_sender(file_name="tests/integration_tests/assets/test_logo.png"),
+        body=data,
     )
 
-    assert response.get("success"), f"Response: {response}"
+    assert response["data"]["logo_path"], f"Response: {response}"
+    assert await aiofiles.os.path.exists(f"static/{response['data']['logo_path']}")
+
+    response = await send_tournament_request(
+        method=HTTPMethod.POST, endpoint="logo", auth_context=auth_context, body=aiohttp.FormData()
+    )
+
+    assert response["data"]["logo_path"] is None, f"Response: {response}"
+    assert not await aiofiles.os.path.exists(f"static/{response['data']['logo_path']}")

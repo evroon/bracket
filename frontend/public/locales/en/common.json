@@ -75,7 +75,7 @@
     "drop_match_alert_title": "Drop a match here",
     "dropzone_accept_text": "Drop files here",
     "dropzone_idle_text": "Upload Logo",
-    "dropzone_reject_text": "Image must be less than 10MB",
+    "dropzone_reject_text": "Image must be less than 5MB.",
     "duration_minutes_choose_title": "Please choose a duration of the matches",
     "edit_club_button": "Edit Club",
     "edit_details_tab_title": "Edit details",

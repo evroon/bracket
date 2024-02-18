@@ -32,7 +32,7 @@ export function DropzoneButton({
         // className={classes.dropzone}
         radius="md"
         accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
-        maxSize={30 * 1024 ** 2}
+        maxSize={5 * 1024 ** 2}
       >
         <div style={{ pointerEvents: 'none' }}>
           <Group justify="center">
@@ -54,6 +54,8 @@ export function DropzoneButton({
           </Text>
           <Text ta="center" size="sm" mt="xs" c="dimmed">
             {t('upload_placeholder')}
+            <br />
+            {t('dropzone_reject_text')}
           </Text>
         </div>
       </Dropzone>

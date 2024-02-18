@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 import aiofiles.os
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
@@ -9,7 +12,6 @@ from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.tournaments import get_tournament_logo_path
 from bracket.models.db.tournament import (
-    Tournament,
     TournamentBody,
     TournamentToInsert,
     TournamentUpdateBody,
@@ -25,11 +27,11 @@ from bracket.routes.models import SuccessResponse, TournamentResponse, Tournamen
 from bracket.schema import tournaments
 from bracket.sql.tournaments import (
     sql_delete_tournament,
+    sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
-from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.errors import (
     ForeignKey,
     UniqueIndex,
@@ -51,9 +53,7 @@ unauthorized_exception = HTTPException(
 async def get_tournament(
     tournament_id: int, user: UserPublic | None = Depends(user_authenticated_or_public_dashboard)
 ) -> TournamentResponse:
-    tournament = await fetch_one_parsed_certain(
-        database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
-    )
+    tournament = await sql_get_tournament(tournament_id)
     if user is None and not tournament.dashboard_public:
         raise unauthorized_exception
 
@@ -154,13 +154,22 @@ async def upload_logo(
     tournament_id: int,
     file: UploadFile | None = None,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-) -> SuccessResponse:
+) -> TournamentResponse:
     old_logo_path = await get_tournament_logo_path(tournament_id)
-    new_logo_path = f"static/{file.filename}" if file is not None else None
+    filename: str | None = None
+    new_logo_path: str | None = None
 
-    if file and new_logo_path:
-        async with aiofiles.open(new_logo_path, "wb") as f:
-            await f.write(await file.read())
+    if file:
+        assert file.filename is not None
+        extension = os.path.splitext(file.filename)[1]
+        assert extension in (".png", ".jpg", ".jpeg")
+
+        filename = f"{uuid4()}{extension}"
+        new_logo_path = f"static/{filename}" if file is not None else None
+
+        if new_logo_path:
+            async with aiofiles.open(new_logo_path, "wb") as f:
+                await f.write(await file.read())
 
     if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
@@ -170,6 +179,6 @@ async def upload_logo(
 
     await database.execute(
         tournaments.update().where(tournaments.c.id == tournament_id),
-        values={"logo_path": file.filename if file else None},
+        values={"logo_path": filename},
     )
-    return SuccessResponse()
+    return TournamentResponse(data=await sql_get_tournament(tournament_id))
