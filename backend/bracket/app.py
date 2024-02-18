@@ -80,7 +80,7 @@ routers = {
 }
 
 table_of_contents = "\n\n".join(
-    [f"[{tag}](#tag/{tag.replace(' ', '-')})" for tag in routers.keys()]
+    [f"- [{tag}](#tag/{tag.replace(' ', '-')})" for tag in routers.keys()]
 )
 
 
