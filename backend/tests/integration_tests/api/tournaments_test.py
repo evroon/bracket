@@ -138,7 +138,7 @@ async def file_sender(file_name: str) -> AsyncIterator[bytes]:
             chunk = await f.read(64 * 1024)
 
 
-async def test_tournament_upload_logo(
+async def test_tournament_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     response = await send_tournament_request(
@@ -146,6 +146,14 @@ async def test_tournament_upload_logo(
         endpoint="logo",
         auth_context=auth_context,
         body=file_sender(file_name="tests/integration_tests/assets/test_logo.png"),
+    )
+
+    assert response.get("success"), f"Response: {response}"
+
+    response = await send_tournament_request(
+        method=HTTPMethod.POST,
+        endpoint="logo",
+        auth_context=auth_context,
     )
 
     assert response.get("success"), f"Response: {response}"
