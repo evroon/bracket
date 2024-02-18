@@ -162,6 +162,8 @@ async def upload_logo(
     if file:
         assert file.filename is not None
         extension = os.path.splitext(file.filename)[1]
+        assert extension in (".png", ".jpg", ".jpeg")
+
         filename = f"{uuid4()}{extension}"
         new_logo_path = f"static/{filename}" if file is not None else None
 
