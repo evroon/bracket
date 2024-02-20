@@ -56,7 +56,7 @@ To insert dummy rows into the database, run:
 sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 ```
 
-See also the [quickstart docs](http://localhost:3000/bracket/docs/running-bracket/quickstart).
+See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
 
 # Development setup
 Read the [development docs](https://docs.bracketapp.nl/docs/running-bracket/development) for how to run Bracket for development.
