@@ -79,7 +79,8 @@ async def register_user(email, password, name) -> None:
         account_type=UserAccountType.REGULAR,
     )
     if await check_whether_email_is_in_use(email):
-        raise AssertionError("Email address already in use")
+        logger.error("Email address already in use")
+        raise SystemExit(1)
     user_created = await create_user(user)
     assert_some(user_created.id)
     logger.info(f"Created user with id: {user_created.id}")
