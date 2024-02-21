@@ -323,6 +323,8 @@ async def sql_create_dev_db() -> int:
     await build_matches_for_stage_item(stage_item_2, tournament_id_1)
     await build_matches_for_stage_item(stage_item_3, tournament_id_1)
 
+    tournament_details = await sql_get_tournament(tournament_id_1)
+
     for stage in await get_full_tournament_details(tournament_id_1):
         for stage_item in stage.stage_items:
             for round_ in stage_item.rounds:
@@ -336,7 +338,7 @@ async def sql_create_dev_db() -> int:
                                 "team2_score": random.randint(0, 10),
                             }
                         ),
-                        tournament=await sql_get_tournament(tournament_id_1),
+                        tournament=tournament_details,
                     )
 
     for tournament in await database.fetch_all(tournaments.select()):
