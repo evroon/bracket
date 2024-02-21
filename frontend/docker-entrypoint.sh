@@ -1,5 +1,7 @@
 #!/bin/sh
+set -evo pipefail
 
+# Script to replace `NEXT_PUBLIC_*` environment variables because they're set at build-time but we want to set them at runtime in `docker-compose.yml`
 echo "Check that we have NEXT_PUBLIC_API_BASE_URL, NEXT_PUBLIC_HCAPTCHA_SITE_KEY vars"
 test -n "$NEXT_PUBLIC_API_BASE_URL"
 test -n "$NEXT_PUBLIC_HCAPTCHA_SITE_KEY"
