@@ -70,7 +70,7 @@ async def create_dev_db() -> None:
 @click.option('--password', prompt='Password', help='The password used to log into the account.')
 @click.option('--name', prompt='Name', help='The name associated with the account.')
 @run_async
-async def register_user(email, password, name) -> None:
+async def register_user(email: str, password: str, name: str) -> None:
     user = User(
         email=email,
         password_hash=hash_password(password),
