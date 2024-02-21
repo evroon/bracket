@@ -30,8 +30,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/docker-entrypoint.sh ./entrypoint.sh
 
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001 -G nodejs && \
+RUN addgroup -g 1001 --system nodejs && \
+    adduser --system nextjs -u 1001 -G nodejs && \
     chown -R nextjs:nodejs /app/.next && \
     chmod +x /app/entrypoint.sh
 
