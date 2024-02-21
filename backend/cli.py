@@ -82,7 +82,7 @@ async def register_user(email, password, name) -> None:
         raise AssertionError("Email address already in use")
     user_created = await create_user(user)
     assert_some(user_created.id)
-    print("Created user with id:", user_created.id)
+    logger.info(f"Created user with id: {user_created.id}")
 
 if __name__ == "__main__":
     cli.add_command(create_dev_db)
