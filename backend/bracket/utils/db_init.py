@@ -1,3 +1,4 @@
+import random
 from typing import TYPE_CHECKING, Any
 
 from heliclockter import datetime_utc
@@ -9,7 +10,7 @@ from bracket.logic.scheduling.builder import build_matches_for_stage_item
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
-from bracket.models.db.match import Match
+from bracket.models.db.match import Match, MatchBody
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
 from bracket.models.db.round import Round
@@ -38,7 +39,10 @@ from bracket.schema import (
     users,
     users_x_clubs,
 )
+from bracket.sql.matches import sql_update_match
 from bracket.sql.stage_items import sql_create_stage_item
+from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.users import create_user, get_user
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import (
@@ -318,6 +322,22 @@ async def sql_create_dev_db() -> int:
     await build_matches_for_stage_item(stage_item_1, tournament_id_1)
     await build_matches_for_stage_item(stage_item_2, tournament_id_1)
     await build_matches_for_stage_item(stage_item_3, tournament_id_1)
+
+    for stage in await get_full_tournament_details(tournament_id_1):
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                for match in round_.matches:
+                    await sql_update_match(
+                        match_id=assert_some(match.id),
+                        match=MatchBody.model_validate(
+                            {
+                                **match.model_dump(),
+                                "team1_score": random.randint(0, 10),
+                                "team2_score": random.randint(0, 10),
+                            }
+                        ),
+                        tournament=await sql_get_tournament(tournament_id_1),
+                    )
 
     for tournament in await database.fetch_all(tournaments.select()):
         await recalculate_ranking_for_tournament_id(tournament.id)  # type: ignore[attr-defined]
