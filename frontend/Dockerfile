@@ -35,6 +35,8 @@ RUN addgroup -g 1001 --system nodejs && \
     chown -R nextjs:nodejs /app/.next && \
     chmod +x /app/entrypoint.sh
 
+RUN apk add bash
+
 RUN yarn next telemetry disable
 
 USER nextjs
