@@ -9,14 +9,14 @@ from heliclockter import datetime_utc
 from bracket.config import config
 from bracket.database import database
 from bracket.logger import get_logger
-from bracket.utils.db_init import sql_create_dev_db
-from bracket.utils.security import hash_password
+from bracket.models.db.account import UserAccountType
+from bracket.models.db.user import User
 from bracket.sql.users import (
     check_whether_email_is_in_use,
     create_user,
 )
-from bracket.models.db.user import User
-from bracket.models.db.account import UserAccountType
+from bracket.utils.db_init import sql_create_dev_db
+from bracket.utils.security import hash_password
 from bracket.utils.types import assert_some
 
 logger = get_logger("cli")
@@ -65,10 +65,11 @@ def hash_password_cmd() -> None:
 async def create_dev_db() -> None:
     await sql_create_dev_db()
 
+
 @click.command()
-@click.option('--email', prompt='Email', help='The email used to log into the account.')
-@click.option('--password', prompt='Password', help='The password used to log into the account.')
-@click.option('--name', prompt='Name', help='The name associated with the account.')
+@click.option("--email", prompt="Email", help="The email used to log into the account.")
+@click.option("--password", prompt="Password", help="The password used to log into the account.")
+@click.option("--name", prompt="Name", help="The name associated with the account.")
 @run_async
 async def register_user(email: str, password: str, name: str) -> None:
     user = User(
@@ -84,6 +85,7 @@ async def register_user(email: str, password: str, name: str) -> None:
     user_created = await create_user(user)
     assert_some(user_created.id)
     logger.info(f"Created user with id: {user_created.id}")
+
 
 if __name__ == "__main__":
     cli.add_command(create_dev_db)
