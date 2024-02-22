@@ -2,9 +2,10 @@ name: frontend
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
-    paths:
-      - 'frontend/**'
+    branches:
+      - 'master'
 
 jobs:
   build:
