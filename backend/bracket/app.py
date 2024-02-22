@@ -89,6 +89,9 @@ description = f"""
 This API allows you to do everything the frontend of [Bracket](https://github.com/evroon/bracket)
 allows you to do (the frontend uses this API as well).
 
+
+
+
 Fore more information, see the [documentation](https://docs.bracketapp.nl).
 
 ### Table of Contents
