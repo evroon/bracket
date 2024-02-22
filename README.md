@@ -136,3 +136,4 @@ Several areas that we need a bit of help with at the moment are:
 Bracket is licensed under AGPL-v3.0.
 
 See [LICENSE](LICENSE)
+
