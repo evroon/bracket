@@ -2,13 +2,13 @@ name: docker
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'master'
   pull_request:
     paths:
       - 'backend/**'
       - 'frontend/**'
+  push:
+    branches:
+      - 'master'
 
 jobs:
   build:
