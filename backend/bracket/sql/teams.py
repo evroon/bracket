@@ -3,28 +3,37 @@ from typing import cast
 from bracket.database import database
 from bracket.models.db.players import PlayerStatistics
 from bracket.models.db.team import FullTeamWithPlayers, Team
+from bracket.utils.id_types import TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import dict_without_none
 
 
-async def get_team_by_id(team_id: int, tournament_id: int) -> Team | None:
+async def get_teams_by_id(team_ids: set[int], tournament_id: TournamentId) -> list[Team]:
+    if len(team_ids) < 1:
+        return []
+
     query = """
         SELECT *
         FROM teams
-        WHERE id = :team_id
+        WHERE id = any(:team_ids)
         AND tournament_id = :tournament_id
     """
-    result = await database.fetch_one(
-        query=query, values={"team_id": team_id, "tournament_id": tournament_id}
+    result = await database.fetch_all(
+        query=query, values={"team_ids": team_ids, "tournament_id": tournament_id}
     )
-    return Team.model_validate(result) if result is not None else None
+    return [Team.model_validate(team) for team in result]
+
+
+async def get_team_by_id(team_id: TeamId, tournament_id: TournamentId) -> Team | None:
+    result = await get_teams_by_id({team_id}, tournament_id)
+    return result[0] if len(result) > 0 else None
 
 
 async def get_teams_with_members(
-    tournament_id: int,
+    tournament_id: TournamentId,
     *,
     only_active_teams: bool = False,
-    team_id: int | None = None,
+    team_id: TeamId | None = None,
     pagination: PaginationTeams | None = None,
 ) -> list[FullTeamWithPlayers]:
     active_team_filter = "AND teams.active IS TRUE" if only_active_teams else ""
@@ -66,7 +75,7 @@ async def get_teams_with_members(
 
 
 async def get_team_count(
-    tournament_id: int,
+    tournament_id: TournamentId,
     *,
     only_active_teams: bool = False,
 ) -> int:
@@ -82,7 +91,7 @@ async def get_team_count(
 
 
 async def update_team_stats(
-    tournament_id: int, team_id: int, team_statistics: PlayerStatistics
+    tournament_id: TournamentId, team_id: TeamId, team_statistics: PlayerStatistics
 ) -> None:
     query = """
         UPDATE teams
@@ -109,13 +118,13 @@ async def update_team_stats(
     )
 
 
-async def sql_delete_team(tournament_id: int, team_id: int) -> None:
+async def sql_delete_team(tournament_id: TournamentId, team_id: TeamId) -> None:
     query = "DELETE FROM teams WHERE id = :team_id AND tournament_id = :tournament_id"
     await database.fetch_one(
         query=query, values={"team_id": team_id, "tournament_id": tournament_id}
     )
 
 
-async def sql_delete_teams_of_tournament(tournament_id: int) -> None:
+async def sql_delete_teams_of_tournament(tournament_id: TournamentId) -> None:
     query = "DELETE FROM teams WHERE tournament_id = :tournament_id"
     await database.fetch_one(query=query, values={"tournament_id": tournament_id})

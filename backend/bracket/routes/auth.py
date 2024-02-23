@@ -16,6 +16,7 @@ from bracket.schema import tournaments
 from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name
 from bracket.sql.users import get_user, get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed
+from bracket.utils.id_types import ClubId, TournamentId, UserId
 from bracket.utils.security import verify_password
 from bracket.utils.types import assert_some
 
@@ -45,7 +46,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 class Token(BaseModel):
     access_token: str
     token_type: str
-    user_id: int
+    user_id: UserId
 
 
 class TokenData(BaseModel):
@@ -98,7 +99,7 @@ async def user_authenticated(token: str = Depends(oauth2_scheme)) -> UserPublic:
 
 
 async def user_authenticated_for_tournament(
-    tournament_id: int, token: str = Depends(oauth2_scheme)
+    tournament_id: TournamentId, token: str = Depends(oauth2_scheme)
 ) -> UserPublic:
     user = await check_jwt_and_get_user(token)
 
@@ -113,7 +114,7 @@ async def user_authenticated_for_tournament(
 
 
 async def user_authenticated_for_club(
-    club_id: int, token: str = Depends(oauth2_scheme)
+    club_id: ClubId, token: str = Depends(oauth2_scheme)
 ) -> UserPublic:
     user = await check_jwt_and_get_user(token)
 
@@ -128,7 +129,7 @@ async def user_authenticated_for_club(
 
 
 async def user_authenticated_or_public_dashboard(
-    tournament_id: int, request: Request
+    tournament_id: TournamentId, request: Request
 ) -> UserPublic | None:
     try:
         token: str = assert_some(await oauth2_scheme(request))

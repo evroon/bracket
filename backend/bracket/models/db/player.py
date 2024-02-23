@@ -4,14 +4,15 @@ from heliclockter import datetime_utc
 from pydantic import Field
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import PlayerId, TournamentId
 
 
 class Player(BaseModelORM):
-    id: int | None = None
+    id: PlayerId | None = None
     active: bool
     name: str
     created: datetime_utc
-    tournament_id: int
+    tournament_id: TournamentId
     elo_score: Decimal = Decimal("0.0")
     swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
@@ -34,7 +35,7 @@ class PlayerMultiBody(BaseModelORM):
 
 class PlayerToInsert(PlayerBody):
     created: datetime_utc
-    tournament_id: int
+    tournament_id: TournamentId
     elo_score: Decimal = Decimal("1200.0")
     swiss_score: Decimal
     wins: int = 0

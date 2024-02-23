@@ -27,9 +27,12 @@ from bracket.routes.util import stage_item_dependency
 from bracket.sql.rounds import set_round_active_or_draft
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
+    get_stage_item,
     sql_create_stage_item,
 )
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.validation import check_inputs_belong_to_tournament
+from bracket.utils.id_types import StageItemId, TournamentId
 
 router = APIRouter()
 
@@ -38,8 +41,8 @@ router = APIRouter()
     "/tournaments/{tournament_id}/stage_items/{stage_item_id}", response_model=SuccessResponse
 )
 async def delete_stage_item(
-    tournament_id: int,
-    stage_item_id: int,
+    tournament_id: TournamentId,
+    stage_item_id: StageItemId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
@@ -50,7 +53,7 @@ async def delete_stage_item(
 
 @router.post("/tournaments/{tournament_id}/stage_items", response_model=SuccessResponse)
 async def create_stage_item(
-    tournament_id: int,
+    tournament_id: TournamentId,
     stage_body: StageItemCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -59,6 +62,8 @@ async def create_stage_item(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Team count doesn't match number of inputs",
         )
+
+    await check_inputs_belong_to_tournament(stage_body, tournament_id)
 
     stages = await get_full_tournament_details(tournament_id)
     existing_stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
@@ -73,12 +78,18 @@ async def create_stage_item(
     "/tournaments/{tournament_id}/stage_items/{stage_item_id}", response_model=SuccessResponse
 )
 async def update_stage_item(
-    tournament_id: int,
-    stage_item_id: int,
+    tournament_id: TournamentId,
+    stage_item_id: StageItemId,
     stage_item_body: StageItemUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
+    if await get_stage_item(tournament_id, stage_item_id) is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Could not find all stages",
+        )
+
     query = """
         UPDATE stage_items
         SET name = :name
@@ -96,8 +107,8 @@ async def update_stage_item(
     response_model=SuccessResponse,
 )
 async def start_next_round(
-    tournament_id: int,
-    stage_item_id: int,
+    tournament_id: TournamentId,
+    stage_item_id: StageItemId,
     active_next_body: StageItemActivateNextBody,
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
     _: UserPublic = Depends(user_authenticated_for_tournament),

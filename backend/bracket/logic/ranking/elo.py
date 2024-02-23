@@ -10,6 +10,7 @@ from bracket.schema import players
 from bracket.sql.players import get_all_players_in_tournament, update_player_stats
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import update_team_stats
+from bracket.utils.id_types import TournamentId
 from bracket.utils.types import assert_some
 
 K = 32
@@ -105,14 +106,14 @@ def determine_team_ranking_for_stage_item(
     return sorted(team_ranking.items(), key=lambda x: x[1].elo_score, reverse=True)
 
 
-async def recalculate_ranking_for_tournament_id(tournament_id: int) -> None:
+async def recalculate_ranking_for_tournament_id(tournament_id: TournamentId) -> None:
     stages = await get_full_tournament_details(tournament_id)
     stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
     await recalculate_ranking_for_stage_items(tournament_id, stage_items)
 
 
 async def recalculate_ranking_for_stage_items(
-    tournament_id: int, stage_items: list[StageItemWithRounds]
+    tournament_id: TournamentId, stage_items: list[StageItemWithRounds]
 ) -> None:
     elo_per_player, elo_per_team = determine_ranking_for_stage_items(stage_items)
 

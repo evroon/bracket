@@ -26,6 +26,7 @@ from bracket.routes.util import match_dependency, round_dependency, round_with_m
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
 from bracket.sql.tournaments import sql_get_tournament
+from bracket.utils.id_types import MatchId, TournamentId
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -36,7 +37,7 @@ router = APIRouter()
     response_model=UpcomingMatchesResponse,
 )
 async def get_matches_to_schedule(
-    tournament_id: int,
+    tournament_id: TournamentId,
     elo_diff_threshold: int = 200,
     iterations: int = 200,
     only_recommended: bool = False,
@@ -61,7 +62,7 @@ async def get_matches_to_schedule(
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def delete_match(
-    tournament_id: int,
+    tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
@@ -72,7 +73,7 @@ async def delete_match(
 
 @router.post("/tournaments/{tournament_id}/matches", response_model=SingleMatchResponse)
 async def create_match(
-    tournament_id: int,
+    tournament_id: TournamentId,
     match_body: MatchCreateBodyFrontend,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
@@ -88,7 +89,7 @@ async def create_match(
 
 @router.post("/tournaments/{tournament_id}/schedule_matches", response_model=SuccessResponse)
 async def schedule_matches(
-    tournament_id: int,
+    tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     await schedule_all_unscheduled_matches(tournament_id)
@@ -99,8 +100,8 @@ async def schedule_matches(
     "/tournaments/{tournament_id}/matches/{match_id}/reschedule", response_model=SuccessResponse
 )
 async def reschedule_match(
-    tournament_id: int,
-    match_id: int,
+    tournament_id: TournamentId,
+    match_id: MatchId,
     body: MatchRescheduleBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -113,7 +114,7 @@ async def reschedule_match(
     response_model=SuccessResponse,
 )
 async def create_matches_automatically(
-    tournament_id: int,
+    tournament_id: TournamentId,
     elo_diff_threshold: int = 100,
     iterations: int = 200,
     only_recommended: bool = False,
@@ -169,7 +170,7 @@ async def create_matches_automatically(
 
 @router.put("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def update_match_by_id(
-    tournament_id: int,
+    tournament_id: TournamentId,
     match_body: MatchBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     match: Match = Depends(match_dependency),

@@ -8,6 +8,7 @@ from bracket.routes.auth import user_authenticated, user_authenticated_for_club
 from bracket.routes.models import ClubResponse, ClubsResponse, SuccessResponse
 from bracket.sql.clubs import create_club, get_clubs_for_user_id, sql_delete_club, sql_update_club
 from bracket.utils.errors import ForeignKey, check_foreign_key_violation
+from bracket.utils.id_types import ClubId
 from bracket.utils.types import assert_some
 
 router = APIRouter()
@@ -29,7 +30,7 @@ async def create_new_club(
 
 @router.delete("/clubs/{club_id}", response_model=SuccessResponse)
 async def delete_club(
-    club_id: int, _: UserPublic = Depends(user_authenticated_for_club)
+    club_id: ClubId, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> SuccessResponse:
     try:
         await sql_delete_club(club_id)
@@ -41,6 +42,6 @@ async def delete_club(
 
 @router.put("/clubs/{club_id}", response_model=ClubResponse)
 async def update_club(
-    club_id: int, club: ClubUpdateBody, _: UserPublic = Depends(user_authenticated_for_club)
+    club_id: ClubId, club: ClubUpdateBody, _: UserPublic = Depends(user_authenticated_for_club)
 ) -> ClubResponse:
     return ClubResponse(data=await sql_update_club(club_id, club))

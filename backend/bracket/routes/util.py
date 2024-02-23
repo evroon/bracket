@@ -12,9 +12,10 @@ from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.id_types import MatchId, RoundId, StageId, StageItemId, TeamId, TournamentId
 
 
-async def round_dependency(tournament_id: int, round_id: int) -> Round:
+async def round_dependency(tournament_id: TournamentId, round_id: RoundId) -> Round:
     round_ = await fetch_one_parsed(
         database,
         Round,
@@ -30,7 +31,9 @@ async def round_dependency(tournament_id: int, round_id: int) -> Round:
     return round_
 
 
-async def round_with_matches_dependency(tournament_id: int, round_id: int) -> RoundWithMatches:
+async def round_with_matches_dependency(
+    tournament_id: TournamentId, round_id: RoundId
+) -> RoundWithMatches:
     round_ = await get_round_by_id(tournament_id, round_id)
     if round_ is None:
         raise HTTPException(
@@ -41,7 +44,7 @@ async def round_with_matches_dependency(tournament_id: int, round_id: int) -> Ro
     return round_
 
 
-async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithStageItems:
+async def stage_dependency(tournament_id: TournamentId, stage_id: StageId) -> StageWithStageItems:
     stages = await get_full_tournament_details(
         tournament_id, no_draft_rounds=False, stage_id=stage_id
     )
@@ -55,7 +58,9 @@ async def stage_dependency(tournament_id: int, stage_id: int) -> StageWithStageI
     return stages[0]
 
 
-async def stage_item_dependency(tournament_id: int, stage_item_id: int) -> StageItemWithRounds:
+async def stage_item_dependency(
+    tournament_id: TournamentId, stage_item_id: StageItemId
+) -> StageItemWithRounds:
     stage_item = await get_stage_item(tournament_id, stage_item_id=stage_item_id)
 
     if stage_item is None:
@@ -67,7 +72,7 @@ async def stage_item_dependency(tournament_id: int, stage_item_id: int) -> Stage
     return stage_item
 
 
-async def match_dependency(tournament_id: int, match_id: int) -> Match:
+async def match_dependency(tournament_id: TournamentId, match_id: MatchId) -> Match:
     match = await fetch_one_parsed(
         database,
         Match,
@@ -85,7 +90,7 @@ async def match_dependency(tournament_id: int, match_id: int) -> Match:
     return match
 
 
-async def team_dependency(tournament_id: int, team_id: int) -> Team:
+async def team_dependency(tournament_id: TournamentId, team_id: TeamId) -> Team:
     team = await fetch_one_parsed(
         database,
         Team,
@@ -101,7 +106,9 @@ async def team_dependency(tournament_id: int, team_id: int) -> Team:
     return team
 
 
-async def team_with_players_dependency(tournament_id: int, team_id: int) -> FullTeamWithPlayers:
+async def team_with_players_dependency(
+    tournament_id: TournamentId, team_id: TeamId
+) -> FullTeamWithPlayers:
     teams_with_members = await get_teams_with_members(tournament_id, team_id=team_id)
 
     if len(teams_with_members) < 1:

@@ -6,11 +6,12 @@ from pydantic import BaseModel
 from bracket.models.db.court import Court
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.team import FullTeamWithPlayers, TeamWithPlayers
+from bracket.utils.id_types import CourtId, MatchId, RoundId, StageItemId, TeamId
 from bracket.utils.types import assert_some
 
 
 class MatchBase(BaseModelORM):
-    id: int | None = None
+    id: MatchId | None = None
     created: datetime_utc
     start_time: datetime_utc | None = None
     duration_minutes: int
@@ -18,10 +19,10 @@ class MatchBase(BaseModelORM):
     custom_duration_minutes: int | None = None
     custom_margin_minutes: int | None = None
     position_in_schedule: int | None = None
-    round_id: int
+    round_id: RoundId
     team1_score: int
     team2_score: int
-    court_id: int | None = None
+    court_id: CourtId | None = None
 
     @property
     def end_time(self) -> datetime_utc:
@@ -32,14 +33,14 @@ class MatchBase(BaseModelORM):
 
 
 class Match(MatchBase):
-    team1_id: int | None = None
-    team2_id: int | None = None
+    team1_id: TeamId | None = None
+    team2_id: TeamId | None = None
     team1_winner_position: int | None = None
-    team1_winner_from_stage_item_id: int | None = None
-    team2_winner_from_stage_item_id: int | None = None
+    team1_winner_from_stage_item_id: StageItemId | None = None
+    team2_winner_from_stage_item_id: StageItemId | None = None
     team2_winner_position: int | None = None
-    team1_winner_from_match_id: int | None = None
-    team2_winner_from_match_id: int | None = None
+    team1_winner_from_match_id: MatchId | None = None
+    team2_winner_from_match_id: MatchId | None = None
 
     def get_winner_index(self) -> int | None:
         if self.team1_score == self.team2_score:
@@ -52,7 +53,7 @@ class MatchWithDetails(Match):
     court: Court | None = None
 
 
-def get_match_hash(team_1_id: int | None, team_2_id: int | None) -> str:
+def get_match_hash(team_1_id: TeamId | None, team_2_id: TeamId | None) -> str:
     return f"{team_1_id}-{team_2_id}"
 
 
@@ -81,25 +82,25 @@ class MatchWithDetailsDefinitive(Match):
 
 
 class MatchBody(BaseModelORM):
-    round_id: int
+    round_id: RoundId
     team1_score: int = 0
     team2_score: int = 0
-    court_id: int | None = None
+    court_id: CourtId | None = None
     custom_duration_minutes: int | None = None
     custom_margin_minutes: int | None = None
 
 
 class MatchCreateBodyFrontend(BaseModelORM):
-    round_id: int
-    court_id: int | None = None
-    team1_id: int | None = None
-    team2_id: int | None = None
-    team1_winner_from_stage_item_id: int | None = None
+    round_id: RoundId
+    court_id: CourtId | None = None
+    team1_id: TeamId | None = None
+    team2_id: TeamId | None = None
+    team1_winner_from_stage_item_id: StageItemId | None = None
     team1_winner_position: int | None = None
-    team1_winner_from_match_id: int | None = None
-    team2_winner_from_stage_item_id: int | None = None
+    team1_winner_from_match_id: MatchId | None = None
+    team2_winner_from_stage_item_id: StageItemId | None = None
     team2_winner_position: int | None = None
-    team2_winner_from_match_id: int | None = None
+    team2_winner_from_match_id: MatchId | None = None
 
 
 class MatchCreateBody(MatchCreateBodyFrontend):
@@ -110,9 +111,9 @@ class MatchCreateBody(MatchCreateBodyFrontend):
 
 
 class MatchRescheduleBody(BaseModelORM):
-    old_court_id: int
+    old_court_id: CourtId
     old_position: int
-    new_court_id: int
+    new_court_id: CourtId
     new_position: int
 
 

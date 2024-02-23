@@ -1,13 +1,14 @@
 from heliclockter import datetime_utc
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import CourtId, TournamentId
 
 
 class Court(BaseModelORM):
-    id: int | None = None
+    id: CourtId | None = None
     name: str
     created: datetime_utc
-    tournament_id: int
+    tournament_id: TournamentId
 
 
 class CourtBody(BaseModelORM):
@@ -16,4 +17,4 @@ class CourtBody(BaseModelORM):
 
 class CourtToInsert(CourtBody):
     created: datetime_utc
-    tournament_id: int
+    tournament_id: TournamentId

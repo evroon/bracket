@@ -70,6 +70,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TOURNAMENT,
     DUMMY_USER,
 )
+from bracket.utils.id_types import UserId
 from bracket.utils.logging import logger
 from bracket.utils.security import hash_password
 from bracket.utils.types import BaseModelT, assert_some
@@ -78,7 +79,7 @@ if TYPE_CHECKING:
     from sqlalchemy import Table
 
 
-async def create_admin_user() -> int:
+async def create_admin_user() -> UserId:
     assert config.admin_email
     assert config.admin_password
 
@@ -94,7 +95,7 @@ async def create_admin_user() -> int:
     return assert_some(user.id)
 
 
-async def init_db_when_empty() -> int | None:
+async def init_db_when_empty() -> UserId | None:
     table_count = await database.fetch_val(
         "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'"
     )
@@ -111,7 +112,7 @@ async def init_db_when_empty() -> int | None:
     return None
 
 
-async def sql_create_dev_db() -> int:
+async def sql_create_dev_db() -> UserId:
     # TODO: refactor into smaller functions
     # pylint: disable=too-many-statements
     assert environment is not Environment.PRODUCTION
