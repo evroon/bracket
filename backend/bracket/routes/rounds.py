@@ -22,6 +22,7 @@ from bracket.schema import rounds
 from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft, sql_create_round
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.validation import check_inputs_belong_to_tournament
 from bracket.utils.id_types import RoundId, TournamentId
 
 router = APIRouter()
@@ -55,6 +56,8 @@ async def create_round(
     round_body: RoundCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
+    await check_inputs_belong_to_tournament(round_body, tournament_id)
+
     stages = await get_full_tournament_details(tournament_id)
     existing_rounds = [
         round_

@@ -52,13 +52,3 @@ async def get_stage_item(
         return None
 
     return stages[0].stage_items[0]
-
-
-async def get_stage_items(
-    tournament_id: TournamentId, stage_item_ids: set[StageItemId]
-) -> list[StageItemWithRounds]:
-    stages = await get_full_tournament_details(tournament_id, stage_item_ids=stage_item_ids)
-    if len(stages) < 1:
-        return []
-
-    return stages[0].stage_items

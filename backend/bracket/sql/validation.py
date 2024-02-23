@@ -1,35 +1,141 @@
+from collections.abc import Awaitable, Callable
+from typing import Any, cast
+
 from fastapi import HTTPException
+from pydantic import BaseModel
 from starlette import status
 
-from bracket.models.db.stage_item import StageItemCreateBody
-from bracket.models.db.stage_item_inputs import (
-    StageItemInputCreateBodyFinal,
-    StageItemInputCreateBodyTentative,
+from bracket.models.db.util import StageWithStageItems
+from bracket.sql.courts import get_all_courts_in_tournament
+from bracket.sql.players import get_all_players_in_tournament, get_player_by_id
+from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.teams import get_team_by_id
+from bracket.utils.id_types import (
+    CourtId,
+    MatchId,
+    PlayerId,
+    RoundId,
+    StageId,
+    StageItemId,
+    StageItemInputId,
+    TeamId,
+    TournamentId,
 )
-from bracket.sql.stage_items import get_stage_items
-from bracket.sql.teams import get_teams_by_id
-from bracket.utils.id_types import TournamentId
+
+CheckCallableT = Callable[[Any, list[StageWithStageItems], TournamentId], Awaitable[bool]]
 
 
-async def todo_check_inputs_belong_to_tournament(
-    stage_body: StageItemCreateBody, tournament_id: TournamentId
+async def check_stage_belongs_to_tournament(
+    stage_id: StageId, stages: list[StageWithStageItems], _: TournamentId
+) -> bool:
+    return any(stage.id == stage_id for stage in stages)
+
+
+async def check_team_belongs_to_tournament(
+    team_id: TeamId, _: list[StageWithStageItems], tournament_id: TournamentId
+) -> bool:
+    return await get_team_by_id(team_id, tournament_id) is not None
+
+
+async def check_stage_item_belongs_to_tournament(
+    stage_item_id: StageItemId, stages: list[StageWithStageItems], _: TournamentId
+) -> bool:
+    return any(
+        stage_item.id == stage_item_id for stage in stages for stage_item in stage.stage_items
+    )
+
+
+async def check_stage_item_input_belongs_to_tournament(
+    stage_item_input_id: StageItemInputId, stages: list[StageWithStageItems], _: TournamentId
+) -> bool:
+    return any(
+        stage_item_input.id == stage_item_input_id
+        for stage in stages
+        for stage_item in stage.stage_items
+        for stage_item_input in stage_item.inputs
+    )
+
+
+async def check_round_belongs_to_tournament(
+    round_id: RoundId, stages: list[StageWithStageItems], _: TournamentId
+) -> bool:
+    return any(
+        round_.id == round_id
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+    )
+
+
+async def check_match_belongs_to_tournament(
+    match_id: MatchId, stages: list[StageWithStageItems], _: TournamentId
+) -> bool:
+    return any(
+        match.id == match_id
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+        for match in round_.matches
+    )
+
+
+async def check_player_belongs_to_tournament(
+    player_id: PlayerId, _: list[StageWithStageItems], tournament_id: TournamentId
+) -> bool:
+    return await get_player_by_id(player_id, tournament_id) is not None
+
+
+async def check_players_belong_to_tournament(
+    player_ids: set[PlayerId], tournament_id: TournamentId
+) -> bool:
+    return player_ids.issubset(
+        player.id for player in await get_all_players_in_tournament(tournament_id)
+    )
+
+
+async def check_court_belongs_to_tournament(
+    court_id: CourtId, _: list[StageWithStageItems], tournament_id: TournamentId
+) -> bool:
+    return any(court_id == court.id for court in await get_all_courts_in_tournament(tournament_id))
+
+
+async def check_inputs_belong_to_tournament(
+    some_body: BaseModel, tournament_id: TournamentId
 ) -> None:
-    teams = {
-        input_.team_id
-        for input_ in stage_body.inputs
-        if isinstance(input_, StageItemInputCreateBodyFinal)
-    }
-    teams_fetched = await get_teams_by_id(teams, tournament_id)
+    stages = await get_full_tournament_details(tournament_id)
 
-    stage_items = {
-        input_.winner_from_stage_item_id
-        for input_ in stage_body.inputs
-        if isinstance(input_, StageItemInputCreateBodyTentative)
+    check_lookup: dict[type[Any], CheckCallableT] = {
+        StageId: check_stage_belongs_to_tournament,
+        TeamId: check_team_belongs_to_tournament,
+        StageItemId: check_stage_item_belongs_to_tournament,
+        StageItemInputId: check_stage_item_input_belongs_to_tournament,
+        RoundId: check_round_belongs_to_tournament,
+        PlayerId: check_player_belongs_to_tournament,
+        MatchId: check_match_belongs_to_tournament,
+        CourtId: check_court_belongs_to_tournament,
     }
-    stage_items_fetched = await get_stage_items(tournament_id, stage_items)
 
-    if len(teams) != len(teams_fetched) or len(stage_items) != len(stage_items_fetched):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Could not find all team ids or stages",
-        )
+    for field_key, field_info in some_body.model_fields.items():
+        field_value = getattr(some_body, field_key)
+
+        if isinstance(field_value, BaseModel):
+            await check_inputs_belong_to_tournament(field_value, tournament_id)
+        elif isinstance(field_value, set):
+            if field_info.annotation == set[PlayerId]:
+                await check_players_belong_to_tournament(field_value, tournament_id)
+            else:
+                raise Exception(f"Unknown set type: {field_info.annotation}")
+        else:
+            check_callable = check_lookup.get(cast(Any, field_info.annotation))
+            if check_callable is not None and not await check_callable(
+                field_value, stages, tournament_id
+            ):
+                field_name = (
+                    field_info.annotation.__name__
+                    if field_info.annotation is not None
+                    else "Unknown type"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Could not find {field_name.replace('Id', '')} with ID {field_value}",
+                )

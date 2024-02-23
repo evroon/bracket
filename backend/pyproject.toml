@@ -51,8 +51,12 @@ ignore_missing_imports = true
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
+    'broad-except',
+    'broad-exception-raised',
+    'consider-iterating-dictionary',
     'dangerous-default-value',
     'duplicate-code',
+    'fixme',
     'import-outside-toplevel',
     'invalid-name',
     'logging-fstring-interpolation',
@@ -66,9 +70,6 @@ disable = [
     'unspecified-encoding',
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
-    'fixme',
-    'broad-except',
-    'consider-iterating-dictionary',
 ]
 
 [tool.bandit]

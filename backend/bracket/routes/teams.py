@@ -26,6 +26,7 @@ from bracket.sql.teams import (
     get_teams_with_members,
     sql_delete_team,
 )
+from bracket.sql.validation import check_inputs_belong_to_tournament
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
@@ -78,6 +79,8 @@ async def update_team_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
 ) -> SingleTeamResponse:
+    await check_inputs_belong_to_tournament(team_body, tournament_id)
+
     await database.execute(
         query=teams.update().where(
             (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
@@ -133,6 +136,8 @@ async def create_team(
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
+    await check_inputs_belong_to_tournament(team_to_insert, tournament_id)
+
     existing_teams = await get_teams_with_members(tournament_id)
     check_requirement(existing_teams, user, "max_teams")
 
