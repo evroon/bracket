@@ -99,7 +99,7 @@ async def check_court_belongs_to_tournament(
     return any(court_id == court.id for court in await get_all_courts_in_tournament(tournament_id))
 
 
-async def check_inputs_belong_to_tournament(
+async def check_foreign_keys_belong_to_tournament(
     some_body: BaseModel, tournament_id: TournamentId
 ) -> None:
     stages = await get_full_tournament_details(tournament_id)
@@ -119,7 +119,7 @@ async def check_inputs_belong_to_tournament(
         field_value = getattr(some_body, field_key)
 
         if isinstance(field_value, BaseModel):
-            await check_inputs_belong_to_tournament(field_value, tournament_id)
+            await check_foreign_keys_belong_to_tournament(field_value, tournament_id)
         elif isinstance(field_value, set):
             if field_info.annotation == set[PlayerId]:
                 await check_players_belong_to_tournament(field_value, tournament_id)
