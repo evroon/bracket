@@ -1,5 +1,5 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, cast
+from typing import Any, get_args
 
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -122,6 +122,8 @@ async def check_foreign_keys_belong_to_tournament(
 
     for field_key, field_info in some_body.model_fields.items():
         field_value = getattr(some_body, field_key)
+        if field_value is None:
+            continue
 
         if isinstance(field_value, BaseModel):
             await check_foreign_keys_belong_to_tournament(field_value, tournament_id)
@@ -131,16 +133,14 @@ async def check_foreign_keys_belong_to_tournament(
             else:
                 raise Exception(f"Unknown set type: {field_info.annotation}")
         else:
-            check_callable = check_lookup.get(cast(Any, field_info.annotation))
-            if check_callable is not None and not await check_callable(
-                field_value, stages, tournament_id
-            ):
-                field_name = (
-                    field_info.annotation.__name__
-                    if field_info.annotation is not None
-                    else "Unknown type"
-                )
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Could not find {field_name.replace('Id', '')} with ID {field_value}",
-                )
+            possible_types = [field_info.annotation, *get_args(field_info.annotation)]
+            for possible_type in possible_types:
+                check_callable = check_lookup.get(possible_type)
+                if check_callable is not None and not await check_callable(
+                    field_value, stages, tournament_id
+                ):
+                    field_name = (
+                        possible_type.__name__ if possible_type is not None else "Unknown type"
+                    )
+                    msg = f"Could not find {field_name.replace('Id', '')} with ID {field_value}"
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
