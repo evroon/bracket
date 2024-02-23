@@ -31,7 +31,6 @@ from bracket.sql.stage_items import (
     sql_create_stage_item,
 )
 from bracket.sql.stages import get_full_tournament_details
-from bracket.sql.validation import check_inputs_belong_to_tournament
 from bracket.utils.id_types import StageItemId, TournamentId
 
 router = APIRouter()
@@ -62,8 +61,6 @@ async def create_stage_item(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Team count doesn't match number of inputs",
         )
-
-    await check_inputs_belong_to_tournament(stage_body, tournament_id)
 
     stages = await get_full_tournament_details(tournament_id)
     existing_stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
