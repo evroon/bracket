@@ -102,6 +102,11 @@ async def check_court_belongs_to_tournament(
 async def check_foreign_keys_belong_to_tournament(
     some_body: BaseModel, tournament_id: TournamentId
 ) -> None:
+    """
+    Inspects the types of BaseModel attributes, and based on that checks whether that attribute
+    is indeed part of the tournament. This prohibits e.g. adding players from another tournament to
+    a certain team.
+    """
     stages = await get_full_tournament_details(tournament_id)
 
     check_lookup: dict[type[Any], CheckCallableT] = {
