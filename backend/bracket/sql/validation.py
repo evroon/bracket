@@ -99,8 +99,8 @@ async def check_court_belongs_to_tournament(
     return any(court_id == court.id for court in await get_all_courts_in_tournament(tournament_id))
 
 
-def raise_exception(possible_type: Any, field_value: Any) -> NoReturn:
-    field_name = possible_type.__name__ if possible_type is not None else "Unknown type"
+def raise_exception(field_type: Any, field_value: Any) -> NoReturn:
+    field_name = field_type.__name__ if field_type is not None else "Unknown type"
     msg = f"Could not find {field_name.replace('Id', '')}(s) with ID {field_value}"
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
