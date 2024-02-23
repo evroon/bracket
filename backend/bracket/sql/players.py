@@ -7,12 +7,13 @@ from bracket.database import database
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
 from bracket.models.db.players import START_ELO, PlayerStatistics
 from bracket.schema import players
+from bracket.utils.id_types import PlayerId, TournamentId
 from bracket.utils.pagination import PaginationPlayers
 from bracket.utils.types import dict_without_none
 
 
 async def get_all_players_in_tournament(
-    tournament_id: int,
+    tournament_id: TournamentId,
     *,
     not_in_team: bool = False,
     pagination: PaginationPlayers | None = None,
@@ -49,7 +50,7 @@ async def get_all_players_in_tournament(
 
 
 async def get_player_count(
-    tournament_id: int,
+    tournament_id: TournamentId,
     *,
     not_in_team: bool = False,
 ) -> int:
@@ -64,7 +65,7 @@ async def get_player_count(
 
 
 async def update_player_stats(
-    tournament_id: int, player_id: int, player_statistics: PlayerStatistics
+    tournament_id: TournamentId, player_id: PlayerId, player_statistics: PlayerStatistics
 ) -> None:
     query = """
         UPDATE players
@@ -91,19 +92,19 @@ async def update_player_stats(
     )
 
 
-async def sql_delete_player(tournament_id: int, player_id: int) -> None:
+async def sql_delete_player(tournament_id: TournamentId, player_id: PlayerId) -> None:
     query = "DELETE FROM players WHERE id = :player_id AND tournament_id = :tournament_id"
     await database.fetch_one(
         query=query, values={"player_id": player_id, "tournament_id": tournament_id}
     )
 
 
-async def sql_delete_players_of_tournament(tournament_id: int) -> None:
+async def sql_delete_players_of_tournament(tournament_id: TournamentId) -> None:
     query = "DELETE FROM players WHERE tournament_id = :tournament_id"
     await database.fetch_one(query=query, values={"tournament_id": tournament_id})
 
 
-async def insert_player(player_body: PlayerBody, tournament_id: int) -> None:
+async def insert_player(player_body: PlayerBody, tournament_id: TournamentId) -> None:
     await database.execute(
         query=players.insert(),
         values=PlayerToInsert(

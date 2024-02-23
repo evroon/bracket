@@ -7,13 +7,16 @@ from bracket.models.db.stage_item import StageType
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_teams_with_members
+from bracket.utils.id_types import TournamentId
 from bracket.utils.types import assert_some
 
 
 async def get_upcoming_matches_for_swiss_round(
-    match_filter: MatchFilter, round_: Round, tournament_id: int
+    match_filter: MatchFilter, round_: Round, tournament_id: TournamentId
 ) -> list[SuggestedMatch]:
-    [stage] = await get_full_tournament_details(tournament_id, stage_item_id=round_.stage_item_id)
+    [stage] = await get_full_tournament_details(
+        tournament_id, stage_item_ids={round_.stage_item_id}
+    )
     assert len(stage.stage_items) == 1
     [stage_item] = stage.stage_items
 

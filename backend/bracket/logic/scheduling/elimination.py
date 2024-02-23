@@ -4,6 +4,7 @@ from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.matches import sql_create_match
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.tournaments import sql_get_tournament
+from bracket.utils.id_types import TournamentId
 from bracket.utils.types import assert_some
 
 
@@ -70,7 +71,7 @@ def determine_matches_subsequent_round(
 
 
 async def build_single_elimination_stage_item(
-    tournament_id: int, stage_item: StageItemWithRounds
+    tournament_id: TournamentId, stage_item: StageItemWithRounds
 ) -> None:
     rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
     tournament = await sql_get_tournament(tournament_id)

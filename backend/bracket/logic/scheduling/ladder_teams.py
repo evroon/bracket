@@ -12,15 +12,16 @@ from bracket.models.db.match import (
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import RoundWithMatches
+from bracket.utils.id_types import TeamId
 from bracket.utils.types import assert_some
 
 
-def get_draft_round_team_ids(draft_round: RoundWithMatches) -> list[int]:
+def get_draft_round_team_ids(draft_round: RoundWithMatches) -> list[TeamId]:
     return [
-        team
+        team_id
         for match in draft_round.matches
         if isinstance(match, MatchWithDetailsDefinitive)
-        for team in match.team_ids
+        for team_id in match.team_ids
     ]
 
 
@@ -37,7 +38,7 @@ def get_previous_matches_hashes(rounds: list[RoundWithMatches]) -> frozenset[str
 
 
 def get_number_of_teams_played_per_team(
-    rounds: list[RoundWithMatches], excluded_team_ids: frozenset[int]
+    rounds: list[RoundWithMatches], excluded_team_ids: frozenset[TeamId]
 ) -> dict[int, int]:
     result: dict[int, int] = defaultdict(int)
 

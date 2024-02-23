@@ -22,14 +22,15 @@ from bracket.schema import rounds
 from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft, sql_create_round
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
+from bracket.utils.id_types import RoundId, TournamentId
 
 router = APIRouter()
 
 
 @router.delete("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def delete_round(
-    tournament_id: int,
-    round_id: int,
+    tournament_id: TournamentId,
+    round_id: RoundId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     round_with_matches: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
@@ -50,7 +51,7 @@ async def delete_round(
 
 @router.post("/tournaments/{tournament_id}/rounds", response_model=SuccessResponse)
 async def create_round(
-    tournament_id: int,
+    tournament_id: TournamentId,
     round_body: RoundCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -90,8 +91,8 @@ async def create_round(
 
 @router.put("/tournaments/{tournament_id}/rounds/{round_id}", response_model=SuccessResponse)
 async def update_round_by_id(
-    tournament_id: int,
-    round_id: int,
+    tournament_id: TournamentId,
+    round_id: RoundId,
     round_body: RoundUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: Round = Depends(round_dependency),

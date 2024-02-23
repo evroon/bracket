@@ -14,6 +14,16 @@ from bracket.models.db.stage_item import StageItemToInsert, StageType
 from bracket.models.db.team import Team
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import User
+from bracket.utils.id_types import (
+    ClubId,
+    CourtId,
+    PlayerId,
+    RoundId,
+    StageId,
+    StageItemId,
+    TeamId,
+    TournamentId,
+)
 from bracket.utils.security import hash_password
 
 DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo("UTC"))
@@ -27,7 +37,7 @@ DUMMY_CLUB = Club(
 )
 
 DUMMY_TOURNAMENT = Tournament(
-    club_id=DB_PLACEHOLDER_ID,
+    club_id=ClubId(DB_PLACEHOLDER_ID),
     name="Some Cool Tournament",
     created=DUMMY_MOCK_TIME,
     start_time=DUMMY_MOCK_TIME,
@@ -41,21 +51,21 @@ DUMMY_TOURNAMENT = Tournament(
 )
 
 DUMMY_STAGE1 = Stage(
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_active=True,
     name="Group Stage",
 )
 
 DUMMY_STAGE2 = Stage(
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_active=False,
     name="Knockout Stage",
 )
 
 DUMMY_STAGE_ITEM1 = StageItemToInsert(
-    stage_id=DB_PLACEHOLDER_ID,
+    stage_id=StageId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.ROUND_ROBIN,
     team_count=4,
@@ -63,7 +73,7 @@ DUMMY_STAGE_ITEM1 = StageItemToInsert(
 )
 
 DUMMY_STAGE_ITEM2 = StageItemToInsert(
-    stage_id=DB_PLACEHOLDER_ID,
+    stage_id=StageId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.ROUND_ROBIN,
     team_count=4,
@@ -71,7 +81,7 @@ DUMMY_STAGE_ITEM2 = StageItemToInsert(
 )
 
 DUMMY_STAGE_ITEM3 = StageItemToInsert(
-    stage_id=DB_PLACEHOLDER_ID,
+    stage_id=StageId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.SINGLE_ELIMINATION,
     team_count=4,
@@ -79,21 +89,21 @@ DUMMY_STAGE_ITEM3 = StageItemToInsert(
 )
 
 DUMMY_ROUND1 = Round(
-    stage_item_id=DB_PLACEHOLDER_ID,
+    stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name="Round 1",
 )
 
 DUMMY_ROUND2 = Round(
-    stage_item_id=DB_PLACEHOLDER_ID,
+    stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=True,
     name="Round 2",
 )
 
 DUMMY_ROUND3 = Round(
-    stage_item_id=DB_PLACEHOLDER_ID,
+    stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name="Round 3",
@@ -102,12 +112,12 @@ DUMMY_ROUND3 = Round(
 DUMMY_MATCH1 = Match(
     created=DUMMY_MOCK_TIME,
     start_time=DUMMY_MOCK_TIME,
-    round_id=DB_PLACEHOLDER_ID,
-    team1_id=DB_PLACEHOLDER_ID,
-    team2_id=DB_PLACEHOLDER_ID,
+    round_id=RoundId(DB_PLACEHOLDER_ID),
+    team1_id=TeamId(DB_PLACEHOLDER_ID),
+    team2_id=TeamId(DB_PLACEHOLDER_ID),
     team1_score=11,
     team2_score=22,
-    court_id=DB_PLACEHOLDER_ID,
+    court_id=CourtId(DB_PLACEHOLDER_ID),
     team1_winner_from_stage_item_id=None,
     team1_winner_position=None,
     team1_winner_from_match_id=None,
@@ -132,28 +142,28 @@ DUMMY_USER = User(
 DUMMY_TEAM1 = Team(
     created=DUMMY_MOCK_TIME,
     name="Team 1",
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
 DUMMY_TEAM2 = Team(
     created=DUMMY_MOCK_TIME,
     name="Team 2",
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
 DUMMY_TEAM3 = Team(
     created=DUMMY_MOCK_TIME,
     name="Team 3",
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
 DUMMY_TEAM4 = Team(
     created=DUMMY_MOCK_TIME,
     name="Team 4",
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
@@ -162,71 +172,71 @@ DUMMY_PLAYER1 = Player(
     name="Player 01",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER2 = Player(
     name="Player 02",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER3 = Player(
     name="Player 03",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER4 = Player(
     name="Player 04",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER5 = Player(
     name="Player 05",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER6 = Player(
     name="Player 06",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER7 = Player(
     name="Player 07",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER8 = Player(
     name="Player 08",
     active=True,
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_PLAYER_X_TEAM = PlayerXTeam(
-    player_id=DB_PLACEHOLDER_ID,
-    team_id=DB_PLACEHOLDER_ID,
+    player_id=PlayerId(DB_PLACEHOLDER_ID),
+    team_id=TeamId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_COURT1 = Court(
     name="Court 1",
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
 DUMMY_COURT2 = Court(
     name="Court 2",
     created=DUMMY_MOCK_TIME,
-    tournament_id=DB_PLACEHOLDER_ID,
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )

@@ -1,11 +1,12 @@
 from heliclockter import datetime_utc
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import RoundId, StageItemId
 
 
 class Round(BaseModelORM):
-    id: int | None = None
-    stage_item_id: int
+    id: RoundId | None = None
+    stage_item_id: StageItemId
     created: datetime_utc
     is_draft: bool
     is_active: bool = False
@@ -20,10 +21,10 @@ class RoundUpdateBody(BaseModelORM):
 
 class RoundCreateBody(BaseModelORM):
     name: str | None = None
-    stage_item_id: int
+    stage_item_id: StageItemId
 
 
 class RoundToInsert(RoundUpdateBody):
-    stage_item_id: int
+    stage_item_id: StageItemId
     is_draft: bool = False
     is_active: bool = False

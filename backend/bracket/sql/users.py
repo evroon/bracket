@@ -6,10 +6,11 @@ from bracket.schema import users
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.sql.tournaments import sql_get_tournaments
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.id_types import ClubId, TournamentId, UserId
 from bracket.utils.types import assert_some
 
 
-async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> bool:
+async def get_user_access_to_tournament(tournament_id: TournamentId, user_id: UserId) -> bool:
     query = """
         SELECT DISTINCT t.id
         FROM users_x_clubs
@@ -20,7 +21,7 @@ async def get_user_access_to_tournament(tournament_id: int, user_id: int) -> boo
     return tournament_id in {tournament.id for tournament in result}  # type: ignore[attr-defined]
 
 
-async def get_which_clubs_has_user_access_to(user_id: int) -> set[int]:
+async def get_which_clubs_has_user_access_to(user_id: UserId) -> set[ClubId]:
     query = """
         SELECT club_id
         FROM users_x_clubs
@@ -30,11 +31,11 @@ async def get_which_clubs_has_user_access_to(user_id: int) -> set[int]:
     return {club.club_id for club in result}  # type: ignore[attr-defined]
 
 
-async def get_user_access_to_club(club_id: int, user_id: int) -> bool:
+async def get_user_access_to_club(club_id: ClubId, user_id: UserId) -> bool:
     return club_id in await get_which_clubs_has_user_access_to(user_id)
 
 
-async def update_user(user_id: int, user: UserToUpdate) -> None:
+async def update_user(user_id: UserId, user: UserToUpdate) -> None:
     query = """
         UPDATE users
         SET name = :name, email = :email
@@ -45,7 +46,7 @@ async def update_user(user_id: int, user: UserToUpdate) -> None:
     )
 
 
-async def update_user_account_type(user_id: int, account_type: UserAccountType) -> None:
+async def update_user_account_type(user_id: UserId, account_type: UserAccountType) -> None:
     query = """
         UPDATE users
         SET account_type = :account_type
@@ -56,7 +57,7 @@ async def update_user_account_type(user_id: int, account_type: UserAccountType) 
     )
 
 
-async def update_user_password(user_id: int, password_hash: str) -> None:
+async def update_user_password(user_id: UserId, password_hash: str) -> None:
     query = """
         UPDATE users
         SET password_hash = :password_hash
@@ -65,7 +66,7 @@ async def update_user_password(user_id: int, password_hash: str) -> None:
     await database.execute(query=query, values={"user_id": user_id, "password_hash": password_hash})
 
 
-async def get_user_by_id(user_id: int) -> UserPublic | None:
+async def get_user_by_id(user_id: UserId) -> UserPublic | None:
     query = """
         SELECT *
         FROM users
@@ -105,7 +106,7 @@ async def create_user(user: User) -> User:
     return User.model_validate(dict(assert_some(result)._mapping))
 
 
-async def delete_user(user_id: int) -> None:
+async def delete_user(user_id: UserId) -> None:
     query = """
         DELETE FROM users
         WHERE id = :user_id
@@ -127,7 +128,7 @@ async def get_user(email: str) -> UserInDB | None:
     return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))
 
 
-async def delete_user_and_owned_clubs(user_id: int) -> None:
+async def delete_user_and_owned_clubs(user_id: UserId) -> None:
     for club in await get_clubs_for_user_id(user_id):
         club_id = assert_some(club.id)
 

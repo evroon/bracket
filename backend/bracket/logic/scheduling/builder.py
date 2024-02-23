@@ -18,10 +18,13 @@ from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.rounds import get_next_round_name, sql_create_round
 from bracket.sql.stage_items import get_stage_item
+from bracket.utils.id_types import StageId, TournamentId
 from bracket.utils.types import assert_some
 
 
-async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: StageItem) -> None:
+async def create_rounds_for_new_stage_item(
+    tournament_id: TournamentId, stage_item: StageItem
+) -> None:
     rounds_count: int
     match stage_item.type:
         case StageType.ROUND_ROBIN:
@@ -42,7 +45,7 @@ async def create_rounds_for_new_stage_item(tournament_id: int, stage_item: Stage
         )
 
 
-async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: int) -> None:
+async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: TournamentId) -> None:
     await create_rounds_for_new_stage_item(tournament_id, stage_item)
     stage_item_with_rounds = await get_stage_item(tournament_id, assert_some(stage_item.id))
 
@@ -66,7 +69,7 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: int
 
 
 def determine_available_inputs(
-    stage_id: int,
+    stage_id: StageId,
     teams: list[FullTeamWithPlayers],
     stages: list[StageWithStageItems],
 ) -> list[StageItemInputOptionTentative | StageItemInputOptionFinal]:

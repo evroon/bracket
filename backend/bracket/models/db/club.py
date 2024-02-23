@@ -1,10 +1,11 @@
 from heliclockter import datetime_utc
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import ClubId
 
 
 class Club(BaseModelORM):
-    id: int | None = None
+    id: ClubId | None = None
     name: str
     created: datetime_utc
 

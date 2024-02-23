@@ -2,9 +2,10 @@ from typing import Any
 
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
+from bracket.utils.id_types import TournamentId
 
 
-async def sql_get_tournament(tournament_id: int) -> Tournament:
+async def sql_get_tournament(tournament_id: TournamentId) -> Tournament:
     query = """
         SELECT *
         FROM tournaments
@@ -45,7 +46,7 @@ async def sql_get_tournaments(
     return [Tournament.model_validate(x) for x in result]
 
 
-async def sql_delete_tournament(tournament_id: int) -> None:
+async def sql_delete_tournament(tournament_id: TournamentId) -> None:
     query = """
         DELETE FROM tournaments
         WHERE id = :tournament_id

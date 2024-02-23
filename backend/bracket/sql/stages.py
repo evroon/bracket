@@ -3,24 +3,27 @@ from typing import Literal, cast
 from bracket.database import database
 from bracket.models.db.stage import Stage
 from bracket.models.db.util import StageWithStageItems
+from bracket.utils.id_types import RoundId, StageId, StageItemId, TournamentId
 from bracket.utils.types import dict_without_none
 
 
 async def get_full_tournament_details(
-    tournament_id: int,
-    round_id: int | None = None,
-    stage_id: int | None = None,
-    stage_item_id: int | None = None,
+    tournament_id: TournamentId,
+    round_id: RoundId | None = None,
+    stage_id: StageId | None = None,
+    stage_item_ids: set[StageItemId] | None = None,
     *,
     no_draft_rounds: bool = False,
 ) -> list[StageWithStageItems]:
     draft_filter = "AND rounds.is_draft IS FALSE" if no_draft_rounds else ""
     round_filter = "AND rounds.id = :round_id" if round_id is not None else ""
     stage_filter = "AND stages.id = :stage_id" if stage_id is not None else ""
-    stage_item_filter = "AND stage_items.id = :stage_item_id" if stage_item_id is not None else ""
+    stage_item_filter = (
+        "AND stage_items.id = any(:stage_item_ids)" if stage_item_ids is not None else ""
+    )
     stage_item_filter_join = (
         "LEFT JOIN stage_items on stages.id = stage_items.stage_id"
-        if stage_item_id is not None
+        if stage_item_ids is not None
         else ""
     )
 
@@ -102,14 +105,14 @@ async def get_full_tournament_details(
             "tournament_id": tournament_id,
             "round_id": round_id,
             "stage_id": stage_id,
-            "stage_item_id": stage_item_id,
+            "stage_item_ids": stage_item_ids,
         }
     )
     result = await database.fetch_all(query=query, values=values)
     return [StageWithStageItems.model_validate(dict(x._mapping)) for x in result]
 
 
-async def sql_delete_stage(tournament_id: int, stage_id: int) -> None:
+async def sql_delete_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
     async with database.transaction():
         query = """
             DELETE FROM stage_items
@@ -127,7 +130,7 @@ async def sql_delete_stage(tournament_id: int, stage_id: int) -> None:
         )
 
 
-async def sql_create_stage(tournament_id: int) -> Stage:
+async def sql_create_stage(tournament_id: TournamentId) -> Stage:
     query = """
         INSERT INTO stages (created, is_active, name, tournament_id)
         VALUES (NOW(), false, :name, :tournament_id)
@@ -145,8 +148,8 @@ async def sql_create_stage(tournament_id: int) -> Stage:
 
 
 async def get_next_stage_in_tournament(
-    tournament_id: int, direction: Literal["next", "previous"]
-) -> int | None:
+    tournament_id: TournamentId, direction: Literal["next", "previous"]
+) -> StageId | None:
     select_query = """
         SELECT id
         FROM stages
@@ -181,7 +184,7 @@ async def get_next_stage_in_tournament(
         AND is_active IS FALSE
     """
     return cast(
-        int | None,
+        StageId | None,
         await database.execute(
             query=select_query,
             values={"tournament_id": tournament_id, "direction": direction},
@@ -189,7 +192,9 @@ async def get_next_stage_in_tournament(
     )
 
 
-async def sql_activate_next_stage(new_active_stage_id: int, tournament_id: int) -> None:
+async def sql_activate_next_stage(
+    new_active_stage_id: StageId, tournament_id: TournamentId
+) -> None:
     update_query = """
         UPDATE stages
         SET is_active = (stages.id = :new_active_stage_id)

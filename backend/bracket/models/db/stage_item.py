@@ -6,6 +6,7 @@ from pydantic import Field, model_validator
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBody
+from bracket.utils.id_types import StageId, StageItemId
 from bracket.utils.types import EnumAutoStr
 
 
@@ -20,8 +21,8 @@ class StageType(EnumAutoStr):
 
 
 class StageItemToInsert(BaseModelORM):
-    id: int | None = None
-    stage_id: int
+    id: StageItemId | None = None
+    stage_id: StageId
     name: str
     created: datetime_utc
     type: StageType
@@ -29,7 +30,7 @@ class StageItemToInsert(BaseModelORM):
 
 
 class StageItem(StageItemToInsert):
-    id: int
+    id: StageItemId
 
 
 class StageItemUpdateBody(BaseModelORM):
@@ -41,7 +42,7 @@ class StageItemActivateNextBody(BaseModelORM):
 
 
 class StageItemCreateBody(BaseModelORM):
-    stage_id: int
+    stage_id: StageId
     name: str | None = None
     type: StageType
     team_count: int = Field(ge=2, le=64)

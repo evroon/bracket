@@ -14,6 +14,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM3,
     DUMMY_TEAM4,
 )
+from bracket.utils.id_types import StageItemId, TeamId
 from tests.integration_tests.mocks import MOCK_NOW
 
 MATCH_FILTER = MatchFilter(elo_diff_threshold=50, iterations=100, limit=20, only_recommended=False)
@@ -24,7 +25,7 @@ def test_no_draft_round() -> None:
         get_possible_upcoming_matches_for_swiss(MATCH_FILTER, [], [])
 
 
-def get_team(team: Team, team_id: int) -> FullTeamWithPlayers:
+def get_team(team: Team, team_id: TeamId) -> FullTeamWithPlayers:
     return FullTeamWithPlayers(
         id=team_id,
         **team.model_dump(exclude={"id"}),
@@ -44,20 +45,30 @@ def get_match(
 
 
 def test_constraints() -> None:
-    team1 = get_team(DUMMY_TEAM1.model_copy(update={"elo_score": Decimal("1125.0")}), team_id=-1)
-    team2 = get_team(DUMMY_TEAM2.model_copy(update={"elo_score": Decimal("1175.0")}), team_id=-2)
-    team3 = get_team(DUMMY_TEAM3.model_copy(update={"elo_score": Decimal("1200.0")}), team_id=-3)
-    team4 = get_team(DUMMY_TEAM4.model_copy(update={"elo_score": Decimal("1250.0")}), team_id=-4)
+    team1 = get_team(
+        DUMMY_TEAM1.model_copy(update={"elo_score": Decimal("1125.0")}), team_id=TeamId(-1)
+    )
+    team2 = get_team(
+        DUMMY_TEAM2.model_copy(update={"elo_score": Decimal("1175.0")}), team_id=TeamId(-2)
+    )
+    team3 = get_team(
+        DUMMY_TEAM3.model_copy(update={"elo_score": Decimal("1200.0")}), team_id=TeamId(-3)
+    )
+    team4 = get_team(
+        DUMMY_TEAM4.model_copy(update={"elo_score": Decimal("1250.0")}), team_id=TeamId(-4)
+    )
 
     rounds = [
         RoundWithMatches(
             matches=[get_match(DUMMY_MATCH1, team1, team2)],
             is_draft=False,
-            stage_item_id=-1,
+            stage_item_id=StageItemId(-1),
             name="R1",
             created=MOCK_NOW,
         ),
-        RoundWithMatches(matches=[], is_draft=True, stage_item_id=-1, name="R2", created=MOCK_NOW),
+        RoundWithMatches(
+            matches=[], is_draft=True, stage_item_id=StageItemId(-1), name="R2", created=MOCK_NOW
+        ),
     ]
     teams = [team1, team2, team3, team4]
     result = get_possible_upcoming_matches_for_swiss(MATCH_FILTER, rounds, teams)

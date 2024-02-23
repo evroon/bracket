@@ -27,13 +27,16 @@ from bracket.sql.teams import (
     sql_delete_team,
 )
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
 router = APIRouter()
 
 
-async def update_team_members(team_id: int, tournament_id: int, player_ids: set[int]) -> None:
+async def update_team_members(
+    team_id: TeamId, tournament_id: TournamentId, player_ids: set[PlayerId]
+) -> None:
     [team] = await get_teams_with_members(tournament_id, team_id=team_id)
 
     # Add members to the team
@@ -56,7 +59,7 @@ async def update_team_members(team_id: int, tournament_id: int, player_ids: set[
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
 async def get_teams(
-    tournament_id: int,
+    tournament_id: TournamentId,
     pagination: PaginationTeams = Depends(),
     _: UserPublic = Depends(user_authenticated_or_public_dashboard),
 ) -> TeamsWithPlayersResponse:
@@ -70,7 +73,7 @@ async def get_teams(
 
 @router.put("/tournaments/{tournament_id}/teams/{team_id}", response_model=SingleTeamResponse)
 async def update_team_by_id(
-    tournament_id: int,
+    tournament_id: TournamentId,
     team_body: TeamBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
@@ -99,7 +102,7 @@ async def update_team_by_id(
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)
 async def delete_team(
-    tournament_id: int,
+    tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
@@ -127,7 +130,7 @@ async def delete_team(
 @router.post("/tournaments/{tournament_id}/teams", response_model=SingleTeamResponse)
 async def create_team(
     team_to_insert: TeamBody,
-    tournament_id: int,
+    tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleTeamResponse:
     existing_teams = await get_teams_with_members(tournament_id)
@@ -151,7 +154,7 @@ async def create_team(
 @router.post("/tournaments/{tournament_id}/teams_multi", response_model=SuccessResponse)
 async def create_multiple_teams(
     team_body: TeamMultiBody,
-    tournament_id: int,
+    tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     team_names = [team.strip() for team in team_body.names.split("\n") if len(team) > 0]
