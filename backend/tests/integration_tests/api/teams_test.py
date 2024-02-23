@@ -101,4 +101,4 @@ async def test_update_team_invalid_players(
         response = await send_tournament_request(
             HTTPMethod.PUT, f"teams/{team_inserted.id}", auth_context, None, body
         )
-        assert response == "Could not find Player(s) with ID {-1}"
+        assert response == {'detail': 'Could not find Player(s) with ID {-1}'}
