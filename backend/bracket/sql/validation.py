@@ -1,5 +1,5 @@
 from collections.abc import Awaitable, Callable
-from typing import Any, get_args
+from typing import Any, NoReturn, get_args
 
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -99,6 +99,12 @@ async def check_court_belongs_to_tournament(
     return any(court_id == court.id for court in await get_all_courts_in_tournament(tournament_id))
 
 
+def raise_exception(possible_type: Any, field_value: Any) -> NoReturn:
+    field_name = possible_type.__name__ if possible_type is not None else "Unknown type"
+    msg = f"Could not find {field_name.replace('Id', '')}(s) with ID {field_value}"
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
+
+
 async def check_foreign_keys_belong_to_tournament(
     some_body: BaseModel, tournament_id: TournamentId
 ) -> None:
@@ -129,7 +135,8 @@ async def check_foreign_keys_belong_to_tournament(
             await check_foreign_keys_belong_to_tournament(field_value, tournament_id)
         elif isinstance(field_value, set):
             if field_info.annotation == set[PlayerId]:
-                await check_players_belong_to_tournament(field_value, tournament_id)
+                if not await check_players_belong_to_tournament(field_value, tournament_id):
+                    raise_exception(PlayerId, field_value)
             else:
                 raise Exception(f"Unknown set type: {field_info.annotation}")
         else:
@@ -139,8 +146,4 @@ async def check_foreign_keys_belong_to_tournament(
                 if check_callable is not None and not await check_callable(
                     field_value, stages, tournament_id
                 ):
-                    field_name = (
-                        possible_type.__name__ if possible_type is not None else "Unknown type"
-                    )
-                    msg = f"Could not find {field_name.replace('Id', '')} with ID {field_value}"
-                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
+                    raise_exception(possible_type, field_value)
