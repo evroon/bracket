@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from bracket.models.db.court import Court
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.team import FullTeamWithPlayers, TeamWithPlayers
-from bracket.utils.id_types import CourtId, MatchId, RoundId, StageItemId, TeamId
+from bracket.utils.id_types import CourtId, MatchId, PlayerId, RoundId, StageItemId, TeamId
 from bracket.utils.types import assert_some
 
 
@@ -67,7 +67,7 @@ class MatchWithDetailsDefinitive(Match):
         return [self.team1, self.team2]
 
     @property
-    def team_ids(self) -> list[int]:
+    def team_ids(self) -> list[TeamId]:
         return [assert_some(self.team1.id), assert_some(self.team2.id)]
 
     def get_team_ids_hashes(self) -> list[str]:
@@ -77,7 +77,7 @@ class MatchWithDetailsDefinitive(Match):
         ]
 
     @property
-    def player_ids(self) -> list[int]:
+    def player_ids(self) -> list[PlayerId]:
         return self.team1.player_ids + self.team2.player_ids
 
 

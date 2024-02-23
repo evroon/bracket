@@ -12,7 +12,7 @@ async def sql_create_round(round_: RoundToInsert) -> RoundId:
         VALUES (NOW(), :is_draft, :is_active, :name, :stage_item_id)
         RETURNING id
         """
-    result: int = await database.fetch_val(
+    result: RoundId = await database.fetch_val(
         query=query,
         values={
             "name": round_.name,

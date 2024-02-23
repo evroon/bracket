@@ -39,7 +39,7 @@ class TeamWithPlayers(BaseModel):
     name: str
 
     @property
-    def player_ids(self) -> list[int]:
+    def player_ids(self) -> list[PlayerId]:
         return [assert_some(player.id) for player in self.players]
 
     @field_validator("players", mode="before")

@@ -1,8 +1,8 @@
 from bracket.models.db.shared import BaseModelORM
-from bracket.utils.id_types import PlayerId, TeamId
+from bracket.utils.id_types import PlayerId, PlayerXTeamId, TeamId
 
 
 class PlayerXTeam(BaseModelORM):
-    id: int | None = None
+    id: PlayerXTeamId | None = None
     player_id: PlayerId
     team_id: TeamId

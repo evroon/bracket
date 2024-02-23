@@ -16,7 +16,7 @@ from bracket.sql.matches import (
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
-from bracket.utils.id_types import MatchId, TournamentId
+from bracket.utils.id_types import CourtId, MatchId, TournamentId
 from bracket.utils.types import assert_some
 
 
@@ -82,7 +82,7 @@ class MatchPosition(NamedTuple):
 async def reorder_matches_for_court(
     tournament: Tournament,
     scheduled_matches: list[MatchPosition],
-    court_id: int,
+    court_id: CourtId,
 ) -> None:
     matches_this_court = sorted(
         (match_pos for match_pos in scheduled_matches if match_pos.match.court_id == court_id),

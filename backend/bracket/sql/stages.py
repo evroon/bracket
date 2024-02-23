@@ -3,7 +3,7 @@ from typing import Literal, cast
 from bracket.database import database
 from bracket.models.db.stage import Stage
 from bracket.models.db.util import StageWithStageItems
-from bracket.utils.id_types import RoundId, StageId, TournamentId
+from bracket.utils.id_types import RoundId, StageId, StageItemId, TournamentId
 from bracket.utils.types import dict_without_none
 
 
@@ -11,7 +11,7 @@ async def get_full_tournament_details(
     tournament_id: TournamentId,
     round_id: RoundId | None = None,
     stage_id: StageId | None = None,
-    stage_item_ids: set[int] | None = None,
+    stage_item_ids: set[StageItemId] | None = None,
     *,
     no_draft_rounds: bool = False,
 ) -> list[StageWithStageItems]:
@@ -149,7 +149,7 @@ async def sql_create_stage(tournament_id: TournamentId) -> Stage:
 
 async def get_next_stage_in_tournament(
     tournament_id: TournamentId, direction: Literal["next", "previous"]
-) -> int | None:
+) -> StageId | None:
     select_query = """
         SELECT id
         FROM stages
@@ -184,7 +184,7 @@ async def get_next_stage_in_tournament(
         AND is_active IS FALSE
     """
     return cast(
-        int | None,
+        StageId | None,
         await database.execute(
             query=select_query,
             values={"tournament_id": tournament_id, "direction": direction},
@@ -192,7 +192,9 @@ async def get_next_stage_in_tournament(
     )
 
 
-async def sql_activate_next_stage(new_active_stage_id: int, tournament_id: TournamentId) -> None:
+async def sql_activate_next_stage(
+    new_active_stage_id: StageId, tournament_id: TournamentId
+) -> None:
     update_query = """
         UPDATE stages
         SET is_active = (stages.id = :new_active_stage_id)

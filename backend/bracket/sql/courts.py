@@ -1,6 +1,6 @@
 from bracket.database import database
 from bracket.models.db.court import Court, CourtBody
-from bracket.utils.id_types import TournamentId
+from bracket.utils.id_types import CourtId, TournamentId
 
 
 async def get_all_courts_in_tournament(tournament_id: TournamentId) -> list[Court]:
@@ -15,7 +15,7 @@ async def get_all_courts_in_tournament(tournament_id: TournamentId) -> list[Cour
 
 
 async def update_court(
-    tournament_id: TournamentId, court_id: int, court_body: CourtBody
+    tournament_id: TournamentId, court_id: CourtId, court_body: CourtBody
 ) -> list[Court]:
     query = """
         UPDATE courts
@@ -30,7 +30,7 @@ async def update_court(
     return [Court.model_validate(dict(x._mapping)) for x in result]
 
 
-async def sql_delete_court(tournament_id: TournamentId, court_id: int) -> None:
+async def sql_delete_court(tournament_id: TournamentId, court_id: CourtId) -> None:
     query = "DELETE FROM courts WHERE id = :court_id AND tournament_id = :tournament_id"
     await database.fetch_one(
         query=query, values={"court_id": court_id, "tournament_id": tournament_id}

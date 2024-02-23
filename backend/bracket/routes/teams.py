@@ -27,7 +27,7 @@ from bracket.sql.teams import (
     sql_delete_team,
 )
 from bracket.utils.db import fetch_one_parsed
-from bracket.utils.id_types import TeamId, TournamentId
+from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
@@ -35,7 +35,7 @@ router = APIRouter()
 
 
 async def update_team_members(
-    team_id: TeamId, tournament_id: TournamentId, player_ids: set[int]
+    team_id: TeamId, tournament_id: TournamentId, player_ids: set[PlayerId]
 ) -> None:
     [team] = await get_teams_with_members(tournament_id, team_id=team_id)
 

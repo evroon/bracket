@@ -8,7 +8,7 @@ from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import dict_without_none
 
 
-async def get_teams_by_id(team_ids: set[int], tournament_id: TournamentId) -> list[Team]:
+async def get_teams_by_id(team_ids: set[TeamId], tournament_id: TournamentId) -> list[Team]:
     if len(team_ids) < 1:
         return []
 

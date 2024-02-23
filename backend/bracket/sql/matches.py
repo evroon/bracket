@@ -5,7 +5,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
-from bracket.utils.id_types import MatchId, StageItemId
+from bracket.utils.id_types import CourtId, MatchId, StageItemId, TeamId
 
 
 async def sql_delete_match(match_id: MatchId) -> None:
@@ -116,7 +116,7 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
 
 
 async def sql_update_team_ids_for_match(
-    match_id: MatchId, team1_id: int | None, team2_id: int | None = None
+    match_id: MatchId, team1_id: TeamId | None, team2_id: TeamId | None = None
 ) -> None:
     query = """
         UPDATE matches
@@ -131,7 +131,7 @@ async def sql_update_team_ids_for_match(
 
 async def sql_reschedule_match(
     match_id: MatchId,
-    court_id: int | None,
+    court_id: CourtId | None,
     start_time: datetime_utc,
     position_in_schedule: int | None,
     duration_minutes: int,
@@ -167,7 +167,7 @@ async def sql_reschedule_match(
 
 async def sql_reschedule_match_and_determine_duration_and_margin(
     match_id: MatchId,
-    court_id: int | None,
+    court_id: CourtId | None,
     start_time: datetime_utc,
     position_in_schedule: int | None,
     match: Match,

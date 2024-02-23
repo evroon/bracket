@@ -21,7 +21,7 @@ async def get_user_access_to_tournament(tournament_id: TournamentId, user_id: Us
     return tournament_id in {tournament.id for tournament in result}  # type: ignore[attr-defined]
 
 
-async def get_which_clubs_has_user_access_to(user_id: UserId) -> set[int]:
+async def get_which_clubs_has_user_access_to(user_id: UserId) -> set[ClubId]:
     query = """
         SELECT club_id
         FROM users_x_clubs

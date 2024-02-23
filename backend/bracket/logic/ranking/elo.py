@@ -1,6 +1,7 @@
 import math
 from collections import defaultdict
 from decimal import Decimal
+from typing import TypeVar
 
 from bracket.database import database
 from bracket.models.db.match import MatchWithDetailsDefinitive
@@ -10,18 +11,21 @@ from bracket.schema import players
 from bracket.sql.players import get_all_players_in_tournament, update_player_stats
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import update_team_stats
-from bracket.utils.id_types import TournamentId
+from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.types import assert_some
 
 K = 32
 D = 400
 
 
+TeamIdOrPlayerId = TypeVar("TeamIdOrPlayerId", bound=PlayerId | TeamId)
+
+
 def set_statistics_for_player_or_team(
     team_index: int,
-    stats: defaultdict[int, PlayerStatistics],
+    stats: defaultdict[TeamIdOrPlayerId, PlayerStatistics],
     match: MatchWithDetailsDefinitive,
-    team_or_player_id: int,
+    team_or_player_id: TeamIdOrPlayerId,
     rating_team1_before: float,
     rating_team2_before: float,
 ) -> None:
@@ -49,9 +53,9 @@ def set_statistics_for_player_or_team(
 
 def determine_ranking_for_stage_items(
     stage_items: list[StageItemWithRounds],
-) -> tuple[defaultdict[int, PlayerStatistics], defaultdict[int, PlayerStatistics]]:
-    player_x_stats: defaultdict[int, PlayerStatistics] = defaultdict(PlayerStatistics)
-    team_x_stats: defaultdict[int, PlayerStatistics] = defaultdict(PlayerStatistics)
+) -> tuple[defaultdict[PlayerId, PlayerStatistics], defaultdict[TeamId, PlayerStatistics]]:
+    player_x_stats: defaultdict[PlayerId, PlayerStatistics] = defaultdict(PlayerStatistics)
+    team_x_stats: defaultdict[TeamId, PlayerStatistics] = defaultdict(PlayerStatistics)
     matches = [
         match
         for stage_item in stage_items
@@ -101,7 +105,7 @@ def determine_ranking_for_stage_items(
 
 def determine_team_ranking_for_stage_item(
     stage_item: StageItemWithRounds,
-) -> list[tuple[int, PlayerStatistics]]:
+) -> list[tuple[TeamId, PlayerStatistics]]:
     _, team_ranking = determine_ranking_for_stage_items([stage_item])
     return sorted(team_ranking.items(), key=lambda x: x[1].elo_score, reverse=True)
 
