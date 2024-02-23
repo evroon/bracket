@@ -49,6 +49,19 @@ async def get_all_players_in_tournament(
     return [Player.model_validate(x) for x in result]
 
 
+async def get_player_by_id(player_id: PlayerId, tournament_id: TournamentId) -> Player | None:
+    query = """
+        SELECT *
+        FROM players
+        WHERE id = :player_id
+        AND tournament_id = :tournament_id
+    """
+    result = await database.fetch_one(
+        query=query, values={"player_id": player_id, "tournament_id": tournament_id}
+    )
+    return Player.model_validate(result) if result is not None else None
+
+
 async def get_player_count(
     tournament_id: TournamentId,
     *,
