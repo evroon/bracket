@@ -27,19 +27,17 @@ const theme = createTheme({
   },
 });
 
-function PlausibleAnalyticsScript() {
-  if (
-    process.env.PLAUSIBLE_ANALYTICS_DATA_DOMAIN == null ||
-    process.env.PLAUSIBLE_ANALYTICS_SCRIPT_SRC == null
-  ) {
+function AnalyticsScript() {
+  if (process.env.ANALYTICS_SCRIPT_SRC == null) {
     return null;
   }
 
   return (
     <script
-      defer
-      data-domain={process.env.PLAUSIBLE_ANALYTICS_DATA_DOMAIN}
-      src={process.env.PLAUSIBLE_ANALYTICS_SCRIPT_SRC}
+      async
+      data-domain={process.env.ANALYTICS_DATA_DOMAIN}
+      data-website-id={process.env.ANALYTICS_DATA_WEBSITE_ID}
+      src={process.env.ANALYTICS_SCRIPT_SRC}
     />
   );
 }
@@ -52,7 +50,7 @@ const App = ({ Component, pageProps }: any) => (
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="/favicon.svg" />
-      <PlausibleAnalyticsScript />
+      <AnalyticsScript />
 
       <ColorSchemeScript defaultColorScheme="auto" />
     </Head>
