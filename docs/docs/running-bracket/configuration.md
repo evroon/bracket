@@ -47,6 +47,9 @@ AUTO_RUN_MIGRATIONS=true
   accounts. You get the secret when you create a new site in HCaptcha.
 - `NEXT_PUBLIC_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
+- `PLAUSIBLE_ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
+  analytics
+- `PLAUSIBLE_ANALYTICS_SCRIPT_SRC`: The URL to the script for Plausible analytics.
 
 ### Frontend: Example configuration file
 
