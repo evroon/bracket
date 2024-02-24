@@ -1,5 +1,23 @@
+import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons-react';
+import { NextRouter } from 'next/router';
+import React from 'react';
+
 export function performLogout() {
   localStorage.removeItem('login');
+}
+
+export function performLogoutAndRedirect(router: NextRouter) {
+  performLogout();
+
+  showNotification({
+    color: 'green',
+    title: 'Logout successful',
+    icon: <IconCheck />,
+    message: '',
+    autoClose: 10000,
+  });
+  router.push('/login');
 }
 
 export function getLogin() {

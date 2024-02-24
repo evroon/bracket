@@ -7,7 +7,6 @@ import {
   IconCalendar,
   IconDots,
   IconHome,
-  IconLogout,
   IconSettings,
   IconSoccerField,
   IconTournament,
@@ -93,7 +92,7 @@ export function getBaseLinksDict() {
     {
       link: '/user',
       label: t('user_title'),
-      links: [{ link: '/user', label: t('logout_title'), icon: IconLogout }],
+      links: [],
       icon: IconUser,
     },
     {

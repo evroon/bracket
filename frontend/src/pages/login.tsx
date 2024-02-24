@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
@@ -36,6 +37,7 @@ export default function Login() {
       showNotification({
         color: 'green',
         title: t('login_success_title'),
+        icon: <IconCheck />,
         message: '',
       });
 
