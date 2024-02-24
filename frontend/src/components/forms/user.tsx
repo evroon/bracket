@@ -1,14 +1,17 @@
 import { Button, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconHash, IconUser } from '@tabler/icons-react';
+import { IconHash, IconLogout, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { UserInterface } from '../../interfaces/user';
+import { performLogoutAndRedirect } from '../../services/local_storage';
 import { updatePassword, updateUser } from '../../services/user';
 import { PasswordStrength } from '../utils/password';
 
 export default function UserForm({ user }: { user: UserInterface }) {
+  const router = useRouter();
   const { t } = useTranslation();
   const details_form = useForm({
     initialValues: {
@@ -66,6 +69,16 @@ export default function UserForm({ user }: { user: UserInterface }) {
           />
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             {t('save_button')}
+          </Button>
+          <Button
+            fullWidth
+            style={{ marginTop: 20 }}
+            color="red"
+            variant="outline"
+            leftSection={<IconLogout />}
+            onClick={() => performLogoutAndRedirect(t, router)}
+          >
+            {t('logout_title')}
           </Button>
         </form>
       </Tabs.Panel>
