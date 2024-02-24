@@ -60,6 +60,8 @@ This is an example of how the config file should look like:
 ```shell
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
 NEXT_PUBLIC_API_BASE_URL='https://api.bracket.com'
+PLAUSIBLE_ANALYTICS_DATA_DOMAIN='bracket.com'
+PLAUSIBLE_ANALYTICS_SCRIPT_SRC='https://plausible.bracket.com/js/script.js'
 ```
 
 [next-config-url]: https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#loading-environment-variables
