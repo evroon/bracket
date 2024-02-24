@@ -76,7 +76,7 @@ export default function UserForm({ user }: { user: UserInterface }) {
             color="red"
             variant="outline"
             leftSection={<IconLogout />}
-            onClick={() => performLogoutAndRedirect(router)}
+            onClick={() => performLogoutAndRedirect(t, router)}
           >
             {t('logout_title')}
           </Button>
