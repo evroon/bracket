@@ -34,7 +34,7 @@ function AnalyticsScript() {
 
   return (
     <script
-      defer
+      async
       data-domain={process.env.ANALYTICS_DATA_DOMAIN}
       data-website-id={process.env.ANALYTICS_DATA_WEBSITE_ID}
       src={process.env.ANALYTICS_SCRIPT_SRC}
