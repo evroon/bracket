@@ -6,12 +6,12 @@ import {
   Container,
   Group,
   Menu,
-  UnstyledButton,
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
+import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
 
@@ -49,15 +49,13 @@ function getMenuItemsForLink(
   return (
     <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
       <Menu.Target>
-        <UnstyledButton
+        <Link
           className={classes.link}
-          onClick={async () => {
-            if (link.link) await router.push(link.link);
-          }}
+          href={link.link || ''}
           data-active={pathName === link.link || undefined}
         >
           <>{link.label}</>
-        </UnstyledButton>
+        </Link>
       </Menu.Target>
       {menuItems.length > 0 ? <Menu.Dropdown>{menuItems}</Menu.Dropdown> : null}
     </Menu>
@@ -78,16 +76,14 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
     }
 
     return (
-      <UnstyledButton
+      <Link
         key={link.label}
         className={classes.link}
-        onClick={async () => {
-          if (link.link) await router.push(link.link);
-        }}
+        href={link.link || ''}
         data-active={pathName === link.link || undefined}
       >
         {link.label}
-      </UnstyledButton>
+      </Link>
     );
   });
   return (
