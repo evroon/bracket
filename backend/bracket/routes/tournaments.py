@@ -30,6 +30,7 @@ from bracket.sql.tournaments import (
     sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
+    sql_update_tournament,
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.errors import (
@@ -97,10 +98,7 @@ async def update_tournament_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     try:
-        await database.execute(
-            query=tournaments.update().where(tournaments.c.id == tournament_id),
-            values=tournament_body.model_dump(),
-        )
+        await sql_update_tournament(tournament_id, tournament_body)
     except asyncpg.exceptions.UniqueViolationError as exc:
         check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 
