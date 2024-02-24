@@ -27,7 +27,7 @@ import { GenericSkeleton } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
-import { getBaseApiUrl, getClubs, getTournamentById, removeLogo } from '../../../services/adapter';
+import { getBaseApiUrl, getClubs, getTournamentById, removeTournamentLogo } from '../../../services/adapter';
 import { updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
@@ -163,7 +163,7 @@ function GeneralTournamentForm({
           {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
         />
 
-        <DropzoneButton tournament={tournament} swrTournamentResponse={swrTournamentResponse} />
+        <DropzoneButton tournamentId={tournament.id} swrResponse={swrTournamentResponse} variant="tournament" />
         <Center my="lg">
           <div style={{ width: '50%' }}>
             <TournamentLogo tournament={tournament} />
@@ -174,7 +174,7 @@ function GeneralTournamentForm({
           color="red"
           fullWidth
           onClick={async () => {
-            await removeLogo(tournament.id);
+            await removeTournamentLogo(tournament.id);
             await swrTournamentResponse.mutate();
           }}
         >
