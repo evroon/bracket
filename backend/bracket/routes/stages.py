@@ -27,13 +27,14 @@ from bracket.sql.stages import (
     sql_delete_stage,
 )
 from bracket.sql.teams import get_teams_with_members
+from bracket.utils.id_types import StageId, TournamentId
 
 router = APIRouter()
 
 
 @router.get("/tournaments/{tournament_id}/stages", response_model=StagesWithStageItemsResponse)
 async def get_stages(
-    tournament_id: int,
+    tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_or_public_dashboard),
     no_draft_rounds: bool = False,
 ) -> StagesWithStageItemsResponse:
@@ -49,8 +50,8 @@ async def get_stages(
 
 @router.delete("/tournaments/{tournament_id}/stages/{stage_id}", response_model=SuccessResponse)
 async def delete_stage(
-    tournament_id: int,
-    stage_id: int,
+    tournament_id: TournamentId,
+    stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage: StageWithStageItems = Depends(stage_dependency),
 ) -> SuccessResponse:
@@ -74,7 +75,7 @@ async def delete_stage(
 
 @router.post("/tournaments/{tournament_id}/stages", response_model=SuccessResponse)
 async def create_stage(
-    tournament_id: int,
+    tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     existing_stages = await get_full_tournament_details(tournament_id)
@@ -86,8 +87,8 @@ async def create_stage(
 
 @router.put("/tournaments/{tournament_id}/stages/{stage_id}", response_model=SuccessResponse)
 async def update_stage(
-    tournament_id: int,
-    stage_id: int,
+    tournament_id: TournamentId,
+    stage_id: StageId,
     stage_body: StageUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage: Stage = Depends(stage_dependency),  # pylint: disable=redefined-builtin
@@ -108,7 +109,7 @@ async def update_stage(
 
 @router.post("/tournaments/{tournament_id}/stages/activate", response_model=SuccessResponse)
 async def activate_next_stage(
-    tournament_id: int,
+    tournament_id: TournamentId,
     stage_body: StageActivateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
@@ -130,8 +131,8 @@ async def activate_next_stage(
     response_model=StageItemInputOptionsResponse,
 )
 async def get_available_inputs(
-    tournament_id: int,
-    stage_id: int,
+    tournament_id: TournamentId,
+    stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage: Stage = Depends(stage_dependency),
 ) -> StageItemInputOptionsResponse:

@@ -2,12 +2,13 @@ from heliclockter import datetime_utc
 from pydantic import Field
 
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import ClubId, TournamentId
 from bracket.utils.pydantic import EmptyStrToNone
 
 
 class Tournament(BaseModelORM):
-    id: int | None = None
-    club_id: int
+    id: TournamentId | None = None
+    club_id: ClubId
     name: str
     created: datetime_utc
     start_time: datetime_utc
@@ -32,7 +33,7 @@ class TournamentUpdateBody(BaseModelORM):
 
 
 class TournamentBody(TournamentUpdateBody):
-    club_id: int
+    club_id: ClubId
 
 
 class TournamentToInsert(TournamentBody):

@@ -5,9 +5,10 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
+from bracket.utils.id_types import CourtId, MatchId, StageItemId, TeamId
 
 
-async def sql_delete_match(match_id: int) -> None:
+async def sql_delete_match(match_id: MatchId) -> None:
     query = """
         DELETE FROM matches
         WHERE matches.id = :match_id
@@ -15,7 +16,7 @@ async def sql_delete_match(match_id: int) -> None:
     await database.execute(query=query, values={"match_id": match_id})
 
 
-async def sql_delete_matches_for_stage_item_id(stage_item_id: int) -> None:
+async def sql_delete_matches_for_stage_item_id(stage_item_id: StageItemId) -> None:
     query = """
         DELETE FROM matches
         WHERE matches.id IN (
@@ -78,7 +79,7 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
     return Match.model_validate(dict(result._mapping))
 
 
-async def sql_update_match(match_id: int, match: MatchBody, tournament: Tournament) -> None:
+async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tournament) -> None:
     query = """
         UPDATE matches
         SET round_id = :round_id,
@@ -115,7 +116,7 @@ async def sql_update_match(match_id: int, match: MatchBody, tournament: Tourname
 
 
 async def sql_update_team_ids_for_match(
-    match_id: int, team1_id: int | None, team2_id: int | None = None
+    match_id: MatchId, team1_id: TeamId | None, team2_id: TeamId | None = None
 ) -> None:
     query = """
         UPDATE matches
@@ -129,8 +130,8 @@ async def sql_update_team_ids_for_match(
 
 
 async def sql_reschedule_match(
-    match_id: int,
-    court_id: int | None,
+    match_id: MatchId,
+    court_id: CourtId | None,
     start_time: datetime_utc,
     position_in_schedule: int | None,
     duration_minutes: int,
@@ -165,8 +166,8 @@ async def sql_reschedule_match(
 
 
 async def sql_reschedule_match_and_determine_duration_and_margin(
-    match_id: int,
-    court_id: int | None,
+    match_id: MatchId,
+    court_id: CourtId | None,
     start_time: datetime_utc,
     position_in_schedule: int | None,
     match: Match,
@@ -194,7 +195,7 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
     )
 
 
-async def sql_get_match(match_id: int) -> Match:
+async def sql_get_match(match_id: MatchId) -> Match:
     query = """
         SELECT *
         FROM matches

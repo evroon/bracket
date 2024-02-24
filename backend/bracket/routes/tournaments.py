@@ -30,6 +30,7 @@ from bracket.sql.tournaments import (
     sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
+    sql_update_tournament,
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.errors import (
@@ -38,6 +39,7 @@ from bracket.utils.errors import (
     check_foreign_key_violation,
     check_unique_constraint_violation,
 )
+from bracket.utils.id_types import TournamentId
 from bracket.utils.logging import logger
 from bracket.utils.types import assert_some
 
@@ -51,7 +53,8 @@ unauthorized_exception = HTTPException(
 
 @router.get("/tournaments/{tournament_id}", response_model=TournamentResponse)
 async def get_tournament(
-    tournament_id: int, user: UserPublic | None = Depends(user_authenticated_or_public_dashboard)
+    tournament_id: TournamentId,
+    user: UserPublic | None = Depends(user_authenticated_or_public_dashboard),
 ) -> TournamentResponse:
     tournament = await sql_get_tournament(tournament_id)
     if user is None and not tournament.dashboard_public:
@@ -90,15 +93,12 @@ async def get_tournaments(
 
 @router.put("/tournaments/{tournament_id}", response_model=SuccessResponse)
 async def update_tournament_by_id(
-    tournament_id: int,
+    tournament_id: TournamentId,
     tournament_body: TournamentUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
     try:
-        await database.execute(
-            query=tournaments.update().where(tournaments.c.id == tournament_id),
-            values=tournament_body.model_dump(),
-        )
+        await sql_update_tournament(tournament_id, tournament_body)
     except asyncpg.exceptions.UniqueViolationError as exc:
         check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 
@@ -108,7 +108,7 @@ async def update_tournament_by_id(
 
 @router.delete("/tournaments/{tournament_id}", response_model=SuccessResponse)
 async def delete_tournament(
-    tournament_id: int, _: UserPublic = Depends(user_authenticated_for_tournament)
+    tournament_id: TournamentId, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
     try:
         await sql_delete_tournament(tournament_id)
@@ -151,7 +151,7 @@ async def create_tournament(
 
 @router.post("/tournaments/{tournament_id}/logo")
 async def upload_logo(
-    tournament_id: int,
+    tournament_id: TournamentId,
     file: UploadFile | None = None,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> TournamentResponse:

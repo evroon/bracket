@@ -1,7 +1,12 @@
 name: backend
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'backend/**'
   push:
+    branches:
+      - 'master'
 
 jobs:
   build:

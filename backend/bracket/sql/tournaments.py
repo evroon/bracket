@@ -1,10 +1,11 @@
 from typing import Any
 
 from bracket.database import database
-from bracket.models.db.tournament import Tournament
+from bracket.models.db.tournament import Tournament, TournamentUpdateBody
+from bracket.utils.id_types import TournamentId
 
 
-async def sql_get_tournament(tournament_id: int) -> Tournament:
+async def sql_get_tournament(tournament_id: TournamentId) -> Tournament:
     query = """
         SELECT *
         FROM tournaments
@@ -45,9 +46,31 @@ async def sql_get_tournaments(
     return [Tournament.model_validate(x) for x in result]
 
 
-async def sql_delete_tournament(tournament_id: int) -> None:
+async def sql_delete_tournament(tournament_id: TournamentId) -> None:
     query = """
         DELETE FROM tournaments
         WHERE id = :tournament_id
         """
     await database.fetch_one(query=query, values={"tournament_id": tournament_id})
+
+
+async def sql_update_tournament(
+    tournament_id: TournamentId, tournament: TournamentUpdateBody
+) -> None:
+    query = """
+        UPDATE tournaments
+        SET
+            start_time = :start_time,
+            name = :name,
+            dashboard_public = :dashboard_public,
+            dashboard_endpoint = :dashboard_endpoint,
+            players_can_be_in_multiple_teams = :players_can_be_in_multiple_teams,
+            auto_assign_courts = :auto_assign_courts,
+            duration_minutes = :duration_minutes,
+            margin_minutes = :margin_minutes
+        WHERE tournaments.id = :tournament_id
+        """
+    await database.execute(
+        query=query,
+        values={"tournament_id": tournament_id, **tournament.model_dump()},
+    )

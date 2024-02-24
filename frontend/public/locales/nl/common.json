@@ -106,6 +106,7 @@
   "invalid_password_validation": "Ongeldig wachtwoord",
   "iterations_input_label": "Iteraties",
   "login_success_title": "Login succesvol",
+  "logout_success_title": "Uitloggen succesvol",
   "logout_title": "Uitloggen",
   "lowercase_required": "Heeft een kleine letter",
   "margin_minutes_choose_title": "Vul de marge tussen wedstrijden in",

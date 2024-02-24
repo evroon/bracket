@@ -28,6 +28,7 @@ from bracket.sql.users import (
     update_user,
     update_user_password,
 )
+from bracket.utils.id_types import UserId
 from bracket.utils.security import hash_password, verify_captcha_token
 from bracket.utils.types import assert_some
 
@@ -41,7 +42,7 @@ async def get_user(user_public: UserPublic = Depends(user_authenticated)) -> Use
 
 @router.get("/users/{user_id}", response_model=UserPublicResponse)
 async def get_me(
-    user_id: int, user_public: UserPublic = Depends(user_authenticated)
+    user_id: UserId, user_public: UserPublic = Depends(user_authenticated)
 ) -> UserPublicResponse:
     if user_public.id != user_id:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Can't view details of this user")
@@ -50,8 +51,8 @@ async def get_me(
 
 
 @router.put("/users/{user_id}", response_model=UserPublicResponse)
-async def put_user(
-    user_id: int,
+async def update_user_details(
+    user_id: UserId,
     user_to_update: UserToUpdate,
     user_public: UserPublic = Depends(user_authenticated),
 ) -> UserPublicResponse:
@@ -65,7 +66,7 @@ async def put_user(
 
 @router.put("/users/{user_id}/password", response_model=SuccessResponse)
 async def put_user_password(
-    user_id: int,
+    user_id: UserId,
     user_to_update: UserPasswordToUpdate,
     user_public: UserPublic = Depends(user_authenticated),
 ) -> SuccessResponse:

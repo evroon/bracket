@@ -5,15 +5,16 @@ from bracket.models.db.match import MatchWithDetails
 from bracket.sql.matches import sql_get_match, sql_update_team_ids_for_match
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
+from bracket.utils.id_types import MatchId, StageId, StageItemId, TeamId, TournamentId
 from bracket.utils.types import assert_some
 
 
 async def determine_team_id(
-    tournament_id: int,
-    winner_from_stage_item_id: int | None,
+    tournament_id: TournamentId,
+    winner_from_stage_item_id: StageItemId | None,
     winner_position: int | None,
-    winner_from_match_id: int | None,
-) -> int | None:
+    winner_from_match_id: MatchId | None,
+) -> TeamId | None:
     if winner_from_stage_item_id is not None and winner_position is not None:
         stage_item = await get_stage_item(tournament_id, winner_from_stage_item_id)
         assert stage_item is not None
@@ -37,7 +38,7 @@ async def determine_team_id(
     raise ValueError("Unexpected match type")
 
 
-async def set_team_ids_for_match(tournament_id: int, match: MatchWithDetails) -> None:
+async def set_team_ids_for_match(tournament_id: TournamentId, match: MatchWithDetails) -> None:
     team1_id = await determine_team_id(
         tournament_id,
         match.team1_winner_from_stage_item_id,
@@ -54,7 +55,7 @@ async def set_team_ids_for_match(tournament_id: int, match: MatchWithDetails) ->
     await sql_update_team_ids_for_match(assert_some(match.id), team1_id, team2_id)
 
 
-async def update_matches_in_activated_stage(tournament_id: int, stage_id: int) -> None:
+async def update_matches_in_activated_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
     [stage] = await get_full_tournament_details(tournament_id, stage_id=stage_id)
 
     for stage_item in stage.stage_items:

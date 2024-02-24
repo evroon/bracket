@@ -5,7 +5,6 @@ import '@mantine/dropzone/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import '@mantine/spotlight/styles.css';
-import { Analytics } from '@vercel/analytics/react';
 import { appWithTranslation } from 'next-i18next';
 import Head from 'next/head';
 
@@ -28,6 +27,23 @@ const theme = createTheme({
   },
 });
 
+function PlausibleAnalyticsScript() {
+  if (
+    process.env.PLAUSIBLE_ANALYTICS_DATA_DOMAIN == null ||
+    process.env.PLAUSIBLE_ANALYTICS_SCRIPT_SRC == null
+  ) {
+    return null;
+  }
+
+  return (
+    <script
+      defer
+      data-domain={process.env.PLAUSIBLE_ANALYTICS_DATA_DOMAIN}
+      src={process.env.PLAUSIBLE_ANALYTICS_SCRIPT_SRC}
+    />
+  );
+}
+
 const App = ({ Component, pageProps }: any) => (
   <>
     <Head>
@@ -36,6 +52,7 @@ const App = ({ Component, pageProps }: any) => (
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="/favicon.svg" />
+      <PlausibleAnalyticsScript />
 
       <ColorSchemeScript defaultColorScheme="auto" />
     </Head>
@@ -44,7 +61,6 @@ const App = ({ Component, pageProps }: any) => (
       <BracketSpotlight />
       <Notifications />
       <Component {...pageProps} />
-      <Analytics />
     </MantineProvider>
   </>
 );

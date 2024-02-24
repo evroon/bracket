@@ -2,10 +2,14 @@ name: docker
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     paths:
       - 'backend/**'
       - 'frontend/**'
+      - 'docker-compose.yml'
+  push:
+    branches:
+      - 'master'
 
 jobs:
   build:

@@ -89,3 +89,16 @@ async def test_update_team(
         assert response["data"]["name"] == body["name"]
 
         await assert_row_count_and_clear(teams, 1)
+
+
+async def test_update_team_invalid_players(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {"name": "Some new name", "active": True, "player_ids": [-1]}
+    async with inserted_team(
+        DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
+    ) as team_inserted:
+        response = await send_tournament_request(
+            HTTPMethod.PUT, f"teams/{team_inserted.id}", auth_context, None, body
+        )
+        assert response == {"detail": "Could not find Player(s) with ID {-1}"}

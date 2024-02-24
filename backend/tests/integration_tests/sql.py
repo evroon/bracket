@@ -33,6 +33,7 @@ from bracket.schema import (
 )
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
+from bracket.utils.id_types import TeamId
 from bracket.utils.types import BaseModelT, assert_some
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
@@ -92,7 +93,7 @@ async def inserted_player(player: Player) -> AsyncIterator[Player]:
 
 
 @asynccontextmanager
-async def inserted_player_in_team(player: Player, team_id: int) -> AsyncIterator[Player]:
+async def inserted_player_in_team(player: Player, team_id: TeamId) -> AsyncIterator[Player]:
     async with inserted_generic(player, players, Player) as row_inserted:
         async with inserted_generic(
             PlayerXTeam(player_id=assert_some(row_inserted.id), team_id=team_id),

@@ -16,10 +16,11 @@ from bracket.sql.matches import (
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
+from bracket.utils.id_types import CourtId, MatchId, TournamentId
 from bracket.utils.types import assert_some
 
 
-async def schedule_all_unscheduled_matches(tournament_id: int) -> None:
+async def schedule_all_unscheduled_matches(tournament_id: TournamentId) -> None:
     tournament = await sql_get_tournament(tournament_id)
     stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
@@ -81,7 +82,7 @@ class MatchPosition(NamedTuple):
 async def reorder_matches_for_court(
     tournament: Tournament,
     scheduled_matches: list[MatchPosition],
-    court_id: int,
+    court_id: CourtId,
 ) -> None:
     matches_this_court = sorted(
         (match_pos for match_pos in scheduled_matches if match_pos.match.court_id == court_id),
@@ -104,7 +105,7 @@ async def reorder_matches_for_court(
 
 
 async def handle_match_reschedule(
-    tournament_id: int, body: MatchRescheduleBody, match_id: int
+    tournament_id: TournamentId, body: MatchRescheduleBody, match_id: MatchId
 ) -> None:
     if body.old_position == body.new_position and body.old_court_id == body.new_court_id:
         return
@@ -143,7 +144,7 @@ async def handle_match_reschedule(
         await reorder_matches_for_court(tournament, scheduled_matches, body.old_court_id)
 
 
-async def update_start_times_of_matches(tournament_id: int) -> None:
+async def update_start_times_of_matches(tournament_id: TournamentId) -> None:
     stages = await get_full_tournament_details(tournament_id)
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)

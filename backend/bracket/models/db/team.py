@@ -11,14 +11,15 @@ from pydantic import BaseModel, Field, StringConstraints, field_validator
 from bracket.models.db.player import Player
 from bracket.models.db.players import START_ELO
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.types import assert_some
 
 
 class Team(BaseModelORM):
-    id: int | None = None
+    id: TeamId | None = None
     created: datetime_utc
     name: str
-    tournament_id: int
+    tournament_id: TournamentId
     active: bool
     elo_score: Decimal = Decimal(START_ELO)
     swiss_score: Decimal = Decimal("0.0")
@@ -28,7 +29,7 @@ class Team(BaseModelORM):
 
 
 class TeamWithPlayers(BaseModel):
-    id: int | None = None
+    id: TeamId | None = None
     players: list[Player]
     elo_score: Decimal = Decimal(START_ELO)
     swiss_score: Decimal = Decimal("0.0")
@@ -38,7 +39,7 @@ class TeamWithPlayers(BaseModel):
     name: str
 
     @property
-    def player_ids(self) -> list[int]:
+    def player_ids(self) -> list[PlayerId]:
         return [assert_some(player.id) for player in self.players]
 
     @field_validator("players", mode="before")
@@ -79,7 +80,7 @@ class FullTeamWithPlayers(TeamWithPlayers, Team):
 class TeamBody(BaseModelORM):
     name: Annotated[str, StringConstraints(min_length=1, max_length=30)]
     active: bool
-    player_ids: set[int]
+    player_ids: set[PlayerId]
 
 
 class TeamMultiBody(BaseModelORM):
@@ -90,7 +91,7 @@ class TeamMultiBody(BaseModelORM):
 class TeamToInsert(BaseModelORM):
     created: datetime_utc
     name: str
-    tournament_id: int
+    tournament_id: TournamentId
     active: bool
     elo_score: Decimal = Decimal("0.0")
     swiss_score: Decimal = Decimal("0.0")

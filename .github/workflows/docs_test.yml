@@ -2,9 +2,12 @@ name: docs test
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     paths:
       - 'docs/**'
+  push:
+    branches:
+      - 'master'
 
 jobs:
   build:

@@ -7,13 +7,14 @@ from pydantic import BaseModel, constr
 
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.shared import BaseModelORM
+from bracket.utils.id_types import UserId
 
 if TYPE_CHECKING:
     from bracket.logic.subscriptions import Subscription
 
 
 class UserBase(BaseModelORM):
-    id: int | None = None
+    id: UserId | None = None
     email: str
     name: str
     created: datetime_utc
@@ -55,5 +56,5 @@ class UserToRegister(BaseModelORM):
 
 
 class UserInDB(User):
-    id: int
+    id: UserId
     password_hash: str
