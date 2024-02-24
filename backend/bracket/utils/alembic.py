@@ -1,7 +1,6 @@
-from bracket.utils.logging import logger
-
 from alembic import command
 from alembic.config import Config
+from bracket.utils.logging import logger
 
 
 def get_alembic_config() -> None:
