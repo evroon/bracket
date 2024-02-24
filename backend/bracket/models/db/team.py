@@ -26,6 +26,7 @@ class Team(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    logo_path: str | None = None
 
 
 class TeamWithPlayers(BaseModel):

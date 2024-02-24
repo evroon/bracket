@@ -1,6 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+import os
+from uuid import uuid4
+import aiofiles
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
+from bracket.utils.logging import logger
+from bracket.logic.teams import delete_team_logo, get_team_logo_path
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
@@ -102,6 +107,40 @@ async def update_team_by_id(
         )
     )
 
+@router.post("/tournaments/{tournament_id}/teams/{team_id}/logo", response_model=SingleTeamResponse)
+async def update_team_logo(
+    tournament_id: TournamentId,
+    file: UploadFile | None = None,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    team: Team = Depends(team_dependency),
+) -> SingleTeamResponse:
+    old_logo_path = await get_team_logo_path(tournament_id, team.id)
+    filename: str | None = None
+    new_logo_path: str | None = None
+
+    if file:
+        assert file.filename is not None
+        extension = os.path.splitext(file.filename)[1]
+        assert extension in (".png", ".jpg", ".jpeg")
+
+        filename = f"{uuid4()}{extension}"
+        new_logo_path = f"static/{filename}" if file is not None else None
+
+        if new_logo_path:
+            async with aiofiles.open(new_logo_path, "wb") as f:
+                await f.write(await file.read())
+    
+    if old_logo_path is not None and old_logo_path != new_logo_path:
+        try:
+            await delete_team_logo(tournament_id, team.id)
+        except Exception as exc:
+            logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
+
+    await database.execute(
+        teams.update().where(teams.c.id == team.id),
+        values={"logo_path": filename},
+    )
+    return SingleTeamResponse(data=await get_team_by_id(tournament_id, team.id))
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)
 async def delete_team(
