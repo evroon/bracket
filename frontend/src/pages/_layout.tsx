@@ -39,19 +39,12 @@ function getMenuItemsForLink(
   pathName: string
 ) {
   const menuItems = link.links?.map((item) => (
-    <UnstyledButton
-      key={item.label}
-      className={classes.link}
-      onClick={async () => {
-        await router.push(item.link);
-      }}
-      data-active={pathName === item.link || undefined}
-    >
+    <a key={item.label} className={classes.link} href={item.link}>
       <Center>
         <item.icon />
         <span style={{ marginLeft: '0.25rem', marginTop: '0.2rem' }}>{item.label}</span>
       </Center>
-    </UnstyledButton>
+    </a>
   ));
   return (
     <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
