@@ -44,6 +44,7 @@ from bracket.sql.stage_items import sql_create_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.users import create_user, get_user
+from bracket.utils.alembic import alembic_stamp_head
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import (
     DUMMY_CLUB,
@@ -116,6 +117,7 @@ async def init_db_when_empty() -> UserId | None:
         ):
             logger.warning("Empty db detected, creating tables...")
             metadata.create_all(engine)
+            alembic_stamp_head()
 
             logger.warning("Empty db detected, creating admin user...")
             return await create_admin_user()
@@ -133,6 +135,7 @@ async def sql_create_dev_db() -> UserId:
     metadata.drop_all(engine)
     metadata.create_all(engine)
     real_user_id = await init_db_when_empty()
+    alembic_stamp_head()
 
     table_lookup: dict[type, Table] = {
         User: users,
