@@ -1,15 +1,15 @@
 import os
 from uuid import uuid4
+
 import aiofiles
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 from starlette import status
-from bracket.utils.logging import logger
-from bracket.logic.teams import delete_team_logo, get_team_logo_path
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.subscriptions import check_requirement
+from bracket.logic.teams import delete_team_logo, get_team_logo_path
 from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
@@ -34,6 +34,7 @@ from bracket.sql.teams import (
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.db import fetch_one_parsed
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
+from bracket.utils.logging import logger
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
@@ -107,6 +108,7 @@ async def update_team_by_id(
         )
     )
 
+
 @router.post("/tournaments/{tournament_id}/teams/{team_id}/logo", response_model=SingleTeamResponse)
 async def update_team_logo(
     tournament_id: TournamentId,
@@ -114,7 +116,7 @@ async def update_team_logo(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
 ) -> SingleTeamResponse:
-    old_logo_path = await get_team_logo_path(tournament_id, team.id)
+    old_logo_path = await get_team_logo_path(tournament_id, assert_some(team.id))
     filename: str | None = None
     new_logo_path: str | None = None
 
@@ -129,18 +131,21 @@ async def update_team_logo(
         if new_logo_path:
             async with aiofiles.open(new_logo_path, "wb") as f:
                 await f.write(await file.read())
-    
+
     if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
-            await delete_team_logo(tournament_id, team.id)
+            await delete_team_logo(tournament_id, assert_some(team.id))
         except Exception as exc:
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
-        teams.update().where(teams.c.id == team.id),
+        teams.update().where(teams.c.id == assert_some(team.id)),
         values={"logo_path": filename},
     )
-    return SingleTeamResponse(data=await get_team_by_id(tournament_id, team.id))
+    return SingleTeamResponse(
+        data=assert_some(await get_team_by_id(assert_some(team.id), tournament_id))
+    )
+
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)
 async def delete_team(

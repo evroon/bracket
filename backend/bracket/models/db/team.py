@@ -38,6 +38,7 @@ class TeamWithPlayers(BaseModel):
     draws: int = 0
     losses: int = 0
     name: str
+    logo_path: str | None = None
 
     @property
     def player_ids(self) -> list[PlayerId]:
