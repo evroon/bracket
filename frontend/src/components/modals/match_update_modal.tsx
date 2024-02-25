@@ -35,7 +35,14 @@ export default function MatchUpdateModal({
             const result = await updateMatch(
               tournament_id,
               match.id,
-              { ...match, ...values }
+              { ...match,
+                ...{
+                  // @ts-ignore
+                  custom_duration_minutes: values.custom_duration_minutes === '' ? null : values.custom_duration_minutes,
+                  // @ts-ignore
+                  custom_margin_minutes: values.custom_margin_minutes === '' ? null : values.custom_margin_minutes,
+                },
+              }
             );
 
             if (requestSucceeded(result)) {
