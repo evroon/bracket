@@ -6,7 +6,6 @@ import { SWRResponse } from 'swr';
 import { useForm } from '@mantine/form';
 import { MatchInterface } from '../../interfaces/match';
 import { updateMatch } from '../../services/match';
-import { requestSucceeded } from '../../services/adapter';
 
 export default function MatchUpdateModal({
   tournament_id,
