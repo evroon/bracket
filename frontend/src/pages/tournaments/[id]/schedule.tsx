@@ -7,7 +7,7 @@ import React from 'react';
 
 import { SWRResponse } from 'swr';
 import { NoContent } from '../../../components/no_content/empty_table_info';
-import { Time } from '../../../components/utils/datetime';
+import { DateTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { Court } from '../../../interfaces/court';
@@ -62,7 +62,7 @@ function ScheduleRow({
                 <Stack gap="xs" align="flex-end">
                   <Group justify="flex-end" gap="xs">
                     <Badge variant="default" size="lg">
-                      {match.start_time != null ? <Time datetime={match.start_time} /> : null}
+                      {match.start_time != null ? <DateTime datetime={match.start_time} /> : null}
                     </Badge>
                     <MatchUpdateModal
                       tournament_id={tournamentData.id}
@@ -124,7 +124,7 @@ function ScheduleColumn({
     <Droppable droppableId={`${court.id}`} direction="vertical">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div style={{ width: '26rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}>
+          <div style={{ width: '30rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}>
             <h4>{court.name}</h4>
             {rows}
             {noItemsAlert}
