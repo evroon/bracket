@@ -30,6 +30,7 @@ async def test_teams_endpoint(
                         "wins": 0,
                         "draws": 0,
                         "losses": 0,
+                        "logo_path": None,
                     }
                 ],
                 "count": 1,
