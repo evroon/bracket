@@ -29,7 +29,7 @@ export default function MatchUpdateModal({
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_match_title')}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_match_modal_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             const result = await updateMatch(
@@ -45,13 +45,13 @@ export default function MatchUpdateModal({
           })}
         >
           <NumberInput
-            label={t('custom_duration_minutes_input_label')}
+            label={t('custom_match_duration_label')}
             placeholder={match.duration_minutes.toString()}
             {...form.getInputProps('custom_duration_minutes')}
           />
 
           <NumberInput
-            label={t('custom_margin_minutes_input_label')}
+            label={t('custom_match_margin_label')}
             placeholder={match.margin_minutes.toString()}
             mb="12rem"
             {...form.getInputProps('custom_margin_minutes')}
