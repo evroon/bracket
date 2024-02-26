@@ -24,14 +24,6 @@ class RoundWithMatches(Round):
             return []
         return values
 
-    def get_team_ids(self) -> set[TeamId]:
-        return {
-            assert_some(team.id)
-            for match in self.matches
-            if isinstance(match, MatchWithDetailsDefinitive)
-            for team in match.teams
-        }
-
 
 class StageItemWithRounds(StageItem):
     rounds: list[RoundWithMatches]

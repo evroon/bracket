@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from heliclockter import datetime_utc
-from starlette import status
 
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
@@ -19,7 +18,6 @@ from bracket.routes.models import (
 )
 from bracket.routes.util import team_dependency, team_with_players_dependency
 from bracket.schema import players_x_teams, teams
-from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import (
     get_team_by_id,
     get_team_count,
@@ -28,6 +26,7 @@ from bracket.sql.teams import (
 )
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.db import fetch_one_parsed
+from bracket.utils.errors import ForeignKey, check_foreign_key_violation
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
@@ -109,23 +108,15 @@ async def delete_team(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: FullTeamWithPlayers = Depends(team_with_players_dependency),
 ) -> SuccessResponse:
-    stages = await get_full_tournament_details(tournament_id, no_draft_rounds=False)
-    for stage in stages:
-        for stage_item in stage.stage_items:
-            for round_ in stage_item.rounds:
-                if team.id in round_.get_team_ids():
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Could not delete team that participates in matches",
-                    )
+    with check_foreign_key_violation(
+        {
+            ForeignKey.stage_item_inputs_team_id_fkey,
+            ForeignKey.matches_team1_id_fkey,
+            ForeignKey.matches_team2_id_fkey,
+        }
+    ):
+        await sql_delete_team(tournament_id, assert_some(team.id))
 
-    if len(team.players):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Could not delete team that still has players in it",
-        )
-
-    await sql_delete_team(tournament_id, assert_some(team.id))
     await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 

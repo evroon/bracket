@@ -110,10 +110,8 @@ async def update_tournament_by_id(
 async def delete_tournament(
     tournament_id: TournamentId, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
-    try:
+    with check_foreign_key_violation({ForeignKey.stages_tournament_id_fkey}):
         await sql_delete_tournament(tournament_id)
-    except asyncpg.exceptions.ForeignKeyViolationError as exc:
-        check_foreign_key_violation(exc, {ForeignKey.stages_tournament_id_fkey})
 
     return SuccessResponse()
 
