@@ -35,10 +35,11 @@ const config = {
 
   scripts: [
     {
-      src: 'https://analytics.bracketapp.nl/script.js',
+      src: "https://analytics.bracketapp.nl/script.js",
       async: true,
-      'data-website-id': '9c5b1839-5cbd-4d04-b95b-a217838898a9'
-    }
+      "data-website-id": "9c5b1839-5cbd-4d04-b95b-a217838898a9",
+      "data-domains": "docs.bracketapp.nl",
+    },
   ],
 
   presets: [
