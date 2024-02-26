@@ -79,4 +79,4 @@ def check_foreign_key_violation(expected_violations: set[ForeignKey]) -> Iterato
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=foreign_key_violation_error_lookup[constraint],
-        )
+        ) from exc
