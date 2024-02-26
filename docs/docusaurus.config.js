@@ -41,13 +41,11 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl:
-            "https://github.com/evroon/bracket/tree/master/docs/",
+          editUrl: "https://github.com/evroon/bracket/tree/master/docs/",
         },
         blog: {
           showReadingTime: true,
-          editUrl:
-            "https://github.com/evroon/bracket/tree/master/docs/",
+          editUrl: "https://github.com/evroon/bracket/tree/master/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
