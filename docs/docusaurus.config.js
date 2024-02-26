@@ -10,18 +10,10 @@ const config = {
   title: "Bracket",
   tagline: "Free and open source tournament scheduling system",
   favicon: "img/logo.svg",
-
-  // Set the production url of your site here
-  url: "https://your-docusaurus-test-site.com",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  url: "https://docs.bracketapp.nl",
   baseUrl: "/",
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: "evroon", // Usually your GitHub org/user name.
-  projectName: "bracket", // Usually your repo name.
-
+  organizationName: "evroon",
+  projectName: "bracket",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
@@ -49,17 +41,13 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/evroon/bracket/tree/master/docs/",
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/evroon/bracket/tree/master/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -74,7 +62,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: "img/logo.svg",
+      image: "img/bracket-screenshot-design.png",
       navbar: {
         title: "Bracket",
         logo: {
