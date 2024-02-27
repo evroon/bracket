@@ -116,7 +116,8 @@ async def update_team_logo(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
 ) -> SingleTeamResponse:
-    old_logo_path = await get_team_logo_path(tournament_id, assert_some(team.id))
+    team_id = assert_some(team.id)
+    old_logo_path = await get_team_logo_path(tournament_id, team_id)
     filename: str | None = None
     new_logo_path: str | None = None
 
@@ -135,16 +136,16 @@ async def update_team_logo(
 
     if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
-            await delete_team_logo(tournament_id, assert_some(team.id))
+            await delete_team_logo(tournament_id, team_id)
         except Exception as exc:
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
-        teams.update().where(teams.c.id == assert_some(team.id)),
+        teams.update().where(teams.c.id == team_id),
         values={"logo_path": filename},
     )
     return SingleTeamResponse(
-        data=assert_some(await get_team_by_id(assert_some(team.id), tournament_id))
+        data=assert_some(await get_team_by_id(team_id, tournament_id))
     )
 
 
