@@ -111,7 +111,7 @@ there's no manual way of choosing a different language.
 
 ## Supported Languages
 - 🇺🇸 English `en` - *Default*
-- 🇨🇳 Chinese `zh-CN` - Contributed by [@Sevichecc](https://github.com/Sevichecc)
+- 🇨🇳 Chinese `zh` - Contributed by [@Sevichecc](https://github.com/Sevichecc)
 - 🇳🇱 Dutch `nl` - Contributed by [@evroon](https://github.com/evroon)
 
 # More screenshots
