@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import aiofiles
 import aiofiles.os
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, UploadFile
 from heliclockter import datetime_utc
 
 from bracket.database import database
@@ -144,9 +144,7 @@ async def update_team_logo(
         teams.update().where(teams.c.id == team_id),
         values={"logo_path": filename},
     )
-    return SingleTeamResponse(
-        data=assert_some(await get_team_by_id(team_id, tournament_id))
-    )
+    return SingleTeamResponse(data=assert_some(await get_team_by_id(team_id, tournament_id)))
 
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)

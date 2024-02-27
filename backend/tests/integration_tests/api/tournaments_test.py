@@ -157,4 +157,6 @@ async def test_tournament_upload_and_remove_logo(
     )
 
     assert response["data"]["logo_path"] is None, f"Response: {response}"
-    assert not await aiofiles.os.path.exists(f"static/tournament-logos/{response['data']['logo_path']}")
+    assert not await aiofiles.os.path.exists(
+        f"static/tournament-logos/{response['data']['logo_path']}"
+    )
