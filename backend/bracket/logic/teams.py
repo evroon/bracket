@@ -10,9 +10,3 @@ async def get_team_logo_path(tournament_id: TournamentId, team_id: TeamId) -> st
         f"static/team-logos/{team.logo_path}" if team is not None and team.logo_path is not None else None
     )
     return logo_path if logo_path is not None and await aiofiles.os.path.exists(logo_path) else None
-
-
-async def delete_team_logo(tournament_id: TournamentId, team_id: TeamId) -> None:
-    logo_path = await get_team_logo_path(tournament_id, team_id)
-    if logo_path is not None:
-        await aiofiles.os.remove(logo_path)

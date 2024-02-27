@@ -9,7 +9,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.subscriptions import check_requirement
-from bracket.logic.teams import delete_team_logo, get_team_logo_path
+from bracket.logic.teams import get_team_logo_path
 from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
@@ -136,7 +136,7 @@ async def update_team_logo(
 
     if old_logo_path is not None and old_logo_path != new_logo_path:
         try:
-            await delete_team_logo(tournament_id, team_id)
+            await aiofiles.os.remove(old_logo_path)
         except Exception as exc:
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
