@@ -47,9 +47,11 @@ AUTO_RUN_MIGRATIONS=true
   accounts. You get the secret when you create a new site in HCaptcha.
 - `NEXT_PUBLIC_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
-- `PLAUSIBLE_ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
+- `ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
   analytics
-- `PLAUSIBLE_ANALYTICS_SCRIPT_SRC`: The URL to the script for Plausible analytics.
+- `ANALYTICS_DATA_WEBSITE_ID`: The `data-website-id` attribute passed to the script for Umami
+  analytics
+- `ANALYTICS_SCRIPT_SRC`: The URL to the script for analytics purposes.
 
 ### Frontend: Example configuration file
 
@@ -60,8 +62,9 @@ This is an example of how the config file should look like:
 ```shell
 NEXT_PUBLIC_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
 NEXT_PUBLIC_API_BASE_URL='https://api.bracket.com'
-PLAUSIBLE_ANALYTICS_DATA_DOMAIN='bracket.com'
-PLAUSIBLE_ANALYTICS_SCRIPT_SRC='https://plausible.bracket.com/js/script.js'
+ANALYTICS_SCRIPT_SRC='https://analytics.bracket.com/script.js'
+ANALYTICS_DATA_DOMAIN='bracket.com'
+ANALYTICS_DATA_WEBSITE_ID='bracket.com'
 ```
 
 [next-config-url]: https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#loading-environment-variables
