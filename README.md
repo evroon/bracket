@@ -1,19 +1,45 @@
-<img align="left" alt="Favicon of Bracket" src="frontend/public/favicon.svg" height="150" />
+<p align="center">
+  <img
+    width="400"
+    src="frontend/public/favicon-wide.svg"
+    alt="Bracket - Tournament System"
+  />
+</p>
 
-# Bracket
-[![codecov](https://codecov.io/gh/evroon/bracket/branch/master/graph/badge.svg?token=YJL0DVPFFG)](https://codecov.io/gh/evroon/bracket)
-[![backend](https://github.com/evroon/bracket/actions/workflows/backend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/backend.yml)
-[![frontend](https://github.com/evroon/bracket/actions/workflows/frontend.yml/badge.svg)](https://github.com/evroon/bracket/actions/workflows/frontend.yml)
-[![last
-commit](https://img.shields.io/github/last-commit/evroon/bracket)](https://img.shields.io/github/last-commit/evroon/bracket)
-[![release](https://img.shields.io/github/v/release/evroon/bracket)](https://img.shields.io/github/v/release/evroon/bracket)<br/>
-[Demo](https://www.bracketapp.nl/demo) |
-[Documentation](https://docs.bracketapp.nl) |
-[Quickstart](https://docs.bracketapp.nl/docs/running-bracket/quickstart) |
-[GitHub](https://github.com/evroon/bracket) |
-[Releases](https://github.com/evroon/bracket/releases)
-
-<br/>
+<p align="center">
+  <a href="https://github.com/evroon/bracket/actions"
+    ><img
+      src="https://img.shields.io/github/actions/workflow/status/evroon/bracket/backend.yml"
+      alt="build status"
+  /></a>
+  <a href="https://github.com/evroon/bracket/commits/"
+    ><img
+      src="https://img.shields.io/github/last-commit/evroon/bracket"
+      alt="last commit"
+  /></a>
+  <a href="https://github.com/evroon/bracket/releases"
+    ><img
+      src="https://img.shields.io/github/v/release/evroon/bracket"
+      alt="release"
+  /></a>
+  <a href="https://codecov.io/gh/evroon/bracket"
+    ><img
+      src="https://codecov.io/gh/evroon/bracket/branch/master/graph/badge.svg?token=YJL0DVPFFG"
+      alt="codecov"
+  /></a>
+</p>
+<p align="center">
+  <a href="https://www.bracketapp.nl/demo">Demo</a>
+  ·
+  <a href="https://docs.bracketapp.nl">Documentation</a>
+  ·
+  <a href="https://docs.bracketapp.nl/docs/running-bracket/quickstart">Quickstart</a>
+  ·
+  <a href="https://github.com/evroon/bracket">GitHub</a>
+  ·
+  <a href="https://github.com/evroon/bracket/releases">Releases</a>
+</p>
+<h1></h1>
 
 Tournament system meant to be easy to use. Bracket is written in async Python (with
 [FastAPI](https://fastapi.tiangolo.com)) and [Next.js](https://nextjs.org/) as frontend using the
@@ -30,8 +56,11 @@ It has the following features:
 - Create **multiple clubs**, with **multiple tournaments** per club.
 - **Swiss tournaments** can be handled dynamically, with automatic scheduling of matches.
 
-### Preview
 <img alt="" src="docs/static/img/bracket-screenshot-design.png" width="100%" />
+
+<p align="center">
+<a href="https://docs.bracketapp.nl"><strong>Explore the Bracket docs&nbsp;&nbsp;▶</strong></a>
+</p>
 
 # Live Demo
 A demo is available for free at <https://www.bracketapp.nl/demo>. The demo lasts for 30 minutes, after which
