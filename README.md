@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    width="400"
+    width="500"
     src="frontend/public/favicon-wide.svg"
     alt="Bracket - Tournament System"
   />
