@@ -163,9 +163,10 @@ async def upload_logo(
         assert extension in (".png", ".jpg", ".jpeg")
 
         filename = f"{uuid4()}{extension}"
-        new_logo_path = f"static/{filename}" if file is not None else None
+        new_logo_path = f"static/tournament-logos/{filename}" if file is not None else None
 
         if new_logo_path:
+            await aiofiles.os.makedirs("static/tournament-logos", exist_ok=True)
             async with aiofiles.open(new_logo_path, "wb") as f:
                 await f.write(await file.read())
 

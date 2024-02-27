@@ -2,6 +2,7 @@ import os
 from uuid import uuid4
 
 import aiofiles
+import aiofiles.os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from heliclockter import datetime_utc
 
@@ -125,9 +126,10 @@ async def update_team_logo(
         assert extension in (".png", ".jpg", ".jpeg")
 
         filename = f"{uuid4()}{extension}"
-        new_logo_path = f"static/{filename}" if file is not None else None
+        new_logo_path = f"static/team-logos/{filename}" if file is not None else None
 
         if new_logo_path:
+            await aiofiles.os.makedirs("static/team-logos", exist_ok=True)
             async with aiofiles.open(new_logo_path, "wb") as f:
                 await f.write(await file.read())
 
