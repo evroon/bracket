@@ -12,6 +12,11 @@
       src="https://img.shields.io/github/actions/workflow/status/evroon/bracket/backend.yml"
       alt="build status"
   /></a>
+  <a href="https://crowdin.com/project/bracket"
+    ><img
+      src="https://badges.crowdin.net/bracket/localized.svg"
+      alt="translations"
+  /></a>
   <a href="https://github.com/evroon/bracket/commits/"
     ><img
       src="https://img.shields.io/github/last-commit/evroon/bracket"
