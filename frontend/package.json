@@ -24,7 +24,7 @@
     "@mantine/core": "7.4.1",
     "@mantine/dates": "7.5.2",
     "@mantine/dropzone": "7.4.1",
-    "@mantine/form": "7.5.1",
+    "@mantine/form": "7.6.0",
     "@mantine/hooks": "7.4.1",
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "7.5.1",
