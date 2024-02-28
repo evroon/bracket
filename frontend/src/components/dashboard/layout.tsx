@@ -43,7 +43,7 @@ export function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tou
       <Image
         radius="lg"
         mt="1rem"
-        src={`${getBaseApiUrl()}/static/${tournamentDataFull.logo_path}`}
+        src={`${getBaseApiUrl()}/static/tournament-logos/${tournamentDataFull.logo_path}`}
         style={{ maxWidth: '400px' }}
       />
     </>

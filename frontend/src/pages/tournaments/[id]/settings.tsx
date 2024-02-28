@@ -33,7 +33,7 @@ import TournamentLayout from '../_tournament_layout';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
-  return <Image radius="md" src={`${getBaseApiUrl()}/static/${tournament.logo_path}`} />;
+  return <Image radius="md" src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`} />;
 }
 
 function GeneralTournamentForm({
