@@ -133,6 +133,7 @@ teams = Table(
     Column("wins", Integer, nullable=False, server_default="0"),
     Column("draws", Integer, nullable=False, server_default="0"),
     Column("losses", Integer, nullable=False, server_default="0"),
+    Column("logo_path", String, nullable=True),
 )
 
 players = Table(
