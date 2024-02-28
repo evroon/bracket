@@ -1,4 +1,5 @@
 import aiofiles
+import aiofiles.os
 import aiohttp
 
 from bracket.database import database
@@ -149,11 +150,13 @@ async def test_tournament_upload_and_remove_logo(
     )
 
     assert response["data"]["logo_path"], f"Response: {response}"
-    assert await aiofiles.os.path.exists(f"static/{response['data']['logo_path']}")
+    assert await aiofiles.os.path.exists(f"static/tournament-logos/{response['data']['logo_path']}")
 
     response = await send_tournament_request(
         method=HTTPMethod.POST, endpoint="logo", auth_context=auth_context, body=aiohttp.FormData()
     )
 
     assert response["data"]["logo_path"] is None, f"Response: {response}"
-    assert not await aiofiles.os.path.exists(f"static/{response['data']['logo_path']}")
+    assert not await aiofiles.os.path.exists(
+        f"static/tournament-logos/{response['data']['logo_path']}"
+    )
