@@ -51,7 +51,7 @@
     "yarn-upgrade-all": "^0.7.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.5",
+    "@babel/core": "^7.24.0",
     "@next/eslint-plugin-next": "^14.0.3",
     "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "^6.4.1",
