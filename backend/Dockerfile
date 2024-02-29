@@ -20,4 +20,4 @@ CMD pipenv run pipenv run gunicorn \
     -k uvicorn.workers.UvicornWorker \
     bracket.app:app \
     --bind 0.0.0.0:8400 \
-    --workers 2
+    --workers 1
