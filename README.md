@@ -106,7 +106,7 @@ But you can also configure Bracket using environment variables directly, for exa
 The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
 
 # Running Bracket in production
-Read the [deployment docs](https://docs.bracketapp.nl/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
+Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how to deploy Bracket and run it in production.
 
 Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 

@@ -116,7 +116,7 @@ const config = {
               },
               {
                 label: "Deployment",
-                to: "/docs/running-bracket/deployment",
+                to: "/docs/deployment",
               },
             ],
           },

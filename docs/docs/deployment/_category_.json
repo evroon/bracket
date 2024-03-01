@@ -1,6 +1,6 @@
 {
-  "label": "Community",
-  "position": 4,
+  "label": "Deployment",
+  "position": 3,
   "link": {
     "type": "generated-index"
   }
