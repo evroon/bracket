@@ -5,8 +5,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 
+import { SWRResponse } from 'swr';
 import { NoContent } from '../../../components/no_content/empty_table_info';
-import { Time } from '../../../components/utils/datetime';
+import { DateTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { Court } from '../../../interfaces/court';
@@ -21,19 +22,24 @@ import {
 } from '../../../services/lookups';
 import { rescheduleMatch, scheduleMatches } from '../../../services/match';
 import TournamentLayout from '../_tournament_layout';
+import MatchUpdateModal from '../../../components/modals/match_update_modal';
 
 function ScheduleRow({
   index,
   match,
   stageItemsLookup,
   matchesLookup,
+  swrStagesResponse,
 }: {
   index: number;
   match: MatchInterface;
   stageItemsLookup: any;
   matchesLookup: any;
+  swrStagesResponse: SWRResponse;
 }) {
   const stageItemColor = stringToColour(`${matchesLookup[match.id].stageItem.id}`);
+  // No need to trickle down the tournament_id, as this component is only used in the SchedulePage
+  const { tournamentData } = getTournamentIdFromRouter();
 
   return (
     <Draggable key={match.id} index={index} draggableId={`${match.id}`}>
@@ -53,10 +59,17 @@ function ScheduleRow({
                 <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
               </Grid.Col>
               <Grid.Col span="content">
-                <Stack gap="xs">
-                  <Badge variant="default" size="lg">
-                    {match.start_time != null ? <Time datetime={match.start_time} /> : null}
-                  </Badge>
+                <Stack gap="xs" align="flex-end">
+                  <Group justify="flex-end" gap="xs">
+                    <Badge variant="default" size="lg">
+                      {match.start_time != null ? <DateTime datetime={match.start_time} /> : null}
+                    </Badge>
+                    <MatchUpdateModal
+                      tournament_id={tournamentData.id}
+                      match={match}
+                      swrMatchResponse={swrStagesResponse}
+                    />
+                  </Group>
                   <Badge color={stageItemColor} variant="outline">
                     {matchesLookup[match.id].stageItem.name}
                   </Badge>
@@ -75,11 +88,13 @@ function ScheduleColumn({
   matches,
   stageItemsLookup,
   matchesLookup,
+  swrStagesResponse,
 }: {
   court: Court;
   matches: MatchInterface[];
   stageItemsLookup: any;
   matchesLookup: any;
+  swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const rows = matches.map((match: MatchInterface, index: number) => (
@@ -89,6 +104,7 @@ function ScheduleColumn({
       matchesLookup={matchesLookup}
       match={match}
       key={match.id}
+      swrStagesResponse={swrStagesResponse}
     />
   ));
 
@@ -108,7 +124,7 @@ function ScheduleColumn({
     <Droppable droppableId={`${court.id}`} direction="vertical">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div style={{ width: '26rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}>
+          <div style={{ width: '30rem', marginLeft: '0.5rem', marginRight: '0.5rem' }}>
             <h4>{court.name}</h4>
             {rows}
             {noItemsAlert}
@@ -125,11 +141,13 @@ function Schedule({
   stageItemsLookup,
   matchesLookup,
   schedule,
+  swrStagesResponse,
 }: {
   t: Translator;
   stageItemsLookup: any;
   matchesLookup: any;
   schedule: { court: Court; matches: MatchInterface[] }[];
+  swrStagesResponse: SWRResponse;
 }) {
   const columns = schedule.map((item) => (
     <ScheduleColumn
@@ -138,6 +156,7 @@ function Schedule({
       key={item.court.id}
       court={item.court}
       matches={item.matches}
+      swrStagesResponse={swrStagesResponse}
     />
   ));
 
@@ -213,6 +232,7 @@ export default function SchedulePage() {
             schedule={data}
             stageItemsLookup={stageItemsLookup}
             matchesLookup={matchesLookup}
+            swrStagesResponse={swrStagesResponse}
           />
         </DragDropContext>
       </Group>
