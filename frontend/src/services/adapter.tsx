@@ -1,5 +1,6 @@
 import { showNotification } from '@mantine/notifications';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import type Axios from 'axios';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
@@ -7,7 +8,8 @@ import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
-const axios = require('axios').default;
+// TODO: This is a workaround for the fact that axios is not properly typed.
+const axios: typeof Axios = require('axios').default;
 
 export function handleRequestError(response: AxiosError) {
   if (response.code === 'ERR_NETWORK') {
@@ -201,15 +203,26 @@ export function getUpcomingMatches(
   );
 }
 
-export async function uploadLogo(tournament_id: number, file: any) {
+export async function uploadTournamentLogo(tournament_id: number, file: any) {
   const bodyFormData = new FormData();
   bodyFormData.append('file', file, file.name);
 
   return createAxios().post(`tournaments/${tournament_id}/logo`, bodyFormData);
 }
 
-export async function removeLogo(tournament_id: number) {
+export async function removeTournamentLogo(tournament_id: number) {
   return createAxios().post(`tournaments/${tournament_id}/logo`);
+}
+
+export async function uploadTeamLogo(tournament_id: number, team_id: number, file: any) {
+  const bodyFormData = new FormData();
+  bodyFormData.append('file', file, file.name);
+
+  return createAxios().post(`tournaments/${tournament_id}/teams/${team_id}/logo`, bodyFormData);
+}
+
+export async function removeTeamLogo(tournament_id: number, team_id: number) {
+  return createAxios().post(`tournaments/${tournament_id}/teams/${team_id}/logo`);
 }
 
 export function checkForAuthError(response: any) {

@@ -11,8 +11,6 @@ from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.stage_item import StageItem, StageType
 from bracket.models.db.stage_item_inputs import StageItemInput
-from bracket.utils.id_types import TeamId
-from bracket.utils.types import assert_some
 
 
 class RoundWithMatches(Round):
@@ -23,14 +21,6 @@ class RoundWithMatches(Round):
         if values == [None]:
             return []
         return values
-
-    def get_team_ids(self) -> set[TeamId]:
-        return {
-            assert_some(team.id)
-            for match in self.matches
-            if isinstance(match, MatchWithDetailsDefinitive)
-            for team in match.teams
-        }
 
 
 class StageItemWithRounds(StageItem):

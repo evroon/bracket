@@ -13,7 +13,7 @@ from bracket.utils.types import assert_some
 
 async def get_tournament_logo_path(tournament_id: TournamentId) -> str | None:
     tournament = await sql_get_tournament(tournament_id)
-    logo_path = f"static/{tournament.logo_path}" if tournament.logo_path else None
+    logo_path = f"static/tournament-logos/{tournament.logo_path}" if tournament.logo_path else None
     return logo_path if logo_path is not None and await aiofiles.os.path.exists(logo_path) else None
 
 

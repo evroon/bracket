@@ -26,6 +26,7 @@ class Team(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    logo_path: str | None = None
 
 
 class TeamWithPlayers(BaseModel):
@@ -37,6 +38,7 @@ class TeamWithPlayers(BaseModel):
     draws: int = 0
     losses: int = 0
     name: str
+    logo_path: str | None = None
 
     @property
     def player_ids(self) -> list[PlayerId]:

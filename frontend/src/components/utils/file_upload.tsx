@@ -1,23 +1,38 @@
 import { Group, Text } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import { AxiosError } from 'axios';
 import { useTranslation } from 'next-i18next';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { SWRResponse } from 'swr';
 
+import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
-import { handleRequestError, uploadLogo } from '../../services/adapter';
+import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '../../services/adapter';
 
 export function DropzoneButton({
-  tournament,
-  swrTournamentResponse,
+  tournamentId,
+  swrResponse,
+  variant,
+  teamId,
 }: {
-  tournament: Tournament;
-  swrTournamentResponse: SWRResponse;
+  tournamentId: Tournament['id'];
+  swrResponse: SWRResponse;
+  variant: 'tournament' | 'team';
+  teamId?: TeamInterface['id'];
 }) {
   // const { classes, theme } = useStyles();
   const openRef = useRef<() => void>(null);
   const { t } = useTranslation();
+
+  const useUploadLogo = useMemo(() => {
+    if (variant === 'tournament') {
+      return uploadTournamentLogo.bind(null, tournamentId);
+    }
+
+    if (teamId === undefined) throw new TypeError('Team is undefined');
+    return uploadTeamLogo.bind(null, tournamentId, teamId);
+  }, [tournamentId, teamId, variant]);
 
   return (
     <div>
@@ -25,9 +40,9 @@ export function DropzoneButton({
         mt="lg"
         openRef={openRef}
         onDrop={async (files) => {
-          const response = await uploadLogo(tournament.id, files[0]);
-          await swrTournamentResponse.mutate();
-          handleRequestError(response);
+          const response = await useUploadLogo(files[0]);
+          await swrResponse.mutate();
+          handleRequestError(response as unknown as AxiosError); // TODO: Check with Erik if this is correct
         }}
         // className={classes.dropzone}
         radius="md"
@@ -53,7 +68,7 @@ export function DropzoneButton({
             <Dropzone.Idle>{t('dropzone_idle_text')}</Dropzone.Idle>
           </Text>
           <Text ta="center" size="sm" mt="xs" c="dimmed">
-            {t('upload_placeholder')}
+            {t(`upload_placeholder_${variant}`)}
             <br />
             {t('dropzone_reject_text')}
           </Text>

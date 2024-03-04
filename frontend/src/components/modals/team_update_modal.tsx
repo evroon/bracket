@@ -1,4 +1,13 @@
-import { Button, Checkbox, Modal, MultiSelect, TextInput } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Fieldset,
+  Image,
+  Modal,
+  MultiSelect,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { useTranslation } from 'next-i18next';
@@ -7,8 +16,19 @@ import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
 import { TeamInterface } from '../../interfaces/team';
-import { getPlayers, requestSucceeded } from '../../services/adapter';
+import {
+  getBaseApiUrl,
+  getPlayers,
+  removeTeamLogo,
+  requestSucceeded,
+} from '../../services/adapter';
 import { updateTeam } from '../../services/team';
+import { DropzoneButton } from '../utils/file_upload';
+
+function TeamLogo({ team }: { team: TeamInterface | null }) {
+  if (team == null || team.logo_path == null) return null;
+  return <Image radius="md" src={`${getBaseApiUrl()}/static/${team.logo_path}`} />;
+}
 
 export default function TeamUpdateModal({
   tournament_id,
@@ -73,11 +93,35 @@ export default function TeamUpdateModal({
             placeholder={t('team_member_select_placeholder')}
             maxDropdownHeight={160}
             searchable
-            mb="12rem"
             mt={12}
             limit={25}
             {...form.getInputProps('player_ids')}
           />
+
+          <Fieldset legend={t('logo_settings_title')} mt={12} radius="md">
+            <DropzoneButton
+              tournamentId={tournament_id}
+              teamId={team.id}
+              swrResponse={swrTeamsResponse}
+              variant="team"
+            />
+            <Center my="lg">
+              <div style={{ width: '50%' }}>
+                <TeamLogo team={team} />
+              </div>
+            </Center>
+            <Button
+              variant="outline"
+              color="red"
+              fullWidth
+              onClick={async () => {
+                await removeTeamLogo(tournament_id, team.id);
+                await swrTeamsResponse.mutate();
+              }}
+            >
+              {t('remove_logo')}
+            </Button>
+          </Fieldset>
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
             {t('save_button')}

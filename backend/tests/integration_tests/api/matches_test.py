@@ -274,6 +274,7 @@ async def test_upcoming_matches_endpoint(
                         "wins": 0,
                         "draws": 0,
                         "losses": 0,
+                        "logo_path": None,
                     },
                     "team2": {
                         "id": team2_inserted.id,
@@ -309,6 +310,7 @@ async def test_upcoming_matches_endpoint(
                         "wins": 0,
                         "draws": 0,
                         "losses": 0,
+                        "logo_path": None,
                     },
                     "elo_diff": "200",
                     "swiss_diff": "0",
