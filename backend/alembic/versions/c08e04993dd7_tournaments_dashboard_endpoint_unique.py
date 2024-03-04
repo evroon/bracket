@@ -6,7 +6,6 @@ Create Date: 2024-02-09 18:44:32.138133
 
 """
 
-
 from alembic import op
 
 # revision identifiers, used by Alembic.
