@@ -1,14 +1,14 @@
 import { Group, Text } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import { AxiosError } from 'axios';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useRef } from 'react';
 import { SWRResponse } from 'swr';
 
-import { AxiosError } from 'axios';
+import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '../../services/adapter';
-import { TeamInterface } from '../../interfaces/team';
 
 export function DropzoneButton({
   tournamentId,

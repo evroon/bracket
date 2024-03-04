@@ -1,9 +1,9 @@
 import { showNotification } from '@mantine/notifications';
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import type Axios from 'axios';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 
-import type Axios from 'axios';
 import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { getLogin, performLogout, tokenPresent } from './local_storage';

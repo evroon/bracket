@@ -1,4 +1,13 @@
-import { Button, Center, Checkbox, Fieldset, Modal, MultiSelect, TextInput, Image } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Fieldset,
+  Image,
+  Modal,
+  MultiSelect,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { useTranslation } from 'next-i18next';
@@ -7,7 +16,12 @@ import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';
 import { TeamInterface } from '../../interfaces/team';
-import { getBaseApiUrl, getPlayers, removeTeamLogo, requestSucceeded } from '../../services/adapter';
+import {
+  getBaseApiUrl,
+  getPlayers,
+  removeTeamLogo,
+  requestSucceeded,
+} from '../../services/adapter';
 import { updateTeam } from '../../services/team';
 import { DropzoneButton } from '../utils/file_upload';
 
@@ -85,7 +99,12 @@ export default function TeamUpdateModal({
           />
 
           <Fieldset legend={t('logo_settings_title')} mt={12} radius="md">
-            <DropzoneButton tournamentId={tournament_id} teamId={team.id} swrResponse={swrTeamsResponse} variant="team" />
+            <DropzoneButton
+              tournamentId={tournament_id}
+              teamId={team.id}
+              swrResponse={swrTeamsResponse}
+              variant="team"
+            />
             <Center my="lg">
               <div style={{ width: '50%' }}>
                 <TeamLogo team={team} />
