@@ -30,12 +30,14 @@ function ScheduleRow({
   stageItemsLookup,
   matchesLookup,
   swrStagesResponse,
+  previousMatch,
 }: {
   index: number;
   match: MatchInterface;
   stageItemsLookup: any;
   matchesLookup: any;
   swrStagesResponse: SWRResponse;
+  previousMatch?: MatchInterface;
 }) {
   const stageItemColor = stringToColour(`${matchesLookup[match.id].stageItem.id}`);
   // No need to trickle down the tournament_id, as this component is only used in the SchedulePage
@@ -68,6 +70,7 @@ function ScheduleRow({
                       tournament_id={tournamentData.id}
                       match={match}
                       swrMatchResponse={swrStagesResponse}
+                      previousMatch={previousMatch}
                     />
                   </Group>
                   <Badge color={stageItemColor} variant="outline">
@@ -105,6 +108,7 @@ function ScheduleColumn({
       match={match}
       key={match.id}
       swrStagesResponse={swrStagesResponse}
+      previousMatch={index > 0 ? matches[index - 1] : undefined}
     />
   ));
 

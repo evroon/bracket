@@ -1,6 +1,17 @@
-import { ActionIcon, Button, Divider, Modal, NumberInput } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Divider,
+  Grid,
+  Input,
+  Modal,
+  NumberInput,
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { parseISO } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -8,16 +19,17 @@ import { SWRResponse } from 'swr';
 import { MatchInterface } from '../../interfaces/match';
 import { updateMatch } from '../../services/match';
 import CommonCustomTimeMatchesForm from '../forms/common_custom_times_matches';
-import { DateTimePicker } from '@mantine/dates';
 
 export default function MatchUpdateModal({
   tournament_id,
   match,
   swrMatchResponse,
+  previousMatch,
 }: {
   tournament_id: number;
   match: MatchInterface;
   swrMatchResponse: SWRResponse;
+  previousMatch?: MatchInterface;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -41,6 +53,8 @@ export default function MatchUpdateModal({
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
     match.custom_margin_minutes != null
   );
+
+  const [date, setDate] = useState<Date | null>(null);
 
   return (
     <>
@@ -69,9 +83,56 @@ export default function MatchUpdateModal({
             setCustomMarginEnabled={setCustomMarginEnabled}
           />
 
-          {/* <Divider mt="sm" />
+          {previousMatch && (
+            <>
+              <Divider mt="sm" />
 
-          <DateTimePicker mt="sm" /> */}
+              <Grid align="center" mt="sm">
+                <Grid.Col span={{ sm: 8 }}>
+                  <DateTimePicker
+                    label={t('calculate_datetime_match_label')}
+                    clearable
+                    value={date}
+                    onChange={setDate}
+                  />
+                </Grid.Col>
+                <Grid.Col span={{ sm: 4 }}>
+                  <Input.Label />
+                  <Center>
+                    <Button
+                      disabled={date === null}
+                      onClick={async () => {
+                        const computedMargin = Math.floor(
+                          (date!.getTime() +
+                            (previousMatch.custom_duration_minutes ??
+                              previousMatch.duration_minutes) *
+                              60 *
+                              1000 -
+                            parseISO(previousMatch.start_time).getTime()) /
+                            60 /
+                            1000
+                        );
+
+                        if (computedMargin < 0) {
+                          return;
+                        }
+
+                        const updatedMatch = {
+                          ...previousMatch,
+                          custom_margin_minutes: computedMargin,
+                        };
+
+                        await updateMatch(tournament_id, previousMatch.id, updatedMatch);
+                        await swrMatchResponse.mutate();
+                      }}
+                    >
+                      {t('calculate_label')}
+                    </Button>
+                  </Center>
+                </Grid.Col>
+              </Grid>
+            </>
+          )}
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
             {t('save_button')}

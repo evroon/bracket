@@ -61,12 +61,10 @@ export default function CommonCustomTimeMatchesForm<
 
   return (
     <>
-      <Text size="sm" fw={500} fz="sm" lh="md">
-        {t('custom_match_margin_label')}
-      </Text>
       <Grid align="center">
         <Grid.Col span={{ sm: 8 }}>
           <NumberInput
+            label={t('custom_match_margin_label')}
             disabled={!customDurationEnabled}
             rightSection={<Text>{t('minutes')}</Text>}
             placeholder={`${match.duration_minutes}`}
@@ -75,6 +73,7 @@ export default function CommonCustomTimeMatchesForm<
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 4 }}>
+          <Input.Label />
           <Center>
             <Checkbox
               checked={customDurationEnabled}
@@ -87,12 +86,10 @@ export default function CommonCustomTimeMatchesForm<
         </Grid.Col>
       </Grid>
 
-      <Text size="sm" mt="0.25rem" fw={500} fz="sm" lh="md">
-        {t('custom_match_margin_label')}
-      </Text>
       <Grid align="center">
         <Grid.Col span={{ sm: 8 }}>
           <NumberInput
+            label={t('custom_match_margin_label')}
             disabled={!customMarginEnabled}
             placeholder={`${match.margin_minutes}`}
             rightSection={<Text>{t('minutes')}</Text>}
@@ -101,6 +98,7 @@ export default function CommonCustomTimeMatchesForm<
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 4 }}>
+          <Input.Label />
           <Center>
             <Checkbox
               checked={customMarginEnabled}
