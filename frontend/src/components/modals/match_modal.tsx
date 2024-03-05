@@ -14,6 +14,7 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
+import CommonCustomTimeMatchesForm from '../forms/common_custom_times_matches';
 
 function MatchDeleteButton({
   tournamentData,
@@ -131,57 +132,7 @@ export default function MatchModal({
           />
           <Divider mt="lg" />
 
-          <Text size="sm" mt="lg">
-            {t('custom_match_duration_label')}
-          </Text>
-          <Grid align="center">
-            <Grid.Col span={{ sm: 8 }}>
-              <NumberInput
-                disabled={!customDurationEnabled}
-                rightSection={<Text>{t('minutes')}</Text>}
-                placeholder={`${match.duration_minutes}`}
-                rightSectionWidth={92}
-                {...form.getInputProps('custom_duration_minutes')}
-              />
-            </Grid.Col>
-            <Grid.Col span={{ sm: 4 }}>
-              <Center>
-                <Checkbox
-                  checked={customDurationEnabled}
-                  label={t('customize_checkbox_label')}
-                  onChange={(event) => {
-                    setCustomDurationEnabled(event.currentTarget.checked);
-                  }}
-                />
-              </Center>
-            </Grid.Col>
-          </Grid>
-
-          <Text size="sm" mt="lg">
-            {t('custom_match_margin_label')}
-          </Text>
-          <Grid align="center">
-            <Grid.Col span={{ sm: 8 }}>
-              <NumberInput
-                disabled={!customMarginEnabled}
-                placeholder={`${match.margin_minutes}`}
-                rightSection={<Text>{t('minutes')}</Text>}
-                rightSectionWidth={92}
-                {...form.getInputProps('custom_margin_minutes')}
-              />
-            </Grid.Col>
-            <Grid.Col span={{ sm: 4 }}>
-              <Center>
-                <Checkbox
-                  checked={customMarginEnabled}
-                  label={t('customize_checkbox_label')}
-                  onChange={(event) => {
-                    setCustomMarginEnabled(event.currentTarget.checked);
-                  }}
-                />
-              </Center>
-            </Grid.Col>
-          </Grid>
+          <CommonCustomTimeMatchesForm customDurationEnabled={customDurationEnabled} customMarginEnabled={customMarginEnabled} form={form} match={match} setCustomDurationEnabled={setCustomDurationEnabled} setCustomMarginEnabled={setCustomMarginEnabled} />
 
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             {t('save_button')}
