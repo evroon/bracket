@@ -1,4 +1,4 @@
-import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { Center, Grid, UnstyledButton, useMantineTheme, Text } from '@mantine/core';
 import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -13,7 +13,7 @@ import {
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
-import { Time } from '../utils/datetime';
+import { DateTime } from '../utils/datetime';
 import classes from './match.module.css';
 
 export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
@@ -30,10 +30,10 @@ export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any
         }}
       >
         <Center>
-          <b>
-            {match.court?.name} |{' '}
-            {match.start_time != null ? <Time datetime={match.start_time} /> : null}
-          </b>
+          <div>
+            <Text fw={700} ta="center">{match.court?.name}</Text>
+            <Text fw={700} ta="center">{match.start_time != null ? <DateTime datetime={match.start_time} /> : null}</Text>
+          </div>
         </Center>
       </div>
     </Center>
