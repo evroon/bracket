@@ -7,9 +7,11 @@ import {
   Input,
   Modal,
   NumberInput,
+  Stack,
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { parseISO } from 'date-fns';
 import { useTranslation } from 'next-i18next';
@@ -98,37 +100,43 @@ export default function MatchUpdateModal({
                 </Grid.Col>
                 <Grid.Col span={{ sm: 4 }}>
                   <Input.Label />
-                  <Center>
-                    <Button
-                      disabled={date === null}
-                      onClick={async () => {
-                        const computedMargin = Math.floor(
-                          (date!.getTime() +
-                            (previousMatch.custom_duration_minutes ??
-                              previousMatch.duration_minutes) *
-                              60 *
-                              1000 -
-                            parseISO(previousMatch.start_time).getTime()) /
-                            60 /
-                            1000
-                        );
+                  <Button
+                    display="block"
+                    w="100%"
+                    disabled={date === null}
+                    onClick={async () => {
+                      const computedMargin = Math.floor(
+                        (date!.getTime() +
+                          (previousMatch.custom_duration_minutes ??
+                            previousMatch.duration_minutes) *
+                            60 *
+                            1000 -
+                          parseISO(previousMatch.start_time).getTime()) /
+                          60 /
+                          1000
+                      );
 
-                        if (computedMargin < 0) {
-                          return;
-                        }
+                      if (computedMargin < 0) {
+                        showNotification({
+                          message: '',
+                          title: t('negative_match_margin_validation'),
+                          color: 'red',
+                          // icon: <IconAlert />,
+                        });
+                        return;
+                      }
 
-                        const updatedMatch = {
-                          ...previousMatch,
-                          custom_margin_minutes: computedMargin,
-                        };
+                      const updatedMatch = {
+                        ...previousMatch,
+                        custom_margin_minutes: computedMargin,
+                      };
 
-                        await updateMatch(tournament_id, previousMatch.id, updatedMatch);
-                        await swrMatchResponse.mutate();
-                      }}
-                    >
-                      {t('calculate_label')}
-                    </Button>
-                  </Center>
+                      await updateMatch(tournament_id, previousMatch.id, updatedMatch);
+                      await swrMatchResponse.mutate();
+                    }}
+                  >
+                    {t('calculate_label')}
+                  </Button>
                 </Grid.Col>
               </Grid>
             </>
