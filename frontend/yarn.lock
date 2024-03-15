@@ -2178,10 +2178,10 @@ data-urls@^3.0.2:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-date-fns@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.4.0.tgz#19ac3c19a39af64acb21c23587cb08504dcdc3de"
-  integrity sha512-Akz4R8J9MXBsOgF1QeWeCsbv6pntT5KCPjU0Q9prBxVmWJYPLhwAIsNg3b0QAdr0ttiozYLD3L/af7Ra0jqYXw==
+date-fns@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.5.0.tgz#d4f89de9b347ce9b14e4d05701f5d150a6591547"
+  integrity sha512-a+DwyXn7NOfdJireCzAA0B9p7jIXEu/Q9JKCyMYvH6+0vPUNbQceA0neXrdfJ/xzl3mhOh5vibQQ3936Tssm6A==
 
 dayjs@^1.11.10:
   version "1.11.10"
