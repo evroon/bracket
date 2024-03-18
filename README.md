@@ -106,7 +106,7 @@ But you can also configure Bracket using environment variables directly, for exa
 The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
 
 # Running Bracket in production
-Read the [deployment docs](https://docs.bracketapp.nl/docs/running-bracket/deployment) for how to deploy Bracket and run it in production.
+Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how to deploy Bracket and run it in production.
 
 Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
 
@@ -134,9 +134,11 @@ If you're using Bracket and would like to help support its development, that wou
 
 Several areas that we need a bit of help with at the moment are:
 - ⭐ **Star Bracket** on GitHub
-- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language
+- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language (via [crowdin](https://crowdin.com/project/bracket))
 - 📣 **Spread the word** by sharing Bracket to help new users discover it
 - 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
+
+See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributing) for more information on how to contribute
 
 # Contributors
 <!-- readme: collaborators,contributors,dependabot/- -start -->
