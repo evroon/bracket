@@ -17,6 +17,10 @@ Several areas that we need a bit of help with at the moment are:
 
 ## Translating
 
+### Adding translations (via crowdin)
+Bracket uses [crowdin](https://crowdin.com/project/bracket) for translations. You can add/improve translations here in your language.
+
+### Manually adding translations
 You can add a translation by copying the English `en` locale
 ([here](https://github.com/evroon/bracket/tree/master/frontend/public/locales)) directory.
 Rename the directory to the name of your locale, and start translating the `common.json` file inside

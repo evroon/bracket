@@ -134,9 +134,11 @@ If you're using Bracket and would like to help support its development, that wou
 
 Several areas that we need a bit of help with at the moment are:
 - ⭐ **Star Bracket** on GitHub
-- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language
+- 🌐 **Translating**: Help make Bracket available to non-native English speakers by adding your language (via [crowdin](https://crowdin.com/project/bracket))
 - 📣 **Spread the word** by sharing Bracket to help new users discover it
 - 🖥️ **Submit a PR** to add a new feature, fix a bug, extend/update the docs or something else
+
+See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributing) for more information on how to contribute
 
 # Contributors
 <!-- readme: collaborators,contributors,dependabot/- -start -->
