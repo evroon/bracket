@@ -19,6 +19,8 @@ services:
         environment:
             ENVIRONMENT: "DEVELOPMENT"
             PG_DSN: "postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev"
+        volumes:
+            - ./backend/static:/app/static
         restart: unless-stopped
         depends_on:
           - postgres
