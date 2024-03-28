@@ -2629,10 +2629,10 @@ eslint-config-airbnb@^19.0.4:
     object.assign "^4.1.2"
     object.entries "^1.1.5"
 
-eslint-config-mantine@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-mantine/-/eslint-config-mantine-3.1.0.tgz#5a4f3573c5649834d73a646d3e7d226977929a65"
-  integrity sha512-BmpIMJQvZsnngHWIBKsD9N7aqHNCRtzgOYVhGJMZdUDU2A93GVl5L4Gqsk9ynVUzfV+5LsNPC1WUr0XObc7peA==
+eslint-config-mantine@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-mantine/-/eslint-config-mantine-3.2.0.tgz#45cb91a198cedf4e9739f219dba3cf3de183e8f2"
+  integrity sha512-egqRpaPQbbzqeGRVbGErvm+kGazaBTYZ1C7lZbhj68xb5Bw7NK+aB7ROPqmzYGOHUG+ZQS1yVN/zuYTZSs7IzQ==
 
 eslint-import-resolver-node@^0.3.9:
   version "0.3.9"
