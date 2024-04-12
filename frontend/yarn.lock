@@ -886,10 +886,10 @@
     clsx "1.1.1"
     csstype "3.0.9"
 
-"@next/bundle-analyzer@^14.1.0":
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-14.1.0.tgz#da146eb713283c2a28d32c98dbd0d63ae7d42d30"
-  integrity sha512-RJWjnlMp/1WSW0ahAdawV22WgJiC6BVaFS5Xfhw6gP7NJEX3cAJjh4JqSHKGr8GnLNRaFCVTQdDPoX84E421BA==
+"@next/bundle-analyzer@^14.2.0":
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-14.2.0.tgz#f22fa4c7e4c73f76eee13921cca1973c72e726c4"
+  integrity sha512-fFzOvgHJgqILHCoZnfBbjvvODbZNqVIVQOaMgzOrOfKnrz0RVZvaNYSXynCIpJK4J7TIhFW0bQ8vFjDhTDKSmQ==
   dependencies:
     webpack-bundle-analyzer "4.10.1"
 
