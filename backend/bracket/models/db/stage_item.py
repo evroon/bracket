@@ -1,7 +1,7 @@
 from enum import auto
 from typing import Any
 
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 from pydantic import Field, model_validator
 
 from bracket.models.db.shared import BaseModelORM
@@ -24,7 +24,7 @@ class StageItemToInsert(BaseModelORM):
     id: StageItemId | None = None
     stage_id: StageId
     name: str
-    created: datetime_utc
+    created: datetime_tz
     type: StageType
     team_count: int = Field(ge=2, le=64)
 
@@ -38,7 +38,7 @@ class StageItemUpdateBody(BaseModelORM):
 
 
 class StageItemActivateNextBody(BaseModelORM):
-    adjust_to_time: datetime_utc | None = None
+    adjust_to_time: datetime_tz | None = None
 
 
 class StageItemCreateBody(BaseModelORM):

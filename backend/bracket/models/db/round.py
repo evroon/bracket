@@ -1,4 +1,4 @@
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import RoundId, StageItemId
@@ -7,7 +7,7 @@ from bracket.utils.id_types import RoundId, StageItemId
 class Round(BaseModelORM):
     id: RoundId | None = None
     stage_item_id: StageItemId
-    created: datetime_utc
+    created: datetime_tz
     is_draft: bool
     is_active: bool = False
     name: str

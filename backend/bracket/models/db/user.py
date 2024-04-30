@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 from pydantic import BaseModel, constr
 
 from bracket.models.db.account import UserAccountType
@@ -17,7 +17,7 @@ class UserBase(BaseModelORM):
     id: UserId | None = None
     email: str
     name: str
-    created: datetime_utc
+    created: datetime_tz
     account_type: UserAccountType
 
     @property

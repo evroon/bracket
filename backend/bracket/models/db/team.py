@@ -5,7 +5,7 @@ import json
 from decimal import Decimal
 from typing import Annotated
 
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 from pydantic import BaseModel, Field, StringConstraints, field_validator
 
 from bracket.models.db.player import Player
@@ -17,7 +17,7 @@ from bracket.utils.types import assert_some
 
 class Team(BaseModelORM):
     id: TeamId | None = None
-    created: datetime_utc
+    created: datetime_tz
     name: str
     tournament_id: TournamentId
     active: bool
@@ -91,7 +91,7 @@ class TeamMultiBody(BaseModelORM):
 
 
 class TeamToInsert(BaseModelORM):
-    created: datetime_utc
+    created: datetime_tz
     name: str
     tournament_id: TournamentId
     active: bool

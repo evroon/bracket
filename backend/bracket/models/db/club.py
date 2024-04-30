@@ -1,4 +1,4 @@
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import ClubId
@@ -7,7 +7,7 @@ from bracket.utils.id_types import ClubId
 class Club(BaseModelORM):
     id: ClubId | None = None
     name: str
-    created: datetime_utc
+    created: datetime_tz
 
 
 class ClubCreateBody(BaseModelORM):

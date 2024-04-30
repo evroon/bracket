@@ -1,4 +1,4 @@
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 from pydantic import Field
 
 from bracket.models.db.shared import BaseModelORM
@@ -10,8 +10,8 @@ class Tournament(BaseModelORM):
     id: TournamentId | None = None
     club_id: ClubId
     name: str
-    created: datetime_utc
-    start_time: datetime_utc
+    created: datetime_tz
+    start_time: datetime_tz
     duration_minutes: int = Field(..., ge=1)
     margin_minutes: int = Field(..., ge=0)
     dashboard_public: bool
@@ -22,7 +22,7 @@ class Tournament(BaseModelORM):
 
 
 class TournamentUpdateBody(BaseModelORM):
-    start_time: datetime_utc
+    start_time: datetime_tz
     name: str
     dashboard_public: bool
     dashboard_endpoint: EmptyStrToNone | str = None
@@ -37,4 +37,4 @@ class TournamentBody(TournamentUpdateBody):
 
 
 class TournamentToInsert(TournamentBody):
-    created: datetime_utc
+    created: datetime_tz
