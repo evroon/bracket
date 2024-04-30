@@ -4,7 +4,7 @@ import functools
 from typing import Any
 
 import click
-from heliclockter import datetime_utc
+from heliclockter import datetime_tz
 
 from bracket.config import config
 from bracket.database import database
@@ -76,7 +76,7 @@ async def register_user(email: str, password: str, name: str) -> None:
         email=email,
         password_hash=hash_password(password),
         name=name,
-        created=datetime_utc.now(),
+        created=datetime_tz.now(),
         account_type=UserAccountType.REGULAR,
     )
     if await check_whether_email_is_in_use(email):
