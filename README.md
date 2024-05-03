@@ -164,6 +164,13 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
             <br />
             <sub><b>SevicheCC</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/djpiper28">
+            <img src="https://avatars.githubusercontent.com/u/13609136?v=4" width="100;" alt="djpiper28"/>
+            <br />
+            <sub><b>Danny Piper</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors,dependabot/- -end -->
