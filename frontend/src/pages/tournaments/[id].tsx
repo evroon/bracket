@@ -75,9 +75,12 @@ export default function TournamentPage() {
     [activeStage] = getActiveStages(swrStagesResponse);
 
     if (activeStage != null && activeStage.stage_items != null) {
-      const draftRounds = activeStage.stage_items.map((stageItem: StageItemWithRounds) =>
-        stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
-      );
+      const draftRounds = activeStage.stage_items
+        .map((stageItem: StageItemWithRounds) =>
+          stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
+        )
+        .filter((round: RoundInterface[]) => round.length > 0);
+
       if (draftRounds != null && draftRounds.length > 0 && draftRounds[0].length > 0) {
         [[draftRound]] = draftRounds;
       }
@@ -91,13 +94,7 @@ export default function TournamentPage() {
     }
   }
 
-  // TODO: Find a way to not send a request with -1 as round_id here.
-  const swrUpcomingMatchesResponse = getUpcomingMatches(
-    id,
-    draftRound != null ? draftRound.id : -1,
-    schedulerSettings
-  );
-
+  const swrUpcomingMatchesResponse = getUpcomingMatches(id, draftRound?.id, schedulerSettings);
   const scheduler =
     draftRound != null &&
     activeStage != null &&

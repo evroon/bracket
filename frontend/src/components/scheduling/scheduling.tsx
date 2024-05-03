@@ -4,8 +4,7 @@ import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
-import { StageWithStageItems, getStageItem } from '../../interfaces/stage';
-import { stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
+import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import { getRoundsLookup } from '../../services/lookups';
 import { AutoCreateMatchesButton } from '../buttons/create_matches_auto';
@@ -15,26 +14,26 @@ import SwissSettings from './settings/ladder_fixed';
 function SchedulingSystem({
   activeStage,
   tournamentData,
-  round_id,
+  roundId,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   displaySettings,
 }: {
   activeStage?: StageWithStageItems;
-  round_id: number;
+  roundId: number;
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
   displaySettings: BracketDisplaySettings;
 }) {
-  if (activeStage == null || stageItemIsHandledAutomatically(getStageItem(activeStage))) {
+  if (activeStage == null) {
     return null;
   }
   return (
     <>
       <Divider mt="1rem" mb="2rem" />
       <UpcomingMatchesTable
-        round_id={round_id}
+        round_id={roundId}
         tournamentData={tournamentData}
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
@@ -85,7 +84,7 @@ export default function Scheduler({
       </Grid>
       <SchedulingSystem
         activeStage={activeStage}
-        round_id={roundId}
+        roundId={roundId}
         tournamentData={tournamentData}
         swrRoundsResponse={swrRoundsResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}

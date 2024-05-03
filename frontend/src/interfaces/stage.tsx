@@ -14,7 +14,3 @@ export interface StageWithStageItems {
 export function getActiveStages(swrStagesResponse: SWRResponse) {
   return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.is_active);
 }
-
-export function getStageItem(stage: StageWithStageItems) {
-  return stage.stage_items[0];
-}

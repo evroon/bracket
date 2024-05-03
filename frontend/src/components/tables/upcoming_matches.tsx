@@ -59,23 +59,23 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
-        <td>
+      <Table.Tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
+        <Table.Td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">
               {t('recommended_badge_title')}
             </Badge>
           ) : null}
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerList team={upcoming_match.team1} displaySettings={displaySettings} />
-        </td>
-        <td>
+        </Table.Td>
+        <Table.Td>
           <PlayerList team={upcoming_match.team2} displaySettings={displaySettings} />
-        </td>
-        <td>{upcoming_match.elo_diff.toFixed(0)}</td>
-        <td>{upcoming_match.swiss_diff.toFixed(1)}</td>
-        <td>
+        </Table.Td>
+        <Table.Td>{Number(upcoming_match.elo_diff).toFixed(0)}</Table.Td>
+        <Table.Td>{Number(upcoming_match.swiss_diff).toFixed(1)}</Table.Td>
+        <Table.Td>
           <Button
             color="green"
             size="xs"
@@ -85,8 +85,8 @@ export default function UpcomingMatchesTable({
           >
             {t('schedule_title')}
           </Button>
-        </td>
-      </tr>
+        </Table.Td>
+      </Table.Tr>
     ));
 
   if (rows.length < 1) {
