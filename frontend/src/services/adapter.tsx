@@ -196,7 +196,7 @@ export function getUpcomingMatches(
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    round_id === -1
+    round_id == null
       ? null
       : `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher

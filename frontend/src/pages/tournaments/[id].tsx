@@ -16,7 +16,7 @@ import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems, getActiveStages } from '../../interfaces/stage';
-import { StageItemWithRounds } from '../../interfaces/stage_item';
+import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { getTournamentEndpoint } from '../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -70,16 +70,25 @@ export default function TournamentPage() {
   const isResponseValid = responseIsValid(swrStagesResponse);
   let activeStage = null;
   let draftRound = null;
+  let draftStageItem = null;
 
   if (isResponseValid) {
     [activeStage] = getActiveStages(swrStagesResponse);
 
     if (activeStage != null && activeStage.stage_items != null) {
-      const draftRounds = activeStage.stage_items.map((stageItem: StageItemWithRounds) =>
-        stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
-      );
+      const draftRounds = activeStage.stage_items
+        .map((stageItem: StageItemWithRounds) =>
+          stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
+        )
+        .filter((round: RoundInterface[]) => round.length > 0);
+
       if (draftRounds != null && draftRounds.length > 0 && draftRounds[0].length > 0) {
         [[draftRound]] = draftRounds;
+        const draftStageItemId = draftRound.stage_item_id;
+
+        [draftStageItem] = activeStage.stage_items.filter(
+          (stageItem: StageItemWithRounds) => stageItem.id === draftStageItemId
+        );
       }
     }
 
@@ -91,22 +100,18 @@ export default function TournamentPage() {
     }
   }
 
-  // TODO: Find a way to not send a request with -1 as round_id here.
-  const swrUpcomingMatchesResponse = getUpcomingMatches(
-    id,
-    draftRound != null ? draftRound.id : -1,
-    schedulerSettings
-  );
-
+  const swrUpcomingMatchesResponse = getUpcomingMatches(id, draftRound?.id, schedulerSettings);
   const scheduler =
     draftRound != null &&
+    draftStageItem != null &&
+    !stageItemIsHandledAutomatically(draftStageItem) &&
     activeStage != null &&
     `${activeStage.id}` === selectedStageId &&
     swrUpcomingMatchesResponse != null ? (
       <>
         <Scheduler
           activeStage={activeStage}
-          roundId={draftRound.id}
+          draftRound={draftRound}
           tournamentData={tournamentDataFull}
           swrRoundsResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
