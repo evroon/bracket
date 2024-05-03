@@ -22,6 +22,8 @@ Several areas that we need a bit of help with at the moment are:
 Bracket uses [crowdin](https://crowdin.com/project/bracket) for translations. You can add/improve
 translations here in your language.
 
+If you want to add a new language, create an issue and I will add the language to Crowdin.
+
 ### Manually adding translations
 
 You can add a translation by copying the English `en` locale
