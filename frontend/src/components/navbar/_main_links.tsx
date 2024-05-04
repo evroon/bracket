@@ -8,7 +8,6 @@ import {
   IconCalendar,
   IconDots,
   IconHome,
-  IconListNumbers,
   IconSettings,
   IconSoccerField,
   IconTrophy,

@@ -1,11 +1,4 @@
-import {
-  Card,
-  Container,
-  rem,
-  SimpleGrid,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Card, Container, rem, SimpleGrid, Text } from "@mantine/core";
 import {
   IconBrandOpenSource,
   IconCloud,
