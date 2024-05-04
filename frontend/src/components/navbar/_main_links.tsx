@@ -1,7 +1,8 @@
 import { Center, Divider, Group, Tooltip, UnstyledButton } from '@mantine/core';
 import {
   Icon,
-  IconBook, IconBrackets,
+  IconBook,
+  IconBrackets,
   IconBrandGithub,
   IconBrowser,
   IconCalendar,
