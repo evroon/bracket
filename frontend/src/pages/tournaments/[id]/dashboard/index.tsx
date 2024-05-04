@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../../404';
-import Brackets from '../../../../components/brackets/brackets';
 import {
   TournamentHeadTitle,
   TournamentLogo,
@@ -13,7 +12,6 @@ import {
 } from '../../../../components/dashboard/layout';
 import StagesTab from '../../../../components/utils/stages_tab';
 import { responseIsValid } from '../../../../components/utils/util';
-import { BracketDisplaySettings } from '../../../../interfaces/brackets';
 import { StageWithStageItems } from '../../../../interfaces/stage';
 import { getStagesLive } from '../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -27,14 +25,6 @@ export default function Index() {
 
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
   const [selectedStageId, setSelectedStageId] = useState(null);
-  const [matchVisibility, setMatchVisibility] = useState('all');
-  const [teamNamesDisplay, setTeamNamesDisplay] = useState('team-names');
-  const displaySettings: BracketDisplaySettings = {
-    matchVisibility,
-    setMatchVisibility,
-    teamNamesDisplay,
-    setTeamNamesDisplay,
-  };
   if (notFound && !swrStagesResponse.isLoading) {
     return <NotFoundTitle />;
   }
@@ -69,14 +59,6 @@ export default function Index() {
               setSelectedStageId={setSelectedStageId}
             />
           </Center>
-          <Brackets
-            tournamentData={tournamentDataFull}
-            swrStagesResponse={swrStagesResponse}
-            swrUpcomingMatchesResponse={null}
-            readOnly
-            selectedStageId={selectedStageId}
-            displaySettings={displaySettings}
-          />
         </Grid.Col>
       </Grid>
     </>

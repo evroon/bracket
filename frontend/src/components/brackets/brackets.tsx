@@ -7,7 +7,6 @@ import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { RoundInterface } from '../../interfaces/round';
-import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { createRound } from '../../services/round';
@@ -60,9 +59,7 @@ function getRoundsGridCols(
     <React.Fragment key={stageItem.id}>
       <div style={{ width: '100%' }}>
         <Grid grow>
-          <Grid.Col span={6}>
-            <h2>{stageItem.name}</h2>
-          </Grid.Col>
+          <Grid.Col span={6}></Grid.Col>
           <Grid.Col span={6}>
             <Group justify="right">
               {hideAddRoundButton ? null : (
@@ -123,23 +120,6 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
   );
 }
 
-function NotStartedAlert() {
-  const { t } = useTranslation();
-
-  return (
-    <Container>
-      <Alert
-        icon={<IconAlertCircle size={16} />}
-        title={t('tournament_not_started_title')}
-        color="blue"
-        radius="lg"
-      >
-        {t('tournament_not_started_description')}
-      </Alert>
-    </Container>
-  );
-}
-
 function LoadingSkeleton() {
   return (
     <Group>
@@ -158,28 +138,22 @@ export default function Brackets({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   readOnly,
-  selectedStageId,
   displaySettings,
+  stageItem,
 }: {
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
-  selectedStageId: string | null;
   displaySettings: BracketDisplaySettings;
+  stageItem: StageItemWithRounds;
 }) {
   const { t } = useTranslation();
 
   if (swrStagesResponse.isLoading) {
     return <LoadingSkeleton />;
   }
-  if (selectedStageId == null) {
-    return <NotStartedAlert />;
-  }
-  if (
-    selectedStageId == null ||
-    (!swrStagesResponse.isLoading && !responseIsValid(swrStagesResponse))
-  ) {
+  if (!swrStagesResponse.isLoading && !responseIsValid(swrStagesResponse)) {
     return <NoRoundsAlert readOnly={readOnly} />;
   }
 
@@ -187,26 +161,15 @@ export default function Brackets({
     return <LoadingSkeleton />;
   }
 
-  const stages_map = Object.fromEntries(
-    swrStagesResponse.data.data.map((x: StageWithStageItems) => [x.id, x])
+  const rounds = getRoundsGridCols(
+    t,
+    stageItem,
+    tournamentData,
+    swrStagesResponse,
+    swrUpcomingMatchesResponse,
+    readOnly,
+    displaySettings
   );
-  const rounds = stages_map[selectedStageId].stage_items
-    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
-    .map((stageItem: StageItemWithRounds) =>
-      getRoundsGridCols(
-        t,
-        stageItem,
-        tournamentData,
-        swrStagesResponse,
-        swrUpcomingMatchesResponse,
-        readOnly,
-        displaySettings
-      )
-    );
-
-  if (rounds.length < 1) {
-    return <NoRoundsAlert readOnly={readOnly} />;
-  }
 
   return <div>{rounds}</div>;
 }

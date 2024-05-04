@@ -7,9 +7,9 @@ import {
   IconCalendar,
   IconDots,
   IconHome,
+  IconListNumbers,
   IconSettings,
   IconSoccerField,
-  IconTournament,
   IconTrophy,
   IconUser,
   IconUsers,
@@ -130,11 +130,6 @@ export function TournamentLinks({ tournament_id }: any) {
 
   const data = [
     {
-      icon: IconTournament,
-      label: capitalize(t('schedule_title')),
-      link: `${tm_prefix}`,
-    },
-    {
       icon: IconUser,
       label: capitalize(t('players_title')),
       link: `${tm_prefix}/players`,
@@ -158,6 +153,11 @@ export function TournamentLinks({ tournament_id }: any) {
       icon: IconCalendar,
       label: capitalize(t('planning_title')),
       link: `${tm_prefix}/schedule`,
+    },
+    {
+      icon: IconListNumbers,
+      label: capitalize(t('results_title')),
+      link: `${tm_prefix}/results`,
     },
     {
       icon: IconSettings,

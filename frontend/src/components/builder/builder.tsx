@@ -2,7 +2,9 @@ import { ActionIcon, Badge, Card, Group, Menu, Stack, Text, rem } from '@mantine
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
@@ -56,6 +58,7 @@ function StageItemRow({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
 }) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
@@ -107,6 +110,16 @@ function StageItemRow({
               >
                 {t('edit_name_button')}
               </Menu.Item>
+              {stageItem.type === 'SWISS' ? (
+                <Menu.Item
+                  leftSection={<BiSolidWrench size={rem(14)} />}
+                  onClick={() => {
+                    router.push(`/tournaments/${tournament.id}/swiss/${stageItem.id}`);
+                  }}
+                >
+                  {t('handle_swiss_system')}
+                </Menu.Item>
+              ) : null}
               <Menu.Item
                 leftSection={<IconTrash size={rem(14)} />}
                 onClick={async () => {

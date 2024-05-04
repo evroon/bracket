@@ -39,7 +39,7 @@ export default function TournamentsTable({
     .map((tournament) => (
       <Table.Tr key={tournament.id}>
         <Table.Td>
-          <Link href={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
+          <Link href={`/tournaments/${tournament.id}/schedule`}>{tournament.name}</Link>
         </Table.Td>
         <Table.Td>
           <DateTime datetime={tournament.created} />
