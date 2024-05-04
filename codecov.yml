@@ -6,3 +6,6 @@ coverage:
     patch:
       default:
         informational: true
+
+ignore:
+  - "backend/alembic"
