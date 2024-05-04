@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'backend/**'
+      - 'codecov.yml'
   push:
     branches:
       - 'master'
