@@ -1,4 +1,4 @@
-import { Center, Container } from '@mantine/core';
+import { Container } from '@mantine/core';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
@@ -37,11 +37,11 @@ export default function Standings() {
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
-      <Center mt="1rem">
-        <Container style={{ width: '100%' }} px="0rem">
+      <Container mt="1rem">
+        <Container style={{ width: '100%', minWidth: '40rem' }} px="0rem">
           <StandingsTable swrTeamsResponse={swrTeamsResponse} />
         </Container>
-      </Center>
+      </Container>
       <DashboardFooter />
     </>
   );
