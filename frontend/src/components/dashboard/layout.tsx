@@ -1,6 +1,5 @@
 import {
   Box,
-  Burger,
   Center,
   Container,
   Group,
@@ -9,7 +8,6 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -82,7 +80,6 @@ export function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: To
 
 export function DoubleHeader({ tournamentData }: { tournamentData: Tournament }) {
   const router = useRouter();
-  const [opened, { toggle }] = useDisclosure(false);
   const endpoint = getTournamentEndpoint(tournamentData);
   const pathName = router.pathname.replace('[id]', endpoint).replace(/\/+$/, '');
 
@@ -112,18 +109,11 @@ export function DoubleHeader({ tournamentData }: { tournamentData: Tournament })
         >
           <Title size="lg">{tournamentData.name}</Title>
         </UnstyledButton>
-        <Box className={classes.links} visibleFrom="sm">
+        <Box className={classes.links}>
           <Group gap={0} className={classes.mainLinks}>
             {mainItems}
           </Group>
         </Box>
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          className={classes.burger}
-          size="sm"
-          hiddenFrom="sm"
-        />
       </Container>
     </header>
   );
