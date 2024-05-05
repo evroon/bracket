@@ -32,7 +32,7 @@ from bracket.sql.stage_items import (
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
-from bracket.utils.errors import check_foreign_key_violation, ForeignKey
+from bracket.utils.errors import ForeignKey, check_foreign_key_violation
 from bracket.utils.id_types import StageItemId, TournamentId
 
 router = APIRouter()
