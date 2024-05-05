@@ -12,7 +12,7 @@ import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
 import { formatMatchTeam1, formatMatchTeam2 } from '../../../../interfaces/match';
-import { getCourts, getStages } from '../../../../services/adapter';
+import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
@@ -82,13 +82,12 @@ function ScheduleRow({
               style={{
                 backgroundColor: team1_color,
                 borderRadius: '0.5rem',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
+                width: '2.5rem',
                 color: 'white',
                 fontWeight: 800,
               }}
             >
-              {data.match.team1_score}
+              <Center>{data.match.team1_score}</Center>
             </div>
           </Grid.Col>
         </Grid>
@@ -101,13 +100,12 @@ function ScheduleRow({
               style={{
                 backgroundColor: team2_color,
                 borderRadius: '0.5rem',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
+                width: '2.5rem',
                 color: 'white',
                 fontWeight: 800,
               }}
             >
-              {data.match.team2_score}
+              <Center>{data.match.team2_score}</Center>
             </div>
           </Grid.Col>
         </Grid>
@@ -194,8 +192,8 @@ export default function SchedulePage() {
   const tournamentId = !notFound ? tournamentResponse[0].id : -1;
   const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
 
-  const swrStagesResponse = getStages(tournamentId);
-  const swrCourtsResponse = getCourts(tournamentId);
+  const swrStagesResponse = getStagesLive(tournamentId);
+  const swrCourtsResponse = getCourtsLive(tournamentId);
 
   const stageItemsLookup = responseIsValid(swrStagesResponse)
     ? getStageItemLookup(swrStagesResponse)
