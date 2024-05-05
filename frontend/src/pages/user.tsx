@@ -14,14 +14,13 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
 });
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const swrUserResponse = getUser();
   checkForAuthError(swrUserResponse);
   const user = swrUserResponse.data != null ? swrUserResponse.data.data : null;
 
-  let content;
-  content = user != null ? <UserForm user={user} /> : null;
+  let content = user != null ? <UserForm user={user} i18n={i18n} t={t} /> : null;
 
   if (swrUserResponse.isLoading) {
     content = (
@@ -34,7 +33,7 @@ export default function HomePage() {
   return (
     <Layout>
       <Title>{t('edit_profile_title')}</Title>
-      <Stack style={{ maxWidth: '400px' }}>{content}</Stack>
+      <Stack style={{ maxWidth: '40rem' }}>{content}</Stack>
     </Layout>
   );
 }
