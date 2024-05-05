@@ -2,6 +2,7 @@ import { Center, Divider, Group, Tooltip, UnstyledButton } from '@mantine/core';
 import {
   Icon,
   IconBook,
+  IconBrackets,
   IconBrandGithub,
   IconBrowser,
   IconCalendar,
@@ -9,7 +10,6 @@ import {
   IconHome,
   IconSettings,
   IconSoccerField,
-  IconTournament,
   IconTrophy,
   IconUser,
   IconUsers,
@@ -130,9 +130,9 @@ export function TournamentLinks({ tournament_id }: any) {
 
   const data = [
     {
-      icon: IconTournament,
-      label: capitalize(t('schedule_title')),
-      link: `${tm_prefix}`,
+      icon: IconTrophy,
+      label: capitalize(t('stage_title')),
+      link: `${tm_prefix}/stages`,
     },
     {
       icon: IconUser,
@@ -150,14 +150,14 @@ export function TournamentLinks({ tournament_id }: any) {
       link: `${tm_prefix}/courts`,
     },
     {
-      icon: IconTrophy,
-      label: capitalize(t('stage_title')),
-      link: `${tm_prefix}/stages`,
-    },
-    {
       icon: IconCalendar,
       label: capitalize(t('planning_title')),
       link: `${tm_prefix}/schedule`,
+    },
+    {
+      icon: IconBrackets,
+      label: capitalize(t('results_title')),
+      link: `${tm_prefix}/results`,
     },
     {
       icon: IconSettings,

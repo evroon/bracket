@@ -8,10 +8,9 @@ import {
   MantineProvider,
   Paper,
   rem,
-  ThemeIcon,
   Text,
+  ThemeIcon,
   Title,
-  Stack,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
@@ -19,7 +18,7 @@ import { HeroTitle } from "../components/HeroTitle";
 import { HomeCarousel } from "../components/HomeCarousel";
 import classes from "./index.module.css";
 import FeaturesCards from "../components/feature_cards";
-import { IconBrandGithub, IconColorSwatch } from "@tabler/icons-react";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 const theme = createTheme({});
 

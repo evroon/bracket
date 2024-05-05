@@ -1,6 +1,6 @@
 import { showNotification } from '@mantine/notifications';
-import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import type Axios from 'axios';
+import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import useSWR, { SWRResponse } from 'swr';
 

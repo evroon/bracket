@@ -1,30 +1,34 @@
-import { Button, Center, Grid, Group, SegmentedControl, Title } from '@mantine/core';
+import { Button, Grid, Group, SegmentedControl, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import React, { useState } from 'react';
+import React from 'react';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../404';
-import Brackets from '../../components/brackets/brackets';
-import Scheduler from '../../components/scheduling/scheduling';
-import classes from '../../components/utility.module.css';
-import { useRouterQueryState } from '../../components/utils/query_parameters';
-import StagesTab from '../../components/utils/stages_tab';
-import { getTournamentIdFromRouter, responseIsValid } from '../../components/utils/util';
-import { BracketDisplaySettings } from '../../interfaces/brackets';
-import { SchedulerSettings } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
-import { StageWithStageItems, getActiveStages } from '../../interfaces/stage';
-import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
-import { getTournamentEndpoint } from '../../interfaces/tournament';
+import NotFoundTitle from '../../../404';
+import Brackets from '../../../../components/brackets/brackets';
+import Scheduler from '../../../../components/scheduling/scheduling';
+import classes from '../../../../components/utility.module.css';
+import { useRouterQueryState } from '../../../../components/utils/query_parameters';
+import {
+  getStageItemIdFromRouter,
+  getTournamentIdFromRouter,
+  responseIsValid,
+} from '../../../../components/utils/util';
+import { BracketDisplaySettings } from '../../../../interfaces/brackets';
+import { SchedulerSettings } from '../../../../interfaces/match';
+import { RoundInterface } from '../../../../interfaces/round';
+import { getStageById } from '../../../../interfaces/stage';
+import { stageItemIsHandledAutomatically } from '../../../../interfaces/stage_item';
+import { getTournamentEndpoint } from '../../../../interfaces/tournament';
 import {
   checkForAuthError,
   getStages,
   getTournamentById,
   getUpcomingMatches,
-} from '../../services/adapter';
-import TournamentLayout from './_tournament_layout';
+} from '../../../../services/adapter';
+import { getStageItemLookup } from '../../../../services/lookups';
+import TournamentLayout from '../../_tournament_layout';
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
@@ -34,6 +38,7 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
 
 export default function TournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();
+  const stageItemId = getStageItemIdFromRouter();
   const { t } = useTranslation();
 
   const swrTournamentResponse = getTournamentById(tournamentData.id);
@@ -43,7 +48,6 @@ export default function TournamentPage() {
   const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 100);
   const [iterations, setIterations] = useRouterQueryState('iterations', 1000);
   const [limit, setLimit] = useRouterQueryState('limit', 50);
-  const [selectedStageId, setSelectedStageId] = useState<string | null>(null);
   const [matchVisibility, setMatchVisibility] = useRouterQueryState('match-visibility', 'all');
   const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('which-names', 'team-names');
   const displaySettings: BracketDisplaySettings = {
@@ -67,46 +71,31 @@ export default function TournamentPage() {
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
-  const isResponseValid = responseIsValid(swrStagesResponse);
   let activeStage = null;
   let draftRound = null;
-  let draftStageItem = null;
+  let stageItem = null;
 
-  if (isResponseValid) {
-    [activeStage] = getActiveStages(swrStagesResponse);
+  if (responseIsValid(swrStagesResponse) && stageItemId != null) {
+    stageItem = getStageItemLookup(swrStagesResponse)[stageItemId];
+    [activeStage] = getStageById(swrStagesResponse, stageItem.stage_id);
 
     if (activeStage != null && activeStage.stage_items != null) {
-      const draftRounds = activeStage.stage_items
-        .map((stageItem: StageItemWithRounds) =>
-          stageItem.rounds.filter((round: RoundInterface) => round.is_draft)
-        )
-        .filter((round: RoundInterface[]) => round.length > 0);
+      const draftRounds = stageItem.rounds.filter(
+        (round: RoundInterface) => round.stage_item_id === stageItemId
+      );
 
-      if (draftRounds != null && draftRounds.length > 0 && draftRounds[0].length > 0) {
-        [[draftRound]] = draftRounds;
-        const draftStageItemId = draftRound.stage_item_id;
-
-        [draftStageItem] = activeStage.stage_items.filter(
-          (stageItem: StageItemWithRounds) => stageItem.id === draftStageItemId
-        );
+      if (draftRounds != null && draftRounds.length > 0) {
+        [draftRound] = draftRounds;
       }
-    }
-
-    const selectedTab = swrStagesResponse.data.data.filter(
-      (stage: StageWithStageItems) => stage.is_active
-    );
-    if (selectedTab.length > 0 && selectedStageId == null && selectedTab[0].id != null) {
-      setSelectedStageId(selectedTab[0].id.toString());
     }
   }
 
   const swrUpcomingMatchesResponse = getUpcomingMatches(id, draftRound?.id, schedulerSettings);
   const scheduler =
     draftRound != null &&
-    draftStageItem != null &&
-    !stageItemIsHandledAutomatically(draftStageItem) &&
+    stageItem != null &&
+    !stageItemIsHandledAutomatically(stageItem) &&
     activeStage != null &&
-    `${activeStage.id}` === selectedStageId &&
     swrUpcomingMatchesResponse != null ? (
       <>
         <Scheduler
@@ -129,7 +118,7 @@ export default function TournamentPage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>{tournamentDataFull != null ? tournamentDataFull.name : ''}</Title>
+          <Title>{stageItem != null ? stageItem.name : ''}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           <Group justify="right">
@@ -169,19 +158,12 @@ export default function TournamentPage() {
         </Grid.Col>
       </Grid>
       <div style={{ marginTop: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
-        <Center>
-          <StagesTab
-            swrStagesResponse={swrStagesResponse}
-            selectedStageId={selectedStageId}
-            setSelectedStageId={setSelectedStageId}
-          />
-        </Center>
         <Brackets
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
-          selectedStageId={selectedStageId}
+          stageItem={stageItem}
           displaySettings={displaySettings}
         />
         {scheduler}

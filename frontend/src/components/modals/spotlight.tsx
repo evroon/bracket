@@ -1,6 +1,7 @@
 import { rem } from '@mantine/core';
 import { Spotlight, SpotlightActionData } from '@mantine/spotlight';
 import {
+  IconBrackets,
   IconCalendarEvent,
   IconHome,
   IconSearch,
@@ -47,6 +48,13 @@ export function BracketSpotlight() {
   ];
 
   const tournamentActions: SpotlightActionData[] = [
+    {
+      id: 'results',
+      title: t('results_title'),
+      description: t('results_spotlight_description'),
+      onClick: () => router.push(`/tournaments/${tournamentId}/results`),
+      leftSection: <IconBrackets size="1.2rem" />,
+    },
     {
       id: 'planning',
       title: t('planning_title'),
