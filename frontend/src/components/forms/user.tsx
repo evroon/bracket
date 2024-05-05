@@ -110,7 +110,7 @@ export default function UserForm({ user, t, i18n }: { user: UserInterface; t: an
       </Tabs.Panel>
       <Tabs.Panel value="language" pt="xs">
         <Select
-          clearable={false}
+          allowDeselect={false}
           value={i18n.language}
           label={t('language')}
           data={locales}
