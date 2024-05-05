@@ -5,11 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
 
-import {
-  TournamentHeadTitle,
-  TournamentLogo,
-  TournamentTitle,
-} from '../../../../components/dashboard/layout';
+import { TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
@@ -148,7 +144,9 @@ export function Schedule({
       if (c < 1 || startTime !== formatTime(sortedMatches[c - 1].match.start_time)) {
         rows.push(
           <Center mt="md" key={`time-${c}`}>
-            <Text fw={800}>{startTime}</Text>
+            <Text size="xl" fw={800}>
+              {startTime}
+            </Text>
           </Center>
         );
       }
