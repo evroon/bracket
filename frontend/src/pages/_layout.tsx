@@ -12,7 +12,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
 import Link from 'next/link';
-import { NextRouter, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
 
 import { Brand } from '../components/navbar/_brand';
@@ -32,12 +32,7 @@ interface HeaderActionProps {
   breadcrumbs: ReactNode;
 }
 
-function getMenuItemsForLink(
-  link: HeaderActionLink,
-  _classes: any,
-  router: NextRouter,
-  pathName: string
-) {
+function getMenuItemsForLink(link: HeaderActionLink, _classes: any, pathName: string) {
   const menuItems = link.links?.map((item) => (
     <a key={item.label} className={classes.link} href={item.link}>
       <Center>
@@ -72,7 +67,7 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
 
   const items = links.map((link) => {
     if (link.links) {
-      return getMenuItemsForLink(link, classes, router, pathName);
+      return getMenuItemsForLink(link, classes, pathName);
     }
 
     return (
