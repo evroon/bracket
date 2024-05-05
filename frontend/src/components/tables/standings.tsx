@@ -56,7 +56,7 @@ export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse:
   if (rows.length < 1) return <EmptyTableInfo entity_name={t('teams_title')} />;
 
   return (
-    <TableLayoutLarge display_mode="presentation" miw={850}>
+    <TableLayoutLarge display_mode="presentation">
       <Table.Thead>
         <Table.Tr>
           <ThNotSortable>#</ThNotSortable>

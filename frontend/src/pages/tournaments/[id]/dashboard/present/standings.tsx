@@ -1,16 +1,20 @@
-import { Center, Container } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../404';
-import { DashboardFooter } from '../../../../components/dashboard/footer';
-import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
-import StandingsTable from '../../../../components/tables/standings';
-import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
-import { getTeamsLive } from '../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
+import NotFoundTitle from '../../../../404';
+import {
+  TournamentHeadTitle,
+  TournamentLogo,
+  TournamentQRCode,
+  TournamentTitle,
+} from '../../../../../components/dashboard/layout';
+import StandingsTable from '../../../../../components/tables/standings';
+import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
+import { getTeamsLive } from '../../../../../services/adapter';
+import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
 
 export default function Standings() {
   const tournamentResponse = getTournamentResponseByEndpointName();
@@ -36,13 +40,16 @@ export default function Standings() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <DoubleHeader tournamentData={tournamentDataFull} />
-      <Center mt="1rem">
-        <Container style={{ width: '100%' }} px="0rem">
+      <Grid style={{ margin: '1rem' }} gutter="2rem">
+        <Grid.Col span={{ base: 12, lg: 2 }}>
+          <TournamentTitle tournamentDataFull={tournamentDataFull} />
+          <TournamentLogo tournamentDataFull={tournamentDataFull} />
+          <TournamentQRCode tournamentDataFull={tournamentDataFull} />
+        </Grid.Col>
+        <Grid.Col span="auto">
           <StandingsTable swrTeamsResponse={swrTeamsResponse} />
-        </Container>
-      </Center>
-      <DashboardFooter />
+        </Grid.Col>
+      </Grid>
     </>
   );
 }

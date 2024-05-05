@@ -5,7 +5,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import React from 'react';
 
-import { TournamentHeadTitle } from '../../../../components/dashboard/layout';
+import { DashboardFooter } from '../../../../components/dashboard/footer';
+import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
@@ -175,8 +176,8 @@ export function Schedule({
     ) : null;
 
   return (
-    <Group wrap="nowrap" align="top">
-      <div style={{ width: '48rem' }}>
+    <Group wrap="nowrap" align="top" style={{ width: '100%' }}>
+      <div style={{ width: '100%' }}>
         {rows}
         {noItemsAlert}
       </div>
@@ -209,9 +210,13 @@ export default function SchedulePage() {
       <Head>
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
-      <Center mt="1rem">
-        <Schedule t={t} matchesLookup={matchesLookup} stageItemsLookup={stageItemsLookup} />
+      <DoubleHeader tournamentData={tournamentDataFull} />
+      <Center>
+        <Group style={{ maxWidth: '48rem', width: '100%' }} px="1rem">
+          <Schedule t={t} matchesLookup={matchesLookup} stageItemsLookup={stageItemsLookup} />
+        </Group>
       </Center>
+      <DashboardFooter />
     </>
   );
 }

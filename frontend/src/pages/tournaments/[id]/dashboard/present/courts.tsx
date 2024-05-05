@@ -5,21 +5,25 @@ import Head from 'next/head';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../404';
-import CourtsLarge, { CourtBadge } from '../../../../components/brackets/courts_large';
+import NotFoundTitle from '../../../../404';
+import CourtsLarge, { CourtBadge } from '../../../../../components/brackets/courts_large';
 import {
   TournamentHeadTitle,
   TournamentLogo,
   TournamentQRCode,
   TournamentTitle,
-} from '../../../../components/dashboard/layout';
-import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
-import { responseIsValid } from '../../../../components/utils/util';
-import { Court } from '../../../../interfaces/court';
-import { MatchInterface, isMatchHappening, isMatchInTheFuture } from '../../../../interfaces/match';
-import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
-import { getMatchLookupByCourt } from '../../../../services/lookups';
-import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
+} from '../../../../../components/dashboard/layout';
+import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
+import { responseIsValid } from '../../../../../components/utils/util';
+import { Court } from '../../../../../interfaces/court';
+import {
+  MatchInterface,
+  isMatchHappening,
+  isMatchInTheFuture,
+} from '../../../../../interfaces/match';
+import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
+import { getMatchLookupByCourt } from '../../../../../services/lookups';
+import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
 
 export default function CourtsPage() {
   const { t } = useTranslation();
