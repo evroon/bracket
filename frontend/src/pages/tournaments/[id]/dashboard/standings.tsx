@@ -81,7 +81,7 @@ export default function Standings() {
       </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" style={{ overflow: 'scroll' }} px="0rem">
-        <Container style={{ width: '100%', minWidth: '40rem' }} px="sm">
+        <Container style={{ width: '100%', minWidth: '55rem' }} px="sm">
           <StandingsContent
             swrTeamsResponse={swrTeamsResponse}
             swrStagesResponse={swrStagesResponse}
