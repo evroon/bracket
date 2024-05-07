@@ -32,14 +32,16 @@ function StandingsContent({
     : {};
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
-  const rows = Object.keys(stageItemTeamLookup).map((stageItemId) => (
-    <>
-      <Text size="xl" mt="md" mb="xs">
-        {stageItemsLookup[stageItemId].name}
-      </Text>
-      <StandingsTable teams={stageItemTeamLookup[stageItemId]} />
-    </>
-  ));
+  const rows = Object.keys(stageItemTeamLookup)
+    .filter((stageItemId) => stageItemsLookup[stageItemId] != null)
+    .map((stageItemId) => (
+      <>
+        <Text size="xl" mt="md" mb="xs">
+          {stageItemsLookup[stageItemId].name}
+        </Text>
+        <StandingsTable teams={stageItemTeamLookup[stageItemId]} />
+      </>
+    ));
 
   if (rows.length < 1) {
     return (
