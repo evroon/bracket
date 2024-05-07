@@ -64,7 +64,7 @@ export default function Standings() {
   const swrStagesResponse = getStagesLive(tournamentId);
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
 
-  if (swrTeamsResponse.isLoading) {
+  if (swrTeamsResponse.isLoading || swrStagesResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
   }
 

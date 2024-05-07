@@ -74,6 +74,24 @@ async def get_teams_with_members(
     return [FullTeamWithPlayers.model_validate(x) for x in result]
 
 
+async def get_teams_in_tournament(
+    tournament_id: TournamentId,
+) -> list[Team]:
+    query = """
+        SELECT *
+        FROM teams
+        WHERE teams.tournament_id = :tournament_id
+        ORDER BY name ASC
+        """
+    values = dict_without_none(
+        {
+            "tournament_id": tournament_id,
+        }
+    )
+    result = await database.fetch_all(query=query, values=values)
+    return [Team.model_validate(x) for x in result]
+
+
 async def get_team_count(
     tournament_id: TournamentId,
     *,
