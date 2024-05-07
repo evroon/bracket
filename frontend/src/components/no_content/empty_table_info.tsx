@@ -1,4 +1,5 @@
-import { Alert, Container, Group, Text, Title } from '@mantine/core';
+import { Alert, Container, Text, Title } from '@mantine/core';
+import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
@@ -30,7 +31,7 @@ export function EmptyTableInfo({
 
 export function NoContent({ title, description }: { title: string; description?: string }) {
   return (
-    <Container>
+    <Container mt="md">
       <div className={classes.label}>
         <MdOutlineConstruction />
       </div>
@@ -38,7 +39,26 @@ export function NoContent({ title, description }: { title: string; description?:
       <Text size="lg" ta="center" className={classes.description}>
         {description}
       </Text>
-      <Group justify="center"></Group>
+    </Container>
+  );
+}
+
+export function NoContentDashboard({
+  title,
+  description,
+}: {
+  title: string;
+  description?: string;
+}) {
+  return (
+    <Container mt="md">
+      <div className={classes.label}>
+        <AiOutlineHourglass />
+      </div>
+      <Title className={classes.title}>{title}</Title>
+      <Text size="lg" ta="center" className={classes.description}>
+        {description}
+      </Text>
     </Container>
   );
 }

@@ -7,7 +7,7 @@ import React from 'react';
 
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
+import { NoContentDashboard } from '../../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
@@ -123,10 +123,6 @@ export function Schedule({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
-  if (matchesLookup.length < 1) {
-    return <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />;
-  }
-
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
@@ -160,6 +156,10 @@ export function Schedule({
         matchesLookup={matchesLookup}
       />
     );
+  }
+
+  if (rows.length < 1) {
+    return <NoContentDashboard title={t('no_matches_title')} description="" />;
   }
 
   const noItemsAlert =

@@ -17,7 +17,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 
 import MatchModal from '../../../components/modals/match_modal';
-import { NoContent } from '../../../components/no_content/empty_table_info';
+import { NoContentDashboard } from '../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
@@ -150,10 +150,6 @@ function Schedule({
   openMatchModal: CallableFunction;
   matchesLookup: any;
 }) {
-  if (matchesLookup.length < 1) {
-    return <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />;
-  }
-
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
@@ -165,7 +161,7 @@ function Schedule({
   for (let c = 0; c < sortedMatches.length; c += 1) {
     const data = sortedMatches[c];
 
-    if (c < 1 || (sortedMatches[c - 1].match.start_time)) {
+    if (c < 1 || sortedMatches[c - 1].match.start_time) {
       const startTime = formatTime(data.match.start_time);
 
       if (c < 1 || startTime !== formatTime(sortedMatches[c - 1].match.start_time)) {
@@ -187,6 +183,12 @@ function Schedule({
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
       />
+    );
+  }
+
+  if (rows.length < 1) {
+    return (
+      <NoContentDashboard title={t('no_matches_title')} description={t('no_matches_description')} />
     );
   }
 

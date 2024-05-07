@@ -9,7 +9,6 @@
   font-weight: 900;
   font-size: rem(220px);
   line-height: 1;
-  margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
 
   @media (max-width: $mantine-breakpoint-sm) {
