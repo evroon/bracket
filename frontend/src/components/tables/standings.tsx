@@ -1,25 +1,19 @@
 import { Table, Text } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import { SWRResponse } from 'swr';
 
 import { TeamInterface } from '../../interfaces/team';
 import PlayerList from '../info/player_list';
 import { PlayerScore } from '../info/player_score';
 import { WinDistribution } from '../info/player_statistics';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
-import RequestErrorAlert from '../utils/error_alert';
 import { WinDistributionTitle } from './players';
 import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 import TableLayoutLarge from './table_large';
 
-export default function StandingsTable({ swrTeamsResponse }: { swrTeamsResponse: SWRResponse }) {
+export default function StandingsTable({ teams }: { teams: TeamInterface[] }) {
   const { t } = useTranslation();
-  const teams: TeamInterface[] =
-    swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
   const tableState = getTableState('elo_score', false);
-
-  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const minELOScore = Math.min(...teams.map((team) => team.elo_score));
   const maxELOScore = Math.max(...teams.map((team) => team.elo_score));

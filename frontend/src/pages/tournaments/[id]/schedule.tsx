@@ -36,8 +36,6 @@ function ScheduleRow({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
-  const stageItemColor = stringToColour(`${matchesLookup[match.id].stageItem.id}`);
-
   return (
     <Draggable key={match.id} index={index} draggableId={`${match.id}`}>
       {(provided) => (
@@ -63,7 +61,10 @@ function ScheduleRow({
                   <Badge variant="default" size="lg">
                     {match.start_time != null ? <Time datetime={match.start_time} /> : null}
                   </Badge>
-                  <Badge color={stageItemColor} variant="outline">
+                  <Badge
+                    color={stringToColour(`${matchesLookup[match.id].stageItem.id}`)}
+                    variant="outline"
+                  >
                     {matchesLookup[match.id].stageItem.name}
                   </Badge>
                 </Stack>
