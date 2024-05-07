@@ -165,7 +165,7 @@ function Schedule({
   for (let c = 0; c < sortedMatches.length; c += 1) {
     const data = sortedMatches[c];
 
-    if (c < 1 || (sortedMatches[c - 1].match.start_time)) {
+    if (c < 1 || sortedMatches[c - 1].match.start_time) {
       const startTime = formatTime(data.match.start_time);
 
       if (c < 1 || startTime !== formatTime(sortedMatches[c - 1].match.start_time)) {
