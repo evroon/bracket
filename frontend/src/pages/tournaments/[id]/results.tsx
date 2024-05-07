@@ -17,7 +17,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 
 import MatchModal from '../../../components/modals/match_modal';
-import {NoContent, NoContentDashboard} from '../../../components/no_content/empty_table_info';
+import { NoContentDashboard } from '../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
@@ -187,7 +187,9 @@ function Schedule({
   }
 
   if (rows.length < 1) {
-    return <NoContentDashboard title={t('no_matches_title')} description={t('no_matches_description')} />;
+    return (
+      <NoContentDashboard title={t('no_matches_title')} description={t('no_matches_description')} />
+    );
   }
 
   const noItemsAlert =
