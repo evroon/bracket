@@ -12,6 +12,7 @@ import {
   TournamentTitle,
 } from '../../../../../components/dashboard/layout';
 import StandingsTable from '../../../../../components/tables/standings';
+import RequestErrorAlert from '../../../../../components/utils/error_alert';
 import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
 import { getTeamsLive } from '../../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
@@ -35,6 +36,8 @@ export default function Standings() {
 
   const tournamentDataFull = tournamentResponse[0];
 
+  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
+
   return (
     <>
       <Head>
@@ -47,7 +50,7 @@ export default function Standings() {
           <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span="auto">
-          <StandingsTable swrTeamsResponse={swrTeamsResponse} />
+          <StandingsTable teams={swrTeamsResponse.data.data.teams} />
         </Grid.Col>
       </Grid>
     </>
