@@ -25,12 +25,12 @@ function StandingsContent({
   swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
-  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const stageItemTeamLookup = responseIsValid(swrStagesResponse)
     ? getStageItemTeamsLookup(swrStagesResponse, swrTeamsResponse)
     : {};
+  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const rows = Object.keys(stageItemTeamLookup).map((stageItemId) => (
     <>

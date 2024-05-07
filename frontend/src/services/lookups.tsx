@@ -62,10 +62,12 @@ export function getStageItemTeamsLookup(
   );
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
-    stage.stage_items.forEach((stageItem) => {
-      const teamIds = stageItem.inputs.map((input) => input.team_id);
-      result = result.concat([[stageItem.id, teamIds.map((id) => teamsLookup![id!])]]);
-    })
+    stage.stage_items
+      .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
+      .forEach((stageItem) => {
+        const teamIds = stageItem.inputs.map((input) => input.team_id);
+        result = result.concat([[stageItem.id, teamIds.map((id) => teamsLookup![id!])]]);
+      })
   );
   return Object.fromEntries(result);
 }
