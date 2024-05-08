@@ -161,14 +161,9 @@ export function getStages(tournament_id: number, no_draft_rounds: boolean = fals
   );
 }
 
-export function getStagesLive(
-  tournament_id: number,
-  no_draft_rounds: boolean = false
-): SWRResponse {
+export function getStagesLive(tournament_id: number): SWRResponse {
   return useSWR(
-    tournament_id === -1
-      ? null
-      : `tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`,
+    tournament_id === -1 ? null : `tournaments/${tournament_id}/stages?no_draft_rounds=true`,
     fetcherWithTimestamp,
     {
       refreshInterval: 5_000,
