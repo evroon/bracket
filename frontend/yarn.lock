@@ -827,10 +827,10 @@
     react-textarea-autosize "8.5.3"
     type-fest "^3.13.1"
 
-"@mantine/dates@7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-7.6.0.tgz#2e10dbcfb48ad784aa0459c3fff79228201a11de"
-  integrity sha512-7EbdMBzYiyBMlCw3T81jXWxkCfs5Al1ULwVN0Hb33WEXxertcPawoQO4crkHcc9jLYvpf0D64dwUJf62uqVeyQ==
+"@mantine/dates@7.9.0":
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-7.9.0.tgz#0dde0847fef452ae01daf6eeab98be5ecb2fb6cc"
+  integrity sha512-+OOM8w6uZfBvlqPtwGIjG0Ef3z4E5QyWVmh7AhevgRS9RBdfa1YpxfRweDTDmrY9qYnim7fyM097Rwe30q/kpA==
   dependencies:
     clsx "2.1.0"
 
