@@ -34,7 +34,7 @@ function StandingsContent({
 
   const rows = Object.keys(stageItemTeamLookup)
     .filter((stageItemId) => stageItemsLookup[stageItemId] != null)
-    .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
+    .sort((si1: any, si2: any) => (si1.name > si2.name ? -1 : 1))
     .map((stageItemId) => (
       <>
         <Text size="xl" mt="md" mb="xs">
