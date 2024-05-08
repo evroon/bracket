@@ -33,7 +33,7 @@ export default function CourtsPage() {
   const notFound = tournamentResponse == null || tournamentResponse[0] == null;
   const tournamentId = !notFound ? tournamentResponse[0].id : -1;
 
-  const swrStagesResponse: SWRResponse = getStagesLive(tournamentId, true);
+  const swrStagesResponse: SWRResponse = getStagesLive(tournamentId);
   const swrCourtsResponse: SWRResponse = getCourtsLive(tournamentId);
 
   if (swrStagesResponse.isLoading || swrCourtsResponse.isLoading) {
