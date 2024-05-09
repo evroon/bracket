@@ -91,11 +91,13 @@ export function StandingsTableForStageItem({
     .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
     .map((team, index) => (
       <Table.Tr key={team.id}>
-        <Table.Td>{index + 1}</Table.Td>
-        <Table.Td style={{ width: '8.5rem' }}>
-          <Text>{team.name}</Text>
+        <Table.Td style={{ width: '2rem' }}>{index + 1}</Table.Td>
+        <Table.Td style={{ width: '20rem' }}>
+          <Text truncate="end" lineClamp={1}>
+            {team.name}
+          </Text>
         </Table.Td>
-        <Table.Td visibleFrom="md" style={{ width: '9rem' }}>
+        <Table.Td visibleFrom="sm" style={{ width: '16rem' }}>
           <PlayerList team={team} />
         </Table.Td>
         {stageItem.type === 'SWISS' ? (
@@ -108,7 +110,7 @@ export function StandingsTableForStageItem({
             />
           </Table.Td>
         ) : (
-          <Table.Td>
+          <Table.Td style={{ minWidth: '10rem' }}>
             <WinDistribution wins={team.wins} draws={team.draws} losses={team.losses} />
           </Table.Td>
         )}
@@ -125,7 +127,7 @@ export function StandingsTableForStageItem({
           <ThSortable state={tableState} field="name">
             {t('name_table_header')}
           </ThSortable>
-          <ThNotSortable visibleFrom="md">{t('members_table_header')}</ThNotSortable>
+          <ThNotSortable visibleFrom="sm">{t('members_table_header')}</ThNotSortable>
           {stageItem.type === 'SWISS' ? (
             <ThSortable state={tableState} field="elo_score">
               {t('elo_score')}

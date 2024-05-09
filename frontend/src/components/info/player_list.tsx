@@ -1,3 +1,4 @@
+import { Text } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
@@ -23,5 +24,9 @@ export default function PlayerList({
     .map((player) => truncateString(player.name, 15))
     .sort()
     .join(', ');
-  return <span>{playerNames}</span>;
+  return (
+    <Text span truncate="end">
+      {playerNames}
+    </Text>
+  );
 }

@@ -57,7 +57,7 @@ function ScheduleRow({
                 <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
               </Grid.Col>
               <Grid.Col span="content">
-                <Stack gap="xs">
+                <Stack gap="xs" align="end">
                   <Badge variant="default" size="lg">
                     {match.start_time != null ? <Time datetime={match.start_time} /> : null}
                   </Badge>
@@ -118,7 +118,7 @@ function ScheduleColumn({
     <Droppable droppableId={`${court.id}`} direction="vertical">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div style={{ width: '22rem' }}>
+          <div style={{ width: '25rem' }}>
             <h4>{court.name}</h4>
             {rows}
             {noItemsAlert}

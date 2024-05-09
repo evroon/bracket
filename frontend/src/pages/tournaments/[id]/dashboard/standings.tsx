@@ -76,7 +76,6 @@ export default function Standings() {
     return <NotFoundTitle />;
   }
 
-
   return (
     <>
       <Head>
