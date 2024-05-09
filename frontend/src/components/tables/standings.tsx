@@ -92,10 +92,10 @@ export function StandingsTableForStageItem({
     .map((team, index) => (
       <Table.Tr key={team.id}>
         <Table.Td>{index + 1}</Table.Td>
-        <Table.Td>
+        <Table.Td style={{ width: '8.5rem' }}>
           <Text>{team.name}</Text>
         </Table.Td>
-        <Table.Td visibleFrom="md">
+        <Table.Td visibleFrom="md" style={{ width: '9rem' }}>
           <PlayerList team={team} />
         </Table.Td>
         {stageItem.type === 'SWISS' ? (

@@ -59,10 +59,11 @@ function StandingsContent({
 
 export default function Standings() {
   const tournamentResponse = getTournamentResponseByEndpointName();
+  const tournamentDataFull = tournamentResponse[0];
 
   // Hack to avoid unequal number of rendered hooks.
-  const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : -1;
+  const notFound = tournamentResponse == null || tournamentDataFull == null;
+  const tournamentId = !notFound ? tournamentDataFull.id : -1;
 
   const swrStagesResponse = getStagesLive(tournamentId);
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
@@ -75,7 +76,6 @@ export default function Standings() {
     return <NotFoundTitle />;
   }
 
-  const tournamentDataFull = tournamentResponse[0];
 
   return (
     <>
