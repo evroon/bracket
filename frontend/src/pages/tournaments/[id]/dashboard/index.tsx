@@ -127,9 +127,9 @@ export function Schedule({
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
     .sort((m1: any, m2: any) =>
-      m1.match.court?.name > m2.match.court?.name
+      m1.match.start_time > m2.match.start_time
         ? 1
-        : -1 || m1.match.start_time > m2.match.start_time
+        : -1 || m1.match.court?.name > m2.match.court?.name
           ? 1
           : -1
     );
