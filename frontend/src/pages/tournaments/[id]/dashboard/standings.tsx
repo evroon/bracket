@@ -9,7 +9,7 @@ import NotFoundTitle from '../../../404';
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContentDashboard } from '../../../../components/no_content/empty_table_info';
-import StandingsTable from '../../../../components/tables/standings';
+import { StandingsTableForStageItem } from '../../../../components/tables/standings';
 import RequestErrorAlert from '../../../../components/utils/error_alert';
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { responseIsValid } from '../../../../components/utils/util';
@@ -39,7 +39,10 @@ function StandingsContent({
         <Text size="xl" mt="md" mb="xs">
           {stageItemsLookup[stageItemId].name}
         </Text>
-        <StandingsTable teams={stageItemTeamLookup[stageItemId]} />
+        <StandingsTableForStageItem
+          teams={stageItemTeamLookup[stageItemId]}
+          stageItem={stageItemsLookup[stageItemId]}
+        />
       </>
     ));
 
@@ -81,7 +84,7 @@ export default function Standings() {
       </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" style={{ overflow: 'scroll' }} px="0rem">
-        <Container style={{ width: '100%', minWidth: '55rem' }} px="sm">
+        <Container style={{ width: '100%' }} px="sm">
           <StandingsContent
             swrTeamsResponse={swrTeamsResponse}
             swrStagesResponse={swrStagesResponse}
