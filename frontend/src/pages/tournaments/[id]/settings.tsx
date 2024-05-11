@@ -14,6 +14,7 @@ import {
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
@@ -33,7 +34,7 @@ import {
   getTournamentById,
   removeTournamentLogo,
 } from '../../../services/adapter';
-import { updateTournament } from '../../../services/tournament';
+import { deleteTournament, updateTournament } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
@@ -213,12 +214,25 @@ function GeneralTournamentForm({
           value={`${getBaseURL()}/tournaments/${getTournamentEndpoint(tournament)}/dashboard`}
         >
           {({ copied, copy }) => (
-            <Button fullWidth mt={8} color={copied ? 'teal' : 'blue'} onClick={copy}>
+            <Button fullWidth mt="sm" color={copied ? 'teal' : 'blue'} onClick={copy}>
               {copied ? t('copied_dashboard_url_button') : t('copy_dashboard_url_button')}
             </Button>
           )}
         </CopyButton>
       ) : null}
+      <Button
+        fullWidth
+        variant="outline"
+        mt="sm"
+        color="red"
+        size="sm"
+        leftSection={<MdDelete size={20} />}
+        onClick={async () => {
+          await deleteTournament(tournament.id);
+        }}
+      >
+        {t('delete_tournament_button')}
+      </Button>
     </form>
   );
 }
