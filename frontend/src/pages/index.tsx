@@ -3,8 +3,8 @@ import { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import TournamentsCardTable from '../components/card_tables/tournaments';
 import TournamentModal from '../components/modals/tournament_modal';
-import TournamentsTable from '../components/tables/tournaments';
 import { capitalize } from '../components/utils/util';
 import { checkForAuthError, getTournaments } from '../services/adapter';
 import Layout from './_layout';
@@ -24,7 +24,7 @@ export default function HomePage() {
           <TournamentModal swrTournamentsResponse={swrTournamentsResponse} />
         </Grid.Col>
       </Grid>
-      <TournamentsTable swrTournamentsResponse={swrTournamentsResponse} />
+      <TournamentsCardTable swrTournamentsResponse={swrTournamentsResponse} />
     </Layout>
   );
 }
