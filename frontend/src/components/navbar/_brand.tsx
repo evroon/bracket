@@ -8,7 +8,7 @@ export function Brand() {
       <UnstyledButton component={Link} href="/">
         <Group>
           <Image style={{ width: '38px', marginRight: '0px' }} src="/favicon.svg" />
-          <Title style={{ height: '38px' }}>Bracket</Title>
+          <Title style={{ height: '38px', marginBottom: '0.4rem' }}>Bracket</Title>
         </Group>
       </UnstyledButton>
     </Center>
