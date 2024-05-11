@@ -1,4 +1,8 @@
 .card {
+    width: 20rem;
+  @media (max-width: $mantine-breakpoint-sm) {
+      width: 100%;
+  }
   background-color: var(--mantine-color-body);
 }
 

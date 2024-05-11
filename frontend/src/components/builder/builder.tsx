@@ -82,7 +82,7 @@ function StageItemRow({
     });
 
   return (
-    <Card withBorder shadow="sm" radius="md" mb="1rem">
+    <Card withBorder shadow="sm" radius="md">
       <Card.Section withBorder inheritPadding py="xs" color="dimmed">
         <Group justify="space-between">
           <Text fw={800}>{stageItem.name}</Text>
@@ -176,7 +176,7 @@ function StageColumn({
         setOpened={setOpened}
       />
       <Group justify="space-between">
-        <h4>
+        <h4 style={{ marginBottom: '0rem' }}>
           {stage.name}
           {stage.is_active ? (
             <Badge ml="1rem" color="green">

@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Group, Image, Text, UnstyledButton } from '@mantine/core';
+import { Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React from 'react';
@@ -56,9 +56,9 @@ export default function TournamentsCardTable({
   const rows = tournaments
     .sort((t1: Tournament, t2: Tournament) => t1.name.localeCompare(t2.name))
     .map((tournament) => (
-      <Group key={tournament.id} mr="sm" mt="sm">
-        <UnstyledButton component={Link} href={`/tournaments/${tournament.id}/schedule`}>
-          <Card shadow="sm" padding="lg" radius="md" withBorder w="20rem">
+      <Group key={tournament.id} className={classes.card}>
+        <UnstyledButton component={Link} href={`/tournaments/${tournament.id}/stages`} w="100%">
+          <Card shadow="sm" padding="lg" radius="md" withBorder w="100%">
             <Card.Section>
               <TournamentLogo tournament={tournament} />
             </Card.Section>
@@ -78,7 +78,7 @@ export default function TournamentsCardTable({
                 color="blue"
                 fullWidth
                 radius="md"
-                href={`/tournaments/${tournament.id}/schedule`}
+                href={`/tournaments/${tournament.id}/stages`}
               >
                 OPEN
               </Button>
@@ -90,5 +90,9 @@ export default function TournamentsCardTable({
 
   if (rows.length < 1) return <EmptyTableInfo entity_name={t('tournaments_title')} />;
 
-  return <Grid>{rows}</Grid>;
+  return (
+    <Group gap="sm" style={{ width: '100%' }}>
+      {rows}
+    </Group>
+  );
 }
