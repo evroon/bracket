@@ -1,4 +1,4 @@
-import { Badge, Table } from '@mantine/core';
+import { Badge, Center, Pagination, Table } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -9,7 +9,7 @@ import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
 import TeamUpdateModal from '../modals/team_update_modal';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
+import { NoContent } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
@@ -20,11 +20,13 @@ export default function TeamsTable({
   swrTeamsResponse,
   teams,
   tableState,
+  teamCount,
 }: {
   tournamentData: TournamentMinimal;
   swrTeamsResponse: SWRResponse;
   teams: TeamInterface[];
   tableState: TableState;
+  teamCount: number;
 }) {
   const { t } = useTranslation();
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
@@ -70,32 +72,43 @@ export default function TeamsTable({
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t('teams_title')} />;
+  if (rows.length < 1) return <NoContent title={t('no_teams_title')} />;
 
   return (
-    <TableLayout miw={850}>
-      <Table.Thead>
-        <Table.Tr>
-          <ThSortable state={tableState} field="active">
-            {t('status')}
-          </ThSortable>
-          <ThSortable state={tableState} field="name">
-            {t('name_table_header')}
-          </ThSortable>
-          <ThNotSortable>{t('members_table_header')}</ThNotSortable>
-          <ThSortable state={tableState} field="created">
-            {t('created')}
-          </ThSortable>
-          <ThSortable state={tableState} field="swiss_score">
-            {t('swiss_score')}
-          </ThSortable>
-          <ThSortable state={tableState} field="elo_score">
-            {t('elo_score')}
-          </ThSortable>
-          <ThNotSortable>{null}</ThNotSortable>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </TableLayout>
+    <>
+      <TableLayout miw={850}>
+        <Table.Thead>
+          <Table.Tr>
+            <ThSortable state={tableState} field="active">
+              {t('status')}
+            </ThSortable>
+            <ThSortable state={tableState} field="name">
+              {t('name_table_header')}
+            </ThSortable>
+            <ThNotSortable>{t('members_table_header')}</ThNotSortable>
+            <ThSortable state={tableState} field="created">
+              {t('created')}
+            </ThSortable>
+            <ThSortable state={tableState} field="swiss_score">
+              {t('swiss_score')}
+            </ThSortable>
+            <ThSortable state={tableState} field="elo_score">
+              {t('elo_score')}
+            </ThSortable>
+            <ThNotSortable>{null}</ThNotSortable>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </TableLayout>
+
+      <Center mt="1rem">
+        <Pagination
+          value={tableState.page}
+          onChange={tableState.setPage}
+          total={1 + teamCount / tableState.pageSize}
+          size="lg"
+        />
+      </Center>
+    </>
   );
 }

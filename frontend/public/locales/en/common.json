@@ -143,6 +143,8 @@
     "next_stage_button": "Go to Next Stage",
     "no_matches_description": "First, add matches by creating stages and stage items. Then, schedule them using the button in the topright corner.",
     "no_matches_title": "No matches scheduled yet",
+    "no_players_title": "No players yet",
+    "no_teams_title": "No teams yet",
     "no_round_description": "There are no rounds in this stage item yet",
     "no_round_found_description": "Please wait for the organiser to add them.",
     "no_round_found_in_stage_description": "There are no rounds in this stage yet",
