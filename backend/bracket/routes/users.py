@@ -5,6 +5,7 @@ from heliclockter import datetime_utc, timedelta
 from starlette import status
 
 from bracket.config import config
+from bracket.logic.subscriptions import setup_demo_account
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import (
     DemoUserToRegister,
@@ -131,6 +132,7 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
     access_token = create_access_token(
         data={"user": user_created.email}, expires_delta=access_token_expires
     )
+    await setup_demo_account(assert_some(user_created.id))
     return TokenResponse(
         data=Token(
             access_token=access_token, token_type="bearer", user_id=assert_some(user_created.id)
