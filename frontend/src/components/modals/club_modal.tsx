@@ -1,4 +1,4 @@
-import { Button, Group, Modal, TextInput } from '@mantine/core';
+import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
@@ -23,13 +23,13 @@ export default function ClubModal({
   const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
   const [opened, setOpened] = useState(false);
   const modalOpenButton = is_create_form ? (
-    <Group justify="right">
-      <SaveButton
-        onClick={() => setOpened(true)}
-        leftSection={<GoPlus size={24} />}
-        title={operation_text}
-      />
-    </Group>
+    <SaveButton
+      mx="0px"
+      fullWidth
+      onClick={() => setOpened(true)}
+      leftSection={<GoPlus size={24} />}
+      title={operation_text}
+    />
   ) : (
     <Button
       color="green"

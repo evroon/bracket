@@ -19,6 +19,7 @@ import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
@@ -32,6 +33,7 @@ import {
   getBaseApiUrl,
   getClubs,
   getTournamentById,
+  handleRequestError,
   removeTournamentLogo,
 } from '../../../services/adapter';
 import { deleteTournament, updateTournament } from '../../../services/tournament';
@@ -53,6 +55,7 @@ function GeneralTournamentForm({
   swrTournamentResponse: SWRResponse;
   clubs: Club[];
 }) {
+  const router = useRouter();
   const { t } = useTranslation();
 
   const form = useForm({
@@ -228,7 +231,11 @@ function GeneralTournamentForm({
         size="sm"
         leftSection={<MdDelete size={20} />}
         onClick={async () => {
-          await deleteTournament(tournament.id);
+          await deleteTournament(tournament.id)
+            .then(async () => {
+              await router.push('/');
+            })
+            .catch((response: any) => handleRequestError(response));
         }}
       >
         {t('delete_tournament_button')}

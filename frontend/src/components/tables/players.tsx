@@ -1,4 +1,4 @@
-import { Badge, Table, Text } from '@mantine/core';
+import { Badge, Center, Pagination, Table, Text } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -10,7 +10,7 @@ import DeleteButton from '../buttons/delete';
 import { PlayerScore } from '../info/player_score';
 import { WinDistribution } from '../info/player_statistics';
 import PlayerUpdateModal from '../modals/player_update_modal';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
+import { NoContent } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
@@ -39,10 +39,12 @@ export default function PlayersTable({
   swrPlayersResponse,
   tournamentData,
   tableState,
+  playerCount,
 }: {
   swrPlayersResponse: SWRResponse;
   tournamentData: TournamentMinimal;
   tableState: TableState;
+  playerCount: number;
 }) {
   const { t } = useTranslation();
   const players: Player[] =
@@ -111,36 +113,46 @@ export default function PlayersTable({
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t('players_title')} />;
+  if (rows.length < 1) return <NoContent title={t('no_players_title')} />;
 
   return (
-    <TableLayout miw={900}>
-      <Table.Thead>
-        <Table.Tr>
-          <ThSortable state={tableState} field="active">
-            {t('status')}
-          </ThSortable>
-          <ThSortable state={tableState} field="name">
-            {t('title')}
-          </ThSortable>
-          <ThSortable state={tableState} field="created">
-            {t('created')}
-          </ThSortable>
-          <ThNotSortable>
-            <>
-              <WinDistributionTitle />
-            </>
-          </ThNotSortable>
-          <ThSortable state={tableState} field="elo_score">
-            {t('elo_score')}
-          </ThSortable>
-          <ThSortable state={tableState} field="swiss_score">
-            {t('swiss_score')}
-          </ThSortable>
-          <ThNotSortable>{null}</ThNotSortable>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-    </TableLayout>
+    <>
+      <TableLayout miw={900}>
+        <Table.Thead>
+          <Table.Tr>
+            <ThSortable state={tableState} field="active">
+              {t('status')}
+            </ThSortable>
+            <ThSortable state={tableState} field="name">
+              {t('title')}
+            </ThSortable>
+            <ThSortable state={tableState} field="created">
+              {t('created')}
+            </ThSortable>
+            <ThNotSortable>
+              <>
+                <WinDistributionTitle />
+              </>
+            </ThNotSortable>
+            <ThSortable state={tableState} field="elo_score">
+              {t('elo_score')}
+            </ThSortable>
+            <ThSortable state={tableState} field="swiss_score">
+              {t('swiss_score')}
+            </ThSortable>
+            <ThNotSortable>{null}</ThNotSortable>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </TableLayout>
+      <Center mt="1rem">
+        <Pagination
+          value={tableState.page}
+          onChange={tableState.setPage}
+          total={1 + playerCount / tableState.pageSize}
+          size="lg"
+        />
+      </Center>
+    </>
   );
 }

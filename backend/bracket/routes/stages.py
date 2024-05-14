@@ -61,7 +61,7 @@ async def delete_stage(
             detail="Stage contains stage items, please delete those first",
         )
 
-    if stage.is_active:
+    if stage.is_active and len(stage.stage_items) > 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Stage is active, please activate another stage first",

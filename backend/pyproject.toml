@@ -70,6 +70,7 @@ disable = [
     'unspecified-encoding',
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
+    'contextmanager-generator-missing-cleanup',  # Gives false positives.
 ]
 
 [tool.bandit]
