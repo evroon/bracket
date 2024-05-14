@@ -8,10 +8,9 @@ Create Date: 2024-05-14 18:52:54.234776
 
 from alembic import op
 
-
 # revision identifiers, used by Alembic.
-revision: str | None = '1961954c0320'
-down_revision: str | None = '19ddf67a4eeb'
+revision: str | None = "1961954c0320"
+down_revision: str | None = "19ddf67a4eeb"
 branch_labels: str | None = None
 depends_on: str | None = None
 
