@@ -47,7 +47,7 @@ export function CreateStageButtonLarge({
       variant="outline"
       color="green"
       size="lg"
-      style={{ marginRight: 10, width: '25%' }}
+      style={{ marginRight: 10 }}
       onClick={async () => {
         await createStage(tournament.id);
         await swrStagesResponse.mutate();

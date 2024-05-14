@@ -28,9 +28,7 @@ export async function createTournament(
 }
 
 export async function deleteTournament(tournament_id: number) {
-  return createAxios()
-    .delete(`tournaments/${tournament_id}`)
-    .catch((response: any) => handleRequestError(response));
+  return createAxios().delete(`tournaments/${tournament_id}`);
 }
 
 export async function updateTournament(
