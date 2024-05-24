@@ -834,10 +834,10 @@
   dependencies:
     clsx "^2.1.1"
 
-"@mantine/dropzone@7.9.2":
-  version "7.9.2"
-  resolved "https://registry.yarnpkg.com/@mantine/dropzone/-/dropzone-7.9.2.tgz#4ccafcce438282264b0d8a160c85baf3f383e1d5"
-  integrity sha512-+vGO04gwwcpDfb+NIjuK0IltIqy0ZeYcFTjRuMgn+Occu2/qCLjH6AyYYUEzyBtSIP/pLWYCf+vGqQqvIA/zmQ==
+"@mantine/dropzone@7.10.0":
+  version "7.10.0"
+  resolved "https://registry.yarnpkg.com/@mantine/dropzone/-/dropzone-7.10.0.tgz#54283a22d1e848619a1659e38dd29852bff135e7"
+  integrity sha512-LFJjYvz0pSfKCSiVGLgAS94AazF2npK/ZYrr+Ax9/tdd1HgbxSd3B8SaPdGm1wOwZbpp8w0auyl3fZfqnDBG8w==
   dependencies:
     react-dropzone-esm "15.0.1"
 
