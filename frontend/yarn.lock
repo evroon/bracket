@@ -870,12 +870,12 @@
     "@mantine/store" "7.10.0"
     react-transition-group "4.4.5"
 
-"@mantine/spotlight@7.9.0":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.9.0.tgz#dd0fbf1154a3cf7e0ec2b60fd31eca8a0b081168"
-  integrity sha512-sBUt5rUCBDMFQ6rvUgcMgqOUIE8Shd8YTgaLCy8izavrfjJKUNUVpJZI7NKYPPF78YfFE2TKpYtM2b+QhAsHzw==
+"@mantine/spotlight@7.10.0":
+  version "7.10.0"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.10.0.tgz#dcf65ae9d85bcf35a694e48251ec2deb3500d2c2"
+  integrity sha512-gkoBdd+GbAZ3heKxBm3MRdVwEYEgAxc3F5va3i/4X+AbyJ9ZeutCcyA2SL6++ZDNrb3bmWJG4zfLwdKI799dXg==
   dependencies:
-    "@mantine/store" "7.9.0"
+    "@mantine/store" "7.10.0"
 
 "@mantine/ssr@6.0.21":
   version "6.0.21"
@@ -889,11 +889,6 @@
   version "7.10.0"
   resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.10.0.tgz#68368c6ca5b75cfb331220e06a3235be753df055"
   integrity sha512-B6AyUX0cA97/hI9v0att7eJJnQTcUG7zBlTdWhOsptBV5UoDNrzdv3DDWIFxrA8h+nhNKGBh6Dif5HWh1+QLeA==
-
-"@mantine/store@7.9.0":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.9.0.tgz#432c8dd7738ecefb815f51773895044d67ed5739"
-  integrity sha512-FzZkjdpy3PEh9sS6WgQ4cTVl9MvUbPRQ1nov8PV3JWWMlGOJHFuHeG6IYYGMc9f1oxu38/lryiKIYk3jcRgTSQ==
 
 "@mantine/styles@6.0.21":
   version "6.0.21"
