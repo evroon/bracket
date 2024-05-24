@@ -182,7 +182,7 @@ async def get_next_stage_in_tournament(
             END
         AND stages.tournament_id = :tournament_id
         AND is_active IS FALSE
-        ORDER BY 
+        ORDER BY
             CASE WHEN :direction='next' THEN id END ASC,
             CASE WHEN NOT :direction='next' THEN id END DESC
     """
