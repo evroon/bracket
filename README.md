@@ -176,6 +176,13 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
             <br />
             <sub><b>Danny Piper</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/IzStriker">
+            <img src="https://avatars.githubusercontent.com/u/44909896?v=4" width="100;" alt="IzStriker"/>
+            <br />
+            <sub><b>IzStriker</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors,dependabot/- -end -->
