@@ -23,7 +23,7 @@
     "@hello-pangea/dnd": "^16.6.0",
     "@mantine/core": "7.6.0",
     "@mantine/dates": "7.10.0",
-    "@mantine/dropzone": "7.9.2",
+    "@mantine/dropzone": "7.10.0",
     "@mantine/form": "7.10.0",
     "@mantine/hooks": "7.6.0",
     "@mantine/next": "^6.0.21",
