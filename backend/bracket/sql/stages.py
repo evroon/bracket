@@ -158,7 +158,7 @@ async def get_next_stage_in_tournament(
             THEN (
                 id > COALESCE(
                     (
-                        SELECT id FROM stages AS t
+                        SELECT id FROM stages
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
                         ORDER BY id ASC
@@ -170,7 +170,7 @@ async def get_next_stage_in_tournament(
             ELSE (
                 id < COALESCE(
                     (
-                        SELECT id FROM stages AS t
+                        SELECT id FROM stages
                         WHERE is_active IS TRUE
                         AND stages.tournament_id = :tournament_id
                         ORDER BY id DESC
@@ -182,6 +182,9 @@ async def get_next_stage_in_tournament(
             END
         AND stages.tournament_id = :tournament_id
         AND is_active IS FALSE
+        ORDER BY
+            CASE WHEN :direction='next' THEN id END ASC,
+            CASE WHEN NOT :direction='next' THEN id END DESC
     """
     return cast(
         StageId | None,
