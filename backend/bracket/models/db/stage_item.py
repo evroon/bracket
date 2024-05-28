@@ -19,6 +19,7 @@ class StageType(EnumAutoStr):
     def supports_dynamic_number_of_rounds(self) -> bool:
         return self in [StageType.SWISS]
 
+
 class RankingMode(EnumAutoStr):
     HIGHEST_ELO = auto()
     HIGHEST_POINTS = auto()

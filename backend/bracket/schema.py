@@ -60,13 +60,7 @@ stage_items = Table(
         nullable=False,
     ),
     Column(
-        "ranking_mode",
-        Enum(
-            "HIGHEST_POINTS", 
-            "HIGHEST_ELO", 
-            name="ranking_mode"
-            ),
-        nullable=True
+        "ranking_mode", Enum("HIGHEST_POINTS", "HIGHEST_ELO", name="ranking_mode"), nullable=True
     ),
 )
 

@@ -41,9 +41,7 @@ async def determine_team_id(
 
 
 async def set_team_ids_for_match(
-    tournament_id: TournamentId,
-    match: MatchWithDetails,
-    ranking_mode: RankingMode | None
+    tournament_id: TournamentId, match: MatchWithDetails, ranking_mode: RankingMode | None
 ) -> None:
     team1_id = await determine_team_id(
         tournament_id,

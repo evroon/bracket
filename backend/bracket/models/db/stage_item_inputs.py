@@ -9,7 +9,8 @@ from bracket.utils.types import EnumAutoStr
 class RankingMode(EnumAutoStr):
     HIGHEST_ELO = auto()
     HIGHEST_POINTS = auto()
-    
+
+
 class StageItemInputBase(BaseModelORM):
     id: StageItemInputId | None = None
     slot: int
