@@ -11,3 +11,4 @@ class PlayerStatistics(BaseModel):
     losses: int = 0
     elo_score: int = START_ELO
     swiss_score: Decimal = Decimal("0.00")
+    game_points: int = 0

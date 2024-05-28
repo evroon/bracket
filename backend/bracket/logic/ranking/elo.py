@@ -3,6 +3,7 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import TypeVar
 
+from bracket.models.db.stage_item import RankingMode
 from bracket.database import database
 from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.players import START_ELO, PlayerStatistics
@@ -44,6 +45,7 @@ def set_statistics_for_player_or_team(
         stats[team_or_player_id].losses += 1
         swiss_score_diff = Decimal("0.00")
 
+    stats[team_or_player_id].game_points += match.team1_score if is_team1 else match.team2_score
     stats[team_or_player_id].swiss_score += swiss_score_diff
 
     rating_diff = (rating_team2_before - rating_team1_before) * (1 if is_team1 else -1)
@@ -105,9 +107,15 @@ def determine_ranking_for_stage_items(
 
 def determine_team_ranking_for_stage_item(
     stage_item: StageItemWithRounds,
+    ranking_mode: RankingMode | None = None,
 ) -> list[tuple[TeamId, PlayerStatistics]]:
     _, team_ranking = determine_ranking_for_stage_items([stage_item])
-    return sorted(team_ranking.items(), key=lambda x: x[1].elo_score, reverse=True)
+
+    match ranking_mode:
+        case RankingMode.HIGHEST_POINTS: 
+            return sorted(team_ranking.items(), key=lambda x: x[1].game_points, reverse=True)
+        case _:
+            return sorted(team_ranking.items(), key=lambda x: x[1].elo_score, reverse=True)
 
 
 async def recalculate_ranking_for_tournament_id(tournament_id: TournamentId) -> None:

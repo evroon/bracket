@@ -19,6 +19,10 @@ class StageType(EnumAutoStr):
     def supports_dynamic_number_of_rounds(self) -> bool:
         return self in [StageType.SWISS]
 
+class RankingMode(EnumAutoStr):
+    HIGHEST_ELO = auto()
+    HIGHEST_POINTS = auto()
+
 
 class StageItemToInsert(BaseModelORM):
     id: StageItemId | None = None
@@ -27,6 +31,7 @@ class StageItemToInsert(BaseModelORM):
     created: datetime_utc
     type: StageType
     team_count: int = Field(ge=2, le=64)
+    ranking_mode: RankingMode | None = None
 
 
 class StageItem(StageItemToInsert):
@@ -47,6 +52,7 @@ class StageItemCreateBody(BaseModelORM):
     type: StageType
     team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]
+    ranking_mode: RankingMode | None = None
 
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()

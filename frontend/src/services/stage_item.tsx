@@ -6,10 +6,17 @@ export async function createStageItem(
   stage_id: number,
   type: string,
   team_count: number,
-  inputs: StageItemInputCreateBody[]
+  inputs: StageItemInputCreateBody[],
+  ranking_mode?: string
 ) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stage_items`, { stage_id, type, team_count, inputs })
+    .post(`tournaments/${tournament_id}/stage_items`, {
+      stage_id,
+      type,
+      team_count,
+      inputs,
+      ranking_mode,
+    })
     .catch((response: any) => handleRequestError(response));
 }
 

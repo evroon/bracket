@@ -68,6 +68,7 @@ function StageItemInput({
   const { t } = useTranslation();
   return (
     <Select
+      required
       withAsterisk
       data={possibleOptions}
       label={`${t('team_title')} ${index}`}
@@ -113,7 +114,12 @@ export function CreateStageItemModal({
   const [opened, setOpened] = useState(false);
 
   const form = useForm({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
+    initialValues: {
+      type: 'ROUND_ROBIN',
+      team_count_round_robin: 4,
+      team_count_elimination: 2,
+      ranking_mode: undefined,
+    },
     validate: {
       team_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
       team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
@@ -153,6 +159,12 @@ export function CreateStageItemModal({
       })
     : {};
 
+  const referencesPreviousStage = responseIsValid(swrAvailableInputsResponse)
+    ? swrAvailableInputsResponse.data.data.every(
+        (option: StageItemInputOption) => option.winner_from_stage_item_id != null
+      )
+    : false;
+
   return (
     <>
       <Modal
@@ -173,7 +185,14 @@ export function CreateStageItemModal({
                 winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });
-            await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
+            await createStageItem(
+              tournament.id,
+              stage.id,
+              values.type,
+              teamCount,
+              inputs,
+              values.ranking_mode
+            );
             await swrStagesResponse.mutate();
             setOpened(false);
           })}
@@ -190,6 +209,20 @@ export function CreateStageItemModal({
             {...form.getInputProps('type')}
           />
           <TeamCountInput form={form} />
+          {referencesPreviousStage ? (
+            <Select
+              withAsterisk
+              label={t('rank_mode_select_label')}
+              allowDeselect={false}
+              mt={24}
+              data={[
+                { value: 'HIGHEST_ELO', label: t('highest_elo_label') },
+                { value: 'HIGHEST_POINTS', label: t('highest_points_label') },
+              ]}
+              {...form.getInputProps('ranking_mode')}
+              defaultValue="HIGHEST_ELO"
+            />
+          ) : null}
           <Divider mt={24} />
           <StageItemInputs form={form} possibleOptions={availableInputs} />
 

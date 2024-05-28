@@ -59,6 +59,7 @@ stage_items = Table(
         ),
         nullable=False,
     ),
+    Column("ranking_mode", Enum("HIGHEST_POINTS", "HIGHEST_ELO", name="ranking_mode"), nullable=True),
 )
 
 stage_item_inputs = Table(
@@ -134,6 +135,7 @@ teams = Table(
     Column("draws", Integer, nullable=False, server_default="0"),
     Column("losses", Integer, nullable=False, server_default="0"),
     Column("logo_path", String, nullable=True),
+    Column("game_points", Integer, nullable=False, server_default="0"),
 )
 
 players = Table(
@@ -149,6 +151,7 @@ players = Table(
     Column("draws", Integer, nullable=False),
     Column("losses", Integer, nullable=False),
     Column("active", Boolean, nullable=False, index=True, server_default="t"),
+    Column("game_points", Integer, nullable=False, server_default="0"),
 )
 
 users = Table(

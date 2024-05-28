@@ -1,9 +1,15 @@
+from enum import auto
 from pydantic import BaseModel, Field
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import MatchId, StageItemId, StageItemInputId, TeamId, TournamentId
+from bracket.utils.types import EnumAutoStr
 
 
+class RankingMode(EnumAutoStr):
+    HIGHEST_ELO = auto()
+    HIGHEST_POINTS = auto()
+    
 class StageItemInputBase(BaseModelORM):
     id: StageItemInputId | None = None
     slot: int
@@ -16,6 +22,7 @@ class StageItemInputGeneric(BaseModel):
     winner_from_stage_item_id: StageItemId | None = None
     winner_position: int | None = None
     winner_from_match_id: MatchId | None = None
+    ranking_mode: RankingMode = RankingMode.HIGHEST_ELO
 
     def __hash__(self) -> int:
         return (
