@@ -1,8 +1,8 @@
-from bracket.models.db.stage_item import RankingMode
 from bracket.logic.ranking.elo import (
     determine_team_ranking_for_stage_item,
 )
 from bracket.models.db.match import MatchWithDetails
+from bracket.models.db.stage_item import RankingMode
 from bracket.sql.matches import sql_get_match, sql_update_team_ids_for_match
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details

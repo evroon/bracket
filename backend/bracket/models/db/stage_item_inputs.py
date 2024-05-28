@@ -1,4 +1,5 @@
 from enum import auto
+
 from pydantic import BaseModel, Field
 
 from bracket.models.db.shared import BaseModelORM

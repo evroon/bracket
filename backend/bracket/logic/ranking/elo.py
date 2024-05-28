@@ -3,10 +3,10 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import TypeVar
 
-from bracket.models.db.stage_item import RankingMode
 from bracket.database import database
 from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.players import START_ELO, PlayerStatistics
+from bracket.models.db.stage_item import RankingMode
 from bracket.models.db.util import StageItemWithRounds
 from bracket.schema import players, teams
 from bracket.sql.players import get_all_players_in_tournament, update_player_stats
