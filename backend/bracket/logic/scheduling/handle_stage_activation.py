@@ -40,7 +40,11 @@ async def determine_team_id(
     raise ValueError("Unexpected match type")
 
 
-async def set_team_ids_for_match(tournament_id: TournamentId, match: MatchWithDetails, ranking_mode: RankingMode | None) -> None:
+async def set_team_ids_for_match(
+    tournament_id: TournamentId,
+    match: MatchWithDetails,
+    ranking_mode: RankingMode | None
+) -> None:
     team1_id = await determine_team_id(
         tournament_id,
         match.team1_winner_from_stage_item_id,

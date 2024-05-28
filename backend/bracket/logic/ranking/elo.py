@@ -112,7 +112,7 @@ def determine_team_ranking_for_stage_item(
     _, team_ranking = determine_ranking_for_stage_items([stage_item])
 
     match ranking_mode:
-        case RankingMode.HIGHEST_POINTS: 
+        case RankingMode.HIGHEST_POINTS:
             return sorted(team_ranking.items(), key=lambda x: x[1].game_points, reverse=True)
         case _:
             return sorted(team_ranking.items(), key=lambda x: x[1].elo_score, reverse=True)

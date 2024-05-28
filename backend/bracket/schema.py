@@ -65,7 +65,7 @@ stage_items = Table(
             "HIGHEST_POINTS", 
             "HIGHEST_ELO", 
             name="ranking_mode"
-            ), 
+            ),
         nullable=True
     ),
 )
