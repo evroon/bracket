@@ -82,10 +82,10 @@ def test_elo_calculation() -> None:
     )
     player_stats, team_stats = determine_ranking_for_stage_items([stage_item])
     assert player_stats == {
-        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
-        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
+        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3),
+        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00"),game_points=4),
     }
     assert team_stats == {
-        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
-        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
+        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3),
+        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00"), game_points=4),
     }
