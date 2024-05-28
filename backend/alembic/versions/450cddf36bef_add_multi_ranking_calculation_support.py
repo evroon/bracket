@@ -21,7 +21,6 @@ depends_on: str | None = None
 ranking_mode = ENUM("HIGHEST_ELO", "HIGHEST_POINTS", name="ranking_mode", create_type=True)
 
 def upgrade() -> None:
-    print("upgrade")
     ranking_mode.create(op.get_bind(), checkfirst=False)
     op.add_column(
         "stage_items", sa.Column("ranking_mode", ranking_mode, server_default=None, nullable=True)
@@ -35,7 +34,6 @@ def upgrade() -> None:
     
 
 def downgrade() -> None:
-    print("downgrade")
     op.drop_column("stage_items", "ranking_mode")
     ranking_mode.drop(op.get_bind(), checkfirst=False) 
     op.drop_column("players", "game_points")
