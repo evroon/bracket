@@ -6,7 +6,7 @@ from bracket.logic.ranking.elo import (
 )
 from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.players import PlayerStatistics
-from bracket.models.db.stage_item import RankingMode
+from bracket.models.db.stage_item import RankingMode, StageType
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.utils.dummy_records import (
@@ -15,7 +15,7 @@ from bracket.utils.dummy_records import (
     DUMMY_PLAYER2,
     DUMMY_STAGE_ITEM1,
 )
-from bracket.utils.id_types import RoundId, StageItemId, TeamId, TournamentId
+from bracket.utils.id_types import RoundId, StageId, StageItemId, TeamId, TournamentId
 
 
 def test_elo_calculation() -> None:
@@ -84,30 +84,23 @@ def test_elo_calculation() -> None:
     )
     player_stats, team_stats = determine_ranking_for_stage_items([stage_item])
     assert player_stats == {
-        1: PlayerStatistics(
-            losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3
-        ),
-        2: PlayerStatistics(
-            wins=1, elo_score=1216, swiss_score=Decimal("1.00"), game_points=4
-        ),
+        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3),
+        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00"), game_points=4),
     }
     assert team_stats == {
-        3: PlayerStatistics(
-            losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3
-        ),
-        4: PlayerStatistics(
-            wins=1, elo_score=1216, swiss_score=Decimal("1.00"), game_points=4
-        ),
+        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00"), game_points=3),
+        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00"), game_points=4),
     }
 
 
-def test_ranking_by_points():
+def test_ranking_by_points() -> None:
     stage_item = StageItemWithRounds(
         id=StageItemId(1),
-        stage_id=1,
+        type_name="Single Elimination",
+        stage_id=StageId(1),
         name="Some stage item",
         team_count=2,
-        type="SINGLE_ELIMINATION",
+        type=StageType.SINGLE_ELIMINATION,
         inputs=[],
         created=DUMMY_MOCK_TIME,
         rounds=[
@@ -170,10 +163,7 @@ def test_ranking_by_points():
             )
         ],
     )
-    ranking = determine_team_ranking_for_stage_item(
-        stage_item, RankingMode.HIGHEST_POINTS
-    )
-    print(ranking)
+    ranking = determine_team_ranking_for_stage_item(stage_item, RankingMode.HIGHEST_POINTS)
     assert ranking == [
         (
             4,
