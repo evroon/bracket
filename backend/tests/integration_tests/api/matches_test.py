@@ -277,7 +277,7 @@ async def test_upcoming_matches_endpoint(
                         "draws": 0,
                         "losses": 0,
                         "logo_path": None,
-                        "game_points": 0,                        
+                        "game_points": 0,
                     },
                     "team2": {
                         "id": team2_inserted.id,
