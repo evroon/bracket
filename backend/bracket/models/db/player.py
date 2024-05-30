@@ -18,6 +18,7 @@ class Player(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    game_points: int = 0
 
     def __hash__(self) -> int:
         return self.id if self.id is not None else int(self.created.timestamp())
@@ -41,3 +42,4 @@ class PlayerToInsert(PlayerBody):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    game_points: int = 0

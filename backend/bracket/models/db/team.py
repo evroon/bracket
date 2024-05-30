@@ -39,6 +39,7 @@ class TeamWithPlayers(BaseModel):
     losses: int = 0
     name: str
     logo_path: str | None = None
+    game_points: int = 0
 
     @property
     def player_ids(self) -> list[PlayerId]:
@@ -100,3 +101,4 @@ class TeamToInsert(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    game_points: int = 0

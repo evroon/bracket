@@ -12,4 +12,5 @@ export interface TeamInterface {
   draws: number;
   losses: number;
   logo_path: string;
+  game_points: number;
 }

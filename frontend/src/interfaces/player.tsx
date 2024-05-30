@@ -9,4 +9,5 @@ export interface Player {
   wins: number;
   draws: number;
   losses: number;
+  game_points: number;
 }
