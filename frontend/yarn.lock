@@ -815,17 +815,17 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mantine/core@7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-7.6.0.tgz#e544b0a1efc6250be98aa66f37e61c647d3e08d9"
-  integrity sha512-TZNoOqk13r4KDO0MuvyKUqI9Z57QilEk+LAKO4bSWoCvIfvPijv+QuSVoUlqk8Y0aI1OBUbMAvUMkTOBDtA5Tw==
+"@mantine/core@7.10.1":
+  version "7.10.1"
+  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-7.10.1.tgz#c90a2aed1e47ece38f745db11c1cff56fd5719b9"
+  integrity sha512-l9ypojKN3PjwO1CSLIsqxi7mA25+7w+xc71Q+JuCCREI0tuGwkZsKbIOpuTATIJOjPh8ycLiW7QxX1LYsRTq6w==
   dependencies:
     "@floating-ui/react" "^0.26.9"
-    clsx "2.1.0"
+    clsx "^2.1.1"
     react-number-format "^5.3.1"
     react-remove-scroll "^2.5.7"
     react-textarea-autosize "8.5.3"
-    type-fest "^3.13.1"
+    type-fest "^4.12.0"
 
 "@mantine/dates@7.10.0":
   version "7.10.0"
@@ -1969,11 +1969,6 @@ clsx@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
-
-clsx@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.0.tgz#e851283bcb5c80ee7608db18487433f7b23f77cb"
-  integrity sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==
 
 clsx@^2.0.0, clsx@^2.1.1:
   version "2.1.1"
@@ -5797,10 +5792,10 @@ type-fest@^0.21.3:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.21.3.tgz#d260a24b0198436e133fa26a524a6d65fa3b2e37"
   integrity sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==
 
-type-fest@^3.13.1:
-  version "3.13.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.13.1.tgz#bb744c1f0678bea7543a2d1ec24e83e68e8c8706"
-  integrity sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==
+type-fest@^4.12.0:
+  version "4.18.3"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.18.3.tgz#5249f96e7c2c3f0f1561625f54050e343f1c8f68"
+  integrity sha512-Q08/0IrpvM+NMY9PA2rti9Jb+JejTddwmwmVQGskAlhtcrw1wsRzoR6ode6mR+OAabNa75w/dxedSUY2mlphaQ==
 
 typed-array-buffer@^1.0.0:
   version "1.0.0"
