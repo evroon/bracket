@@ -106,12 +106,13 @@ export default function MatchUpdateModal({
                     disabled={date === null}
                     onClick={async () => {
                       const computedMargin = Math.floor(
-                        (date!.getTime() +
-                          (previousMatch.custom_duration_minutes ??
-                            previousMatch.duration_minutes) *
+                        (date!.getTime() -
+                          parseISO(previousMatch.start_time).getTime() +
+                          (previousMatch.custom_duration_minutes === null
+                            ? previousMatch.duration_minutes
+                            : previousMatch.custom_duration_minutes) *
                             60 *
-                            1000 -
-                          parseISO(previousMatch.start_time).getTime()) /
+                            1000) /
                           60 /
                           1000
                       );

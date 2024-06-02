@@ -64,7 +64,7 @@ export default function CommonCustomTimeMatchesForm<
       <Grid align="center">
         <Grid.Col span={{ sm: 8 }}>
           <NumberInput
-            label={t('custom_match_margin_label')}
+            label={t('custom_match_duration_label')}
             disabled={!customDurationEnabled}
             rightSection={<Text>{t('minutes')}</Text>}
             placeholder={`${match.duration_minutes}`}
@@ -112,12 +112,6 @@ export default function CommonCustomTimeMatchesForm<
       </Grid>
 
       <Input.Wrapper label={t('next_match_time_label')} mt="sm">
-        {/* <Input component={BareDateTime}
-            datetime={fromUnixTime(
-              getUnixTime(parseISO(match.start_time)) + matchDuration * 60 + matchMargin * 60
-            )}
-            formatStr="d LLLL yyyy HH:mm"
-          /> */}
         <Input
           component="time"
           dateTime={endDatetime.toISOString()}

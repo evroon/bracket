@@ -132,7 +132,13 @@ export default function MatchModal({
           />
           <Divider mt="lg" />
 
-          <CommonCustomTimeMatchesForm customDurationEnabled={customDurationEnabled} customMarginEnabled={customMarginEnabled} form={form} match={match} setCustomDurationEnabled={setCustomDurationEnabled} setCustomMarginEnabled={setCustomMarginEnabled} />
+          <CommonCustomTimeMatchesForm customDurationEnabled={customDurationEnabled} customMarginEnabled={customMarginEnabled} form={form} match={match} setCustomDurationEnabled={(val) => {
+            setCustomDurationEnabled(val);
+            if (val === false) form.setFieldValue('custom_duration_minutes', null);
+          }} setCustomMarginEnabled={(val) => {
+            setCustomMarginEnabled(val);
+            if (val === false) form.setFieldValue('custom_margin_minutes', null);
+          }} />
 
           <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
             {t('save_button')}
