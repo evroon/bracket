@@ -81,6 +81,6 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.3.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.5.2"
   }
 }
