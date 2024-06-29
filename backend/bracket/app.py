@@ -114,15 +114,14 @@ app = FastAPI(
     },
 )
 
-if config.is_cors_enabled():
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=config.cors_origins,
-        allow_origin_regex=config.cors_origin_regex,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=config.cors_origins,
+    allow_origin_regex=config.cors_origin_regex,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.middleware("http")
