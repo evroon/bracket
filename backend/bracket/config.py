@@ -41,6 +41,9 @@ class Config(BaseSettings):
     pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
     sentry_dsn: str | None = None
 
+    def is_cors_enabled(self) -> bool:
+        return self.cors_origins != "*"
+
 
 class CIConfig(Config):
     model_config = SettingsConfigDict(env_file="ci.env")
