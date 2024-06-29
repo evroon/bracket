@@ -13,6 +13,7 @@ from bracket.models.db.court import Court
 from bracket.models.db.match import Match, MatchBody
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
+from bracket.models.db.ranking import RankingInsertable
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.stage_item import StageItem, StageItemCreateBody
@@ -31,6 +32,7 @@ from bracket.schema import (
     metadata,
     players,
     players_x_teams,
+    rankings,
     rounds,
     stage_items,
     stages,
@@ -59,6 +61,7 @@ from bracket.utils.dummy_records import (
     DUMMY_PLAYER7,
     DUMMY_PLAYER8,
     DUMMY_PLAYER_X_TEAM,
+    DUMMY_RANKING1,
     DUMMY_STAGE1,
     DUMMY_STAGE2,
     DUMMY_STAGE_ITEM1,
@@ -76,6 +79,7 @@ from bracket.utils.id_types import (
     CourtId,
     PlayerId,
     PlayerXTeamId,
+    RankingId,
     StageId,
     TeamId,
     TournamentId,
@@ -150,6 +154,7 @@ async def sql_create_dev_db() -> UserId:
         Tournament: tournaments,
         Court: courts,
         StageItem: stage_items,
+        RankingInsertable: rankings,
     }
 
     async def insert_dummy(
@@ -179,6 +184,8 @@ async def sql_create_dev_db() -> UserId:
     tournament_id_1 = await insert_dummy(DUMMY_TOURNAMENT, TournamentId, {"club_id": club_id_1})
     stage_id_1 = await insert_dummy(DUMMY_STAGE1, StageId, {"tournament_id": tournament_id_1})
     stage_id_2 = await insert_dummy(DUMMY_STAGE2, StageId, {"tournament_id": tournament_id_1})
+
+    await insert_dummy(DUMMY_RANKING1, RankingId, {"tournament_id": tournament_id_1})
 
     team_id_1 = await insert_dummy(DUMMY_TEAM1, TeamId, {"tournament_id": tournament_id_1})
     team_id_2 = await insert_dummy(DUMMY_TEAM2, TeamId, {"tournament_id": tournament_id_1})

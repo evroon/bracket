@@ -6,6 +6,7 @@ from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match, SuggestedMatch
 from bracket.models.db.player import Player
+from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item_inputs import (
     StageItemInputOptionFinal,
     StageItemInputOptionTentative,
@@ -94,6 +95,10 @@ class CourtsResponse(DataResponse[list[Court]]):
 
 
 class SingleCourtResponse(DataResponse[Court]):
+    pass
+
+
+class RankingsResponse(DataResponse[list[Ranking]]):
     pass
 
 

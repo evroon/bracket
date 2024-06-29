@@ -171,6 +171,10 @@ export function getStagesLive(tournament_id: number): SWRResponse {
   );
 }
 
+export function getRankings(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/rankings`, fetcher);
+}
+
 export function getCourts(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }

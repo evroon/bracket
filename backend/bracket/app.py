@@ -20,6 +20,7 @@ from bracket.routes import (
     internals,
     matches,
     players,
+    rankings,
     rounds,
     stage_items,
     stages,
@@ -58,12 +59,13 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 routers = {
-    "Internals": internals.router,
     "Auth": auth.router,
     "Clubs": clubs.router,
     "Courts": courts.router,
+    "Internals": internals.router,
     "Matches": matches.router,
     "Players": players.router,
+    "Rankings": rankings.router,
     "Rounds": rounds.router,
     "Stage Items": stage_items.router,
     "Stages": stages.router,

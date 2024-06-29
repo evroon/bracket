@@ -10,6 +10,7 @@ from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.tournaments import get_tournament_logo_path
+from bracket.models.db.ranking import RankingCreateBody
 from bracket.models.db.tournament import (
     TournamentBody,
     TournamentUpdateBody,
@@ -23,6 +24,7 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
+from bracket.sql.rankings import sql_create_ranking
 from bracket.sql.tournaments import (
     sql_create_tournament,
     sql_delete_tournament,
@@ -139,10 +141,14 @@ async def create_tournament(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    try:
-        await sql_create_tournament(tournament_to_insert)
-    except asyncpg.exceptions.UniqueViolationError as exc:
-        check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
+    async with database.transaction():
+        try:
+            tournament_id = await sql_create_tournament(tournament_to_insert)
+        except asyncpg.exceptions.UniqueViolationError as exc:
+            check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
+
+        ranking = RankingCreateBody()
+        await sql_create_ranking(tournament_id, ranking, position=0)
 
     return SuccessResponse()
 

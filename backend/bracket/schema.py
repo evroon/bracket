@@ -204,3 +204,15 @@ courts = Table(
     Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
     Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
 )
+
+rankings = Table(
+    "rankings",
+    metadata,
+    Column("id", BigInteger, primary_key=True, index=True),
+    Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
+    Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
+    Column("position", Integer, nullable=False),
+    Column("win_points", Float, nullable=False),
+    Column("draw_points", Float, nullable=False),
+    Column("loss_points", Float, nullable=False),
+)
