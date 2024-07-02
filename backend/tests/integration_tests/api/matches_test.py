@@ -255,6 +255,7 @@ async def test_upcoming_matches_endpoint(
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
+                                "game_points": 0,
                             },
                             {
                                 "id": player_inserted_3.id,
@@ -267,6 +268,7 @@ async def test_upcoming_matches_endpoint(
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
+                                "game_points": 0,
                             },
                         ],
                         "swiss_score": "0.0",
@@ -275,6 +277,7 @@ async def test_upcoming_matches_endpoint(
                         "draws": 0,
                         "losses": 0,
                         "logo_path": None,
+                        "game_points": 0,
                     },
                     "team2": {
                         "id": team2_inserted.id,
@@ -291,6 +294,7 @@ async def test_upcoming_matches_endpoint(
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
+                                "game_points": 0,
                             },
                             {
                                 "id": player_inserted_4.id,
@@ -303,6 +307,7 @@ async def test_upcoming_matches_endpoint(
                                 "wins": 0,
                                 "draws": 0,
                                 "losses": 0,
+                                "game_points": 0,
                             },
                         ],
                         "swiss_score": "0.0",
@@ -311,6 +316,7 @@ async def test_upcoming_matches_endpoint(
                         "draws": 0,
                         "losses": 0,
                         "logo_path": None,
+                        "game_points": 0,
                     },
                     "elo_diff": "200",
                     "swiss_diff": "0",

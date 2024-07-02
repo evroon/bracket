@@ -83,6 +83,7 @@ export function StandingsTableForStageItem({
 
   const minELOScore = Math.min(...teams.map((team) => team.elo_score));
   const maxELOScore = Math.max(...teams.map((team) => team.elo_score));
+  const maxGamePoints = Math.max(...teams.map((team) => team.game_points));
 
   const rows = teams
     .sort((p1: TeamInterface, p2: TeamInterface) => (p1.name < p2.name ? 1 : -1))
@@ -114,6 +115,14 @@ export function StandingsTableForStageItem({
             <WinDistribution wins={team.wins} draws={team.draws} losses={team.losses} />
           </Table.Td>
         )}
+        <Table.Td style={{ width: '20rem' }}>
+          <PlayerScore
+            score={team.game_points}
+            min_score={0}
+            max_score={maxGamePoints}
+            decimals={0}
+          />
+        </Table.Td>
       </Table.Tr>
     ));
 
@@ -137,6 +146,9 @@ export function StandingsTableForStageItem({
               <WinDistributionTitle />
             </ThNotSortable>
           )}
+          <ThSortable state={tableState} field="game_points">
+            {t('game_points')}
+          </ThSortable>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>

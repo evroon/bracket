@@ -118,7 +118,8 @@ async def update_team_stats(
             draws = :draws,
             losses = :losses,
             elo_score = :elo_score,
-            swiss_score = :swiss_score
+            swiss_score = :swiss_score,
+            game_points = :game_points
         WHERE teams.tournament_id = :tournament_id
         AND teams.id = :team_id
         """
@@ -132,6 +133,7 @@ async def update_team_stats(
             "losses": team_statistics.losses,
             "elo_score": team_statistics.elo_score,
             "swiss_score": float(team_statistics.swiss_score),
+            "game_points": team_statistics.game_points,
         },
     )
 

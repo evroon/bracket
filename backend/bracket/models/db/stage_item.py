@@ -20,6 +20,11 @@ class StageType(EnumAutoStr):
         return self in [StageType.SWISS]
 
 
+class RankingMode(EnumAutoStr):
+    HIGHEST_ELO = auto()
+    HIGHEST_POINTS = auto()
+
+
 class StageItemToInsert(BaseModelORM):
     id: StageItemId | None = None
     stage_id: StageId
@@ -27,6 +32,7 @@ class StageItemToInsert(BaseModelORM):
     created: datetime_utc
     type: StageType
     team_count: int = Field(ge=2, le=64)
+    ranking_mode: RankingMode | None = None
 
 
 class StageItem(StageItemToInsert):
@@ -47,6 +53,7 @@ class StageItemCreateBody(BaseModelORM):
     type: StageType
     team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]
+    ranking_mode: RankingMode | None = None
 
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()
