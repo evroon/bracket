@@ -1,13 +1,13 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
+import { BiEditAlt } from 'react-icons/bi';
 import MatchModal from '../../../components/modals/match_modal';
-import MatchUpdateModal from '../../../components/modals/match_update_modal';
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { DateTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
@@ -71,12 +71,15 @@ function ScheduleRow({
                     <Badge variant="default" size="lg">
                       {match.start_time != null ? <DateTime datetime={match.start_time} /> : null}
                     </Badge>
-                    <MatchUpdateModal
+                    {/* <MatchUpdateModal
                       tournament_id={tournamentData.id}
                       match={match}
                       swrMatchResponse={swrStagesResponse}
                       previousMatch={previousMatch}
-                    />
+                    /> */}
+                    <ActionIcon color="green" radius="lg" size={26}>
+                      <BiEditAlt size={20} />
+                    </ActionIcon>
                   </Group>
                   <Badge
                     color={stringToColour(`${matchesLookup[match.id].stageItem.id}`)}

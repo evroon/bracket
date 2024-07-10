@@ -1,9 +1,10 @@
-import { Button, Divider, Modal, NumberInput } from '@mantine/core';
+import { Button, Center, Checkbox, Divider, Grid, Input, Modal, NumberInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'next-i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SWRResponse } from 'swr';
 
+import { format, fromUnixTime, getUnixTime, parseISO } from 'date-fns';
 import {
   MatchBodyInterface,
   MatchInterface,
@@ -14,7 +15,6 @@ import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
-import CommonCustomTimeMatchesForm from '../forms/common_custom_times_matches';
 
 function MatchDeleteButton({
   tournamentData,
@@ -91,6 +91,24 @@ function MatchModalForm({
     match.custom_margin_minutes != null
   );
 
+  const matchDuration = useMemo(() => {
+    const value = customDurationEnabled
+      ? form.values.custom_duration_minutes
+      : match.duration_minutes;
+    return value ?? 0;
+  }, [customDurationEnabled, form.values.custom_duration_minutes, match.duration_minutes]);
+
+  const matchMargin = useMemo(() => {
+    const value = customMarginEnabled ? form.values.custom_margin_minutes : match.margin_minutes;
+    return value ?? 0;
+  }, [customMarginEnabled, form.values.custom_margin_minutes, match.margin_minutes]);
+
+  const endDatetime = useMemo(
+    () =>
+      fromUnixTime(getUnixTime(parseISO(match.start_time)) + matchDuration * 60 + matchMargin * 60),
+    [match.start_time, matchDuration, matchMargin]
+  );
+
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
 
@@ -131,14 +149,69 @@ function MatchModalForm({
         />
         <Divider mt="lg" />
 
-        <CommonCustomTimeMatchesForm
+        {/* <CommonCustomTimeMatchesForm
           customDurationEnabled={customDurationEnabled}
           customMarginEnabled={customMarginEnabled}
           form={form}
           match={match}
           setCustomDurationEnabled={setCustomDurationEnabled}
           setCustomMarginEnabled={setCustomMarginEnabled}
-        />
+        /> */}
+        <Grid align="center">
+          <Grid.Col span={{ sm: 8 }}>
+            <NumberInput
+              label={t('custom_match_duration_label')}
+              disabled={!customDurationEnabled}
+              rightSection={<Text>{t('minutes')}</Text>}
+              placeholder={`${match.duration_minutes}`}
+              rightSectionWidth={92}
+              {...form.getInputProps('custom_duration_minutes')}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ sm: 4 }}>
+            <Input.Label />
+            <Center>
+              <Checkbox
+                checked={customDurationEnabled}
+                label={t('customize_checkbox_label')}
+                onChange={(event) => {
+                  setCustomDurationEnabled(event.currentTarget.checked);
+                }}
+              />
+            </Center>
+          </Grid.Col>
+        </Grid>
+
+        <Grid align="center">
+          <Grid.Col span={{ sm: 8 }}>
+            <NumberInput
+              label={t('custom_match_margin_label')}
+              disabled={!customMarginEnabled}
+              placeholder={`${match.margin_minutes}`}
+              rightSection={<Text>{t('minutes')}</Text>}
+              rightSectionWidth={92}
+              {...form.getInputProps('custom_margin_minutes')}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ sm: 4 }}>
+            <Input.Label />
+            <Center>
+              <Checkbox
+                checked={customMarginEnabled}
+                label={t('customize_checkbox_label')}
+                onChange={(event) => {
+                  setCustomMarginEnabled(event.currentTarget.checked);
+                }}
+              />
+            </Center>
+          </Grid.Col>
+        </Grid>
+
+        <Input.Wrapper label={t('next_match_time_label')} mt="sm">
+          <Input component="time" dateTime={endDatetime.toISOString()}>
+            {format(endDatetime, 'd LLLL yyyy HH:mm')}
+          </Input>
+        </Input.Wrapper>
 
         <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
           {t('save_button')}
