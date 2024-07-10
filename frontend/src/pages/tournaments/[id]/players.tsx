@@ -1,4 +1,4 @@
-import { Center, Grid, Pagination, Title } from '@mantine/core';
+import { Grid, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
@@ -33,18 +33,11 @@ export default function Players() {
         </Grid.Col>
       </Grid>
       <PlayersTable
+        playerCount={playerCount}
         swrPlayersResponse={swrPlayersResponse}
         tournamentData={tournamentData}
         tableState={tableState}
       />
-      <Center mt="1rem">
-        <Pagination
-          value={tableState.page}
-          onChange={tableState.setPage}
-          total={1 + playerCount / tableState.pageSize}
-          size="lg"
-        />
-      </Center>
     </TournamentLayout>
   );
 }

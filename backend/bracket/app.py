@@ -46,7 +46,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     if environment is Environment.PRODUCTION:
         start_cronjobs()
 
-    if environment is Environment.PRODUCTION and config.cors_origins == "*":
+    if environment is Environment.PRODUCTION and not config.is_cors_enabled():
         logger.warning("It's advised to set the `CORS_ORIGINS` environment variable in production")
 
     yield

@@ -1,4 +1,4 @@
-import { Center, Grid, Pagination, Select, Title } from '@mantine/core';
+import { Grid, Select, Title } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
@@ -95,15 +95,8 @@ export default function Teams() {
         tournamentData={tournamentData}
         teams={teams}
         tableState={tableState}
+        teamCount={teamCount}
       />
-      <Center mt="1rem">
-        <Pagination
-          value={tableState.page}
-          onChange={tableState.setPage}
-          total={1 + teamCount / tableState.pageSize}
-          size="lg"
-        />
-      </Center>
     </TournamentLayout>
   );
 }

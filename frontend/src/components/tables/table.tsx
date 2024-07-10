@@ -87,9 +87,15 @@ export function ThSortable({ children, field, state }: ThProps) {
   );
 }
 
-export function ThNotSortable({ children }: { children: React.ReactNode }) {
+export function ThNotSortable({
+  children,
+  visibleFrom,
+}: {
+  children: React.ReactNode;
+  visibleFrom?: string;
+}) {
   return (
-    <Table.Th className={classes.th}>
+    <Table.Th className={classes.th} visibleFrom={visibleFrom}>
       <Group justify="apart" ml="20px">
         <Text fw={800} size="sm">
           {children}

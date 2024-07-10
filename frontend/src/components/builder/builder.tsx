@@ -1,8 +1,10 @@
-import { ActionIcon, Badge, Card, Group, Menu, Stack, Text, rem } from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Menu, Stack, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 import React, { useState } from 'react';
+import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
@@ -80,7 +82,7 @@ function StageItemRow({
     });
 
   return (
-    <Card withBorder shadow="sm" radius="md" mb="1rem">
+    <Card withBorder shadow="sm" radius="md">
       <Card.Section withBorder inheritPadding py="xs" color="dimmed">
         <Group justify="space-between">
           <Text fw={800}>{stageItem.name}</Text>
@@ -94,21 +96,30 @@ function StageItemRow({
           <Menu withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
               <ActionIcon variant="transparent" color="gray">
-                <IconDots size="1rem" />
+                <IconDots size="1.5rem" />
               </ActionIcon>
             </Menu.Target>
 
             <Menu.Dropdown>
               <Menu.Item
-                leftSection={<IconPencil size={rem(14)} />}
+                leftSection={<IconPencil size="1.5rem" />}
                 onClick={() => {
                   setOpened(true);
                 }}
               >
                 {t('edit_name_button')}
               </Menu.Item>
+              {stageItem.type === 'SWISS' ? (
+                <Menu.Item
+                  leftSection={<BiSolidWrench size="1.5rem" />}
+                  component={Link}
+                  href={`/tournaments/${tournament.id}/swiss/${stageItem.id}`}
+                >
+                  {t('handle_swiss_system')}
+                </Menu.Item>
+              ) : null}
               <Menu.Item
-                leftSection={<IconTrash size={rem(14)} />}
+                leftSection={<IconTrash size="1.5rem" />}
                 onClick={async () => {
                   await deleteStageItem(tournament.id, stageItem.id);
                   await swrStagesResponse.mutate();
@@ -165,7 +176,7 @@ function StageColumn({
         setOpened={setOpened}
       />
       <Group justify="space-between">
-        <h4>
+        <h4 style={{ marginBottom: '0rem' }}>
           {stage.name}
           {stage.is_active ? (
             <Badge ml="1rem" color="green">
@@ -182,7 +193,7 @@ function StageColumn({
 
           <Menu.Dropdown>
             <Menu.Item
-              leftSection={<IconPencil size={rem(14)} />}
+              leftSection={<IconPencil size="1.5rem" />}
               onClick={() => {
                 setOpened(true);
               }}
@@ -190,7 +201,7 @@ function StageColumn({
               {t('edit_name_button')}
             </Menu.Item>
             <Menu.Item
-              leftSection={<IconTrash size={rem(14)} />}
+              leftSection={<IconTrash size="1.5rem" />}
               onClick={async () => {
                 await deleteStage(tournament.id, stage.id);
                 await swrStagesResponse.mutate();

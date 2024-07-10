@@ -1,18 +1,7 @@
-import { Container, Text, Button, Group, Center } from "@mantine/core";
-import { GithubIcon } from "@mantinex/dev-icons";
+import { Button, Center, Container, Group, Text } from "@mantine/core";
 import classes from "./styles.module.css";
 import React from "react";
-import {
-  IconBracketsContainStart,
-  IconLibrary,
-  IconLivePhoto,
-  IconLiveView,
-  IconPlayCard,
-  IconPlayerPlay,
-  IconRocket,
-  IconRun,
-  IconStar,
-} from "@tabler/icons-react";
+import { IconLibrary, IconRocket } from "@tabler/icons-react";
 
 export function HeroTitle() {
   return (

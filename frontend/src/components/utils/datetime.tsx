@@ -21,3 +21,7 @@ export function Time({ datetime }: { datetime: string }) {
   const date = parseISO(datetime);
   return <BareDateTime datetime={date} formatStr="HH:mm" datetimeAttr={datetime} />;
 }
+
+export function formatTime(datetime: string) {
+  return format(parseISO(datetime), 'HH:mm');
+}

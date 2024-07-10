@@ -2,6 +2,7 @@ import { Center, Divider, Group, Tooltip, UnstyledButton } from '@mantine/core';
 import {
   Icon,
   IconBook,
+  IconBrackets,
   IconBrandGithub,
   IconBrowser,
   IconCalendar,
@@ -9,13 +10,13 @@ import {
   IconHome,
   IconSettings,
   IconSoccerField,
-  IconTournament,
   IconTrophy,
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
-import { NextRouter, useRouter } from 'next/router';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { getBaseApiUrl } from '../../services/adapter';
@@ -29,22 +30,15 @@ interface MainLinkProps {
   links?: MainLinkProps[] | null;
 }
 
-function MainLinkMobile({
-  router,
-  item,
-  pathName,
-}: {
-  router: NextRouter;
-  item: MainLinkProps;
-  pathName: String;
-}) {
+function MainLinkMobile({ item, pathName }: { item: MainLinkProps; pathName: String }) {
   return (
     <>
       <UnstyledButton
         hiddenFrom="sm"
+        component={Link}
+        href={item.link}
         className={classes.mobileLink}
         style={{ width: '100%' }}
-        onClick={() => router.push(item.link)}
         data-active={pathName === item.link || undefined}
       >
         <Group className={classes.mobileLinkGroup}>
@@ -57,28 +51,21 @@ function MainLinkMobile({
   );
 }
 
-function MainLink({
-  router,
-  item,
-  pathName,
-}: {
-  router: NextRouter;
-  item: MainLinkProps;
-  pathName: String;
-}) {
+function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String }) {
   return (
     <>
       <Tooltip position="right" label={item.label} transitionProps={{ duration: 0 }}>
         <UnstyledButton
           visibleFrom="sm"
-          onClick={() => router.push(item.link)}
+          component={Link}
+          href={item.link}
           className={classes.link}
           data-active={pathName === item.link || undefined}
         >
           <item.icon stroke={1.5} />
         </UnstyledButton>
       </Tooltip>
-      <MainLinkMobile router={router} item={item} pathName={pathName} />
+      <MainLinkMobile item={item} pathName={pathName} />
     </>
   );
 }
@@ -117,9 +104,7 @@ export function getBaseLinks() {
   const pathName = router.pathname.replace(/\/+$/, '');
   return getBaseLinksDict()
     .filter((link) => link.links.length < 1)
-    .map((link) => (
-      <MainLinkMobile router={router} key={link.label} item={link} pathName={pathName} />
-    ));
+    .map((link) => <MainLinkMobile key={link.label} item={link} pathName={pathName} />);
 }
 
 export function TournamentLinks({ tournament_id }: any) {
@@ -130,9 +115,9 @@ export function TournamentLinks({ tournament_id }: any) {
 
   const data = [
     {
-      icon: IconTournament,
-      label: capitalize(t('schedule_title')),
-      link: `${tm_prefix}`,
+      icon: IconTrophy,
+      label: capitalize(t('stage_title')),
+      link: `${tm_prefix}/stages`,
     },
     {
       icon: IconUser,
@@ -150,14 +135,14 @@ export function TournamentLinks({ tournament_id }: any) {
       link: `${tm_prefix}/courts`,
     },
     {
-      icon: IconTrophy,
-      label: capitalize(t('stage_title')),
-      link: `${tm_prefix}/stages`,
-    },
-    {
       icon: IconCalendar,
       label: capitalize(t('planning_title')),
       link: `${tm_prefix}/schedule`,
+    },
+    {
+      icon: IconBrackets,
+      label: capitalize(t('results_title')),
+      link: `${tm_prefix}/results`,
     },
     {
       icon: IconSettings,
@@ -166,9 +151,7 @@ export function TournamentLinks({ tournament_id }: any) {
     },
   ];
 
-  const links = data.map((link) => (
-    <MainLink router={router} key={link.label} item={link} pathName={pathName} />
-  ));
+  const links = data.map((link) => <MainLink key={link.label} item={link} pathName={pathName} />);
   return (
     <>
       <Center hiddenFrom="sm">

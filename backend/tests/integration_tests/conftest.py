@@ -72,6 +72,5 @@ async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> Asyn
 
 @pytest.fixture(scope="session")
 async def auth_context(reinit_database: Database) -> AsyncIterator[AuthContext]:
-    async with reinit_database:
-        async with inserted_auth_context() as auth_context:
-            yield auth_context
+    async with reinit_database, inserted_auth_context() as auth_context:
+        yield auth_context

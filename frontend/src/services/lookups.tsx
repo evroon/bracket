@@ -52,6 +52,32 @@ export function getStageItemTeamIdsLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
+export function getStageItemTeamsLookup(
+  swrStagesResponse: SWRResponse,
+  swrTeamsResponse: SWRResponse
+) {
+  let result: any[] = [];
+  const teamsLookup = Object.fromEntries(
+    swrTeamsResponse.data.data.teams.map((x: TeamInterface) => [x.id, x])
+  );
+
+  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
+    stage.stage_items
+      .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
+      .forEach((stageItem) => {
+        const teams = stageItem.inputs
+          .map((input) => input.team_id)
+          .map((id) => teamsLookup![id!])
+          .filter((team: TeamInterface) => team != null);
+
+        if (teams.length > 0) {
+          result = result.concat([[stageItem.id, teams]]);
+        }
+      })
+  );
+  return Object.fromEntries(result);
+}
+
 export function getMatchLookup(swrStagesResponse: SWRResponse) {
   let result: any[] = [];
 
@@ -61,19 +87,6 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
         round.matches.forEach((match) => {
           result = result.concat([[match.id, { match, stageItem }]]);
         });
-      });
-    })
-  );
-  return Object.fromEntries(result);
-}
-
-export function getRoundsLookup(swrStagesResponse: SWRResponse) {
-  let result: any[] = [];
-
-  swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
-    stage.stage_items.forEach((stageItem) => {
-      stageItem.rounds.forEach((round) => {
-        result = result.concat([[round.id, round]]);
       });
     })
   );

@@ -46,23 +46,25 @@ function MatchDeleteButton({
   );
 }
 
-export default function MatchModal({
+function MatchModalForm({
   tournamentData,
   match,
   swrStagesResponse,
   swrUpcomingMatchesResponse,
-  opened,
   setOpened,
   dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
-  match: MatchInterface;
+  match: MatchInterface | null;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
-  opened: boolean;
   setOpened: any;
   dynamicSchedule: boolean;
 }) {
+  if (match == null) {
+    return null;
+  }
+
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
@@ -97,64 +99,90 @@ export default function MatchModal({
 
   return (
     <>
+      <form
+        onSubmit={form.onSubmit(async (values) => {
+          const updatedMatch: MatchBodyInterface = {
+            id: match.id,
+            round_id: match.round_id,
+            team1_score: values.team1_score,
+            team2_score: values.team2_score,
+            court_id: match.court_id,
+            custom_duration_minutes: customDurationEnabled ? values.custom_duration_minutes : null,
+            custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
+          };
+          await updateMatch(tournamentData.id, match.id, updatedMatch);
+          await swrStagesResponse.mutate();
+          if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
+          setOpened(false);
+        })}
+      >
+        <NumberInput
+          withAsterisk
+          label={`${t('score_of_label')} ${team1Name}`}
+          placeholder={`${t('score_of_label')} ${team1Name}`}
+          {...form.getInputProps('team1_score')}
+        />
+        <NumberInput
+          withAsterisk
+          mt="lg"
+          label={`${t('score_of_label')} ${team2Name}`}
+          placeholder={`${t('score_of_label')} ${team2Name}`}
+          {...form.getInputProps('team2_score')}
+        />
+        <Divider mt="lg" />
+
+        <CommonCustomTimeMatchesForm
+          customDurationEnabled={customDurationEnabled}
+          customMarginEnabled={customMarginEnabled}
+          form={form}
+          match={match}
+          setCustomDurationEnabled={setCustomDurationEnabled}
+          setCustomMarginEnabled={setCustomMarginEnabled}
+        />
+
+        <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
+          {t('save_button')}
+        </Button>
+      </form>
+      <MatchDeleteButton
+        swrRoundsResponse={swrStagesResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        tournamentData={tournamentData}
+        match={match}
+        dynamicSchedule={dynamicSchedule}
+      />
+    </>
+  );
+}
+
+export default function MatchModal({
+  tournamentData,
+  match,
+  swrStagesResponse,
+  swrUpcomingMatchesResponse,
+  opened,
+  setOpened,
+  dynamicSchedule,
+}: {
+  tournamentData: TournamentMinimal;
+  match: MatchInterface | null;
+  swrStagesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  opened: boolean;
+  setOpened: any;
+  dynamicSchedule: boolean;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <>
       <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_match_modal_title')}>
-        <form
-          onSubmit={form.onSubmit(async (values) => {
-            const updatedMatch: MatchBodyInterface = {
-              id: match.id,
-              round_id: match.round_id,
-              team1_score: values.team1_score,
-              team2_score: values.team2_score,
-              court_id: match.court_id,
-              custom_duration_minutes: customDurationEnabled
-                ? values.custom_duration_minutes
-                : null,
-              custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
-            };
-            await updateMatch(tournamentData.id, match.id, updatedMatch);
-            await swrStagesResponse.mutate();
-            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
-            setOpened(false);
-          })}
-        >
-          <NumberInput
-            withAsterisk
-            label={`${t('score_of_label')} ${team1Name}`}
-            placeholder={`${t('score_of_label')} ${team1Name}`}
-            {...form.getInputProps('team1_score')}
-          />
-          <NumberInput
-            withAsterisk
-            mt="lg"
-            label={`${t('score_of_label')} ${team2Name}`}
-            placeholder={`${t('score_of_label')} ${team2Name}`}
-            {...form.getInputProps('team2_score')}
-          />
-          <Divider mt="lg" />
-
-          <CommonCustomTimeMatchesForm
-            customDurationEnabled={customDurationEnabled}
-            customMarginEnabled={customMarginEnabled}
-            form={form}
-            match={match}
-            setCustomDurationEnabled={(val) => {
-            setCustomDurationEnabled(val);
-            if (val === false) form.setFieldValue('custom_duration_minutes', null);
-          }}
-            setCustomMarginEnabled={(val) => {
-            setCustomMarginEnabled(val);
-            if (val === false) form.setFieldValue('custom_margin_minutes', null);
-          }} />
-
-          <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
-            {t('save_button')}
-          </Button>
-        </form>
-        <MatchDeleteButton
-          swrRoundsResponse={swrStagesResponse}
+        <MatchModalForm
+          swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           tournamentData={tournamentData}
           match={match}
+          setOpened={setOpened}
           dynamicSchedule={dynamicSchedule}
         />
       </Modal>

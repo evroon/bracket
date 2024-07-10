@@ -34,7 +34,3 @@ class TournamentUpdateBody(BaseModelORM):
 
 class TournamentBody(TournamentUpdateBody):
     club_id: ClubId
-
-
-class TournamentToInsert(TournamentBody):
-    created: datetime_utc

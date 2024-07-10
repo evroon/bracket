@@ -53,6 +53,12 @@ export function getTournamentIdFromRouter() {
   return { id, tournamentData };
 }
 
+export function getStageItemIdFromRouter() {
+  const router = useRouter();
+  const { stage_item_id: idString }: any = router.query;
+  return parseInt(idString, 10);
+}
+
 export function getTournamentEndpointFromRouter() {
   const router = useRouter();
   const { id }: any = router.query;

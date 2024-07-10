@@ -16,7 +16,9 @@ RUN set -ex \
     && pip3 install --upgrade pip pipenv wheel virtualenv \
     && pipenv install --deploy
 
-CMD pipenv run pipenv run gunicorn \
+EXPOSE 8400
+
+CMD pipenv run gunicorn \
     -k uvicorn.workers.UvicornWorker \
     bracket.app:app \
     --bind 0.0.0.0:8400 \

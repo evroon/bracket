@@ -16,11 +16,16 @@ class UniqueIndex(EnumAutoStr):
 
 
 class ForeignKey(EnumAutoStr):
-    stages_tournament_id_fkey = auto()
-    tournaments_club_id_fkey = auto()
-    stage_item_inputs_team_id_fkey = auto()
+    courts_tournament_id_fkey = auto()
     matches_team1_id_fkey = auto()
+    matches_team1_winner_from_stage_item_id_fkey = auto()
     matches_team2_id_fkey = auto()
+    matches_team2_winner_from_stage_item_id_fkey = auto()
+    players_tournament_id_fkey = auto()
+    stage_item_inputs_team_id_fkey = auto()
+    stages_tournament_id_fkey = auto()
+    teams_tournament_id_fkey = auto()
+    tournaments_club_id_fkey = auto()
 
 
 unique_index_violation_error_lookup = {
@@ -30,11 +35,18 @@ unique_index_violation_error_lookup = {
 
 
 foreign_key_violation_error_lookup = {
-    ForeignKey.stages_tournament_id_fkey: "This tournament still has stages, delete those first",
-    ForeignKey.tournaments_club_id_fkey: "This club still has tournaments, delete those first",
-    ForeignKey.stage_item_inputs_team_id_fkey: "This team is still used in stage items",
+    ForeignKey.courts_tournament_id_fkey: "This tournament still has courts, delete those first",
     ForeignKey.matches_team1_id_fkey: "This team is still part of matches",
+    ForeignKey.matches_team1_winner_from_stage_item_id_fkey: "This stage item is referenced by "
+    "other stage items",
     ForeignKey.matches_team2_id_fkey: "This team is still part of matches",
+    ForeignKey.matches_team2_winner_from_stage_item_id_fkey: "This stage item is referenced by "
+    "other stage items",
+    ForeignKey.players_tournament_id_fkey: "This tournament still has players, delete those first",
+    ForeignKey.stage_item_inputs_team_id_fkey: "This team is still used in stage items",
+    ForeignKey.stages_tournament_id_fkey: "This tournament still has stages, delete those first",
+    ForeignKey.teams_tournament_id_fkey: "This tournament still has teams, delete those first",
+    ForeignKey.tournaments_club_id_fkey: "This club still has tournaments, delete those first",
 }
 
 

@@ -11,10 +11,6 @@ export interface StageWithStageItems {
   stage_items: StageItemWithRounds[];
 }
 
-export function getActiveStages(swrStagesResponse: SWRResponse) {
-  return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.is_active);
-}
-
-export function getStageItem(stage: StageWithStageItems) {
-  return stage.stage_items[0];
+export function getStageById(swrStagesResponse: SWRResponse, stageId: number) {
+  return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.id === stageId);
 }

@@ -4,7 +4,6 @@ from uuid import uuid4
 import aiofiles.os
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
-from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
@@ -13,7 +12,6 @@ from bracket.logic.subscriptions import check_requirement
 from bracket.logic.tournaments import get_tournament_logo_path
 from bracket.models.db.tournament import (
     TournamentBody,
-    TournamentToInsert,
     TournamentUpdateBody,
 )
 from bracket.models.db.user import UserPublic
@@ -26,6 +24,7 @@ from bracket.routes.auth import (
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
 from bracket.sql.tournaments import (
+    sql_create_tournament,
     sql_delete_tournament,
     sql_get_tournament,
     sql_get_tournament_by_endpoint_name,
@@ -110,7 +109,14 @@ async def update_tournament_by_id(
 async def delete_tournament(
     tournament_id: TournamentId, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
-    with check_foreign_key_violation({ForeignKey.stages_tournament_id_fkey}):
+    with check_foreign_key_violation(
+        {
+            ForeignKey.stages_tournament_id_fkey,
+            ForeignKey.teams_tournament_id_fkey,
+            ForeignKey.players_tournament_id_fkey,
+            ForeignKey.courts_tournament_id_fkey,
+        }
+    ):
         await sql_delete_tournament(tournament_id)
 
     return SuccessResponse()
@@ -134,13 +140,7 @@ async def create_tournament(
         )
 
     try:
-        await database.execute(
-            query=tournaments.insert(),
-            values=TournamentToInsert(
-                **tournament_to_insert.model_dump(),
-                created=datetime_utc.now(),
-            ).model_dump(),
-        )
+        await sql_create_tournament(tournament_to_insert)
     except asyncpg.exceptions.UniqueViolationError as exc:
         check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 

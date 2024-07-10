@@ -190,6 +190,7 @@ export default function TournamentModal({
         />
       </Modal>
       <SaveButton
+        mx="0px"
         fullWidth
         onClick={() => setOpened(true)}
         leftSection={<GoPlus size={24} />}

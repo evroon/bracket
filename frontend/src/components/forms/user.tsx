@@ -1,7 +1,8 @@
-import { Button, Tabs, TextInput } from '@mantine/core';
+import { Button, Select, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { BiGlobe } from '@react-icons/all-files/bi/BiGlobe';
 import { IconHash, IconLogout, IconUser } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
+import assert from 'assert';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -10,9 +11,8 @@ import { performLogoutAndRedirect } from '../../services/local_storage';
 import { updatePassword, updateUser } from '../../services/user';
 import { PasswordStrength } from '../utils/password';
 
-export default function UserForm({ user }: { user: UserInterface }) {
+export default function UserForm({ user, t, i18n }: { user: UserInterface; t: any; i18n: any }) {
   const router = useRouter();
-  const { t } = useTranslation();
   const details_form = useForm({
     initialValues: {
       name: user != null ? user.name : '',
@@ -35,6 +35,20 @@ export default function UserForm({ user }: { user: UserInterface }) {
     },
   });
 
+  const locales = [
+    { value: 'de', label: '🇩🇪 German' },
+    { value: 'en', label: '🇺🇸 English' },
+    { value: 'es', label: '🇪🇸 Spanish' },
+    { value: 'nl', label: '🇳🇱 Dutch' },
+    { value: 'zh', label: '🇨🇳 Chinese' },
+  ];
+
+  const changeLanguage = (newLocale: string | null) => {
+    const { pathname, asPath, query } = router;
+    assert(newLocale != null);
+    router.push({ pathname, query }, asPath, { locale: newLocale });
+  };
+
   return (
     <Tabs defaultValue="details">
       <Tabs.List>
@@ -44,9 +58,9 @@ export default function UserForm({ user }: { user: UserInterface }) {
         <Tabs.Tab value="password" leftSection={<IconHash size="1.0rem" />}>
           {t('edit_password_tab_title')}
         </Tabs.Tab>
-        {/*<Tabs.Tab value="settings" icon={<IconSettings size="1.0rem" />}>*/}
-        {/*  Settings*/}
-        {/*</Tabs.Tab>*/}
+        <Tabs.Tab value="language" leftSection={<BiGlobe size="1.0rem" />}>
+          {t('edit_language_tab_title')}
+        </Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel value="details" pt="xs">
         <form
@@ -93,6 +107,15 @@ export default function UserForm({ user }: { user: UserInterface }) {
             {t('save_button')}
           </Button>
         </form>
+      </Tabs.Panel>
+      <Tabs.Panel value="language" pt="xs">
+        <Select
+          allowDeselect={false}
+          value={i18n.language}
+          label={t('language')}
+          data={locales}
+          onChange={async (lng) => changeLanguage(lng)}
+        />
       </Tabs.Panel>
     </Tabs>
   );

@@ -7,10 +7,10 @@ from bracket.database import database
 from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.players import START_ELO, PlayerStatistics
 from bracket.models.db.util import StageItemWithRounds
-from bracket.schema import players
+from bracket.schema import players, teams
 from bracket.sql.players import get_all_players_in_tournament, update_player_stats
 from bracket.sql.stages import get_full_tournament_details
-from bracket.sql.teams import update_team_stats
+from bracket.sql.teams import get_teams_in_tournament, update_team_stats
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.types import assert_some
 
@@ -133,6 +133,16 @@ async def recalculate_ranking_for_stage_items(
             await database.execute(
                 query=players.update().where(
                     (players.c.id == player.id) & (players.c.tournament_id == tournament_id)
+                ),
+                values=PlayerStatistics().model_dump(),
+            )
+
+    all_teams = await get_teams_in_tournament(tournament_id)
+    for team in all_teams:
+        if team.id not in elo_per_team:
+            await database.execute(
+                query=teams.update().where(
+                    (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
                 ),
                 values=PlayerStatistics().model_dump(),
             )
