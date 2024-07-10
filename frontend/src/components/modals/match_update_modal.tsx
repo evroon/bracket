@@ -1,11 +1,4 @@
-import {
-  ActionIcon,
-  Button,
-  Divider,
-  Grid,
-  Input,
-  Modal,
-} from '@mantine/core';
+import { ActionIcon, Button, Divider, Grid, Input, Modal } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';

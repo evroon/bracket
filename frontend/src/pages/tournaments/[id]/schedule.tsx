@@ -4,9 +4,10 @@ import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
-
 import { SWRResponse } from 'swr';
+
 import MatchModal from '../../../components/modals/match_modal';
+import MatchUpdateModal from '../../../components/modals/match_update_modal';
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { DateTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
@@ -23,7 +24,6 @@ import {
 } from '../../../services/lookups';
 import { rescheduleMatch, scheduleMatches } from '../../../services/match';
 import TournamentLayout from '../_tournament_layout';
-import MatchUpdateModal from '../../../components/modals/match_update_modal';
 
 function ScheduleRow({
   index,
@@ -78,7 +78,10 @@ function ScheduleRow({
                       previousMatch={previousMatch}
                     />
                   </Group>
-                  <Badge color={stringToColour(`${matchesLookup[match.id].stageItem.id}`)} variant="outline">
+                  <Badge
+                    color={stringToColour(`${matchesLookup[match.id].stageItem.id}`)}
+                    variant="outline"
+                  >
                     {matchesLookup[match.id].stageItem.name}
                   </Badge>
                 </Stack>

@@ -53,9 +53,11 @@ export default function CommonCustomTimeMatchesForm<
     return value ?? 0;
   }, [customMarginEnabled, match.custom_margin_minutes, match.margin_minutes]);
 
-  const endDatetime = useMemo(() => fromUnixTime(
-      getUnixTime(parseISO(match.start_time)) + matchDuration * 60 + matchMargin * 60
-    ), [match.start_time, matchDuration, matchMargin]);
+  const endDatetime = useMemo(
+    () =>
+      fromUnixTime(getUnixTime(parseISO(match.start_time)) + matchDuration * 60 + matchMargin * 60),
+    [match.start_time, matchDuration, matchMargin]
+  );
 
   return (
     <>
@@ -110,10 +112,7 @@ export default function CommonCustomTimeMatchesForm<
       </Grid>
 
       <Input.Wrapper label={t('next_match_time_label')} mt="sm">
-        <Input
-          component="time"
-          dateTime={endDatetime.toISOString()}
-        >
+        <Input component="time" dateTime={endDatetime.toISOString()}>
           {format(endDatetime, 'd LLLL yyyy HH:mm')}
         </Input>
       </Input.Wrapper>
