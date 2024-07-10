@@ -1,4 +1,4 @@
-import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
+import { Button, Divider, Modal, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
@@ -132,10 +132,16 @@ export default function MatchModal({
           />
           <Divider mt="lg" />
 
-          <CommonCustomTimeMatchesForm customDurationEnabled={customDurationEnabled} customMarginEnabled={customMarginEnabled} form={form} match={match} setCustomDurationEnabled={(val) => {
+          <CommonCustomTimeMatchesForm
+            customDurationEnabled={customDurationEnabled}
+            customMarginEnabled={customMarginEnabled}
+            form={form}
+            match={match}
+            setCustomDurationEnabled={(val) => {
             setCustomDurationEnabled(val);
             if (val === false) form.setFieldValue('custom_duration_minutes', null);
-          }} setCustomMarginEnabled={(val) => {
+          }}
+            setCustomMarginEnabled={(val) => {
             setCustomMarginEnabled(val);
             if (val === false) form.setFieldValue('custom_margin_minutes', null);
           }} />
