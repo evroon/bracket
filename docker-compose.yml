@@ -1,34 +1,42 @@
 version: '3.1'
 
+networks:
+  bracket_lan:
+    driver: bridge
+
 services:
-    bracket-frontend:
-        image: ghcr.io/evroon/bracket-frontend
-        container_name: bracket-frontend
-        ports:
-            - "3000:3000"
-        environment:
-            NEXT_PUBLIC_API_BASE_URL: "http://localhost:8400"
-            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"  # Public test key
-        restart: unless-stopped
-
-    bracket-backend:
-        image: ghcr.io/evroon/bracket-backend
-        container_name: bracket-backend
-        ports:
-            - "8400:8400"
-        environment:
-            ENVIRONMENT: "DEVELOPMENT"
-            PG_DSN: "postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev"
-        volumes:
-            - ./backend/static:/app/static
-        restart: unless-stopped
-        depends_on:
-          - postgres
-
-    postgres:
-        image: postgres
-        restart: always
-        environment:
-          POSTGRES_DB: bracket_dev
-          POSTGRES_USER: bracket_dev
-          POSTGRES_PASSWORD: bracket_dev
+  bracket-backend:
+    container_name: bracket-backend
+    depends_on:
+      - postgres
+    environment:
+      ENVIRONMENT: DEVELOPMENT
+      PG_DSN: postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev
+    image: ghcr.io/evroon/bracket-backend
+    networks:
+      - bracket_lan
+    ports:
+      - 8400:8400
+    restart: unless-stopped
+    volumes:
+      - ./backend/static:/app/static
+  bracket-frontend:
+    container_name: bracket-frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8400
+      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: 10000000-ffff-ffff-ffff-000000000001
+    image: ghcr.io/evroon/bracket-frontend
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  postgres:
+    environment:
+      POSTGRES_DB: bracket_dev
+      POSTGRES_PASSWORD: bracket_dev
+      POSTGRES_USER: bracket_dev
+    image: postgres
+    networks:
+      - bracket_lan
+    ports:
+      - 5432:5432
+    restart: always
