@@ -4,6 +4,10 @@ networks:
   bracket_lan:
     driver: bridge
 
+volumes:
+  bracket_pg_data:
+
+
 services:
   bracket-backend:
     container_name: bracket-backend
@@ -40,3 +44,5 @@ services:
     ports:
       - 5432:5432
     restart: always
+    volumes:
+      - bracket_pg_data:/var/lib/postgresql/data
