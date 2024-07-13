@@ -7,6 +7,7 @@ import { MatchInterface } from '../interfaces/match';
 import { StageWithStageItems } from '../interfaces/stage';
 import { TeamInterface } from '../interfaces/team';
 import { getTeams } from './adapter';
+import { StageItemWithRounds } from '../interfaces/stage_item';
 
 export function getTeamsLookup(tournamentId: number) {
   const swrTeamsResponse: SWRResponse = getTeams(tournamentId);
@@ -18,8 +19,10 @@ export function getTeamsLookup(tournamentId: number) {
   return Object.fromEntries(swrTeamsResponse.data.data.teams.map((x: TeamInterface) => [x.id, x]));
 }
 
-export function getStageItemLookup(swrStagesResponse: SWRResponse) {
-  let result: any[] = [];
+export function getStageItemLookup(
+  swrStagesResponse: SWRResponse
+) {
+  let result: [number, StageItemWithRounds][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stage_item) => {
@@ -30,7 +33,7 @@ export function getStageItemLookup(swrStagesResponse: SWRResponse) {
 }
 
 export function getStageItemList(swrStagesResponse: SWRResponse) {
-  let result: any[] = [];
+  let result: [StageItemWithRounds][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stage_item) => {
@@ -41,7 +44,7 @@ export function getStageItemList(swrStagesResponse: SWRResponse) {
 }
 
 export function getStageItemTeamIdsLookup(swrStagesResponse: SWRResponse) {
-  let result: any[] = [];
+  let result: [number, (number | null)[]][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stageItem) => {
@@ -79,7 +82,7 @@ export function getStageItemTeamsLookup(
 }
 
 export function getMatchLookup(swrStagesResponse: SWRResponse) {
-  let result: any[] = [];
+  let result: [number, { match: MatchInterface, stageItem: StageItemWithRounds }][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stageItem) => {
@@ -117,12 +120,12 @@ export function stringToColour(input: string) {
 
 export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
   const matches = Object.values(getMatchLookup(swrStagesResponse)).map((x) => x.match);
-  return groupBy(['court_id'])(matches);
+  return groupBy<PropertyKey, MatchInterface>(['court_id'], matches);
 }
 
 export function getScheduleData(
   swrCourtsResponse: SWRResponse,
-  matchesByCourtId: any
+  matchesByCourtId: ReturnType<typeof groupBy<PropertyKey, MatchInterface>>
 ): { court: Court; matches: MatchInterface[] }[] {
   return swrCourtsResponse.data.data.map((court: Court) => ({
     matches: (matchesByCourtId[court.id] || [])

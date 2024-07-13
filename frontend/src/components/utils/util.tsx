@@ -73,13 +73,17 @@ export function getBaseURL() {
   return typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
 }
 
-export const groupBy = (keys: any) => (array: any) =>
-  array.reduce((objectsByKeyValue: any, obj: any) => {
-    const value = keys.map((key: any) => obj[key]).join('-');
-    // eslint-disable-next-line no-param-reassign
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-    return objectsByKeyValue;
-  }, {});
+export const groupBy = <
+  K extends PropertyKey = PropertyKey,
+  T extends Record<K, any> = Record<K, unknown>
+>(
+  keys: K[], array: T[]
+) => array.reduce((objectsByKeyValue: Record<string, T[]>, obj) => {
+  const value = keys.map((key) => obj[key]).join('');
+  // eslint-disable-next-line no-param-reassign
+  objectsByKeyValue[value] = (objectsByKeyValue[value] ?? []).concat(obj);
+  return objectsByKeyValue;
+}, {});
 
 export function truncateString(input: string, length: number) {
   if (input.length > length + 3) {
