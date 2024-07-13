@@ -5,6 +5,8 @@ import React, { useMemo, useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import { format, fromUnixTime, getUnixTime, parseISO } from 'date-fns';
+import { DateTimePicker } from '@mantine/dates';
+import { showNotification } from '@mantine/notifications';
 import {
   MatchBodyInterface,
   MatchInterface,
@@ -16,18 +18,33 @@ import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
 
+interface MatchModalBaseProps {
+  tournamentData: TournamentMinimal;
+  // match: MatchInterface | null;
+  // swrStagesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  // opened: boolean;
+  // setOpened: any;
+  dynamicSchedule: boolean;
+  // priorMatch?: MatchInterface;
+}
+
+interface MatchModalProps extends MatchModalBaseProps {
+  match: MatchInterface | null;
+  swrStagesResponse: SWRResponse;
+  setOpened: (value: boolean) => void;
+  priorMatch: MatchInterface | null;
+}
+
 function MatchDeleteButton({
   tournamentData,
   match,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
+}: MatchModalBaseProps & {
   match: MatchInterface;
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
   if (!dynamicSchedule) return null;
@@ -53,14 +70,8 @@ function MatchModalForm({
   swrUpcomingMatchesResponse,
   setOpened,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  setOpened: any;
-  dynamicSchedule: boolean;
-}) {
+  priorMatch,
+}: MatchModalProps) {
   if (match == null) {
     return null;
   }
@@ -90,6 +101,8 @@ function MatchModalForm({
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
     match.custom_margin_minutes != null
   );
+
+  const [date, setDate] = useState<Date | null>(null);
 
   const matchDuration = useMemo(() => {
     const value = customDurationEnabled
@@ -142,21 +155,14 @@ function MatchModalForm({
         />
         <NumberInput
           withAsterisk
-          mt="lg"
+          mt="xs"
           label={`${t('score_of_label')} ${team2Name}`}
           placeholder={`${t('score_of_label')} ${team2Name}`}
           {...form.getInputProps('team2_score')}
         />
-        <Divider mt="lg" />
 
-        {/* <CommonCustomTimeMatchesForm
-          customDurationEnabled={customDurationEnabled}
-          customMarginEnabled={customMarginEnabled}
-          form={form}
-          match={match}
-          setCustomDurationEnabled={setCustomDurationEnabled}
-          setCustomMarginEnabled={setCustomMarginEnabled}
-        /> */}
+        <Divider mt="lg" mb="xs" />
+
         <Grid align="center">
           <Grid.Col span={{ sm: 8 }}>
             <NumberInput
@@ -213,6 +219,64 @@ function MatchModalForm({
           </Input>
         </Input.Wrapper>
 
+        {priorMatch && (
+            <>
+              <Divider mt="lg" mb="xs" />
+
+              <Grid align="center">
+                <Grid.Col span={{ sm: 8 }}>
+                  <DateTimePicker
+                    label={t('calculate_datetime_match_label')}
+                    clearable
+                    value={date}
+                    onChange={setDate}
+                  />
+                </Grid.Col>
+                <Grid.Col span={{ sm: 4 }}>
+                  <Input.Label />
+                  <Button
+                    display="block"
+                    w="100%"
+                    disabled={date === null}
+                    onClick={async () => {
+                      const computedMargin = Math.floor(
+                        (date!.getTime() -
+                          parseISO(priorMatch.start_time).getTime() +
+                          (priorMatch.custom_duration_minutes === null
+                            ? priorMatch.duration_minutes
+                            : priorMatch.custom_duration_minutes) *
+                            60 *
+                            1000) /
+                          60 /
+                          1000
+                      );
+
+                      if (computedMargin < 0) {
+                        showNotification({
+                          message: '',
+                          title: t('negative_match_margin_validation'),
+                          color: 'red',
+                          // icon: <IconAlert />,
+                        });
+                        return;
+                      }
+
+                      const updatedMatch = {
+                        ...priorMatch,
+                        custom_margin_minutes: computedMargin,
+                      };
+
+                      await updateMatch(tournamentData.id, priorMatch.id, updatedMatch);
+                      await swrStagesResponse.mutate();
+                    }}
+                  >
+                    {t('calculate_label')}
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            </>
+          )}
+
         <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
           {t('save_button')}
         </Button>
@@ -236,14 +300,9 @@ export default function MatchModal({
   opened,
   setOpened,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  opened: boolean;
-  setOpened: any;
-  dynamicSchedule: boolean;
+  priorMatch,
+}: MatchModalProps & {
+  opened: boolean
 }) {
   const { t } = useTranslation();
 
@@ -257,6 +316,7 @@ export default function MatchModal({
           match={match}
           setOpened={setOpened}
           dynamicSchedule={dynamicSchedule}
+          priorMatch={priorMatch}
         />
       </Modal>
     </>
