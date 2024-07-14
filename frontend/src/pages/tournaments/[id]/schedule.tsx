@@ -200,17 +200,17 @@ export default function SchedulePage() {
         )
       : [];
 
-  if (!responseIsValid(swrStagesResponse)) return null;
-  if (!responseIsValid(swrCourtsResponse)) return null;
-
   const openMatchModal = useCallback((
     matchToOpen: MatchInterface,
-    priorMatchToOpen?: MatchInterface
+    priorMatchToOpen: MatchInterface | null
   ) => {
     setMatch(matchToOpen);
-    setPriorMatch(priorMatchToOpen ?? null);
+    setPriorMatch(priorMatchToOpen);
     modalSetOpened(true);
-  }, []);
+  }, [setMatch, setPriorMatch, modalSetOpened]);
+
+  if (!responseIsValid(swrStagesResponse)) return null;
+  if (!responseIsValid(swrCourtsResponse)) return null;
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
