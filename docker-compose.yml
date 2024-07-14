@@ -24,6 +24,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend/static:/app/static
+
   bracket-frontend:
     container_name: bracket-frontend
     environment:
@@ -33,6 +34,7 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
+
   postgres:
     environment:
       POSTGRES_DB: bracket_dev
@@ -41,8 +43,6 @@ services:
     image: postgres
     networks:
       - bracket_lan
-    ports:
-      - 5432:5432
     restart: always
     volumes:
       - bracket_pg_data:/var/lib/postgresql/data

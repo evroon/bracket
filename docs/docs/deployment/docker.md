@@ -28,7 +28,7 @@ NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
             - "8400:8400"
         environment:
             ENVIRONMENT: "DEVELOPMENT"
-            PG_DSN: "postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev"
+            PG_DSN: "postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod"
             CORS_ORIGINS: https://your-site.com
             CORS_ORIGIN_REGEX: ^https://your-site.com$
             JWT_SECRET: change_me
@@ -42,7 +42,7 @@ NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
         image: postgres
         restart: always
         environment:
-          POSTGRES_DB: bracket_dev
-          POSTGRES_USER: bracket_dev
-          POSTGRES_PASSWORD: bracket_dev
+          POSTGRES_DB: bracket_prod
+          POSTGRES_USER: bracket_prod
+          POSTGRES_PASSWORD: bracket_prod
 ```
