@@ -232,14 +232,14 @@ export default function SchedulePage() {
     : [];
   const matchesLookup = responseIsValid(swrStagesResponse) ? getMatchLookup(swrStagesResponse) : {};
 
-  const openMatchModal: OpenMatchModalFn = useCallback((
-    matchToOpen: MatchInterface,
-    priorMatchToOpen: MatchInterface | null
-  ) => {
-    setMatch(matchToOpen);
-    setPriorMatch(priorMatchToOpen);
-    modalSetOpened(true);
-  }, [setMatch, setPriorMatch, modalSetOpened]);
+  const openMatchModal: OpenMatchModalFn = useCallback(
+    (matchToOpen: MatchInterface, priorMatchToOpen: MatchInterface | null) => {
+      setMatch(matchToOpen);
+      setPriorMatch(priorMatchToOpen);
+      modalSetOpened(true);
+    },
+    [setMatch, setPriorMatch, modalSetOpened]
+  );
 
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;

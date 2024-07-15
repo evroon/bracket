@@ -1,11 +1,22 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ActionIcon, Alert, Badge, Button, Card, Grid, Group, Stack, Text, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Alert,
+  Badge,
+  Button,
+  Card,
+  Grid,
+  Group,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import { IconAlertCircle, IconCalendarPlus } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useCallback, useState } from 'react';
-
 import { BiEditAlt } from 'react-icons/bi';
+
 import MatchModal, { OpenMatchModalFn } from '../../../components/modals/match_modal';
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { DateTime } from '../../../components/utils/datetime';
@@ -200,14 +211,14 @@ export default function SchedulePage() {
         )
       : [];
 
-  const openMatchModal: OpenMatchModalFn = useCallback((
-    matchToOpen: MatchInterface,
-    priorMatchToOpen: MatchInterface | null
-  ) => {
-    setMatch(matchToOpen);
-    setPriorMatch(priorMatchToOpen);
-    modalSetOpened(true);
-  }, [setMatch, setPriorMatch, modalSetOpened]);
+  const openMatchModal: OpenMatchModalFn = useCallback(
+    (matchToOpen: MatchInterface, priorMatchToOpen: MatchInterface | null) => {
+      setMatch(matchToOpen);
+      setPriorMatch(priorMatchToOpen);
+      modalSetOpened(true);
+    },
+    [setMatch, setPriorMatch, modalSetOpened]
+  );
 
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;

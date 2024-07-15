@@ -5,9 +5,9 @@ import { groupBy, responseIsValid } from '../components/utils/util';
 import { Court } from '../interfaces/court';
 import { MatchInterface } from '../interfaces/match';
 import { StageWithStageItems } from '../interfaces/stage';
+import { StageItemWithRounds } from '../interfaces/stage_item';
 import { TeamInterface } from '../interfaces/team';
 import { getTeams } from './adapter';
-import { StageItemWithRounds } from '../interfaces/stage_item';
 
 export function getTeamsLookup(tournamentId: number) {
   const swrTeamsResponse: SWRResponse = getTeams(tournamentId);
@@ -21,9 +21,7 @@ export function getTeamsLookup(tournamentId: number) {
   );
 }
 
-export function getStageItemLookup(
-  swrStagesResponse: SWRResponse
-) {
+export function getStageItemLookup(swrStagesResponse: SWRResponse) {
   let result: [number, StageItemWithRounds][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
@@ -84,7 +82,7 @@ export function getStageItemTeamsLookup(
 }
 
 export function getMatchLookup(swrStagesResponse: SWRResponse) {
-  let result: [number, { match: MatchInterface, stageItem: StageItemWithRounds }][] = [];
+  let result: [number, { match: MatchInterface; stageItem: StageItemWithRounds }][] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stageItem) => {

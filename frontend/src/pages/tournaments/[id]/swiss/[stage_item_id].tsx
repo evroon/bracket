@@ -19,7 +19,10 @@ import { BracketDisplaySettings } from '../../../../interfaces/brackets';
 import { SchedulerSettings } from '../../../../interfaces/match';
 import { RoundInterface } from '../../../../interfaces/round';
 import { StageWithStageItems, getStageById } from '../../../../interfaces/stage';
-import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../../../interfaces/stage_item';
+import {
+  StageItemWithRounds,
+  stageItemIsHandledAutomatically,
+} from '../../../../interfaces/stage_item';
 import { getTournamentEndpoint } from '../../../../interfaces/tournament';
 import {
   checkForAuthError,

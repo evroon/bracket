@@ -1,12 +1,22 @@
-import { Button, Center, Checkbox, Divider, Grid, Input, Modal, NumberInput, Text } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Divider,
+  Grid,
+  Input,
+  Modal,
+  NumberInput,
+  Text,
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+import { format, fromUnixTime, getUnixTime, parseISO } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo, useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { format, fromUnixTime, getUnixTime, parseISO } from 'date-fns';
-import { DateTimePicker } from '@mantine/dates';
-import { showNotification } from '@mantine/notifications';
 import {
   MatchBodyInterface,
   MatchInterface,
@@ -220,62 +230,62 @@ function MatchModalForm({
         </Input.Wrapper>
 
         {priorMatch && (
-            <>
-              <Divider mt="lg" mb="xs" />
+          <>
+            <Divider mt="lg" mb="xs" />
 
-              <Grid align="center">
-                <Grid.Col span={{ sm: 8 }}>
-                  <DateTimePicker
-                    label={t('calculate_datetime_match_label')}
-                    clearable
-                    value={date}
-                    onChange={setDate}
-                  />
-                </Grid.Col>
-                <Grid.Col span={{ sm: 4 }}>
-                  <Input.Label />
-                  <Button
-                    display="block"
-                    w="100%"
-                    disabled={date === null}
-                    onClick={async () => {
-                      const computedMargin = Math.floor(
-                        (date!.getTime() -
-                          parseISO(priorMatch.start_time).getTime() +
-                          (priorMatch.custom_duration_minutes === null
-                            ? priorMatch.duration_minutes
-                            : priorMatch.custom_duration_minutes) *
-                            60 *
-                            1000) /
-                          60 /
-                          1000
-                      );
+            <Grid align="center">
+              <Grid.Col span={{ sm: 8 }}>
+                <DateTimePicker
+                  label={t('calculate_datetime_match_label')}
+                  clearable
+                  value={date}
+                  onChange={setDate}
+                />
+              </Grid.Col>
+              <Grid.Col span={{ sm: 4 }}>
+                <Input.Label />
+                <Button
+                  display="block"
+                  w="100%"
+                  disabled={date === null}
+                  onClick={async () => {
+                    const computedMargin = Math.floor(
+                      (date!.getTime() -
+                        parseISO(priorMatch.start_time).getTime() +
+                        (priorMatch.custom_duration_minutes === null
+                          ? priorMatch.duration_minutes
+                          : priorMatch.custom_duration_minutes) *
+                          60 *
+                          1000) /
+                        60 /
+                        1000
+                    );
 
-                      if (computedMargin < 0) {
-                        showNotification({
-                          message: '',
-                          title: t('negative_match_margin_validation'),
-                          color: 'red',
-                          // icon: <IconAlert />,
-                        });
-                        return;
-                      }
+                    if (computedMargin < 0) {
+                      showNotification({
+                        message: '',
+                        title: t('negative_match_margin_validation'),
+                        color: 'red',
+                        // icon: <IconAlert />,
+                      });
+                      return;
+                    }
 
-                      const updatedMatch = {
-                        ...priorMatch,
-                        custom_margin_minutes: computedMargin,
-                      };
+                    const updatedMatch = {
+                      ...priorMatch,
+                      custom_margin_minutes: computedMargin,
+                    };
 
-                      await updateMatch(tournamentData.id, priorMatch.id, updatedMatch);
-                      await swrStagesResponse.mutate();
-                    }}
-                  >
-                    {t('calculate_label')}
-                  </Button>
-                </Grid.Col>
-              </Grid>
-            </>
-          )}
+                    await updateMatch(tournamentData.id, priorMatch.id, updatedMatch);
+                    await swrStagesResponse.mutate();
+                  }}
+                >
+                  {t('calculate_label')}
+                </Button>
+              </Grid.Col>
+            </Grid>
+          </>
+        )}
 
         <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
           {t('save_button')}
@@ -302,7 +312,7 @@ export default function MatchModal({
   dynamicSchedule,
   priorMatch,
 }: MatchModalProps & {
-  opened: boolean
+  opened: boolean;
 }) {
   const { t } = useTranslation();
 
