@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useCallback, useState } from 'react';
 
 import { BiEditAlt } from 'react-icons/bi';
-import MatchModal from '../../../components/modals/match_modal';
+import MatchModal, { OpenMatchModalFn } from '../../../components/modals/match_modal';
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { DateTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
@@ -34,10 +34,10 @@ function ScheduleRow({
 }: {
   index: number;
   match: MatchInterface;
-  openMatchModal: (match: MatchInterface, priorMatch?: MatchInterface) => void;
+  openMatchModal: OpenMatchModalFn;
   stageItemsLookup: any;
   matchesLookup: any;
-  previousMatch?: MatchInterface;
+  previousMatch: MatchInterface | null;
 }) {
   return (
     <Draggable key={match.id} index={index} draggableId={`${match.id}`}>
@@ -94,7 +94,7 @@ function ScheduleColumn({
 }: {
   court: Court;
   matches: MatchInterface[];
-  openMatchModal: any;
+  openMatchModal: OpenMatchModalFn;
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
@@ -107,7 +107,7 @@ function ScheduleColumn({
       match={match}
       openMatchModal={openMatchModal}
       key={match.id}
-      previousMatch={index > 0 ? matches[index - 1] : undefined}
+      previousMatch={index > 0 ? matches[index - 1] : null}
     />
   ));
 
@@ -150,7 +150,7 @@ function Schedule({
   stageItemsLookup: any;
   matchesLookup: any;
   schedule: { court: Court; matches: MatchInterface[] }[];
-  openMatchModal: CallableFunction;
+  openMatchModal: OpenMatchModalFn;
 }) {
   const columns = schedule.map((item) => (
     <ScheduleColumn
@@ -200,7 +200,7 @@ export default function SchedulePage() {
         )
       : [];
 
-  const openMatchModal = useCallback((
+  const openMatchModal: OpenMatchModalFn = useCallback((
     matchToOpen: MatchInterface,
     priorMatchToOpen: MatchInterface | null
   ) => {

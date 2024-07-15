@@ -16,7 +16,9 @@ export function getTeamsLookup(tournamentId: number) {
   if (!isResponseValid) {
     return null;
   }
-  return Object.fromEntries(swrTeamsResponse.data.data.teams.map((x: TeamInterface) => [x.id, x]));
+  return Object.fromEntries(
+    (swrTeamsResponse.data.data.teams as TeamInterface[]).map((x: TeamInterface) => [x.id, x])
+  );
 }
 
 export function getStageItemLookup(

@@ -48,7 +48,7 @@ export default function CourtsPage() {
   const courts = responseIsValid(swrCourtsResponse) ? swrCourtsResponse.data.data : [];
   const matchesByCourtId = responseIsValid(swrStagesResponse)
     ? getMatchLookupByCourt(swrStagesResponse)
-    : [];
+    : {};
 
   const rows = courts.map((court: Court) => {
     const matchesForCourt = matchesByCourtId[court.id] || [];

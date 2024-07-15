@@ -20,13 +20,8 @@ import DeleteButton from '../buttons/delete';
 
 interface MatchModalBaseProps {
   tournamentData: TournamentMinimal;
-  // match: MatchInterface | null;
-  // swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
-  // opened: boolean;
-  // setOpened: any;
   dynamicSchedule: boolean;
-  // priorMatch?: MatchInterface;
 }
 
 interface MatchModalProps extends MatchModalBaseProps {
@@ -35,6 +30,11 @@ interface MatchModalProps extends MatchModalBaseProps {
   setOpened: (value: boolean) => void;
   priorMatch: MatchInterface | null;
 }
+
+/**
+ * A typical implementation for opening a match modal. Useful for other components, especially in pages.
+ */
+export type OpenMatchModalFn = (match: MatchInterface, priorMatch: MatchInterface | null) => void;
 
 function MatchDeleteButton({
   tournamentData,

@@ -132,6 +132,7 @@ export default function Match({
         opened={opened}
         setOpened={setOpened}
         dynamicSchedule={dynamicSchedule}
+        priorMatch={null}
       />
     </>
   );

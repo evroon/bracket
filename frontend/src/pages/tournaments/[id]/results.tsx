@@ -14,9 +14,9 @@ import {
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import MatchModal from '../../../components/modals/match_modal';
+import MatchModal, { OpenMatchModalFn } from '../../../components/modals/match_modal';
 import { NoContentDashboard } from '../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
@@ -31,11 +31,13 @@ function ScheduleRow({
   openMatchModal,
   stageItemsLookup,
   matchesLookup,
+  previousMatch,
 }: {
-  data: any;
-  openMatchModal: any;
+  data: { match: MatchInterface; stageItem: any };
+  openMatchModal: OpenMatchModalFn;
   stageItemsLookup: any;
   matchesLookup: any;
+  previousMatch: MatchInterface | null;
 }) {
   const winColor = '#2a8f37';
   const drawColor = '#656565';
@@ -62,14 +64,14 @@ function ScheduleRow({
         mt="md"
         pt="0rem"
         onClick={() => {
-          openMatchModal(data.match);
+          openMatchModal(data.match, previousMatch);
         }}
       >
         <Card.Section withBorder>
           <Grid pt="0.75rem" pb="0.5rem">
             <Grid.Col mb="0rem" span={4}>
               <Text pl="sm" mt="sm" fw={800}>
-                {data.match.court.name}
+                {data.match.court!.name}
               </Text>
             </Grid.Col>
             <Grid.Col mb="0rem" span={4}>
@@ -147,10 +149,10 @@ function Schedule({
 }: {
   t: Translator;
   stageItemsLookup: any;
-  openMatchModal: CallableFunction;
-  matchesLookup: any;
+  openMatchModal: OpenMatchModalFn;
+  matchesLookup: ReturnType<typeof getMatchLookup>;
 }) {
-  const matches: any[] = Object.values(matchesLookup);
+  const matches = Object.values(matchesLookup);
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
     .sort((m1: any, m2: any) => (m1.match.court?.name > m2.match.court?.name ? 1 : -1))
@@ -182,6 +184,7 @@ function Schedule({
         openMatchModal={openMatchModal}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
+        previousMatch={c > 0 ? sortedMatches[c - 1].match : null}
       />
     );
   }
@@ -193,7 +196,7 @@ function Schedule({
   }
 
   const noItemsAlert =
-    matchesLookup.length < 1 ? (
+    Object.getOwnPropertyNames(matchesLookup).length < 1 ? (
       <Alert
         icon={<IconAlertCircle size={16} />}
         title={t('no_matches_title')}
@@ -217,6 +220,7 @@ function Schedule({
 export default function SchedulePage() {
   const [modalOpened, modalSetOpened] = useState(false);
   const [match, setMatch] = useState<MatchInterface | null>(null);
+  const [priorMatch, setPriorMatch] = useState<MatchInterface | null>(null);
 
   const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
@@ -226,22 +230,19 @@ export default function SchedulePage() {
   const stageItemsLookup = responseIsValid(swrStagesResponse)
     ? getStageItemLookup(swrStagesResponse)
     : [];
-  const matchesLookup = responseIsValid(swrStagesResponse) ? getMatchLookup(swrStagesResponse) : [];
+  const matchesLookup = responseIsValid(swrStagesResponse) ? getMatchLookup(swrStagesResponse) : {};
+
+  const openMatchModal: OpenMatchModalFn = useCallback((
+    matchToOpen: MatchInterface,
+    priorMatchToOpen: MatchInterface | null
+  ) => {
+    setMatch(matchToOpen);
+    setPriorMatch(priorMatchToOpen);
+    modalSetOpened(true);
+  }, [setMatch, setPriorMatch, modalSetOpened]);
 
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;
-
-  function openMatchModal(matchToOpen: MatchInterface) {
-    setMatch(matchToOpen);
-    modalSetOpened(true);
-  }
-
-  function modalSetOpenedAndUpdateMatch(opened: boolean) {
-    if (!opened) {
-      setMatch(null);
-    }
-    modalSetOpened(opened);
-  }
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>
@@ -251,8 +252,12 @@ export default function SchedulePage() {
         tournamentData={tournamentData}
         match={match}
         opened={modalOpened}
-        setOpened={modalSetOpenedAndUpdateMatch}
+        setOpened={(openend) => {
+          if (openend === false) setMatch(null);
+          modalSetOpened(openend);
+        }}
         dynamicSchedule={false}
+        priorMatch={priorMatch}
       />
       <Title>{t('results_title')}</Title>
       <Center mt="1rem">

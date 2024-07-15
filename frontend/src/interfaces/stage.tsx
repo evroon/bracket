@@ -12,5 +12,6 @@ export interface StageWithStageItems {
 }
 
 export function getStageById(swrStagesResponse: SWRResponse, stageId: number) {
-  return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.id === stageId);
+  return (swrStagesResponse.data.data as StageWithStageItems[])
+    .filter((stage: StageWithStageItems) => stage.id === stageId);
 }

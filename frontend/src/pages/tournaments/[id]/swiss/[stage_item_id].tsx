@@ -18,8 +18,8 @@ import {
 import { BracketDisplaySettings } from '../../../../interfaces/brackets';
 import { SchedulerSettings } from '../../../../interfaces/match';
 import { RoundInterface } from '../../../../interfaces/round';
-import { getStageById } from '../../../../interfaces/stage';
-import { stageItemIsHandledAutomatically } from '../../../../interfaces/stage_item';
+import { StageWithStageItems, getStageById } from '../../../../interfaces/stage';
+import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../../../interfaces/stage_item';
 import { getTournamentEndpoint } from '../../../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -71,12 +71,12 @@ export default function TournamentPage() {
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
-  let activeStage = null;
-  let draftRound = null;
-  let stageItem = null;
+  let activeStage: StageWithStageItems | null = null;
+  let draftRound: RoundInterface | null = null;
+  let stageItem: StageItemWithRounds | null = null;
 
-  if (responseIsValid(swrStagesResponse) && stageItemId != null) {
-    stageItem = getStageItemLookup(swrStagesResponse)[stageItemId];
+  if (responseIsValid(swrStagesResponse)) {
+    stageItem = getStageItemLookup(swrStagesResponse)[stageItemId] ?? null;
     [activeStage] = getStageById(swrStagesResponse, stageItem.stage_id);
 
     if (activeStage != null && activeStage.stage_items != null) {
@@ -90,7 +90,11 @@ export default function TournamentPage() {
     }
   }
 
-  const swrUpcomingMatchesResponse = getUpcomingMatches(id, draftRound?.id, schedulerSettings);
+  const swrUpcomingMatchesResponse = getUpcomingMatches(
+    id,
+    draftRound?.id ?? null,
+    schedulerSettings
+  );
   const scheduler =
     draftRound != null &&
     stageItem != null &&
@@ -163,7 +167,7 @@ export default function TournamentPage() {
           swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           readOnly={false}
-          stageItem={stageItem}
+          stageItem={stageItem!} // TODO: Actually check if stageItem exists before using it, remove this once proper checks are in place
           displaySettings={displaySettings}
         />
         {scheduler}
