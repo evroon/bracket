@@ -59,6 +59,13 @@ translation for you, and then carefully check and correct any mistakes.
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/BachErik">
+            <img src="https://avatars.githubusercontent.com/u/75324423?v=4" width="100;" alt="BachErik"/>
+            <br />
+            <sub><b>BachErik</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/djpiper28">
             <img src="https://avatars.githubusercontent.com/u/13609136?v=4" width="100;" alt="djpiper28"/>
             <br />
