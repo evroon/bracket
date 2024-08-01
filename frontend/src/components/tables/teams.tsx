@@ -53,8 +53,6 @@ export default function TeamsTable({
         <Table.Td>
           <DateTime datetime={team.created} />
         </Table.Td>
-        <Table.Td>{Number(team.swiss_score).toFixed(1)}</Table.Td>
-        <Table.Td>{Number(team.elo_score).toFixed(0)}</Table.Td>
         <Table.Td>
           <TeamUpdateModal
             tournament_id={tournamentData.id}
@@ -88,12 +86,6 @@ export default function TeamsTable({
             <ThNotSortable>{t('members_table_header')}</ThNotSortable>
             <ThSortable state={tableState} field="created">
               {t('created')}
-            </ThSortable>
-            <ThSortable state={tableState} field="swiss_score">
-              {t('swiss_score')}
-            </ThSortable>
-            <ThSortable state={tableState} field="elo_score">
-              {t('elo_score')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

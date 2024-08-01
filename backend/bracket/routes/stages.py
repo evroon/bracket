@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
+from bracket.logic.ranking.elo import (
+    determine_team_ranking_for_stage_item,
+)
 from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import update_matches_in_activated_stage
 from bracket.logic.subscriptions import check_requirement
@@ -15,10 +17,13 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import (
     StageItemInputOptionsResponse,
+    StageRankingResponse,
     StagesWithStageItemsResponse,
     SuccessResponse,
 )
 from bracket.routes.util import stage_dependency
+from bracket.sql.rankings import get_ranking_for_stage_item
+from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import (
     get_full_tournament_details,
     get_next_stage_in_tournament,
@@ -28,6 +33,7 @@ from bracket.sql.stages import (
 )
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.id_types import StageId, TournamentId
+from bracket.utils.types import assert_some
 
 router = APIRouter()
 
@@ -69,7 +75,6 @@ async def delete_stage(
 
     await sql_delete_stage(tournament_id, stage_id)
 
-    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 
@@ -140,3 +145,30 @@ async def get_available_inputs(
     teams = await get_teams_with_members(tournament_id)
     available_inputs = determine_available_inputs(stage_id, teams, stages)
     return StageItemInputOptionsResponse(data=available_inputs)
+
+
+@router.get("/tournaments/{tournament_id}/stages/{stage_id}/rankings")
+async def get_rankings(
+    tournament_id: TournamentId,
+    stage_id: StageId,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    stage_without_details: Stage = Depends(stage_dependency),
+) -> StageRankingResponse:
+    """
+    Get the rankings for the stage items in this stage.
+    """
+    [stage] = await get_full_tournament_details(tournament_id, stage_id=stage_id)
+
+    stage_items = {
+        stage_item.id: assert_some(await get_stage_item(tournament_id, stage_item.id))
+        for stage_item in stage.stage_items
+    }
+    stage_item_x_ranking = {
+        stage_item_id: await determine_team_ranking_for_stage_item(
+            stage_item,
+            assert_some(await get_ranking_for_stage_item(tournament_id, stage_item.id)),
+        )
+        for stage_item_id, stage_item in stage_items.items()
+    }
+
+    return StageRankingResponse(data=stage_item_x_ranking)

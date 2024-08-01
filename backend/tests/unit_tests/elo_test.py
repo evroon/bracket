@@ -1,10 +1,9 @@
 from decimal import Decimal
 
-from bracket.logic.ranking.elo import (
-    determine_ranking_for_stage_items,
-)
+from bracket.logic.ranking.elo import determine_ranking_for_stage_item
 from bracket.models.db.match import MatchWithDetailsDefinitive
-from bracket.models.db.players import PlayerStatistics
+from bracket.models.db.players import TeamStatistics
+from bracket.models.db.ranking import Ranking
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.utils.dummy_records import (
@@ -13,7 +12,7 @@ from bracket.utils.dummy_records import (
     DUMMY_PLAYER2,
     DUMMY_STAGE_ITEM1,
 )
-from bracket.utils.id_types import RoundId, StageItemId, TeamId, TournamentId
+from bracket.utils.id_types import RankingId, RoundId, StageItemId, TeamId, TournamentId
 
 
 def test_elo_calculation() -> None:
@@ -74,18 +73,23 @@ def test_elo_calculation() -> None:
             )
         ],
     )
+    ranking = Ranking(
+        id=RankingId(-1),
+        tournament_id=TournamentId(1),
+        created=DUMMY_MOCK_TIME,
+        win_points=Decimal("1.0"),
+        draw_points=Decimal("0.5"),
+        loss_points=Decimal("0.0"),
+        add_score_points=False,
+        position=1,
+    )
     stage_item = StageItemWithRounds(
         **DUMMY_STAGE_ITEM1.model_dump(exclude={"id"}),
         id=StageItemId(-1),
         inputs=[],
         rounds=[round_],
     )
-    player_stats, team_stats = determine_ranking_for_stage_items([stage_item])
-    assert player_stats == {
-        1: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
-        2: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
-    }
-    assert team_stats == {
-        3: PlayerStatistics(losses=1, elo_score=1184, swiss_score=Decimal("0.00")),
-        4: PlayerStatistics(wins=1, elo_score=1216, swiss_score=Decimal("1.00")),
+    assert determine_ranking_for_stage_item(stage_item, ranking) == {
+        3: TeamStatistics(losses=1, points=Decimal("0.0")),
+        4: TeamStatistics(wins=1, points=Decimal("1.0")),
     }

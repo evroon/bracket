@@ -78,25 +78,6 @@ export default function PlayersTable({
           <DateTime datetime={player.created} />
         </Table.Td>
         <Table.Td>
-          <WinDistribution wins={player.wins} draws={player.draws} losses={player.losses} />
-        </Table.Td>
-        <Table.Td>
-          <PlayerScore
-            score={Number(player.elo_score)}
-            min_score={minELOScore}
-            max_score={maxELOScore}
-            decimals={0}
-          />
-        </Table.Td>
-        <Table.Td>
-          <PlayerScore
-            score={Number(player.swiss_score)}
-            min_score={0}
-            max_score={maxSwissScore}
-            decimals={1}
-          />
-        </Table.Td>
-        <Table.Td>
           <PlayerUpdateModal
             swrPlayersResponse={swrPlayersResponse}
             tournament_id={tournamentData.id}
@@ -128,17 +109,6 @@ export default function PlayersTable({
             </ThSortable>
             <ThSortable state={tableState} field="created">
               {t('created')}
-            </ThSortable>
-            <ThNotSortable>
-              <>
-                <WinDistributionTitle />
-              </>
-            </ThNotSortable>
-            <ThSortable state={tableState} field="elo_score">
-              {t('elo_score')}
-            </ThSortable>
-            <ThSortable state={tableState} field="swiss_score">
-              {t('swiss_score')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

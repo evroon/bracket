@@ -6,6 +6,10 @@ export interface StageItemInput {
   team_id: number | null;
   winner_from_stage_item_id: number | null;
   winner_position: number | null;
+  wins: number;
+  draws: number;
+  losses: number;
+  points: number;
 }
 
 export interface StageItemInputCreateBody {

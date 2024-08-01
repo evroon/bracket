@@ -49,6 +49,7 @@ stage_items = Table(
     Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
     Column("stage_id", BigInteger, ForeignKey("stages.id"), index=True, nullable=False),
     Column("team_count", Integer, nullable=False),
+    Column("ranking_id", BigInteger, ForeignKey("rankings.id"), nullable=False),
     Column(
         "type",
         Enum(
@@ -77,6 +78,10 @@ stage_item_inputs = Table(
     Column("team_id", BigInteger, ForeignKey("teams.id"), nullable=True),
     Column("winner_from_stage_item_id", BigInteger, ForeignKey("stage_items.id"), nullable=True),
     Column("winner_position", Integer, nullable=True),
+    Column("points", Float, nullable=False, server_default="0"),
+    Column("wins", Integer, nullable=False, server_default="0"),
+    Column("draws", Integer, nullable=False, server_default="0"),
+    Column("losses", Integer, nullable=False, server_default="0"),
 )
 
 rounds = Table(
@@ -203,4 +208,17 @@ courts = Table(
     Column("name", Text, nullable=False),
     Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
     Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
+)
+
+rankings = Table(
+    "rankings",
+    metadata,
+    Column("id", BigInteger, primary_key=True, index=True),
+    Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
+    Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
+    Column("position", Integer, nullable=False),
+    Column("win_points", Float, nullable=False),
+    Column("draw_points", Float, nullable=False),
+    Column("loss_points", Float, nullable=False),
+    Column("add_score_points", Boolean, nullable=False),
 )

@@ -28,7 +28,11 @@ async def test_available_inputs(
         # inserted_stage(
         #     DUMMY_STAGE2.model_copy(update={'tournament_id': auth_context.tournament.id})
         # ) as stage_inserted_2,
-        inserted_stage_item(DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted_1.id})),
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted_1.id, "ranking_id": auth_context.ranking.id}
+            )
+        ),
     ):
         response = await send_tournament_request(
             HTTPMethod.GET, f"stages/{stage_inserted_1.id}/available_inputs", auth_context

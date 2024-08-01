@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
+from bracket.logic.ranking.elo import (
+    recalculate_ranking_for_stage_item_id,
+)
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.round import (
     Round,
@@ -46,7 +48,7 @@ async def delete_round(
             rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
         ),
     )
-    await recalculate_ranking_for_tournament_id(tournament_id)
+    await recalculate_ranking_for_stage_item_id(tournament_id, round_with_matches.stage_item_id)
     return SuccessResponse()
 
 

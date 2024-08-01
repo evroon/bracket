@@ -3,7 +3,6 @@ import { StageItemInput } from './stage_item_input';
 
 export interface StageItemWithRounds {
   id: number;
-  tournament_id: number;
   created: string;
   type: string;
   name: string;

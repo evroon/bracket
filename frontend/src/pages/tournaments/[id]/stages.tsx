@@ -12,17 +12,20 @@ import {
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { TableSkeletonTwoColumnsSmall } from '../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
+import { Ranking } from '../../../interfaces/ranking';
 import { StageWithStageItems } from '../../../interfaces/stage';
-import { getStages, getTournamentById } from '../../../services/adapter';
+import { getRankings, getStages, getTournamentById } from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
 
 export default function StagesPage() {
   const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
+  const swrRankingsResponse = getRankings(tournamentData.id);
   const swrTournamentResponse = getTournamentById(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
+  const rankings: Ranking[] = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
 
   const stages: StageWithStageItems[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
@@ -51,7 +54,11 @@ export default function StagesPage() {
           <NextStageButton tournamentData={tournamentData} swrStagesResponse={swrStagesResponse} />
         </Group>
         <Group mt="1rem" align="top">
-          <Builder tournament={tournamentDataFull} swrStagesResponse={swrStagesResponse} />
+          <Builder
+            tournament={tournamentDataFull}
+            swrStagesResponse={swrStagesResponse}
+            rankings={rankings}
+          />
         </Group>
       </>
     );

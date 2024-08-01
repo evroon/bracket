@@ -131,8 +131,11 @@ export function getPlayersPaginated(tournament_id: number, pagination: Paginatio
   );
 }
 
-export function getTeams(tournament_id: number): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/teams?limit=100`, fetcher);
+export function getTeams(tournament_id: number | null): SWRResponse {
+  return useSWR(
+    tournament_id == null ? null : `tournaments/${tournament_id}/teams?limit=100`,
+    fetcher
+  );
 }
 
 export function getTeamsPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
@@ -142,8 +145,8 @@ export function getTeamsPaginated(tournament_id: number, pagination: Pagination)
   );
 }
 
-export function getTeamsLive(tournament_id: number): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/teams`, fetcher, {
+export function getTeamsLive(tournament_id: number | null): SWRResponse {
+  return useSWR(tournament_id == null ? null : `tournaments/${tournament_id}/teams`, fetcher, {
     refreshInterval: 5_000,
   });
 }
@@ -152,23 +155,30 @@ export function getAvailableStageItemInputs(tournament_id: number, stage_id: num
   return useSWR(`tournaments/${tournament_id}/stages/${stage_id}/available_inputs`, fetcher);
 }
 
-export function getStages(tournament_id: number, no_draft_rounds: boolean = false): SWRResponse {
+export function getStages(
+  tournament_id: number | null,
+  no_draft_rounds: boolean = false
+): SWRResponse {
   return useSWR(
-    tournament_id === -1
+    tournament_id == null || tournament_id === -1
       ? null
       : `tournaments/${tournament_id}/stages?no_draft_rounds=${no_draft_rounds}`,
     fetcher
   );
 }
 
-export function getStagesLive(tournament_id: number): SWRResponse {
+export function getStagesLive(tournament_id: number | null): SWRResponse {
   return useSWR(
-    tournament_id === -1 ? null : `tournaments/${tournament_id}/stages?no_draft_rounds=true`,
+    tournament_id == null ? null : `tournaments/${tournament_id}/stages?no_draft_rounds=true`,
     fetcherWithTimestamp,
     {
       refreshInterval: 5_000,
     }
   );
+}
+
+export function getRankings(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/rankings`, fetcher);
 }
 
 export function getCourts(tournament_id: number): SWRResponse {

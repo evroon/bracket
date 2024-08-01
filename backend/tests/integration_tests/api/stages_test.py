@@ -37,7 +37,9 @@ async def test_stages_endpoint(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
         ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
@@ -62,6 +64,7 @@ async def test_stages_endpoint(
                         {
                             "id": stage_item_inserted.id,
                             "stage_id": stage_inserted.id,
+                            "ranking_id": auth_context.ranking.id,
                             "name": "Group A",
                             "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                             "type": "ROUND_ROBIN",
@@ -132,7 +135,11 @@ async def test_update_stage(
         inserted_stage(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
-        inserted_stage_item(DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})),
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
+        ),
     ):
         assert (
             await send_tournament_request(
@@ -174,3 +181,24 @@ async def test_activate_stage(
 
         await assert_row_count_and_clear(stage_items, 1)
         await assert_row_count_and_clear(stages, 1)
+
+
+async def test_get_rankings(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with (
+        inserted_team(DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})),
+        inserted_stage(
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ) as stage_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
+        ) as stage_item_inserted,
+    ):
+        response = await send_tournament_request(
+            HTTPMethod.GET, f"stages/{stage_inserted.id}/rankings", auth_context
+        )
+
+    assert response == {"data": {f"{stage_item_inserted.id}": []}}

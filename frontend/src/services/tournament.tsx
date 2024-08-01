@@ -60,5 +60,5 @@ export function getTournamentResponseByEndpointName() {
   const endpointName = getTournamentEndpointFromRouter();
   const swrTournamentsResponse = getTournamentByEndpointName(endpointName);
 
-  return swrTournamentsResponse.data != null ? swrTournamentsResponse.data.data : null;
+  return swrTournamentsResponse.data?.data;
 }

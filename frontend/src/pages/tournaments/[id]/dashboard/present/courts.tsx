@@ -31,7 +31,7 @@ export default function CourtsPage() {
 
   // Hack to avoid unequal number of rendered hooks.
   const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : -1;
+  const tournamentId = !notFound ? tournamentResponse[0].id : null;
 
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId);
   const swrCourtsResponse: SWRResponse = getCourtsLive(tournamentId);

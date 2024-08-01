@@ -7,7 +7,6 @@ from fastapi import APIRouter, Depends, UploadFile
 from heliclockter import datetime_utc
 
 from bracket.database import database
-from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.teams import get_team_logo_path
 from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
@@ -61,7 +60,6 @@ async def update_team_members(
             & (players_x_teams.c.team_id == team_id)
         ),
     )
-    await recalculate_ranking_for_tournament_id(tournament_id)
 
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
@@ -94,7 +92,6 @@ async def update_team_by_id(
         values=team_body.model_dump(exclude={"player_ids"}),
     )
     await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
-    await recalculate_ranking_for_tournament_id(tournament_id)
 
     return SingleTeamResponse(
         data=assert_some(
@@ -162,7 +159,6 @@ async def delete_team(
     ):
         await sql_delete_team(tournament_id, assert_some(team.id))
 
-    await recalculate_ranking_for_tournament_id(tournament_id)
     return SuccessResponse()
 
 

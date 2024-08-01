@@ -10,6 +10,7 @@ from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
+from bracket.models.db.ranking import Ranking, RankingInsertable
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.stage_item import StageItem, StageItemToInsert
@@ -23,6 +24,7 @@ from bracket.schema import (
     matches,
     players,
     players_x_teams,
+    rankings,
     rounds,
     stage_items,
     stages,
@@ -32,7 +34,7 @@ from bracket.schema import (
     users_x_clubs,
 )
 from bracket.utils.db import insert_generic
-from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_TOURNAMENT
+from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_RANKING1, DUMMY_TOURNAMENT
 from bracket.utils.id_types import TeamId
 from bracket.utils.types import BaseModelT, assert_some
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
@@ -84,6 +86,12 @@ async def inserted_team(team: Team) -> AsyncIterator[Team]:
 async def inserted_court(court: Court) -> AsyncIterator[Court]:
     async with inserted_generic(court, courts, Court) as row_inserted:
         yield row_inserted
+
+
+@asynccontextmanager
+async def inserted_ranking(ranking: RankingInsertable) -> AsyncIterator[Ranking]:
+    async with inserted_generic(ranking, rankings, Ranking) as row_inserted:
+        yield cast(Ranking, row_inserted)
 
 
 @asynccontextmanager
@@ -143,6 +151,9 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         inserted_tournament(
             DUMMY_TOURNAMENT.model_copy(update={"club_id": club_inserted.id})
         ) as tournament_inserted,
+        inserted_ranking(
+            DUMMY_RANKING1.model_copy(update={"tournament_id": tournament_inserted.id})
+        ) as ranking_inserted,
         inserted_user_x_club(
             UserXClub(
                 user_id=user_inserted.id,
@@ -157,4 +168,5 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
             club=club_inserted,
             tournament=tournament_inserted,
             user_x_club=user_x_club_inserted,
+            ranking=ranking_inserted,
         )
