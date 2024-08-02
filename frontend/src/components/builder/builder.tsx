@@ -28,12 +28,10 @@ function StageItemInputSectionLast({
   lastInList,
 }: {
   input: StageItemInput;
-  team: TeamInterface | null;
-  teamStageItem: TeamInterface | null;
+  team: TeamInterface;
+  teamStageItem: StageItemWithRounds;
   lastInList: boolean;
 }) {
-  assert(team != null || teamStageItem != null);
-
   const content = team
     ? team.name
     : // @ts-ignore
@@ -53,7 +51,7 @@ function StageItemRow({
   stageItem,
   swrStagesResponse,
 }: {
-  teamsMap: any;
+  teamsMap: NonNullable<ReturnType<typeof getTeamsLookup>>;
   tournament: Tournament;
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
@@ -70,12 +68,14 @@ function StageItemRow({
         ? stageItemsLookup[input.winner_from_stage_item_id]
         : null;
 
+      assert(team != null || teamStageItem != null);
+
       return (
         <StageItemInputSectionLast
           key={i}
-          team={team}
+          team={team!}
           input={input}
-          teamStageItem={teamStageItem}
+          teamStageItem={teamStageItem!}
           lastInList={i === stageItem.inputs.length - 1}
         />
       );
