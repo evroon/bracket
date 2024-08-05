@@ -17,10 +17,8 @@ services:
         ports:
             - "3000:3000"
         environment:
-            NEXT_PUBLIC_API_BASE_URL: "https://bracket.mywebsite.com"
-            # Go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
-            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "xxxxx"
-            NODE_ENV: "production"
+NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
+            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"  # Public test key
         restart: unless-stopped
 
     bracket-backend:
@@ -31,8 +29,11 @@ services:
         environment:
             ENVIRONMENT: "PRODUCTION"
             PG_DSN: "postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod"
+            CORS_ORIGINS: https://your-site.com
+            CORS_ORIGIN_REGEX: ^https://your-site.com$
+            JWT_SECRET: change_me
         volumes:
-          - ./backend/static:/app/static
+            - ./backend/static:/app/static
         restart: unless-stopped
         depends_on:
           - postgres
