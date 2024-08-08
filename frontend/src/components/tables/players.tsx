@@ -53,6 +53,7 @@ export default function PlayersTable({
   const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
   const maxELOScore = Math.max(...players.map((player) => Number(player.elo_score)));
   const maxSwissScore = Math.max(...players.map((player) => Number(player.swiss_score)));
+  const maxGamePoints = Math.max(...players.map((player) => Number(player.game_points)));
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
@@ -94,6 +95,14 @@ export default function PlayersTable({
             min_score={0}
             max_score={maxSwissScore}
             decimals={1}
+          />
+        </Table.Td>
+        <Table.Td>
+          <PlayerScore
+            score={Number(player.game_points)}
+            min_score={0}
+            max_score={maxGamePoints}
+            decimals={0}
           />
         </Table.Td>
         <Table.Td>
@@ -139,6 +148,9 @@ export default function PlayersTable({
             </ThSortable>
             <ThSortable state={tableState} field="swiss_score">
               {t('swiss_score')}
+            </ThSortable>
+            <ThSortable state={tableState} field="game_points">
+              {t('game_points')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

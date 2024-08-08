@@ -55,6 +55,7 @@ export default function TeamsTable({
         </Table.Td>
         <Table.Td>{Number(team.swiss_score).toFixed(1)}</Table.Td>
         <Table.Td>{Number(team.elo_score).toFixed(0)}</Table.Td>
+        <Table.Td>{Number(team.game_points)}</Table.Td>
         <Table.Td>
           <TeamUpdateModal
             tournament_id={tournamentData.id}
@@ -94,6 +95,9 @@ export default function TeamsTable({
             </ThSortable>
             <ThSortable state={tableState} field="elo_score">
               {t('elo_score')}
+            </ThSortable>
+            <ThSortable state={tableState} field="game_points">
+              {t('game_points')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>
