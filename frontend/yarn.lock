@@ -535,10 +535,10 @@
   resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-1.2.1.tgz#02162dd8a41dceff49a2a34e09e6c1545a0a567b"
   integrity sha512-O16E7mAByRR+uuzwtA3ROaOT4Er/TasHRZBTLyhZ2ksMRsmaaXChGkdE/dws4meTJYjcItqZNyc3NpJv9/jgAw==
 
-"@hcaptcha/react-hcaptcha@^1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.10.1.tgz#c9c4a913cde4fd6e9c09180f1aa6f65d9f136263"
-  integrity sha512-P0en4gEZAecah7Pt3WIaJO2gFlaLZKkI0+Tfdg8fNqsDxqT9VytZWSkH4WAkiPRULK1QcGgUZK+J56MXYmPifw==
+"@hcaptcha/react-hcaptcha@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.11.0.tgz#d4520dd3b7ece735bc928dedcda048be477b2dcd"
+  integrity sha512-UKHtzzVMHLTGwab5pgV96UbcXdyh5Qyq8E0G5DTyXq8txMvuDx7rSyC+BneOjWVW0a7O9VuZmkg/EznVLRE45g==
   dependencies:
     "@babel/runtime" "^7.17.9"
     "@hcaptcha/loader" "^1.2.1"
