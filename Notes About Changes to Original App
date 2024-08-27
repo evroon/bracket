@@ -1,0 +1,11 @@
+Stages should be Race Divisions (Qualifiers, Quarters, Semis, and Finals)
+Stage Type should be Heat #
+courts should be lanes
+Need to restructure Courts to build heats
+Planning should pull in Heats (Stages), add lanes (courts) and accept race times (currently resuts, which should maybe be the same info + display race times)
+Need a publish to dashboard button for admins
+Need to set up log in in google "firebase?"
+Need to set up github actions for workflows
+Will need to set up algorythm to auto populate qualifier rounds and Sunday rounds according to race rules
+Need to set up dev environment in lil plastic castle
+run as is to make sure everything works as expected before making changes
