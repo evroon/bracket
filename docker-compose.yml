@@ -7,7 +7,6 @@ networks:
 volumes:
   bracket_pg_data:
 
-
 services:
   bracket-backend:
     container_name: bracket-backend
