@@ -17,8 +17,10 @@ services:
         ports:
             - "3000:3000"
         environment:
-NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
-            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"  # Public test key
+            NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
+            # Go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
+            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+            NODE_ENV: "production"
         restart: unless-stopped
 
     bracket-backend:
