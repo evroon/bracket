@@ -187,7 +187,7 @@ export function getUser(): SWRResponse {
 
 export function getUpcomingMatches(
   tournament_id: number,
-  round_id: number,
+  round_id: number | null,
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(

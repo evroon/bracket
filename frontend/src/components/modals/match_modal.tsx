@@ -1,7 +1,20 @@
-import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Divider,
+  Grid,
+  Input,
+  Modal,
+  NumberInput,
+  Text,
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+import { format, fromUnixTime, getUnixTime, parseISO } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SWRResponse } from 'swr';
 
 import {
@@ -15,18 +28,33 @@ import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
 import DeleteButton from '../buttons/delete';
 
+interface MatchModalBaseProps {
+  tournamentData: TournamentMinimal;
+  swrUpcomingMatchesResponse: SWRResponse | null;
+  dynamicSchedule: boolean;
+}
+
+interface MatchModalProps extends MatchModalBaseProps {
+  match: MatchInterface | null;
+  swrStagesResponse: SWRResponse;
+  setOpened: (value: boolean) => void;
+  priorMatch: MatchInterface | null;
+}
+
+/**
+ * A typical implementation for opening a match modal. Useful for other components, especially in pages.
+ */
+export type OpenMatchModalFn = (match: MatchInterface, priorMatch: MatchInterface | null) => void;
+
 function MatchDeleteButton({
   tournamentData,
   match,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
+}: MatchModalBaseProps & {
   match: MatchInterface;
   swrRoundsResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
   if (!dynamicSchedule) return null;
@@ -52,14 +80,8 @@ function MatchModalForm({
   swrUpcomingMatchesResponse,
   setOpened,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
-  setOpened: any;
-  dynamicSchedule: boolean;
-}) {
+  priorMatch,
+}: MatchModalProps) {
   if (match == null) {
     return null;
   }
@@ -88,6 +110,26 @@ function MatchModalForm({
   );
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
     match.custom_margin_minutes != null
+  );
+
+  const [date, setDate] = useState<Date | null>(null);
+
+  const matchDuration = useMemo(() => {
+    const value = customDurationEnabled
+      ? form.values.custom_duration_minutes
+      : match.duration_minutes;
+    return value ?? 0;
+  }, [customDurationEnabled, form.values.custom_duration_minutes, match.duration_minutes]);
+
+  const matchMargin = useMemo(() => {
+    const value = customMarginEnabled ? form.values.custom_margin_minutes : match.margin_minutes;
+    return value ?? 0;
+  }, [customMarginEnabled, form.values.custom_margin_minutes, match.margin_minutes]);
+
+  const endDatetime = useMemo(
+    () =>
+      fromUnixTime(getUnixTime(parseISO(match.start_time)) + matchDuration * 60 + matchMargin * 60),
+    [match.start_time, matchDuration, matchMargin]
   );
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
@@ -123,19 +165,18 @@ function MatchModalForm({
         />
         <NumberInput
           withAsterisk
-          mt="lg"
+          mt="xs"
           label={`${t('score_of_label')} ${team2Name}`}
           placeholder={`${t('score_of_label')} ${team2Name}`}
           {...form.getInputProps('team2_score')}
         />
-        <Divider mt="lg" />
 
-        <Text size="sm" mt="lg">
-          {t('custom_match_duration_label')}
-        </Text>
+        <Divider mt="lg" mb="xs" />
+
         <Grid align="center">
           <Grid.Col span={{ sm: 8 }}>
             <NumberInput
+              label={t('custom_match_duration_label')}
               disabled={!customDurationEnabled}
               rightSection={<Text>{t('minutes')}</Text>}
               placeholder={`${match.duration_minutes}`}
@@ -144,6 +185,7 @@ function MatchModalForm({
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 4 }}>
+            <Input.Label />
             <Center>
               <Checkbox
                 checked={customDurationEnabled}
@@ -156,12 +198,10 @@ function MatchModalForm({
           </Grid.Col>
         </Grid>
 
-        <Text size="sm" mt="lg">
-          {t('custom_match_margin_label')}
-        </Text>
         <Grid align="center">
           <Grid.Col span={{ sm: 8 }}>
             <NumberInput
+              label={t('custom_match_margin_label')}
               disabled={!customMarginEnabled}
               placeholder={`${match.margin_minutes}`}
               rightSection={<Text>{t('minutes')}</Text>}
@@ -170,6 +210,7 @@ function MatchModalForm({
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 4 }}>
+            <Input.Label />
             <Center>
               <Checkbox
                 checked={customMarginEnabled}
@@ -181,6 +222,70 @@ function MatchModalForm({
             </Center>
           </Grid.Col>
         </Grid>
+
+        <Input.Wrapper label={t('next_match_time_label')} mt="sm">
+          <Input component="time" dateTime={endDatetime.toISOString()}>
+            {format(endDatetime, 'd LLLL yyyy HH:mm')}
+          </Input>
+        </Input.Wrapper>
+
+        {priorMatch && (
+          <>
+            <Divider mt="lg" mb="xs" />
+
+            <Grid align="center">
+              <Grid.Col span={{ sm: 8 }}>
+                <DateTimePicker
+                  label={t('calculate_datetime_match_label')}
+                  clearable
+                  value={date}
+                  onChange={setDate}
+                />
+              </Grid.Col>
+              <Grid.Col span={{ sm: 4 }}>
+                <Input.Label />
+                <Button
+                  display="block"
+                  w="100%"
+                  disabled={date === null}
+                  onClick={async () => {
+                    const computedMargin = Math.floor(
+                      (date!.getTime() -
+                        parseISO(priorMatch.start_time).getTime() +
+                        (priorMatch.custom_duration_minutes === null
+                          ? priorMatch.duration_minutes
+                          : priorMatch.custom_duration_minutes) *
+                          60 *
+                          1000) /
+                        60 /
+                        1000
+                    );
+
+                    if (computedMargin < 0) {
+                      showNotification({
+                        message: '',
+                        title: t('negative_match_margin_validation'),
+                        color: 'red',
+                        // icon: <IconAlert />,
+                      });
+                      return;
+                    }
+
+                    const updatedMatch = {
+                      ...priorMatch,
+                      custom_margin_minutes: computedMargin,
+                    };
+
+                    await updateMatch(tournamentData.id, priorMatch.id, updatedMatch);
+                    await swrStagesResponse.mutate();
+                  }}
+                >
+                  {t('calculate_label')}
+                </Button>
+              </Grid.Col>
+            </Grid>
+          </>
+        )}
 
         <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
           {t('save_button')}
@@ -205,14 +310,9 @@ export default function MatchModal({
   opened,
   setOpened,
   dynamicSchedule,
-}: {
-  tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse | null;
+  priorMatch,
+}: MatchModalProps & {
   opened: boolean;
-  setOpened: any;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -226,6 +326,7 @@ export default function MatchModal({
           match={match}
           setOpened={setOpened}
           dynamicSchedule={dynamicSchedule}
+          priorMatch={priorMatch}
         />
       </Modal>
     </>
