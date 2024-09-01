@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from bracket.logic.planning.matches import (
+    get_scheduled_matches,
     handle_match_reschedule,
+    reorder_matches_for_court,
     schedule_all_unscheduled_matches,
 )
 from bracket.logic.ranking.elo import recalculate_ranking_for_tournament_id
@@ -25,6 +27,7 @@ from bracket.routes.models import SingleMatchResponse, SuccessResponse, Upcoming
 from bracket.routes.util import match_dependency, round_dependency, round_with_matches_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
+from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.id_types import MatchId, TournamentId
@@ -184,4 +187,11 @@ async def update_match_by_id(
 
     await sql_update_match(assert_some(match.id), match_body, tournament)
     await recalculate_ranking_for_tournament_id(tournament_id)
+    if (
+        match_body.custom_duration_minutes != match.custom_duration_minutes
+        or match_body.custom_margin_minutes != match.custom_margin_minutes
+    ):
+        tournament = await sql_get_tournament(tournament_id)
+        scheduled_matches = get_scheduled_matches(await get_full_tournament_details(tournament_id))
+        await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
     return SuccessResponse()

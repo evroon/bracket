@@ -174,6 +174,67 @@ async def test_update_match(
         await assert_row_count_and_clear(matches, 1)
 
 
+async def test_update_endpoint_custom_duration_margin(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    async with (
+        inserted_stage(
+            DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ) as stage_inserted,
+        inserted_stage_item(
+            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+        ) as stage_item_inserted,
+        inserted_round(
+            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
+        ) as round_inserted,
+        inserted_team(
+            DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ) as team1_inserted,
+        inserted_team(
+            DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ) as team2_inserted,
+        inserted_court(
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ) as court1_inserted,
+        inserted_match(
+            DUMMY_MATCH1.model_copy(
+                update={
+                    "round_id": round_inserted.id,
+                    "team1_id": team1_inserted.id,
+                    "team2_id": team2_inserted.id,
+                    "court_id": court1_inserted.id,
+                    "custom_duration_minutes": 20,
+                    "custom_margin_minutes": 10,
+                }
+            )
+        ) as match_inserted,
+    ):
+        body = {
+            "round_id": round_inserted.id,
+            "custom_duration_minutes": 30,
+            "custom_margin_minutes": 20,
+        }
+        assert (
+            await send_tournament_request(
+                HTTPMethod.PUT,
+                f"matches/{match_inserted.id}",
+                auth_context,
+                None,
+                body,
+            )
+            == SUCCESS_RESPONSE
+        )
+        updated_match = await fetch_one_parsed_certain(
+            database,
+            Match,
+            query=matches.select().where(matches.c.id == match_inserted.id),
+        )
+        assert updated_match.custom_duration_minutes == body["custom_duration_minutes"]
+        assert updated_match.custom_margin_minutes == body["custom_margin_minutes"]
+
+        await assert_row_count_and_clear(matches, 1)
+
+
 async def test_upcoming_matches_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
