@@ -15,7 +15,9 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
-RUN NEXT_PUBLIC_API_BASE_URL=http://NEXT_PUBLIC_API_BASE_URL_PLACEHOLDER yarn build
+RUN NEXT_PUBLIC_API_BASE_URL=http://NEXT_PUBLIC_API_BASE_URL_PLACEHOLDER \
+    NEXT_PUBLIC_HCAPTCHA_SITE_KEY=http://NEXT_PUBLIC_HCAPTCHA_SITE_KEY_PLACEHOLDER \
+    yarn build
 
 # Production image, copy all the files and run next
 FROM node:18-alpine AS runner
