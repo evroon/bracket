@@ -18,6 +18,9 @@ RUN set -ex \
 
 EXPOSE 8400
 
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
+    CMD wget --spider http://localhost:8400 || exit 1
+
 CMD pipenv run gunicorn \
     -k uvicorn.workers.UvicornWorker \
     bracket.app:app \
