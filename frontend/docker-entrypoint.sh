@@ -6,7 +6,7 @@ set -eo pipefail
 replace_placeholder() {
   find .next public -type f |
   while read file; do
-      sed -i "s|$FROM|$TO|g" "$file" || true
+      sed -i "s|$1|$2|g" "$file" || true
   done
 }
 
