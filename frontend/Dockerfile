@@ -16,7 +16,7 @@ COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
 RUN NEXT_PUBLIC_API_BASE_URL=http://NEXT_PUBLIC_API_BASE_URL_PLACEHOLDER \
-    NEXT_PUBLIC_HCAPTCHA_SITE_KEY=http://NEXT_PUBLIC_HCAPTCHA_SITE_KEY_PLACEHOLDER \
+    NEXT_PUBLIC_HCAPTCHA_SITE_KEY=NEXT_PUBLIC_HCAPTCHA_SITE_KEY_PLACEHOLDER \
     yarn build
 
 # Production image, copy all the files and run next
@@ -49,7 +49,7 @@ EXPOSE 3000
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-HEALTHCHECK --interval=30s --timeout=30s --retries=5 \
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
     CMD wget --spider http://localhost:3000 || exit 1
 
 CMD yarn start
