@@ -1,11 +1,11 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
-import { SSRConfig, i18n as globali18n, useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { GetStaticProps } from 'next';
+import { SSRConfig, i18n as globali18n, useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import classes from './404.module.css';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function NotFoundTitle(props: SSRConfig) {
   const router = useRouter();
