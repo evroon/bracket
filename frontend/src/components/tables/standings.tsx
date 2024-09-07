@@ -84,8 +84,8 @@ export function StandingsTableForStageItem({
   const { t } = useTranslation();
   const tableState = getTableState('points', false);
 
-  const minPoints = Math.min(...teams_with_inputs.map((item) => item.team.elo_score));
-  const maxPoints = Math.max(...teams_with_inputs.map((item) => item.team.elo_score));
+  const minPoints = Math.min(...teams_with_inputs.map((item) => item.input.points));
+  const maxPoints = Math.max(...teams_with_inputs.map((item) => item.input.points));
 
   const rows = teams_with_inputs
     .sort((p1: TeamWithInput, p2: TeamWithInput) => (p1.input.points > p2.input.points ? 1 : -1))
@@ -111,7 +111,7 @@ export function StandingsTableForStageItem({
         {stageItem.type === 'SWISS' ? (
           <Table.Td>
             <PlayerScore
-              score={team_with_input.team.elo_score}
+              score={team_with_input.input.points}
               min_score={minPoints}
               max_score={maxPoints}
               decimals={0}
