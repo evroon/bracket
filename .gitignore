@@ -16,3 +16,5 @@ coverage.json
 
 backend/yarn.lock
 backend/static
+
+/process-compose.yml

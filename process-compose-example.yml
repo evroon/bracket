@@ -1,0 +1,35 @@
+version: "0.5"
+log_level: debug
+
+processes:
+  frontend:
+    working_dir: "frontend"
+    command: "yarn run dev"
+    availability:
+      restart: "on_failure"
+    readiness_probe:
+      http_get:
+        host: 127.0.0.1
+        scheme: http
+        path: "/"
+        port: 3000
+      timeout_seconds: 10
+      failure_threshold: 999
+      period_seconds: 10
+
+  backend:
+    working_dir: "backend"
+    command: "pipenv run gunicorn -k bracket.uvicorn.RestartableUvicornWorker bracket.app:app --bind localhost:8400 --workers 1 --reload"
+    availability:
+      restart: "on_failure"
+    environment:
+      - "ENVIRONMENT=DEVELOPMENT"
+    readiness_probe:
+      http_get:
+        host: 127.0.0.1
+        scheme: http
+        path: "/ping"
+        port: 8400
+      timeout_seconds: 10
+      failure_threshold: 999
+      period_seconds: 10
