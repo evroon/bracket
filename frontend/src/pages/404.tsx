@@ -1,10 +1,11 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
+import { GetStaticProps } from 'next';
 import { SSRConfig, i18n as globali18n, useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import classes from './404.module.css';
-import { getStaticProps } from './index';
 
 export default function NotFoundTitle(props: SSRConfig) {
   const router = useRouter();
@@ -40,5 +41,9 @@ export default function NotFoundTitle(props: SSRConfig) {
     </Container>
   );
 }
-
-export { getStaticProps };
+type Props = {};
+export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+  },
+});
