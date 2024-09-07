@@ -26,17 +26,17 @@ def add_missing_rankings(tournaments_without_ranking: list[Any]) -> None:
             .execute(
                 sa.text(
                     """
-                INSERT INTO rankings (
-                    tournament_id,
-                    position,
-                    win_points,
-                    draw_points,
-                    loss_points,
-                    add_score_points
-                )
-                VALUES (:tournament_id, 0, 1, 0.5, 0, false)
-                RETURNING id
-                """
+                    INSERT INTO rankings (
+                        tournament_id,
+                        position,
+                        win_points,
+                        draw_points,
+                        loss_points,
+                        add_score_points
+                    )
+                    VALUES (:tournament_id, 0, 1, 0.5, 0, false)
+                    RETURNING id
+                    """
                 ),
                 tournament_id=tournament.id,
             )
@@ -46,13 +46,13 @@ def add_missing_rankings(tournaments_without_ranking: list[Any]) -> None:
         op.get_bind().execute(
             sa.text(
                 """
-            UPDATE stage_items
-            SET ranking_id = :ranking_id
-            WHERE stage_items.ranking_id IS NULL AND stage_items.stage_id IN (
-                SELECT id FROM stages
-                WHERE stages.tournament_id = :tournament_id
-            )
-            """
+                UPDATE stage_items
+                SET ranking_id = :ranking_id
+                WHERE stage_items.ranking_id IS NULL AND stage_items.stage_id IN (
+                    SELECT id FROM stages
+                    WHERE stages.tournament_id = :tournament_id
+                )
+                """
             ),
             tournament_id=tournament.id,
             ranking_id=ranking_id,
