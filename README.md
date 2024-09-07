@@ -93,7 +93,7 @@ sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
 
 # Development setup
-Read the [development docs](https://docs.bracketapp.nl/docs/running-bracket/development) for how to run Bracket for development.
+Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
 
 Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
 
