@@ -68,12 +68,15 @@ pipenv shell
 ./run.sh
 ```
 
-
 ### Alternative: running Bracket via process-compose
-Alternatively, you can use [process-compose](https://github.com/F1bonacc1/process-compose) to run the app locally. It 
-works similarly to docker-compose, except it works with non-containerized applications.
 
-Just install it according to the [docs](https://f1bonacc1.github.io/process-compose/installation/) and then run:
+Alternatively, you can use [process-compose](https://github.com/F1bonacc1/process-compose) to run
+the app locally. It works similarly to docker-compose, except it works with non-containerized
+applications.
+
+Just install it according to the [docs](https://f1bonacc1.github.io/process-compose/installation/)
+and then run:
+
 ```shell
 cp process-compose-example.yml process-compose.yml 
 process-compose up -d
