@@ -3,9 +3,10 @@ import aiofiles.os
 import aiohttp
 
 from bracket.database import database
+from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.tournament import Tournament
 from bracket.schema import tournaments
-from bracket.sql.tournaments import sql_delete_tournament
+from bracket.sql.tournaments import sql_delete_tournament, sql_get_tournament_by_endpoint_name
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
@@ -68,11 +69,13 @@ async def test_tournament_endpoint(
 async def test_create_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
+    dashboard_endpoint = "some-new-endpoint"
     body = {
         "name": "Some new name",
         "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
         "club_id": auth_context.club.id,
-        "dashboard_public": False,
+        "dashboard_public": True,
+        "dashboard_endpoint": dashboard_endpoint,
         "players_can_be_in_multiple_teams": True,
         "auto_assign_courts": True,
         "duration_minutes": 12,
@@ -82,7 +85,10 @@ async def test_create_tournament(
         await send_auth_request(HTTPMethod.POST, "tournaments", auth_context, json=body)
         == SUCCESS_RESPONSE
     )
-    await database.execute(tournaments.delete().where(tournaments.c.name == body["name"]))
+
+    # Cleanup
+    tournament = assert_some(await sql_get_tournament_by_endpoint_name(dashboard_endpoint))
+    await sql_delete_tournament_completely(assert_some(tournament.id))
 
 
 async def test_update_tournament(

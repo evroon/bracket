@@ -22,7 +22,7 @@ export default function Standings() {
 
   // Hack to avoid unequal number of rendered hooks.
   const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : -1;
+  const tournamentId = !notFound ? tournamentResponse[0].id : null;
 
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
 

@@ -5,7 +5,7 @@ from heliclockter import datetime_utc
 
 from bracket.database import database
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
-from bracket.models.db.players import START_ELO, PlayerStatistics
+from bracket.models.db.players import START_ELO
 from bracket.schema import players
 from bracket.utils.id_types import PlayerId, TournamentId
 from bracket.utils.pagination import PaginationPlayers
@@ -75,34 +75,6 @@ async def get_player_count(
         {not_in_team_filter}
         """
     return cast(int, await database.fetch_val(query=query, values={"tournament_id": tournament_id}))
-
-
-async def update_player_stats(
-    tournament_id: TournamentId, player_id: PlayerId, player_statistics: PlayerStatistics
-) -> None:
-    query = """
-        UPDATE players
-        SET
-            wins = :wins,
-            draws = :draws,
-            losses = :losses,
-            elo_score = :elo_score,
-            swiss_score = :swiss_score
-        WHERE players.tournament_id = :tournament_id
-        AND players.id = :player_id
-        """
-    await database.execute(
-        query=query,
-        values={
-            "tournament_id": tournament_id,
-            "player_id": player_id,
-            "wins": player_statistics.wins,
-            "draws": player_statistics.draws,
-            "losses": player_statistics.losses,
-            "elo_score": player_statistics.elo_score,
-            "swiss_score": float(player_statistics.swiss_score),
-        },
-    )
 
 
 async def sql_delete_player(tournament_id: TournamentId, player_id: PlayerId) -> None:
