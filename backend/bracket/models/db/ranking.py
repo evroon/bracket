@@ -30,7 +30,7 @@ class RankingBody(BaseModel):
 
 
 class RankingCreateBody(BaseModel):
-    win_points: Decimal = Decimal("3.0")
-    draw_points: Decimal = Decimal("1.0")
+    win_points: Decimal = Decimal("1.0")
+    draw_points: Decimal = Decimal("0.5")
     loss_points: Decimal = Decimal("0.0")
     add_score_points: bool = False

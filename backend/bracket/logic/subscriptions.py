@@ -8,8 +8,10 @@ from pydantic import BaseModel
 
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.club import ClubCreateBody
+from bracket.models.db.ranking import RankingCreateBody
 from bracket.models.db.tournament import TournamentBody
 from bracket.sql.clubs import create_club
+from bracket.sql.rankings import sql_create_ranking
 from bracket.sql.tournaments import sql_create_tournament
 from bracket.utils.id_types import UserId
 from bracket.utils.types import assert_some
@@ -86,4 +88,7 @@ async def setup_demo_account(user_id: UserId) -> None:
         duration_minutes=10,
         margin_minutes=5,
     )
-    await sql_create_tournament(tournament)
+    tournament_id = await sql_create_tournament(tournament)
+
+    ranking = RankingCreateBody()
+    await sql_create_ranking(tournament_id=tournament_id, ranking_body=ranking, position=0)
