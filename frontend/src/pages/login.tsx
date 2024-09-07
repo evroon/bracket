@@ -19,7 +19,6 @@ import React, { useEffect } from 'react';
 // import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
 import { performLogin } from '../services/user';
-import Layout from './_layout';
 
 export default function Login() {
   // const { classes } = useStyles();
@@ -58,7 +57,7 @@ export default function Login() {
   });
 
   return (
-    <Layout>
+    <>
       <Title ta="center" mt={100}>
         {t('welcome_title')}{' '}
         <Text inherit variant="gradient" component="span">
@@ -121,7 +120,7 @@ export default function Login() {
           </Text>
         </Paper>
       </Container>
-    </Layout>
+    </>
   );
 }
 
