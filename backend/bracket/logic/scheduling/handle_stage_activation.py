@@ -1,8 +1,8 @@
 from bracket.logic.ranking.elo import (
     determine_team_ranking_for_stage_item,
 )
+from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.match import MatchWithDetails
-from bracket.models.db.players import TeamStatistics
 from bracket.sql.matches import sql_get_match, sql_update_team_ids_for_match
 from bracket.sql.rankings import get_ranking_for_stage_item
 from bracket.sql.stage_items import get_stage_item

@@ -3,8 +3,8 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import TypeVar
 
+from bracket.logic.ranking.statistics import START_ELO, TeamStatistics
 from bracket.models.db.match import MatchWithDetailsDefinitive
-from bracket.models.db.players import TeamStatistics
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import StageItemWithRounds
@@ -35,6 +35,10 @@ def set_statistics_for_team(
     team_score = match.team1_score if is_team1 else match.team2_score
     was_draw = match.team1_score == match.team2_score
     has_won = not was_draw and team_score == max(match.team1_score, match.team2_score)
+
+    # Set default for SWISS teams
+    if stage_item.type is StageType.SWISS and team_id not in stats:
+        stats[team_id].points = START_ELO
 
     if has_won:
         stats[team_id].wins += 1

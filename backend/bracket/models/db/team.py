@@ -8,8 +8,8 @@ from typing import Annotated
 from heliclockter import datetime_utc
 from pydantic import BaseModel, Field, StringConstraints, field_validator
 
+from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.player import Player
-from bracket.models.db.players import START_ELO
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
 from bracket.utils.types import assert_some
@@ -21,7 +21,7 @@ class Team(BaseModelORM):
     name: str
     tournament_id: TournamentId
     active: bool
-    elo_score: Decimal = Decimal(START_ELO)
+    elo_score: Decimal = START_ELO
     swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
@@ -32,7 +32,7 @@ class Team(BaseModelORM):
 class TeamWithPlayers(BaseModel):
     id: TeamId | None = None
     players: list[Player]
-    elo_score: Decimal = Decimal(START_ELO)
+    elo_score: Decimal = START_ELO
     swiss_score: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0

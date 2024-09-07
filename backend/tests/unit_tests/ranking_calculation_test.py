@@ -3,8 +3,8 @@ from decimal import Decimal
 from heliclockter import datetime_utc
 
 from bracket.logic.ranking.elo import determine_ranking_for_stage_item
+from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.match import MatchWithDetails, MatchWithDetailsDefinitive
-from bracket.models.db.players import TeamStatistics
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import StageItemInputFinal
@@ -173,8 +173,8 @@ def test_determine_ranking_for_stage_item_swiss() -> None:
     )
 
     assert ranking == {
-        -2: TeamStatistics(wins=0, draws=1, losses=1, points=Decimal("8.00")),
-        -1: TeamStatistics(wins=1, draws=1, losses=0, points=Decimal("120.00")),
+        -2: TeamStatistics(wins=0, draws=1, losses=1, points=Decimal("1208")),
+        -1: TeamStatistics(wins=1, draws=1, losses=0, points=Decimal("1320")),
     }
 
 

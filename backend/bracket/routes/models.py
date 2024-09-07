@@ -2,11 +2,11 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
+from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match, SuggestedMatch
 from bracket.models.db.player import Player
-from bracket.models.db.players import TeamStatistics
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item_inputs import (
     StageItemInputOptionFinal,

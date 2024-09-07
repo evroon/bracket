@@ -4,8 +4,8 @@ from typing import cast
 from heliclockter import datetime_utc
 
 from bracket.database import database
+from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
-from bracket.models.db.players import START_ELO
 from bracket.schema import players
 from bracket.utils.id_types import PlayerId, TournamentId
 from bracket.utils.pagination import PaginationPlayers
@@ -96,7 +96,7 @@ async def insert_player(player_body: PlayerBody, tournament_id: TournamentId) ->
             **player_body.model_dump(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-            elo_score=Decimal(START_ELO),
+            elo_score=START_ELO,
             swiss_score=Decimal("0.0"),
         ).model_dump(),
     )

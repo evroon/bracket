@@ -1,7 +1,7 @@
 from typing import cast
 
 from bracket.database import database
-from bracket.models.db.players import TeamStatistics
+from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.team import FullTeamWithPlayers, Team
 from bracket.utils.id_types import StageItemInputId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
