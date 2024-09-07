@@ -1,0 +1,18 @@
+# Run pre-translate with translation memory, all files/langs, at midnight daily.
+name: Crowdin Updates
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger_crowdin_tm:
+    name: Crowdin Translation Memory Trigger
+    runs-on: ubuntu-latest
+    # Prevent this workflow from running (and failing) on forks
+    if: github.repository == 'evroon/bracket'
+    steps:
+      - uses: starship/crowdin-pretranslate-action@main
+        with:
+          project_id: 651936
+          api_key: ${{ secrets.CROWDIN_API_KEY }}
