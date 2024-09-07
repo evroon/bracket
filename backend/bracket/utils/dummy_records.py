@@ -1,3 +1,4 @@
+from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 from heliclockter import datetime_utc
@@ -8,6 +9,7 @@ from bracket.models.db.court import Court
 from bracket.models.db.match import Match
 from bracket.models.db.player import Player
 from bracket.models.db.player_x_team import PlayerXTeam
+from bracket.models.db.ranking import RankingInsertable
 from bracket.models.db.round import Round
 from bracket.models.db.stage import Stage
 from bracket.models.db.stage_item import StageItemToInsert, StageType
@@ -18,6 +20,7 @@ from bracket.utils.id_types import (
     ClubId,
     CourtId,
     PlayerId,
+    RankingId,
     RoundId,
     StageId,
     StageItemId,
@@ -66,6 +69,7 @@ DUMMY_STAGE2 = Stage(
 
 DUMMY_STAGE_ITEM1 = StageItemToInsert(
     stage_id=StageId(DB_PLACEHOLDER_ID),
+    ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.ROUND_ROBIN,
     team_count=4,
@@ -74,6 +78,7 @@ DUMMY_STAGE_ITEM1 = StageItemToInsert(
 
 DUMMY_STAGE_ITEM2 = StageItemToInsert(
     stage_id=StageId(DB_PLACEHOLDER_ID),
+    ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.ROUND_ROBIN,
     team_count=4,
@@ -82,6 +87,7 @@ DUMMY_STAGE_ITEM2 = StageItemToInsert(
 
 DUMMY_STAGE_ITEM3 = StageItemToInsert(
     stage_id=StageId(DB_PLACEHOLDER_ID),
+    ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     type=StageType.SINGLE_ELIMINATION,
     team_count=4,
@@ -239,4 +245,13 @@ DUMMY_COURT2 = Court(
     name="Court 2",
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
+)
+
+DUMMY_RANKING1 = RankingInsertable(
+    tournament_id=TournamentId(DB_PLACEHOLDER_ID),
+    win_points=Decimal("1.0"),
+    draw_points=Decimal("0.5"),
+    loss_points=Decimal("0.0"),
+    add_score_points=False,
+    position=0,
 )

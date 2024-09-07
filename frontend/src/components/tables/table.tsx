@@ -20,6 +20,7 @@ export interface ThProps {
   children: React.ReactNode;
   state: TableState;
   field: string;
+  visibleFrom?: string;
 }
 
 export const setSorting = (state: TableState, newSortField: string) => {
@@ -70,11 +71,11 @@ export function getSortIcon(sorted: boolean, reversed: boolean) {
   return <HiSortAscending />;
 }
 
-export function ThSortable({ children, field, state }: ThProps) {
+export function ThSortable({ children, field, visibleFrom, state }: ThProps) {
   const sorted = state.sortField === field;
   const onSort = () => setSorting(state, field);
   return (
-    <Table.Th className={classes.th}>
+    <Table.Th className={classes.th} visibleFrom={visibleFrom}>
       <UnstyledButton onClick={onSort} className={classes.control}>
         <Group justify="apart">
           <Text fw={800} size="sm" ml="0.5rem" my="0.25rem">

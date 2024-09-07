@@ -8,6 +8,7 @@ import {
   IconCalendar,
   IconDots,
   IconHome,
+  IconScoreboard,
   IconSettings,
   IconSoccerField,
   IconTrophy,
@@ -143,6 +144,11 @@ export function TournamentLinks({ tournament_id }: any) {
       icon: IconBrackets,
       label: capitalize(t('results_title')),
       link: `${tm_prefix}/results`,
+    },
+    {
+      icon: IconScoreboard,
+      label: capitalize(t('rankings_title')),
+      link: `${tm_prefix}/rankings`,
     },
     {
       icon: IconSettings,

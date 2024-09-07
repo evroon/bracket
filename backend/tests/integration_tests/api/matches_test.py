@@ -42,7 +42,9 @@ async def test_create_match(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
         ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
@@ -79,7 +81,9 @@ async def test_delete_match(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
         ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
@@ -121,7 +125,9 @@ async def test_update_match(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
         ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
@@ -182,7 +188,9 @@ async def test_update_endpoint_custom_duration_margin(
             DUMMY_STAGE1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as stage_inserted,
         inserted_stage_item(
-            DUMMY_STAGE_ITEM1.model_copy(update={"stage_id": stage_inserted.id})
+            DUMMY_STAGE_ITEM1.model_copy(
+                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+            )
         ) as stage_item_inserted,
         inserted_round(
             DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
@@ -249,7 +257,11 @@ async def test_upcoming_matches_endpoint(
         ) as stage_inserted,
         inserted_stage_item(
             DUMMY_STAGE_ITEM1.model_copy(
-                update={"stage_id": stage_inserted.id, "type": StageType.SWISS}
+                update={
+                    "stage_id": stage_inserted.id,
+                    "type": StageType.SWISS,
+                    "ranking_id": auth_context.ranking.id,
+                }
             )
         ) as stage_item_inserted,
         inserted_round(

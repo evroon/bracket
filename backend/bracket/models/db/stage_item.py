@@ -6,7 +6,7 @@ from pydantic import Field, model_validator
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBody
-from bracket.utils.id_types import StageId, StageItemId
+from bracket.utils.id_types import RankingId, StageId, StageItemId
 from bracket.utils.types import EnumAutoStr
 
 
@@ -27,6 +27,7 @@ class StageItemToInsert(BaseModelORM):
     created: datetime_utc
     type: StageType
     team_count: int = Field(ge=2, le=64)
+    ranking_id: RankingId | None = None
 
 
 class StageItem(StageItemToInsert):
@@ -35,6 +36,7 @@ class StageItem(StageItemToInsert):
 
 class StageItemUpdateBody(BaseModelORM):
     name: str
+    ranking_id: RankingId
 
 
 class StageItemActivateNextBody(BaseModelORM):
@@ -47,6 +49,7 @@ class StageItemCreateBody(BaseModelORM):
     type: StageType
     team_count: int = Field(ge=2, le=64)
     inputs: list[StageItemInputCreateBody]
+    ranking_id: RankingId | None = None
 
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()

@@ -38,15 +38,15 @@ function StandingsContent({
       stageItemsLookup[si1].name > stageItemsLookup[si2].name ? 1 : -1
     )
     .map((stageItemId) => (
-      <>
+      <div key={stageItemId}>
         <Text size="xl" mt="md" mb="xs">
           {stageItemsLookup[stageItemId].name}
         </Text>
         <StandingsTableForStageItem
-          teams={stageItemTeamLookup[stageItemId]}
+          teams_with_inputs={stageItemTeamLookup[stageItemId]}
           stageItem={stageItemsLookup[stageItemId]}
         />
-      </>
+      </div>
     ));
 
   if (rows.length < 1) {
@@ -62,14 +62,18 @@ function StandingsContent({
 
 export default function Standings() {
   const tournamentResponse = getTournamentResponseByEndpointName();
-  const tournamentDataFull = tournamentResponse[0];
 
-  // Hack to avoid unequal number of rendered hooks.
-  const notFound = tournamentResponse == null || tournamentDataFull == null;
-  const tournamentId = !notFound ? tournamentDataFull.id : -1;
+  const tournamentDataFull = tournamentResponse ? tournamentResponse[0] : null;
+
+  const notFound = tournamentDataFull == null;
+  const tournamentId = !notFound ? tournamentDataFull.id : null;
 
   const swrStagesResponse = getStagesLive(tournamentId);
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
+
+  if (!tournamentResponse) {
+    return <TableSkeletonTwoColumns />;
+  }
 
   if (swrTeamsResponse.isLoading || swrStagesResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
@@ -85,7 +89,7 @@ export default function Standings() {
         <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
       </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
-      <Container mt="1rem" style={{ overflow: 'scroll' }} px="0rem">
+      <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
           <StandingsContent
             swrTeamsResponse={swrTeamsResponse}

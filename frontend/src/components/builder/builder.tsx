@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
+import { Ranking } from '../../interfaces/ranking';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
@@ -52,11 +53,13 @@ function StageItemRow({
   tournament,
   stageItem,
   swrStagesResponse,
+  rankings,
 }: {
   teamsMap: any;
   tournament: Tournament;
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
+  rankings: Ranking[];
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -92,6 +95,7 @@ function StageItemRow({
             tournament={tournament}
             opened={opened}
             setOpened={setOpened}
+            rankings={rankings}
           />
           <Menu withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
@@ -107,7 +111,7 @@ function StageItemRow({
                   setOpened(true);
                 }}
               >
-                {t('edit_name_button')}
+                {t('edit_stage_item_label')}
               </Menu.Item>
               {stageItem.type === 'SWISS' ? (
                 <Menu.Item
@@ -141,10 +145,12 @@ function StageColumn({
   tournament,
   stage,
   swrStagesResponse,
+  rankings,
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
+  rankings: Ranking[];
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -163,6 +169,7 @@ function StageColumn({
         tournament={tournament}
         stageItem={stageItem}
         swrStagesResponse={swrStagesResponse}
+        rankings={rankings}
       />
     ));
 
@@ -176,14 +183,10 @@ function StageColumn({
         setOpened={setOpened}
       />
       <Group justify="space-between">
-        <h4 style={{ marginBottom: '0rem' }}>
+        <Group>
           {stage.name}
-          {stage.is_active ? (
-            <Badge ml="1rem" color="green">
-              {t('active_badge_label')}
-            </Badge>
-          ) : null}
-        </h4>
+          {stage.is_active ? <Badge color="green">{t('active_badge_label')}</Badge> : null}
+        </Group>
         <Menu withinPortal position="bottom-end" shadow="sm">
           <Menu.Target>
             <ActionIcon variant="transparent" color="gray">
@@ -198,7 +201,7 @@ function StageColumn({
                 setOpened(true);
               }}
             >
-              {t('edit_name_button')}
+              {t('edit_stage_label')}
             </Menu.Item>
             <Menu.Item
               leftSection={<IconTrash size="1.5rem" />}
@@ -227,9 +230,11 @@ function StageColumn({
 export default function Builder({
   tournament,
   swrStagesResponse,
+  rankings,
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
+  rankings: Ranking[];
 }) {
   const stages: StageWithStageItems[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
@@ -244,6 +249,7 @@ export default function Builder({
         tournament={tournament}
         swrStagesResponse={swrStagesResponse}
         stage={stage}
+        rankings={rankings}
       />
     ));
 

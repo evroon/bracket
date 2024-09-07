@@ -9,7 +9,7 @@ interface ScoreProps {
 
 export function PlayerScore({ score, min_score, max_score, decimals }: ScoreProps) {
   const percentageScale = 100.0 / (max_score - min_score);
-  const empty = score - min_score === 0;
+  const empty = max_score - min_score === 0;
 
   return (
     <Progress.Root size={20}>

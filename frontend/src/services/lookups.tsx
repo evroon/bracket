@@ -65,13 +65,12 @@ export function getStageItemTeamsLookup(
     stage.stage_items
       .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
       .forEach((stageItem) => {
-        const teams = stageItem.inputs
-          .map((input) => input.team_id)
-          .map((id) => teamsLookup![id!])
-          .filter((team: TeamInterface) => team != null);
+        const teams_with_inputs = stageItem.inputs
+          .filter((input) => input.team_id != null)
+          .map((input) => ({ team: teamsLookup[input.team_id!], input }));
 
-        if (teams.length > 0) {
-          result = result.concat([[stageItem.id, teams]]);
+        if (teams_with_inputs.length > 0) {
+          result = result.concat([[stageItem.id, teams_with_inputs]]);
         }
       })
   );

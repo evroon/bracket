@@ -1,9 +1,9 @@
 from typing import cast
 
 from bracket.database import database
-from bracket.models.db.players import PlayerStatistics
+from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.team import FullTeamWithPlayers, Team
-from bracket.utils.id_types import TeamId, TournamentId
+from bracket.utils.id_types import StageItemInputId, TeamId, TournamentId
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import dict_without_none
 
@@ -74,24 +74,6 @@ async def get_teams_with_members(
     return [FullTeamWithPlayers.model_validate(x) for x in result]
 
 
-async def get_teams_in_tournament(
-    tournament_id: TournamentId,
-) -> list[Team]:
-    query = """
-        SELECT *
-        FROM teams
-        WHERE teams.tournament_id = :tournament_id
-        ORDER BY name ASC
-        """
-    values = dict_without_none(
-        {
-            "tournament_id": tournament_id,
-        }
-    )
-    result = await database.fetch_all(query=query, values=values)
-    return [Team.model_validate(x) for x in result]
-
-
 async def get_team_count(
     tournament_id: TournamentId,
     *,
@@ -109,29 +91,29 @@ async def get_team_count(
 
 
 async def update_team_stats(
-    tournament_id: TournamentId, team_id: TeamId, team_statistics: PlayerStatistics
+    tournament_id: TournamentId,
+    stage_item_input_id: StageItemInputId,
+    team_statistics: TeamStatistics,
 ) -> None:
     query = """
-        UPDATE teams
+        UPDATE stage_item_inputs
         SET
             wins = :wins,
             draws = :draws,
             losses = :losses,
-            elo_score = :elo_score,
-            swiss_score = :swiss_score
-        WHERE teams.tournament_id = :tournament_id
-        AND teams.id = :team_id
+            points = :points
+        WHERE stage_item_inputs.tournament_id = :tournament_id
+        AND stage_item_inputs.id = :stage_item_input_id
         """
     await database.execute(
         query=query,
         values={
             "tournament_id": tournament_id,
-            "team_id": team_id,
+            "stage_item_input_id": stage_item_input_id,
             "wins": team_statistics.wins,
             "draws": team_statistics.draws,
             "losses": team_statistics.losses,
-            "elo_score": team_statistics.elo_score,
-            "swiss_score": float(team_statistics.swiss_score),
+            "points": float(team_statistics.points),
         },
     )
 

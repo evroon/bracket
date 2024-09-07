@@ -76,7 +76,7 @@ async def sql_update_tournament(
     )
 
 
-async def sql_create_tournament(tournament: TournamentBody) -> None:
+async def sql_create_tournament(tournament: TournamentBody) -> TournamentId:
     query = """
         INSERT INTO tournaments (
             name,
@@ -102,8 +102,7 @@ async def sql_create_tournament(tournament: TournamentBody) -> None:
             :duration_minutes,
             :margin_minutes
         )
+        RETURNING id
         """
-    await database.execute(
-        query=query,
-        values=tournament.model_dump(),
-    )
+    new_id = await database.fetch_val(query=query, values=tournament.model_dump())
+    return TournamentId(new_id)

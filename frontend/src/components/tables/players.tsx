@@ -7,8 +7,6 @@ import { Player } from '../../interfaces/player';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
-import { PlayerScore } from '../info/player_score';
-import { WinDistribution } from '../info/player_statistics';
 import PlayerUpdateModal from '../modals/player_update_modal';
 import { NoContent } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
@@ -50,9 +48,9 @@ export default function PlayersTable({
   const players: Player[] =
     swrPlayersResponse.data != null ? swrPlayersResponse.data.data.players : [];
 
-  const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
-  const maxELOScore = Math.max(...players.map((player) => Number(player.elo_score)));
-  const maxSwissScore = Math.max(...players.map((player) => Number(player.swiss_score)));
+  // const minELOScore = Math.min(...players.map((player) => Number(player.elo_score)));
+  // const maxELOScore = Math.max(...players.map((player) => Number(player.elo_score)));
+  // const maxSwissScore = Math.max(...players.map((player) => Number(player.swiss_score)));
 
   if (swrPlayersResponse.error) return <RequestErrorAlert error={swrPlayersResponse.error} />;
 
@@ -76,25 +74,6 @@ export default function PlayersTable({
         </Table.Td>
         <Table.Td>
           <DateTime datetime={player.created} />
-        </Table.Td>
-        <Table.Td>
-          <WinDistribution wins={player.wins} draws={player.draws} losses={player.losses} />
-        </Table.Td>
-        <Table.Td>
-          <PlayerScore
-            score={Number(player.elo_score)}
-            min_score={minELOScore}
-            max_score={maxELOScore}
-            decimals={0}
-          />
-        </Table.Td>
-        <Table.Td>
-          <PlayerScore
-            score={Number(player.swiss_score)}
-            min_score={0}
-            max_score={maxSwissScore}
-            decimals={1}
-          />
         </Table.Td>
         <Table.Td>
           <PlayerUpdateModal
@@ -128,17 +107,6 @@ export default function PlayersTable({
             </ThSortable>
             <ThSortable state={tableState} field="created">
               {t('created')}
-            </ThSortable>
-            <ThNotSortable>
-              <>
-                <WinDistributionTitle />
-              </>
-            </ThNotSortable>
-            <ThSortable state={tableState} field="elo_score">
-              {t('elo_score')}
-            </ThSortable>
-            <ThSortable state={tableState} field="swiss_score">
-              {t('swiss_score')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

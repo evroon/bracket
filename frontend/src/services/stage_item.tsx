@@ -13,9 +13,14 @@ export async function createStageItem(
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function updateStageItem(tournament_id: number, stage_item_id: number, name: string) {
+export async function updateStageItem(
+  tournament_id: number,
+  stage_item_id: number,
+  name: string,
+  ranking_id: string
+) {
   return createAxios()
-    .put(`tournaments/${tournament_id}/stage_items/${stage_item_id}`, { name })
+    .put(`tournaments/${tournament_id}/stage_items/${stage_item_id}`, { name, ranking_id })
     .catch((response: any) => handleRequestError(response));
 }
 
