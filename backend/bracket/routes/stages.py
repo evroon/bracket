@@ -128,25 +128,6 @@ async def activate_next_stage(
     return SuccessResponse()
 
 
-@router.get("/tournaments/{tournament_id}/stages/activate/preview", response_model=SuccessResponse)
-async def activate_next_stage_preview(
-    tournament_id: TournamentId,
-    stage_body: StageActivateBody,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
-) -> SuccessResponse:
-    new_active_stage_id = await get_next_stage_in_tournament(tournament_id, stage_body.direction)
-    if new_active_stage_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"There is no {stage_body.direction} stage",
-        )
-
-    await sql_activate_next_stage(new_active_stage_id, tournament_id)
-    if stage_body.direction == "next":
-        await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
-    return SuccessResponse()
-
-
 @router.get(
     "/tournaments/{tournament_id}/stages/{stage_id}/available_inputs",
     response_model=StageItemInputOptionsResponse,
