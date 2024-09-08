@@ -10,7 +10,6 @@ import {
   IconHome,
   IconScoreboard,
   IconSettings,
-  IconSoccerField,
   IconTrophy,
   IconUser,
   IconUsers,
@@ -129,11 +128,6 @@ export function TournamentLinks({ tournament_id }: any) {
       icon: IconUsers,
       label: capitalize(t('teams_title')),
       link: `${tm_prefix}/teams`,
-    },
-    {
-      icon: IconSoccerField,
-      label: capitalize(t('courts_title')),
-      link: `${tm_prefix}/courts`,
     },
     {
       icon: IconCalendar,

@@ -7,7 +7,6 @@ import {
   IconScoreboard,
   IconSearch,
   IconSettings,
-  IconSoccerField,
   IconTrophy,
   IconUser,
   IconUsers,
@@ -83,13 +82,6 @@ export function BracketSpotlight() {
       description: t('stage_spotlight_description'),
       onClick: () => router.push(`/tournaments/${tournamentId}/stages`),
       leftSection: <IconTrophy size="1.2rem" />,
-    },
-    {
-      id: 'courts',
-      title: t('courts_title'),
-      description: t('court_spotlight_description'),
-      onClick: () => router.push(`/tournaments/${tournamentId}/courts`),
-      leftSection: <IconSoccerField size="1.2rem" />,
     },
     {
       id: 'tournament settings',
