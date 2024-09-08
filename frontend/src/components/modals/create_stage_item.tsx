@@ -203,7 +203,6 @@ export function CreateStageItemModal({
         variant="outline"
         color="green"
         size="xs"
-        style={{ marginRight: 10 }}
         onClick={() => setOpened(true)}
         leftSection={<GoPlus size={24} />}
       >

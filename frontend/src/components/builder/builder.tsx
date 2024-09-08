@@ -100,7 +100,7 @@ function StageItemRow({
           <Menu withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
               <ActionIcon variant="transparent" color="gray">
-                <IconDots size="1.5rem" />
+                <IconDots size="1.25rem" />
               </ActionIcon>
             </Menu.Target>
 
@@ -190,7 +190,7 @@ function StageColumn({
         <Menu withinPortal position="bottom-end" shadow="sm">
           <Menu.Target>
             <ActionIcon variant="transparent" color="gray">
-              <IconDots size="1rem" />
+              <IconDots size="1.25rem" />
             </ActionIcon>
           </Menu.Target>
 

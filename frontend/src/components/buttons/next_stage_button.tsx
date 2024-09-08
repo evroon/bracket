@@ -10,7 +10,7 @@ export function NextStageButton({ tournamentData, swrStagesResponse }: any) {
   return (
     <Button
       size="md"
-      style={{ marginBottom: 10 }}
+      mb="10"
       color="indigo"
       leftSection={<IconSquareArrowRight size={24} />}
       onClick={async () => {
@@ -29,7 +29,7 @@ export function PreviousStageButton({ tournamentData, swrStagesResponse }: any) 
   return (
     <Button
       size="md"
-      style={{ marginBottom: 10 }}
+      mb="10"
       color="indigo"
       leftSection={<IconSquareArrowLeft size={24} />}
       onClick={async () => {

@@ -146,7 +146,7 @@ function ScheduleColumn({
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon variant="transparent" color="gray">
-                    <IconDots size="1rem" />
+                    <IconDots size="1.25rem" />
                   </ActionIcon>
                 </Menu.Target>
 
@@ -159,7 +159,7 @@ function ScheduleColumn({
                     }}
                     color="red"
                   >
-                    {t('delete_button')}
+                    {t('delete_court_button')}
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
