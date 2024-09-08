@@ -96,7 +96,7 @@ def determine_ranking_for_stage_item(
     return team_x_stats
 
 
-async def determine_team_ranking_for_stage_item(
+def determine_team_ranking_for_stage_item(
     stage_item: StageItemWithRounds,
     ranking: Ranking,
 ) -> list[tuple[TeamId, TeamStatistics]]:

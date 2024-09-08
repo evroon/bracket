@@ -5,10 +5,8 @@ import React from 'react';
 
 import Builder from '../../../components/builder/builder';
 import { CreateStageButtonLarge } from '../../../components/buttons/create_stage';
-import {
-  NextStageButton,
-  PreviousStageButton,
-} from '../../../components/buttons/next_stage_button';
+import ActivateNextStageModal from '../../../components/modals/activate_next_stage_modal';
+import ActivatePreviousStageModal from '../../../components/modals/activate_previous_stage_modal';
 import { NoContent } from '../../../components/no_content/empty_table_info';
 import { TableSkeletonTwoColumnsSmall } from '../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
@@ -47,11 +45,14 @@ export default function StagesPage() {
     content = (
       <>
         <Group grow mt="1rem" maw="30rem">
-          <PreviousStageButton
-            tournamentData={tournamentData}
+          <ActivatePreviousStageModal
+            tournamentId={tournamentData.id}
             swrStagesResponse={swrStagesResponse}
           />
-          <NextStageButton tournamentData={tournamentData} swrStagesResponse={swrStagesResponse} />
+          <ActivateNextStageModal
+            tournamentId={tournamentData.id}
+            swrStagesResponse={swrStagesResponse}
+          />
         </Group>
         <Group mt="1rem" align="top">
           <Builder
