@@ -255,7 +255,7 @@ export default function Builder({
 
   const button = (
     <Stack miw="24rem" align="top" key={-1}>
-      <h4>
+      <h4 style={{ marginTop: '0rem' }}>
         <CreateStageButton tournament={tournament} swrStagesResponse={swrStagesResponse} />
       </h4>
     </Stack>

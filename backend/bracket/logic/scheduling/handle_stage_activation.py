@@ -3,9 +3,9 @@ from bracket.logic.ranking.elo import (
 )
 from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.match import MatchWithDetails
+from bracket.models.db.util import StageWithStageItems
 from bracket.sql.matches import sql_get_match, sql_update_team_ids_for_match
 from bracket.sql.rankings import get_ranking_for_stage_item
-from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.id_types import MatchId, StageId, StageItemId, TeamId, TournamentId
 from bracket.utils.types import assert_some
@@ -65,20 +65,26 @@ async def set_team_ids_for_match(
     await sql_update_team_ids_for_match(assert_some(match.id), team1_id, team2_id)
 
 
-async def get_team_rankings_lookup(tournament_id: TournamentId) -> StageItemXTeamRanking:
-    stages = await get_full_tournament_details(tournament_id)
-
-    stage_items = {
-        stage_item.id: assert_some(await get_stage_item(tournament_id, stage_item.id))
-        for stage in stages
-        for stage_item in stage.stage_items
-    }
+async def get_team_rankings_lookup_for_stage(
+    tournament_id: TournamentId, stage: StageWithStageItems
+) -> StageItemXTeamRanking:
+    stage_items = {stage_item.id: stage_item for stage_item in stage.stage_items}
     return {
-        stage_item_id: await determine_team_ranking_for_stage_item(
+        stage_item_id: determine_team_ranking_for_stage_item(
             stage_item,
             assert_some(await get_ranking_for_stage_item(tournament_id, stage_item.id)),
         )
         for stage_item_id, stage_item in stage_items.items()
+    }
+
+
+async def get_team_rankings_lookup(tournament_id: TournamentId) -> StageItemXTeamRanking:
+    return {
+        stage_item_id: team_ranking
+        for stage in await get_full_tournament_details(tournament_id)
+        for stage_item_id, team_ranking in (
+            await get_team_rankings_lookup_for_stage(tournament_id, stage)
+        ).items()
     }
 
 
