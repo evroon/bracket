@@ -2,14 +2,17 @@
 
 This section describes how to deploy Bracket (frontend and backend) to docker using docker-compose.
 
+## 1. Install Docker and docker-compose
+
 First, make sure you have docker and docker-compose installed.
 
-Then, store the following YAML in a file called `docker-compose.yml` and run it using
-`docker-compose up -d` in the same directory as the file:
+## 2. Store the docker-compose.yml file
+
+Then, store the following YAML in a file called `docker-compose.yml` in an empty directory.
+
+The highlighted lines will be discussed in the next steps.
 
 ```yaml
-version: '3.1'
-
 services:
     bracket-frontend:
         image: ghcr.io/evroon/bracket-frontend
@@ -17,10 +20,11 @@ services:
         ports:
             - "3000:3000"
         environment:
-            NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
-            # Go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
-            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
             NODE_ENV: "production"
+            // highlight-start
+            NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
+            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+            // highlight-end
         restart: unless-stopped
 
     bracket-backend:
@@ -30,11 +34,13 @@ services:
             - "8400:8400"
         environment:
             ENVIRONMENT: "PRODUCTION"
+            // highlight-start
             PG_DSN: "postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod"
             CORS_ORIGINS: https://your-site.com
-            CORS_ORIGIN_REGEX: ^https://your-site.com$
             JWT_SECRET: change_me
+            // highlight-end
         volumes:
+            // highlight-next-line
             - ./backend/static:/app/static
         restart: unless-stopped
         depends_on:
@@ -48,3 +54,28 @@ services:
           POSTGRES_USER: bracket_prod
           POSTGRES_PASSWORD: bracket_prod
 ```
+
+## 3. Set up the environment variables
+
+Replace the lines that are highlighted in the code block from the previous step.
+
+Replace the following values for `bracket-frontend`:
+- `NEXT_PUBLIC_API_BASE_URL`
+- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
+
+Replace the following values for `bracket-backend`:
+- `PG_DSN`: 
+- `CORS_ORIGINS`: 
+- `JWT_SECRET`: 
+
+:::warning
+
+Note that your `docker-compose.yml` file now contains secrets. 
+If you want a more secure setup, you can store secrets in separate files on the host and
+load them via [docker secrets](https://docs.docker.com/compose/use-secrets/).
+
+:::
+
+## 4. Access the application
+
+Run it using `docker-compose up -d` in the same directory as the file:
