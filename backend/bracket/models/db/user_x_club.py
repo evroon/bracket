@@ -10,8 +10,11 @@ class UserXClubRelation(EnumAutoStr):
     COLLABORATOR = auto()
 
 
-class UserXClub(BaseModelORM):
-    id: UserXClubId | None = None
+class UserXClubInsertable(BaseModelORM):
     user_id: UserId
     club_id: ClubId
     relation: UserXClubRelation
+
+
+class UserXClub(UserXClubInsertable):
+    id: UserXClubId

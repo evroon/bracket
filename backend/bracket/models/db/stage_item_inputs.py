@@ -7,7 +7,7 @@ from bracket.utils.id_types import MatchId, StageItemId, StageItemInputId, TeamI
 
 
 class StageItemInputBase(BaseModelORM):
-    id: StageItemInputId | None = None
+    id: StageItemInputId
     slot: int
     tournament_id: TournamentId
     stage_item_id: StageItemId | None = None

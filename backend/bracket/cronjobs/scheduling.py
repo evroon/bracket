@@ -7,7 +7,6 @@ from bracket.models.db.account import UserAccountType
 from bracket.sql.users import delete_user_and_owned_clubs, get_expired_demo_users
 from bracket.utils.asyncio import AsyncioTasksManager
 from bracket.utils.logging import logger
-from bracket.utils.types import assert_some
 
 CronjobT = Callable[[], Awaitable[None]]
 
@@ -21,7 +20,7 @@ async def delete_demo_accounts() -> None:
 
     for demo_user in demo_users:
         assert demo_user.account_type is UserAccountType.DEMO
-        user_id = assert_some(demo_user.id)
+        user_id = demo_user.id
 
         await delete_user_and_owned_clubs(user_id)
 

@@ -19,7 +19,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM2,
 )
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
@@ -286,25 +285,25 @@ async def test_upcoming_matches_endpoint(
             DUMMY_PLAYER1.model_copy(
                 update={"elo_score": Decimal("1100.0"), "tournament_id": auth_context.tournament.id}
             ),
-            assert_some(team1_inserted.id),
+            team1_inserted.id,
         ) as player_inserted_1,
         inserted_player_in_team(
             DUMMY_PLAYER2.model_copy(
                 update={"elo_score": Decimal("1300.0"), "tournament_id": auth_context.tournament.id}
             ),
-            assert_some(team2_inserted.id),
+            team2_inserted.id,
         ) as player_inserted_2,
         inserted_player_in_team(
             DUMMY_PLAYER3.model_copy(
                 update={"elo_score": Decimal("1200.0"), "tournament_id": auth_context.tournament.id}
             ),
-            assert_some(team1_inserted.id),
+            team1_inserted.id,
         ) as player_inserted_3,
         inserted_player_in_team(
             DUMMY_PLAYER4.model_copy(
                 update={"elo_score": Decimal("1400.0"), "tournament_id": auth_context.tournament.id}
             ),
-            assert_some(team2_inserted.id),
+            team2_inserted.id,
         ) as player_inserted_4,
     ):
         json_response = await send_tournament_request(

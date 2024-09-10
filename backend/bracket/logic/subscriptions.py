@@ -14,7 +14,6 @@ from bracket.sql.clubs import create_club
 from bracket.sql.rankings import sql_create_ranking
 from bracket.sql.tournaments import sql_create_tournament
 from bracket.utils.id_types import UserId
-from bracket.utils.types import assert_some
 
 if TYPE_CHECKING:
     from bracket.models.db.user import UserBase
@@ -80,7 +79,7 @@ async def setup_demo_account(user_id: UserId) -> None:
 
     tournament = TournamentBody(
         name="Demo Tournament",
-        club_id=assert_some(club_inserted.id),
+        club_id=club_inserted.id,
         start_time=datetime_utc.future(hours=1),
         dashboard_public=False,
         players_can_be_in_multiple_teams=False,

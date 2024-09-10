@@ -19,7 +19,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM1,
 )
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
@@ -55,30 +54,30 @@ async def test_activate_next_stage(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_4,
     ):
-        tournament_id = assert_some(auth_context.tournament.id)
+        tournament_id = auth_context.tournament.id
         stage_item_1 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_1.id),
+                stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=DUMMY_STAGE_ITEM1.team_count,
                 type=DUMMY_STAGE_ITEM1.type,
                 inputs=[
                     StageItemInputCreateBodyFinal(
                         slot=1,
-                        team_id=assert_some(team_inserted_1.id),
+                        team_id=team_inserted_1.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=2,
-                        team_id=assert_some(team_inserted_2.id),
+                        team_id=team_inserted_2.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=3,
-                        team_id=assert_some(team_inserted_3.id),
+                        team_id=team_inserted_3.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=4,
-                        team_id=assert_some(team_inserted_4.id),
+                        team_id=team_inserted_4.id,
                     ),
                 ],
             ),
@@ -86,7 +85,7 @@ async def test_activate_next_stage(
         stage_item_2 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_2.id),
+                stage_id=stage_inserted_2.id,
                 name=DUMMY_STAGE_ITEM3.name,
                 team_count=2,
                 type=DUMMY_STAGE_ITEM3.type,
@@ -108,12 +107,12 @@ async def test_activate_next_stage(
         await build_matches_for_stage_item(stage_item_2, tournament_id)
 
         # Set match score to get a winner (team 2) that goes to the next round
-        [prev_stage, _] = await get_full_tournament_details(assert_some(auth_context.tournament.id))
+        [prev_stage, _] = await get_full_tournament_details(auth_context.tournament.id)
         match1 = prev_stage.stage_items[0].rounds[0].matches[0]
         assert isinstance(match1, MatchWithDetailsDefinitive)
         assert match1.team2.id == team_inserted_2.id
         await sql_update_match(
-            assert_some(match1.id),
+            match1.id,
             MatchBody(**match1.model_copy(update={"team2_score": 42}).model_dump()),
             auth_context.tournament,
         )
@@ -121,7 +120,7 @@ async def test_activate_next_stage(
         response = await send_tournament_request(
             HTTPMethod.POST, "stages/activate?direction=next", auth_context, json={}
         )
-        [_, next_stage] = await get_full_tournament_details(assert_some(auth_context.tournament.id))
+        [_, next_stage] = await get_full_tournament_details(auth_context.tournament.id)
 
         await sql_delete_stage_item_with_foreign_keys(stage_item_2.id)
         await sql_delete_stage_item_with_foreign_keys(stage_item_1.id)

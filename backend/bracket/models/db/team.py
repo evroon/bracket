@@ -12,11 +12,9 @@ from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
-from bracket.utils.types import assert_some
 
 
-class Team(BaseModelORM):
-    id: TeamId | None = None
+class TeamInsertable(BaseModelORM):
     created: datetime_utc
     name: str
     tournament_id: TournamentId
@@ -29,8 +27,12 @@ class Team(BaseModelORM):
     logo_path: str | None = None
 
 
+class Team(TeamInsertable):
+    id: TeamId
+
+
 class TeamWithPlayers(BaseModel):
-    id: TeamId | None = None
+    id: TeamId
     players: list[Player]
     elo_score: Decimal = START_ELO
     swiss_score: Decimal = Decimal("0.0")
@@ -42,7 +44,7 @@ class TeamWithPlayers(BaseModel):
 
     @property
     def player_ids(self) -> list[PlayerId]:
-        return [assert_some(player.id) for player in self.players]
+        return [player.id for player in self.players]
 
     @field_validator("players", mode="before")
     def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]
@@ -88,15 +90,3 @@ class TeamBody(BaseModelORM):
 class TeamMultiBody(BaseModelORM):
     names: str = Field(..., min_length=1)
     active: bool
-
-
-class TeamToInsert(BaseModelORM):
-    created: datetime_utc
-    name: str
-    tournament_id: TournamentId
-    active: bool
-    elo_score: Decimal = Decimal("0.0")
-    swiss_score: Decimal = Decimal("0.0")
-    wins: int = 0
-    draws: int = 0
-    losses: int = 0

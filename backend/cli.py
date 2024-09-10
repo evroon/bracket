@@ -10,14 +10,13 @@ from bracket.config import config
 from bracket.database import database
 from bracket.logger import get_logger
 from bracket.models.db.account import UserAccountType
-from bracket.models.db.user import User
+from bracket.models.db.user import UserInsertable
 from bracket.sql.users import (
     check_whether_email_is_in_use,
     create_user,
 )
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import hash_password
-from bracket.utils.types import assert_some
 
 logger = get_logger("cli")
 
@@ -72,7 +71,7 @@ async def create_dev_db() -> None:
 @click.option("--name", prompt="Name", help="The name associated with the account.")
 @run_async
 async def register_user(email: str, password: str, name: str) -> None:
-    user = User(
+    user = UserInsertable(
         email=email,
         password_hash=hash_password(password),
         name=name,
@@ -83,7 +82,6 @@ async def register_user(email: str, password: str, name: str) -> None:
         logger.error("Email address already in use")
         raise SystemExit(1)
     user_created = await create_user(user)
-    assert_some(user_created.id)
     logger.info(f"Created user with id: {user_created.id}")
 
 

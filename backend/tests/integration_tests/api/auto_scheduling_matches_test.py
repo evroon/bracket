@@ -1,6 +1,6 @@
 from heliclockter import datetime_utc
 
-from bracket.models.db.round import RoundToInsert
+from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import StageItemCreateBody, StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
@@ -21,6 +21,7 @@ from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_tournament_request,
 )
+from tests.integration_tests.mocks import MOCK_NOW
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
     inserted_court,
@@ -46,28 +47,34 @@ async def test_schedule_matches_auto(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_2,
     ):
-        tournament_id = assert_some(auth_context.tournament.id)
+        tournament_id = auth_context.tournament.id
         stage_item_1 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_1.id),
+                stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
                 type=StageType.SWISS,
                 inputs=[
                     StageItemInputCreateBodyFinal(
                         slot=1,
-                        team_id=assert_some(team_inserted_1.id),
+                        team_id=team_inserted_1.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=2,
-                        team_id=assert_some(team_inserted_2.id),
+                        team_id=team_inserted_2.id,
                     ),
                 ],
             ),
         )
         await sql_create_round(
-            RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
+            RoundInsertable(
+                stage_item_id=stage_item_1.id,
+                name="",
+                is_draft=True,
+                is_active=False,
+                created=MOCK_NOW,
+            ),
         )
 
         response = await send_tournament_request(
@@ -103,31 +110,43 @@ async def test_start_next_round(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_2,
     ):
-        tournament_id = assert_some(auth_context.tournament.id)
+        tournament_id = auth_context.tournament.id
         stage_item_1 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_1.id),
+                stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
                 type=StageType.SWISS,
                 inputs=[
                     StageItemInputCreateBodyFinal(
                         slot=1,
-                        team_id=assert_some(team_inserted_1.id),
+                        team_id=team_inserted_1.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=2,
-                        team_id=assert_some(team_inserted_2.id),
+                        team_id=team_inserted_2.id,
                     ),
                 ],
             ),
         )
         round_1_id = await sql_create_round(
-            RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
+            RoundInsertable(
+                stage_item_id=stage_item_1.id,
+                name="",
+                is_draft=True,
+                is_active=False,
+                created=MOCK_NOW,
+            ),
         )
         round_2_id = await sql_create_round(
-            RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
+            RoundInsertable(
+                stage_item_id=stage_item_1.id,
+                name="",
+                is_draft=True,
+                is_active=False,
+                created=MOCK_NOW,
+            ),
         )
 
         try:

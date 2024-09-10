@@ -11,7 +11,6 @@ from bracket.sql.rankings import (
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_RANKING1, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_ranking, inserted_team
@@ -45,7 +44,7 @@ async def test_create_ranking(
     response = await send_tournament_request(HTTPMethod.POST, "rankings", auth_context, json={})
     assert response.get("success") is True, response
 
-    tournament_id = assert_some(auth_context.tournament.id)
+    tournament_id = auth_context.tournament.id
     for ranking in await get_all_rankings_in_tournament(tournament_id):
         if ranking.position != 0:
             await sql_delete_ranking(tournament_id, ranking.id)

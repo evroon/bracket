@@ -9,7 +9,13 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.teams import get_team_logo_path
-from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
+from bracket.models.db.team import (
+    FullTeamWithPlayers,
+    Team,
+    TeamBody,
+    TeamInsertable,
+    TeamMultiBody,
+)
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
@@ -91,7 +97,7 @@ async def update_team_by_id(
         ),
         values=team_body.model_dump(exclude={"player_ids"}),
     )
-    await update_team_members(assert_some(team.id), tournament_id, team_body.player_ids)
+    await update_team_members(team.id, tournament_id, team_body.player_ids)
 
     return SingleTeamResponse(
         data=assert_some(
@@ -113,7 +119,7 @@ async def update_team_logo(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
 ) -> SingleTeamResponse:
-    team_id = assert_some(team.id)
+    team_id = team.id
     old_logo_path = await get_team_logo_path(tournament_id, team_id)
     filename: str | None = None
     new_logo_path: str | None = None
@@ -157,7 +163,7 @@ async def delete_team(
             ForeignKey.matches_team2_id_fkey,
         }
     ):
-        await sql_delete_team(tournament_id, assert_some(team.id))
+        await sql_delete_team(tournament_id, team.id)
 
     return SuccessResponse()
 
@@ -175,7 +181,7 @@ async def create_team(
 
     last_record_id = await database.execute(
         query=teams.insert(),
-        values=TeamToInsert(
+        values=TeamInsertable(
             **team_to_insert.model_dump(exclude={"player_ids"}),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
@@ -201,7 +207,7 @@ async def create_multiple_teams(
     for team_name in team_names:
         await database.execute(
             query=teams.insert(),
-            values=TeamToInsert(
+            values=TeamInsertable(
                 name=team_name,
                 active=team_body.active,
                 created=datetime_utc.now(),

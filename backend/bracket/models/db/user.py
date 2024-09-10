@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 class UserBase(BaseModelORM):
-    id: UserId | None = None
     email: str
     name: str
     created: datetime_utc
@@ -27,12 +26,16 @@ class UserBase(BaseModelORM):
         return subscription_lookup[self.account_type]
 
 
-class User(UserBase):
+class UserInsertable(UserBase):
     password_hash: str | None = None
 
 
+class User(UserInsertable):
+    id: UserId
+
+
 class UserPublic(UserBase):
-    pass
+    id: UserId
 
 
 class UserToUpdate(BaseModel):

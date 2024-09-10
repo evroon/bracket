@@ -5,7 +5,6 @@ from bracket.sql.matches import sql_create_match
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.id_types import TournamentId
-from bracket.utils.types import assert_some
 
 
 def determine_matches_first_round(
@@ -18,7 +17,7 @@ def determine_matches_first_round(
         second_input = stage_item.inputs[i + 1]
         suggestions.append(
             MatchCreateBody(
-                round_id=assert_some(round_.id),
+                round_id=round_.id,
                 court_id=None,
                 team1_id=first_input.team_id,
                 team1_winner_from_stage_item_id=first_input.winner_from_stage_item_id,
@@ -51,7 +50,7 @@ def determine_matches_subsequent_round(
 
         suggestions.append(
             MatchCreateBody(
-                round_id=assert_some(round_.id),
+                round_id=round_.id,
                 court_id=None,
                 team1_id=None,
                 team1_winner_from_stage_item_id=None,
@@ -59,8 +58,8 @@ def determine_matches_subsequent_round(
                 team2_id=None,
                 team2_winner_from_stage_item_id=None,
                 team2_winner_position=None,
-                team1_winner_from_match_id=assert_some(first_match.id),
-                team2_winner_from_match_id=assert_some(second_match.id),
+                team1_winner_from_match_id=first_match.id,
+                team2_winner_from_match_id=second_match.id,
                 duration_minutes=tournament.duration_minutes,
                 margin_minutes=tournament.margin_minutes,
                 custom_duration_minutes=None,

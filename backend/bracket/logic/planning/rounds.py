@@ -22,13 +22,9 @@ def get_active_and_next_rounds(
     active_round = next((round_ for round_ in stage_item.rounds if round_.is_active), None)
 
     def is_round_in_future(round_: RoundWithMatches) -> bool:
-        return (
-            (assert_some(round_.id) > assert_some(active_round.id))
-            if active_round is not None
-            else True
-        )
+        return (round_.id > active_round.id) if active_round is not None else True
 
-    rounds_chronologically_sorted = sorted(stage_item.rounds, key=lambda r: assert_some(r.id))
+    rounds_chronologically_sorted = sorted(stage_item.rounds, key=lambda r: r.id)
     next_round = next(
         (round_ for round_ in rounds_chronologically_sorted if is_round_in_future(round_)),
         None,
@@ -53,7 +49,7 @@ async def schedule_all_matches_for_swiss_round(
     assert len(active_round.matches) <= len(courts)
 
     for i, match in enumerate(active_round.matches):
-        court_id = assert_some(courts[i].id)
+        court_id = courts[i].id
         last_match = (
             next((m for m in matches_per_court[court_id][::-1] if m.match.id != match.id), None)
             if court_id in matches_per_court
@@ -83,7 +79,7 @@ async def schedule_all_matches_for_swiss_round(
                     )
                     rescheduling_operations.append(
                         sql_reschedule_match_and_determine_duration_and_margin(
-                            assert_some(last_match.match.id),
+                            last_match.match.id,
                             court_id,
                             assert_some(last_match.match.start_time),
                             assert_some(last_match.match.position_in_schedule),
@@ -104,7 +100,7 @@ async def schedule_all_matches_for_swiss_round(
 
         rescheduling_operations.append(
             sql_reschedule_match_and_determine_duration_and_margin(
-                assert_some(match.id), court_id, start_time, pos_in_schedule, match, tournament
+                match.id, court_id, start_time, pos_in_schedule, match, tournament
             )
         )
 

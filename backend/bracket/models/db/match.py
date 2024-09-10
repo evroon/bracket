@@ -10,8 +10,7 @@ from bracket.utils.id_types import CourtId, MatchId, PlayerId, RoundId, StageIte
 from bracket.utils.types import assert_some
 
 
-class MatchBase(BaseModelORM):
-    id: MatchId | None = None
+class MatchBaseInsertable(BaseModelORM):
     created: datetime_utc
     start_time: datetime_utc | None = None
     duration_minutes: int
@@ -32,7 +31,7 @@ class MatchBase(BaseModelORM):
         )
 
 
-class Match(MatchBase):
+class MatchInsertable(MatchBaseInsertable):
     team1_id: TeamId | None = None
     team2_id: TeamId | None = None
     team1_winner_position: int | None = None
@@ -47,6 +46,10 @@ class Match(MatchBase):
             return None
 
         return 1 if self.team1_score > self.team2_score else 0
+
+
+class Match(MatchInsertable):
+    id: MatchId
 
 
 class MatchWithDetails(Match):

@@ -103,7 +103,7 @@ async def user_authenticated_for_tournament(
 ) -> UserPublic:
     user = await check_jwt_and_get_user(token)
 
-    if not user or not await get_user_access_to_tournament(tournament_id, assert_some(user.id)):
+    if not user or not await get_user_access_to_tournament(tournament_id, user.id):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -118,7 +118,7 @@ async def user_authenticated_for_club(
 ) -> UserPublic:
     user = await check_jwt_and_get_user(token)
 
-    if not user or not await get_user_access_to_club(club_id, assert_some(user.id)):
+    if not user or not await get_user_access_to_club(club_id, user.id):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -134,9 +134,7 @@ async def user_authenticated_or_public_dashboard(
     try:
         token: str = assert_some(await oauth2_scheme(request))
         user = await check_jwt_and_get_user(token)
-        if user is not None and await get_user_access_to_tournament(
-            tournament_id, assert_some(user.id)
-        ):
+        if user is not None and await get_user_access_to_tournament(tournament_id, user.id):
             return user
     except HTTPException:
         pass

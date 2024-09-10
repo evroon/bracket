@@ -9,7 +9,7 @@ from bracket.logic.subscriptions import setup_demo_account
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import (
     DemoUserToRegister,
-    User,
+    UserInsertable,
     UserPasswordToUpdate,
     UserPublic,
     UserToRegister,
@@ -60,7 +60,7 @@ async def update_user_details(
     if user_public.id != user_id:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Can't change details of this user")
 
-    await update_user(assert_some(user_public.id), user_to_update)
+    await update_user(user_public.id, user_to_update)
     user_updated = await get_user_by_id(user_id)
     return UserPublicResponse(data=assert_some(user_updated))
 
@@ -72,7 +72,7 @@ async def put_user_password(
     user_public: UserPublic = Depends(user_authenticated),
 ) -> SuccessResponse:
     assert user_public.id == user_id
-    await update_user_password(assert_some(user_public.id), hash_password(user_to_update.password))
+    await update_user_password(user_public.id, hash_password(user_to_update.password))
     return SuccessResponse()
 
 
@@ -84,7 +84,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
     if not await verify_captcha_token(user_to_register.captcha_token):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
-    user = User(
+    user = UserInsertable(
         email=user_to_register.email,
         password_hash=hash_password(user_to_register.password),
         name=user_to_register.name,
@@ -100,9 +100,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
         data={"user": user_created.email}, expires_delta=access_token_expires
     )
     return TokenResponse(
-        data=Token(
-            access_token=access_token, token_type="bearer", user_id=assert_some(user_created.id)
-        )
+        data=Token(access_token=access_token, token_type="bearer", user_id=user_created.id)
     )
 
 
@@ -117,7 +115,7 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
     username = f"demo-{uuid4()}"
-    user = User(
+    user = UserInsertable(
         email=f"{username}@example.org",
         password_hash=hash_password(str(uuid4())),
         name=username,
@@ -132,9 +130,7 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
     access_token = create_access_token(
         data={"user": user_created.email}, expires_delta=access_token_expires
     )
-    await setup_demo_account(assert_some(user_created.id))
+    await setup_demo_account(user_created.id)
     return TokenResponse(
-        data=Token(
-            access_token=access_token, token_type="bearer", user_id=assert_some(user_created.id)
-        )
+        data=Token(access_token=access_token, token_type="bearer", user_id=user_created.id)
     )

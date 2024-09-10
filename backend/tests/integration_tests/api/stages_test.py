@@ -11,7 +11,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM1,
 )
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_request,
@@ -147,7 +146,7 @@ async def test_update_stage(
             )
             == SUCCESS_RESPONSE
         )
-        [updated_stage] = await get_full_tournament_details(assert_some(auth_context.tournament.id))
+        [updated_stage] = await get_full_tournament_details(auth_context.tournament.id)
         assert len(updated_stage.stage_items) == 1
         assert updated_stage.name == body["name"]
 
@@ -173,9 +172,7 @@ async def test_activate_stage(
             )
             == SUCCESS_RESPONSE
         )
-        [prev_stage, next_stage] = await get_full_tournament_details(
-            assert_some(auth_context.tournament.id)
-        )
+        [prev_stage, next_stage] = await get_full_tournament_details(auth_context.tournament.id)
         assert prev_stage.is_active is False
         assert next_stage.is_active is True
 

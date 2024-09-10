@@ -12,7 +12,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM2,
 )
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
@@ -65,9 +64,9 @@ async def test_reschedule_match(
         ) as match_inserted,
     ):
         body = MatchRescheduleBody(
-            old_court_id=assert_some(court1_inserted.id),
+            old_court_id=court1_inserted.id,
             old_position=1,
-            new_court_id=assert_some(court2_inserted.id),
+            new_court_id=court2_inserted.id,
             new_position=2,
         )
         assert (
@@ -79,7 +78,7 @@ async def test_reschedule_match(
             )
             == SUCCESS_RESPONSE
         )
-        match = await sql_get_match(assert_some(match_inserted.id))
+        match = await sql_get_match(match_inserted.id)
         await assert_row_count_and_clear(matches, 0)
 
     assert match.court_id == body.new_court_id

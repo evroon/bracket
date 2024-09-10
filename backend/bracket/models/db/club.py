@@ -4,10 +4,13 @@ from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import ClubId
 
 
-class Club(BaseModelORM):
-    id: ClubId | None = None
+class ClubInsertable(BaseModelORM):
     name: str
     created: datetime_utc
+
+
+class Club(ClubInsertable):
+    id: ClubId
 
 
 class ClubCreateBody(BaseModelORM):

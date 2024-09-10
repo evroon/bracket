@@ -4,11 +4,14 @@ from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import CourtId, TournamentId
 
 
-class Court(BaseModelORM):
-    id: CourtId | None = None
+class CourtInsertable(BaseModelORM):
     name: str
     created: datetime_utc
     tournament_id: TournamentId
+
+
+class Court(CourtInsertable):
+    id: CourtId
 
 
 class CourtBody(BaseModelORM):

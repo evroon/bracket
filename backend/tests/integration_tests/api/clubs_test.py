@@ -1,8 +1,7 @@
-from bracket.models.db.user_x_club import UserXClub, UserXClubRelation
+from bracket.models.db.user_x_club import UserXClubInsertable, UserXClubRelation
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_MOCK_TIME
 from bracket.utils.http import HTTPMethod
-from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import send_auth_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_club, inserted_user_x_club
@@ -27,7 +26,7 @@ async def test_create_club(
 ) -> None:
     payload = {"name": "Some Cool Club"}
     response = await send_auth_request(HTTPMethod.POST, "clubs", auth_context, json=payload)
-    user_id = assert_some(auth_context.user.id)
+    user_id = auth_context.user.id
 
     clubs = await get_clubs_for_user_id(user_id)
     club_id = response["data"]["id"]
@@ -43,9 +42,9 @@ async def test_delete_club(
 ) -> None:
     async with inserted_club(DUMMY_CLUB) as club_inserted:
         async with inserted_user_x_club(
-            UserXClub(
-                user_id=assert_some(auth_context.user.id),
-                club_id=assert_some(club_inserted.id),
+            UserXClubInsertable(
+                user_id=auth_context.user.id,
+                club_id=club_inserted.id,
                 relation=UserXClubRelation.OWNER,
             )
         ):

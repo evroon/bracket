@@ -4,18 +4,18 @@ from zoneinfo import ZoneInfo
 from heliclockter import datetime_utc
 
 from bracket.models.db.account import UserAccountType
-from bracket.models.db.club import Club
-from bracket.models.db.court import Court
-from bracket.models.db.match import Match
-from bracket.models.db.player import Player
-from bracket.models.db.player_x_team import PlayerXTeam
+from bracket.models.db.club import ClubInsertable
+from bracket.models.db.court import CourtInsertable
+from bracket.models.db.match import MatchInsertable
+from bracket.models.db.player import PlayerInsertable
+from bracket.models.db.player_x_team import PlayerXTeamInsertable
 from bracket.models.db.ranking import RankingInsertable
-from bracket.models.db.round import Round
-from bracket.models.db.stage import Stage
-from bracket.models.db.stage_item import StageItemToInsert, StageType
-from bracket.models.db.team import Team
-from bracket.models.db.tournament import Tournament
-from bracket.models.db.user import User
+from bracket.models.db.round import RoundInsertable
+from bracket.models.db.stage import StageInsertable
+from bracket.models.db.stage_item import StageItemInsertable, StageType
+from bracket.models.db.team import TeamInsertable
+from bracket.models.db.tournament import TournamentInsertable
+from bracket.models.db.user import UserInsertable
 from bracket.utils.id_types import (
     ClubId,
     CourtId,
@@ -34,12 +34,12 @@ DUMMY_MOCK_TIME = datetime_utc(2022, 1, 11, 4, 32, 11, tzinfo=ZoneInfo("UTC"))
 # We don't know any db IDs here, so we use a placeholder for foreign keys.
 DB_PLACEHOLDER_ID = -42
 
-DUMMY_CLUB = Club(
+DUMMY_CLUB = ClubInsertable(
     name="Some Cool Club",
     created=DUMMY_MOCK_TIME,
 )
 
-DUMMY_TOURNAMENT = Tournament(
+DUMMY_TOURNAMENT = TournamentInsertable(
     club_id=ClubId(DB_PLACEHOLDER_ID),
     name="Some Cool Tournament",
     created=DUMMY_MOCK_TIME,
@@ -53,21 +53,21 @@ DUMMY_TOURNAMENT = Tournament(
     margin_minutes=5,
 )
 
-DUMMY_STAGE1 = Stage(
+DUMMY_STAGE1 = StageInsertable(
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_active=True,
     name="Group Stage",
 )
 
-DUMMY_STAGE2 = Stage(
+DUMMY_STAGE2 = StageInsertable(
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_active=False,
     name="Knockout Stage",
 )
 
-DUMMY_STAGE_ITEM1 = StageItemToInsert(
+DUMMY_STAGE_ITEM1 = StageItemInsertable(
     stage_id=StageId(DB_PLACEHOLDER_ID),
     ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
@@ -76,7 +76,7 @@ DUMMY_STAGE_ITEM1 = StageItemToInsert(
     name="Group A",
 )
 
-DUMMY_STAGE_ITEM2 = StageItemToInsert(
+DUMMY_STAGE_ITEM2 = StageItemInsertable(
     stage_id=StageId(DB_PLACEHOLDER_ID),
     ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
@@ -85,7 +85,7 @@ DUMMY_STAGE_ITEM2 = StageItemToInsert(
     name="Group B",
 )
 
-DUMMY_STAGE_ITEM3 = StageItemToInsert(
+DUMMY_STAGE_ITEM3 = StageItemInsertable(
     stage_id=StageId(DB_PLACEHOLDER_ID),
     ranking_id=RankingId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
@@ -94,28 +94,28 @@ DUMMY_STAGE_ITEM3 = StageItemToInsert(
     name="Bracket A",
 )
 
-DUMMY_ROUND1 = Round(
+DUMMY_ROUND1 = RoundInsertable(
     stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name="Round 1",
 )
 
-DUMMY_ROUND2 = Round(
+DUMMY_ROUND2 = RoundInsertable(
     stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=True,
     name="Round 2",
 )
 
-DUMMY_ROUND3 = Round(
+DUMMY_ROUND3 = RoundInsertable(
     stage_item_id=StageItemId(DB_PLACEHOLDER_ID),
     created=DUMMY_MOCK_TIME,
     is_draft=False,
     name="Round 3",
 )
 
-DUMMY_MATCH1 = Match(
+DUMMY_MATCH1 = MatchInsertable(
     created=DUMMY_MOCK_TIME,
     start_time=DUMMY_MOCK_TIME,
     round_id=RoundId(DB_PLACEHOLDER_ID),
@@ -137,7 +137,7 @@ DUMMY_MATCH1 = Match(
     position_in_schedule=1,
 )
 
-DUMMY_USER = User(
+DUMMY_USER = UserInsertable(
     email="admin@example.com",
     name="Admin",
     password_hash=hash_password("adminadmin"),
@@ -145,28 +145,28 @@ DUMMY_USER = User(
     account_type=UserAccountType.REGULAR,
 )
 
-DUMMY_TEAM1 = Team(
+DUMMY_TEAM1 = TeamInsertable(
     created=DUMMY_MOCK_TIME,
     name="Team 1",
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
-DUMMY_TEAM2 = Team(
+DUMMY_TEAM2 = TeamInsertable(
     created=DUMMY_MOCK_TIME,
     name="Team 2",
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
-DUMMY_TEAM3 = Team(
+DUMMY_TEAM3 = TeamInsertable(
     created=DUMMY_MOCK_TIME,
     name="Team 3",
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
     active=True,
 )
 
-DUMMY_TEAM4 = Team(
+DUMMY_TEAM4 = TeamInsertable(
     created=DUMMY_MOCK_TIME,
     name="Team 4",
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
@@ -174,74 +174,74 @@ DUMMY_TEAM4 = Team(
 )
 
 
-DUMMY_PLAYER1 = Player(
+DUMMY_PLAYER1 = PlayerInsertable(
     name="Player 01",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER2 = Player(
+DUMMY_PLAYER2 = PlayerInsertable(
     name="Player 02",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER3 = Player(
+DUMMY_PLAYER3 = PlayerInsertable(
     name="Player 03",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER4 = Player(
+DUMMY_PLAYER4 = PlayerInsertable(
     name="Player 04",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER5 = Player(
+DUMMY_PLAYER5 = PlayerInsertable(
     name="Player 05",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER6 = Player(
+DUMMY_PLAYER6 = PlayerInsertable(
     name="Player 06",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER7 = Player(
+DUMMY_PLAYER7 = PlayerInsertable(
     name="Player 07",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER8 = Player(
+DUMMY_PLAYER8 = PlayerInsertable(
     name="Player 08",
     active=True,
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_PLAYER_X_TEAM = PlayerXTeam(
+DUMMY_PLAYER_X_TEAM = PlayerXTeamInsertable(
     player_id=PlayerId(DB_PLACEHOLDER_ID),
     team_id=TeamId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_COURT1 = Court(
+DUMMY_COURT1 = CourtInsertable(
     name="Court 1",
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),
 )
 
-DUMMY_COURT2 = Court(
+DUMMY_COURT2 = CourtInsertable(
     name="Court 2",
     created=DUMMY_MOCK_TIME,
     tournament_id=TournamentId(DB_PLACEHOLDER_ID),

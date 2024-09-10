@@ -5,7 +5,7 @@ from fastapi import HTTPException
 
 from bracket.logic.scheduling.ladder_teams import get_possible_upcoming_matches_for_swiss
 from bracket.models.db.match import Match, MatchFilter, MatchWithDetailsDefinitive, SuggestedMatch
-from bracket.models.db.team import FullTeamWithPlayers, Team
+from bracket.models.db.team import FullTeamWithPlayers, TeamInsertable
 from bracket.models.db.util import RoundWithMatches
 from bracket.utils.dummy_records import (
     DUMMY_MATCH1,
@@ -14,7 +14,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM3,
     DUMMY_TEAM4,
 )
-from bracket.utils.id_types import StageItemId, TeamId
+from bracket.utils.id_types import MatchId, RoundId, StageItemId, TeamId
 from tests.integration_tests.mocks import MOCK_NOW
 
 MATCH_FILTER = MatchFilter(elo_diff_threshold=50, iterations=100, limit=20, only_recommended=False)
@@ -25,7 +25,7 @@ def test_no_draft_round() -> None:
         get_possible_upcoming_matches_for_swiss(MATCH_FILTER, [], [])
 
 
-def get_team(team: Team, team_id: TeamId) -> FullTeamWithPlayers:
+def get_team(team: TeamInsertable, team_id: TeamId) -> FullTeamWithPlayers:
     return FullTeamWithPlayers(
         id=team_id,
         **team.model_dump(exclude={"id"}),
@@ -60,14 +60,26 @@ def test_constraints() -> None:
 
     rounds = [
         RoundWithMatches(
-            matches=[get_match(DUMMY_MATCH1, team1, team2)],
+            id=RoundId(-1),
+            matches=[
+                get_match(
+                    Match.model_validate(DUMMY_MATCH1.model_dump() | {"id": MatchId(-1)}),
+                    team1,
+                    team2,
+                )
+            ],
             is_draft=False,
             stage_item_id=StageItemId(-1),
             name="R1",
             created=MOCK_NOW,
         ),
         RoundWithMatches(
-            matches=[], is_draft=True, stage_item_id=StageItemId(-1), name="R2", created=MOCK_NOW
+            id=RoundId(-1),
+            matches=[],
+            is_draft=True,
+            stage_item_id=StageItemId(-1),
+            name="R2",
+            created=MOCK_NOW,
         ),
     ]
     teams = [team1, team2, team3, team4]
