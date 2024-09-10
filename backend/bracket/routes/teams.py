@@ -119,8 +119,7 @@ async def update_team_logo(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     team: Team = Depends(team_dependency),
 ) -> SingleTeamResponse:
-    team_id = team.id
-    old_logo_path = await get_team_logo_path(tournament_id, team_id)
+    old_logo_path = await get_team_logo_path(tournament_id, team.id)
     filename: str | None = None
     new_logo_path: str | None = None
 
@@ -144,10 +143,10 @@ async def update_team_logo(
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
-        teams.update().where(teams.c.id == team_id),
+        teams.update().where(teams.c.id == team.id),
         values={"logo_path": filename},
     )
-    return SingleTeamResponse(data=assert_some(await get_team_by_id(team_id, tournament_id)))
+    return SingleTeamResponse(data=assert_some(await get_team_by_id(team.id, tournament_id)))
 
 
 @router.delete("/tournaments/{tournament_id}/teams/{team_id}", response_model=SuccessResponse)

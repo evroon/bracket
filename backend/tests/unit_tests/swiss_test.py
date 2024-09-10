@@ -74,7 +74,7 @@ def test_constraints() -> None:
             created=MOCK_NOW,
         ),
         RoundWithMatches(
-            id=RoundId(-1),
+            id=RoundId(-2),
             matches=[],
             is_draft=True,
             stage_item_id=StageItemId(-1),
