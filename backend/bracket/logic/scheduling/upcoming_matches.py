@@ -9,7 +9,6 @@ from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.id_types import StageItemId, TournamentId
-from bracket.utils.types import assert_some
 
 
 async def get_draft_round_in_stage_item(
@@ -40,7 +39,7 @@ async def get_upcoming_matches_for_swiss_round(
     if not round_.is_draft:
         raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
-    rounds = await get_rounds_for_stage_item(tournament_id, assert_some(stage_item.id))
+    rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
     teams = await get_teams_with_members(tournament_id, only_active_teams=True)
 
     return get_possible_upcoming_matches_for_swiss(match_filter, rounds, teams)

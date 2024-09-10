@@ -47,7 +47,7 @@ def get_number_of_teams_played_per_team(
             if isinstance(match, MatchWithDetailsDefinitive):
                 for team in match.teams:
                     if team.active and team.id not in excluded_team_ids:
-                        result[assert_some(team.id)] += 1
+                        result[team.id] += 1
 
     return result
 
@@ -80,7 +80,7 @@ def get_possible_upcoming_matches_for_swiss(
     )
     for team in teams_to_schedule:
         if team.id not in times_played_per_team:
-            times_played_per_team[assert_some(team.id)] = 0
+            times_played_per_team[team.id] = 0
 
     min_times_played = min(times_played_per_team.values()) if len(times_played_per_team) > 0 else 0
 
@@ -100,8 +100,8 @@ def get_possible_upcoming_matches_for_swiss(
             continue
 
         times_played_min = min(
-            times_played_per_team[assert_some(team1.id)],
-            times_played_per_team[assert_some(team2.id)],
+            times_played_per_team[team1.id],
+            times_played_per_team[team2.id],
         )
         suggested_match = check_team_combination_adheres_to_filter(
             team1, team2, filter_, is_recommended=times_played_min <= min_times_played

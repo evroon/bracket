@@ -17,7 +17,6 @@ from bracket.sql.users import (
 )
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import hash_password
-from bracket.utils.types import assert_some
 
 logger = get_logger("cli")
 
@@ -83,7 +82,6 @@ async def register_user(email: str, password: str, name: str) -> None:
         logger.error("Email address already in use")
         raise SystemExit(1)
     user_created = await create_user(user)
-    assert_some(user_created.id)
     logger.info(f"Created user with id: {user_created.id}")
 
 

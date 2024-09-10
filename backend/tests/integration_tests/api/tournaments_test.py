@@ -88,7 +88,7 @@ async def test_create_tournament(
 
     # Cleanup
     tournament = assert_some(await sql_get_tournament_by_endpoint_name(dashboard_endpoint))
-    await sql_delete_tournament_completely(assert_some(tournament.id))
+    await sql_delete_tournament_completely(tournament.id)
 
 
 async def test_update_tournament(
@@ -133,7 +133,7 @@ async def test_delete_tournament(
             == SUCCESS_RESPONSE
         )
 
-    await sql_delete_tournament(assert_some(tournament_inserted.id))
+    await sql_delete_tournament(tournament_inserted.id)
 
 
 async def test_tournament_upload_and_remove_logo(

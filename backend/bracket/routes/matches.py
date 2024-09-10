@@ -75,7 +75,7 @@ async def delete_match(
 ) -> SuccessResponse:
     round_ = await get_round_by_id(tournament_id, match.round_id)
 
-    await sql_delete_match(assert_some(match.id))
+    await sql_delete_match(match.id)
 
     await recalculate_ranking_for_stage_item_id(tournament_id, assert_some(round_).stage_item_id)
     return SuccessResponse()

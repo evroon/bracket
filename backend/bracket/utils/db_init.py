@@ -110,7 +110,7 @@ async def create_admin_user() -> UserId:
             account_type=UserAccountType.REGULAR,
         )
     )
-    return assert_some(user.id)
+    return user.id
 
 
 async def init_db_when_empty() -> UserId | None:

@@ -62,7 +62,7 @@ async def set_team_ids_for_match(
         stage_item_x_team_rankings,
     )
 
-    await sql_update_team_ids_for_match(assert_some(match.id), team1_id, team2_id)
+    await sql_update_team_ids_for_match(match.id, team1_id, team2_id)
 
 
 async def get_team_rankings_lookup_for_stage(

@@ -47,22 +47,22 @@ async def test_schedule_matches_auto(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_2,
     ):
-        tournament_id = assert_some(auth_context.tournament.id)
+        tournament_id = auth_context.tournament.id
         stage_item_1 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_1.id),
+                stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
                 type=StageType.SWISS,
                 inputs=[
                     StageItemInputCreateBodyFinal(
                         slot=1,
-                        team_id=assert_some(team_inserted_1.id),
+                        team_id=team_inserted_1.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=2,
-                        team_id=assert_some(team_inserted_2.id),
+                        team_id=team_inserted_2.id,
                     ),
                 ],
             ),
@@ -110,22 +110,22 @@ async def test_start_next_round(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team_inserted_2,
     ):
-        tournament_id = assert_some(auth_context.tournament.id)
+        tournament_id = auth_context.tournament.id
         stage_item_1 = await sql_create_stage_item(
             tournament_id,
             StageItemCreateBody(
-                stage_id=assert_some(stage_inserted_1.id),
+                stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
                 type=StageType.SWISS,
                 inputs=[
                     StageItemInputCreateBodyFinal(
                         slot=1,
-                        team_id=assert_some(team_inserted_1.id),
+                        team_id=team_inserted_1.id,
                     ),
                     StageItemInputCreateBodyFinal(
                         slot=2,
-                        team_id=assert_some(team_inserted_2.id),
+                        team_id=team_inserted_2.id,
                     ),
                 ],
             ),

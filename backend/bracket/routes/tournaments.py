@@ -42,7 +42,6 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import TournamentId
 from bracket.utils.logging import logger
-from bracket.utils.types import assert_some
 
 router = APIRouter()
 unauthorized_exception = HTTPException(
@@ -84,7 +83,7 @@ async def get_tournaments(
             return TournamentsResponse(data=[tournament])
 
         case _, _ if isinstance(user, UserPublic):
-            user_club_ids = await get_which_clubs_has_user_access_to(assert_some(user.id))
+            user_club_ids = await get_which_clubs_has_user_access_to(user.id)
             return TournamentsResponse(
                 data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name)
             )
@@ -131,9 +130,7 @@ async def create_tournament(
     existing_tournaments = await sql_get_tournaments((tournament_to_insert.club_id,))
     check_requirement(existing_tournaments, user, "max_tournaments")
 
-    has_access_to_club = await get_user_access_to_club(
-        tournament_to_insert.club_id, assert_some(user.id)
-    )
+    has_access_to_club = await get_user_access_to_club(tournament_to_insert.club_id, user.id)
     if not has_access_to_club:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

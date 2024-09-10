@@ -7,7 +7,7 @@ from sqlalchemy import Table
 from bracket.database import database
 from bracket.models.db.club import Club, ClubInsertable
 from bracket.models.db.court import Court, CourtInsertable
-from bracket.models.db.match import Match
+from bracket.models.db.match import Match, MatchInsertable
 from bracket.models.db.player import Player, PlayerInsertable
 from bracket.models.db.player_x_team import PlayerXTeamInsertable
 from bracket.models.db.ranking import Ranking, RankingInsertable
@@ -36,7 +36,7 @@ from bracket.schema import (
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_RANKING1, DUMMY_TOURNAMENT
 from bracket.utils.id_types import TeamId
-from bracket.utils.types import BaseModelT, assert_some
+from bracket.utils.types import BaseModelT
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
@@ -132,9 +132,9 @@ async def inserted_round(round_: RoundInsertable) -> AsyncIterator[Round]:
 
 
 @asynccontextmanager
-async def inserted_match(match: Match) -> AsyncIterator[Match]:
+async def inserted_match(match: MatchInsertable) -> AsyncIterator[Match]:
     async with inserted_generic(match, matches, Match) as row_inserted:
-        yield row_inserted
+        yield cast(Match, row_inserted)
 
 
 @asynccontextmanager
@@ -159,7 +159,7 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         inserted_user_x_club(
             UserXClubInsertable(
                 user_id=user_inserted.id,
-                club_id=assert_some(club_inserted.id),
+                club_id=club_inserted.id,
                 relation=UserXClubRelation.OWNER,
             )
         ) as user_x_club_inserted,

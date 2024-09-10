@@ -14,7 +14,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM3,
     DUMMY_TEAM4,
 )
-from bracket.utils.id_types import RoundId, StageItemId, TeamId
+from bracket.utils.id_types import MatchId, RoundId, StageItemId, TeamId
 from tests.integration_tests.mocks import MOCK_NOW
 
 MATCH_FILTER = MatchFilter(elo_diff_threshold=50, iterations=100, limit=20, only_recommended=False)
@@ -61,7 +61,13 @@ def test_constraints() -> None:
     rounds = [
         RoundWithMatches(
             id=RoundId(-1),
-            matches=[get_match(DUMMY_MATCH1, team1, team2)],
+            matches=[
+                get_match(
+                    Match.model_validate(DUMMY_MATCH1.model_dump() | {"id": MatchId(-1)}),
+                    team1,
+                    team2,
+                )
+            ],
             is_draft=False,
             stage_item_id=StageItemId(-1),
             name="R1",

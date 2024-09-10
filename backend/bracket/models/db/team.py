@@ -12,7 +12,6 @@ from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.player import Player
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import PlayerId, TeamId, TournamentId
-from bracket.utils.types import assert_some
 
 
 class TeamInsertable(BaseModelORM):
@@ -45,7 +44,7 @@ class TeamWithPlayers(BaseModel):
 
     @property
     def player_ids(self) -> list[PlayerId]:
-        return [assert_some(player.id) for player in self.players]
+        return [player.id for player in self.players]
 
     @field_validator("players", mode="before")
     def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]

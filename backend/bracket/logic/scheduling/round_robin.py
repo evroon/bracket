@@ -5,7 +5,6 @@ from bracket.models.db.util import StageItemWithRounds
 from bracket.sql.matches import sql_create_match
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.id_types import TournamentId
-from bracket.utils.types import assert_some
 
 
 def get_round_robin_combinations(team_count: int) -> list[list[tuple[int, int]]]:
@@ -48,7 +47,7 @@ async def build_round_robin_stage_item(
                 team_1, team_2 = stage_item.inputs[team_1_id], stage_item.inputs[team_2_id]
 
                 match = MatchCreateBody(
-                    round_id=assert_some(round_.id),
+                    round_id=round_.id,
                     team1_id=team_1.team_id,
                     team1_winner_from_stage_item_id=team_1.winner_from_stage_item_id,
                     team1_winner_position=team_1.winner_position,

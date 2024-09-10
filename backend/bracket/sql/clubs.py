@@ -28,7 +28,7 @@ async def create_club(club: ClubCreateBody, user_id: UserId) -> Club:
 
         club_created = Club.model_validate(dict(result._mapping))
 
-        await sql_give_user_access_to_club(user_id, assert_some(club_created.id))
+        await sql_give_user_access_to_club(user_id, club_created.id)
 
     return club_created
 

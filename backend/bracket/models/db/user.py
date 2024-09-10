@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 class UserBase(BaseModelORM):
-    id: UserId | None = None
     email: str
     name: str
     created: datetime_utc
@@ -36,7 +35,7 @@ class User(UserInsertable):
 
 
 class UserPublic(UserBase):
-    pass
+    id: UserId
 
 
 class UserToUpdate(BaseModel):

@@ -6,7 +6,7 @@ from heliclockter import datetime_utc
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.club import ClubInsertable
 from bracket.models.db.court import CourtInsertable
-from bracket.models.db.match import Match
+from bracket.models.db.match import MatchInsertable
 from bracket.models.db.player import PlayerInsertable
 from bracket.models.db.player_x_team import PlayerXTeamInsertable
 from bracket.models.db.ranking import RankingInsertable
@@ -115,7 +115,7 @@ DUMMY_ROUND3 = RoundInsertable(
     name="Round 3",
 )
 
-DUMMY_MATCH1 = Match(
+DUMMY_MATCH1 = MatchInsertable(
     created=DUMMY_MOCK_TIME,
     start_time=DUMMY_MOCK_TIME,
     round_id=RoundId(DB_PLACEHOLDER_ID),

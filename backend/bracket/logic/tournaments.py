@@ -9,7 +9,6 @@ from bracket.sql.stages import get_full_tournament_details, sql_delete_stage
 from bracket.sql.teams import sql_delete_teams_of_tournament
 from bracket.sql.tournaments import sql_delete_tournament, sql_get_tournament
 from bracket.utils.id_types import TournamentId
-from bracket.utils.types import assert_some
 
 
 async def get_tournament_logo_path(tournament_id: TournamentId) -> str | None:
@@ -36,7 +35,7 @@ async def sql_delete_tournament_completely(tournament_id: TournamentId) -> None:
         for stage_item in stage.stage_items:
             await sql_delete_stage_item(stage_item.id)
 
-        await sql_delete_stage(tournament_id, assert_some(stage.id))
+        await sql_delete_stage(tournament_id, stage.id)
 
     for ranking in await get_all_rankings_in_tournament(tournament_id):
         await sql_delete_ranking(tournament_id, ranking.id)
