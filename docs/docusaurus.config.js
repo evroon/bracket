@@ -1,9 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
+import { themes as prismThemes } from "prism-react-renderer";
 
 const { themes } = require("prism-react-renderer");
-const lightCodeTheme = themes.github;
-const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -154,9 +153,18 @@ const config = {
         copyright: `Bracket - Self-Hosted Tournament System.<br/> Licensed under AGPL-v3.0. Copyright © ${new Date().getFullYear()} Bracket. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-        additionalLanguages: ["bash", "diff", "json"],
+        theme: prismThemes.oneLight,
+        darkTheme: prismThemes.oneDark,
+        additionalLanguages: [
+          "bash",
+          "diff",
+          "json",
+          "systemd",
+          "docker",
+          "toml",
+          "hcl",
+          "yaml",
+        ],
       },
     }),
 };

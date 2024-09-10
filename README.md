@@ -72,11 +72,11 @@ A demo is available for free at <https://www.bracketapp.nl/demo>. The demo lasts
 your data will de deleted. 
 
 # Quickstart
-To quickly run bracket to see how it works, clone it and run `docker-compose up`:
+To quickly run bracket to see how it works, clone it and run `docker compose up`:
 ```bash
 git clone git@github.com:evroon/bracket.git
 cd bracket
-sudo docker-compose up -d
+sudo docker compose up -d
 ```
 
 This will start the backend and frontend of Bracket, as well as a postgres instance. You should now
