@@ -26,7 +26,7 @@ def get_active_and_next_rounds(
 
     rounds_chronologically_sorted = sorted(stage_item.rounds, key=lambda r: r.id)
     next_round = next(
-        (round_ for round_ in rounds_chronologically_sorted if is_round_in_future(round_)),get_full_tournament_details(g )
+        (round_ for round_ in rounds_chronologically_sorted if is_round_in_future(round_)),
         None,
     )
     return active_round, next_round
