@@ -53,6 +53,9 @@ services:
           POSTGRES_DB: bracket_prod
           POSTGRES_USER: bracket_prod
           POSTGRES_PASSWORD: bracket_prod
+        volumes:
+            // highlight-next-line
+          - ./postgres:/var/lib/postgresql/data
 ```
 
 ## 3. Set up the environment variables
@@ -82,7 +85,14 @@ load them via [docker secrets](https://docs.docker.com/compose/use-secrets/).
 
 :::
 
-## 4. Access the application
+## 4. Update volume bindings
+
+Bracket needs two volume bindings: for the backend and for the database.
+
+Update the two volume binding paths to point to a directory where you want to store the
+persistent data.
+
+## 5. Access the application
 
 Run it using `docker compose up -d` in the same directory as the file.
 Access Bracket at `http://localhost:3000`.
