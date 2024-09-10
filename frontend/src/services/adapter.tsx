@@ -197,13 +197,13 @@ export function getUser(): SWRResponse {
 
 export function getUpcomingMatches(
   tournament_id: number,
-  round_id: number,
+  stage_item_id: number,
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    round_id == null
+    stage_item_id == null
       ? null
-      : `tournaments/${tournament_id}/rounds/${round_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
+      : `tournaments/${tournament_id}/stage_items/${stage_item_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher
   );
 }
