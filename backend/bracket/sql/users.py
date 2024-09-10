@@ -130,12 +130,9 @@ async def get_user(email: str) -> UserInDB | None:
 
 async def delete_user_and_owned_clubs(user_id: UserId) -> None:
     for club in await get_clubs_for_user_id(user_id):
-        club_id = club.id
+        for tournament in await sql_get_tournaments((club.id,), None):
+            await sql_delete_tournament_completely(tournament.id)
 
-        for tournament in await sql_get_tournaments((club_id,), None):
-            tournament_id = tournament.id
-            await sql_delete_tournament_completely(tournament_id)
-
-        await sql_delete_club(club_id)
+        await sql_delete_club(club.id)
 
     await delete_user(user_id)
