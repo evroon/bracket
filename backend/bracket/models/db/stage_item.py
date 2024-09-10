@@ -21,7 +21,6 @@ class StageType(EnumAutoStr):
 
 
 class StageItemInsertable(BaseModelORM):
-    id: StageItemId | None = None
     stage_id: StageId
     name: str
     created: datetime_utc

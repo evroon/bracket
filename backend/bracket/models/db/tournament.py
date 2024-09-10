@@ -7,7 +7,6 @@ from bracket.utils.pydantic import EmptyStrToNone
 
 
 class TournamentInsertable(BaseModelORM):
-    id: TournamentId | None = None
     club_id: ClubId
     name: str
     created: datetime_utc
