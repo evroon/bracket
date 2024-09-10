@@ -60,17 +60,22 @@ services:
 Replace the lines that are highlighted in the code block from the previous step.
 
 Replace the following values for `bracket-frontend`:
-- `NEXT_PUBLIC_API_BASE_URL`
-- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or go to https://dashboard.hcaptcha.com/signup, create a site and put the site key here
+
+- `NEXT_PUBLIC_API_BASE_URL`: The address of your backend. The frontend will send
+  requests to this address.
+- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or go to
+  <https://dashboard.hcaptcha.com/signup>, create a site and put the site key here
 
 Replace the following values for `bracket-backend`:
-- `PG_DSN`: 
-- `CORS_ORIGINS`: 
-- `JWT_SECRET`: 
+
+- `PG_DSN`: The DSN with format `postgresql://<username>:<password>@<host>:<port>/<database>`
+- `CORS_ORIGINS`: Put the address of your frontend here, it's used to make sure incoming requests
+  can only come from your actual frontend
+- `JWT_SECRET`: Generate a secret to create JWTs using `openssl rand -hex 32`
 
 :::warning
 
-Note that your `docker-compose.yml` file now contains secrets. 
+Note that your `docker-compose.yml` file now contains secrets.
 If you want a more secure setup, you can store secrets in separate files on the host and
 load them via [docker secrets](https://docs.docker.com/compose/use-secrets/).
 
@@ -78,4 +83,5 @@ load them via [docker secrets](https://docs.docker.com/compose/use-secrets/).
 
 ## 4. Access the application
 
-Run it using `docker-compose up -d` in the same directory as the file:
+Run it using `docker compose up -d` in the same directory as the file.
+Access Bracket at `http://localhost:3000`.

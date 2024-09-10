@@ -1,6 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
 
 const { themes } = require("prism-react-renderer");
 
@@ -155,7 +155,16 @@ const config = {
       prism: {
         theme: prismThemes.oneLight,
         darkTheme: prismThemes.oneDark,
-        additionalLanguages: ["bash", "diff", "json", "systemd", "docker", "toml", "hcl", "yaml"],
+        additionalLanguages: [
+          "bash",
+          "diff",
+          "json",
+          "systemd",
+          "docker",
+          "toml",
+          "hcl",
+          "yaml",
+        ],
       },
     }),
 };
