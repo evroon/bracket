@@ -2,9 +2,9 @@
 
 This section describes how to deploy Bracket (frontend and backend) to docker using docker-compose.
 
-## 1. Install Docker and docker-compose
+## 1. Install Docker and docker compose
 
-First, make sure you have docker and docker-compose installed.
+First, make sure you have docker and docker compose installed.
 
 ## 2. Store the docker-compose.yml file
 
@@ -63,8 +63,9 @@ Replace the following values for `bracket-frontend`:
 
 - `NEXT_PUBLIC_API_BASE_URL`: The address of your backend. The frontend will send
   requests to this address.
-- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or go to
-  <https://dashboard.hcaptcha.com/signup>, create a site and put the site key here
+- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or
+  [signup for hCaptcha](https://dashboard.hcaptcha.com/signup), create a site and
+  put the site key here
 
 Replace the following values for `bracket-backend`:
 
