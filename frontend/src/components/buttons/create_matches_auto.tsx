@@ -12,19 +12,16 @@ export function AutoCreateMatchesButton({
   tournamentData,
   swrStagesResponse,
   swrUpcomingMatchesResponse,
-  roundId,
+  stageItemId,
   schedulerSettings,
 }: {
   schedulerSettings: SchedulerSettings;
-  roundId: number;
+  stageItemId: number;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
-  if (roundId == null) {
-    return null;
-  }
   return (
     <Button
       size="md"
@@ -35,7 +32,7 @@ export function AutoCreateMatchesButton({
       onClick={async () => {
         await createMatchesAuto(
           tournamentData.id,
-          roundId,
+          stageItemId,
           schedulerSettings.eloThreshold,
           schedulerSettings.onlyRecommended,
           schedulerSettings.iterations

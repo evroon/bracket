@@ -6,6 +6,7 @@ import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
+import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { Tournament } from '../../interfaces/tournament';
 import { AutoCreateMatchesButton } from '../buttons/create_matches_auto';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
@@ -40,6 +41,7 @@ function SchedulingSystem({
 
 export default function Scheduler({
   activeStage,
+  stageItem,
   tournamentData,
   draftRound,
   swrRoundsResponse,
@@ -48,6 +50,7 @@ export default function Scheduler({
   displaySettings,
 }: {
   activeStage: StageWithStageItems;
+  stageItem: StageItemWithRounds;
   draftRound: RoundInterface;
   tournamentData: Tournament;
   swrRoundsResponse: SWRResponse;
@@ -70,7 +73,7 @@ export default function Scheduler({
               swrStagesResponse={swrRoundsResponse}
               swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
               tournamentData={tournamentData}
-              roundId={draftRound.id}
+              stageItemId={stageItem.id}
               schedulerSettings={schedulerSettings}
             />
           </Group>

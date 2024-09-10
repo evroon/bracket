@@ -66,13 +66,13 @@ async def test_schedule_matches_auto(
                 ],
             ),
         )
-        round_1_id = await sql_create_round(
+        await sql_create_round(
             RoundToInsert(stage_item_id=stage_item_1.id, name="", is_draft=True, is_active=False),
         )
 
         response = await send_tournament_request(
             HTTPMethod.POST,
-            f"rounds/{round_1_id}/schedule_auto",
+            f"stage_items/{stage_item_1.id}/schedule_auto",
             auth_context,
         )
         stages = await get_full_tournament_details(tournament_id)

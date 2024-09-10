@@ -90,7 +90,7 @@ export default function TournamentPage() {
     }
   }
 
-  const swrUpcomingMatchesResponse = getUpcomingMatches(id, draftRound?.id, schedulerSettings);
+  const swrUpcomingMatchesResponse = getUpcomingMatches(id, stageItemId, schedulerSettings);
   const scheduler =
     draftRound != null &&
     stageItem != null &&
@@ -100,6 +100,7 @@ export default function TournamentPage() {
       <>
         <Scheduler
           activeStage={activeStage}
+          stageItem={stageItem}
           draftRound={draftRound}
           tournamentData={tournamentDataFull}
           swrRoundsResponse={swrStagesResponse}

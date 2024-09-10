@@ -271,7 +271,7 @@ async def test_upcoming_matches_endpoint(
                     "stage_item_id": stage_item_inserted.id,
                 }
             )
-        ) as round_inserted,
+        ),
         inserted_team(
             DUMMY_TEAM1.model_copy(
                 update={"tournament_id": auth_context.tournament.id, "elo_score": Decimal("1150.0")}
@@ -308,7 +308,10 @@ async def test_upcoming_matches_endpoint(
         ) as player_inserted_4,
     ):
         json_response = await send_tournament_request(
-            HTTPMethod.GET, f"rounds/{round_inserted.id}/upcoming_matches", auth_context, {}
+            HTTPMethod.GET,
+            f"stage_items/{stage_item_inserted.id}/upcoming_matches",
+            auth_context,
+            {},
         )
         assert json_response == {
             "data": [
