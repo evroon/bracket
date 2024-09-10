@@ -31,10 +31,6 @@ class MatchBaseInsertable(BaseModelORM):
         )
 
 
-class MatchBase(MatchBaseInsertable):
-    id: MatchId
-
-
 class MatchInsertable(MatchBaseInsertable):
     team1_id: TeamId | None = None
     team2_id: TeamId | None = None
