@@ -7,8 +7,7 @@ from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import PlayerId, TournamentId
 
 
-class Player(BaseModelORM):
-    id: PlayerId | None = None
+class PlayerInsertable(BaseModelORM):
     active: bool
     name: str
     created: datetime_utc
@@ -18,6 +17,10 @@ class Player(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+
+
+class Player(PlayerInsertable):
+    id: PlayerId
 
     def __hash__(self) -> int:
         return self.id if self.id is not None else int(self.created.timestamp())

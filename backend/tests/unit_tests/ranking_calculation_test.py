@@ -21,6 +21,7 @@ def test_determine_ranking_for_stage_item_elimination() -> None:
         StageItemWithRounds(
             rounds=[
                 RoundWithMatches(
+                    id=RoundId(-1),
                     matches=[
                         MatchWithDetailsDefinitive(
                             team1=FullTeamWithPlayers(
@@ -103,6 +104,7 @@ def test_determine_ranking_for_stage_item_swiss() -> None:
         StageItemWithRounds(
             rounds=[
                 RoundWithMatches(
+                    id=RoundId(-1),
                     matches=[
                         MatchWithDetailsDefinitive(
                             team1=FullTeamWithPlayers(
@@ -185,6 +187,7 @@ def test_determine_ranking_for_stage_item_swiss_no_matches() -> None:
         StageItemWithRounds(
             rounds=[
                 RoundWithMatches(
+                    id=RoundId(-1),
                     matches=[],
                     stage_item_id=StageItemId(-1),
                     created=now,

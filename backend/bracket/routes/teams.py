@@ -9,7 +9,13 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.teams import get_team_logo_path
-from bracket.models.db.team import FullTeamWithPlayers, Team, TeamBody, TeamMultiBody, TeamToInsert
+from bracket.models.db.team import (
+    FullTeamWithPlayers,
+    Team,
+    TeamBody,
+    TeamInsertable,
+    TeamMultiBody,
+)
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
@@ -175,7 +181,7 @@ async def create_team(
 
     last_record_id = await database.execute(
         query=teams.insert(),
-        values=TeamToInsert(
+        values=TeamInsertable(
             **team_to_insert.model_dump(exclude={"player_ids"}),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
@@ -201,7 +207,7 @@ async def create_multiple_teams(
     for team_name in team_names:
         await database.execute(
             query=teams.insert(),
-            values=TeamToInsert(
+            values=TeamInsertable(
                 name=team_name,
                 active=team_body.active,
                 created=datetime_utc.now(),

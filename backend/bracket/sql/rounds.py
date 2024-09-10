@@ -1,12 +1,12 @@
 from bracket.database import database
-from bracket.models.db.round import RoundToInsert
+from bracket.models.db.round import RoundInsertable
 from bracket.models.db.util import RoundWithMatches
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.id_types import RoundId, StageItemId, TournamentId
 
 
-async def sql_create_round(round_: RoundToInsert) -> RoundId:
+async def sql_create_round(round_: RoundInsertable) -> RoundId:
     query = """
         INSERT INTO rounds (created, is_draft, is_active, name, stage_item_id)
         VALUES (NOW(), :is_draft, :is_active, :name, :stage_item_id)

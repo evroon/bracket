@@ -9,7 +9,7 @@ from bracket.logic.subscriptions import setup_demo_account
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import (
     DemoUserToRegister,
-    User,
+    UserInsertable,
     UserPasswordToUpdate,
     UserPublic,
     UserToRegister,
@@ -84,7 +84,7 @@ async def register_user(user_to_register: UserToRegister) -> TokenResponse:
     if not await verify_captcha_token(user_to_register.captcha_token):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
-    user = User(
+    user = UserInsertable(
         email=user_to_register.email,
         password_hash=hash_password(user_to_register.password),
         name=user_to_register.name,
@@ -117,7 +117,7 @@ async def register_demo_user(user_to_register: DemoUserToRegister) -> TokenRespo
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Failed to validate captcha")
 
     username = f"demo-{uuid4()}"
-    user = User(
+    user = UserInsertable(
         email=f"{username}@example.org",
         password_hash=hash_password(str(uuid4())),
         name=username,

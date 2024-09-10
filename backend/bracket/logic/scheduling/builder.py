@@ -8,7 +8,7 @@ from bracket.logic.scheduling.round_robin import (
     build_round_robin_stage_item,
     get_number_of_rounds_to_create_round_robin,
 )
-from bracket.models.db.round import RoundToInsert
+from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import StageItem, StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputOptionFinal,
@@ -20,6 +20,7 @@ from bracket.sql.rounds import get_next_round_name, sql_create_round
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.id_types import StageId, TournamentId
 from bracket.utils.types import assert_some
+from tests.integration_tests.mocks import MOCK_NOW
 
 
 async def create_rounds_for_new_stage_item(
@@ -38,7 +39,9 @@ async def create_rounds_for_new_stage_item(
 
     for _ in range(rounds_count):
         await sql_create_round(
-            RoundToInsert(
+            RoundInsertable(
+                created=MOCK_NOW,
+                is_draft=False,
                 stage_item_id=assert_some(stage_item.id),
                 name=await get_next_round_name(tournament_id, assert_some(stage_item.id)),
             ),

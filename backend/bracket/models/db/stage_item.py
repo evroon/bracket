@@ -20,7 +20,7 @@ class StageType(EnumAutoStr):
         return self in [StageType.SWISS]
 
 
-class StageItemToInsert(BaseModelORM):
+class StageItemInsertable(BaseModelORM):
     id: StageItemId | None = None
     stage_id: StageId
     name: str
@@ -30,7 +30,7 @@ class StageItemToInsert(BaseModelORM):
     ranking_id: RankingId | None = None
 
 
-class StageItem(StageItemToInsert):
+class StageItem(StageItemInsertable):
     id: StageItemId
 
 

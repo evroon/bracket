@@ -6,7 +6,7 @@ from bracket.utils.id_types import ClubId, TournamentId
 from bracket.utils.pydantic import EmptyStrToNone
 
 
-class Tournament(BaseModelORM):
+class TournamentInsertable(BaseModelORM):
     id: TournamentId | None = None
     club_id: ClubId
     name: str
@@ -19,6 +19,10 @@ class Tournament(BaseModelORM):
     logo_path: str | None = None
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
+
+
+class Tournament(TournamentInsertable):
+    id: TournamentId
 
 
 class TournamentUpdateBody(BaseModelORM):

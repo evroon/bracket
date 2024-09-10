@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from heliclockter import datetime_utc, timedelta
 
 from bracket.models.db.account import UserAccountType
-from bracket.models.db.user import User
+from bracket.models.db.user import UserInsertable
 from bracket.routes.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 
 MOCK_NOW = datetime_utc(
@@ -16,8 +16,8 @@ def generate_email() -> str:
     return f"donald_duck-{uuid4()}"
 
 
-def get_mock_user() -> User:
-    return User(
+def get_mock_user() -> UserInsertable:
+    return UserInsertable(
         email=generate_email(),
         name="Donald Duck",
         # hash of 'mypassword'
@@ -27,7 +27,7 @@ def get_mock_user() -> User:
     )
 
 
-def get_mock_token(mock_user: User) -> str:
+def get_mock_token(mock_user: UserInsertable) -> str:
     return create_access_token(
         data={"user": mock_user.email},
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),

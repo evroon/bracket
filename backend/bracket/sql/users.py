@@ -1,7 +1,7 @@
 from bracket.database import database
 from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.account import UserAccountType
-from bracket.models.db.user import User, UserInDB, UserPublic, UserToUpdate
+from bracket.models.db.user import User, UserInDB, UserInsertable, UserPublic, UserToUpdate
 from bracket.schema import users
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.sql.tournaments import sql_get_tournaments
@@ -87,7 +87,7 @@ async def get_expired_demo_users() -> list[UserPublic]:
     return [UserPublic.model_validate(demo_user) for demo_user in result]
 
 
-async def create_user(user: User) -> User:
+async def create_user(user: UserInsertable) -> User:
     query = """
         INSERT INTO users (email, name, password_hash, created, account_type)
         VALUES (:email, :name, :password_hash, :created, :account_type)
