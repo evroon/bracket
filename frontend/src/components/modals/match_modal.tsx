@@ -7,8 +7,8 @@ import { SWRResponse } from 'swr';
 import {
   MatchBodyInterface,
   MatchInterface,
-  formatMatchTeam1,
-  formatMatchTeam2,
+  formatMatchInput1,
+  formatMatchInput2,
 } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
@@ -67,8 +67,8 @@ function MatchModalForm({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      team1_score: match.team1_score,
-      team2_score: match.team2_score,
+      team1_score: match.stage_item_input1_score,
+      team2_score: match.stage_item_input2_score,
       custom_duration_minutes: match.custom_duration_minutes,
       custom_margin_minutes: match.custom_margin_minutes,
     },
@@ -93,8 +93,8 @@ function MatchModalForm({
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
 
-  const team1Name = formatMatchTeam1(stageItemsLookup, matchesLookup, match);
-  const team2Name = formatMatchTeam2(stageItemsLookup, matchesLookup, match);
+  const team1Name = formatMatchInput1(stageItemsLookup, matchesLookup, match);
+  const team2Name = formatMatchInput2(stageItemsLookup, matchesLookup, match);
 
   return (
     <>

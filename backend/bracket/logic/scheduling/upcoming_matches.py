@@ -3,11 +3,11 @@ from fastapi import HTTPException
 from bracket.logic.scheduling.ladder_teams import get_possible_upcoming_matches_for_swiss
 from bracket.models.db.match import MatchFilter, SuggestedMatch
 from bracket.models.db.round import Round
-from bracket.models.db.stage_item import StageItem, StageType
+from bracket.models.db.stage_item import StageType
+from bracket.models.db.stage_item_inputs import StageItemInputFinal
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.stages import get_full_tournament_details
-from bracket.sql.teams import get_teams_with_members
 from bracket.utils.id_types import StageItemId, TournamentId
 
 
@@ -26,12 +26,15 @@ async def get_draft_round_in_stage_item(
         (None, None),
     )
     if draft_round is None or stage_item is None:
-        raise HTTPException(400, "Expected stage item to be of type SWISS.")
+        raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
     return draft_round, stage_item
 
 
 async def get_upcoming_matches_for_swiss_round(
-    match_filter: MatchFilter, stage_item: StageItem, round_: Round, tournament_id: TournamentId
+    match_filter: MatchFilter,
+    stage_item: StageItemWithRounds,
+    round_: Round,
+    tournament_id: TournamentId,
 ) -> list[SuggestedMatch]:
     if stage_item.type is not StageType.SWISS:
         raise HTTPException(400, "Expected stage item to be of type SWISS.")
@@ -40,6 +43,14 @@ async def get_upcoming_matches_for_swiss_round(
         raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
     rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
-    teams = await get_teams_with_members(tournament_id, only_active_teams=True)
+    if inv := next(
+        (input_ for input_ in stage_item.inputs if not isinstance(input_, StageItemInputFinal)),
+        None,
+    ):
+        raise Exception(
+            f"Unsupported stage item type for {type(inv)} {inv.id}. "
+            "Only final stage items are supported"
+        )
 
-    return get_possible_upcoming_matches_for_swiss(match_filter, rounds, teams)
+    inputs = [sii for sii in stage_item.inputs if isinstance(sii, StageItemInputFinal)]
+    return get_possible_upcoming_matches_for_swiss(match_filter, rounds, inputs)

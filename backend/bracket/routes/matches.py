@@ -156,19 +156,15 @@ async def create_matches_automatically(
         match = all_matches_to_schedule[0]
         assert isinstance(match, SuggestedMatch)
 
-        assert draft_round.id and match.team1.id and match.team2.id
+        assert draft_round.id and match.stage_item_input1.id and match.stage_item_input2.id
         await sql_create_match(
             MatchCreateBody(
                 round_id=draft_round.id,
-                team1_id=match.team1.id,
-                team2_id=match.team2.id,
+                stage_item_input1_id=match.stage_item_input1.id,
+                stage_item_input2_id=match.stage_item_input2.id,
                 court_id=None,
-                team1_winner_from_stage_item_id=None,
-                team1_winner_position=None,
-                team1_winner_from_match_id=None,
-                team2_winner_from_stage_item_id=None,
-                team2_winner_position=None,
-                team2_winner_from_match_id=None,
+                stage_item_input1_winner_from_match_id=None,
+                stage_item_input2_winner_from_match_id=None,
                 duration_minutes=tournament.duration_minutes,
                 margin_minutes=tournament.margin_minutes,
                 custom_duration_minutes=None,

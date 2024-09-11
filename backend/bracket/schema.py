@@ -107,21 +107,23 @@ matches = Table(
     Column("custom_duration_minutes", Integer, nullable=True),
     Column("custom_margin_minutes", Integer, nullable=True),
     Column("round_id", BigInteger, ForeignKey("rounds.id"), nullable=False),
-    Column("team1_id", BigInteger, ForeignKey("teams.id"), nullable=True),
-    Column("team2_id", BigInteger, ForeignKey("teams.id"), nullable=True),
+    Column("stage_item_input1_id", BigInteger, ForeignKey("stage_item_inputs.id"), nullable=True),
+    Column("stage_item_input2_id", BigInteger, ForeignKey("stage_item_inputs.id"), nullable=True),
     Column(
-        "team1_winner_from_stage_item_id", BigInteger, ForeignKey("stage_items.id"), nullable=True
+        "stage_item_input1_winner_from_match_id",
+        BigInteger,
+        ForeignKey("matches.id"),
+        nullable=True,
     ),
     Column(
-        "team2_winner_from_stage_item_id", BigInteger, ForeignKey("stage_items.id"), nullable=True
+        "stage_item_input2_winner_from_match_id",
+        BigInteger,
+        ForeignKey("matches.id"),
+        nullable=True,
     ),
-    Column("team1_winner_position", Integer, nullable=True),
-    Column("team2_winner_position", Integer, nullable=True),
-    Column("team1_winner_from_match_id", BigInteger, ForeignKey("matches.id"), nullable=True),
-    Column("team2_winner_from_match_id", BigInteger, ForeignKey("matches.id"), nullable=True),
     Column("court_id", BigInteger, ForeignKey("courts.id"), nullable=True),
-    Column("team1_score", Integer, nullable=False),
-    Column("team2_score", Integer, nullable=False),
+    Column("stage_item_input1_score", Integer, nullable=False),
+    Column("stage_item_input2_score", Integer, nullable=False),
     Column("position_in_schedule", Integer, nullable=True),
 )
 

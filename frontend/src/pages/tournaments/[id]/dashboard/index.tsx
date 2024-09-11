@@ -11,7 +11,7 @@ import { NoContentDashboard } from '../../../../components/no_content/empty_tabl
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
-import { formatMatchTeam1, formatMatchTeam2 } from '../../../../interfaces/match';
+import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -75,7 +75,7 @@ function ScheduleRow({
       <Stack pt="sm">
         <Grid>
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, data.match)}</Text>
+            <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, data.match)}</Text>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div
@@ -93,7 +93,7 @@ function ScheduleRow({
         </Grid>
         <Grid mb="0rem">
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, data.match)}</Text>
+            <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, data.match)}</Text>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div

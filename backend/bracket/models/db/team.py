@@ -56,26 +56,6 @@ class TeamWithPlayers(BaseModel):
 
         return values
 
-    def get_elo(self) -> Decimal:
-        """
-        The ELO score of a team is the average of all player's ELO scores.
-        """
-        return (
-            Decimal(sum(player.elo_score for player in self.players)) / len(self.players)
-            if len(self.players) > 0
-            else self.elo_score
-        )
-
-    def get_swiss_score(self) -> Decimal:
-        """
-        The Swiss system score of a team.
-        """
-        return (
-            Decimal(sum(player.swiss_score for player in self.players)) / len(self.players)
-            if len(self.players) > 0
-            else self.swiss_score
-        )
-
 
 class FullTeamWithPlayers(TeamWithPlayers, Team):
     pass
