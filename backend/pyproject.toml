@@ -71,6 +71,7 @@ disable = [
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
     'contextmanager-generator-missing-cleanup',  # Gives false positives.
+    'too-many-positional-arguments',
 ]
 
 [tool.bandit]
