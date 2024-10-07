@@ -2,7 +2,6 @@ import assert from 'assert';
 
 import { Court } from './court';
 import { StageItemInput, getPositionName } from './stage_item_input';
-import { TeamInterface } from './team';
 
 export interface MatchInterface {
   id: number;
@@ -27,8 +26,8 @@ export interface MatchInterface {
 export interface MatchBodyInterface {
   id: number;
   round_id: number;
-  team1_score: number;
-  team2_score: number;
+  stage_item_input1_score: number;
+  stage_item_input2_score: number;
   court_id: number | null;
   custom_duration_minutes: number | null;
   custom_margin_minutes: number | null;
@@ -43,8 +42,8 @@ export interface MatchRescheduleInterface {
 
 export interface UpcomingMatchInterface {
   is_recommended: boolean;
-  team1: TeamInterface;
-  team2: TeamInterface;
+  stage_item_input1: StageItemInput;
+  stage_item_input2: StageItemInput;
   elo_diff: number;
   swiss_diff: number;
 }

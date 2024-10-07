@@ -41,15 +41,15 @@ function ScheduleRow({
   const drawColor = '#656565';
   const loseColor = '#af4034';
   const team1_color =
-    data.match.team1_score > data.match.team2_score
+    data.match.stage_item_input1_score > data.match.stage_item_input2_score
       ? winColor
-      : data.match.team1_score === data.match.team2_score
+      : data.match.stage_item_input1_score === data.match.stage_item_input2_score
         ? drawColor
         : loseColor;
   const team2_color =
-    data.match.team2_score > data.match.team1_score
+    data.match.stage_item_input2_score > data.match.stage_item_input1_score
       ? winColor
-      : data.match.team1_score === data.match.team2_score
+      : data.match.stage_item_input1_score === data.match.stage_item_input2_score
         ? drawColor
         : loseColor;
 
@@ -110,7 +110,7 @@ function ScheduleRow({
                   fontWeight: 800,
                 }}
               >
-                {data.match.team1_score}
+                {data.match.stage_item_input1_score}
               </div>
             </Grid.Col>
           </Grid>
@@ -129,7 +129,7 @@ function ScheduleRow({
                   fontWeight: 800,
                 }}
               >
-                {data.match.team2_score}
+                {data.match.stage_item_input2_score}
               </div>
             </Grid.Col>
           </Grid>

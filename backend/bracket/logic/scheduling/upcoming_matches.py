@@ -43,14 +43,5 @@ async def get_upcoming_matches_for_swiss_round(
         raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
     rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
-    if inv := next(
-        (input_ for input_ in stage_item.inputs if not isinstance(input_, StageItemInputFinal)),
-        None,
-    ):
-        raise Exception(
-            f"Unsupported stage item type for {type(inv)} {inv.id}. "
-            "Only final stage items are supported"
-        )
-
-    inputs = [sii for sii in stage_item.inputs if isinstance(sii, StageItemInputFinal)]
+    inputs = [sii for sii in stage_item.inputs]
     return get_possible_upcoming_matches_for_swiss(match_filter, rounds, inputs)

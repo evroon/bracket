@@ -10,7 +10,7 @@ from bracket.models.db.match import (
     SuggestedMatch,
     get_match_hash,
 )
-from bracket.models.db.stage_item_inputs import StageItemInputFinal
+from bracket.models.db.stage_item_inputs import StageItemInputFinal, StageItemInput
 from bracket.models.db.util import RoundWithMatches
 from bracket.utils.id_types import StageItemInputId
 from bracket.utils.types import assert_some
@@ -57,7 +57,7 @@ def get_number_of_inputs_played_per_input(
 def get_possible_upcoming_matches_for_swiss(
     filter_: MatchFilter,
     rounds: list[RoundWithMatches],
-    stage_item_inputs: list[StageItemInputFinal],
+    stage_item_inputs: list[StageItemInput],
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
     scheduled_hashes: list[str] = []

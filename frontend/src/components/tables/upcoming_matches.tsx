@@ -40,10 +40,13 @@ export default function UpcomingMatchesTable({
   }
 
   async function scheduleMatch(upcoming_match: UpcomingMatchInterface) {
-    if (upcoming_match.team1.id != null && upcoming_match.team2.id != null) {
+    if (
+      upcoming_match.stage_item_input1.id != null &&
+      upcoming_match.stage_item_input2.id != null
+    ) {
       const match_to_schedule: MatchCreateBodyInterface = {
-        team1_id: upcoming_match.team1.id,
-        team2_id: upcoming_match.team2.id,
+        team1_id: upcoming_match.stage_item_input1.id,
+        team2_id: upcoming_match.stage_item_input2.id,
         round_id,
         label: '',
       };
@@ -59,7 +62,9 @@ export default function UpcomingMatchesTable({
       sortTableEntries(m1, m2, tableState)
     )
     .map((upcoming_match: UpcomingMatchInterface) => (
-      <Table.Tr key={`${upcoming_match.team1.id} - ${upcoming_match.team2.id}`}>
+      <Table.Tr
+        key={`${upcoming_match.stage_item_input1.id} - ${upcoming_match.stage_item_input2.id}`}
+      >
         <Table.Td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">
@@ -68,10 +73,20 @@ export default function UpcomingMatchesTable({
           ) : null}
         </Table.Td>
         <Table.Td>
-          <PlayerList team={upcoming_match.team1} displaySettings={displaySettings} />
+          {upcoming_match.stage_item_input1.team != null ? (
+            <PlayerList
+              team={upcoming_match.stage_item_input1.team}
+              displaySettings={displaySettings}
+            />
+          ) : null}
         </Table.Td>
         <Table.Td>
-          <PlayerList team={upcoming_match.team2} displaySettings={displaySettings} />
+          {upcoming_match.stage_item_input2.team != null ? (
+            <PlayerList
+              team={upcoming_match.stage_item_input2.team}
+              displaySettings={displaySettings}
+            />
+          ) : null}
         </Table.Td>
         <Table.Td>{Number(upcoming_match.elo_diff).toFixed(0)}</Table.Td>
         <Table.Td>{Number(upcoming_match.swiss_diff).toFixed(1)}</Table.Td>
