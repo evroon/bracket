@@ -1,12 +1,12 @@
 from decimal import Decimal
 
-from heliclockter import datetime_utc, timedelta
+from heliclockter import datetime_utc
 from pydantic import BaseModel
 
 from bracket.models.db.court import Court
 from bracket.models.db.shared import BaseModelORM
-from bracket.models.db.team import FullTeamWithPlayers, TeamWithPlayers
-from bracket.utils.id_types import CourtId, MatchId, PlayerId, RoundId, StageItemId, TeamId
+from bracket.models.db.stage_item_inputs import StageItemInput
+from bracket.utils.id_types import CourtId, MatchId, RoundId, StageItemInputId
 from bracket.utils.types import assert_some
 
 
@@ -19,33 +19,21 @@ class MatchBaseInsertable(BaseModelORM):
     custom_margin_minutes: int | None = None
     position_in_schedule: int | None = None
     round_id: RoundId
-    team1_score: int
-    team2_score: int
+    stage_item_input1_score: int
+    stage_item_input2_score: int
     court_id: CourtId | None = None
 
     @property
     def end_time(self) -> datetime_utc:
         assert self.start_time
-        return datetime_utc.from_datetime(
-            self.start_time + timedelta(minutes=self.duration_minutes + self.margin_minutes)
-        )
+        return self.start_time.future(minutes=self.duration_minutes + self.margin_minutes)
 
 
 class MatchInsertable(MatchBaseInsertable):
-    team1_id: TeamId | None = None
-    team2_id: TeamId | None = None
-    team1_winner_position: int | None = None
-    team1_winner_from_stage_item_id: StageItemId | None = None
-    team2_winner_from_stage_item_id: StageItemId | None = None
-    team2_winner_position: int | None = None
-    team1_winner_from_match_id: MatchId | None = None
-    team2_winner_from_match_id: MatchId | None = None
-
-    def get_winner_index(self) -> int | None:
-        if self.team1_score == self.team2_score:
-            return None
-
-        return 1 if self.team1_score > self.team2_score else 0
+    stage_item_input1_id: StageItemInputId | None = None
+    stage_item_input2_id: StageItemInputId | None = None
+    stage_item_input1_winner_from_match_id: MatchId | None = None
+    stage_item_input2_winner_from_match_id: MatchId | None = None
 
 
 class Match(MatchInsertable):
@@ -56,38 +44,36 @@ class MatchWithDetails(Match):
     court: Court | None = None
 
 
-def get_match_hash(team_1_id: TeamId | None, team_2_id: TeamId | None) -> str:
-    return f"{team_1_id}-{team_2_id}"
+def get_match_hash(
+    stage_item_input1_id: StageItemInputId | None, stage_item_input2_id: StageItemInputId | None
+) -> str:
+    return f"{stage_item_input1_id}-{stage_item_input2_id}"
 
 
 class MatchWithDetailsDefinitive(Match):
-    team1: FullTeamWithPlayers
-    team2: FullTeamWithPlayers
+    stage_item_input1: StageItemInput
+    stage_item_input2: StageItemInput
     court: Court | None = None
 
     @property
-    def teams(self) -> list[FullTeamWithPlayers]:
-        return [self.team1, self.team2]
+    def stage_item_inputs(self) -> list[StageItemInput]:
+        return [self.stage_item_input1, self.stage_item_input2]
 
     @property
-    def team_ids(self) -> list[TeamId]:
-        return [assert_some(self.team1.id), assert_some(self.team2.id)]
+    def stage_item_input_ids(self) -> list[StageItemInputId]:
+        return [assert_some(self.stage_item_input1_id), assert_some(self.stage_item_input2_id)]
 
-    def get_team_ids_hashes(self) -> list[str]:
+    def get_input_ids_hashes(self) -> list[str]:
         return [
-            get_match_hash(self.team1_id, self.team2_id),
-            get_match_hash(self.team2_id, self.team1_id),
+            get_match_hash(self.stage_item_input1_id, self.stage_item_input2_id),
+            get_match_hash(self.stage_item_input2_id, self.stage_item_input1_id),
         ]
-
-    @property
-    def player_ids(self) -> list[PlayerId]:
-        return self.team1.player_ids + self.team2.player_ids
 
 
 class MatchBody(BaseModelORM):
     round_id: RoundId
-    team1_score: int = 0
-    team2_score: int = 0
+    stage_item_input1_score: int = 0
+    stage_item_input2_score: int = 0
     court_id: CourtId | None = None
     custom_duration_minutes: int | None = None
     custom_margin_minutes: int | None = None
@@ -96,14 +82,10 @@ class MatchBody(BaseModelORM):
 class MatchCreateBodyFrontend(BaseModelORM):
     round_id: RoundId
     court_id: CourtId | None = None
-    team1_id: TeamId | None = None
-    team2_id: TeamId | None = None
-    team1_winner_from_stage_item_id: StageItemId | None = None
-    team1_winner_position: int | None = None
-    team1_winner_from_match_id: MatchId | None = None
-    team2_winner_from_stage_item_id: StageItemId | None = None
-    team2_winner_position: int | None = None
-    team2_winner_from_match_id: MatchId | None = None
+    stage_item_input1_id: StageItemInputId | None = None
+    stage_item_input2_id: StageItemInputId | None = None
+    stage_item_input1_winner_from_match_id: MatchId | None = None
+    stage_item_input2_winner_from_match_id: MatchId | None = None
 
 
 class MatchCreateBody(MatchCreateBodyFrontend):
@@ -128,19 +110,13 @@ class MatchFilter(BaseModel):
 
 
 class SuggestedMatch(BaseModel):
-    team1: TeamWithPlayers
-    team2: TeamWithPlayers
+    stage_item_input1: StageItemInput
+    stage_item_input2: StageItemInput
     elo_diff: Decimal
     swiss_diff: Decimal
     is_recommended: bool
     player_behind_schedule_count: int
 
     @property
-    def team_ids(self) -> list[int]:
-        return [assert_some(self.team1.id), assert_some(self.team2.id)]
-
-    def __hash__(self) -> int:
-        return sum(
-            pow(100, i) + player.id
-            for i, player in enumerate(self.team1.players + self.team2.players)
-        )
+    def stage_item_input_ids(self) -> list[int]:
+        return [self.stage_item_input1.id, self.stage_item_input2.id]

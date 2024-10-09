@@ -14,6 +14,11 @@ from bracket.models.db.ranking import Ranking, RankingInsertable
 from bracket.models.db.round import Round, RoundInsertable
 from bracket.models.db.stage import Stage, StageInsertable
 from bracket.models.db.stage_item import StageItem, StageItemInsertable
+from bracket.models.db.stage_item_inputs import (
+    StageItemInputBase,
+    StageItemInputFinal,
+    StageItemInputInsertable,
+)
 from bracket.models.db.team import Team, TeamInsertable
 from bracket.models.db.tournament import Tournament, TournamentInsertable
 from bracket.models.db.user import UserInDB, UserInsertable
@@ -26,6 +31,7 @@ from bracket.schema import (
     players_x_teams,
     rankings,
     rounds,
+    stage_item_inputs,
     stage_items,
     stages,
     teams,
@@ -33,6 +39,7 @@ from bracket.schema import (
     users,
     users_x_clubs,
 )
+from bracket.sql.teams import get_teams_by_id
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_RANKING1, DUMMY_TOURNAMENT
 from bracket.utils.id_types import TeamId
@@ -123,6 +130,19 @@ async def inserted_stage(stage: StageInsertable) -> AsyncIterator[Stage]:
 async def inserted_stage_item(stage_item: StageItemInsertable) -> AsyncIterator[StageItem]:
     async with inserted_generic(stage_item, stage_items, StageItem) as row_inserted:
         yield StageItem(**row_inserted.model_dump())
+
+
+@asynccontextmanager
+async def inserted_stage_item_input(
+    stage_item_input: StageItemInputInsertable,
+) -> AsyncIterator[StageItemInputFinal]:
+    async with inserted_generic(
+        stage_item_input, stage_item_inputs, StageItemInputBase
+    ) as row_inserted:
+        [team] = await get_teams_by_id({stage_item_input.team_id}, stage_item_input.tournament_id)
+        yield StageItemInputFinal.model_validate(
+            row_inserted.model_dump() | {"team": team, "team_id": team.id}
+        )
 
 
 @asynccontextmanager

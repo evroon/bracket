@@ -396,8 +396,8 @@ async def sql_create_dev_db() -> UserId:
                         match=MatchBody.model_validate(
                             {
                                 **match.model_dump(),
-                                "team1_score": random.randint(0, 10),
-                                "team2_score": random.randint(0, 10),
+                                "stage_item_input1_score": random.randint(0, 10),
+                                "stage_item_input2_score": random.randint(0, 10),
                             }
                         ),
                         tournament=tournament_details,

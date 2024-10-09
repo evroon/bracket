@@ -3,7 +3,8 @@ from decimal import Decimal
 from pydantic import BaseModel, Field
 
 from bracket.models.db.shared import BaseModelORM
-from bracket.utils.id_types import MatchId, StageItemId, StageItemInputId, TeamId, TournamentId
+from bracket.models.db.team import Team
+from bracket.utils.id_types import StageItemId, StageItemInputId, TeamId, TournamentId
 
 
 class StageItemInputBase(BaseModelORM):
@@ -17,43 +18,40 @@ class StageItemInputGeneric(BaseModel):
     team_id: TeamId | None = None
     winner_from_stage_item_id: StageItemId | None = None
     winner_position: int | None = None
-    winner_from_match_id: MatchId | None = None
     points: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
     losses: int = 0
+
+    @property
+    def elo(self) -> Decimal:
+        """
+        For now, ELO is saved as points.
+        """
+        return self.points
 
     def __hash__(self) -> int:
         return (
             self.team_id,
             self.winner_from_stage_item_id,
             self.winner_position,
-            self.winner_from_match_id,
         ).__hash__()
 
 
 class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
-    winner_from_match_id: None = None
     winner_from_stage_item_id: StageItemId
     winner_position: int = Field(ge=1)
 
 
 class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: TeamId
-    winner_from_match_id: None = None
+    team: Team
     winner_from_stage_item_id: None = None
     winner_position: None = None
 
 
-class StageItemInputMatch(StageItemInputBase, StageItemInputGeneric):
-    team_id: None = None
-    winner_from_match_id: MatchId
-    winner_from_stage_item_id: None = None
-    winner_position: None = None
-
-
-StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputMatch
+StageItemInput = StageItemInputTentative | StageItemInputFinal
 
 
 class StageItemInputCreateBodyTentative(BaseModel):
@@ -68,6 +66,13 @@ class StageItemInputCreateBodyFinal(BaseModel):
 
 
 StageItemInputCreateBody = StageItemInputCreateBodyTentative | StageItemInputCreateBodyFinal
+
+
+class StageItemInputInsertable(BaseModel):
+    slot: int
+    team_id: TeamId
+    tournament_id: TournamentId
+    stage_item_id: StageItemId
 
 
 class StageItemInputOptionFinal(BaseModel):

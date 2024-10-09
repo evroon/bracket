@@ -54,6 +54,7 @@ disable = [
     'broad-except',
     'broad-exception-raised',
     'consider-iterating-dictionary',
+    'contextmanager-generator-missing-cleanup',  # Gives false positives.
     'dangerous-default-value',
     'duplicate-code',
     'fixme',
@@ -67,11 +68,10 @@ disable = [
     'too-many-arguments',
     'too-many-locals',
     'too-many-nested-blocks',
+    'too-many-positional-arguments',
     'unspecified-encoding',
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
-    'contextmanager-generator-missing-cleanup',  # Gives false positives.
-    'too-many-positional-arguments',
 ]
 
 [tool.bandit]

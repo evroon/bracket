@@ -25,7 +25,7 @@ import { Time } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
 import { Court } from '../../../interfaces/court';
-import { MatchInterface, formatMatchTeam1, formatMatchTeam2 } from '../../../interfaces/match';
+import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../../interfaces/match';
 import { TournamentMinimal } from '../../../interfaces/tournament';
 import { getCourts, getStages } from '../../../services/adapter';
 import { deleteCourt } from '../../../services/court';
@@ -69,8 +69,8 @@ function ScheduleRow({
           >
             <Grid>
               <Grid.Col span="auto">
-                <Text fw={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, match)}</Text>
-                <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, match)}</Text>
+                <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, match)}</Text>
+                <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, match)}</Text>
               </Grid.Col>
               <Grid.Col span="content">
                 <Stack gap="xs" align="end">
