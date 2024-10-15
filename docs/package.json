@@ -61,7 +61,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "markdownlint-cli2": "^0.14.0",
-    "markdownlint-rule-relative-links": "^2.1.1",
+    "markdownlint-rule-relative-links": "^3.0.0",
     "postcss": "^8.4.32",
     "postcss-preset-mantine": "^1.11.1",
     "postcss-simple-vars": "^7.0.1",
