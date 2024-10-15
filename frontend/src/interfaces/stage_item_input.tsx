@@ -1,3 +1,5 @@
+import { TeamInterface } from './team';
+
 export interface StageItemInput {
   id: number;
   slot: number;
@@ -10,6 +12,7 @@ export interface StageItemInput {
   draws: number;
   losses: number;
   points: number;
+  team: TeamInterface | null;
 }
 
 export interface StageItemInputCreateBody {

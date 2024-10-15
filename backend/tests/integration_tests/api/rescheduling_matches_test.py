@@ -1,4 +1,5 @@
 from bracket.models.db.match import MatchRescheduleBody
+from bracket.models.db.stage_item_inputs import StageItemInputInsertable
 from bracket.schema import matches
 from bracket.sql.matches import sql_get_match
 from bracket.utils.dummy_records import (
@@ -21,6 +22,7 @@ from tests.integration_tests.sql import (
     inserted_round,
     inserted_stage,
     inserted_stage_item,
+    inserted_stage_item_input,
     inserted_team,
 )
 
@@ -46,6 +48,22 @@ async def test_reschedule_match(
         inserted_team(
             DUMMY_TEAM2.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as team2_inserted,
+        inserted_stage_item_input(
+            StageItemInputInsertable(
+                slot=0,
+                team_id=team1_inserted.id,
+                tournament_id=auth_context.tournament.id,
+                stage_item_id=stage_item_inserted.id,
+            )
+        ) as stage_item_input1_inserted,
+        inserted_stage_item_input(
+            StageItemInputInsertable(
+                slot=0,
+                team_id=team2_inserted.id,
+                tournament_id=auth_context.tournament.id,
+                stage_item_id=stage_item_inserted.id,
+            )
+        ) as stage_item_input2_inserted,
         inserted_court(
             DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
         ) as court1_inserted,
@@ -56,8 +74,8 @@ async def test_reschedule_match(
             DUMMY_MATCH1.model_copy(
                 update={
                     "round_id": round_inserted.id,
-                    "team1_id": team1_inserted.id,
-                    "team2_id": team2_inserted.id,
+                    "stage_item_input1_id": stage_item_input1_inserted.id,
+                    "stage_item_input2_id": stage_item_input2_inserted.id,
                     "court_id": court1_inserted.id,
                 }
             )

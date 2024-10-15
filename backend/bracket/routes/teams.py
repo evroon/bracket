@@ -158,8 +158,8 @@ async def delete_team(
     with check_foreign_key_violation(
         {
             ForeignKey.stage_item_inputs_team_id_fkey,
-            ForeignKey.matches_team1_id_fkey,
-            ForeignKey.matches_team2_id_fkey,
+            ForeignKey.matches_stage_item_input1_id_fkey,
+            ForeignKey.matches_stage_item_input2_id_fkey,
         }
     ):
         await sql_delete_team(tournament_id, team.id)

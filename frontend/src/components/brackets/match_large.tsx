@@ -6,16 +6,16 @@ import { MatchInterface } from '../../interfaces/match';
 import { Time } from '../utils/datetime';
 
 export default function MatchLarge({ match }: { match: MatchInterface }) {
-  assert(match.team1 != null);
-  assert(match.team2 != null);
+  assert(match.stage_item_input1?.team != null);
+  assert(match.stage_item_input2?.team != null);
 
   const bracket = (
     <div>
       <Card padding="md" shadow="sm" radius="lg" withBorder>
         <Grid align="center">
           <Grid.Col span={{ sm: 9 }}>
-            <Text lineClamp={1}>{match.team1.name}</Text>
-            <Text lineClamp={1}>{match.team2.name}</Text>
+            <Text lineClamp={1}>{match.stage_item_input1.team.name}</Text>
+            <Text lineClamp={1}>{match.stage_item_input2.team.name}</Text>
           </Grid.Col>
           <Grid.Col span={{ sm: 3 }}>
             <Center>
