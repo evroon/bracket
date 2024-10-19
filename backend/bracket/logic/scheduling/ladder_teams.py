@@ -10,7 +10,7 @@ from bracket.models.db.match import (
     SuggestedMatch,
     get_match_hash,
 )
-from bracket.models.db.stage_item_inputs import StageItemInputFinal, StageItemInput
+from bracket.models.db.stage_item_inputs import StageItemInput
 from bracket.models.db.util import RoundWithMatches
 from bracket.utils.id_types import StageItemInputId
 from bracket.utils.types import assert_some

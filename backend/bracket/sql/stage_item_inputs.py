@@ -1,11 +1,58 @@
 from bracket.database import database
 from bracket.models.db.stage_item_inputs import (
+    StageItemInput,
     StageItemInputBase,
     StageItemInputCreateBody,
     StageItemInputCreateBodyFinal,
     StageItemInputCreateBodyTentative,
+    StageItemInputFinal,
+    StageItemInputTentative,
 )
-from bracket.utils.id_types import StageItemId, TournamentId
+from bracket.sql.teams import get_team_by_id
+from bracket.utils.id_types import StageItemId, StageItemInputId, TeamId, TournamentId
+
+
+async def get_stage_item_input_by_id(
+    tournament_id: TournamentId, stage_item_input_id: StageItemInputId
+) -> StageItemInput | None:
+    query = """
+        SELECT *
+        FROM stage_item_inputs
+        WHERE id = :stage_item_input_id
+        AND tournament_id = :tournament_id
+    """
+    result = await database.fetch_one(
+        query=query,
+        values={"stage_item_input_id": stage_item_input_id, "tournament_id": tournament_id},
+    )
+    if result is None:
+        return None
+
+    if result["team_id"] is not None:
+        data = dict(result._mapping)
+        data["team"] = await get_team_by_id(data["team_id"], tournament_id)
+        return StageItemInputFinal.model_validate(data)
+
+    return StageItemInputTentative.model_validate(result)
+
+
+async def sql_set_team_id_for_stage_item_input(
+    tournament_id: TournamentId, stage_item_input_id: StageItemInputId, team_id: TeamId
+) -> None:
+    query = """
+        UPDATE stage_item_inputs
+        SET team_id = :team_id
+        WHERE tournament_id = :tournament_id
+        AND stage_item_inputs.id = :stage_item_input_id
+        """
+    await database.execute(
+        query=query,
+        values={
+            "team_id": team_id,
+            "stage_item_input_id": stage_item_input_id,
+            "tournament_id": tournament_id,
+        },
+    )
 
 
 async def sql_delete_stage_item_inputs(stage_item_id: StageItemId) -> None:

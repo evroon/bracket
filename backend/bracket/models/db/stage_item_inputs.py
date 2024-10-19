@@ -47,8 +47,6 @@ class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
 class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: TeamId
     team: Team
-    winner_from_stage_item_id: None = None
-    winner_position: None = None
 
 
 StageItemInput = StageItemInputTentative | StageItemInputFinal

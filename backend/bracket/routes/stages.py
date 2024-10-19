@@ -5,6 +5,7 @@ from bracket.database import database
 from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import (
     get_team_rankings_lookup_for_stage,
+    update_matches_in_activated_stage,
     # update_matches_in_activated_stage,
 )
 from bracket.logic.subscriptions import check_requirement
@@ -123,8 +124,8 @@ async def activate_next_stage(
         )
 
     await sql_activate_next_stage(new_active_stage_id, tournament_id)
-    # if stage_body.direction == "next":
-    #     await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
+    if stage_body.direction == "next":
+        await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
     return SuccessResponse()
 
 

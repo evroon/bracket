@@ -5,7 +5,10 @@ from fastapi import HTTPException
 
 from bracket.logic.scheduling.ladder_teams import get_possible_upcoming_matches_for_swiss
 from bracket.models.db.match import Match, MatchFilter, MatchWithDetailsDefinitive, SuggestedMatch
-from bracket.models.db.stage_item_inputs import StageItemInputFinal
+from bracket.models.db.stage_item_inputs import (
+    StageItemInput,
+    StageItemInputFinal,
+)
 from bracket.models.db.team import Team
 from bracket.models.db.util import RoundWithMatches
 from bracket.utils.dummy_records import (
@@ -87,7 +90,7 @@ def test_constraints() -> None:
             created=MOCK_NOW,
         ),
     ]
-    inputs = [input1, input2, input3, input4]
+    inputs: list[StageItemInput] = [input1, input2, input3, input4]
     result = get_possible_upcoming_matches_for_swiss(MATCH_FILTER, rounds, inputs)
 
     # Team 3 and 4 haven't played yet, so any suggested match with one or more of those teams
