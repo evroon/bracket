@@ -102,3 +102,15 @@ async def update_matches_in_activated_stage(tournament_id: TournamentId, stage_i
                 await set_team_ids_for_input(
                     tournament_id, stage_item_input, team_rankings_per_stage_item
                 )
+
+
+async def update_matches_in_deactivated_stage(
+    tournament_id: TournamentId, deactivated_stage: StageWithStageItems
+) -> None:
+    """
+    Unsets the team_id for stage item inputs of the newly deactivated stage.
+    """
+    for stage_item in deactivated_stage.stage_items:
+        for stage_item_input in stage_item.inputs:
+            if stage_item_input.winner_from_stage_item_id is not None:
+                await sql_set_team_id_for_stage_item_input(tournament_id, stage_item_input.id, None)

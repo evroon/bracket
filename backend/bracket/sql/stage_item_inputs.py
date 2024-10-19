@@ -37,7 +37,7 @@ async def get_stage_item_input_by_id(
 
 
 async def sql_set_team_id_for_stage_item_input(
-    tournament_id: TournamentId, stage_item_input_id: StageItemInputId, team_id: TeamId
+    tournament_id: TournamentId, stage_item_input_id: StageItemInputId, team_id: TeamId | None
 ) -> None:
     query = """
         UPDATE stage_item_inputs
