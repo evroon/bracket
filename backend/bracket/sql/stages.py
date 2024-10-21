@@ -28,24 +28,26 @@ async def get_full_tournament_details(
     )
 
     query = f"""
-        WITH teams_with_players AS (
-            SELECT DISTINCT ON (teams.id)
-                teams.*,
-                to_json(array_remove(array_agg(p), NULL)) as players
-            FROM teams
-            LEFT JOIN players_x_teams pt on pt.team_id = teams.id
-            LEFT JOIN players p on pt.player_id = p.id
-            WHERE teams.tournament_id = :tournament_id
-            GROUP BY teams.id
-        ), matches_with_teams AS (
+        WITH inputs_with_teams AS (
+            SELECT DISTINCT ON (stage_item_inputs.id)
+                stage_item_inputs.*,
+                to_json(t.*) AS team
+            FROM stage_item_inputs
+            JOIN stage_items on stage_item_inputs.stage_item_id = stage_items.id
+            LEFT JOIN stages s2 on s2.id = stage_items.stage_id
+            LEFT JOIN teams t on t.id = stage_item_inputs.team_id
+            WHERE s2.tournament_id = :tournament_id
+            {stage_item_filter}
+            GROUP BY stage_item_inputs.id, t.id
+        ), matches_with_inputs AS (
             SELECT DISTINCT ON (matches.id)
                 matches.*,
-                to_json(t1) as team1,
-                to_json(t2) as team2,
+                to_json(sii1) as stage_item_input1,
+                to_json(sii2) as stage_item_input2,
                 to_json(c) as court
             FROM matches
-            LEFT JOIN teams_with_players t1 on t1.id = matches.team1_id
-            LEFT JOIN teams_with_players t2 on t2.id = matches.team2_id
+            LEFT JOIN inputs_with_teams sii1 on sii1.id = matches.stage_item_input1_id
+            LEFT JOIN inputs_with_teams sii2 on sii2.id = matches.stage_item_input2_id
             LEFT JOIN rounds r on matches.round_id = r.id
             LEFT JOIN stage_items si on r.stage_item_id = si.id
             LEFT JOIN stages s2 on s2.id = si.stage_id
@@ -56,7 +58,7 @@ async def get_full_tournament_details(
                 rounds.*,
                 to_json(array_agg(m.*)) AS matches
             FROM rounds
-            LEFT JOIN matches_with_teams m on m.round_id = rounds.id
+            LEFT JOIN matches_with_inputs m on m.round_id = rounds.id
             LEFT JOIN stage_items si on rounds.stage_item_id = si.id
             LEFT JOIN stages s2 on s2.id = si.stage_id
             WHERE s2.tournament_id = :tournament_id
@@ -78,7 +80,7 @@ async def get_full_tournament_details(
                 stage_items.id,
                 to_json(array_agg(sii)) AS inputs
             FROM stage_items
-            LEFT JOIN stage_item_inputs sii ON stage_items.id = sii.stage_item_id
+            LEFT JOIN inputs_with_teams sii ON stage_items.id = sii.stage_item_id
             WHERE sii.tournament_id = :tournament_id
             {stage_item_filter}
             GROUP BY stage_items.id

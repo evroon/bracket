@@ -6,6 +6,8 @@ from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import (
     get_team_rankings_lookup_for_stage,
     update_matches_in_activated_stage,
+    update_matches_in_deactivated_stage,
+    # update_matches_in_activated_stage,
 )
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
@@ -122,9 +124,15 @@ async def activate_next_stage(
             detail=f"There is no {stage_body.direction} stage",
         )
 
+    stages = await get_full_tournament_details(tournament_id)
+    deactivated_stage = next((stage for stage in stages if stage.is_active), None)
+
     await sql_activate_next_stage(new_active_stage_id, tournament_id)
     if stage_body.direction == "next":
         await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
+    else:
+        if deactivated_stage:
+            await update_matches_in_deactivated_stage(tournament_id, deactivated_stage)
     return SuccessResponse()
 
 

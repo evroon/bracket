@@ -17,10 +17,8 @@ class UniqueIndex(EnumAutoStr):
 
 class ForeignKey(EnumAutoStr):
     courts_tournament_id_fkey = auto()
-    matches_team1_id_fkey = auto()
-    matches_team1_winner_from_stage_item_id_fkey = auto()
-    matches_team2_id_fkey = auto()
-    matches_team2_winner_from_stage_item_id_fkey = auto()
+    matches_stage_item_input1_id_fkey = auto()
+    matches_stage_item_input2_id_fkey = auto()
     players_tournament_id_fkey = auto()
     stage_item_inputs_team_id_fkey = auto()
     stages_tournament_id_fkey = auto()
@@ -36,12 +34,8 @@ unique_index_violation_error_lookup = {
 
 foreign_key_violation_error_lookup = {
     ForeignKey.courts_tournament_id_fkey: "This tournament still has courts, delete those first",
-    ForeignKey.matches_team1_id_fkey: "This team is still part of matches",
-    ForeignKey.matches_team1_winner_from_stage_item_id_fkey: "This stage item is referenced by "
-    "other stage items",
-    ForeignKey.matches_team2_id_fkey: "This team is still part of matches",
-    ForeignKey.matches_team2_winner_from_stage_item_id_fkey: "This stage item is referenced by "
-    "other stage items",
+    ForeignKey.matches_stage_item_input1_id_fkey: "This team is still part of matches",
+    ForeignKey.matches_stage_item_input2_id_fkey: "This team is still part of matches",
     ForeignKey.players_tournament_id_fkey: "This tournament still has players, delete those first",
     ForeignKey.stage_item_inputs_team_id_fkey: "This team is still used in stage items",
     ForeignKey.stages_tournament_id_fkey: "This tournament still has stages, delete those first",

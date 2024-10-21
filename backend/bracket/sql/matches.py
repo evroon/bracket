@@ -5,7 +5,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
-from bracket.utils.id_types import CourtId, MatchId, StageItemId, TeamId
+from bracket.utils.id_types import CourtId, MatchId, StageItemId
 
 
 async def sql_delete_match(match_id: MatchId) -> None:
@@ -34,33 +34,25 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
         INSERT INTO matches (
             round_id,
             court_id,
-            team1_id,
-            team2_id,
-            team1_winner_from_stage_item_id,
-            team2_winner_from_stage_item_id,
-            team1_winner_position,
-            team2_winner_position,
-            team1_winner_from_match_id,
-            team2_winner_from_match_id,
+            stage_item_input1_id,
+            stage_item_input2_id,
+            stage_item_input1_winner_from_match_id,
+            stage_item_input2_winner_from_match_id,
             duration_minutes,
             custom_duration_minutes,
             margin_minutes,
             custom_margin_minutes,
-            team1_score,
-            team2_score,
+            stage_item_input1_score,
+            stage_item_input2_score,
             created
         )
         VALUES (
             :round_id,
             :court_id,
-            :team1_id,
-            :team2_id,
-            :team1_winner_from_stage_item_id,
-            :team2_winner_from_stage_item_id,
-            :team1_winner_position,
-            :team2_winner_position,
-            :team1_winner_from_match_id,
-            :team2_winner_from_match_id,
+            :stage_item_input1_id,
+            :stage_item_input2_id,
+            :stage_item_input1_winner_from_match_id,
+            :stage_item_input2_winner_from_match_id,
             :duration_minutes,
             :custom_duration_minutes,
             :margin_minutes,
@@ -83,8 +75,8 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
     query = """
         UPDATE matches
         SET round_id = :round_id,
-            team1_score = :team1_score,
-            team2_score = :team2_score,
+            stage_item_input1_score = :stage_item_input1_score,
+            stage_item_input2_score = :stage_item_input2_score,
             court_id = :court_id,
             custom_duration_minutes = :custom_duration_minutes,
             custom_margin_minutes = :custom_margin_minutes,
@@ -112,20 +104,6 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
             "duration_minutes": duration_minutes,
             "margin_minutes": margin_minutes,
         },
-    )
-
-
-async def sql_update_team_ids_for_match(
-    match_id: MatchId, team1_id: TeamId | None, team2_id: TeamId | None = None
-) -> None:
-    query = """
-        UPDATE matches
-        SET team1_id = :team1_id,
-            team2_id = :team2_id
-        WHERE matches.id = :match_id
-        """
-    await database.execute(
-        query=query, values={"match_id": match_id, "team1_id": team1_id, "team2_id": team2_id}
     )
 
 

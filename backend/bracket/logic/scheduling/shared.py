@@ -1,16 +1,18 @@
 from bracket.models.db.match import MatchFilter, SuggestedMatch
-from bracket.models.db.team import TeamWithPlayers
+from bracket.models.db.stage_item_inputs import StageItemInput
 
 
 def get_suggested_match(
-    team1: TeamWithPlayers, team2: TeamWithPlayers, is_recommended: bool
+    stage_item_input1: StageItemInput,
+    stage_item_input2: StageItemInput,
+    is_recommended: bool,
 ) -> SuggestedMatch:
-    elo_diff = abs(team1.get_elo() - team2.get_elo())
-    swiss_diff = abs(team1.get_swiss_score() - team2.get_swiss_score())
+    elo_diff = abs(stage_item_input1.elo - stage_item_input2.elo)
+    swiss_diff = abs(stage_item_input1.points - stage_item_input2.points)
 
     return SuggestedMatch(
-        team1=team1,
-        team2=team2,
+        stage_item_input1=stage_item_input1,
+        stage_item_input2=stage_item_input2,
         elo_diff=elo_diff,
         swiss_diff=swiss_diff,
         is_recommended=is_recommended,
@@ -18,13 +20,13 @@ def get_suggested_match(
     )
 
 
-def check_team_combination_adheres_to_filter(
-    team1: TeamWithPlayers, team2: TeamWithPlayers, filter_: MatchFilter, is_recommended: bool
+def check_input_combination_adheres_to_filter(
+    stage_item_input1: StageItemInput,
+    stage_item_input2: StageItemInput,
+    filter_: MatchFilter,
+    is_recommended: bool,
 ) -> SuggestedMatch | None:
-    if any(player_id in team2.player_ids for player_id in team1.player_ids):
-        return None
-
-    suggested_match = get_suggested_match(team1, team2, is_recommended)
+    suggested_match = get_suggested_match(stage_item_input1, stage_item_input2, is_recommended)
 
     if suggested_match.elo_diff <= filter_.elo_diff_threshold:
         return suggested_match

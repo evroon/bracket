@@ -11,7 +11,7 @@ import { NoContentDashboard } from '../../../../components/no_content/empty_tabl
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
-import { formatMatchTeam1, formatMatchTeam2 } from '../../../../interfaces/match';
+import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -29,15 +29,15 @@ function ScheduleRow({
   const drawColor = '#656565';
   const loseColor = '#af4034';
   const team1_color =
-    data.match.team1_score > data.match.team2_score
+    data.match.stage_item_input1_score > data.match.stage_item_input2_score
       ? winColor
-      : data.match.team1_score === data.match.team2_score
+      : data.match.stage_item_input1_score === data.match.stage_item_input2_score
         ? drawColor
         : loseColor;
   const team2_color =
-    data.match.team2_score > data.match.team1_score
+    data.match.stage_item_input2_score > data.match.stage_item_input1_score
       ? winColor
-      : data.match.team1_score === data.match.team2_score
+      : data.match.stage_item_input1_score === data.match.stage_item_input2_score
         ? drawColor
         : loseColor;
 
@@ -75,7 +75,7 @@ function ScheduleRow({
       <Stack pt="sm">
         <Grid>
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>{formatMatchTeam1(stageItemsLookup, matchesLookup, data.match)}</Text>
+            <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, data.match)}</Text>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div
@@ -87,13 +87,13 @@ function ScheduleRow({
                 fontWeight: 800,
               }}
             >
-              <Center>{data.match.team1_score}</Center>
+              <Center>{data.match.stage_item_input1_score}</Center>
             </div>
           </Grid.Col>
         </Grid>
         <Grid mb="0rem">
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>{formatMatchTeam2(stageItemsLookup, matchesLookup, data.match)}</Text>
+            <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, data.match)}</Text>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div
@@ -105,7 +105,7 @@ function ScheduleRow({
                 fontWeight: 800,
               }}
             >
-              <Center>{data.match.team2_score}</Center>
+              <Center>{data.match.stage_item_input2_score}</Center>
             </div>
           </Grid.Col>
         </Grid>

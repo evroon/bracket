@@ -17,7 +17,7 @@ from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import Token
-from bracket.utils.id_types import StageItemId, TeamId
+from bracket.utils.id_types import StageItemId, StageItemInputId
 
 DataT = TypeVar("DataT")
 
@@ -110,5 +110,7 @@ class StageItemInputOptionsResponse(
     pass
 
 
-class StageRankingResponse(DataResponse[dict[StageItemId, list[tuple[TeamId, TeamStatistics]]]]):
+class StageRankingResponse(
+    DataResponse[dict[StageItemId, list[tuple[StageItemInputId, TeamStatistics]]]]
+):
     pass

@@ -7,8 +7,8 @@ import { SWRResponse } from 'swr';
 import {
   MatchBodyInterface,
   MatchInterface,
-  formatMatchTeam1,
-  formatMatchTeam2,
+  formatMatchInput1,
+  formatMatchInput2,
 } from '../../interfaces/match';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
@@ -67,15 +67,15 @@ function MatchModalForm({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      team1_score: match.team1_score,
-      team2_score: match.team2_score,
+      stage_item_input1_score: match.stage_item_input1_score,
+      stage_item_input2_score: match.stage_item_input2_score,
       custom_duration_minutes: match.custom_duration_minutes,
       custom_margin_minutes: match.custom_margin_minutes,
     },
 
     validate: {
-      team1_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
-      team2_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
+      stage_item_input1_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
+      stage_item_input2_score: (value) => (value >= 0 ? null : t('negative_score_validation')),
       custom_duration_minutes: (value) =>
         value == null || value >= 0 ? null : t('negative_match_duration_validation'),
       custom_margin_minutes: (value) =>
@@ -93,8 +93,8 @@ function MatchModalForm({
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
 
-  const team1Name = formatMatchTeam1(stageItemsLookup, matchesLookup, match);
-  const team2Name = formatMatchTeam2(stageItemsLookup, matchesLookup, match);
+  const team1Name = formatMatchInput1(stageItemsLookup, matchesLookup, match);
+  const team2Name = formatMatchInput2(stageItemsLookup, matchesLookup, match);
 
   return (
     <>
@@ -103,8 +103,8 @@ function MatchModalForm({
           const updatedMatch: MatchBodyInterface = {
             id: match.id,
             round_id: match.round_id,
-            team1_score: values.team1_score,
-            team2_score: values.team2_score,
+            stage_item_input1_score: values.stage_item_input1_score,
+            stage_item_input2_score: values.stage_item_input2_score,
             court_id: match.court_id,
             custom_duration_minutes: customDurationEnabled ? values.custom_duration_minutes : null,
             custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
@@ -119,14 +119,14 @@ function MatchModalForm({
           withAsterisk
           label={`${t('score_of_label')} ${team1Name}`}
           placeholder={`${t('score_of_label')} ${team1Name}`}
-          {...form.getInputProps('team1_score')}
+          {...form.getInputProps('stage_item_input1_score')}
         />
         <NumberInput
           withAsterisk
           mt="lg"
           label={`${t('score_of_label')} ${team2Name}`}
           placeholder={`${t('score_of_label')} ${team2Name}`}
-          {...form.getInputProps('team2_score')}
+          {...form.getInputProps('stage_item_input2_score')}
         />
         <Divider mt="lg" />
 
