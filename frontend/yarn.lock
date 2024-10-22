@@ -920,10 +920,10 @@
     clsx "1.1.1"
     csstype "3.0.9"
 
-"@next/bundle-analyzer@^14.2.0":
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-14.2.0.tgz#f22fa4c7e4c73f76eee13921cca1973c72e726c4"
-  integrity sha512-fFzOvgHJgqILHCoZnfBbjvvODbZNqVIVQOaMgzOrOfKnrz0RVZvaNYSXynCIpJK4J7TIhFW0bQ8vFjDhTDKSmQ==
+"@next/bundle-analyzer@^15.0.0":
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-15.0.0.tgz#0f5ca9f4f8bed24932540018303c1de37e213d68"
+  integrity sha512-FGkM4yaHe+BadSJvcI5C4hV00i7MSbrc7esqjICxN1tEttDFPzxrXHb5W0DUJGcbnEsei0psdQMvbu4Bz8wS0Q==
   dependencies:
     webpack-bundle-analyzer "4.10.1"
 
