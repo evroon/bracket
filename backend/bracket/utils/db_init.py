@@ -18,7 +18,10 @@ from bracket.models.db.player_x_team import PlayerXTeamInsertable
 from bracket.models.db.ranking import RankingInsertable
 from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage import StageInsertable
-from bracket.models.db.stage_item import StageItemCreateBody, StageItemInsertable
+from bracket.models.db.stage_item import (
+    StageItemInsertable,
+    StageItemWithInputsCreate,
+)
 from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
     StageItemInputCreateBodyTentative,
@@ -44,7 +47,7 @@ from bracket.schema import (
     users_x_clubs,
 )
 from bracket.sql.matches import sql_update_match
-from bracket.sql.stage_items import sql_create_stage_item
+from bracket.sql.stage_items import sql_create_stage_item_with_inputs
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.users import create_user, get_user
@@ -295,9 +298,9 @@ async def sql_create_dev_db() -> UserId:
     await insert_dummy(DUMMY_COURT1, CourtId, {"tournament_id": tournament_id_1})
     await insert_dummy(DUMMY_COURT2, CourtId, {"tournament_id": tournament_id_1})
 
-    stage_item_1 = await sql_create_stage_item(
+    stage_item_1 = await sql_create_stage_item_with_inputs(
         tournament_id_1,
-        StageItemCreateBody(
+        StageItemWithInputsCreate(
             stage_id=stage_id_1,
             name=DUMMY_STAGE_ITEM1.name,
             team_count=DUMMY_STAGE_ITEM1.team_count,
@@ -322,9 +325,9 @@ async def sql_create_dev_db() -> UserId:
             ],
         ),
     )
-    stage_item_2 = await sql_create_stage_item(
+    stage_item_2 = await sql_create_stage_item_with_inputs(
         tournament_id_1,
-        StageItemCreateBody(
+        StageItemWithInputsCreate(
             stage_id=stage_id_1,
             name=DUMMY_STAGE_ITEM2.name,
             team_count=DUMMY_STAGE_ITEM2.team_count,
@@ -349,9 +352,9 @@ async def sql_create_dev_db() -> UserId:
             ],
         ),
     )
-    stage_item_3 = await sql_create_stage_item(
+    stage_item_3 = await sql_create_stage_item_with_inputs(
         tournament_id_1,
-        StageItemCreateBody(
+        StageItemWithInputsCreate(
             stage_id=stage_id_2,
             name=DUMMY_STAGE_ITEM3.name,
             team_count=DUMMY_STAGE_ITEM3.team_count,

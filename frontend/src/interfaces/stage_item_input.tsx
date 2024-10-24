@@ -28,6 +28,11 @@ export interface StageItemInputOption {
   winner_position: number | null;
 }
 
+export interface StageItemInputChoice {
+  value: string;
+  label: string;
+}
+
 export function getPositionName(position: number) {
   // TODO: handle inputs like `21` (21st)
   return (

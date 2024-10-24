@@ -137,18 +137,18 @@ async def activate_next_stage(
 
 
 @router.get(
-    "/tournaments/{tournament_id}/stages/{stage_id}/available_inputs",
+    "/tournaments/{tournament_id}/available_inputs",
     response_model=StageItemInputOptionsResponse,
 )
 async def get_available_inputs(
     tournament_id: TournamentId,
-    stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    stage: Stage = Depends(stage_dependency),
 ) -> StageItemInputOptionsResponse:
     stages = await get_full_tournament_details(tournament_id)
     teams = await get_teams_with_members(tournament_id)
-    available_inputs = determine_available_inputs(stage_id, teams, stages)
+    available_inputs = {
+        stage.id: determine_available_inputs(stage.id, teams, stages) for stage in stages
+    }
     return StageItemInputOptionsResponse(data=available_inputs)
 
 
@@ -157,7 +157,7 @@ async def get_rankings(
     tournament_id: TournamentId,
     stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    stage_without_details: Stage = Depends(stage_dependency),
+    __: Stage = Depends(stage_dependency),
 ) -> StageRankingResponse:
     """
     Get the rankings for the stage items in this stage.
