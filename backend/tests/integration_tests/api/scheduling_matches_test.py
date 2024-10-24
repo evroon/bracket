@@ -1,11 +1,11 @@
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
-from bracket.models.db.stage_item import StageItemCreateBody
+from bracket.models.db.stage_item import StageItemWithInputsCreate
 from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
     StageItemInputCreateBodyTentative,
 )
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
-from bracket.sql.stage_items import sql_create_stage_item
+from bracket.sql.stage_items import sql_create_stage_item_with_inputs
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
     DUMMY_COURT1,
@@ -51,9 +51,9 @@ async def test_schedule_all_matches(
         ) as team_inserted_4,
     ):
         tournament_id = auth_context.tournament.id
-        stage_item_1 = await sql_create_stage_item(
+        stage_item_1 = await sql_create_stage_item_with_inputs(
             tournament_id,
-            StageItemCreateBody(
+            StageItemWithInputsCreate(
                 stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=DUMMY_STAGE_ITEM1.team_count,
@@ -78,9 +78,9 @@ async def test_schedule_all_matches(
                 ],
             ),
         )
-        stage_item_2 = await sql_create_stage_item(
+        stage_item_2 = await sql_create_stage_item_with_inputs(
             tournament_id,
-            StageItemCreateBody(
+            StageItemWithInputsCreate(
                 stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM3.name,
                 team_count=2,

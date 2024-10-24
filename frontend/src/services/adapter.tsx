@@ -151,8 +151,8 @@ export function getTeamsLive(tournament_id: number | null): SWRResponse {
   });
 }
 
-export function getAvailableStageItemInputs(tournament_id: number, stage_id: number): SWRResponse {
-  return useSWR(`tournaments/${tournament_id}/stages/${stage_id}/available_inputs`, fetcher);
+export function getAvailableStageItemInputs(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/available_inputs`, fetcher);
 }
 
 export function getStages(

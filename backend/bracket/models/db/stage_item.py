@@ -47,8 +47,14 @@ class StageItemCreateBody(BaseModelORM):
     name: str | None = None
     type: StageType
     team_count: int = Field(ge=2, le=64)
-    inputs: list[StageItemInputCreateBody]
     ranking_id: RankingId | None = None
+
+    def get_name_or_default_name(self) -> str:
+        return self.name if self.name is not None else self.type.value.replace("_", " ").title()
+
+
+class StageItemWithInputsCreate(StageItemCreateBody):
+    inputs: list[StageItemInputCreateBody]
 
     def get_name_or_default_name(self) -> str:
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()

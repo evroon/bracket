@@ -1,13 +1,13 @@
 from heliclockter import datetime_utc
 
 from bracket.models.db.round import RoundInsertable
-from bracket.models.db.stage_item import StageItemCreateBody, StageType
+from bracket.models.db.stage_item import StageItemWithInputsCreate, StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
 )
 from bracket.sql.rounds import get_round_by_id, sql_create_round
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
-from bracket.sql.stage_items import sql_create_stage_item
+from bracket.sql.stage_items import sql_create_stage_item_with_inputs
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
     DUMMY_COURT1,
@@ -48,9 +48,9 @@ async def test_schedule_matches_auto(
         ) as team_inserted_2,
     ):
         tournament_id = auth_context.tournament.id
-        stage_item_1 = await sql_create_stage_item(
+        stage_item_1 = await sql_create_stage_item_with_inputs(
             tournament_id,
-            StageItemCreateBody(
+            StageItemWithInputsCreate(
                 stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
@@ -111,9 +111,9 @@ async def test_start_next_round(
         ) as team_inserted_2,
     ):
         tournament_id = auth_context.tournament.id
-        stage_item_1 = await sql_create_stage_item(
+        stage_item_1 = await sql_create_stage_item_with_inputs(
             tournament_id,
-            StageItemCreateBody(
+            StageItemWithInputsCreate(
                 stage_id=stage_inserted_1.id,
                 name=DUMMY_STAGE_ITEM1.name,
                 team_count=2,
