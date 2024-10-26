@@ -134,7 +134,7 @@ function StageItemInputComboBox({
         <Combobox.Search
           value={search}
           onChange={(event) => setSearch(event.currentTarget.value)}
-          placeholder={t("search_placeholder")}
+          placeholder={t('search_placeholder')}
         />
         <Combobox.Options>{options}</Combobox.Options>
       </Combobox.Dropdown>
