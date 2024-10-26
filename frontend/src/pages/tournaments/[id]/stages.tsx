@@ -12,7 +12,12 @@ import { TableSkeletonTwoColumnsSmall } from '../../../components/utils/skeleton
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Ranking } from '../../../interfaces/ranking';
 import { StageWithStageItems } from '../../../interfaces/stage';
-import { getRankings, getStages, getTournamentById } from '../../../services/adapter';
+import {
+  getAvailableStageItemInputs,
+  getRankings,
+  getStages,
+  getTournamentById,
+} from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
 
 export default function StagesPage() {
@@ -21,6 +26,7 @@ export default function StagesPage() {
   const swrStagesResponse = getStages(tournamentData.id);
   const swrRankingsResponse = getRankings(tournamentData.id);
   const swrTournamentResponse = getTournamentById(tournamentData.id);
+  const swrAvailableInputsResponse = getAvailableStageItemInputs(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
   const rankings: Ranking[] = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
@@ -32,6 +38,7 @@ export default function StagesPage() {
   if (
     swrStagesResponse.isLoading ||
     swrTournamentResponse.isLoading ||
+    swrAvailableInputsResponse.isLoading ||
     swrRankingsResponse.isLoading
   ) {
     content = <TableSkeletonTwoColumnsSmall />;
@@ -62,6 +69,7 @@ export default function StagesPage() {
           <Builder
             tournament={tournamentDataFull}
             swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
             rankings={rankings}
           />
         </Group>

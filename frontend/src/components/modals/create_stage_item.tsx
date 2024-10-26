@@ -65,10 +65,12 @@ export function CreateStageItemModal({
   tournament,
   stage,
   swrStagesResponse,
+  swrAvailableInputsResponse,
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -84,9 +86,8 @@ export function CreateStageItemModal({
   // TODO: Refactor lookups into one request.
   const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
   const stageItemMap = getStageItemLookup(swrStagesResponse);
-  const swrAvailableInputsResponse = getAvailableStageItemInputs(tournament.id);
 
-  if (teamsMap == null || stageItemMap == null || swrAvailableInputsResponse.data == null) {
+  if (teamsMap == null || stageItemMap == null) {
     return null;
   }
 
@@ -112,6 +113,7 @@ export function CreateStageItemModal({
             });
             await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
             await swrStagesResponse.mutate();
+            await swrAvailableInputsResponse.mutate();
             setOpened(false);
           })}
         >

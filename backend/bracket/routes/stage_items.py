@@ -26,7 +26,7 @@ from bracket.routes.util import stage_item_dependency
 from bracket.sql.rounds import set_round_active_or_draft
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
-    sql_create_stage_item,
+    sql_create_stage_item_with_empty_inputs,
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
@@ -60,7 +60,7 @@ async def create_stage_item(
     existing_stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
     check_requirement(existing_stage_items, user, "max_stage_items")
 
-    stage_item = await sql_create_stage_item(tournament_id, stage_body)
+    stage_item = await sql_create_stage_item_with_empty_inputs(tournament_id, stage_body)
     await build_matches_for_stage_item(stage_item, tournament_id)
     return SuccessResponse()
 

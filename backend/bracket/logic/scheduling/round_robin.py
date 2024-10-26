@@ -38,12 +38,12 @@ def get_round_robin_combinations(team_count: int) -> list[list[tuple[int, int]]]
 async def build_round_robin_stage_item(
     tournament_id: TournamentId, stage_item: StageItemWithRounds
 ) -> None:
-    matches = get_round_robin_combinations(len(stage_item.inputs))
+    matches = get_round_robin_combinations(stage_item.team_count)
     tournament = await sql_get_tournament(tournament_id)
 
     for i, round_ in enumerate(stage_item.rounds):
         for team_1_id, team_2_id in matches[i]:
-            if team_1_id < len(stage_item.inputs) and team_2_id < len(stage_item.inputs):
+            if team_1_id < stage_item.team_count and team_2_id < stage_item.team_count:
                 stage_item_1, stage_item_2 = (
                     stage_item.inputs[team_1_id],
                     stage_item.inputs[team_2_id],

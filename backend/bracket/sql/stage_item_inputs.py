@@ -1,3 +1,5 @@
+from pydantic import TypeAdapter
+
 from bracket.database import database
 from bracket.models.db.stage_item_inputs import (
     StageItemInput,
@@ -6,7 +8,6 @@ from bracket.models.db.stage_item_inputs import (
     StageItemInputCreateBodyFinal,
     StageItemInputCreateBodyTentative,
     StageItemInputFinal,
-    StageItemInputTentative,
 )
 from bracket.sql.teams import get_team_by_id
 from bracket.utils.id_types import StageItemId, StageItemInputId, TeamId, TournamentId
@@ -33,7 +34,7 @@ async def get_stage_item_input_by_id(
         data["team"] = await get_team_by_id(data["team_id"], tournament_id)
         return StageItemInputFinal.model_validate(data)
 
-    return StageItemInputTentative.model_validate(result)
+    return TypeAdapter(StageItemInput).validate_python(result)
 
 
 async def sql_set_team_id_for_stage_item_input(
