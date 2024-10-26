@@ -44,7 +44,7 @@ foreign_key_violation_error_lookup = {
     ForeignKey.matches_stage_item_input1_id_fkey: "This team is still part of matches",
     ForeignKey.matches_stage_item_input2_id_fkey: "This team is still part of matches",
     ForeignKey.players_tournament_id_fkey: "This tournament still has players, delete those first",
-    ForeignKey.stage_item_inputs_team_id_fkey: "This team is still used in stage items",
+    ForeignKey.stage_item_inputs_team_id_fkey: "Invalid team as input to this stage item",
     ForeignKey.stages_tournament_id_fkey: "This tournament still has stages, delete those first",
     ForeignKey.teams_tournament_id_fkey: "This tournament still has teams, delete those first",
     ForeignKey.tournaments_club_id_fkey: "This club still has tournaments, delete those first",

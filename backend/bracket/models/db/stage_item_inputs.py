@@ -104,7 +104,7 @@ StageItemInputUpdateBody = (
 
 class StageItemInputInsertable(BaseModel):
     slot: int
-    team_id: TeamId
+    team_id: TeamId | None = None
     tournament_id: TournamentId
     stage_item_id: StageItemId
 

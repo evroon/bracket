@@ -16,6 +16,7 @@ from bracket.models.db.stage import Stage, StageInsertable
 from bracket.models.db.stage_item import StageItem, StageItemInsertable
 from bracket.models.db.stage_item_inputs import (
     StageItemInputBase,
+    StageItemInputEmpty,
     StageItemInputFinal,
     StageItemInputInsertable,
 )
@@ -135,14 +136,19 @@ async def inserted_stage_item(stage_item: StageItemInsertable) -> AsyncIterator[
 @asynccontextmanager
 async def inserted_stage_item_input(
     stage_item_input: StageItemInputInsertable,
-) -> AsyncIterator[StageItemInputFinal]:
+) -> AsyncIterator[StageItemInputFinal | StageItemInputEmpty]:
     async with inserted_generic(
         stage_item_input, stage_item_inputs, StageItemInputBase
     ) as row_inserted:
-        [team] = await get_teams_by_id({stage_item_input.team_id}, stage_item_input.tournament_id)
-        yield StageItemInputFinal.model_validate(
-            row_inserted.model_dump() | {"team": team, "team_id": team.id}
-        )
+        if stage_item_input.team_id is not None:
+            [team] = await get_teams_by_id(
+                {stage_item_input.team_id}, stage_item_input.tournament_id
+            )
+            yield StageItemInputFinal.model_validate(
+                row_inserted.model_dump() | {"team": team, "team_id": team.id}
+            )
+        else:
+            yield StageItemInputEmpty.model_validate(row_inserted.model_dump())
 
 
 @asynccontextmanager
