@@ -10,7 +10,10 @@ import {
   Stack,
   Text,
   useCombobox,
+  useMantineColorScheme,
+  useMantineTheme,
 } from '@mantine/core';
+import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
@@ -55,22 +58,37 @@ function StageItemInputComboBox({
   swrAvailableInputsResponse: SWRResponse;
   swrStagesResponse: SWRResponse;
 }) {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-  });
-
   const [selectedInput, setSelectedInput] = useState<string | null>(current_key);
+  const [successIcon, setSuccessIcon] = useState<boolean>(false);
+  const [search, setSearch] = useState('');
+  const combobox = useCombobox({
+    onDropdownClose: () => {
+      combobox.resetSelectedOption();
+      combobox.focusTarget();
+      setSearch('');
+    },
+
+    onDropdownOpen: () => {
+      combobox.focusSearchInput();
+    },
+  });
 
   const options = availableInputs
     .filter((option: StageItemInputChoice) => !option.already_taken)
+    .filter((item) => item.label?.toLowerCase().includes(search.toLowerCase().trim()))
     .map((option: StageItemInputChoice, i: number) => (
       <Combobox.Option key={i} value={option.value}>
         {option.label || <i>None</i>}
       </Combobox.Option>
     ));
 
+  const theme = useMantineTheme();
+  const scheme = useMantineColorScheme();
+  const dropdownBorderColor = scheme.colorScheme === 'dark' ? '#444' : '#ccc';
+
   return (
     <Combobox
+      shadow="lg"
       store={combobox}
       onOptionSubmit={(val) => {
         const option = availableInputs.find((o) => o.value === val);
@@ -82,9 +100,16 @@ function StageItemInputComboBox({
           option?.team_id || null,
           option?.winner_position || null,
           option?.winner_from_stage_item_id || null
-        );
-        swrAvailableInputsResponse.mutate();
-        swrStagesResponse.mutate();
+        ).then(() => {
+          swrAvailableInputsResponse.mutate();
+          swrStagesResponse.mutate();
+
+          setSuccessIcon(true);
+
+          setTimeout(() => {
+            setSuccessIcon(false);
+          }, 1500);
+        });
         combobox.closeDropdown();
       }}
     >
@@ -93,6 +118,7 @@ function StageItemInputComboBox({
           radius="0.5rem"
           component="button"
           type="button"
+          rightSection={successIcon ? <BiCheck size={18} color={theme.colors.green[4]} /> : null}
           pointer
           rightSectionPointerEvents="none"
           onClick={() => combobox.toggleDropdown()}
@@ -104,7 +130,12 @@ function StageItemInputComboBox({
         </InputBase>
       </Combobox.Target>
 
-      <Combobox.Dropdown>
+      <Combobox.Dropdown style={{ border: `solid 0.1rem ${dropdownBorderColor}` }}>
+        <Combobox.Search
+          value={search}
+          onChange={(event) => setSearch(event.currentTarget.value)}
+          placeholder="Search"
+        />
         <Combobox.Options>{options}</Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
@@ -156,7 +187,7 @@ export function getAvailableInputs(
     : {};
 }
 
-function StageItemInputSectionLast({
+function StageItemInputSection({
   tournament,
   stageItemInput,
   currentOptionValue,
@@ -218,7 +249,7 @@ function StageItemRow({
       }
 
       return (
-        <StageItemInputSectionLast
+        <StageItemInputSection
           key={i}
           tournament={tournament}
           stageItemInput={input}
@@ -323,6 +354,7 @@ function StageColumn({
   });
 
   const rows = stage.stage_items
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.id > i2.id ? 1 : -1))
     .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) => (
       <StageItemRow

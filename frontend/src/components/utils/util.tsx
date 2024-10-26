@@ -10,11 +10,6 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getItemColor(theme: any) {
-  const darkTheme = theme.colorScheme === 'dark';
-  return darkTheme ? theme.colors.dark[4] : theme.colors.gray[2];
-}
-
 function getTodayAtMidnight() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
