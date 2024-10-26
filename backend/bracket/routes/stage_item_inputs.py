@@ -1,4 +1,3 @@
-import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
@@ -76,7 +75,12 @@ async def update_stage_item_input(
         WHERE stage_item_inputs.id = :stage_item_input_id
         AND stage_item_inputs.tournament_id = :tournament_id
     """
-    try:
+    with check_unique_constraint_violation(
+        {
+            UniqueIndex.stage_item_inputs_stage_item_id_team_id_key,
+            UniqueIndex.stage_item_inputs_stage_item_id_winner_from_stage_item_id_w_key,
+        },
+    ):
         await database.execute(
             query=query,
             values={
@@ -91,14 +95,6 @@ async def update_stage_item_input(
                 "winner_from_stage_item_id": stage_item_body.winner_from_stage_item_id
                 if isinstance(stage_item_body, StageItemInputUpdateBodyTentative)
                 else None,
-            },
-        )
-    except asyncpg.exceptions.UniqueViolationError as exc:
-        check_unique_constraint_violation(
-            exc,
-            {
-                UniqueIndex.stage_item_inputs_stage_item_id_team_id_key,
-                UniqueIndex.stage_item_inputs_stage_item_id_winner_from_stage_item_id_w_key,
             },
         )
     return SuccessResponse()

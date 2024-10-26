@@ -1,7 +1,6 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
 from enum import auto
-from typing import NoReturn
 
 import asyncpg  # type: ignore[import-untyped]
 from fastapi import HTTPException
@@ -52,24 +51,26 @@ foreign_key_violation_error_lookup = {
 }
 
 
-def check_unique_constraint_violation(
-    exc: asyncpg.exceptions.UniqueViolationError, expected_violations: set[UniqueIndex]
-) -> NoReturn:
-    constraint_name = exc.as_dict()["constraint_name"]
-    assert constraint_name, "UniqueViolationError occurred but no constraint_name defined"
-    assert constraint_name in UniqueIndex.values(), "Unknown UniqueViolationError occurred"
-    constraint = UniqueIndex(constraint_name)
+@contextmanager
+def check_unique_constraint_violation(expected_violations: set[UniqueIndex]) -> Iterator[None]:
+    try:
+        yield
+    except asyncpg.exceptions.UniqueViolationError as exc:
+        constraint_name = exc.as_dict()["constraint_name"]
+        assert constraint_name, "UniqueViolationError occurred but no constraint_name defined"
+        assert constraint_name in UniqueIndex.values(), "Unknown UniqueViolationError occurred"
+        constraint = UniqueIndex(constraint_name)
 
-    if (
-        constraint not in unique_index_violation_error_lookup
-        or constraint not in expected_violations
-    ):
-        raise exc
+        if (
+            constraint not in unique_index_violation_error_lookup
+            or constraint not in expected_violations
+        ):
+            raise exc
 
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail=unique_index_violation_error_lookup[constraint],
-    )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=unique_index_violation_error_lookup[constraint],
+        ) from exc
 
 
 @contextmanager

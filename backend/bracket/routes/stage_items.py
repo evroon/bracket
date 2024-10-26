@@ -30,6 +30,10 @@ from bracket.sql.stage_items import (
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
+from bracket.utils.errors import (
+    ForeignKey,
+    check_foreign_key_violation,
+)
 from bracket.utils.id_types import StageItemId, TournamentId
 
 router = APIRouter()
@@ -44,7 +48,10 @@ async def delete_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    await sql_delete_stage_item_with_foreign_keys(stage_item_id)
+    with check_foreign_key_violation(
+        {ForeignKey.matches_stage_item_input1_id_fkey, ForeignKey.matches_stage_item_input2_id_fkey}
+    ):
+        await sql_delete_stage_item_with_foreign_keys(stage_item_id)
     return SuccessResponse()
 
 
