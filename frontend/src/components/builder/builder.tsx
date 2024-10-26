@@ -4,7 +4,6 @@ import {
   Card,
   Combobox,
   Group,
-  Input,
   InputBase,
   Menu,
   Stack,
@@ -13,6 +12,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
+import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
@@ -59,7 +59,9 @@ function StageItemInputComboBox({
   swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
-  const [selectedInput, setSelectedInput] = useState<string | null>(current_key);
+  const [selectedInput, setSelectedInput] = useState<StageItemInputChoice | null>(
+    availableInputs.find((o) => o.value === current_key) || null
+  );
   const [successIcon, setSuccessIcon] = useState<boolean>(false);
   const [search, setSearch] = useState('');
   const combobox = useCombobox({
@@ -92,8 +94,8 @@ function StageItemInputComboBox({
       shadow="lg"
       store={combobox}
       onOptionSubmit={(val) => {
-        const option = availableInputs.find((o) => o.value === val);
-        setSelectedInput(val);
+        const option = availableInputs.find((o) => o.value === val) || null;
+        setSelectedInput(option);
         updateStageItemInput(
           tournament.id,
           stageItemInput.stage_item_id,
@@ -124,8 +126,13 @@ function StageItemInputComboBox({
           rightSectionPointerEvents="none"
           onClick={() => combobox.toggleDropdown()}
         >
-          {availableInputs.find((o) => o.value === selectedInput)?.label || (
-            <Input.Placeholder>Pick value</Input.Placeholder>
+          {selectedInput?.label ? (
+            selectedInput?.label
+          ) : (
+            <Group gap="xs">
+              <AiFillWarning size={18} color={theme.colors.orange[4]} />
+              <b>{selectedInput?.label || t('empty_slot').toUpperCase()}</b>
+            </Group>
           )}
         </InputBase>
       </Combobox.Target>
