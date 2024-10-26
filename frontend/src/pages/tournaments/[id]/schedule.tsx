@@ -129,6 +129,7 @@ function ScheduleColumn({
         title={t('no_matches_title')}
         color="gray"
         radius="md"
+        mt="1rem"
       >
         {t('drop_match_alert_title')}
       </Alert>
