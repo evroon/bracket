@@ -23,16 +23,17 @@ import { Ranking } from '../../interfaces/ranking';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
 import {
+  StageItemInput,
   StageItemInputChoice,
   StageItemInputOption,
   formatStageItemInput,
 } from '../../interfaces/stage_item_input';
-import { TeamInterface } from '../../interfaces/team';
 import { Tournament } from '../../interfaces/tournament';
 import { getAvailableStageItemInputs } from '../../services/adapter';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
+import { updateStageItemInput } from '../../services/stage_item_input';
 import CreateStageButton from '../buttons/create_stage';
 import { CreateStageItemModal } from '../modals/create_stage_item';
 import { UpdateStageModal } from '../modals/update_stage';
@@ -41,9 +42,13 @@ import RequestErrorAlert from '../utils/error_alert';
 import { responseIsValid } from '../utils/util';
 
 function StageItemInputComboBox({
+  tournament,
+  stageItemInput,
   current_key,
   availableInputs,
 }: {
+  tournament: Tournament;
+  stageItemInput: StageItemInput;
   current_key: string | null;
   availableInputs: StageItemInputChoice[];
 }) {
@@ -53,15 +58,28 @@ function StageItemInputComboBox({
 
   const [value, setValue] = useState<string | null>(current_key);
 
-  const options = availableInputs.map((option: StageItemInputChoice) => (
-    <Combobox.Option value={option.value || 'nothing'}>{option.label}</Combobox.Option>
+  const options = availableInputs.map((option: StageItemInputChoice, i: number) => (
+    <Combobox.Option key={i} value={option.value}>
+      {option.label || <i>None</i>}
+    </Combobox.Option>
   ));
 
   return (
     <Combobox
       store={combobox}
       onOptionSubmit={(val) => {
+        const option = availableInputs.find((o) => o.value === value);
         setValue(val);
+        if (option != null) {
+          updateStageItemInput(
+            tournament.id,
+            stageItemInput.stage_item_id,
+            stageItemInput.id,
+            option.team_id,
+            option.winner_position,
+            option.winner_from_stage_item_id
+          );
+        }
         combobox.closeDropdown();
       }}
     >
@@ -75,7 +93,9 @@ function StageItemInputComboBox({
           onClick={() => combobox.toggleDropdown()}
           style={{ border: '0rem' }}
         >
-          {value || <Input.Placeholder>Pick value</Input.Placeholder>}
+          {availableInputs.find((o) => o.value === value)?.label || (
+            <Input.Placeholder>Pick value</Input.Placeholder>
+          )}
         </InputBase>
       </Combobox.Target>
 
@@ -99,6 +119,9 @@ export function getAvailableInputs(
       return {
         value: `${stage_item_input.team_id}`,
         label: team.name,
+        team_id: team.id,
+        winner_from_stage_item_id: null,
+        winner_position: null,
       };
     }
 
@@ -109,6 +132,9 @@ export function getAvailableInputs(
     return {
       value: `${stage_item_input.winner_from_stage_item_id}_${stage_item_input.winner_position}`,
       label: `${formatStageItemInput(stage_item_input.winner_position, stageItem.name)}`,
+      team_id: null,
+      winner_from_stage_item_id: stage_item_input.winner_from_stage_item_id,
+      winner_position: stage_item_input.winner_position,
     };
   };
   return responseIsValid(swrAvailableInputsResponse)
@@ -123,40 +149,41 @@ export function getAvailableInputs(
 }
 
 function StageItemInputSectionLast({
-  team,
-  teamStageItem,
+  tournament,
+  stageItemInput,
+  currentOptionValue,
   lastInList,
   availableInputs,
 }: {
-  team: TeamInterface | null;
-  teamStageItem: TeamInterface | null;
+  tournament: Tournament;
+  stageItemInput: StageItemInput;
+  currentOptionValue: string | null;
   lastInList: boolean;
   availableInputs: StageItemInputChoice[];
 }) {
-  assert(team != null || teamStageItem != null);
-
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
   return (
     <Card.Section inheritPadding {...opts}>
-      <StageItemInputComboBox current_key={team?.name || null} availableInputs={availableInputs} />
+      <StageItemInputComboBox
+        tournament={tournament}
+        stageItemInput={stageItemInput}
+        current_key={currentOptionValue}
+        availableInputs={availableInputs}
+      />
     </Card.Section>
   );
 }
 
 function StageItemRow({
-  teamsMap,
   tournament,
   stageItem,
   swrStagesResponse,
-  stageItemsLookup,
   availableInputs,
   rankings,
 }: {
-  teamsMap: any;
   tournament: Tournament;
   stageItem: StageItemWithRounds;
-  stageItemsLookup: any;
   swrStagesResponse: SWRResponse;
   availableInputs: StageItemInputChoice[];
   rankings: Ranking[];
@@ -167,17 +194,20 @@ function StageItemRow({
   const inputs = stageItem.inputs
     .sort((i1, i2) => (i1.slot > i2.slot ? 1 : -1))
     .map((input, i) => {
-      const team = input.team_id ? teamsMap[input.team_id] : null;
-      const teamStageItem = input.winner_from_stage_item_id
-        ? stageItemsLookup[input.winner_from_stage_item_id]
-        : null;
+      let currentOptionValue = null;
+      if (input.team_id != null) {
+        currentOptionValue = `${input.team_id}`;
+      } else if (input.winner_from_stage_item_id != null) {
+        currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
+      }
 
       return (
         <StageItemInputSectionLast
           key={i}
-          team={team}
+          tournament={tournament}
+          stageItemInput={input}
+          currentOptionValue={currentOptionValue}
           availableInputs={availableInputs}
-          teamStageItem={teamStageItem}
           lastInList={i === stageItem.inputs.length - 1}
         />
       );
@@ -270,16 +300,21 @@ function StageColumn({
   if (availableInputs == null) {
     return null;
   }
+  availableInputs.push({
+    value: 'null',
+    label: null,
+    team_id: null,
+    winner_from_stage_item_id: null,
+    winner_position: null,
+  });
 
   const rows = stage.stage_items
     .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) => (
       <StageItemRow
         key={stageItem.id}
-        teamsMap={teamsMap}
         tournament={tournament}
         stageItem={stageItem}
-        stageItemsLookup={stageItemsLookup}
         swrStagesResponse={swrStagesResponse}
         availableInputs={availableInputs}
         rankings={rankings}

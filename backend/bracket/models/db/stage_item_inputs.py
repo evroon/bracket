@@ -66,6 +66,18 @@ class StageItemInputCreateBodyFinal(BaseModel):
 StageItemInputCreateBody = StageItemInputCreateBodyTentative | StageItemInputCreateBodyFinal
 
 
+class StageItemInputUpdateBodyTentative(BaseModelORM):
+    winner_from_stage_item_id: StageItemId
+    winner_position: int = Field(ge=1)
+
+
+class StageItemInputUpdateBodyFinal(BaseModelORM):
+    team_id: TeamId
+
+
+StageItemInputUpdateBody = StageItemInputUpdateBodyTentative | StageItemInputUpdateBodyFinal
+
+
 class StageItemInputInsertable(BaseModel):
     slot: int
     team_id: TeamId

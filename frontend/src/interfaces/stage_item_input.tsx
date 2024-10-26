@@ -31,6 +31,9 @@ export interface StageItemInputOption {
 export interface StageItemInputChoice {
   value: string;
   label: string;
+  team_id: number | null;
+  winner_from_stage_item_id: number | null;
+  winner_position: number | null;
 }
 
 export function getPositionName(position: number) {

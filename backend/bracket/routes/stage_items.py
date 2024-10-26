@@ -26,7 +26,6 @@ from bracket.routes.util import stage_item_dependency
 from bracket.sql.rounds import set_round_active_or_draft
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
-    get_stage_item,
     sql_create_stage_item,
 )
 from bracket.sql.stages import get_full_tournament_details
@@ -76,7 +75,7 @@ async def update_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    if await get_stage_item(tournament_id, stage_item_id) is None:
+    if stage_item is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could not find all stages",
