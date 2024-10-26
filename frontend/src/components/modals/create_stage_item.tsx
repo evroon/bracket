@@ -7,7 +7,6 @@ import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
-import { getAvailableStageItemInputs } from '../../services/adapter';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem } from '../../services/stage_item';
 

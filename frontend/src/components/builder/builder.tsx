@@ -212,7 +212,6 @@ function StageItemRow({
       } else if (input.winner_from_stage_item_id != null) {
         currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
       }
-      console.error(input.id, currentOptionValue);
 
       return (
         <StageItemInputSectionLast
@@ -308,11 +307,8 @@ function StageColumn({
     return null;
   }
 
-  const availableInputs = getAvailableInputs(
-    swrAvailableInputsResponse,
-    teamsMap,
-    stageItemsLookup
-  )[stage.id] || [];
+  const availableInputs =
+    getAvailableInputs(swrAvailableInputsResponse, teamsMap, stageItemsLookup)[stage.id] || [];
   availableInputs.push({
     value: 'null',
     label: null,
@@ -426,7 +422,11 @@ export default function Builder({
   const button = (
     <Stack miw="24rem" align="top" key={-1}>
       <h4 style={{ marginTop: '0rem' }}>
-        <CreateStageButton tournament={tournament} swrStagesResponse={swrStagesResponse} swrAvailableInputsResponse={swrAvailableInputsResponse} />
+        <CreateStageButton
+          tournament={tournament}
+          swrStagesResponse={swrStagesResponse}
+          swrAvailableInputsResponse={swrAvailableInputsResponse}
+        />
       </h4>
     </Stack>
   );

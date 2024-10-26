@@ -89,7 +89,13 @@ class StageItemInputUpdateBodyFinal(BaseModelORM):
     team_id: TeamId
 
 
-StageItemInputUpdateBody = StageItemInputUpdateBodyTentative | StageItemInputUpdateBodyFinal
+class StageItemInputUpdateBodyEmpty(BaseModelORM):
+    team_id: None = None
+    winner_from_stage_item_id: None = None
+    winner_position: None = None
+
+
+StageItemInputUpdateBody = StageItemInputUpdateBodyTentative | StageItemInputUpdateBodyFinal | StageItemInputUpdateBodyEmpty
 
 
 class StageItemInputInsertable(BaseModel):
