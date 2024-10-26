@@ -33,4 +33,6 @@ async def test_available_inputs(
     ):
         response = await send_tournament_request(HTTPMethod.GET, "available_inputs", auth_context)
 
-    assert response == {"data": {str(stage_inserted_1.id): [{"team_id": team_inserted.id}]}}
+    assert response == {
+        "data": {str(stage_inserted_1.id): [{"team_id": team_inserted.id, "already_taken": False}]}
+    }

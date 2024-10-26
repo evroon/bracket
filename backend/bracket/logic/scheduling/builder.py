@@ -75,27 +75,36 @@ def determine_available_inputs(
     teams: list[FullTeamWithPlayers],
     stages: list[StageWithStageItems],
 ) -> list[StageItemInputOptionTentative | StageItemInputOptionFinal]:
-    results_team_ids = [team.id for team in teams]
+    results_team_ids = {team.id: False for team in teams}
     results_tentative = []
 
     for stage in stages:
-        if stage_id == stage.id:
-            break
-
         for stage_item in stage.stage_items:
             item_team_id_inputs = [
                 input.team_id for input in stage_item.inputs if input.team_id is not None
             ]
             for input_ in item_team_id_inputs:
                 if input_ in results_team_ids:
-                    results_team_ids.remove(input_)
+                    if stage_id != stage.id:
+                        results_team_ids.pop(input_)
+                    else:
+                        results_team_ids[input_] = True
 
+        if stage_id == stage.id:
+            break
+
+        for stage_item in stage.stage_items:
             for winner_position in range(1, 5):
                 results_tentative.append(
                     StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id, winner_position=winner_position
+                        winner_from_stage_item_id=stage_item.id,
+                        winner_position=winner_position,
+                        already_taken=False,
                     )
                 )
 
-    results_final = [StageItemInputOptionFinal(team_id=team_id) for team_id in results_team_ids]
+    results_final = [
+        StageItemInputOptionFinal(team_id=team_id, already_taken=taken)
+        for team_id, taken in results_team_ids.items()
+    ]
     return results_final + results_tentative

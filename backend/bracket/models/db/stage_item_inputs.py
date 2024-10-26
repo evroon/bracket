@@ -111,8 +111,10 @@ class StageItemInputInsertable(BaseModel):
 
 class StageItemInputOptionFinal(BaseModel):
     team_id: TeamId
+    already_taken: bool
 
 
 class StageItemInputOptionTentative(BaseModel):
     winner_from_stage_item_id: StageItemId
     winner_position: int
+    already_taken: bool

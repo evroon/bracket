@@ -61,11 +61,13 @@ function StageItemInputComboBox({
 
   const [selectedInput, setSelectedInput] = useState<string | null>(current_key);
 
-  const options = availableInputs.map((option: StageItemInputChoice, i: number) => (
-    <Combobox.Option key={i} value={option.value}>
-      {option.label || <i>None</i>}
-    </Combobox.Option>
-  ));
+  const options = availableInputs
+    .filter((option: StageItemInputChoice) => !option.already_taken)
+    .map((option: StageItemInputChoice, i: number) => (
+      <Combobox.Option key={i} value={option.value}>
+        {option.label || <i>None</i>}
+      </Combobox.Option>
+    ));
 
   return (
     <Combobox
@@ -126,6 +128,7 @@ export function getAvailableInputs(
         team_id: team.id,
         winner_from_stage_item_id: null,
         winner_position: null,
+        already_taken: option.already_taken,
       };
     }
 
@@ -139,6 +142,7 @@ export function getAvailableInputs(
       team_id: null,
       winner_from_stage_item_id: option.winner_from_stage_item_id,
       winner_position: option.winner_position,
+      already_taken: option.already_taken,
     };
   };
   return responseIsValid(swrAvailableInputsResponse)
@@ -315,6 +319,7 @@ function StageColumn({
     team_id: null,
     winner_from_stage_item_id: null,
     winner_position: null,
+    already_taken: false,
   });
 
   const rows = stage.stage_items
