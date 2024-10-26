@@ -95,7 +95,11 @@ class StageItemInputUpdateBodyEmpty(BaseModelORM):
     winner_position: None = None
 
 
-StageItemInputUpdateBody = StageItemInputUpdateBodyTentative | StageItemInputUpdateBodyFinal | StageItemInputUpdateBodyEmpty
+StageItemInputUpdateBody = (
+    StageItemInputUpdateBodyTentative
+    | StageItemInputUpdateBodyFinal
+    | StageItemInputUpdateBodyEmpty
+)
 
 
 class StageItemInputInsertable(BaseModel):
