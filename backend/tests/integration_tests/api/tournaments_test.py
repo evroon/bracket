@@ -33,7 +33,7 @@ async def test_tournaments_endpoint(
                 "name": "Some Cool Tournament",
                 "logo_path": None,
                 "dashboard_public": True,
-                "dashboard_endpoint": None,
+                "dashboard_endpoint": "endpoint-test",
                 "players_can_be_in_multiple_teams": True,
                 "auto_assign_courts": True,
                 "duration_minutes": 10,
@@ -57,7 +57,7 @@ async def test_tournament_endpoint(
             "logo_path": None,
             "name": "Some Cool Tournament",
             "dashboard_public": True,
-            "dashboard_endpoint": None,
+            "dashboard_endpoint": "endpoint-test",
             "players_can_be_in_multiple_teams": True,
             "auto_assign_courts": True,
             "duration_minutes": 10,
@@ -89,6 +89,25 @@ async def test_create_tournament(
     # Cleanup
     tournament = assert_some(await sql_get_tournament_by_endpoint_name(dashboard_endpoint))
     await sql_delete_tournament_completely(tournament.id)
+
+
+async def test_create_tournament_duplicate_dashboard_endpoint(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    body = {
+        "name": "Some new name",
+        "start_time": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
+        "club_id": auth_context.club.id,
+        "dashboard_public": True,
+        "dashboard_endpoint": "endpoint-test",
+        "players_can_be_in_multiple_teams": True,
+        "auto_assign_courts": True,
+        "duration_minutes": 12,
+        "margin_minutes": 3,
+    }
+    assert await send_auth_request(HTTPMethod.POST, "tournaments", auth_context, json=body) == {
+        "detail": "This dashboard link is already taken"
+    }
 
 
 async def test_update_tournament(
