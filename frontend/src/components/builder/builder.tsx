@@ -58,6 +58,7 @@ function StageItemInputComboBox({
   swrAvailableInputsResponse: SWRResponse;
   swrStagesResponse: SWRResponse;
 }) {
+  const { t } = useTranslation();
   const [selectedInput, setSelectedInput] = useState<string | null>(current_key);
   const [successIcon, setSuccessIcon] = useState<boolean>(false);
   const [search, setSearch] = useState('');
@@ -75,7 +76,7 @@ function StageItemInputComboBox({
 
   const options = availableInputs
     .filter((option: StageItemInputChoice) => !option.already_taken)
-    .filter((item) => item.label?.toLowerCase().includes(search.toLowerCase().trim()))
+    .filter((item) => (item.label || 'None').toLowerCase().includes(search.toLowerCase().trim()))
     .map((option: StageItemInputChoice, i: number) => (
       <Combobox.Option key={i} value={option.value}>
         {option.label || <i>None</i>}
@@ -122,7 +123,6 @@ function StageItemInputComboBox({
           pointer
           rightSectionPointerEvents="none"
           onClick={() => combobox.toggleDropdown()}
-          style={{ border: '0rem' }}
         >
           {availableInputs.find((o) => o.value === selectedInput)?.label || (
             <Input.Placeholder>Pick value</Input.Placeholder>
@@ -134,7 +134,7 @@ function StageItemInputComboBox({
         <Combobox.Search
           value={search}
           onChange={(event) => setSearch(event.currentTarget.value)}
-          placeholder="Search"
+          placeholder={t("search_placeholder")}
         />
         <Combobox.Options>{options}</Combobox.Options>
       </Combobox.Dropdown>
