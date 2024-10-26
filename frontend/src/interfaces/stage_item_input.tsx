@@ -26,6 +26,16 @@ export interface StageItemInputOption {
   team_id: number | null;
   winner_from_stage_item_id: number | null;
   winner_position: number | null;
+  already_taken: boolean;
+}
+
+export interface StageItemInputChoice {
+  value: string;
+  label: string;
+  team_id: number | null;
+  winner_from_stage_item_id: number | null;
+  winner_position: number | null;
+  already_taken: boolean;
 }
 
 export function getPositionName(position: number) {

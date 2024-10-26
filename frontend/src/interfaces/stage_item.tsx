@@ -4,7 +4,7 @@ import { StageItemInput } from './stage_item_input';
 export interface StageItemWithRounds {
   id: number;
   created: string;
-  type: string;
+  type: 'SWISS' | 'ROUND_ROBIN' | 'SINGLE_ELIMINATION';
   name: string;
   type_name: string;
   team_count: number;

@@ -26,11 +26,14 @@ from bracket.routes.util import stage_item_dependency
 from bracket.sql.rounds import set_round_active_or_draft
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
-    get_stage_item,
-    sql_create_stage_item,
+    sql_create_stage_item_with_empty_inputs,
 )
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
+from bracket.utils.errors import (
+    ForeignKey,
+    check_foreign_key_violation,
+)
 from bracket.utils.id_types import StageItemId, TournamentId
 
 router = APIRouter()
@@ -45,7 +48,10 @@ async def delete_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    await sql_delete_stage_item_with_foreign_keys(stage_item_id)
+    with check_foreign_key_violation(
+        {ForeignKey.matches_stage_item_input1_id_fkey, ForeignKey.matches_stage_item_input2_id_fkey}
+    ):
+        await sql_delete_stage_item_with_foreign_keys(stage_item_id)
     return SuccessResponse()
 
 
@@ -55,19 +61,13 @@ async def create_stage_item(
     stage_body: StageItemCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    if stage_body.team_count != len(stage_body.inputs):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Team count doesn't match number of inputs",
-        )
-
     await check_foreign_keys_belong_to_tournament(stage_body, tournament_id)
 
     stages = await get_full_tournament_details(tournament_id)
     existing_stage_items = [stage_item for stage in stages for stage_item in stage.stage_items]
     check_requirement(existing_stage_items, user, "max_stage_items")
 
-    stage_item = await sql_create_stage_item(tournament_id, stage_body)
+    stage_item = await sql_create_stage_item_with_empty_inputs(tournament_id, stage_body)
     await build_matches_for_stage_item(stage_item, tournament_id)
     return SuccessResponse()
 
@@ -82,7 +82,7 @@ async def update_stage_item(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
-    if await get_stage_item(tournament_id, stage_item_id) is None:
+    if stage_item is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could not find all stages",

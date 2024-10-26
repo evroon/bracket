@@ -10,9 +10,11 @@ import { createStage } from '../../services/stage';
 export default function CreateStageButton({
   tournament,
   swrStagesResponse,
+  swrAvailableInputsResponse,
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
 
@@ -25,6 +27,7 @@ export default function CreateStageButton({
       onClick={async () => {
         await createStage(tournament.id);
         await swrStagesResponse.mutate();
+        await swrAvailableInputsResponse.mutate();
       }}
       leftSection={<GoPlus size={24} />}
     >

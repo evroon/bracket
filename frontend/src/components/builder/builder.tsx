@@ -1,4 +1,19 @@
-import { ActionIcon, Badge, Card, Group, Menu, Stack, Text } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Combobox,
+  Group,
+  Input,
+  InputBase,
+  Menu,
+  Stack,
+  Text,
+  useCombobox,
+  useMantineColorScheme,
+  useMantineTheme,
+} from '@mantine/core';
+import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
@@ -10,76 +25,239 @@ import { SWRResponse } from 'swr';
 import { Ranking } from '../../interfaces/ranking';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
-import { TeamInterface } from '../../interfaces/team';
+import {
+  StageItemInput,
+  StageItemInputChoice,
+  StageItemInputOption,
+  formatStageItemInput,
+} from '../../interfaces/stage_item_input';
 import { Tournament } from '../../interfaces/tournament';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
+import { updateStageItemInput } from '../../services/stage_item_input';
 import CreateStageButton from '../buttons/create_stage';
 import { CreateStageItemModal } from '../modals/create_stage_item';
 import { UpdateStageModal } from '../modals/update_stage';
 import { UpdateStageItemModal } from '../modals/update_stage_item';
 import RequestErrorAlert from '../utils/error_alert';
+import { responseIsValid } from '../utils/util';
 
-function StageItemInputSectionLast({
-  input,
-  team,
-  teamStageItem,
-  lastInList,
+function StageItemInputComboBox({
+  tournament,
+  stageItemInput,
+  current_key,
+  availableInputs,
+  swrAvailableInputsResponse,
+  swrStagesResponse,
 }: {
-  input: StageItemInput;
-  team: TeamInterface | null;
-  teamStageItem: TeamInterface | null;
-  lastInList: boolean;
+  tournament: Tournament;
+  stageItemInput: StageItemInput;
+  current_key: string | null;
+  availableInputs: StageItemInputChoice[];
+  swrAvailableInputsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
 }) {
-  assert(team != null || teamStageItem != null);
+  const [selectedInput, setSelectedInput] = useState<string | null>(current_key);
+  const [successIcon, setSuccessIcon] = useState<boolean>(false);
+  const [search, setSearch] = useState('');
+  const combobox = useCombobox({
+    onDropdownClose: () => {
+      combobox.resetSelectedOption();
+      combobox.focusTarget();
+      setSearch('');
+    },
 
-  const content = team
-    ? team.name
-    : // @ts-ignore
-      formatStageItemInput(input.winner_position, teamStageItem.name);
+    onDropdownOpen: () => {
+      combobox.focusSearchInput();
+    },
+  });
+
+  const options = availableInputs
+    .filter((option: StageItemInputChoice) => !option.already_taken)
+    .filter((item) => item.label?.toLowerCase().includes(search.toLowerCase().trim()))
+    .map((option: StageItemInputChoice, i: number) => (
+      <Combobox.Option key={i} value={option.value}>
+        {option.label || <i>None</i>}
+      </Combobox.Option>
+    ));
+
+  const theme = useMantineTheme();
+  const scheme = useMantineColorScheme();
+  const dropdownBorderColor = scheme.colorScheme === 'dark' ? '#444' : '#ccc';
+
+  return (
+    <Combobox
+      shadow="lg"
+      store={combobox}
+      onOptionSubmit={(val) => {
+        const option = availableInputs.find((o) => o.value === val);
+        setSelectedInput(val);
+        updateStageItemInput(
+          tournament.id,
+          stageItemInput.stage_item_id,
+          stageItemInput.id,
+          option?.team_id || null,
+          option?.winner_position || null,
+          option?.winner_from_stage_item_id || null
+        ).then(() => {
+          swrAvailableInputsResponse.mutate();
+          swrStagesResponse.mutate();
+
+          setSuccessIcon(true);
+
+          setTimeout(() => {
+            setSuccessIcon(false);
+          }, 1500);
+        });
+        combobox.closeDropdown();
+      }}
+    >
+      <Combobox.Target>
+        <InputBase
+          radius="0.5rem"
+          component="button"
+          type="button"
+          rightSection={successIcon ? <BiCheck size={18} color={theme.colors.green[4]} /> : null}
+          pointer
+          rightSectionPointerEvents="none"
+          onClick={() => combobox.toggleDropdown()}
+          style={{ border: '0rem' }}
+        >
+          {availableInputs.find((o) => o.value === selectedInput)?.label || (
+            <Input.Placeholder>Pick value</Input.Placeholder>
+          )}
+        </InputBase>
+      </Combobox.Target>
+
+      <Combobox.Dropdown style={{ border: `solid 0.1rem ${dropdownBorderColor}` }}>
+        <Combobox.Search
+          value={search}
+          onChange={(event) => setSearch(event.currentTarget.value)}
+          placeholder="Search"
+        />
+        <Combobox.Options>{options}</Combobox.Options>
+      </Combobox.Dropdown>
+    </Combobox>
+  );
+}
+
+export function getAvailableInputs(
+  swrAvailableInputsResponse: SWRResponse,
+  teamsMap: any,
+  stageItemMap: any
+) {
+  const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
+    if (option.winner_from_stage_item_id == null) {
+      if (option.team_id == null) return null;
+      const team = teamsMap[option.team_id];
+      if (team == null) return null;
+      assert(option.team_id === team.id);
+      return {
+        value: `${option.team_id}`,
+        label: team.name,
+        team_id: team.id,
+        winner_from_stage_item_id: null,
+        winner_position: null,
+        already_taken: option.already_taken,
+      };
+    }
+
+    assert(option.winner_position != null);
+    const stageItem = stageItemMap[option.winner_from_stage_item_id];
+
+    if (stageItem == null) return null;
+    return {
+      value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
+      label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
+      team_id: null,
+      winner_from_stage_item_id: option.winner_from_stage_item_id,
+      winner_position: option.winner_position,
+      already_taken: option.already_taken,
+    };
+  };
+  return responseIsValid(swrAvailableInputsResponse)
+    ? Object.keys(swrAvailableInputsResponse.data.data).reduce((result: any, stage_id: string) => {
+        const option = swrAvailableInputsResponse.data.data[stage_id];
+        result[stage_id] = option.map((opt: StageItemInputOption) =>
+          getComboBoxOptionForStageItemInput(opt)
+        );
+        return result;
+      }, {})
+    : {};
+}
+
+function StageItemInputSection({
+  tournament,
+  stageItemInput,
+  currentOptionValue,
+  lastInList,
+  availableInputs,
+  swrAvailableInputsResponse,
+  swrStagesResponse,
+}: {
+  tournament: Tournament;
+  stageItemInput: StageItemInput;
+  currentOptionValue: string | null;
+  lastInList: boolean;
+  availableInputs: StageItemInputChoice[];
+  swrAvailableInputsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
+}) {
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
   return (
     <Card.Section inheritPadding {...opts}>
-      <Text fw={500}>{content}</Text>
+      <StageItemInputComboBox
+        tournament={tournament}
+        stageItemInput={stageItemInput}
+        current_key={currentOptionValue}
+        availableInputs={availableInputs}
+        swrAvailableInputsResponse={swrAvailableInputsResponse}
+        swrStagesResponse={swrStagesResponse}
+      />
     </Card.Section>
   );
 }
 
 function StageItemRow({
-  teamsMap,
   tournament,
   stageItem,
   swrStagesResponse,
+  availableInputs,
   rankings,
+  swrAvailableInputsResponse,
 }: {
-  teamsMap: any;
   tournament: Tournament;
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
+  availableInputs: StageItemInputChoice[];
   rankings: Ranking[];
+  swrAvailableInputsResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
-  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   const inputs = stageItem.inputs
     .sort((i1, i2) => (i1.slot > i2.slot ? 1 : -1))
     .map((input, i) => {
-      const team = input.team_id ? teamsMap[input.team_id] : null;
-      const teamStageItem = input.winner_from_stage_item_id
-        ? stageItemsLookup[input.winner_from_stage_item_id]
-        : null;
+      let currentOptionValue = null;
+      if (input.team_id != null) {
+        currentOptionValue = `${input.team_id}`;
+      } else if (input.winner_from_stage_item_id != null) {
+        currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
+      }
 
       return (
-        <StageItemInputSectionLast
+        <StageItemInputSection
           key={i}
-          team={team}
-          input={input}
-          teamStageItem={teamStageItem}
+          tournament={tournament}
+          stageItemInput={input}
+          currentOptionValue={currentOptionValue}
+          availableInputs={availableInputs}
           lastInList={i === stageItem.inputs.length - 1}
+          swrAvailableInputsResponse={swrAvailableInputsResponse}
+          swrStagesResponse={swrStagesResponse}
         />
       );
     });
@@ -127,6 +305,7 @@ function StageItemRow({
                 onClick={async () => {
                   await deleteStageItem(tournament.id, stageItem.id);
                   await swrStagesResponse.mutate();
+                  await swrAvailableInputsResponse.mutate();
                 }}
                 color="red"
               >
@@ -145,30 +324,46 @@ function StageColumn({
   tournament,
   stage,
   swrStagesResponse,
+  swrAvailableInputsResponse,
   rankings,
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
   rankings: Ranking[];
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
+  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   if (teamsMap == null) {
     return null;
   }
 
+  const availableInputs =
+    getAvailableInputs(swrAvailableInputsResponse, teamsMap, stageItemsLookup)[stage.id] || [];
+  availableInputs.push({
+    value: 'null',
+    label: null,
+    team_id: null,
+    winner_from_stage_item_id: null,
+    winner_position: null,
+    already_taken: false,
+  });
+
   const rows = stage.stage_items
+    .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.id > i2.id ? 1 : -1))
     .sort((i1: StageItemWithRounds, i2: StageItemWithRounds) => (i1.name > i2.name ? 1 : -1))
     .map((stageItem: StageItemWithRounds) => (
       <StageItemRow
         key={stageItem.id}
-        teamsMap={teamsMap}
         tournament={tournament}
         stageItem={stageItem}
         swrStagesResponse={swrStagesResponse}
+        availableInputs={availableInputs}
+        swrAvailableInputsResponse={swrAvailableInputsResponse}
         rankings={rankings}
       />
     ));
@@ -208,6 +403,7 @@ function StageColumn({
               onClick={async () => {
                 await deleteStage(tournament.id, stage.id);
                 await swrStagesResponse.mutate();
+                await swrAvailableInputsResponse.mutate();
               }}
               color="red"
             >
@@ -222,6 +418,7 @@ function StageColumn({
         tournament={tournament}
         stage={stage}
         swrStagesResponse={swrStagesResponse}
+        swrAvailableInputsResponse={swrAvailableInputsResponse}
       />
     </Stack>
   );
@@ -230,16 +427,21 @@ function StageColumn({
 export default function Builder({
   tournament,
   swrStagesResponse,
+  swrAvailableInputsResponse,
   rankings,
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
   rankings: Ranking[];
 }) {
   const stages: StageWithStageItems[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
 
   if (swrStagesResponse.error) return <RequestErrorAlert error={swrStagesResponse.error} />;
+  if (swrAvailableInputsResponse.error) {
+    return <RequestErrorAlert error={swrAvailableInputsResponse.error} />;
+  }
 
   const cols = stages
     .sort((s1: StageWithStageItems, s2: StageWithStageItems) => (s1.id > s2.id ? 1 : -1))
@@ -248,6 +450,7 @@ export default function Builder({
         key={stage.id}
         tournament={tournament}
         swrStagesResponse={swrStagesResponse}
+        swrAvailableInputsResponse={swrAvailableInputsResponse}
         stage={stage}
         rankings={rankings}
       />
@@ -256,7 +459,11 @@ export default function Builder({
   const button = (
     <Stack miw="24rem" align="top" key={-1}>
       <h4 style={{ marginTop: '0rem' }}>
-        <CreateStageButton tournament={tournament} swrStagesResponse={swrStagesResponse} />
+        <CreateStageButton
+          tournament={tournament}
+          swrStagesResponse={swrStagesResponse}
+          swrAvailableInputsResponse={swrAvailableInputsResponse}
+        />
       </h4>
     </Stack>
   );

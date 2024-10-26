@@ -2,7 +2,6 @@ import os
 from uuid import uuid4
 
 import aiofiles.os
-import asyncpg  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from starlette import status
 
@@ -97,10 +96,8 @@ async def update_tournament_by_id(
     tournament_body: TournamentUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    try:
+    with check_unique_constraint_violation({UniqueIndex.ix_tournaments_dashboard_endpoint}):
         await sql_update_tournament(tournament_id, tournament_body)
-    except asyncpg.exceptions.UniqueViolationError as exc:
-        check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 
     await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
@@ -139,10 +136,8 @@ async def create_tournament(
         )
 
     async with database.transaction():
-        try:
+        with check_unique_constraint_violation({UniqueIndex.ix_tournaments_dashboard_endpoint}):
             tournament_id = await sql_create_tournament(tournament_to_insert)
-        except asyncpg.exceptions.UniqueViolationError as exc:
-            check_unique_constraint_violation(exc, {UniqueIndex.ix_tournaments_dashboard_endpoint})
 
         ranking = RankingCreateBody()
         await sql_create_ranking(tournament_id, ranking, position=0)

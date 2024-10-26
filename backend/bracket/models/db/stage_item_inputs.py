@@ -49,7 +49,13 @@ class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team: Team
 
 
-StageItemInput = StageItemInputTentative | StageItemInputFinal
+class StageItemInputEmpty(StageItemInputBase, StageItemInputGeneric):
+    team_id: None = None
+    winner_from_stage_item_id: None = None
+    winner_position: None = None
+
+
+StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty
 
 
 class StageItemInputCreateBodyTentative(BaseModel):
@@ -63,20 +69,52 @@ class StageItemInputCreateBodyFinal(BaseModel):
     team_id: TeamId
 
 
-StageItemInputCreateBody = StageItemInputCreateBodyTentative | StageItemInputCreateBodyFinal
+class StageItemInputCreateBodyEmpty(BaseModel):
+    slot: int
+
+
+StageItemInputCreateBody = (
+    StageItemInputCreateBodyTentative
+    | StageItemInputCreateBodyFinal
+    | StageItemInputCreateBodyEmpty
+)
+
+
+class StageItemInputUpdateBodyTentative(BaseModelORM):
+    winner_from_stage_item_id: StageItemId
+    winner_position: int = Field(ge=1)
+
+
+class StageItemInputUpdateBodyFinal(BaseModelORM):
+    team_id: TeamId
+
+
+class StageItemInputUpdateBodyEmpty(BaseModelORM):
+    team_id: None = None
+    winner_from_stage_item_id: None = None
+    winner_position: None = None
+
+
+StageItemInputUpdateBody = (
+    StageItemInputUpdateBodyTentative
+    | StageItemInputUpdateBodyFinal
+    | StageItemInputUpdateBodyEmpty
+)
 
 
 class StageItemInputInsertable(BaseModel):
     slot: int
-    team_id: TeamId
+    team_id: TeamId | None = None
     tournament_id: TournamentId
     stage_item_id: StageItemId
 
 
 class StageItemInputOptionFinal(BaseModel):
     team_id: TeamId
+    already_taken: bool
 
 
 class StageItemInputOptionTentative(BaseModel):
     winner_from_stage_item_id: StageItemId
     winner_position: int
+    already_taken: bool

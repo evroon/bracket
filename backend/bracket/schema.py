@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Table, func
+from sqlalchemy import Column, ForeignKey, Integer, String, Table, UniqueConstraint, func
 from sqlalchemy.orm import declarative_base  # type: ignore[attr-defined]
 from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Enum, Float, Text
 
@@ -82,6 +82,8 @@ stage_item_inputs = Table(
     Column("wins", Integer, nullable=False, server_default="0"),
     Column("draws", Integer, nullable=False, server_default="0"),
     Column("losses", Integer, nullable=False, server_default="0"),
+    UniqueConstraint("stage_item_id", "team_id"),
+    UniqueConstraint("stage_item_id", "winner_from_stage_item_id", "winner_position"),
 )
 
 rounds = Table(
