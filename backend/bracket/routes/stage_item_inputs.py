@@ -30,7 +30,9 @@ router = APIRouter()
 
 
 async def validate_stage_item_update(
-    stage_item_input_db: StageItemInput | None, stage_item_body: StageItemInputUpdateBody, tournament_id: TournamentId
+    stage_item_input_db: StageItemInput | None,
+    stage_item_body: StageItemInputUpdateBody,
+    tournament_id: TournamentId,
 ) -> None:
     if stage_item_input_db is None:
         raise HTTPException(
@@ -57,7 +59,6 @@ async def validate_stage_item_update(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Could not find team with id {stage_item_body.team_id}",
         )
-
 
 
 @router.put(
