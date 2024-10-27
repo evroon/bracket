@@ -23,7 +23,11 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.schema import tournaments
-from bracket.sql.rankings import sql_create_ranking
+from bracket.sql.rankings import (
+    get_all_rankings_in_tournament,
+    sql_create_ranking,
+    sql_delete_ranking,
+)
 from bracket.sql.tournaments import (
     sql_create_tournament,
     sql_delete_tournament,
@@ -107,6 +111,9 @@ async def update_tournament_by_id(
 async def delete_tournament(
     tournament_id: TournamentId, _: UserPublic = Depends(user_authenticated_for_tournament)
 ) -> SuccessResponse:
+    for ranking in await get_all_rankings_in_tournament(tournament_id):
+        await sql_delete_ranking(tournament_id, ranking.id)
+
     with check_foreign_key_violation(
         {
             ForeignKey.stages_tournament_id_fkey,

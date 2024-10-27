@@ -12,6 +12,7 @@ filterwarnings = [
     'ignore:.*:pytest.PytestDeprecationWarning',
     'ignore:.*pytest-asyncio detected an unclosed event loop.*:DeprecationWarning',
     'ignore:.*The event_loop fixture provided by pytest-asyncio has been redefined.*:DeprecationWarning',
+    'ignore:.*Please use `import python_multipart` instead.*:PendingDeprecationWarning',
 ]
 
 [tool.mypy]
