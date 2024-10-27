@@ -132,6 +132,8 @@ DUMMY_MATCH1 = MatchInsertable(
     custom_duration_minutes=None,
     custom_margin_minutes=None,
     position_in_schedule=1,
+    stage_item_input1_conflict=False,
+    stage_item_input2_conflict=False,
 )
 
 DUMMY_USER = UserInsertable(

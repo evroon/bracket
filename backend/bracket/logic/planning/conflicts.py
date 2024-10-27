@@ -1,0 +1,105 @@
+from bracket.database import database
+from bracket.models.db.match import MatchWithDetailsDefinitive
+from bracket.models.db.util import StageWithStageItems
+from bracket.utils.id_types import MatchId
+
+
+def get_conflicting_matches(
+    stages: list[StageWithStageItems],
+) -> tuple[
+    list[tuple[bool, bool, MatchId]],
+    set[MatchId],
+]:
+    matches = [
+        match
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+        for match in round_.matches
+        if isinstance(match, MatchWithDetailsDefinitive)
+    ]
+
+    conflicts_to_set = []
+    matches_with_conflicts = set()
+    conflicts_to_clear = set()
+
+    for i, match1 in enumerate(matches):
+        for match2 in matches:
+            if match1.id == match2.id:
+                continue
+
+            conflicting_input_ids = []
+
+            if match2.stage_item_input1_id in match1.stage_item_input_ids:
+                conflicting_input_ids.append(match2.stage_item_input1_id)
+            if match2.stage_item_input2_id in match1.stage_item_input_ids:
+                conflicting_input_ids.append(match2.stage_item_input2_id)
+
+            if len(conflicting_input_ids) < 1:
+                continue
+
+            if match1.start_time is None or match2.start_time is None:
+                continue
+
+            if match2.start_time == match1.start_time:
+                conflicts_to_set.append(
+                    (
+                        match1.stage_item_input1_id in conflicting_input_ids,
+                        match1.stage_item_input2_id in conflicting_input_ids,
+                        match1.id,
+                    )
+                )
+                conflicts_to_set.append(
+                    (
+                        match2.stage_item_input1_id in conflicting_input_ids,
+                        match2.stage_item_input2_id in conflicting_input_ids,
+                        match2.id,
+                    )
+                )
+                matches_with_conflicts.add(match1.id)
+                matches_with_conflicts.add(match2.id)
+
+    for match in matches:
+        if match.id not in matches_with_conflicts:
+            conflicts_to_clear.add(match.id)
+
+    assert set(con[2] for con in conflicts_to_set).intersection(conflicts_to_clear) == set()
+    return conflicts_to_set, conflicts_to_clear
+
+
+async def set_conflicts(
+    conflicts_to_set: list[tuple[bool, bool, MatchId]],
+    conflicts_to_clear: set[MatchId],
+) -> None:
+    for conflict in conflicts_to_set:
+        await database.execute(
+            """
+            UPDATE matches
+            SET
+                stage_item_input1_conflict = :conflict1_id,
+                stage_item_input2_conflict = :conflict2_id
+            WHERE id = :match_id
+            """,
+            values={
+                "conflict1_id": conflict[0],
+                "conflict2_id": conflict[1],
+                "match_id": conflict[2],
+            },
+        )
+
+    for match_id in conflicts_to_clear:
+        await database.execute(
+            """
+            UPDATE matches
+            SET
+                stage_item_input1_conflict = false,
+                stage_item_input2_conflict = false
+            WHERE id = :match_id
+            """,
+            values={"match_id": match_id},
+        )
+
+
+async def handle_conflicts(stages: list[StageWithStageItems]) -> None:
+    conflicts_to_set, conflicts_to_clear = get_conflicting_matches(stages)
+    await set_conflicts(conflicts_to_set, conflicts_to_clear)

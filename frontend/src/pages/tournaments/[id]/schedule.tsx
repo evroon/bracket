@@ -12,6 +12,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
+import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -69,8 +70,14 @@ function ScheduleRow({
           >
             <Grid>
               <Grid.Col span="auto">
-                <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, match)}</Text>
-                <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, match)}</Text>
+                <Group gap="xs">
+                  {match.stage_item_input1_conflict && <AiFillWarning color="red" />}
+                  <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, match)}</Text>
+                </Group>
+                <Group gap="xs">
+                  {match.stage_item_input2_conflict && <AiFillWarning color="red" />}
+                  <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, match)}</Text>
+                </Group>
               </Grid.Col>
               <Grid.Col span="content">
                 <Stack gap="xs" align="end">

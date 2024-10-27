@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import (
     get_scheduled_matches,
     handle_match_reschedule,
@@ -87,6 +88,7 @@ async def create_match(
     match_body: MatchCreateBodyFrontend,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
+    # TODO: check this is a swiss stage item
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
 
     tournament = await sql_get_tournament(tournament_id)
@@ -104,7 +106,9 @@ async def schedule_matches(
     tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
-    await schedule_all_unscheduled_matches(tournament_id)
+    stages = await get_full_tournament_details(tournament_id)
+    await schedule_all_unscheduled_matches(tournament_id, stages)
+    # await handle_conflicts(stages)
     return SuccessResponse()
 
 
@@ -119,6 +123,7 @@ async def reschedule_match(
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(body, tournament_id)
     await handle_match_reschedule(tournament_id, body, match_id)
+    await handle_conflicts(await get_full_tournament_details(tournament_id))
     return SuccessResponse()
 
 
