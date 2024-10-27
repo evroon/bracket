@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Badge,
   Card,
+  CheckIcon,
   Combobox,
   Group,
   InputBase,
@@ -10,9 +11,9 @@ import {
   Text,
   Tooltip,
   useCombobox,
-  useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
+import { useColorScheme } from '@mantine/hooks';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
@@ -30,7 +31,7 @@ import {
   StageItemInput,
   StageItemInputChoice,
   StageItemInputOption,
-  formatStageItemInput,
+  formatStageItemInputTentative,
 } from '../../interfaces/stage_item_input';
 import { Tournament } from '../../interfaces/tournament';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
@@ -50,6 +51,7 @@ function StageItemInputComboBox({
   current_key,
   availableInputs,
   swrAvailableInputsResponse,
+  swrRankingsPerStageItemResponse,
   swrStagesResponse,
 }: {
   tournament: Tournament;
@@ -57,6 +59,7 @@ function StageItemInputComboBox({
   current_key: string | null;
   availableInputs: StageItemInputChoice[];
   swrAvailableInputsResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
   swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
@@ -82,13 +85,15 @@ function StageItemInputComboBox({
     .filter((item) => (item.label || 'None').toLowerCase().includes(search.toLowerCase().trim()))
     .map((option: StageItemInputChoice, i: number) => (
       <Combobox.Option key={i} value={option.value}>
-        {option.label || <i>None</i>}
+        <Group gap="xs" justify="space-between">
+          {option.label || <i>None</i>}
+          {option.value === selectedInput?.value && <CheckIcon size={12} />}
+        </Group>
       </Combobox.Option>
     ));
 
   const theme = useMantineTheme();
-  const scheme = useMantineColorScheme();
-  const dropdownBorderColor = scheme.colorScheme === 'dark' ? '#444' : '#ccc';
+  const dropdownBorderColor = useColorScheme() === 'dark' ? '#444' : '#ccc';
 
   return (
     <Combobox
@@ -107,6 +112,7 @@ function StageItemInputComboBox({
         ).then(() => {
           swrAvailableInputsResponse.mutate();
           swrStagesResponse.mutate();
+          swrRankingsPerStageItemResponse.mutate();
 
           setSuccessIcon(true);
 
@@ -163,7 +169,7 @@ export function getAvailableInputs(
       if (stageItem == null) return null;
       return {
         value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
-        label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
+        label: `${formatStageItemInputTentative(option, stageItemMap)}`,
         team_id: null,
         winner_from_stage_item_id: option.winner_from_stage_item_id,
         winner_position: option.winner_position,
@@ -203,6 +209,7 @@ function StageItemInputSection({
   availableInputs,
   swrAvailableInputsResponse,
   swrStagesResponse,
+  swrRankingsPerStageItemResponse,
 }: {
   tournament: Tournament;
   stageItemInput: StageItemInput;
@@ -211,6 +218,7 @@ function StageItemInputSection({
   availableInputs: StageItemInputChoice[];
   swrAvailableInputsResponse: SWRResponse;
   swrStagesResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
@@ -222,6 +230,7 @@ function StageItemInputSection({
         current_key={currentOptionValue}
         availableInputs={availableInputs}
         swrAvailableInputsResponse={swrAvailableInputsResponse}
+        swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
         swrStagesResponse={swrStagesResponse}
       />
     </Card.Section>
@@ -235,6 +244,7 @@ function StageItemRow({
   availableInputs,
   rankings,
   swrAvailableInputsResponse,
+  swrRankingsPerStageItemResponse,
 }: {
   tournament: Tournament;
   stageItem: StageItemWithRounds;
@@ -242,6 +252,7 @@ function StageItemRow({
   availableInputs: StageItemInputChoice[];
   rankings: Ranking[];
   swrAvailableInputsResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -266,6 +277,7 @@ function StageItemRow({
           lastInList={i === stageItem.inputs.length - 1}
           swrAvailableInputsResponse={swrAvailableInputsResponse}
           swrStagesResponse={swrStagesResponse}
+          swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
         />
       );
     });
@@ -284,16 +296,18 @@ function StageItemRow({
             rankings={rankings}
           />
           <Group gap="0rem">
-            <Tooltip label={t('handle_swiss_system')}>
-              <ActionIcon
-                variant="transparent"
-                color="gray"
-                component={Link}
-                href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
-              >
-                <BiSolidWrench size="1.25rem" />
-              </ActionIcon>
-            </Tooltip>
+            {stageItem.type === 'SWISS' ? (
+              <Tooltip label={t('handle_swiss_system')}>
+                <ActionIcon
+                  variant="transparent"
+                  color="gray"
+                  component={Link}
+                  href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
+                >
+                  <BiSolidWrench size="1.25rem" />
+                </ActionIcon>
+              </Tooltip>
+            ) : null}
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon variant="transparent" color="gray">
@@ -314,7 +328,7 @@ function StageItemRow({
                   <Menu.Item
                     leftSection={<BiSolidWrench size="1.5rem" />}
                     component={Link}
-                    href={`/tournaments/${tournament.id}/swiss/${stageItem.id}`}
+                    href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
                   >
                     {t('handle_swiss_system')}
                   </Menu.Item>
@@ -345,12 +359,14 @@ function StageColumn({
   stage,
   swrStagesResponse,
   swrAvailableInputsResponse,
+  swrRankingsPerStageItemResponse,
   rankings,
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
   rankings: Ranking[];
 }) {
   const { t } = useTranslation();
@@ -384,6 +400,7 @@ function StageColumn({
         swrStagesResponse={swrStagesResponse}
         availableInputs={availableInputs}
         swrAvailableInputsResponse={swrAvailableInputsResponse}
+        swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
         rankings={rankings}
       />
     ));
@@ -448,11 +465,13 @@ export default function Builder({
   tournament,
   swrStagesResponse,
   swrAvailableInputsResponse,
+  swrRankingsPerStageItemResponse,
   rankings,
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
   rankings: Ranking[];
 }) {
   const stages: StageWithStageItems[] =
@@ -471,6 +490,7 @@ export default function Builder({
         tournament={tournament}
         swrStagesResponse={swrStagesResponse}
         swrAvailableInputsResponse={swrAvailableInputsResponse}
+        swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
         stage={stage}
         rankings={rankings}
       />
@@ -483,6 +503,7 @@ export default function Builder({
           tournament={tournament}
           swrStagesResponse={swrStagesResponse}
           swrAvailableInputsResponse={swrAvailableInputsResponse}
+          swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
         />
       </h4>
     </Stack>

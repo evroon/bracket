@@ -25,8 +25,6 @@ def set_statistics_for_stage_item_input(
     stats: defaultdict[StageItemInputId, TeamStatistics],
     match: MatchWithDetailsDefinitive,
     stage_item_input_id: StageItemInputId,
-    rating_team1_before: Decimal,
-    rating_team2_before: Decimal,
     ranking: Ranking,
     stage_item: StageItemWithRounds,
 ) -> None:
@@ -61,7 +59,9 @@ def set_statistics_for_stage_item_input(
             stats[stage_item_input_id].points += swiss_score_diff
 
         case StageType.SWISS:
-            rating_diff = (rating_team2_before - rating_team1_before) * (1 if is_team1 else -1)
+            rating_diff = (match.stage_item_input2.elo - match.stage_item_input1.elo) * (
+                1 if is_team1 else -1
+            )
             expected_score = Decimal(1.0 / (1.0 + math.pow(10.0, rating_diff / D)))
             stats[stage_item_input_id].points += int(K * (swiss_score_diff - expected_score))
 
@@ -80,21 +80,17 @@ def determine_ranking_for_stage_item(
         if not round_.is_draft
         for match in round_.matches
         if isinstance(match, MatchWithDetailsDefinitive)
-        if match.stage_item_input1_score != 0 or match.stage_item_input2_score != 0
     ]
     for match in matches:
         for team_index, stage_item_input in enumerate(match.stage_item_inputs):
-            if stage_item_input.id is not None:
-                set_statistics_for_stage_item_input(
-                    team_index,
-                    team_x_stats,
-                    match,
-                    stage_item_input.id,
-                    match.stage_item_input1.elo,
-                    match.stage_item_input2.elo,
-                    ranking,
-                    stage_item,
-                )
+            set_statistics_for_stage_item_input(
+                team_index,
+                team_x_stats,
+                match,
+                stage_item_input.id,
+                ranking,
+                stage_item,
+            )
 
     return team_x_stats
 

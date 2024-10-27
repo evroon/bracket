@@ -19,7 +19,6 @@ export default function Round({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   readOnly,
-  dynamicSchedule,
   displaySettings,
 }: {
   tournamentData: TournamentMinimal;
@@ -27,7 +26,6 @@ export default function Round({
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
-  dynamicSchedule: boolean;
   displaySettings: BracketDisplaySettings;
 }) {
   const matches = round.matches
@@ -48,23 +46,17 @@ export default function Round({
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
         readOnly={readOnly}
-        dynamicSchedule={dynamicSchedule}
       />
     ));
-  const active_round_style = round.is_active
+  const active_round_style = round.is_draft
     ? {
-        borderStyle: 'solid',
-        borderColor: 'green',
+        borderStyle: 'dashed',
+        borderColor: 'gray',
       }
-    : round.is_draft
-      ? {
-          borderStyle: 'dashed',
-          borderColor: 'gray',
-        }
-      : {
-          borderStyle: 'solid',
-          borderColor: 'gray',
-        };
+    : {
+        borderStyle: 'solid',
+        borderColor: 'gray',
+      };
 
   const modal = readOnly ? (
     <Title order={3}>{round.name}</Title>
@@ -72,9 +64,8 @@ export default function Round({
     <RoundModal
       tournamentData={tournamentData}
       round={round}
-      swrRoundsResponse={swrStagesResponse}
+      swrStagesResponse={swrStagesResponse}
       swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-      dynamicSchedule={dynamicSchedule}
     />
   );
 

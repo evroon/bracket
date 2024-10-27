@@ -7,31 +7,7 @@ import { RoundInterface } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
-import SwissSettings from './settings/ladder_fixed';
-
-function SchedulingSystem({
-  tournamentData,
-  draftRound,
-  swrStagesResponse,
-  swrUpcomingMatchesResponse,
-}: {
-  tournamentData: Tournament;
-  draftRound: RoundInterface;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
-}) {
-  return (
-    <>
-      <Divider mt="1rem" mb="2rem" />
-      <UpcomingMatchesTable
-        round_id={draftRound.id}
-        tournamentData={tournamentData}
-        swrStagesResponse={swrStagesResponse}
-        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-      />
-    </>
-  );
-}
+import SwissSettings, { getSwissRoundSchedulingProgress } from './settings/ladder_fixed';
 
 export default function Scheduler({
   activeStage,
@@ -39,6 +15,7 @@ export default function Scheduler({
   draftRound,
   swrStagesResponse,
   swrUpcomingMatchesResponse,
+  swrCourtsResponse,
   schedulerSettings,
 }: {
   activeStage: StageWithStageItems;
@@ -46,6 +23,7 @@ export default function Scheduler({
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse;
   schedulerSettings: SchedulerSettings;
 }) {
   return (
@@ -53,8 +31,12 @@ export default function Scheduler({
       <h2>
         Schedule new matches for <u>{draftRound.name}</u> in <u>{activeStage.name}</u>
       </h2>
-      <SwissSettings schedulerSettings={schedulerSettings} />
-      <SchedulingSystem
+      <SwissSettings
+        schedulerSettings={schedulerSettings}
+        progress={getSwissRoundSchedulingProgress(draftRound, swrCourtsResponse)}
+      />
+      <Divider mt="1rem" mb="2rem" />
+      <UpcomingMatchesTable
         draftRound={draftRound}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}

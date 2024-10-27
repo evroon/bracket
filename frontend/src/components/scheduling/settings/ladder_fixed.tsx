@@ -1,13 +1,30 @@
-import { Divider, Flex, Group, NumberInput, Radio } from '@mantine/core';
+import { Divider, Flex, Group, NumberInput, Progress, Radio, Stack } from '@mantine/core';
 import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
+import React from 'react';
+import { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../../../interfaces/match';
+import { RoundInterface } from '../../../interfaces/round';
+
+export type SchedulingProgress = { courtsCount: number; scheduledMatchesCount: number };
+
+export function getSwissRoundSchedulingProgress(
+  draftRound: RoundInterface,
+  swrCourtsResponse: SWRResponse
+) {
+  return {
+    courtsCount: swrCourtsResponse.data?.data?.length || 0,
+    scheduledMatchesCount: draftRound?.matches.length,
+  };
+}
 
 export default function LadderFixed({
   schedulerSettings,
+  progress,
 }: {
   schedulerSettings: SchedulerSettings;
+  progress: SchedulingProgress;
 }) {
   const { t } = useTranslation();
 
@@ -52,6 +69,21 @@ export default function LadderFixed({
         step={100}
         leftSection={<IconRepeat size={18} />}
       />
+
+      {progress.scheduledMatchesCount == null ? null : (
+        <>
+          <Divider orientation="vertical" />
+          <Stack gap="6px" mt="1rem">
+            {progress.scheduledMatchesCount} / {progress.courtsCount} {t('courts_filled_badge')}
+            <Progress
+              value={(progress.scheduledMatchesCount * 100) / progress.courtsCount}
+              miw="12rem"
+              striped
+              color="indigo"
+            />
+          </Stack>
+        </>
+      )}
     </Flex>
   );
 }

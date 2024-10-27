@@ -281,7 +281,6 @@ export default function SchedulePage() {
           match={match}
           opened={modalOpened}
           setOpened={modalSetOpened}
-          dynamicSchedule={false}
         />
       ) : null}
       <Grid grow>

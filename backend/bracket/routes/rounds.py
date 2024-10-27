@@ -93,7 +93,7 @@ async def create_round(
         ),
     )
 
-    await set_round_active_or_draft(round_id, tournament_id, is_active=False, is_draft=True)
+    await set_round_active_or_draft(round_id, tournament_id, is_draft=True)
     return SuccessResponse()
 
 
@@ -105,12 +105,9 @@ async def update_round_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: Round = Depends(round_dependency),
 ) -> SuccessResponse:
-    await set_round_active_or_draft(
-        round_id, tournament_id, is_active=round_body.is_active, is_draft=round_body.is_draft
-    )
     query = """
         UPDATE rounds
-        SET name = :name
+        SET name = :name, is_draft = :is_draft
         WHERE rounds.id IN (
             SELECT rounds.id
             FROM rounds
@@ -122,6 +119,11 @@ async def update_round_by_id(
     """
     await database.execute(
         query=query,
-        values={"tournament_id": tournament_id, "round_id": round_id, "name": round_body.name},
+        values={
+            "tournament_id": tournament_id,
+            "round_id": round_id,
+            "name": round_body.name,
+            "is_draft": round_body.is_draft,
+        },
     )
     return SuccessResponse()

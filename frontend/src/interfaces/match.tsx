@@ -1,8 +1,7 @@
-import assert from 'assert';
 import { useTranslation } from 'next-i18next';
 
 import { Court } from './court';
-import { StageItemInput, getPositionName } from './stage_item_input';
+import { StageItemInput, formatStageItemInput } from './stage_item_input';
 
 export interface MatchInterface {
   id: number;
@@ -97,19 +96,14 @@ export function formatMatchInput1(
   match: MatchInterface
 ): string {
   const { t } = useTranslation();
-  if (match.stage_item_input1?.team != null) return match.stage_item_input1.team.name;
-  if (match.stage_item_input1?.winner_from_stage_item_id != null) {
-    assert(match.stage_item_input1.winner_position != null);
-    return `${getPositionName(match.stage_item_input1.winner_position)} of ${
-      stageItemsLookup[match.stage_item_input1?.winner_from_stage_item_id].name
-    }`;
-  }
+  const formatted = formatStageItemInput(match.stage_item_input1, stageItemsLookup);
+  if (formatted != null) return formatted;
+
   if (match.stage_item_input1_winner_from_match_id == null) {
     return t('empty_slot');
   }
   const winner = matchesLookup[match.stage_item_input1_winner_from_match_id].match;
   const match_1 = formatMatchInput1(stageItemsLookup, matchesLookup, winner);
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const match_2 = formatMatchInput2(stageItemsLookup, matchesLookup, winner);
   return `Winner of match ${match_1} - ${match_2}`;
 }
@@ -120,13 +114,9 @@ export function formatMatchInput2(
   match: MatchInterface
 ): string {
   const { t } = useTranslation();
-  if (match.stage_item_input2?.team != null) return match.stage_item_input2.team.name;
-  if (match.stage_item_input2?.winner_from_stage_item_id != null) {
-    assert(match.stage_item_input2.winner_position != null);
-    return `${getPositionName(match.stage_item_input2.winner_position)} of ${
-      stageItemsLookup[match.stage_item_input2?.winner_from_stage_item_id].name
-    }`;
-  }
+  const formatted = formatStageItemInput(match.stage_item_input2, stageItemsLookup);
+  if (formatted != null) return formatted;
+
   if (match.stage_item_input2_winner_from_match_id == null) {
     return t('empty_slot');
   }

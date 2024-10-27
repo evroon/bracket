@@ -1,4 +1,5 @@
-import { Badge, Button, Table } from '@mantine/core';
+import { Badge, Button, Center, Stack, Table } from '@mantine/core';
+import { GoChecklist } from '@react-icons/all-files/go/GoChecklist';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
@@ -6,19 +7,21 @@ import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
+import { RoundInterface } from '../../interfaces/round';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
+import { updateRound } from '../../services/round';
 import { NoContent } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function UpcomingMatchesTable({
-  round_id,
+  draftRound,
   tournamentData,
   swrStagesResponse,
   swrUpcomingMatchesResponse,
 }: {
-  round_id: number;
+  draftRound: RoundInterface;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
@@ -28,7 +31,7 @@ export default function UpcomingMatchesTable({
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
   const tableState = getTableState('elo_diff');
 
-  if (round_id == null) {
+  if (draftRound == null) {
     return null;
   }
 
@@ -44,7 +47,7 @@ export default function UpcomingMatchesTable({
       const match_to_schedule: MatchCreateBodyInterface = {
         team1_id: upcoming_match.stage_item_input1.id,
         team2_id: upcoming_match.stage_item_input2.id,
-        round_id,
+        round_id: draftRound.id,
         label: '',
       };
 
@@ -89,11 +92,29 @@ export default function UpcomingMatchesTable({
 
   if (rows.length < 1) {
     return (
-      <NoContent
-        title={t('no_more_matches_title')}
-        description={`${t('all_matches_scheduled_description')}`}
-        icon={<FaCheck />}
-      />
+      <Stack>
+        <NoContent
+          title={t('no_more_matches_title')}
+          description={`${t('all_matches_scheduled_description')}`}
+          icon={<FaCheck />}
+        />
+        <Center>
+          <Button
+            color="green"
+            size="lg"
+            variant="outline"
+            miw="20rem"
+            leftSection={<GoChecklist size={20} />}
+            onClick={async () => {
+              await updateRound(tournamentData.id, draftRound.id, draftRound.name, false);
+              await swrStagesResponse.mutate();
+              await swrUpcomingMatchesResponse.mutate();
+            }}
+          >
+            {t('mark_round_as_non_draft')}
+          </Button>
+        </Center>
+      </Stack>
     );
   }
 

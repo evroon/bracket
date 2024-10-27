@@ -23,7 +23,6 @@ import { BracketDisplaySettings } from '../../../../../interfaces/brackets';
 import { SchedulerSettings } from '../../../../../interfaces/match';
 import { RoundInterface } from '../../../../../interfaces/round';
 import { getStageById } from '../../../../../interfaces/stage';
-import { stageItemIsHandledAutomatically } from '../../../../../interfaces/stage_item';
 import { Tournament } from '../../../../../interfaces/tournament';
 import {
   checkForAuthError,
@@ -121,25 +120,18 @@ export default function TournamentPage() {
     }
   }
 
-  const swrUpcomingMatchesResponse = getUpcomingMatches(id, stageItemId, schedulerSettings);
-  const scheduler =
+  const swrUpcomingMatchesResponse = getUpcomingMatches(
+    id,
+    stageItemId,
+    draftRound,
+    schedulerSettings
+  );
+  const showScheduler =
     draftRound != null &&
     stageItem != null &&
-    !stageItemIsHandledAutomatically(stageItem) &&
     activeStage != null &&
     displaySettings.showManualSchedulingOptions === 'true' &&
-    swrUpcomingMatchesResponse != null ? (
-      <>
-        <Scheduler
-          activeStage={activeStage}
-          draftRound={draftRound}
-          tournamentData={tournamentDataFull}
-          swrStagesResponse={swrStagesResponse}
-          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-          schedulerSettings={schedulerSettings}
-        />
-      </>
-    ) : null;
+    swrUpcomingMatchesResponse != null;
 
   if (!swrTournamentResponse.isLoading && tournamentDataFull == null) {
     return <NotFoundTitle />;
@@ -199,15 +191,22 @@ export default function TournamentPage() {
         <RoundsGridCols
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
-          swrCourtsResponse={swrCourtsResponse}
           readOnly={false}
           stageItem={stageItem}
           displaySettings={displaySettings}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-          schedulerSettings={schedulerSettings}
-          draftRound={draftRound}
         />
-        {scheduler}
+        {showScheduler ? (
+          <Scheduler
+            activeStage={activeStage}
+            draftRound={draftRound}
+            tournamentData={tournamentDataFull}
+            swrStagesResponse={swrStagesResponse}
+            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+            swrCourtsResponse={swrCourtsResponse}
+            schedulerSettings={schedulerSettings}
+          />
+        ) : null}
       </div>
     </TournamentLayout>
   );

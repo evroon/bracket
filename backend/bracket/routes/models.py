@@ -2,7 +2,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
-from bracket.logic.ranking.statistics import TeamStatistics
+from bracket.logic.scheduling.handle_stage_activation import StageItemInputUpdate
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
 from bracket.models.db.match import Match, SuggestedMatch
@@ -17,7 +17,7 @@ from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import Token
-from bracket.utils.id_types import StageId, StageItemId, StageItemInputId
+from bracket.utils.id_types import StageId, StageItemId
 
 DataT = TypeVar("DataT")
 
@@ -110,7 +110,5 @@ class StageItemInputOptionsResponse(
     pass
 
 
-class StageRankingResponse(
-    DataResponse[dict[StageItemId, list[tuple[StageItemInputId, TeamStatistics]]]]
-):
+class StageRankingResponse(DataResponse[dict[StageItemId, list[StageItemInputUpdate]]]):
     pass

@@ -257,7 +257,6 @@ export default function SchedulePage() {
         match={match}
         opened={modalOpened}
         setOpened={modalSetOpenedAndUpdateMatch}
-        dynamicSchedule={false}
       />
       <Title>{t('results_title')}</Title>
       <Center mt="1rem">

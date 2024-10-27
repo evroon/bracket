@@ -20,16 +20,13 @@ function MatchDeleteButton({
   match,
   swrRoundsResponse,
   swrUpcomingMatchesResponse,
-  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface;
   swrRoundsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
-  if (!dynamicSchedule) return null;
   return (
     <DeleteButton
       fullWidth
@@ -51,14 +48,12 @@ function MatchModalForm({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   setOpened,
-  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface | null;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   setOpened: any;
-  dynamicSchedule: boolean;
 }) {
   if (match == null) {
     return null;
@@ -191,7 +186,6 @@ function MatchModalForm({
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}
         match={match}
-        dynamicSchedule={dynamicSchedule}
       />
     </>
   );
@@ -204,7 +198,6 @@ export default function MatchModal({
   swrUpcomingMatchesResponse,
   opened,
   setOpened,
-  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface | null;
@@ -212,7 +205,6 @@ export default function MatchModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -225,7 +217,6 @@ export default function MatchModal({
           tournamentData={tournamentData}
           match={match}
           setOpened={setOpened}
-          dynamicSchedule={dynamicSchedule}
         />
       </Modal>
     </>

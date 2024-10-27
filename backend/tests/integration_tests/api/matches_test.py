@@ -315,6 +315,9 @@ async def test_upcoming_matches_endpoint(
                 }
             )
         ) as stage_item_inserted,
+        inserted_court(
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ),
         inserted_round(
             DUMMY_ROUND1.model_copy(
                 update={

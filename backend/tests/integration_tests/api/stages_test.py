@@ -74,7 +74,6 @@ async def test_stages_endpoint(
                                     "stage_item_id": stage_item_inserted.id,
                                     "created": DUMMY_MOCK_TIME.isoformat().replace("+00:00", "Z"),
                                     "is_draft": False,
-                                    "is_active": False,
                                     "name": "Round 1",
                                     "matches": [],
                                 }
@@ -172,15 +171,12 @@ async def test_activate_stage(
             )
             == SUCCESS_RESPONSE
         )
-        [prev_stage, next_stage] = await get_full_tournament_details(auth_context.tournament.id)
-        assert prev_stage.is_active is False
-        assert next_stage.is_active is True
 
         await assert_row_count_and_clear(stage_items, 1)
         await assert_row_count_and_clear(stages, 1)
 
 
-async def test_get_rankings(
+async def test_get_next_stage_rankings(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
     async with (
@@ -192,10 +188,10 @@ async def test_get_rankings(
             DUMMY_STAGE_ITEM1.model_copy(
                 update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
             )
-        ) as stage_item_inserted,
+        ),
     ):
         response = await send_tournament_request(
-            HTTPMethod.GET, f"stages/{stage_inserted.id}/rankings", auth_context
+            HTTPMethod.GET, "next_stage_rankings", auth_context
         )
 
-    assert response == {"data": {f"{stage_item_inserted.id}": []}}
+    assert response == {"data": {}}

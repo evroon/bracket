@@ -1,8 +1,6 @@
 import random
 from collections import defaultdict
 
-from fastapi import HTTPException
-
 from bracket.logic.scheduling.shared import check_input_combination_adheres_to_filter
 from bracket.models.db.match import (
     MatchFilter,
@@ -58,15 +56,12 @@ def get_possible_upcoming_matches_for_swiss(
     filter_: MatchFilter,
     rounds: list[RoundWithMatches],
     stage_item_inputs: list[StageItemInput],
+    draft_round: RoundWithMatches | None = None,
 ) -> list[SuggestedMatch]:
     suggestions: list[SuggestedMatch] = []
     scheduled_hashes: list[str] = []
-    draft_round = next((round_ for round_ in rounds if round_.is_draft), None)
+    draft_round_input_ids = get_draft_round_input_ids(draft_round) if draft_round else frozenset()
 
-    if draft_round is None:
-        raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
-
-    draft_round_input_ids = get_draft_round_input_ids(draft_round)
     inputs_to_schedule = [
         input_ for input_ in stage_item_inputs if input_.id not in draft_round_input_ids
     ]

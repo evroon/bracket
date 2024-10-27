@@ -25,7 +25,6 @@ function getRoundsGridCols(
           swrUpcomingMatchesResponse={null}
           match={match}
           readOnly
-          dynamicSchedule={false}
         />
       </Grid.Col>
     ));

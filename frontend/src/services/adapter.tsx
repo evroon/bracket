@@ -6,6 +6,7 @@ import useSWR, { SWRResponse } from 'swr';
 
 import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
+import { RoundInterface } from '../interfaces/round';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 // TODO: This is a workaround for the fact that axios is not properly typed.
@@ -181,6 +182,10 @@ export function getRankings(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/rankings`, fetcher);
 }
 
+export function getRankingsPerStageItem(tournament_id: number): SWRResponse {
+  return useSWR(`tournaments/${tournament_id}/next_stage_rankings`, fetcher);
+}
+
 export function getCourts(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
@@ -198,10 +203,11 @@ export function getUser(): SWRResponse {
 export function getUpcomingMatches(
   tournament_id: number,
   stage_item_id: number,
+  draftRound: RoundInterface | null,
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(
-    stage_item_id == null
+    stage_item_id == null || draftRound == null
       ? null
       : `tournaments/${tournament_id}/stage_items/${stage_item_id}/upcoming_matches?elo_diff_threshold=${schedulerSettings.eloThreshold}&only_recommended=${schedulerSettings.onlyRecommended}&limit=${schedulerSettings.limit}&iterations=${schedulerSettings.iterations}`,
     fetcher

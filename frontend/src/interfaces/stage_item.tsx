@@ -11,8 +11,5 @@ export interface StageItemWithRounds {
   is_active: boolean;
   rounds: RoundInterface[];
   inputs: StageItemInput[];
-}
-
-export function stageItemIsHandledAutomatically(activeStage: StageItemWithRounds) {
-  return ['ROUND_ROBIN', 'SINGLE_ELIMINATION'].includes(activeStage.type);
+  stage_id: number;
 }

@@ -4,10 +4,9 @@ from starlette import status
 from bracket.database import database
 from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import (
-    get_team_rankings_lookup_for_stage,
+    get_updates_to_inputs_in_activated_stage,
     update_matches_in_activated_stage,
     update_matches_in_deactivated_stage,
-    # update_matches_in_activated_stage,
 )
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
@@ -152,15 +151,19 @@ async def get_available_inputs(
     return StageItemInputOptionsResponse(data=available_inputs)
 
 
-@router.get("/tournaments/{tournament_id}/stages/{stage_id}/rankings")
-async def get_rankings(
+@router.get("/tournaments/{tournament_id}/next_stage_rankings")
+async def get_next_stage_rankings(
     tournament_id: TournamentId,
-    stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    __: Stage = Depends(stage_dependency),
 ) -> StageRankingResponse:
     """
     Get the rankings for the stage items in this stage.
     """
-    [stage] = await get_full_tournament_details(tournament_id, stage_id=stage_id)
-    return StageRankingResponse(data=await get_team_rankings_lookup_for_stage(tournament_id, stage))
+    next_stage_id = await get_next_stage_in_tournament(tournament_id, "next")
+
+    if next_stage_id is None:
+        return StageRankingResponse(data={})
+
+    return StageRankingResponse(
+        data=await get_updates_to_inputs_in_activated_stage(tournament_id, next_stage_id)
+    )

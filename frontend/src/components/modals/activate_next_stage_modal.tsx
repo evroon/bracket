@@ -1,21 +1,87 @@
-import { Alert, Button, Modal } from '@mantine/core';
+import { Alert, Button, Container, Grid, Loader, Modal, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { FaArrowRight } from '@react-icons/all-files/fa/FaArrowRight';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
+import { StageItemWithRounds } from '../../interfaces/stage_item';
+import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
+import { TeamInterface } from '../../interfaces/team';
+import { getStageItemLookup } from '../../services/lookups';
 import { activateNextStage } from '../../services/stage';
+
+type Update = { stage_item_input: StageItemInput; team: TeamInterface };
+type StageItemUpdate = { updates: Update[]; stageItem: StageItemWithRounds };
+
+function UpdatesToStageItemInputsTable({
+  stageItemsLookup,
+  updates,
+}: {
+  stageItemsLookup: any;
+  updates: Update[];
+}) {
+  return updates
+    .sort((si1: Update, si2: Update) =>
+      si1.stage_item_input.slot > si2.stage_item_input.slot ? 1 : -1
+    )
+    .map((update) => (
+      <Grid>
+        <Grid.Col span={{ sm: 6 }}>
+          {formatStageItemInput(update.stage_item_input, stageItemsLookup)}
+        </Grid.Col>
+        <Grid.Col span={{ sm: 6 }}>
+          <FaArrowRight style={{ marginRight: '0.5rem' }} />
+          {update.team?.name}
+        </Grid.Col>
+      </Grid>
+    ));
+}
+
+function UpdatesToStageItemInputsTables({
+  stageItemsLookup,
+  swrRankingsPerStageItemResponse,
+}: {
+  stageItemsLookup: any;
+  swrRankingsPerStageItemResponse: SWRResponse;
+}) {
+  if (swrRankingsPerStageItemResponse.isLoading) {
+    return <Loader />;
+  }
+
+  const items = swrRankingsPerStageItemResponse.data.data;
+  return Object.keys(items)
+    .map((stageItemId) => ({
+      updates: items[stageItemId],
+      stageItem: stageItemsLookup[stageItemId],
+    }))
+    .filter((item: StageItemUpdate) => item.stageItem != null)
+    .sort((si1: StageItemUpdate, si2: StageItemUpdate) =>
+      si1.stageItem.name > si2.stageItem.name ? 1 : -1
+    )
+    .map((item: StageItemUpdate) => (
+      <>
+        <Title size="h2" mt="1rem">
+          {item.stageItem.name}
+        </Title>
+        <UpdatesToStageItemInputsTable updates={item.updates} stageItemsLookup={stageItemsLookup} />
+      </>
+    ));
+}
 
 export default function ActivateNextStageModal({
   tournamentId,
   swrStagesResponse,
+  swrRankingsPerStageItemResponse,
 }: {
   tournamentId: number;
   swrStagesResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
+  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   const form = useForm({
     initialValues: {},
@@ -39,6 +105,13 @@ export default function ActivateNextStageModal({
           <Alert icon={<IconAlertCircle size={16} />} color="gray" radius="lg">
             {t('active_next_stage_modal_description')}
           </Alert>
+
+          <Container mt="1rem">
+            <UpdatesToStageItemInputsTables
+              swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
+              stageItemsLookup={stageItemsLookup}
+            />
+          </Container>
 
           <Button
             fullWidth
