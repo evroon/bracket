@@ -20,9 +20,10 @@ from bracket.utils.id_types import CourtId, MatchId, TournamentId
 from bracket.utils.types import assert_some
 
 
-async def schedule_all_unscheduled_matches(tournament_id: TournamentId) -> None:
+async def schedule_all_unscheduled_matches(
+    tournament_id: TournamentId, stages: list[StageWithStageItems]
+) -> None:
     tournament = await sql_get_tournament(tournament_id)
-    stages = await get_full_tournament_details(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
 
     if len(stages) < 1 or len(courts) < 1:

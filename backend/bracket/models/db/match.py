@@ -22,6 +22,8 @@ class MatchBaseInsertable(BaseModelORM):
     stage_item_input1_score: int
     stage_item_input2_score: int
     court_id: CourtId | None = None
+    stage_item_input1_conflict: bool
+    stage_item_input2_conflict: bool
 
     @property
     def end_time(self) -> datetime_utc:

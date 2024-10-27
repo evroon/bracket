@@ -111,6 +111,8 @@ matches = Table(
     Column("round_id", BigInteger, ForeignKey("rounds.id"), nullable=False),
     Column("stage_item_input1_id", BigInteger, ForeignKey("stage_item_inputs.id"), nullable=True),
     Column("stage_item_input2_id", BigInteger, ForeignKey("stage_item_inputs.id"), nullable=True),
+    Column("stage_item_input1_conflict", Boolean, nullable=False),
+    Column("stage_item_input2_conflict", Boolean, nullable=False),
     Column(
         "stage_item_input1_winner_from_match_id",
         BigInteger,

@@ -44,6 +44,8 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             custom_margin_minutes,
             stage_item_input1_score,
             stage_item_input2_score,
+            stage_item_input1_conflict,
+            stage_item_input2_conflict,
             created
         )
         VALUES (
@@ -59,6 +61,8 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             :custom_margin_minutes,
             0,
             0,
+            false,
+            false,
             NOW()
         )
         RETURNING *
@@ -116,6 +120,8 @@ async def sql_reschedule_match(
     margin_minutes: int,
     custom_duration_minutes: int | None,
     custom_margin_minutes: int | None,
+    stage_item_input1_conflict: bool,
+    stage_item_input2_conflict: bool,
 ) -> None:
     query = """
         UPDATE matches
@@ -125,7 +131,9 @@ async def sql_reschedule_match(
             duration_minutes = :duration_minutes,
             margin_minutes = :margin_minutes,
             custom_duration_minutes = :custom_duration_minutes,
-            custom_margin_minutes = :custom_margin_minutes
+            custom_margin_minutes = :custom_margin_minutes,
+            stage_item_input1_conflict = :stage_item_input1_conflict,
+            stage_item_input2_conflict = :stage_item_input2_conflict
         WHERE matches.id = :match_id
         """
     await database.execute(
@@ -139,6 +147,8 @@ async def sql_reschedule_match(
             "margin_minutes": margin_minutes,
             "custom_duration_minutes": custom_duration_minutes,
             "custom_margin_minutes": custom_margin_minutes,
+            "stage_item_input1_conflict": stage_item_input1_conflict,
+            "stage_item_input2_conflict": stage_item_input2_conflict,
         },
     )
 
@@ -170,6 +180,8 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
         margin_minutes,
         match.custom_duration_minutes,
         match.custom_margin_minutes,
+        match.stage_item_input1_conflict,
+        match.stage_item_input2_conflict,
     )
 
 

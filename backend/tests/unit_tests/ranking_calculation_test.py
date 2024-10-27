@@ -57,6 +57,8 @@ def test_determine_ranking_for_stage_item_elimination() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=2,
                             stage_item_input2_score=0,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                         MatchWithDetailsDefinitive(
                             id=MatchId(-2),
@@ -68,6 +70,8 @@ def test_determine_ranking_for_stage_item_elimination() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=2,
                             stage_item_input2_score=2,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                         MatchWithDetails(  # This gets ignored in ranking calculation
                             id=MatchId(-3),
@@ -77,6 +81,8 @@ def test_determine_ranking_for_stage_item_elimination() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=3,
                             stage_item_input2_score=2,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                     ],
                     stage_item_id=StageItemId(-1),
@@ -147,6 +153,8 @@ def test_determine_ranking_for_stage_item_swiss() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=2,
                             stage_item_input2_score=0,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                         MatchWithDetailsDefinitive(
                             id=MatchId(-2),
@@ -158,6 +166,8 @@ def test_determine_ranking_for_stage_item_swiss() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=2,
                             stage_item_input2_score=2,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                         MatchWithDetails(  # This gets ignored in ranking calculation
                             id=MatchId(-3),
@@ -167,6 +177,8 @@ def test_determine_ranking_for_stage_item_swiss() -> None:
                             round_id=RoundId(-1),
                             stage_item_input1_score=3,
                             stage_item_input2_score=2,
+                            stage_item_input1_conflict=False,
+                            stage_item_input2_conflict=False,
                         ),
                     ],
                     stage_item_id=StageItemId(-1),
