@@ -1,7 +1,22 @@
 from bracket.database import database
-from bracket.models.db.match import MatchWithDetailsDefinitive
+from bracket.models.db.match import Match, MatchWithDetailsDefinitive
 from bracket.models.db.util import StageWithStageItems
 from bracket.utils.id_types import MatchId
+
+
+def matchesOverlap(match1: Match, match2: Match) -> bool:
+    if (
+        match1.start_time is None
+        or match1.end_time is None
+        or match2.start_time is None
+        or match2.end_time is None
+    ):
+        return False
+
+    return not (
+        (match1.end_time < match2.end_time and match1.start_time < match2.start_time)
+        or (match1.start_time > match2.start_time or match1.end_time > match2.end_time)
+    )
 
 
 def get_conflicting_matches(
@@ -24,7 +39,7 @@ def get_conflicting_matches(
     conflicts_to_clear = set()
 
     for i, match1 in enumerate(matches):
-        for match2 in matches:
+        for match2 in matches[i + 1 :]:
             if match1.id == match2.id:
                 continue
 
@@ -38,10 +53,7 @@ def get_conflicting_matches(
             if len(conflicting_input_ids) < 1:
                 continue
 
-            if match1.start_time is None or match2.start_time is None:
-                continue
-
-            if match2.start_time == match1.start_time:
+            if matchesOverlap(match1, match2):
                 conflicts_to_set.append(
                     (
                         match1.stage_item_input1_id in conflicting_input_ids,
