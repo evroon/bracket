@@ -12,7 +12,7 @@ from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import StageItem, StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputOptionFinal,
-    StageItemInputOptionTentative,
+    StageItemInputOptionTentative, StageItemInputTentative,
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
@@ -75,6 +75,13 @@ def determine_available_inputs(
     teams: list[FullTeamWithPlayers],
     stages: list[StageWithStageItems],
 ) -> list[StageItemInputOptionTentative | StageItemInputOptionFinal]:
+    """
+    Returns available inputs for the given stage.
+
+    Inputs are either from:
+    - Teams directly
+    - Previous ROUND_ROBIN stage items
+    """
     results_team_ids = {team.id: False for team in teams}
     results_tentative = []
 
