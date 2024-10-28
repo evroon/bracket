@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from bracket.database import database
 from bracket.models.db.match import Match, MatchWithDetailsDefinitive
 from bracket.models.db.util import StageWithStageItems
@@ -22,7 +24,7 @@ def matchesOverlap(match1: Match, match2: Match) -> bool:
 def get_conflicting_matches(
     stages: list[StageWithStageItems],
 ) -> tuple[
-    list[tuple[bool, bool, MatchId]],
+    defaultdict[MatchId, list[bool]],
     set[MatchId],
 ]:
     matches = [
@@ -34,7 +36,7 @@ def get_conflicting_matches(
         if isinstance(match, MatchWithDetailsDefinitive)
     ]
 
-    conflicts_to_set = []
+    conflicts_to_set: defaultdict[MatchId, list[bool]] = defaultdict(lambda: [False, False])
     matches_with_conflicts = set()
     conflicts_to_clear = set()
 
@@ -54,20 +56,16 @@ def get_conflicting_matches(
                 continue
 
             if matchesOverlap(match1, match2):
-                conflicts_to_set.append(
-                    (
-                        match1.stage_item_input1_id in conflicting_input_ids,
-                        match1.stage_item_input2_id in conflicting_input_ids,
-                        match1.id,
-                    )
-                )
-                conflicts_to_set.append(
-                    (
-                        match2.stage_item_input1_id in conflicting_input_ids,
-                        match2.stage_item_input2_id in conflicting_input_ids,
-                        match2.id,
-                    )
-                )
+                for match in (match1, match2):
+                    if not conflicts_to_set[match.id][0]:
+                        conflicts_to_set[match.id][0] = (
+                            match.stage_item_input1_id in conflicting_input_ids
+                        )
+                    if not conflicts_to_set[match.id][1]:
+                        conflicts_to_set[match.id][1] = (
+                            match.stage_item_input2_id in conflicting_input_ids
+                        )
+
                 matches_with_conflicts.add(match1.id)
                 matches_with_conflicts.add(match2.id)
 
@@ -75,15 +73,15 @@ def get_conflicting_matches(
         if match.id not in matches_with_conflicts:
             conflicts_to_clear.add(match.id)
 
-    assert set(con[2] for con in conflicts_to_set).intersection(conflicts_to_clear) == set()
+    assert set(conflicts_to_set.keys()).intersection(conflicts_to_clear) == set()
     return conflicts_to_set, conflicts_to_clear
 
 
 async def set_conflicts(
-    conflicts_to_set: list[tuple[bool, bool, MatchId]],
+    conflicts_to_set: dict[MatchId, list[bool]],
     conflicts_to_clear: set[MatchId],
 ) -> None:
-    for conflict in conflicts_to_set:
+    for match_id, conflict in conflicts_to_set.items():
         await database.execute(
             """
             UPDATE matches
@@ -93,9 +91,9 @@ async def set_conflicts(
             WHERE id = :match_id
             """,
             values={
+                "match_id": match_id,
                 "conflict1_id": conflict[0],
                 "conflict2_id": conflict[1],
-                "match_id": conflict[2],
             },
         )
 
