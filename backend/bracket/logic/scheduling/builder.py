@@ -12,7 +12,7 @@ from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import StageItem, StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputOptionFinal,
-    StageItemInputOptionTentative, StageItemInputTentative,
+    StageItemInputOptionTentative,
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
