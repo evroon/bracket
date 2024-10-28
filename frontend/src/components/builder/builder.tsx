@@ -155,31 +155,31 @@ export function getAvailableInputs(
   stageItemMap: any
 ) {
   const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
-    if (option.winner_from_stage_item_id == null) {
-      if (option.team_id == null) return null;
-      const team = teamsMap[option.team_id];
-      if (team == null) return null;
-      assert(option.team_id === team.id);
+    if (option.winner_from_stage_item_id != null) {
+      assert(option.winner_position != null);
+      const stageItem = stageItemMap[option.winner_from_stage_item_id];
+
+      if (stageItem == null) return null;
       return {
-        value: `${option.team_id}`,
-        label: team.name,
-        team_id: team.id,
-        winner_from_stage_item_id: null,
-        winner_position: null,
+        value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
+        label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
+        team_id: null,
+        winner_from_stage_item_id: option.winner_from_stage_item_id,
+        winner_position: option.winner_position,
         already_taken: option.already_taken,
       };
     }
 
-    assert(option.winner_position != null);
-    const stageItem = stageItemMap[option.winner_from_stage_item_id];
-
-    if (stageItem == null) return null;
+    if (option.team_id == null) return null;
+    const team = teamsMap[option.team_id];
+    if (team == null) return null;
+    assert(option.team_id === team.id);
     return {
-      value: `${option.winner_from_stage_item_id}_${option.winner_position}`,
-      label: `${formatStageItemInput(option.winner_position, stageItem.name)}`,
-      team_id: null,
-      winner_from_stage_item_id: option.winner_from_stage_item_id,
-      winner_position: option.winner_position,
+      value: `${option.team_id}`,
+      label: team.name,
+      team_id: team.id,
+      winner_from_stage_item_id: null,
+      winner_position: null,
       already_taken: option.already_taken,
     };
   };
@@ -249,10 +249,11 @@ function StageItemRow({
     .sort((i1, i2) => (i1.slot > i2.slot ? 1 : -1))
     .map((input, i) => {
       let currentOptionValue = null;
+      if (input.winner_from_stage_item_id != null) {
+        currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
+      } else
       if (input.team_id != null) {
         currentOptionValue = `${input.team_id}`;
-      } else if (input.winner_from_stage_item_id != null) {
-        currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
       }
 
       return (
