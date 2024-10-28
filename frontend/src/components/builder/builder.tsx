@@ -188,7 +188,7 @@ export function getAvailableInputs(
         const option = swrAvailableInputsResponse.data.data[stage_id];
         result[stage_id] = option.map((opt: StageItemInputOption) =>
           getComboBoxOptionForStageItemInput(opt)
-        );
+        ).filter((o: StageItemInputOption | null) => o != null);
         return result;
       }, {})
     : {};
