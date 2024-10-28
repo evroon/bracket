@@ -28,13 +28,16 @@ def determine_team_id(
 ) -> StageItemInputId:
     """
     Determine the team ID for a stage item input that didn't have a team assigned yet.
-    Either return:
-    - A team that was chosen from a previous stage item ranking, or
-    - A team that was chosen from a previous match inside the same stage item
+
+    Returns a team that was chosen from a previous stage item ranking.
     """
 
     team_ranking = stage_item_x_team_rankings[winner_from_stage_item_id]
-    assert len(team_ranking) >= winner_position
+    msg = (
+        "Winner position is out of range of ranking of previous stage item. "
+        f"Ranking has size: {len(team_ranking)}, winner position: {winner_position}"
+    )
+    assert len(team_ranking) >= winner_position, msg
     return team_ranking[winner_position - 1][0]
 
 
