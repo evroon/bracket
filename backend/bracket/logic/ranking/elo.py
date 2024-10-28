@@ -80,7 +80,6 @@ def determine_ranking_for_stage_item(
         if not round_.is_draft
         for match in round_.matches
         if isinstance(match, MatchWithDetailsDefinitive)
-        # if match.stage_item_input1_score != 0 or match.stage_item_input2_score != 0
     ]
     for match in matches:
         for team_index, stage_item_input in enumerate(match.stage_item_inputs):
