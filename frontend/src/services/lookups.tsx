@@ -52,9 +52,7 @@ export function getStageItemTeamIdsLookup(swrStagesResponse: SWRResponse) {
   return Object.fromEntries(result);
 }
 
-export function getStageItemTeamsLookup(
-  swrStagesResponse: SWRResponse,
-) {
+export function getStageItemTeamsLookup(swrStagesResponse: SWRResponse) {
   let result: any[] = [];
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
