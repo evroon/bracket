@@ -98,10 +98,7 @@ export function StandingsTableForStageItem({
             {team_with_input.team.name}
           </Text>
         </Table.Td>
-        <Table.Td visibleFrom="sm" style={{ width: '16rem' }}>
-          <PlayerList team={team_with_input.team} />
-        </Table.Td>
-        <Table.Td visibleFrom="sm" style={{ width: '6rem' }}>
+        <Table.Td visibleFrom="sm" style={{ minWidth: '6rem' }}>
           <Text truncate="end" lineClamp={1}>
             {team_with_input.points}
           </Text>
@@ -137,7 +134,6 @@ export function StandingsTableForStageItem({
           <ThSortable state={tableState} field="name">
             {t('name_table_header')}
           </ThSortable>
-          <ThNotSortable visibleFrom="sm">{t('members_table_header')}</ThNotSortable>
           <ThSortable visibleFrom="sm" state={tableState} field="points">
             {t('points_table_header')}
           </ThSortable>
