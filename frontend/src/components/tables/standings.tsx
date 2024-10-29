@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { StageItemInput } from '../../interfaces/stage_item_input';
+import { StageItemInputFinal } from '../../interfaces/stage_item_input';
 import { TeamInterface } from '../../interfaces/team';
 import PlayerList from '../info/player_list';
 import { PlayerScore } from '../info/player_score';
@@ -72,25 +72,23 @@ export default function StandingsTable({ teams }: { teams: TeamInterface[] }) {
   );
 }
 
-type TeamWithInput = { team: TeamInterface; input: StageItemInput };
-
 export function StandingsTableForStageItem({
   teams_with_inputs,
   stageItem,
 }: {
-  teams_with_inputs: { team: TeamInterface; input: StageItemInput }[];
+  teams_with_inputs: StageItemInputFinal[];
   stageItem: StageItemWithRounds;
 }) {
   const { t } = useTranslation();
   const tableState = getTableState('points', false);
 
-  const minPoints = Math.min(...teams_with_inputs.map((item) => item.input.points));
-  const maxPoints = Math.max(...teams_with_inputs.map((item) => item.input.points));
+  const minPoints = Math.min(...teams_with_inputs.map((input) => input.points));
+  const maxPoints = Math.max(...teams_with_inputs.map((input) => input.points));
 
   const rows = teams_with_inputs
-    .sort((p1: TeamWithInput, p2: TeamWithInput) => (p1.input.points > p2.input.points ? 1 : -1))
-    .sort((p1: TeamWithInput, p2: TeamWithInput) =>
-      sortTableEntries(p1.input, p2.input, tableState)
+    .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) => (p1.points > p2.points ? 1 : -1))
+    .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) =>
+      sortTableEntries(p1, p2, tableState)
     )
     .map((team_with_input, index) => (
       <Table.Tr key={team_with_input.team.id}>
@@ -105,13 +103,13 @@ export function StandingsTableForStageItem({
         </Table.Td>
         <Table.Td visibleFrom="sm" style={{ width: '6rem' }}>
           <Text truncate="end" lineClamp={1}>
-            {team_with_input.input.points}
+            {team_with_input.points}
           </Text>
         </Table.Td>
         {stageItem.type === 'SWISS' ? (
           <Table.Td>
             <PlayerScore
-              score={team_with_input.input.points}
+              score={team_with_input.points}
               min_score={minPoints}
               max_score={maxPoints}
               decimals={0}
@@ -120,9 +118,9 @@ export function StandingsTableForStageItem({
         ) : (
           <Table.Td style={{ minWidth: '10rem' }}>
             <WinDistribution
-              wins={team_with_input.input.wins}
-              draws={team_with_input.input.draws}
-              losses={team_with_input.input.losses}
+              wins={team_with_input.wins}
+              draws={team_with_input.draws}
+              losses={team_with_input.losses}
             />
           </Table.Td>
         )}

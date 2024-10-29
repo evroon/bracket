@@ -59,10 +59,7 @@ export function getStageItemTeamsLookup(swrStagesResponse: SWRResponse) {
     stage.stage_items
       .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
       .forEach((stageItem) => {
-        const teams_with_inputs = stageItem.inputs
-          .filter((input) => input.team_id != null)
-          .map((input) => ({ team: input.team, input }))
-          .filter((input) => input.team != null);
+        const teams_with_inputs = stageItem.inputs.filter((input) => input.team != null);
 
         if (teams_with_inputs.length > 0) {
           result = result.concat([[stageItem.id, teams_with_inputs]]);

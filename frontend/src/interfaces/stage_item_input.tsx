@@ -15,6 +15,15 @@ export interface StageItemInput {
   team: TeamInterface | null;
 }
 
+export interface StageItemInputFinal {
+  id: number;
+  team: TeamInterface;
+  wins: number;
+  draws: number;
+  losses: number;
+  points: number;
+}
+
 export interface StageItemInputCreateBody {
   slot: number;
   team_id: number | null;
