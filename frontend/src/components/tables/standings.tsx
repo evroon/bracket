@@ -104,7 +104,7 @@ export function StandingsTableForStageItem({
           </Text>
         </Table.Td>
         {stageItem.type === 'SWISS' ? (
-          <Table.Td>
+          <Table.Td style={{ minWidth: '10rem' }}>
             <PlayerScore
               score={team_with_input.points}
               min_score={minPoints}
