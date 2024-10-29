@@ -54,12 +54,8 @@ export function getStageItemTeamIdsLookup(swrStagesResponse: SWRResponse) {
 
 export function getStageItemTeamsLookup(
   swrStagesResponse: SWRResponse,
-  swrTeamsResponse: SWRResponse
 ) {
   let result: any[] = [];
-  const teamsLookup = Object.fromEntries(
-    swrTeamsResponse.data.data.teams.map((x: TeamInterface) => [x.id, x])
-  );
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items
@@ -67,7 +63,8 @@ export function getStageItemTeamsLookup(
       .forEach((stageItem) => {
         const teams_with_inputs = stageItem.inputs
           .filter((input) => input.team_id != null)
-          .map((input) => ({ team: teamsLookup[input.team_id!], input }));
+          .map((input) => ({ team: input.team, input }))
+          .filter((input) => input.team != null);
 
         if (teams_with_inputs.length > 0) {
           result = result.concat([[stageItem.id, teams_with_inputs]]);

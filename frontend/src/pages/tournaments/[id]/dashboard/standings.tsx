@@ -18,19 +18,16 @@ import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../service
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 function StandingsContent({
-  swrTeamsResponse,
   swrStagesResponse,
 }: {
-  swrTeamsResponse: SWRResponse;
   swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const stageItemTeamLookup = responseIsValid(swrStagesResponse)
-    ? getStageItemTeamsLookup(swrStagesResponse, swrTeamsResponse)
+    ? getStageItemTeamsLookup(swrStagesResponse)
     : {};
-  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const rows = Object.keys(stageItemTeamLookup)
     .filter((stageItemId) => stageItemsLookup[stageItemId] != null)
@@ -69,13 +66,12 @@ export default function Standings() {
   const tournamentId = !notFound ? tournamentDataFull.id : null;
 
   const swrStagesResponse = getStagesLive(tournamentId);
-  const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
 
   if (!tournamentResponse) {
     return <TableSkeletonTwoColumns />;
   }
 
-  if (swrTeamsResponse.isLoading || swrStagesResponse.isLoading) {
+  if ( swrStagesResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
   }
 
@@ -92,7 +88,6 @@ export default function Standings() {
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
           <StandingsContent
-            swrTeamsResponse={swrTeamsResponse}
             swrStagesResponse={swrStagesResponse}
           />
         </Container>

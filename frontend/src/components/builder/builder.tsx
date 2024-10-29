@@ -186,9 +186,9 @@ export function getAvailableInputs(
   return responseIsValid(swrAvailableInputsResponse)
     ? Object.keys(swrAvailableInputsResponse.data.data).reduce((result: any, stage_id: string) => {
         const option = swrAvailableInputsResponse.data.data[stage_id];
-        result[stage_id] = option.map((opt: StageItemInputOption) =>
-          getComboBoxOptionForStageItemInput(opt)
-        ).filter((o: StageItemInputOption | null) => o != null);
+        result[stage_id] = option
+          .map((opt: StageItemInputOption) => getComboBoxOptionForStageItemInput(opt))
+          .filter((o: StageItemInputOption | null) => o != null);
         return result;
       }, {})
     : {};
@@ -251,8 +251,7 @@ function StageItemRow({
       let currentOptionValue = null;
       if (input.winner_from_stage_item_id != null) {
         currentOptionValue = `${input.winner_from_stage_item_id}_${input.winner_position}`;
-      } else
-      if (input.team_id != null) {
+      } else if (input.team_id != null) {
         currentOptionValue = `${input.team_id}`;
       }
 
