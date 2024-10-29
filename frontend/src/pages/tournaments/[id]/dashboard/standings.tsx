@@ -10,27 +10,19 @@ import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContentDashboard } from '../../../../components/no_content/empty_table_info';
 import { StandingsTableForStageItem } from '../../../../components/tables/standings';
-import RequestErrorAlert from '../../../../components/utils/error_alert';
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { responseIsValid } from '../../../../components/utils/util';
-import { getStagesLive, getTeamsLive } from '../../../../services/adapter';
+import { getStagesLive } from '../../../../services/adapter';
 import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
-function StandingsContent({
-  swrTeamsResponse,
-  swrStagesResponse,
-}: {
-  swrTeamsResponse: SWRResponse;
-  swrStagesResponse: SWRResponse;
-}) {
+function StandingsContent({ swrStagesResponse }: { swrStagesResponse: SWRResponse }) {
   const { t } = useTranslation();
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const stageItemTeamLookup = responseIsValid(swrStagesResponse)
-    ? getStageItemTeamsLookup(swrStagesResponse, swrTeamsResponse)
+    ? getStageItemTeamsLookup(swrStagesResponse)
     : {};
-  if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
   const rows = Object.keys(stageItemTeamLookup)
     .filter((stageItemId) => stageItemsLookup[stageItemId] != null)
@@ -69,13 +61,12 @@ export default function Standings() {
   const tournamentId = !notFound ? tournamentDataFull.id : null;
 
   const swrStagesResponse = getStagesLive(tournamentId);
-  const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
 
   if (!tournamentResponse) {
     return <TableSkeletonTwoColumns />;
   }
 
-  if (swrTeamsResponse.isLoading || swrStagesResponse.isLoading) {
+  if (swrStagesResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
   }
 
@@ -91,10 +82,7 @@ export default function Standings() {
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
-          <StandingsContent
-            swrTeamsResponse={swrTeamsResponse}
-            swrStagesResponse={swrStagesResponse}
-          />
+          <StandingsContent swrStagesResponse={swrStagesResponse} />
         </Container>
       </Container>
       <DashboardFooter />
