@@ -2,29 +2,26 @@ import { Badge, Button, Table } from '@mantine/core';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 
-import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
-import PlayerList from '../info/player_list';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
+import { NoContent } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
 export default function UpcomingMatchesTable({
   round_id,
   tournamentData,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrUpcomingMatchesResponse,
-  displaySettings,
 }: {
   round_id: number;
   tournamentData: Tournament;
-  swrRoundsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
-  displaySettings: BracketDisplaySettings;
 }) {
   const { t } = useTranslation();
   const upcoming_matches: UpcomingMatchInterface[] =
@@ -53,7 +50,7 @@ export default function UpcomingMatchesTable({
 
       await createMatch(tournamentData.id, match_to_schedule);
     }
-    await swrRoundsResponse.mutate();
+    await swrStagesResponse.mutate();
     await swrUpcomingMatchesResponse.mutate();
   }
 
@@ -72,22 +69,8 @@ export default function UpcomingMatchesTable({
             </Badge>
           ) : null}
         </Table.Td>
-        <Table.Td>
-          {upcoming_match.stage_item_input1.team != null ? (
-            <PlayerList
-              team={upcoming_match.stage_item_input1.team}
-              displaySettings={displaySettings}
-            />
-          ) : null}
-        </Table.Td>
-        <Table.Td>
-          {upcoming_match.stage_item_input2.team != null ? (
-            <PlayerList
-              team={upcoming_match.stage_item_input2.team}
-              displaySettings={displaySettings}
-            />
-          ) : null}
-        </Table.Td>
+        <Table.Td>{upcoming_match.stage_item_input1.team?.name}</Table.Td>
+        <Table.Td>{upcoming_match.stage_item_input2.team?.name}</Table.Td>
         <Table.Td>{Number(upcoming_match.elo_diff).toFixed(0)}</Table.Td>
         <Table.Td>{Number(upcoming_match.swiss_diff).toFixed(1)}</Table.Td>
         <Table.Td>
@@ -105,7 +88,13 @@ export default function UpcomingMatchesTable({
     ));
 
   if (rows.length < 1) {
-    return <EmptyTableInfo entity_name={t('upcoming_matches_empty_table_info')} />;
+    return (
+      <NoContent
+        title={t('no_more_matches_title')}
+        description={`${t('all_matches_scheduled_description')}`}
+        icon={<FaCheck />}
+      />
+    );
   }
 
   return (

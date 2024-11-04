@@ -1,4 +1,5 @@
 import { Container, Text } from '@mantine/core';
+import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
@@ -8,7 +9,7 @@ import { SWRResponse } from 'swr';
 import NotFoundTitle from '../../../404';
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
-import { NoContentDashboard } from '../../../../components/no_content/empty_table_info';
+import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { StandingsTableForStageItem } from '../../../../components/tables/standings';
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { responseIsValid } from '../../../../components/utils/util';
@@ -43,9 +44,10 @@ function StandingsContent({ swrStagesResponse }: { swrStagesResponse: SWRRespons
 
   if (rows.length < 1) {
     return (
-      <NoContentDashboard
+      <NoContent
         title={`${t('could_not_find_any_alert')} ${t('teams_title')}`}
         description=""
+        icon={<AiOutlineHourglass />}
       />
     );
   }

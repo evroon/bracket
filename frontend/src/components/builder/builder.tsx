@@ -8,6 +8,7 @@ import {
   Menu,
   Stack,
   Text,
+  Tooltip,
   useCombobox,
   useMantineColorScheme,
   useMantineTheme,
@@ -282,44 +283,56 @@ function StageItemRow({
             setOpened={setOpened}
             rankings={rankings}
           />
-          <Menu withinPortal position="bottom-end" shadow="sm">
-            <Menu.Target>
-              <ActionIcon variant="transparent" color="gray">
-                <IconDots size="1.25rem" />
+          <Group gap="0rem">
+            <Tooltip label={t('handle_swiss_system')}>
+              <ActionIcon
+                variant="transparent"
+                color="gray"
+                component={Link}
+                href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
+              >
+                <BiSolidWrench size="1.25rem" />
               </ActionIcon>
-            </Menu.Target>
+            </Tooltip>
+            <Menu withinPortal position="bottom-end" shadow="sm">
+              <Menu.Target>
+                <ActionIcon variant="transparent" color="gray">
+                  <IconDots size="1.25rem" />
+                </ActionIcon>
+              </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Item
-                leftSection={<IconPencil size="1.5rem" />}
-                onClick={() => {
-                  setOpened(true);
-                }}
-              >
-                {t('edit_stage_item_label')}
-              </Menu.Item>
-              {stageItem.type === 'SWISS' ? (
+              <Menu.Dropdown>
                 <Menu.Item
-                  leftSection={<BiSolidWrench size="1.5rem" />}
-                  component={Link}
-                  href={`/tournaments/${tournament.id}/swiss/${stageItem.id}`}
+                  leftSection={<IconPencil size="1.5rem" />}
+                  onClick={() => {
+                    setOpened(true);
+                  }}
                 >
-                  {t('handle_swiss_system')}
+                  {t('edit_stage_item_label')}
                 </Menu.Item>
-              ) : null}
-              <Menu.Item
-                leftSection={<IconTrash size="1.5rem" />}
-                onClick={async () => {
-                  await deleteStageItem(tournament.id, stageItem.id);
-                  await swrStagesResponse.mutate();
-                  await swrAvailableInputsResponse.mutate();
-                }}
-                color="red"
-              >
-                {t('delete_button')}
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+                {stageItem.type === 'SWISS' ? (
+                  <Menu.Item
+                    leftSection={<BiSolidWrench size="1.5rem" />}
+                    component={Link}
+                    href={`/tournaments/${tournament.id}/swiss/${stageItem.id}`}
+                  >
+                    {t('handle_swiss_system')}
+                  </Menu.Item>
+                ) : null}
+                <Menu.Item
+                  leftSection={<IconTrash size="1.5rem" />}
+                  onClick={async () => {
+                    await deleteStageItem(tournament.id, stageItem.id);
+                    await swrStagesResponse.mutate();
+                    await swrAvailableInputsResponse.mutate();
+                  }}
+                  color="red"
+                >
+                  {t('delete_button')}
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
         </Group>
       </Card.Section>
       {inputs}

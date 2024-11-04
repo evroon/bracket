@@ -1,4 +1,5 @@
 import { Alert, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from '@mantine/core';
+import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -7,7 +8,7 @@ import React from 'react';
 
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
-import { NoContentDashboard } from '../../../../components/no_content/empty_table_info';
+import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
@@ -162,7 +163,7 @@ export function Schedule({
   }
 
   if (rows.length < 1) {
-    return <NoContentDashboard title={t('no_matches_title')} description="" />;
+    return <NoContent title={t('no_matches_title')} description="" icon={<AiOutlineHourglass />} />;
   }
 
   const noItemsAlert =

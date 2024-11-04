@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import QRCode from 'react-qr-code';
 
-import { Tournament, getTournamentEndpoint } from '../../interfaces/tournament';
+import { Tournament } from '../../interfaces/tournament';
 import { getBaseApiUrl } from '../../services/adapter';
 import { getBaseURL } from '../utils/util';
 import classes from './layout.module.css';
@@ -80,7 +80,7 @@ export function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: To
 
 export function DoubleHeader({ tournamentData }: { tournamentData: Tournament }) {
   const router = useRouter();
-  const endpoint = getTournamentEndpoint(tournamentData);
+  const endpoint = tournamentData.dashboard_endpoint;
   const pathName = router.pathname.replace('[id]', endpoint).replace(/\/+$/, '');
 
   const mainLinks = [

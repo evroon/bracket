@@ -36,10 +36,6 @@ export function getDefaultTimeRange(selectMultipleDates: boolean) {
   return [minDate, maxDate];
 }
 
-export function onlyUnique(value: any, index: number, self: any) {
-  return self.indexOf(value) === index;
-}
-
 export function getTournamentIdFromRouter() {
   const router = useRouter();
   const { id: idString }: any = router.query;
