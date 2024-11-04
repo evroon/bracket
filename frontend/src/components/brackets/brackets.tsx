@@ -139,25 +139,25 @@ export function RoundsGridCols({
             <Group>
               <Center>
                 {scheduledMatchesCount == null ? null : (
-                    <>
-                  <Stack gap="6px">
-                    <>
-                      {scheduledMatchesCount} / {courtsCount} {t('courts_filled_badge')}
-                    </>
-                    <Progress
-                      value={(scheduledMatchesCount * 100) / courtsCount}
-                      miw="12rem"
-                      striped
-                      color="indigo"
-                    />
-                  </Stack>
-                <Divider orientation="vertical" mx="1rem" />
+                  <>
+                    <Stack gap="6px">
+                      <>
+                        {scheduledMatchesCount} / {courtsCount} {t('courts_filled_badge')}
+                      </>
+                      <Progress
+                        value={(scheduledMatchesCount * 100) / courtsCount}
+                        miw="12rem"
+                        striped
+                        color="indigo"
+                      />
+                    </Stack>
+                    <Divider orientation="vertical" mx="1rem" />
                   </>
                 )}
                 <Switch
                   size="md"
-                  offLabel={<MdOutlineAutoFixHigh size={16} />}
-                  onLabel={<IoOptions size={16} />}
+                  onLabel={<MdOutlineAutoFixHigh size={16} />}
+                  offLabel={<IoOptions size={16} />}
                   checked={displaySettings.showManualSchedulingOptions === 'false'}
                   label={
                     displaySettings.showManualSchedulingOptions === 'true' ? 'Manual' : 'Automatic'
