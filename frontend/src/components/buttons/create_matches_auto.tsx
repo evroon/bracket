@@ -1,9 +1,10 @@
 import { Button } from '@mantine/core';
-import { IconTool } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
+import { BracketDisplaySettings } from '../../interfaces/brackets';
 import { SchedulerSettings } from '../../interfaces/match';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatchesAuto } from '../../services/round';
@@ -14,21 +15,22 @@ export function AutoCreateMatchesButton({
   swrUpcomingMatchesResponse,
   stageItemId,
   schedulerSettings,
+  displaySettings,
 }: {
   schedulerSettings: SchedulerSettings;
   stageItemId: number;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
+  displaySettings: BracketDisplaySettings;
 }) {
   const { t } = useTranslation();
   return (
     <Button
       size="md"
-      mt="1rem"
-      mb="1rem"
       color="indigo"
-      leftSection={<IconTool size={24} />}
+      leftSection={<MdOutlineAutoFixHigh size={24} />}
+      disabled={displaySettings.showManualSchedulingOptions === 'true'}
       onClick={async () => {
         await createMatchesAuto(
           tournamentData.id,

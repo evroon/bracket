@@ -3,7 +3,6 @@ import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
-import { BracketDisplaySettings } from '../../interfaces/brackets';
 import {
   MatchInterface,
   formatMatchInput1,
@@ -47,7 +46,6 @@ export default function Match({
   match,
   readOnly,
   dynamicSchedule,
-  displaySettings,
 }: {
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
@@ -55,7 +53,6 @@ export default function Match({
   match: MatchInterface;
   readOnly: boolean;
   dynamicSchedule: boolean;
-  displaySettings?: BracketDisplaySettings | null;
 }) {
   // const { classes } = useStyles();
   const theme = useMantineTheme();
@@ -63,8 +60,6 @@ export default function Match({
     // backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
     backgroundColor: theme.colors.green[9],
   };
-  const showTeamMemberNames =
-    displaySettings != null && displaySettings.teamNamesDisplay === 'player-names';
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
@@ -74,22 +69,8 @@ export default function Match({
   const team2_style =
     match.stage_item_input1_score < match.stage_item_input2_score ? winner_style : {};
 
-  const team1_players = match.stage_item_input1?.team
-    ? match.stage_item_input1.team.players.map((player) => player.name).join(', ')
-    : '';
-  const team2_players = match.stage_item_input2?.team
-    ? match.stage_item_input2.team.players.map((player) => player.name).join(', ')
-    : '';
-
-  const team1_players_label = team1_players === '' ? 'No players' : team1_players;
-  const team2_players_label = team2_players === '' ? 'No players' : team2_players;
-
-  const team1_label = showTeamMemberNames
-    ? team1_players_label
-    : formatMatchInput1(stageItemsLookup, matchesLookup, match);
-  const team2_label = showTeamMemberNames
-    ? team2_players_label
-    : formatMatchInput2(stageItemsLookup, matchesLookup, match);
+  const team1_label = formatMatchInput1(stageItemsLookup, matchesLookup, match);
+  const team2_label = formatMatchInput2(stageItemsLookup, matchesLookup, match);
 
   const [opened, setOpened] = useState(false);
 

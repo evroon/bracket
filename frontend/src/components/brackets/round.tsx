@@ -49,7 +49,6 @@ export default function Round({
         match={match}
         readOnly={readOnly}
         dynamicSchedule={dynamicSchedule}
-        displaySettings={displaySettings}
       />
     ));
   const active_round_style = round.is_active
