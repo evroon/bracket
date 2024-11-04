@@ -60,7 +60,7 @@ function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String })
           component={Link}
           href={item.link}
           className={classes.link}
-          data-active={pathName === item.link || undefined}
+          data-active={pathName.startsWith(item.link) || undefined}
         >
           <item.icon stroke={1.5} />
         </UnstyledButton>

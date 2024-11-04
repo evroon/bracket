@@ -2,12 +2,13 @@ import { Badge, Button, Table } from '@mantine/core';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
 import { Tournament } from '../../interfaces/tournament';
 import { createMatch } from '../../services/match';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
+import { NoContent } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
@@ -87,7 +88,13 @@ export default function UpcomingMatchesTable({
     ));
 
   if (rows.length < 1) {
-    return <EmptyTableInfo entity_name={t('upcoming_matches_empty_table_info')} />;
+    return (
+      <NoContent
+        title={t('no_more_matches_title')}
+        description={`${t('all_matches_scheduled_description')}`}
+        icon={<FaCheck />}
+      />
+    );
   }
 
   return (

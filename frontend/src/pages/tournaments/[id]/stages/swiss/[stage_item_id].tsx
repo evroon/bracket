@@ -7,33 +7,33 @@ import React from 'react';
 import { LuNavigation } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../404';
-import { RoundsGridCols } from '../../../../components/brackets/brackets';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
-import Scheduler from '../../../../components/scheduling/scheduling';
-import classes from '../../../../components/utility.module.css';
-import { useRouterQueryState } from '../../../../components/utils/query_parameters';
-import { Translator } from '../../../../components/utils/types';
+import NotFoundTitle from '../../../../404';
+import { RoundsGridCols } from '../../../../../components/brackets/brackets';
+import { NoContent } from '../../../../../components/no_content/empty_table_info';
+import Scheduler from '../../../../../components/scheduling/scheduling';
+import classes from '../../../../../components/utility.module.css';
+import { useRouterQueryState } from '../../../../../components/utils/query_parameters';
+import { Translator } from '../../../../../components/utils/types';
 import {
   getStageItemIdFromRouter,
   getTournamentIdFromRouter,
   responseIsValid,
-} from '../../../../components/utils/util';
-import { BracketDisplaySettings } from '../../../../interfaces/brackets';
-import { SchedulerSettings } from '../../../../interfaces/match';
-import { RoundInterface } from '../../../../interfaces/round';
-import { getStageById } from '../../../../interfaces/stage';
-import { stageItemIsHandledAutomatically } from '../../../../interfaces/stage_item';
-import { Tournament, getTournamentEndpoint } from '../../../../interfaces/tournament';
+} from '../../../../../components/utils/util';
+import { BracketDisplaySettings } from '../../../../../interfaces/brackets';
+import { SchedulerSettings } from '../../../../../interfaces/match';
+import { RoundInterface } from '../../../../../interfaces/round';
+import { getStageById } from '../../../../../interfaces/stage';
+import { stageItemIsHandledAutomatically } from '../../../../../interfaces/stage_item';
+import { Tournament } from '../../../../../interfaces/tournament';
 import {
   checkForAuthError,
   getCourts,
   getStages,
   getTournamentById,
   getUpcomingMatches,
-} from '../../../../services/adapter';
-import { getStageItemLookup } from '../../../../services/lookups';
-import TournamentLayout from '../../_tournament_layout';
+} from '../../../../../services/adapter';
+import { getStageItemLookup } from '../../../../../services/lookups';
+import TournamentLayout from '../../../_tournament_layout';
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
@@ -175,19 +175,23 @@ export default function TournamentPage() {
                 { label: t('match_filter_option_current'), value: 'present-only' },
               ]}
             />
-            <Button
-              className={classes.fullWithMobile}
-              color="blue"
-              size="sm"
-              variant="outline"
-              leftSection={<IconExternalLink size={24} />}
-              onClick={() => {
-                const endpoint = getTournamentEndpoint(tournamentDataFull);
-                window.open(`/tournaments/${endpoint}/dashboard`, '_ blank');
-              }}
-            >
-              {t('view_dashboard_button')}
-            </Button>
+            {tournamentDataFull?.dashboard_endpoint && (
+              <Button
+                className={classes.fullWithMobile}
+                color="blue"
+                size="sm"
+                variant="outline"
+                leftSection={<IconExternalLink size={24} />}
+                onClick={() => {
+                  window.open(
+                    `/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`,
+                    '_ blank'
+                  );
+                }}
+              >
+                {t('view_dashboard_button')}
+              </Button>
+            )}
           </Group>
         </Grid.Col>
       </Grid>

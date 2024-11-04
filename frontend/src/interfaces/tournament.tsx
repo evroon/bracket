@@ -15,7 +15,3 @@ export interface Tournament {
 export interface TournamentMinimal {
   id: number;
 }
-
-export function getTournamentEndpoint(tournament: Tournament) {
-  return tournament.dashboard_endpoint != null ? tournament.dashboard_endpoint : `${tournament.id}`;
-}

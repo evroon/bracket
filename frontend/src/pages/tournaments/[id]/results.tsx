@@ -11,13 +11,14 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
+import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 
 import MatchModal from '../../../components/modals/match_modal';
-import { NoContentDashboard } from '../../../components/no_content/empty_table_info';
+import { NoContent } from '../../../components/no_content/empty_table_info';
 import { Time, formatTime } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
@@ -188,7 +189,11 @@ function Schedule({
 
   if (rows.length < 1) {
     return (
-      <NoContentDashboard title={t('no_matches_title')} description={t('no_matches_description')} />
+      <NoContent
+        title={t('no_matches_title')}
+        description={t('no_matches_description')}
+        icon={<AiOutlineHourglass />}
+      />
     );
   }
 

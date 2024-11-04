@@ -15,7 +15,7 @@ import {
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
-import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
+import { IconCalendar, IconCalendarTime, IconCopy } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -28,7 +28,7 @@ import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeleton } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
-import { Tournament, getTournamentEndpoint } from '../../../interfaces/tournament';
+import { Tournament } from '../../../interfaces/tournament';
 import {
   getBaseApiUrl,
   getClubs,
@@ -162,11 +162,32 @@ function GeneralTournamentForm({
         </Grid>
       </Fieldset>
       <Fieldset legend={t('dashboard_settings_title')} mt="lg" radius="md">
-        <TextInput
-          label={t('dashboard_link_label')}
-          placeholder={t('dashboard_link_placeholder')}
-          {...form.getInputProps('dashboard_endpoint')}
-        />
+        <Text fz="sm">{t('dashboard_link_label')}</Text>
+        <Grid>
+          <Grid.Col span={{ sm: 9 }}>
+            <TextInput
+              placeholder={t('dashboard_link_placeholder')}
+              {...form.getInputProps('dashboard_endpoint')}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ sm: 3 }}>
+            <CopyButton
+              value={`${getBaseURL()}/tournaments/${tournament.dashboard_endpoint}/dashboard`}
+            >
+              {({ copied, copy }) => (
+                <Button
+                  disabled={form.values.dashboard_endpoint === ''}
+                  leftSection={<IconCopy size="1.1rem" stroke={1.5} />}
+                  fullWidth
+                  color={copied ? 'teal' : 'indigo'}
+                  onClick={copy}
+                >
+                  {copied ? t('copied_url_button') : t('copy_url_button')}
+                </Button>
+              )}
+            </CopyButton>
+          </Grid.Col>
+        </Grid>
 
         <Checkbox
           mt="lg"
@@ -212,17 +233,6 @@ function GeneralTournamentForm({
         {t('save_button')}
       </Button>
 
-      {tournament != null ? (
-        <CopyButton
-          value={`${getBaseURL()}/tournaments/${getTournamentEndpoint(tournament)}/dashboard`}
-        >
-          {({ copied, copy }) => (
-            <Button fullWidth mt="sm" color={copied ? 'teal' : 'blue'} onClick={copy}>
-              {copied ? t('copied_dashboard_url_button') : t('copy_dashboard_url_button')}
-            </Button>
-          )}
-        </CopyButton>
-      ) : null}
       <Button
         fullWidth
         variant="outline"

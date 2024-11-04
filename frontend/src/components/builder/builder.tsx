@@ -289,7 +289,7 @@ function StageItemRow({
                 variant="transparent"
                 color="gray"
                 component={Link}
-                href={`/tournaments/${tournament.id}/swiss/${stageItem.id}`}
+                href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
               >
                 <BiSolidWrench size="1.25rem" />
               </ActionIcon>
