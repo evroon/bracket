@@ -118,6 +118,3 @@ class StageItemInputOptionTentative(BaseModel):
     winner_from_stage_item_id: StageItemId
     winner_position: int
     already_taken: bool
-
-    def __hash__(self) -> int:
-        return self.winner_from_stage_item_id + self.winner_position * int(1e9)
