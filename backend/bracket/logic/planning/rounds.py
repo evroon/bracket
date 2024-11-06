@@ -16,20 +16,13 @@ class MatchTimingAdjustmentInfeasible(Exception):
     pass
 
 
-def get_active_and_next_rounds(
+def get_draft_round(
     stage_item: StageItemWithRounds,
-) -> tuple[RoundWithMatches | None, RoundWithMatches | None]:
-    active_round = next((round_ for round_ in stage_item.rounds if round_.is_active), None)
-
-    def is_round_in_future(round_: RoundWithMatches) -> bool:
-        return (round_.id > active_round.id) if active_round is not None else True
-
-    rounds_chronologically_sorted = sorted(stage_item.rounds, key=lambda r: r.id)
-    next_round = next(
-        (round_ for round_ in rounds_chronologically_sorted if is_round_in_future(round_)),
+) -> RoundWithMatches | None:
+    return next(
+        (round_ for round_ in sorted(stage_item.rounds, key=lambda r: r.id) if round_.is_draft),
         None,
     )
-    return active_round, next_round
 
 
 async def schedule_all_matches_for_swiss_round(

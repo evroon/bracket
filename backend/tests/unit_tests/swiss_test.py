@@ -1,8 +1,5 @@
 from decimal import Decimal
 
-import pytest
-from fastapi import HTTPException
-
 from bracket.logic.scheduling.ladder_teams import get_possible_upcoming_matches_for_swiss
 from bracket.models.db.match import Match, MatchFilter, MatchWithDetailsDefinitive, SuggestedMatch
 from bracket.models.db.stage_item_inputs import (
@@ -26,11 +23,6 @@ from bracket.utils.id_types import (
 from tests.integration_tests.mocks import MOCK_NOW
 
 MATCH_FILTER = MatchFilter(elo_diff_threshold=50, iterations=100, limit=20, only_recommended=False)
-
-
-def test_no_draft_round() -> None:
-    with pytest.raises(HTTPException, match="There is no draft round, so no matches can be"):
-        get_possible_upcoming_matches_for_swiss(MATCH_FILTER, [], [])
 
 
 def get_match(

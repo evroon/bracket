@@ -10,9 +10,11 @@ import { activateNextStage } from '../../services/stage';
 export default function ActivatePreviousStageModal({
   tournamentId,
   swrStagesResponse,
+  swrRankingsPerStageItemResponse,
 }: {
   tournamentId: number;
   swrStagesResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -33,6 +35,7 @@ export default function ActivatePreviousStageModal({
           onSubmit={form.onSubmit(async () => {
             await activateNextStage(tournamentId, 'previous');
             swrStagesResponse.mutate();
+            swrRankingsPerStageItemResponse.mutate();
             setOpened(false);
           })}
         >

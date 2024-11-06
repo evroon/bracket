@@ -23,7 +23,7 @@ class Player(PlayerInsertable):
     id: PlayerId
 
     def __hash__(self) -> int:
-        return self.id if self.id is not None else int(self.created.timestamp())
+        return self.id
 
 
 class PlayerBody(BaseModelORM):

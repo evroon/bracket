@@ -3,10 +3,8 @@ import {
   Button,
   Center,
   Container,
-  Divider,
   Grid,
   Group,
-  Progress,
   Skeleton,
   Stack,
   Switch,
@@ -20,12 +18,10 @@ import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
-import { SchedulerSettings } from '../../interfaces/match';
 import { RoundInterface } from '../../interfaces/round';
-import { StageItemWithRounds, stageItemIsHandledAutomatically } from '../../interfaces/stage_item';
+import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { Tournament, TournamentMinimal } from '../../interfaces/tournament';
 import { createRound } from '../../services/round';
-import { AutoCreateMatchesButton } from '../buttons/create_matches_auto';
 import ActivateNextRoundModal from '../modals/activate_next_round_modal';
 import { NoContent } from '../no_content/empty_table_info';
 import { Translator } from '../utils/types';
@@ -37,12 +33,14 @@ function AddRoundButton({
   tournamentData,
   stageItem,
   swrStagesResponse,
+  swrUpcomingMatchesResponse,
   size,
 }: {
   t: Translator;
   tournamentData: TournamentMinimal;
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse;
+  swrUpcomingMatchesResponse: SWRResponse;
   size: 'md' | 'lg';
 }) {
   return (
@@ -54,6 +52,7 @@ function AddRoundButton({
       onClick={async () => {
         await createRound(tournamentData.id, stageItem.id);
         await swrStagesResponse.mutate();
+        await swrUpcomingMatchesResponse.mutate();
       }}
     >
       {t('add_round_button')}
@@ -65,22 +64,16 @@ export function RoundsGridCols({
   stageItem,
   tournamentData,
   swrStagesResponse,
-  swrCourtsResponse,
   swrUpcomingMatchesResponse,
-  schedulerSettings,
   readOnly,
   displaySettings,
-  draftRound,
 }: {
   stageItem: StageItemWithRounds;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;
-  schedulerSettings: SchedulerSettings;
   readOnly: boolean;
   displaySettings: BracketDisplaySettings;
-  draftRound: RoundInterface;
 }) {
   const { t } = useTranslation();
 
@@ -101,7 +94,6 @@ export function RoundsGridCols({
         swrStagesResponse={swrStagesResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         readOnly={readOnly}
-        dynamicSchedule={!stageItemIsHandledAutomatically(stageItem)}
         displaySettings={displaySettings}
       />
     ));
@@ -118,6 +110,7 @@ export function RoundsGridCols({
             tournamentData={tournamentData}
             stageItem={stageItem}
             swrStagesResponse={swrStagesResponse}
+            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
             size="lg"
           />
         </Stack>
@@ -125,11 +118,7 @@ export function RoundsGridCols({
     );
   }
 
-  const hideAddRoundButton =
-    tournamentData == null || readOnly || stageItemIsHandledAutomatically(stageItem);
-
-  const courtsCount = swrCourtsResponse.data?.data?.length || 0;
-  const scheduledMatchesCount = draftRound?.matches.length;
+  const hideAddRoundButton = tournamentData == null || readOnly;
 
   return (
     <React.Fragment key={stageItem.id}>
@@ -138,22 +127,6 @@ export function RoundsGridCols({
           <Grid.Col span={6} mb="2rem">
             <Group>
               <Center>
-                {scheduledMatchesCount == null ? null : (
-                  <>
-                    <Stack gap="6px">
-                      <>
-                        {scheduledMatchesCount} / {courtsCount} {t('courts_filled_badge')}
-                      </>
-                      <Progress
-                        value={(scheduledMatchesCount * 100) / courtsCount}
-                        miw="12rem"
-                        striped
-                        color="indigo"
-                      />
-                    </Stack>
-                    <Divider orientation="vertical" mx="1rem" />
-                  </>
-                )}
                 <Switch
                   size="md"
                   onLabel={<MdOutlineAutoFixHigh size={16} />}
@@ -170,33 +143,28 @@ export function RoundsGridCols({
                   }}
                   miw="9rem"
                 />
-                <Divider orientation="vertical" mx="1rem" />
-                <AutoCreateMatchesButton
-                  swrStagesResponse={swrStagesResponse}
-                  swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-                  tournamentData={tournamentData}
-                  stageItemId={stageItem.id}
-                  schedulerSettings={schedulerSettings}
-                  displaySettings={displaySettings}
-                />
               </Center>
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
             <Group justify="right">
-              {hideAddRoundButton ? null : (
+              {hideAddRoundButton ||
+              displaySettings.showManualSchedulingOptions === 'false' ? null : (
                 <AddRoundButton
                   t={t}
                   tournamentData={tournamentData}
                   stageItem={stageItem}
                   swrStagesResponse={swrStagesResponse}
+                  swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
                   size="md"
                 />
               )}
-              {hideAddRoundButton ? null : (
+              {hideAddRoundButton ||
+              displaySettings.showManualSchedulingOptions === 'true' ? null : (
                 <ActivateNextRoundModal
                   tournamentId={tournamentData.id}
                   swrStagesResponse={swrStagesResponse}
+                  swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
                   stageItem={stageItem}
                 />
               )}

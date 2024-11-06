@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 import { TeamInterface } from './team';
 
 export interface StageItemInput {
@@ -58,7 +60,25 @@ export function getPositionName(position: number) {
   );
 }
 
-export function formatStageItemInput(winner_position: number, teamName: string) {
-  // @ts-ignore
-  return `${getPositionName(winner_position)} of ${teamName}`;
+export function formatStageItemInputTentative(
+  stage_item_input: StageItemInput | StageItemInputOption,
+  stageItemsLookup: any
+) {
+  assert(
+    stage_item_input.winner_from_stage_item_id != null && stage_item_input.winner_position != null
+  );
+  return `${getPositionName(stage_item_input.winner_position)} of ${stageItemsLookup[stage_item_input.winner_from_stage_item_id].name}`;
+}
+
+export function formatStageItemInput(
+  stage_item_input: StageItemInput | null,
+  stageItemsLookup: any
+) {
+  if (stage_item_input == null) return null;
+  if (stage_item_input?.team != null) return stage_item_input.team.name;
+  if (stage_item_input?.winner_from_stage_item_id != null) {
+    assert(stage_item_input.winner_position != null);
+    return formatStageItemInputTentative(stage_item_input, stageItemsLookup);
+  }
+  return null;
 }

@@ -93,7 +93,6 @@ rounds = Table(
     Column("name", Text, nullable=False),
     Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
     Column("is_draft", Boolean, nullable=False),
-    Column("is_active", Boolean, nullable=False, server_default="false"),
     Column("stage_item_id", BigInteger, ForeignKey("stage_items.id"), nullable=False),
 )
 

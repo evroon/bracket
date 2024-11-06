@@ -1,16 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
+from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
 from bracket.logic.planning.rounds import (
     MatchTimingAdjustmentInfeasible,
-    get_active_and_next_rounds,
+    get_draft_round,
     schedule_all_matches_for_swiss_round,
 )
 from bracket.logic.scheduling.builder import (
     build_matches_for_stage_item,
 )
+from bracket.logic.scheduling.upcoming_matches import get_upcoming_matches_for_swiss
 from bracket.logic.subscriptions import check_requirement
+from bracket.models.db.match import MatchCreateBody, MatchFilter, SuggestedMatch
+from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import (
     StageItemActivateNextBody,
     StageItemCreateBody,
@@ -23,12 +27,20 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse
 from bracket.routes.util import stage_item_dependency
-from bracket.sql.rounds import set_round_active_or_draft
+from bracket.sql.courts import get_all_courts_in_tournament
+from bracket.sql.matches import sql_create_match
+from bracket.sql.rounds import (
+    get_next_round_name,
+    get_round_by_id,
+    set_round_active_or_draft,
+    sql_create_round,
+)
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
     sql_create_stage_item_with_empty_inputs,
 )
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.errors import (
     ForeignKey,
@@ -109,21 +121,85 @@ async def start_next_round(
     stage_item_id: StageItemId,
     active_next_body: StageItemActivateNextBody,
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
-    _: UserPublic = Depends(user_authenticated_for_tournament),
+    user: UserPublic = Depends(user_authenticated_for_tournament),
+    elo_diff_threshold: int = 100,
+    iterations: int = 200,
+    only_recommended: bool = False,
 ) -> SuccessResponse:
-    __, next_round = get_active_and_next_rounds(stage_item)
-    if next_round is None:
+    draft_round = get_draft_round(stage_item)
+    if draft_round is not None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=(
-                "There is no next round in this stage item, please create one "
-                "(after the current active round if there is an active round)"
+            detail="There is already a draft round in this stage item, please delete it first",
+        )
+
+    match_filter = MatchFilter(
+        elo_diff_threshold=elo_diff_threshold,
+        only_recommended=only_recommended,
+        limit=1,
+        iterations=iterations,
+    )
+    all_matches_to_schedule = await get_upcoming_matches_for_swiss(
+        match_filter, stage_item, tournament_id
+    )
+    if len(all_matches_to_schedule) < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No more matches to schedule, all combinations of teams have been added already",
+        )
+
+    stages = await get_full_tournament_details(tournament_id)
+    existing_rounds = [
+        round_
+        for stage in stages
+        for stage_item in stage.stage_items
+        for round_ in stage_item.rounds
+    ]
+    check_requirement(existing_rounds, user, "max_rounds")
+
+    round_id = await sql_create_round(
+        RoundInsertable(
+            created=datetime_utc.now(),
+            is_draft=True,
+            stage_item_id=stage_item_id,
+            name=await get_next_round_name(tournament_id, stage_item_id),
+        ),
+    )
+    draft_round = await get_round_by_id(tournament_id, round_id)
+    tournament = await sql_get_tournament(tournament_id)
+    courts = await get_all_courts_in_tournament(tournament_id)
+
+    limit = len(courts) - len(draft_round.matches)
+    for ___ in range(limit):
+        all_matches_to_schedule = await get_upcoming_matches_for_swiss(
+            match_filter, stage_item, tournament_id
+        )
+        if len(all_matches_to_schedule) < 1:
+            break
+
+        match = all_matches_to_schedule[0]
+        assert isinstance(match, SuggestedMatch)
+
+        assert draft_round.id and match.stage_item_input1.id and match.stage_item_input2.id
+        await sql_create_match(
+            MatchCreateBody(
+                round_id=draft_round.id,
+                stage_item_input1_id=match.stage_item_input1.id,
+                stage_item_input2_id=match.stage_item_input2.id,
+                court_id=None,
+                stage_item_input1_winner_from_match_id=None,
+                stage_item_input2_winner_from_match_id=None,
+                duration_minutes=tournament.duration_minutes,
+                margin_minutes=tournament.margin_minutes,
+                custom_duration_minutes=None,
+                custom_margin_minutes=None,
             ),
         )
 
+    draft_round = await get_round_by_id(tournament_id, round_id)
     try:
         await schedule_all_matches_for_swiss_round(
-            tournament_id, next_round, active_next_body.adjust_to_time
+            tournament_id, draft_round, active_next_body.adjust_to_time
         )
     except MatchTimingAdjustmentInfeasible as exc:
         raise HTTPException(
@@ -131,7 +207,6 @@ async def start_next_round(
             detail=str(exc),
         ) from exc
 
-    assert next_round.id is not None
-    await set_round_active_or_draft(next_round.id, tournament_id, is_active=True, is_draft=False)
+    await set_round_active_or_draft(draft_round.id, tournament_id, is_draft=False)
 
     return SuccessResponse()

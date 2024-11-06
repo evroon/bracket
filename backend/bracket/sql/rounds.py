@@ -8,8 +8,8 @@ from bracket.utils.id_types import RoundId, StageItemId, TournamentId
 
 async def sql_create_round(round_: RoundInsertable) -> RoundId:
     query = """
-        INSERT INTO rounds (created, is_draft, is_active, name, stage_item_id)
-        VALUES (NOW(), :is_draft, :is_active, :name, :stage_item_id)
+        INSERT INTO rounds (created, is_draft, name, stage_item_id)
+        VALUES (NOW(), :is_draft, :name, :stage_item_id)
         RETURNING id
         """
     result: RoundId = await database.fetch_val(
@@ -17,7 +17,6 @@ async def sql_create_round(round_: RoundInsertable) -> RoundId:
         values={
             "name": round_.name,
             "is_draft": round_.is_draft,
-            "is_active": round_.is_active,
             "stage_item_id": round_.stage_item_id,
         },
     )
@@ -37,9 +36,7 @@ async def get_rounds_for_stage_item(
     return stage_item.rounds
 
 
-async def get_round_by_id(
-    tournament_id: TournamentId, round_id: RoundId
-) -> RoundWithMatches | None:
+async def get_round_by_id(tournament_id: TournamentId, round_id: RoundId) -> RoundWithMatches:
     stages = await get_full_tournament_details(
         tournament_id, no_draft_rounds=False, round_id=round_id
     )
@@ -50,7 +47,7 @@ async def get_round_by_id(
                 if round_ is not None:
                     return round_
 
-    return None
+    raise ValueError(f"Could not find round with id {round_id} for tournament {tournament_id}")
 
 
 async def get_next_round_name(tournament_id: TournamentId, stage_item_id: StageItemId) -> str:
@@ -78,7 +75,7 @@ async def sql_delete_rounds_for_stage_item_id(stage_item_id: StageItemId) -> Non
 
 
 async def set_round_active_or_draft(
-    round_id: RoundId, tournament_id: TournamentId, *, is_active: bool, is_draft: bool
+    round_id: RoundId, tournament_id: TournamentId, *, is_draft: bool
 ) -> None:
     query = """
         UPDATE rounds
@@ -86,10 +83,6 @@ async def set_round_active_or_draft(
             is_draft =
                 CASE WHEN rounds.id=:round_id THEN :is_draft
                      ELSE is_draft AND NOT :is_draft
-                END,
-            is_active =
-                CASE WHEN rounds.id=:round_id THEN :is_active
-                     ELSE is_active AND NOT :is_active
                 END
         WHERE rounds.id IN (
             SELECT rounds.id
@@ -104,7 +97,6 @@ async def set_round_active_or_draft(
         values={
             "tournament_id": tournament_id,
             "round_id": round_id,
-            "is_active": is_active,
             "is_draft": is_draft,
         },
     )

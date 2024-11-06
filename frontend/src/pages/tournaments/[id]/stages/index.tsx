@@ -15,6 +15,7 @@ import { StageWithStageItems } from '../../../../interfaces/stage';
 import {
   getAvailableStageItemInputs,
   getRankings,
+  getRankingsPerStageItem,
   getStages,
   getTournamentById,
 } from '../../../../services/adapter';
@@ -27,6 +28,7 @@ export default function StagesPage() {
   const swrRankingsResponse = getRankings(tournamentData.id);
   const swrTournamentResponse = getTournamentById(tournamentData.id);
   const swrAvailableInputsResponse = getAvailableStageItemInputs(tournamentData.id);
+  const swrRankingsPerStageItemResponse = getRankingsPerStageItem(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
   const rankings: Ranking[] = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
@@ -59,10 +61,12 @@ export default function StagesPage() {
           <ActivatePreviousStageModal
             tournamentId={tournamentData.id}
             swrStagesResponse={swrStagesResponse}
+            swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
           />
           <ActivateNextStageModal
             tournamentId={tournamentData.id}
             swrStagesResponse={swrStagesResponse}
+            swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
           />
         </Group>
         <Group mt="1rem" align="top">
@@ -70,6 +74,7 @@ export default function StagesPage() {
             tournament={tournamentDataFull}
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
+            swrRankingsPerStageItemResponse={swrRankingsPerStageItemResponse}
             rankings={rankings}
           />
         </Group>

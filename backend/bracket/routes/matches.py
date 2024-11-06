@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from starlette import status
 
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import (
@@ -12,7 +13,7 @@ from bracket.logic.ranking.elo import (
 )
 from bracket.logic.scheduling.upcoming_matches import (
     get_draft_round_in_stage_item,
-    get_upcoming_matches_for_swiss_round,
+    get_upcoming_matches_for_swiss,
 )
 from bracket.models.db.match import (
     Match,
@@ -21,7 +22,6 @@ from bracket.models.db.match import (
     MatchCreateBodyFrontend,
     MatchFilter,
     MatchRescheduleBody,
-    SuggestedMatch,
 )
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
@@ -60,10 +60,13 @@ async def get_matches_to_schedule(
     )
 
     draft_round, stage_item = await get_draft_round_in_stage_item(tournament_id, stage_item_id)
+    courts = await get_all_courts_in_tournament(tournament_id)
+    if len(courts) <= len(draft_round.matches):
+        return UpcomingMatchesResponse(data=[])
 
     return UpcomingMatchesResponse(
-        data=await get_upcoming_matches_for_swiss_round(
-            match_filter, stage_item, draft_round, tournament_id
+        data=await get_upcoming_matches_for_swiss(
+            match_filter, stage_item, tournament_id, draft_round
         )
     )
 
@@ -75,10 +78,15 @@ async def delete_match(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     round_ = await get_round_by_id(tournament_id, match.round_id)
+    if not round_.is_draft:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only delete matches from draft rounds",
+        )
 
     await sql_delete_match(match.id)
 
-    await recalculate_ranking_for_stage_item_id(tournament_id, assert_some(round_).stage_item_id)
+    await recalculate_ranking_for_stage_item_id(tournament_id, round_.stage_item_id)
     return SuccessResponse()
 
 
@@ -90,6 +98,13 @@ async def create_match(
 ) -> SingleMatchResponse:
     # TODO: check this is a swiss stage item
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
+
+    round_ = await get_round_by_id(tournament_id, match_body.round_id)
+    if not round_.is_draft:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only delete matches from draft rounds",
+        )
 
     tournament = await sql_get_tournament(tournament_id)
     body_with_durations = MatchCreateBody(
@@ -127,59 +142,6 @@ async def reschedule_match(
     return SuccessResponse()
 
 
-@router.post(
-    "/tournaments/{tournament_id}/stage_items/{stage_item_id}/schedule_auto",
-    response_model=SuccessResponse,
-)
-async def create_matches_automatically(
-    tournament_id: TournamentId,
-    stage_item_id: StageItemId,
-    elo_diff_threshold: int = 100,
-    iterations: int = 200,
-    only_recommended: bool = False,
-    _: UserPublic = Depends(user_authenticated_for_tournament),
-) -> SuccessResponse:
-    match_filter = MatchFilter(
-        elo_diff_threshold=elo_diff_threshold,
-        only_recommended=only_recommended,
-        limit=1,
-        iterations=iterations,
-    )
-
-    draft_round, stage_item = await get_draft_round_in_stage_item(tournament_id, stage_item_id)
-    courts = await get_all_courts_in_tournament(tournament_id)
-    tournament = await sql_get_tournament(tournament_id)
-
-    limit = len(courts) - len(draft_round.matches)
-    for __ in range(limit):
-        all_matches_to_schedule = await get_upcoming_matches_for_swiss_round(
-            match_filter, stage_item, draft_round, tournament_id
-        )
-        if len(all_matches_to_schedule) < 1:
-            break
-
-        match = all_matches_to_schedule[0]
-        assert isinstance(match, SuggestedMatch)
-
-        assert draft_round.id and match.stage_item_input1.id and match.stage_item_input2.id
-        await sql_create_match(
-            MatchCreateBody(
-                round_id=draft_round.id,
-                stage_item_input1_id=match.stage_item_input1.id,
-                stage_item_input2_id=match.stage_item_input2.id,
-                court_id=None,
-                stage_item_input1_winner_from_match_id=None,
-                stage_item_input2_winner_from_match_id=None,
-                duration_minutes=tournament.duration_minutes,
-                margin_minutes=tournament.margin_minutes,
-                custom_duration_minutes=None,
-                custom_margin_minutes=None,
-            ),
-        )
-
-    return SuccessResponse()
-
-
 @router.put("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
 async def update_match_by_id(
     tournament_id: TournamentId,
@@ -194,7 +156,7 @@ async def update_match_by_id(
     await sql_update_match(match_id, match_body, tournament)
 
     round_ = await get_round_by_id(tournament_id, match.round_id)
-    await recalculate_ranking_for_stage_item_id(tournament_id, assert_some(round_).stage_item_id)
+    await recalculate_ranking_for_stage_item_id(tournament_id, round_.stage_item_id)
 
     if (
         match_body.custom_duration_minutes != match.custom_duration_minutes

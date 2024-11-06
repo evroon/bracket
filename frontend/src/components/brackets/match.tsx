@@ -1,4 +1,5 @@
 import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { useColorScheme } from '@mantine/hooks';
 import assert from 'assert';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
@@ -9,6 +10,7 @@ import {
   formatMatchInput2,
   isMatchHappening,
 } from '../../interfaces/match';
+import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
@@ -17,7 +19,7 @@ import classes from './match.module.css';
 
 export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
   const visibility = match.court ? 'visible' : 'hidden';
-  const badgeColor = theme.colorScheme === 'dark' ? theme.colors.blue[7] : theme.colors.blue[7];
+  const badgeColor = useColorScheme() ? theme.colors.blue[7] : theme.colors.blue[7];
   return (
     <Center style={{ transform: 'translateY(0%)', visibility }}>
       <div
@@ -45,19 +47,18 @@ export default function Match({
   tournamentData,
   match,
   readOnly,
-  dynamicSchedule,
+  round,
 }: {
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
   readOnly: boolean;
-  dynamicSchedule: boolean;
+
+  round: RoundInterface;
 }) {
-  // const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
-    // backgroundColor: theme.colorScheme === 'dark' ? theme.colors.green[9] : theme.colors.green[4],
     backgroundColor: theme.colors.green[9],
   };
 
@@ -110,7 +111,7 @@ export default function Match({
         match={match}
         opened={opened}
         setOpened={setOpened}
-        dynamicSchedule={dynamicSchedule}
+        round={round}
       />
     </>
   );

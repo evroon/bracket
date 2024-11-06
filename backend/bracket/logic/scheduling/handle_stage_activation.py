@@ -1,8 +1,13 @@
+from collections import defaultdict
+
+from pydantic import BaseModel
+
 from bracket.logic.ranking.elo import (
     determine_team_ranking_for_stage_item,
 )
 from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.stage_item_inputs import StageItemInputFinal, StageItemInputTentative
+from bracket.models.db.team import Team
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.rankings import get_ranking_for_stage_item
 from bracket.sql.stage_item_inputs import (
@@ -19,6 +24,11 @@ from bracket.utils.id_types import (
 from bracket.utils.types import assert_some
 
 StageItemXTeamRanking = dict[StageItemId, list[tuple[StageItemInputId, TeamStatistics]]]
+
+
+class StageItemInputUpdate(BaseModel):
+    stage_item_input: StageItemInputTentative
+    team: Team
 
 
 def determine_team_id(
@@ -41,11 +51,11 @@ def determine_team_id(
     return team_ranking[winner_position - 1][0]
 
 
-async def set_team_ids_for_input(
+async def get_team_update_for_input(
     tournament_id: TournamentId,
     stage_item_input: StageItemInputTentative,
     stage_item_x_team_rankings: StageItemXTeamRanking,
-) -> None:
+) -> StageItemInputUpdate:
     target_stage_item_input_id = determine_team_id(
         stage_item_input.winner_from_stage_item_id,
         stage_item_input.winner_position,
@@ -55,22 +65,9 @@ async def set_team_ids_for_input(
         tournament_id, target_stage_item_input_id
     )
     assert isinstance(target_stage_item_input, StageItemInputFinal)
-    await sql_set_team_id_for_stage_item_input(
-        tournament_id, stage_item_input.id, target_stage_item_input.team_id
+    return StageItemInputUpdate(
+        stage_item_input=stage_item_input, team=target_stage_item_input.team
     )
-
-
-async def get_team_rankings_lookup_for_stage(
-    tournament_id: TournamentId, stage: StageWithStageItems
-) -> StageItemXTeamRanking:
-    stage_items = {stage_item.id: stage_item for stage_item in stage.stage_items}
-    return {
-        stage_item_id: determine_team_ranking_for_stage_item(
-            stage_item,
-            assert_some(await get_ranking_for_stage_item(tournament_id, stage_item.id)),
-        )
-        for stage_item_id, stage_item in stage_items.items()
-    }
 
 
 async def get_team_rankings_lookup_for_tournament(
@@ -88,9 +85,11 @@ async def get_team_rankings_lookup_for_tournament(
     }
 
 
-async def update_matches_in_activated_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
+async def get_updates_to_inputs_in_activated_stage(
+    tournament_id: TournamentId, stage_id: StageId
+) -> dict[StageItemId, list[StageItemInputUpdate]]:
     """
-    Sets the team_id for stage item inputs of the newly activated stage.
+    Gets the team_id updates for stage item inputs of the newly activated stage.
     """
     stages = await get_full_tournament_details(tournament_id)
     team_rankings_per_stage_item = await get_team_rankings_lookup_for_tournament(
@@ -99,12 +98,30 @@ async def update_matches_in_activated_stage(tournament_id: TournamentId, stage_i
     activated_stage = next((stage for stage in stages if stage.id == stage_id), None)
     assert activated_stage
 
+    result = defaultdict(list)
+
     for stage_item in activated_stage.stage_items:
         for stage_item_input in stage_item.inputs:
             if isinstance(stage_item_input, StageItemInputTentative):
-                await set_team_ids_for_input(
-                    tournament_id, stage_item_input, team_rankings_per_stage_item
+                result[stage_item.id].append(
+                    await get_team_update_for_input(
+                        tournament_id, stage_item_input, team_rankings_per_stage_item
+                    )
                 )
+
+    return dict(result)
+
+
+async def update_matches_in_activated_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
+    """
+    Sets the team_id for stage item inputs of the newly activated stage.
+    """
+    updates_per_stage_item = await get_updates_to_inputs_in_activated_stage(tournament_id, stage_id)
+    for stage_item_updates in updates_per_stage_item.values():
+        for update in stage_item_updates:
+            await sql_set_team_id_for_stage_item_input(
+                tournament_id, update.stage_item_input.id, update.team.id
+            )
 
 
 async def update_matches_in_deactivated_stage(

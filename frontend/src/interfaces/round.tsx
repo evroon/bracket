@@ -6,6 +6,5 @@ export interface RoundInterface {
   created: string;
   name: string;
   is_draft: boolean;
-  is_active: boolean;
   matches: MatchInterface[];
 }

@@ -1,16 +1,9 @@
-import {
-  ActionIcon,
-  Button,
-  Checkbox,
-  Modal,
-  TextInput,
-  Title,
-  UnstyledButton,
-} from '@mantine/core';
+import { ActionIcon, Button, Modal, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { LuConstruction } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
 import { RoundInterface } from '../../interfaces/round';
@@ -21,24 +14,21 @@ import DeleteButton from '../buttons/delete';
 function RoundDeleteButton({
   tournamentData,
   round,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrUpcomingMatchesResponse,
-  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
-  swrRoundsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
-  if (!dynamicSchedule) return null;
   return (
     <DeleteButton
       fullWidth
       onClick={async () => {
         await deleteRound(tournamentData.id, round.id);
-        await swrRoundsResponse.mutate();
+        await swrStagesResponse.mutate();
         if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
       }}
       style={{ marginTop: '15px' }}
@@ -51,15 +41,13 @@ function RoundDeleteButton({
 export default function RoundModal({
   tournamentData,
   round,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrUpcomingMatchesResponse,
-  dynamicSchedule,
 }: {
   tournamentData: TournamentMinimal;
   round: RoundInterface;
-  swrRoundsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
-  dynamicSchedule: boolean;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -67,8 +55,6 @@ export default function RoundModal({
   const form = useForm({
     initialValues: {
       name: round == null ? '' : round.name,
-      is_active: round == null ? true : round.is_active,
-      is_draft: round == null ? true : round.is_draft,
     },
 
     validate: {
@@ -81,8 +67,8 @@ export default function RoundModal({
       <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_round')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
-            await updateRound(tournamentData.id, round.id, values as RoundInterface);
-            await swrRoundsResponse.mutate();
+            await updateRound(tournamentData.id, round.id, values.name, round.is_draft);
+            await swrStagesResponse.mutate();
             setOpened(false);
           })}
         >
@@ -92,26 +78,31 @@ export default function RoundModal({
             placeholder={t('round_name_input_placeholder')}
             {...form.getInputProps('name')}
           />
-          <Checkbox
-            mt="md"
-            label={t('active_round_checkbox_label')}
-            {...form.getInputProps('is_active', { type: 'checkbox' })}
-          />
-          <Checkbox
-            mt="md"
-            label={t('draft_round_checkbox_label')}
-            {...form.getInputProps('is_draft', { type: 'checkbox' })}
-          />
-          <Button fullWidth style={{ marginTop: 20 }} color="green" type="submit">
+          <Button fullWidth mt="1rem" color="green" type="submit">
             {t('save_button')}
           </Button>
         </form>
+        <Button
+          fullWidth
+          mt="1rem"
+          color="yellow"
+          variant="outline"
+          disabled={round.is_draft}
+          leftSection={<LuConstruction />}
+          onClick={async () => {
+            await updateRound(tournamentData.id, round.id, round.name, true);
+            await swrStagesResponse.mutate();
+            if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
+            setOpened(false);
+          }}
+        >
+          {t('mark_round_as_draft')}
+        </Button>
         <RoundDeleteButton
-          swrRoundsResponse={swrRoundsResponse}
+          swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           tournamentData={tournamentData}
           round={round}
-          dynamicSchedule={dynamicSchedule}
         />
       </Modal>
 

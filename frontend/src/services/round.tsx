@@ -1,4 +1,3 @@
-import { RoundInterface } from '../interfaces/round';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createRound(tournament_id: number, stage_item_id: number) {
@@ -9,31 +8,20 @@ export async function createRound(tournament_id: number, stage_item_id: number) 
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function createMatchesAuto(
-  tournament_id: number,
-  stage_item_id: number,
-  elo_diff_threshold: number,
-  only_recommended: string,
-  iterations: number
-) {
-  return createAxios()
-    .post(`tournaments/${tournament_id}/stage_items/${stage_item_id}/schedule_auto`, {
-      elo_diff_threshold,
-      only_recommended,
-      iterations,
-    })
-    .catch((response: any) => handleRequestError(response));
-}
-
 export async function deleteRound(tournament_id: number, round_id: number) {
   return createAxios()
     .delete(`tournaments/${tournament_id}/rounds/${round_id}`)
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function updateRound(tournament_id: number, round_id: number, round: RoundInterface) {
+export async function updateRound(
+  tournament_id: number,
+  round_id: number,
+  name: string,
+  is_draft: boolean
+) {
   return createAxios()
-    .put(`tournaments/${tournament_id}/rounds/${round_id}`, round)
+    .put(`tournaments/${tournament_id}/rounds/${round_id}`, { name, is_draft })
     .catch((response: any) => handleRequestError(response));
 }
 

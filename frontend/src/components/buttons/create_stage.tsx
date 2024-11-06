@@ -11,10 +11,12 @@ export default function CreateStageButton({
   tournament,
   swrStagesResponse,
   swrAvailableInputsResponse,
+  swrRankingsPerStageItemResponse,
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
 
@@ -28,6 +30,7 @@ export default function CreateStageButton({
         await createStage(tournament.id);
         await swrStagesResponse.mutate();
         await swrAvailableInputsResponse.mutate();
+        await swrRankingsPerStageItemResponse.mutate();
       }}
       leftSection={<GoPlus size={24} />}
     >

@@ -50,7 +50,9 @@ async def test_create_match(
             )
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(
+                update={"stage_item_id": stage_item_inserted.id, "is_draft": True}
+            )
         ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
@@ -71,7 +73,7 @@ async def test_create_match(
         response = await send_tournament_request(
             HTTPMethod.POST, "matches", auth_context, json=body
         )
-        assert response["data"]["id"]
+        assert response["data"]["id"], response
 
         await assert_row_count_and_clear(matches, 1)
 
@@ -89,7 +91,9 @@ async def test_delete_match(
             )
         ) as stage_item_inserted,
         inserted_round(
-            DUMMY_ROUND1.model_copy(update={"stage_item_id": stage_item_inserted.id})
+            DUMMY_ROUND1.model_copy(
+                update={"stage_item_id": stage_item_inserted.id, "is_draft": True}
+            )
         ) as round_inserted,
         inserted_team(
             DUMMY_TEAM1.model_copy(update={"tournament_id": auth_context.tournament.id})
@@ -315,6 +319,9 @@ async def test_upcoming_matches_endpoint(
                 }
             )
         ) as stage_item_inserted,
+        inserted_court(
+            DUMMY_COURT1.model_copy(update={"tournament_id": auth_context.tournament.id})
+        ),
         inserted_round(
             DUMMY_ROUND1.model_copy(
                 update={

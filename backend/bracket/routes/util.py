@@ -34,14 +34,7 @@ async def round_dependency(tournament_id: TournamentId, round_id: RoundId) -> Ro
 async def round_with_matches_dependency(
     tournament_id: TournamentId, round_id: RoundId
 ) -> RoundWithMatches:
-    round_ = await get_round_by_id(tournament_id, round_id)
-    if round_ is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Could not find round with id {round_id}",
-        )
-
-    return round_
+    return await get_round_by_id(tournament_id, round_id)
 
 
 async def stage_dependency(tournament_id: TournamentId, stage_id: StageId) -> StageWithStageItems:

@@ -8,7 +8,6 @@ class RoundInsertable(BaseModelORM):
     created: datetime_utc
     stage_item_id: StageItemId
     is_draft: bool
-    is_active: bool = False
     name: str
 
 
@@ -19,7 +18,6 @@ class Round(RoundInsertable):
 class RoundUpdateBody(BaseModelORM):
     name: str
     is_draft: bool
-    is_active: bool
 
 
 class RoundCreateBody(BaseModelORM):
