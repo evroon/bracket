@@ -45,8 +45,8 @@ export default function UpcomingMatchesTable({
       upcoming_match.stage_item_input2.id != null
     ) {
       const match_to_schedule: MatchCreateBodyInterface = {
-        team1_id: upcoming_match.stage_item_input1.id,
-        team2_id: upcoming_match.stage_item_input2.id,
+        stage_item_input1_id: upcoming_match.stage_item_input1.id,
+        stage_item_input2_id: upcoming_match.stage_item_input2.id,
         round_id: draftRound.id,
         label: '',
       };
@@ -81,7 +81,7 @@ export default function UpcomingMatchesTable({
             color="green"
             size="xs"
             style={{ marginRight: 10 }}
-            onClick={() => scheduleMatch(upcoming_match)}
+            onClick={async () => await scheduleMatch(upcoming_match)}
             leftSection={<IconCalendarPlus size={20} />}
           >
             {t('schedule_title')}

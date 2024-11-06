@@ -52,8 +52,8 @@ export interface UpcomingMatchInterface {
 
 export interface MatchCreateBodyInterface {
   round_id: number;
-  team1_id: number;
-  team2_id: number;
+  stage_item_input1_id: number;
+  stage_item_input2_id: number;
   label: string;
 }
 
