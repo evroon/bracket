@@ -43,6 +43,9 @@ class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     winner_from_stage_item_id: StageItemId
     winner_position: int = Field(ge=1)
 
+    def get_lookup_key(self) -> tuple[StageItemId, int]:
+        return self.winner_from_stage_item_id, self.winner_position
+
 
 class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: TeamId

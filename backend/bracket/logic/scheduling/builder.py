@@ -11,8 +11,10 @@ from bracket.logic.scheduling.round_robin import (
 from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import StageItem, StageType
 from bracket.models.db.stage_item_inputs import (
+    StageItemInputFinal,
     StageItemInputOptionFinal,
     StageItemInputOptionTentative,
+    StageItemInputTentative,
 )
 from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
@@ -79,44 +81,51 @@ def determine_available_inputs(
 
     Inputs are either from:
     - Teams directly
-    - Previous ROUND_ROBIN stage items
+    - Previous ROUND_ROBIN or SWISS stage items (tentative options)
     """
-    results_team_ids = {team.id: False for team in teams}
+    all_team_options = {
+        team.id: StageItemInputOptionFinal(team_id=team.id, already_taken=False) for team in teams
+    }
+    # Add inputs from non-elimination stage items that can be used in the next stage.
+    # Elimination stage items have no "outputs" but are final.
+    all_tentative_options = {
+        (stage_item.id, winner_position): StageItemInputOptionTentative(
+            winner_from_stage_item_id=stage_item.id,
+            winner_position=winner_position,
+            already_taken=False,
+        )
+        for stage in stages
+        for stage_item in stage.stage_items
+        if stage_item.type in {StageType.ROUND_ROBIN, StageType.SWISS}
+        for winner_position in range(1, 5)
+    }
+
+    # Determine which inputs have been used (set `already_taken` to True)
+    for stage in stages:
+        for stage_item in stage.stage_items:
+            for input_ in stage_item.inputs:
+                match input_:
+                    case StageItemInputFinal() as final if input_.team_id in all_team_options:
+                        all_team_options[final.team_id].already_taken = True
+
+                    case StageItemInputTentative() as tentative:
+                        if (key := tentative.get_lookup_key()) in all_tentative_options:
+                            all_tentative_options[key].already_taken = True
+
+    # Loop through stage items once more to assemble the final results and make sure
+    # tentative inputs are only available after the stage item that they originate from.
+    # We start with all teams but not tentative inputs.
+    results_teams = all_team_options.copy()
     results_tentative: dict[tuple[StageItemId, int], StageItemInputOptionTentative] = {}
     results = {}
 
     for stage in stages:
-        # First, set options that are used in this round to have `already_taken=True`
+        results[stage.id] = list(results_teams.values()) + list(results_tentative.values())
+
+        # Add options for subsequent stage items for the tentative "outputs" from this round
         for stage_item in stage.stage_items:
-            for input_ in stage_item.inputs:
-                if input_.team_id is not None and input_.team_id in results_team_ids:
-                    results_team_ids[input_.team_id] = True
-
-                if (
-                    input_.winner_from_stage_item_id is not None
-                    and input_.winner_position is not None
-                    and (key := (input_.winner_from_stage_item_id, input_.winner_position))
-                    in results_tentative
-                ):
-                    results_tentative[key].already_taken = True
-
-        # Store results for this stage
-        results_final = [
-            StageItemInputOptionFinal(team_id=team_id, already_taken=taken)
-            for team_id, taken in results_team_ids.items()
-        ]
-        results[stage.id] = results_final + list(results_tentative.values())
-
-        # Then, add inputs from non-elimination stage items that can be used in the next stage.
-        for stage_item in stage.stage_items:
-            if stage_item.type in {StageType.ROUND_ROBIN, StageType.SWISS}:
-                for winner_position in range(1, 5):
-                    results_tentative[(stage_item.id, winner_position)] = (
-                        StageItemInputOptionTentative(
-                            winner_from_stage_item_id=stage_item.id,
-                            winner_position=winner_position,
-                            already_taken=False,
-                        )
-                    )
+            for (option_stage_item_id, option_win_pos), option in all_tentative_options.items():
+                if option_stage_item_id == stage_item.id:
+                    results_tentative[(option_stage_item_id, option_win_pos)] = option
 
     return results
