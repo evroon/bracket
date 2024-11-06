@@ -281,6 +281,7 @@ export default function SchedulePage() {
           match={match}
           opened={modalOpened}
           setOpened={modalSetOpened}
+          round={null}
         />
       ) : null}
       <Grid grow>

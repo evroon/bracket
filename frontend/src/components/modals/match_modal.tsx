@@ -10,6 +10,7 @@ import {
   formatMatchInput1,
   formatMatchInput2,
 } from '../../interfaces/match';
+import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
@@ -48,12 +49,14 @@ function MatchModalForm({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   setOpened,
+  round,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface | null;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   setOpened: any;
+  round: RoundInterface | null;
 }) {
   if (match == null) {
     return null;
@@ -181,12 +184,14 @@ function MatchModalForm({
           {t('save_button')}
         </Button>
       </form>
-      <MatchDeleteButton
-        swrRoundsResponse={swrStagesResponse}
-        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-        tournamentData={tournamentData}
-        match={match}
-      />
+      {round && round.is_draft && (
+        <MatchDeleteButton
+          swrRoundsResponse={swrStagesResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          tournamentData={tournamentData}
+          match={match}
+        />
+      )}
     </>
   );
 }
@@ -198,6 +203,7 @@ export default function MatchModal({
   swrUpcomingMatchesResponse,
   opened,
   setOpened,
+  round,
 }: {
   tournamentData: TournamentMinimal;
   match: MatchInterface | null;
@@ -205,6 +211,7 @@ export default function MatchModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
+  round: RoundInterface | null;
 }) {
   const { t } = useTranslation();
 
@@ -217,6 +224,7 @@ export default function MatchModal({
           tournamentData={tournamentData}
           match={match}
           setOpened={setOpened}
+          round={round}
         />
       </Modal>
     </>

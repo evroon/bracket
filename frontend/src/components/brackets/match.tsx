@@ -10,6 +10,7 @@ import {
   formatMatchInput2,
   isMatchHappening,
 } from '../../interfaces/match';
+import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
@@ -46,14 +47,16 @@ export default function Match({
   tournamentData,
   match,
   readOnly,
+  round,
 }: {
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
   match: MatchInterface;
   readOnly: boolean;
+
+  round: RoundInterface;
 }) {
-  // const { classes } = useStyles();
   const theme = useMantineTheme();
   const winner_style = {
     backgroundColor: theme.colors.green[9],
@@ -108,6 +111,7 @@ export default function Match({
         match={match}
         opened={opened}
         setOpened={setOpened}
+        round={round}
       />
     </>
   );

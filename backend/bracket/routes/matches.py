@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from starlette import status
 
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import (
@@ -77,6 +78,11 @@ async def delete_match(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     round_ = await get_round_by_id(tournament_id, match.round_id)
+    if not round_.is_draft:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only delete matches from draft rounds",
+        )
 
     await sql_delete_match(match.id)
 
@@ -92,6 +98,13 @@ async def create_match(
 ) -> SingleMatchResponse:
     # TODO: check this is a swiss stage item
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
+
+    round_ = await get_round_by_id(tournament_id, match_body.round_id)
+    if not round_.is_draft:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only delete matches from draft rounds",
+        )
 
     tournament = await sql_get_tournament(tournament_id)
     body_with_durations = MatchCreateBody(

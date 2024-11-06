@@ -46,6 +46,7 @@ export default function Round({
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         match={match}
         readOnly={readOnly}
+        round={round}
       />
     ));
   const active_round_style = round.is_draft
