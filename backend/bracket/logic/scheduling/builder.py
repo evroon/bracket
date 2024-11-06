@@ -18,7 +18,7 @@ from bracket.models.db.team import FullTeamWithPlayers
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.rounds import get_next_round_name, sql_create_round
 from bracket.sql.stage_items import get_stage_item
-from bracket.utils.id_types import StageId, TournamentId
+from bracket.utils.id_types import StageId, StageItemId, TournamentId
 from tests.integration_tests.mocks import MOCK_NOW
 
 
@@ -71,10 +71,9 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: Tou
 
 
 def determine_available_inputs(
-    stage_id: StageId,
     teams: list[FullTeamWithPlayers],
     stages: list[StageWithStageItems],
-) -> list[StageItemInputOptionTentative | StageItemInputOptionFinal]:
+) -> dict[StageId, list[StageItemInputOptionTentative | StageItemInputOptionFinal]]:
     """
     Returns available inputs for the given stage.
 
@@ -83,35 +82,41 @@ def determine_available_inputs(
     - Previous ROUND_ROBIN stage items
     """
     results_team_ids = {team.id: False for team in teams}
-    results_tentative = []
+    results_tentative: dict[tuple[StageItemId, int], StageItemInputOptionTentative] = {}
+    results = {}
 
     for stage in stages:
+        # First, set options that are used in this round to have `already_taken=True`
         for stage_item in stage.stage_items:
-            item_team_id_inputs = [
-                input.team_id for input in stage_item.inputs if input.team_id is not None
-            ]
-            for input_ in item_team_id_inputs:
-                if input_ in results_team_ids:
-                    if stage_id != stage.id:
-                        results_team_ids.pop(input_)
-                    else:
-                        results_team_ids[input_] = True
+            for input_ in stage_item.inputs:
+                if input_.team_id is not None and input_.team_id in results_team_ids:
+                    results_team_ids[input_.team_id] = True
 
-        if stage_id == stage.id:
-            break
+                if (
+                    input_.winner_from_stage_item_id is not None
+                    and input_.winner_position is not None
+                    and (key := (input_.winner_from_stage_item_id, input_.winner_position))
+                    in results_tentative
+                ):
+                    results_tentative[key].already_taken = True
 
+        # Store results for this stage
+        results_final = [
+            StageItemInputOptionFinal(team_id=team_id, already_taken=taken)
+            for team_id, taken in results_team_ids.items()
+        ]
+        results[stage.id] = results_final + list(results_tentative.values())
+
+        # Then, add inputs from non-elimination stage items that can be used in the next stage.
         for stage_item in stage.stage_items:
-            for winner_position in range(1, 5):
-                results_tentative.append(
-                    StageItemInputOptionTentative(
-                        winner_from_stage_item_id=stage_item.id,
-                        winner_position=winner_position,
-                        already_taken=False,
+            if stage_item.type in {StageType.ROUND_ROBIN, StageType.SWISS}:
+                for winner_position in range(1, 5):
+                    results_tentative[(stage_item.id, winner_position)] = (
+                        StageItemInputOptionTentative(
+                            winner_from_stage_item_id=stage_item.id,
+                            winner_position=winner_position,
+                            already_taken=False,
+                        )
                     )
-                )
 
-    results_final = [
-        StageItemInputOptionFinal(team_id=team_id, already_taken=taken)
-        for team_id, taken in results_team_ids.items()
-    ]
-    return results_final + results_tentative
+    return results

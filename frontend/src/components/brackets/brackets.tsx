@@ -84,8 +84,12 @@ export function RoundsGridCols({
     return <NoRoundsAlert readOnly={readOnly} />;
   }
 
-  const items = stageItem.rounds
+  let result: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
+    .filter(
+      (round: RoundInterface) =>
+        round.matches.length > 0 || displaySettings.matchVisibility === 'all'
+    )
     .map((round: RoundInterface) => (
       <Round
         key={round.id}
@@ -98,24 +102,34 @@ export function RoundsGridCols({
       />
     ));
 
-  let result: React.JSX.Element[] | React.JSX.Element = items;
-
   if (result.length < 1) {
-    result = (
-      <Container mt="1rem">
-        <Stack align="center">
-          <NoContent title={t('no_round_description')} />
-          <AddRoundButton
-            t={t}
-            tournamentData={tournamentData}
-            stageItem={stageItem}
-            swrStagesResponse={swrStagesResponse}
-            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-            size="lg"
-          />
-        </Stack>
-      </Container>
-    );
+    if (stageItem.rounds.length < 1) {
+      result = (
+        <Container mt="1rem">
+          <Stack align="center">
+            <NoContent title={t('no_round_description')} />
+            {stageItem.rounds.length < 1 && (
+              <AddRoundButton
+                t={t}
+                tournamentData={tournamentData}
+                stageItem={stageItem}
+                swrStagesResponse={swrStagesResponse}
+                swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+                size="lg"
+              />
+            )}
+          </Stack>
+        </Container>
+      );
+    } else {
+      result = (
+        <Container mt="1rem">
+          <Stack align="center">
+            <NoContent title={t('no_round_found_title')} />
+          </Stack>
+        </Container>
+      );
+    }
   }
 
   const hideAddRoundButton = tournamentData == null || readOnly;
