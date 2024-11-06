@@ -95,12 +95,10 @@ def determine_available_inputs(
                 if (
                     input_.winner_from_stage_item_id is not None
                     and input_.winner_position is not None
-                    and (input_.winner_from_stage_item_id, input_.winner_position)
+                    and (key := (input_.winner_from_stage_item_id, input_.winner_position))
                     in results_tentative
                 ):
-                    results_tentative[
-                        (input_.winner_from_stage_item_id, input_.winner_position)
-                    ].already_taken = True
+                    results_tentative[key].already_taken = True
 
         # Store results for this stage
         results_final = [
