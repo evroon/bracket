@@ -81,7 +81,7 @@ export default function UpcomingMatchesTable({
             color="green"
             size="xs"
             style={{ marginRight: 10 }}
-            onClick={async () => await scheduleMatch(upcoming_match)}
+            onClick={async () => scheduleMatch(upcoming_match)}
             leftSection={<IconCalendarPlus size={20} />}
           >
             {t('schedule_title')}
