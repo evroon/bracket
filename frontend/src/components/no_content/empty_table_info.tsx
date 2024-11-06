@@ -2,7 +2,7 @@ import { Alert, Container, Text, Title } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import { MdOutlineConstruction } from 'react-icons/md';
+import { HiMiniWrenchScrewdriver } from 'react-icons/hi2';
 
 import classes from './empty_table_info.module.css';
 
@@ -39,7 +39,7 @@ export function NoContent({
 }) {
   return (
     <Container mt="md">
-      <div className={classes.label}>{icon || <MdOutlineConstruction />}</div>
+      <div className={classes.label}>{icon || <HiMiniWrenchScrewdriver />}</div>
       <Title className={classes.title}>{title}</Title>
       <Text size="lg" ta="center" className={classes.description}>
         {description}

@@ -70,10 +70,6 @@ export default function Round({
     />
   );
 
-  if (matches.length < 1 && displaySettings.matchVisibility !== 'all') {
-    return null;
-  }
-
   const item = (
     <div
       style={{

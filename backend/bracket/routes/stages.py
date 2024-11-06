@@ -145,10 +145,7 @@ async def get_available_inputs(
 ) -> StageItemInputOptionsResponse:
     stages = await get_full_tournament_details(tournament_id)
     teams = await get_teams_with_members(tournament_id)
-    available_inputs = {
-        stage.id: determine_available_inputs(stage.id, teams, stages) for stage in stages
-    }
-    return StageItemInputOptionsResponse(data=available_inputs)
+    return StageItemInputOptionsResponse(data=determine_available_inputs(teams, stages))
 
 
 @router.get("/tournaments/{tournament_id}/next_stage_rankings")

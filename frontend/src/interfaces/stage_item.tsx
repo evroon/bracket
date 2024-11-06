@@ -8,7 +8,6 @@ export interface StageItemWithRounds {
   name: string;
   type_name: string;
   team_count: number;
-  is_active: boolean;
   rounds: RoundInterface[];
   inputs: StageItemInput[];
   stage_id: number;
