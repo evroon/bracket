@@ -126,12 +126,13 @@ async def activate_next_stage(
     stages = await get_full_tournament_details(tournament_id)
     deactivated_stage = next((stage for stage in stages if stage.is_active), None)
 
-    await sql_activate_next_stage(new_active_stage_id, tournament_id)
     if stage_body.direction == "next":
         await update_matches_in_activated_stage(tournament_id, new_active_stage_id)
     else:
         if deactivated_stage:
             await update_matches_in_deactivated_stage(tournament_id, deactivated_stage)
+
+    await sql_activate_next_stage(new_active_stage_id, tournament_id)
     return SuccessResponse()
 
 

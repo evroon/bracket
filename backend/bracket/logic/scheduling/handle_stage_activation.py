@@ -1,12 +1,18 @@
 from collections import defaultdict
 
+from fastapi import HTTPException
 from pydantic import BaseModel
+from starlette import status
 
 from bracket.logic.ranking.elo import (
     determine_team_ranking_for_stage_item,
 )
 from bracket.logic.ranking.statistics import TeamStatistics
-from bracket.models.db.stage_item_inputs import StageItemInputFinal, StageItemInputTentative
+from bracket.models.db.stage_item_inputs import (
+    StageItemInputEmpty,
+    StageItemInputFinal,
+    StageItemInputTentative,
+)
 from bracket.models.db.team import Team
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.matches import clear_scores_for_matches_in_stage_item
@@ -65,7 +71,15 @@ async def get_team_update_for_input(
     target_stage_item_input = await get_stage_item_input_by_id(
         tournament_id, target_stage_item_input_id
     )
-    assert isinstance(target_stage_item_input, StageItemInputFinal)
+    if isinstance(target_stage_item_input, StageItemInputEmpty):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please first assign teams to all stage items in the current stage.",
+        )
+
+    assert isinstance(
+        target_stage_item_input, StageItemInputFinal
+    ), f"Unexpected stage item type: {type(target_stage_item_input)}"
     return StageItemInputUpdate(
         stage_item_input=stage_item_input, team=target_stage_item_input.team
     )

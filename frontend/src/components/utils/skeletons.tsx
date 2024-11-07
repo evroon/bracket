@@ -2,11 +2,15 @@ import { Center, Grid, Skeleton } from '@mantine/core';
 import React from 'react';
 
 export function GenericSkeleton() {
+  return <Skeleton height={75} radius="lg" mb="xl" />;
+}
+
+export function GenericSkeletonThreeRows() {
   return (
     <>
-      <Skeleton height={75} radius="lg" mb="xl" />
-      <Skeleton height={75} radius="lg" mb="xl" />
-      <Skeleton height={75} radius="lg" mb="xl" />
+      <GenericSkeleton />
+      <GenericSkeleton />
+      <GenericSkeleton />
     </>
   );
 }
