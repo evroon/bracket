@@ -97,7 +97,7 @@ def determine_available_inputs(
         for stage in stages
         for stage_item in stage.stage_items
         if stage_item.type in {StageType.ROUND_ROBIN, StageType.SWISS}
-        for winner_position in range(1, 5)
+        for winner_position in range(1, stage_item.team_count + 1)
     }
 
     # Determine which inputs have been used (set `already_taken` to True)
