@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.logic.ranking.elo import recalculate_ranking_for_stage_item_id
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.ranking import RankingBody, RankingCreateBody
 from bracket.models.db.user import UserPublic
@@ -17,6 +18,7 @@ from bracket.sql.rankings import (
     sql_delete_ranking,
     sql_update_ranking,
 )
+from bracket.sql.stage_item_inputs import get_stage_item_input_ids_by_ranking_id
 from bracket.utils.id_types import RankingId, TournamentId
 
 router = APIRouter()
@@ -42,6 +44,9 @@ async def update_ranking_by_id(
         ranking_id=ranking_id,
         ranking_body=ranking_body,
     )
+    stage_item_ids = await get_stage_item_input_ids_by_ranking_id(ranking_id)
+    for stage_item_id in stage_item_ids:
+        await recalculate_ranking_for_stage_item_id(tournament_id, stage_item_id)
     return SuccessResponse()
 
 

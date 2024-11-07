@@ -20,6 +20,7 @@ export function getTeamsLookup(tournamentId: number) {
 
 export function getStageItemLookup(swrStagesResponse: SWRResponse) {
   let result: any[] = [];
+  if (swrStagesResponse?.data == null) return Object.fromEntries(result);
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stage_item) => {

@@ -53,6 +53,7 @@ export function StandingsTableForStageItem({
               min_score={minPoints}
               max_score={maxPoints}
               decimals={0}
+              fontSizeInPixels={fontSizeInPixels}
             />
           </Table.Td>
         ) : (

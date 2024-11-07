@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+from bracket.logic.ranking.elo import recalculate_ranking_for_stage_item_id
 from bracket.logic.scheduling.elimination import (
     build_single_elimination_stage_item,
     get_number_of_rounds_to_create_single_elimination,
@@ -70,6 +71,8 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: Tou
             raise HTTPException(
                 400, f"Cannot automatically create matches for stage type {stage_item.type}"
             )
+
+    await recalculate_ranking_for_stage_item_id(tournament_id, stage_item.id)
 
 
 def determine_available_inputs(
