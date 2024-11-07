@@ -7,23 +7,29 @@ export interface StageItemInput {
   slot: number;
   tournament_id: number;
   stage_item_id: number;
-  team_id: number | null;
-  winner_from_stage_item_id: number | null;
-  winner_position: number | null;
   wins: number;
   draws: number;
   losses: number;
   points: number;
+  team_id: number | null;
   team: TeamInterface | null;
+  winner_from_stage_item_id: number | null;
+  winner_position: number | null;
 }
 
 export interface StageItemInputFinal {
   id: number;
-  team: TeamInterface;
+  slot: number;
+  tournament_id: number;
+  stage_item_id: number;
   wins: number;
   draws: number;
   losses: number;
   points: number;
+  team_id: number;
+  team: TeamInterface;
+  winner_from_stage_item_id: number | null;
+  winner_position: number | null;
 }
 
 export interface StageItemInputCreateBody {

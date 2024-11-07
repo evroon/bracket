@@ -76,9 +76,9 @@ export function ThSortable({ children, field, visibleFrom, state }: ThProps) {
   const onSort = () => setSorting(state, field);
   return (
     <Table.Th className={classes.th} visibleFrom={visibleFrom}>
-      <UnstyledButton onClick={onSort} className={classes.control}>
+      <UnstyledButton onClick={onSort} className={classes.control} style={{ fontSize: 'inherit' }}>
         <Group justify="apart">
-          <Text fw={800} size="sm" ml="0.5rem" my="0.25rem">
+          <Text fw={800} inherit ml="0.5rem" my="0.25rem">
             {children}
           </Text>
           <Center className={classes.icon}>{getSortIcon(sorted, state.reversed)}</Center>
@@ -98,7 +98,7 @@ export function ThNotSortable({
   return (
     <Table.Th className={classes.th} visibleFrom={visibleFrom}>
       <Group justify="apart" ml="20px">
-        <Text fw={800} size="sm">
+        <Text fw={800} inherit>
           {children}
         </Text>
       </Group>

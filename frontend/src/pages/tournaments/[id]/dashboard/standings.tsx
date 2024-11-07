@@ -17,7 +17,13 @@ import { getStagesLive } from '../../../../services/adapter';
 import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
-function StandingsContent({ swrStagesResponse }: { swrStagesResponse: SWRResponse }) {
+export function StandingsContent({
+  swrStagesResponse,
+  fontSizeInPixels,
+}: {
+  swrStagesResponse: SWRResponse;
+  fontSizeInPixels: number;
+}) {
   const { t } = useTranslation();
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
@@ -32,12 +38,14 @@ function StandingsContent({ swrStagesResponse }: { swrStagesResponse: SWRRespons
     )
     .map((stageItemId) => (
       <div key={stageItemId}>
-        <Text size="xl" mt="md" mb="xs">
+        <Text size="xl" mt="md" mb="xs" inherit>
           {stageItemsLookup[stageItemId].name}
         </Text>
         <StandingsTableForStageItem
           teams_with_inputs={stageItemTeamLookup[stageItemId]}
           stageItem={stageItemsLookup[stageItemId]}
+          stageItemsLookup={stageItemsLookup}
+          fontSizeInPixels={fontSizeInPixels}
         />
       </div>
     ));
@@ -84,7 +92,7 @@ export default function Standings() {
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
-          <StandingsContent swrStagesResponse={swrStagesResponse} />
+          <StandingsContent swrStagesResponse={swrStagesResponse} fontSizeInPixels={16} />
         </Container>
       </Container>
       <DashboardFooter />

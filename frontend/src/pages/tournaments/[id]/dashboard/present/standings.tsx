@@ -11,11 +11,11 @@ import {
   TournamentQRCode,
   TournamentTitle,
 } from '../../../../../components/dashboard/layout';
-import StandingsTable from '../../../../../components/tables/standings';
 import RequestErrorAlert from '../../../../../components/utils/error_alert';
 import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
-import { getTeamsLive } from '../../../../../services/adapter';
+import { getStagesLive, getTeamsLive } from '../../../../../services/adapter';
 import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
+import { StandingsContent } from '../standings';
 
 export default function Standings() {
   const tournamentResponse = getTournamentResponseByEndpointName();
@@ -25,6 +25,7 @@ export default function Standings() {
   const tournamentId = !notFound ? tournamentResponse[0].id : null;
 
   const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
+  const swrStagesResponse = getStagesLive(tournamentId);
 
   if (swrTeamsResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
@@ -38,6 +39,7 @@ export default function Standings() {
 
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 
+  const fontSizeInPixels = 28;
   return (
     <>
       <Head>
@@ -49,8 +51,11 @@ export default function Standings() {
           <TournamentLogo tournamentDataFull={tournamentDataFull} />
           <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
-        <Grid.Col span="auto">
-          <StandingsTable teams={swrTeamsResponse.data.data.teams} />
+        <Grid.Col span="auto" style={{ fontSize: fontSizeInPixels }}>
+          <StandingsContent
+            swrStagesResponse={swrStagesResponse}
+            fontSizeInPixels={fontSizeInPixels}
+          />
         </Grid.Col>
       </Grid>
     </>

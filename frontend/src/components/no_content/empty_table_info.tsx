@@ -41,7 +41,7 @@ export function NoContent({
     <Container mt="md">
       <div className={classes.label}>{icon || <HiMiniWrenchScrewdriver />}</div>
       <Title className={classes.title}>{title}</Title>
-      <Text size="lg" ta="center" className={classes.description}>
+      <Text size="lg" ta="center" className={classes.description} inherit>
         {description}
       </Text>
     </Container>
