@@ -5,7 +5,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
-from bracket.utils.id_types import CourtId, MatchId, StageItemId
+from bracket.utils.id_types import CourtId, MatchId, StageItemId, TournamentId
 
 
 async def sql_delete_match(match_id: MatchId) -> None:
@@ -197,3 +197,26 @@ async def sql_get_match(match_id: MatchId) -> Match:
         raise ValueError("Could not create stage")
 
     return Match.model_validate(dict(result._mapping))
+
+
+async def clear_scores_for_matches_in_stage_item(
+    tournament_id: TournamentId, stage_item_id: StageItemId
+) -> None:
+    query = """
+        UPDATE matches
+        SET stage_item_input1_score = 0,
+            stage_item_input2_score = 0
+        FROM rounds
+        JOIN stage_items ON rounds.stage_item_id = stage_items.id
+        JOIN stages ON stages.id = stage_items.stage_id
+        WHERE   rounds.id = matches.round_id
+            AND stages.tournament_id = :tournament_id
+            AND stage_items.id = :stage_item_id
+        """
+    await database.execute(
+        query=query,
+        values={
+            "stage_item_id": stage_item_id,
+            "tournament_id": tournament_id,
+        },
+    )
