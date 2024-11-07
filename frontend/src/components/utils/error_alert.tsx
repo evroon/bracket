@@ -4,7 +4,13 @@ import React from 'react';
 
 export function ErrorAlert({ title, message }: { title: string; message: string }) {
   return (
-    <Alert icon={<IconAlertCircle size={16} />} title={title} color="red" radius="lg">
+    <Alert
+      icon={<IconAlertCircle size={32} />}
+      title={title}
+      color="red"
+      radius="lg"
+      variant="outline"
+    >
       {message}
     </Alert>
   );

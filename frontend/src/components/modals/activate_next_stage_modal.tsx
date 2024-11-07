@@ -1,4 +1,4 @@
-import { Alert, Button, Container, Grid, Loader, Modal, Title } from '@mantine/core';
+import { Alert, Button, Container, Grid, Modal, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { FaArrowRight } from '@react-icons/all-files/fa/FaArrowRight';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
@@ -11,6 +11,8 @@ import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_ite
 import { TeamInterface } from '../../interfaces/team';
 import { getStageItemLookup } from '../../services/lookups';
 import { activateNextStage } from '../../services/stage';
+import RequestErrorAlert from '../utils/error_alert';
+import { GenericSkeleton } from '../utils/skeletons';
 
 type Update = { stage_item_input: StageItemInput; team: TeamInterface };
 type StageItemUpdate = { updates: Update[]; stageItem: StageItemWithRounds };
@@ -47,7 +49,10 @@ function UpdatesToStageItemInputsTables({
   swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   if (swrRankingsPerStageItemResponse.isLoading) {
-    return <Loader />;
+    return <GenericSkeleton />;
+  }
+  if (swrRankingsPerStageItemResponse.error) {
+    return <RequestErrorAlert error={swrRankingsPerStageItemResponse.error} />;
   }
 
   const items = swrRankingsPerStageItemResponse.data.data;

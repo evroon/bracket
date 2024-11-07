@@ -25,7 +25,7 @@ import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../404';
 import { DropzoneButton } from '../../../components/utils/file_upload';
-import { GenericSkeleton } from '../../../components/utils/skeletons';
+import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Club } from '../../../interfaces/club';
 import { Tournament } from '../../../interfaces/tournament';
@@ -266,7 +266,7 @@ export default function SettingsPage() {
   let content = <NotFoundTitle />;
 
   if (swrTournamentResponse.isLoading || swrClubsResponse.isLoading) {
-    content = <GenericSkeleton />;
+    content = <GenericSkeletonThreeRows />;
   }
 
   if (tournamentDataFull != null) {
