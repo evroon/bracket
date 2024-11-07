@@ -5,7 +5,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
-from bracket.utils.id_types import CourtId, MatchId, StageItemId, TournamentId, TeamId
+from bracket.utils.id_types import CourtId, MatchId, StageItemId, TournamentId
 
 
 async def sql_delete_match(match_id: MatchId) -> None:
