@@ -9,6 +9,7 @@ from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.stage_item_inputs import StageItemInputFinal, StageItemInputTentative
 from bracket.models.db.team import Team
 from bracket.models.db.util import StageWithStageItems
+from bracket.sql.matches import clear_scores_for_matches_in_stage_item
 from bracket.sql.rankings import get_ranking_for_stage_item
 from bracket.sql.stage_item_inputs import (
     get_stage_item_input_by_id,
@@ -131,6 +132,8 @@ async def update_matches_in_deactivated_stage(
     Unsets the team_id for stage item inputs of the newly deactivated stage.
     """
     for stage_item in deactivated_stage.stage_items:
+        await clear_scores_for_matches_in_stage_item(tournament_id, stage_item.id)
+
         for stage_item_input in stage_item.inputs:
             if stage_item_input.winner_from_stage_item_id is not None:
                 await sql_set_team_id_for_stage_item_input(tournament_id, stage_item_input.id, None)
