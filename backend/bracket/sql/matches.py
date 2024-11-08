@@ -118,7 +118,7 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
     )
 
 
-async def sql_set_input_id_for_match_winner_input(
+async def sql_set_input_ids_for_match(
     round_id: RoundId, match_id: MatchId, input_ids: list[StageItemInputId | None]
 ) -> None:
     query = """

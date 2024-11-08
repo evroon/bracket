@@ -173,6 +173,6 @@ async def update_match_by_id(
         await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
 
     if stage_item.type == StageType.SINGLE_ELIMINATION:
-        await update_teams_in_subsequent_elimination_rounds(round_, stage_item)
+        await update_teams_in_subsequent_elimination_rounds(round_, stage_item, {match_id})
 
     return SuccessResponse()

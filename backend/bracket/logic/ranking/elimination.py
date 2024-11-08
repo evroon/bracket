@@ -4,14 +4,15 @@ from decimal import Decimal
 from typing import TypeVar
 
 from bracket.logic.ranking.statistics import START_ELO, TeamStatistics
-from bracket.models.db.match import MatchWithDetails, MatchWithDetailsDefinitive
+from bracket.models.db.match import Match, MatchWithDetailsDefinitive
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
 from bracket.sql.matches import (
-    sql_set_input_id_for_match_winner_input,
+    sql_set_input_ids_for_match,
 )
 from bracket.utils.id_types import (
+    MatchId,
     PlayerId,
     StageItemInputId,
     TeamId,
@@ -111,42 +112,43 @@ def determine_team_ranking_for_stage_item(
 async def update_teams_in_subsequent_elimination_rounds(
     current_round: RoundWithMatches,
     stage_item: StageItemWithRounds,
+    match_ids: set[MatchId],
 ) -> None:
-    affected_match_ids = {match.id for match in current_round.matches}
+    affected_matches: dict[MatchId, Match] = {
+        match.id: match for match in current_round.matches if match.id in match_ids
+    }
     subsequent_rounds = [round_ for round_ in stage_item.rounds if round_.id > current_round.id]
+    subsequent_rounds.sort(key=lambda round_: round_.id)
 
     for round_ in subsequent_rounds:
-        for match in round_.matches:
-            updated_input_ids = [match.stage_item_input1_id, match.stage_item_input2_id]
+        for subsequent_match in round_.matches:
+            updated_input_ids: list[StageItemInputId | None] = [
+                subsequent_match.stage_item_input1_id,
+                subsequent_match.stage_item_input2_id,
+            ]
+            updated = False
 
-            if match.stage_item_input1_winner_from_match_id in affected_match_ids:
-                referenced_match: MatchWithDetailsDefinitive | MatchWithDetails | None = next(
-                    (
-                        earlier_match
-                        for earlier_match in current_round.matches
-                        if match.stage_item_input1_winner_from_match_id == earlier_match.id
-                    ),
-                    None,
+            if subsequent_match.stage_item_input1_winner_from_match_id in affected_matches:
+                updated = True
+                winner = affected_matches[
+                    subsequent_match.stage_item_input1_winner_from_match_id
+                ].get_winner()
+                updated_input_ids[0] = winner.id if winner is not None else None
+
+            if subsequent_match.stage_item_input2_winner_from_match_id in affected_matches:
+                updated = True
+                winner = affected_matches[
+                    subsequent_match.stage_item_input2_winner_from_match_id
+                ].get_winner()
+                updated_input_ids[1] = winner.id if winner is not None else None
+
+            if updated:
+                await sql_set_input_ids_for_match(round_.id, subsequent_match.id, updated_input_ids)
+
+                # Matches from this round also affect matches of the next round
+                affected_matches[subsequent_match.id] = subsequent_match.model_copy(
+                    update={
+                        "stage_item_input1_id": updated_input_ids[0],
+                        "stage_item_input2_id": updated_input_ids[1],
+                    }
                 )
-                if referenced_match is not None:
-                    winner = referenced_match.get_winner()
-                    updated_input_ids[0] = winner.id if winner is not None else None
-
-            if match.stage_item_input2_winner_from_match_id in affected_match_ids:
-                referenced_match = next(
-                    (
-                        earlier_match
-                        for earlier_match in current_round.matches
-                        if match.stage_item_input2_winner_from_match_id == earlier_match.id
-                    ),
-                    None,
-                )
-                if referenced_match is not None:
-                    winner = referenced_match.get_winner()
-                    updated_input_ids[1] = winner.id if winner is not None else None
-
-            await sql_set_input_id_for_match_winner_input(round_.id, match.id, updated_input_ids)
-
-        # Matches from this round also affect matches of the next round
-        for match in round_.matches:
-            affected_match_ids.add(match.id)
