@@ -13,7 +13,7 @@ from bracket.utils.id_types import (
 def get_inputs_to_update_in_subsequent_elimination_rounds(
     current_round_id: RoundId,
     stage_item: StageItemWithRounds,
-    match_ids: set[MatchId],
+    match_ids: set[MatchId] | None = None,
 ) -> dict[MatchId, Match]:
     """
     Determine the updates of stage item input IDs in the elimination tree.
@@ -23,7 +23,9 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
     """
     current_round = next(round_ for round_ in stage_item.rounds if round_.id == current_round_id)
     affected_matches: dict[MatchId, Match] = {
-        match.id: match for match in current_round.matches if match.id in match_ids
+        match.id: match
+        for match in current_round.matches
+        if match_ids is None or match.id in match_ids
     }
     subsequent_rounds = [round_ for round_ in stage_item.rounds if round_.id > current_round.id]
     subsequent_rounds.sort(key=lambda round_: round_.id)
@@ -60,14 +62,16 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
 
     # All affected matches need to be updated except for the inputs.
     return {
-        match_id: match for match_id, match in affected_matches.items() if match_id not in match_ids
+        match_id: match
+        for match_id, match in affected_matches.items()
+        if match_ids is None or match.id not in match_ids
     }
 
 
 async def update_inputs_in_subsequent_elimination_rounds(
     current_round_id: RoundId,
     stage_item: StageItemWithRounds,
-    match_ids: set[MatchId],
+    match_ids: set[MatchId] | None = None,
 ) -> None:
     updates = get_inputs_to_update_in_subsequent_elimination_rounds(
         current_round_id, stage_item, match_ids
@@ -76,3 +80,10 @@ async def update_inputs_in_subsequent_elimination_rounds(
         await sql_set_input_ids_for_match(
             match.round_id, match.id, [match.stage_item_input1_id, match.stage_item_input2_id]
         )
+
+
+async def update_inputs_in_complete_elimination_stage_item(
+    stage_item: StageItemWithRounds,
+) -> None:
+    for round_ in stage_item.rounds:
+        await update_inputs_in_subsequent_elimination_rounds(round_.id, stage_item)

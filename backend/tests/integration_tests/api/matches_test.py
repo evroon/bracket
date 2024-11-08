@@ -46,7 +46,11 @@ async def test_create_match(
         ) as stage_inserted,
         inserted_stage_item(
             DUMMY_STAGE_ITEM1.model_copy(
-                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+                update={
+                    "stage_id": stage_inserted.id,
+                    "ranking_id": auth_context.ranking.id,
+                    "type": StageType.SWISS,
+                }
             )
         ) as stage_item_inserted,
         inserted_round(
@@ -87,7 +91,11 @@ async def test_delete_match(
         ) as stage_inserted,
         inserted_stage_item(
             DUMMY_STAGE_ITEM1.model_copy(
-                update={"stage_id": stage_inserted.id, "ranking_id": auth_context.ranking.id}
+                update={
+                    "stage_id": stage_inserted.id,
+                    "ranking_id": auth_context.ranking.id,
+                    "type": StageType.SWISS,
+                }
             )
         ) as stage_item_inserted,
         inserted_round(
