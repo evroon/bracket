@@ -4,7 +4,7 @@ from decimal import Decimal
 from typing import TypeVar
 
 from bracket.logic.ranking.statistics import START_ELO, TeamStatistics
-from bracket.models.db.match import MatchWithDetailsDefinitive
+from bracket.models.db.match import MatchWithDetails, MatchWithDetailsDefinitive
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
@@ -120,12 +120,11 @@ async def update_teams_in_subsequent_elimination_rounds(
             updated_input_ids = [match.stage_item_input1_id, match.stage_item_input2_id]
 
             if match.stage_item_input1_winner_from_match_id in affected_match_ids:
-                referenced_match: MatchWithDetailsDefinitive | None = next(
+                referenced_match: MatchWithDetailsDefinitive | MatchWithDetails | None = next(
                     (
                         earlier_match
                         for earlier_match in current_round.matches
-                        if isinstance(earlier_match, MatchWithDetailsDefinitive)
-                        and match.stage_item_input1_winner_from_match_id == earlier_match.id
+                        if match.stage_item_input1_winner_from_match_id == earlier_match.id
                     ),
                     None,
                 )
@@ -138,8 +137,7 @@ async def update_teams_in_subsequent_elimination_rounds(
                     (
                         earlier_match
                         for earlier_match in current_round.matches
-                        if isinstance(earlier_match, MatchWithDetailsDefinitive)
-                        and match.stage_item_input2_winner_from_match_id == earlier_match.id
+                        if match.stage_item_input2_winner_from_match_id == earlier_match.id
                     ),
                     None,
                 )
@@ -148,3 +146,7 @@ async def update_teams_in_subsequent_elimination_rounds(
                     updated_input_ids[1] = winner.id if winner is not None else None
 
             await sql_set_input_id_for_match_winner_input(round_.id, match.id, updated_input_ids)
+
+        # Matches from this round also affect matches of the next round
+        for match in round_.matches:
+            affected_match_ids.add(match.id)

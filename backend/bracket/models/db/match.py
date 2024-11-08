@@ -40,6 +40,16 @@ class MatchInsertable(MatchBaseInsertable):
 
 class Match(MatchInsertable):
     id: MatchId
+    stage_item_input1: StageItemInput | None = None
+    stage_item_input2: StageItemInput | None = None
+
+    def get_winner(self) -> StageItemInput | None:
+        if self.stage_item_input1_score > self.stage_item_input2_score:
+            return self.stage_item_input1
+        if self.stage_item_input1_score < self.stage_item_input2_score:
+            return self.stage_item_input2
+
+        return None
 
 
 class MatchWithDetails(Match):
@@ -47,8 +57,6 @@ class MatchWithDetails(Match):
     MatchWithDetails has zero or one defined stage item inputs, but not both.
     """
 
-    stage_item_input1: StageItemInput | None = None
-    stage_item_input2: StageItemInput | None = None
     court: Court | None = None
 
 
@@ -76,14 +84,6 @@ class MatchWithDetailsDefinitive(Match):
             get_match_hash(self.stage_item_input1_id, self.stage_item_input2_id),
             get_match_hash(self.stage_item_input2_id, self.stage_item_input1_id),
         ]
-
-    def get_winner(self) -> StageItemInput | None:
-        if self.stage_item_input1_score > self.stage_item_input2_score:
-            return self.stage_item_input1
-        if self.stage_item_input1_score < self.stage_item_input2_score:
-            return self.stage_item_input2
-
-        return None
 
 
 class MatchBody(BaseModelORM):
