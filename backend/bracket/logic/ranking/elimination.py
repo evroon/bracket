@@ -7,11 +7,15 @@ from bracket.logic.ranking.statistics import START_ELO, TeamStatistics
 from bracket.models.db.match import MatchWithDetailsDefinitive
 from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
-from bracket.models.db.util import StageItemWithRounds
-from bracket.sql.rankings import get_ranking_for_stage_item
-from bracket.sql.stage_items import get_stage_item
-from bracket.sql.teams import update_team_stats
-from bracket.utils.id_types import PlayerId, StageItemId, StageItemInputId, TeamId, TournamentId
+from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
+from bracket.sql.matches import (
+    sql_set_input_id_for_match_winner_input,
+)
+from bracket.utils.id_types import (
+    PlayerId,
+    StageItemInputId,
+    TeamId,
+)
 
 K = 32
 D = 400
@@ -104,24 +108,47 @@ def determine_team_ranking_for_stage_item(
     return sorted(team_ranking.items(), key=lambda x: x[1].points, reverse=True)
 
 
-async def recalculate_ranking_for_stage_item_id(
-    tournament_id: TournamentId,
-    stage_item_id: StageItemId,
+async def update_teams_in_subsequent_elimination_rounds(
+    current_round: RoundWithMatches,
+    stage_item: StageItemWithRounds,
 ) -> None:
-    stage_item = await get_stage_item(tournament_id, stage_item_id)
-    ranking = await get_ranking_for_stage_item(tournament_id, stage_item_id)
-    assert stage_item, "Stage item not found"
-    assert ranking, "Ranking not found"
+    affected_match_ids = {match.id for match in current_round.matches}
+    subsequent_rounds = [round_ for round_ in stage_item.rounds if round_.id > current_round.id]
 
-    team_x_stage_item_input_lookup = {
-        stage_item_input.team_id: stage_item_input.id
-        for stage_item_input in stage_item.inputs
-        if stage_item_input.team_id is not None
-    }
+    for round_ in subsequent_rounds:
+        for match in round_.matches:
+            updated_input_ids = [match.stage_item_input1_id, match.stage_item_input2_id]
 
-    elo_per_input = determine_ranking_for_stage_item(stage_item, ranking)
+            if match.stage_item_input1_winner_from_match_id in affected_match_ids:
+                referenced_match: MatchWithDetailsDefinitive | None = next(
+                    (
+                        earlier_match
+                        for earlier_match in current_round.matches
+                        if isinstance(earlier_match, MatchWithDetailsDefinitive)
+                        and match.stage_item_input1_winner_from_match_id == earlier_match.id
+                    ),
+                    None,
+                )
+                if (
+                    referenced_match is not None
+                    and (winner := referenced_match.get_winner()) is not None
+                ):
+                    updated_input_ids[0] = winner.id
 
-    for stage_item_input_id in team_x_stage_item_input_lookup.values():
-        await update_team_stats(
-            tournament_id, stage_item_input_id, elo_per_input[stage_item_input_id]
-        )
+            if match.stage_item_input2_winner_from_match_id in affected_match_ids:
+                referenced_match = next(
+                    (
+                        earlier_match
+                        for earlier_match in current_round.matches
+                        if isinstance(earlier_match, MatchWithDetailsDefinitive)
+                        and match.stage_item_input2_winner_from_match_id == earlier_match.id
+                    ),
+                    None,
+                )
+                if (
+                    referenced_match is not None
+                    and (winner := referenced_match.get_winner()) is not None
+                ):
+                    updated_input_ids[1] = winner.id
+
+            await sql_set_input_id_for_match_winner_input(round_.id, match.id, updated_input_ids)

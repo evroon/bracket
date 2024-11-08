@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from heliclockter import datetime_utc
 
-from bracket.logic.ranking.elo import determine_ranking_for_stage_item
+from bracket.logic.ranking.calculation import determine_ranking_for_stage_item
 from bracket.logic.ranking.statistics import TeamStatistics
 from bracket.models.db.match import MatchWithDetails, MatchWithDetailsDefinitive
 from bracket.models.db.ranking import Ranking

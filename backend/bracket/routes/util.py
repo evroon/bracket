@@ -54,15 +54,7 @@ async def stage_dependency(tournament_id: TournamentId, stage_id: StageId) -> St
 async def stage_item_dependency(
     tournament_id: TournamentId, stage_item_id: StageItemId
 ) -> StageItemWithRounds:
-    stage_item = await get_stage_item(tournament_id, stage_item_id=stage_item_id)
-
-    if stage_item is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Could not find stage item with id {stage_item_id}",
-        )
-
-    return stage_item
+    return await get_stage_item(tournament_id, stage_item_id=stage_item_id)
 
 
 async def match_dependency(tournament_id: TournamentId, match_id: MatchId) -> Match:

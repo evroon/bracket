@@ -5,7 +5,14 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.match import Match, MatchBody, MatchCreateBody
 from bracket.models.db.tournament import Tournament
-from bracket.utils.id_types import CourtId, MatchId, StageItemId, TournamentId
+from bracket.utils.id_types import (
+    CourtId,
+    MatchId,
+    RoundId,
+    StageItemId,
+    StageItemInputId,
+    TournamentId,
+)
 
 
 async def sql_delete_match(match_id: MatchId) -> None:
@@ -107,6 +114,27 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
             **match.model_dump(),
             "duration_minutes": duration_minutes,
             "margin_minutes": margin_minutes,
+        },
+    )
+
+
+async def sql_set_input_id_for_match_winner_input(
+    round_id: RoundId, match_id: MatchId, input_ids: list[StageItemInputId | None]
+) -> None:
+    query = """
+        UPDATE matches
+        SET stage_item_input1_id = :input1_id,
+            stage_item_input2_id = :input2_id
+        WHERE round_id = :round_id
+        AND matches.id = :match_id
+        """
+    await database.execute(
+        query=query,
+        values={
+            "round_id": round_id,
+            "match_id": match_id,
+            "input1_id": input_ids[0],
+            "input2_id": input_ids[1],
         },
     )
 

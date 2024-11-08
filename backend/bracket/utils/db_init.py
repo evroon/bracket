@@ -5,8 +5,8 @@ from heliclockter import datetime_utc
 
 from bracket.config import Environment, config, environment
 from bracket.database import database, engine
-from bracket.logic.ranking.elo import (
-    recalculate_ranking_for_stage_item_id,
+from bracket.logic.ranking.calculation import (
+    recalculate_ranking_for_stage_item,
 )
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
 from bracket.models.db.account import UserAccountType
@@ -47,7 +47,7 @@ from bracket.schema import (
     users_x_clubs,
 )
 from bracket.sql.matches import sql_update_match
-from bracket.sql.stage_items import sql_create_stage_item_with_inputs
+from bracket.sql.stage_items import get_stage_item, sql_create_stage_item_with_inputs
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.users import create_user, get_user
@@ -407,6 +407,7 @@ async def sql_create_dev_db() -> UserId:
                     )
 
     for _stage_item in (stage_item_1, stage_item_2, stage_item_3):
-        await recalculate_ranking_for_stage_item_id(tournament_id_1, _stage_item.id)
+        stage_item_with_rounds = await get_stage_item(tournament_id_1, _stage_item.id)
+        await recalculate_ranking_for_stage_item(tournament_id_1, stage_item_with_rounds)
 
     return user_id_1

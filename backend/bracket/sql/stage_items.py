@@ -1,3 +1,6 @@
+from fastapi import HTTPException
+from starlette import status
+
 from bracket.database import database
 from bracket.models.db.stage_item import StageItem, StageItemCreateBody, StageItemWithInputsCreate
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBodyEmpty
@@ -70,9 +73,12 @@ async def sql_delete_stage_item(stage_item_id: StageItemId) -> None:
 
 async def get_stage_item(
     tournament_id: TournamentId, stage_item_id: StageItemId
-) -> StageItemWithRounds | None:
+) -> StageItemWithRounds:
     stages = await get_full_tournament_details(tournament_id, stage_item_ids={stage_item_id})
     if len(stages) < 1 or len(stages[0].stage_items) < 1:
-        return None
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Stage item doesn't exist",
+        )
 
     return stages[0].stage_items[0]

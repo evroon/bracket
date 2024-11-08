@@ -109,5 +109,4 @@ async def test_update_stage_item(
         updated_stage_item = await get_stage_item(
             auth_context.tournament.id, stage_item_inserted.id
         )
-        assert updated_stage_item
         assert updated_stage_item.name == body["name"]

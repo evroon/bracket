@@ -71,6 +71,14 @@ class MatchWithDetailsDefinitive(Match):
             get_match_hash(self.stage_item_input2_id, self.stage_item_input1_id),
         ]
 
+    def get_winner(self) -> StageItemInput | None:
+        if self.stage_item_input1_score > self.stage_item_input2_score:
+            return self.stage_item_input1
+        if self.stage_item_input1_score < self.stage_item_input2_score:
+            return self.stage_item_input2
+
+        return None
+
 
 class MatchBody(BaseModelORM):
     round_id: RoundId
