@@ -81,10 +81,12 @@ async def delete_match(
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     round_ = await get_round_by_id(tournament_id, match.round_id)
-    if not round_.is_draft:
+    stage_item = await get_stage_item(tournament_id, round_.stage_item_id)
+
+    if not round_.is_draft or stage_item.type != StageType.SWISS:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Can only delete matches from draft rounds",
+            detail="Can only delete matches from draft rounds in Swiss stage items",
         )
 
     await sql_delete_match(match.id)
@@ -101,14 +103,15 @@ async def create_match(
     match_body: MatchCreateBodyFrontend,
     _: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SingleMatchResponse:
-    # TODO: check this is a swiss stage item
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
 
     round_ = await get_round_by_id(tournament_id, match_body.round_id)
-    if not round_.is_draft:
+    stage_item = await get_stage_item(tournament_id, round_.stage_item_id)
+
+    if not round_.is_draft or stage_item.type != StageType.SWISS:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Can only delete matches from draft rounds",
+            detail="Can only create matches in draft rounds of Swiss stage items",
         )
 
     tournament = await sql_get_tournament(tournament_id)
@@ -128,7 +131,6 @@ async def schedule_matches(
 ) -> SuccessResponse:
     stages = await get_full_tournament_details(tournament_id)
     await schedule_all_unscheduled_matches(tournament_id, stages)
-    # await handle_conflicts(stages)
     return SuccessResponse()
 
 
