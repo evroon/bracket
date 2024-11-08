@@ -27,12 +27,6 @@ async def get_rounds_for_stage_item(
     tournament_id: TournamentId, stage_item_id: StageItemId
 ) -> list[RoundWithMatches]:
     stage_item = await get_stage_item(tournament_id, stage_item_id)
-
-    if stage_item is None:
-        raise ValueError(
-            f"Could not find stage item with id {stage_item_id} for tournament {tournament_id}"
-        )
-
     return stage_item.rounds
 
 

@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from bracket.database import database
-from bracket.logic.ranking.elo import (
-    recalculate_ranking_for_stage_item_id,
+from bracket.logic.ranking.calculation import (
+    recalculate_ranking_for_stage_item,
 )
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.round import (
@@ -49,7 +49,9 @@ async def delete_round(
             rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
         ),
     )
-    await recalculate_ranking_for_stage_item_id(tournament_id, round_with_matches.stage_item_id)
+
+    stage_item = await get_stage_item(tournament_id, round_with_matches.stage_item_id)
+    await recalculate_ranking_for_stage_item(tournament_id, stage_item)
     return SuccessResponse()
 
 
@@ -71,12 +73,6 @@ async def create_round(
     check_requirement(existing_rounds, user, "max_rounds")
 
     stage_item = await get_stage_item(tournament_id, stage_item_id=round_body.stage_item_id)
-
-    if stage_item is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Stage item doesn't exist",
-        )
 
     if not stage_item.type.supports_dynamic_number_of_rounds:
         raise HTTPException(

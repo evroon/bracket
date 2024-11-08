@@ -8,7 +8,7 @@ from bracket.logic.planning.rounds import (
     get_draft_round,
     schedule_all_matches_for_swiss_round,
 )
-from bracket.logic.ranking.elo import recalculate_ranking_for_stage_item_id
+from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
 from bracket.logic.scheduling.builder import (
     build_matches_for_stage_item,
 )
@@ -110,7 +110,7 @@ async def update_stage_item(
         query=query,
         values={"stage_item_id": stage_item_id, "name": stage_item_body.name},
     )
-    await recalculate_ranking_for_stage_item_id(tournament_id, stage_item_id)
+    await recalculate_ranking_for_stage_item(tournament_id, stage_item)
     return SuccessResponse()
 
 

@@ -40,9 +40,23 @@ class MatchInsertable(MatchBaseInsertable):
 
 class Match(MatchInsertable):
     id: MatchId
+    stage_item_input1: StageItemInput | None = None
+    stage_item_input2: StageItemInput | None = None
+
+    def get_winner(self) -> StageItemInput | None:
+        if self.stage_item_input1_score > self.stage_item_input2_score:
+            return self.stage_item_input1
+        if self.stage_item_input1_score < self.stage_item_input2_score:
+            return self.stage_item_input2
+
+        return None
 
 
 class MatchWithDetails(Match):
+    """
+    MatchWithDetails has zero or one defined stage item inputs, but not both.
+    """
+
     court: Court | None = None
 
 

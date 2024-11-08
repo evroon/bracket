@@ -1,6 +1,7 @@
 import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { useColorScheme } from '@mantine/hooks';
 import assert from 'assert';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { SWRResponse } from 'swr';
 
@@ -57,6 +58,7 @@ export default function Match({
 
   round: RoundInterface;
 }) {
+  const { t } = useTranslation();
   const theme = useMantineTheme();
   const winner_style = {
     backgroundColor: theme.colors.green[9],
@@ -70,8 +72,8 @@ export default function Match({
   const team2_style =
     match.stage_item_input1_score < match.stage_item_input2_score ? winner_style : {};
 
-  const team1_label = formatMatchInput1(stageItemsLookup, matchesLookup, match);
-  const team2_label = formatMatchInput2(stageItemsLookup, matchesLookup, match);
+  const team1_label = formatMatchInput1(t, stageItemsLookup, matchesLookup, match);
+  const team2_label = formatMatchInput2(t, stageItemsLookup, matchesLookup, match);
 
   const [opened, setOpened] = useState(false);
 

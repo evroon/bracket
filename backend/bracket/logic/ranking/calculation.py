@@ -9,9 +9,8 @@ from bracket.models.db.ranking import Ranking
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import StageItemWithRounds
 from bracket.sql.rankings import get_ranking_for_stage_item
-from bracket.sql.stage_items import get_stage_item
 from bracket.sql.teams import update_team_stats
-from bracket.utils.id_types import PlayerId, StageItemId, StageItemInputId, TeamId, TournamentId
+from bracket.utils.id_types import PlayerId, StageItemInputId, TeamId, TournamentId
 
 K = 32
 D = 400
@@ -104,12 +103,11 @@ def determine_team_ranking_for_stage_item(
     return sorted(team_ranking.items(), key=lambda x: x[1].points, reverse=True)
 
 
-async def recalculate_ranking_for_stage_item_id(
+async def recalculate_ranking_for_stage_item(
     tournament_id: TournamentId,
-    stage_item_id: StageItemId,
+    stage_item: StageItemWithRounds,
 ) -> None:
-    stage_item = await get_stage_item(tournament_id, stage_item_id)
-    ranking = await get_ranking_for_stage_item(tournament_id, stage_item_id)
+    ranking = await get_ranking_for_stage_item(tournament_id, stage_item.id)
     assert stage_item, "Stage item not found"
     assert ranking, "Ranking not found"
 

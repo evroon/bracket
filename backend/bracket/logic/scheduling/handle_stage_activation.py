@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from starlette import status
 
-from bracket.logic.ranking.elo import (
+from bracket.logic.ranking.calculation import (
     determine_team_ranking_for_stage_item,
 )
 from bracket.logic.ranking.statistics import TeamStatistics

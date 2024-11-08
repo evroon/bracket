@@ -8,9 +8,10 @@ from bracket.logic.planning.matches import (
     reorder_matches_for_court,
     schedule_all_unscheduled_matches,
 )
-from bracket.logic.ranking.elo import (
-    recalculate_ranking_for_stage_item_id,
+from bracket.logic.ranking.calculation import (
+    recalculate_ranking_for_stage_item,
 )
+from bracket.logic.ranking.elimination import update_inputs_in_subsequent_elimination_rounds
 from bracket.logic.scheduling.upcoming_matches import (
     get_draft_round_in_stage_item,
     get_upcoming_matches_for_swiss,
@@ -23,6 +24,7 @@ from bracket.models.db.match import (
     MatchFilter,
     MatchRescheduleBody,
 )
+from bracket.models.db.stage_item import StageType
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
@@ -30,6 +32,7 @@ from bracket.routes.util import match_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
 from bracket.sql.rounds import get_round_by_id
+from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
@@ -86,7 +89,9 @@ async def delete_match(
 
     await sql_delete_match(match.id)
 
-    await recalculate_ranking_for_stage_item_id(tournament_id, round_.stage_item_id)
+    stage_item = await get_stage_item(tournament_id, round_.stage_item_id)
+
+    await recalculate_ranking_for_stage_item(tournament_id, stage_item)
     return SuccessResponse()
 
 
@@ -156,7 +161,8 @@ async def update_match_by_id(
     await sql_update_match(match_id, match_body, tournament)
 
     round_ = await get_round_by_id(tournament_id, match.round_id)
-    await recalculate_ranking_for_stage_item_id(tournament_id, round_.stage_item_id)
+    stage_item = await get_stage_item(tournament_id, round_.stage_item_id)
+    await recalculate_ranking_for_stage_item(tournament_id, stage_item)
 
     if (
         match_body.custom_duration_minutes != match.custom_duration_minutes
@@ -165,5 +171,8 @@ async def update_match_by_id(
         tournament = await sql_get_tournament(tournament_id)
         scheduled_matches = get_scheduled_matches(await get_full_tournament_details(tournament_id))
         await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
+
+    if stage_item.type == StageType.SINGLE_ELIMINATION:
+        await update_inputs_in_subsequent_elimination_rounds(round_.id, stage_item, {match_id})
 
     return SuccessResponse()
