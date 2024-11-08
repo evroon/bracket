@@ -53,6 +53,7 @@ function ScheduleRow({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
+  const { t } = useTranslation();
   return (
     <Draggable key={match.id} index={index} draggableId={`${match.id}`}>
       {(provided) => (
@@ -72,11 +73,15 @@ function ScheduleRow({
               <Grid.Col span="auto">
                 <Group gap="xs">
                   {match.stage_item_input1_conflict && <AiFillWarning color="red" />}
-                  <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, match)}</Text>
+                  <Text fw={500}>
+                    {formatMatchInput1(t, stageItemsLookup, matchesLookup, match)}
+                  </Text>
                 </Group>
                 <Group gap="xs">
                   {match.stage_item_input2_conflict && <AiFillWarning color="red" />}
-                  <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, match)}</Text>
+                  <Text fw={500}>
+                    {formatMatchInput2(t, stageItemsLookup, matchesLookup, match)}
+                  </Text>
                 </Group>
               </Grid.Col>
               <Grid.Col span="content">

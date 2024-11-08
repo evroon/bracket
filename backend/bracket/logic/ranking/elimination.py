@@ -129,11 +129,9 @@ async def update_teams_in_subsequent_elimination_rounds(
                     ),
                     None,
                 )
-                if (
-                    referenced_match is not None
-                    and (winner := referenced_match.get_winner()) is not None
-                ):
-                    updated_input_ids[0] = winner.id
+                if referenced_match is not None:
+                    winner = referenced_match.get_winner()
+                    updated_input_ids[0] = winner.id if winner is not None else None
 
             if match.stage_item_input2_winner_from_match_id in affected_match_ids:
                 referenced_match = next(
@@ -145,10 +143,8 @@ async def update_teams_in_subsequent_elimination_rounds(
                     ),
                     None,
                 )
-                if (
-                    referenced_match is not None
-                    and (winner := referenced_match.get_winner()) is not None
-                ):
-                    updated_input_ids[1] = winner.id
+                if referenced_match is not None:
+                    winner = referenced_match.get_winner()
+                    updated_input_ids[1] = winner.id if winner is not None else None
 
             await sql_set_input_id_for_match_winner_input(round_.id, match.id, updated_input_ids)

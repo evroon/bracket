@@ -91,8 +91,8 @@ function MatchModalForm({
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
 
-  const team1Name = formatMatchInput1(stageItemsLookup, matchesLookup, match);
-  const team2Name = formatMatchInput2(stageItemsLookup, matchesLookup, match);
+  const team1Name = formatMatchInput1(t, stageItemsLookup, matchesLookup, match);
+  const team2Name = formatMatchInput2(t, stageItemsLookup, matchesLookup, match);
 
   return (
     <>

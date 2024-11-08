@@ -38,6 +38,7 @@ function ScheduleRow({
   stageItemsLookup: any;
   matchesLookup: any;
 }) {
+  const { t } = useTranslation();
   const winColor = '#2a8f37';
   const drawColor = '#656565';
   const loseColor = '#af4034';
@@ -98,7 +99,9 @@ function ScheduleRow({
         <Stack pt="sm">
           <Grid>
             <Grid.Col span="auto" pb="0rem">
-              <Text fw={500}>{formatMatchInput1(stageItemsLookup, matchesLookup, data.match)}</Text>
+              <Text fw={500}>
+                {formatMatchInput1(t, stageItemsLookup, matchesLookup, data.match)}
+              </Text>
             </Grid.Col>
             <Grid.Col span="content" pb="0rem">
               <div
@@ -117,7 +120,9 @@ function ScheduleRow({
           </Grid>
           <Grid mb="0rem">
             <Grid.Col span="auto" pb="0rem">
-              <Text fw={500}>{formatMatchInput2(stageItemsLookup, matchesLookup, data.match)}</Text>
+              <Text fw={500}>
+                {formatMatchInput2(t, stageItemsLookup, matchesLookup, data.match)}
+              </Text>
             </Grid.Col>
             <Grid.Col span="content" pb="0rem">
               <div

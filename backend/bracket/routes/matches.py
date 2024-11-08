@@ -24,6 +24,7 @@ from bracket.models.db.match import (
     MatchFilter,
     MatchRescheduleBody,
 )
+from bracket.models.db.stage_item import StageType
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
@@ -171,5 +172,7 @@ async def update_match_by_id(
         scheduled_matches = get_scheduled_matches(await get_full_tournament_details(tournament_id))
         await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
 
-    await update_teams_in_subsequent_elimination_rounds(round_, stage_item)
+    if stage_item.type == StageType.SINGLE_ELIMINATION:
+        await update_teams_in_subsequent_elimination_rounds(round_, stage_item)
+
     return SuccessResponse()

@@ -43,6 +43,12 @@ class Match(MatchInsertable):
 
 
 class MatchWithDetails(Match):
+    """
+    MatchWithDetails has zero or one defined stage item inputs, but not both.
+    """
+
+    stage_item_input1: StageItemInput | None = None
+    stage_item_input2: StageItemInput | None = None
     court: Court | None = None
 
 
