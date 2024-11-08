@@ -11,7 +11,7 @@ from bracket.logic.planning.matches import (
 from bracket.logic.ranking.calculation import (
     recalculate_ranking_for_stage_item,
 )
-from bracket.logic.ranking.elimination import update_teams_in_subsequent_elimination_rounds
+from bracket.logic.ranking.elimination import update_inputs_in_subsequent_elimination_rounds
 from bracket.logic.scheduling.upcoming_matches import (
     get_draft_round_in_stage_item,
     get_upcoming_matches_for_swiss,
@@ -173,6 +173,6 @@ async def update_match_by_id(
         await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
 
     if stage_item.type == StageType.SINGLE_ELIMINATION:
-        await update_teams_in_subsequent_elimination_rounds(round_, stage_item, {match_id})
+        await update_inputs_in_subsequent_elimination_rounds(round_.id, stage_item, {match_id})
 
     return SuccessResponse()
