@@ -35,10 +35,6 @@ def set_statistics_for_stage_item_input(
         match.stage_item_input1_score, match.stage_item_input2_score
     )
 
-    # Set default for SWISS teams
-    if stage_item.type is StageType.SWISS and stage_item_input_id not in stats:
-        stats[stage_item_input_id].points = START_ELO
-
     if has_won:
         stats[stage_item_input_id].wins += 1
         swiss_score_diff = ranking.win_points
@@ -73,7 +69,12 @@ def determine_ranking_for_stage_item(
     stage_item: StageItemWithRounds,
     ranking: Ranking,
 ) -> defaultdict[StageItemInputId, TeamStatistics]:
-    team_x_stats: defaultdict[StageItemInputId, TeamStatistics] = defaultdict(TeamStatistics)
+    input_x_stats: defaultdict[StageItemInputId, TeamStatistics] = defaultdict(TeamStatistics)
+
+    if stage_item.type is StageType.SWISS:
+        for input_ in stage_item.inputs:
+            input_x_stats[input_.id].points = START_ELO
+
     matches = [
         match
         for round_ in stage_item.rounds
@@ -85,14 +86,14 @@ def determine_ranking_for_stage_item(
         for team_index, stage_item_input in enumerate(match.stage_item_inputs):
             set_statistics_for_stage_item_input(
                 team_index,
-                team_x_stats,
+                input_x_stats,
                 match,
                 stage_item_input.id,
                 ranking,
                 stage_item,
             )
 
-    return team_x_stats
+    return input_x_stats
 
 
 def determine_team_ranking_for_stage_item(

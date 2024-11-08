@@ -1,5 +1,7 @@
+import { Text } from '@mantine/core';
+
 import { TeamInterface } from '../../interfaces/team';
 
 export default function PlayerList({ team }: { team: TeamInterface }) {
-  return <span>{team.name}</span>;
+  return <Text inherit>{team.name}</Text>;
 }

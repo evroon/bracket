@@ -247,7 +247,7 @@ def test_determine_ranking_for_stage_item_swiss_no_matches() -> None:
             ],
             inputs=[stage_item_input1, stage_item_input2],
             type_name="Swiss",
-            team_count=4,
+            team_count=2,
             ranking_id=None,
             id=StageItemId(-1),
             stage_id=StageId(-1),
@@ -267,4 +267,7 @@ def test_determine_ranking_for_stage_item_swiss_no_matches() -> None:
         ),
     )
 
-    assert not ranking
+    assert ranking == {
+        -2: TeamStatistics(wins=0, draws=0, losses=0, points=Decimal("1200")),
+        -1: TeamStatistics(wins=0, draws=0, losses=0, points=Decimal("1200")),
+    }

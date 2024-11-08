@@ -10,7 +10,7 @@ from bracket.models.db.stage_item_inputs import (
     StageItemInputFinal,
 )
 from bracket.sql.teams import get_team_by_id
-from bracket.utils.id_types import StageItemId, StageItemInputId, TeamId, TournamentId
+from bracket.utils.id_types import RankingId, StageItemId, StageItemInputId, TeamId, TournamentId
 
 
 async def get_stage_item_input_by_id(
@@ -35,6 +35,20 @@ async def get_stage_item_input_by_id(
         return StageItemInputFinal.model_validate(data)
 
     return TypeAdapter(StageItemInput).validate_python(result)
+
+
+async def get_stage_item_input_ids_by_ranking_id(ranking_id: RankingId) -> list[StageItemId]:
+    query = """
+        SELECT id
+        FROM stage_items
+        WHERE ranking_id = :ranking_id
+    """
+    results = await database.fetch_all(
+        query=query,
+        values={"ranking_id": ranking_id},
+    )
+
+    return [StageItemId(result["id"]) for result in results]
 
 
 async def sql_set_team_id_for_stage_item_input(

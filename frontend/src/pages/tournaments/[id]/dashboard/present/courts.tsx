@@ -22,7 +22,7 @@ import {
   isMatchInTheFuture,
 } from '../../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
-import { getMatchLookupByCourt } from '../../../../../services/lookups';
+import { getMatchLookupByCourt, getStageItemLookup } from '../../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
 
 export default function CourtsPage() {
@@ -43,6 +43,7 @@ export default function CourtsPage() {
   if (notFound) {
     return <NotFoundTitle />;
   }
+  const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
   const courts = responseIsValid(swrCourtsResponse) ? swrCourtsResponse.data.data : [];
@@ -53,23 +54,22 @@ export default function CourtsPage() {
   const rows = courts.map((court: Court) => {
     const matchesForCourt = matchesByCourtId[court.id] || [];
     const activeMatch = matchesForCourt.filter((m: MatchInterface) => isMatchHappening(m))[0];
-    const futureMatch = matchesForCourt.filter((m: MatchInterface) => isMatchInTheFuture(m))[0];
+    const futureMatch = matchesForCourt
+      .filter((m: MatchInterface) => isMatchInTheFuture(m))
+      .sort((m1: MatchInterface, m2: MatchInterface) =>
+        m1.start_time > m2.start_time ? 1 : -1
+      )[0];
 
     return (
-      <CourtsLarge key={court.id} court={court} activeMatch={activeMatch} nextMatch={futureMatch} />
+      <CourtsLarge
+        key={court.id}
+        court={court}
+        activeMatch={activeMatch}
+        nextMatch={futureMatch}
+        stageItemsLookup={stageItemsLookup}
+      />
     );
   });
-  const header = (
-    <Grid align="center" gutter="2rem">
-      <Grid.Col span={{ sm: 2 }} />
-      <Grid.Col span={{ sm: 5 }}>
-        <CourtBadge name={t('current_matches_badge')} color="teal" />
-      </Grid.Col>
-      <Grid.Col span={{ sm: 5 }}>
-        <CourtBadge name={t('next_matches_badge')} color="gray" />
-      </Grid.Col>
-    </Grid>
-  );
 
   return (
     <>
@@ -83,7 +83,15 @@ export default function CourtsPage() {
           <TournamentQRCode tournamentDataFull={tournamentDataFull} />
         </Grid.Col>
         <Grid.Col span="auto">
-          {header}
+          <Grid align="center" gutter="2rem">
+            <Grid.Col span={{ sm: 2 }} />
+            <Grid.Col span={{ sm: 5 }}>
+              <CourtBadge name={t('current_matches_badge')} color="teal" />
+            </Grid.Col>
+            <Grid.Col span={{ sm: 5 }}>
+              <CourtBadge name={t('next_matches_badge')} color="gray" />
+            </Grid.Col>
+          </Grid>
           {rows}
         </Grid.Col>
       </Grid>

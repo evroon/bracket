@@ -23,21 +23,16 @@ export function CourtBadge({ name, color }: { name: string; color: MantineColor 
   );
 }
 
-function getRoundsGridCols(match: MatchInterface | null) {
-  if (match == null) {
-    return null;
-  }
-  return <MatchLarge key={match.id} match={match} />;
-}
-
 export default function CourtsLarge({
   court,
   activeMatch,
   nextMatch,
+  stageItemsLookup,
 }: {
   court: Court;
   activeMatch: MatchInterface | null;
   nextMatch: MatchInterface | null;
+  stageItemsLookup: any;
 }) {
   return (
     <Grid align="center" style={{ marginTop: '1rem' }} gutter="2rem">
@@ -45,10 +40,22 @@ export default function CourtsLarge({
         <CourtBadge name={court.name} color="indigo" />
       </Grid.Col>
       <Grid.Col span={{ sm: 5 }}>
-        <Grid>{getRoundsGridCols(activeMatch)}</Grid>
+        <Grid>
+          {activeMatch != null && (
+            <MatchLarge
+              key={activeMatch.id}
+              match={activeMatch}
+              stageItemsLookup={stageItemsLookup}
+            />
+          )}
+        </Grid>
       </Grid.Col>
       <Grid.Col span={{ sm: 5 }}>
-        <Grid>{getRoundsGridCols(nextMatch)}</Grid>
+        <Grid>
+          {nextMatch != null && (
+            <MatchLarge key={nextMatch.id} match={nextMatch} stageItemsLookup={stageItemsLookup} />
+          )}
+        </Grid>
       </Grid.Col>
     </Grid>
   );
