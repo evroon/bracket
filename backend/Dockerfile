@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.17
+FROM python:3.12-alpine3.17
 ARG packages
 RUN apk --update add ${packages} \
     && rm -rf /var/cache/apk/* \
