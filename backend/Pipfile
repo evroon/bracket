@@ -45,4 +45,4 @@ ruff = ">=0.0.292"
 vulture = ">=2.10"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"
