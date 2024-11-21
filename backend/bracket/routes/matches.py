@@ -50,7 +50,7 @@ async def get_matches_to_schedule(
     tournament_id: TournamentId,
     stage_item_id: StageItemId,
     elo_diff_threshold: int = 200,
-    iterations: int = 200,
+    iterations: int = 2_000,
     only_recommended: bool = False,
     limit: int = 50,
     _: UserPublic = Depends(user_authenticated_for_tournament),
@@ -68,9 +68,7 @@ async def get_matches_to_schedule(
         return UpcomingMatchesResponse(data=[])
 
     return UpcomingMatchesResponse(
-        data=await get_upcoming_matches_for_swiss(
-            match_filter, stage_item, tournament_id, draft_round
-        )
+        data=get_upcoming_matches_for_swiss(match_filter, stage_item, draft_round)
     )
 
 

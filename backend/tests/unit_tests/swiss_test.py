@@ -89,19 +89,21 @@ def test_constraints() -> None:
     # is recommended.
     assert result == [
         SuggestedMatch(
-            stage_item_input1=input3,
-            stage_item_input2=input2,
-            elo_diff=Decimal("25"),
-            swiss_diff=Decimal("25"),
+            stage_item_input1=input4,
+            stage_item_input2=input3,
+            elo_diff=Decimal("50.0"),
+            swiss_diff=Decimal("50.0"),
             is_recommended=True,
+            times_played_sum=0,
             player_behind_schedule_count=0,
         ),
         SuggestedMatch(
-            stage_item_input1=input4,
-            stage_item_input2=input3,
-            elo_diff=Decimal("50"),
-            swiss_diff=Decimal("50"),
-            is_recommended=True,
+            stage_item_input1=input3,
+            stage_item_input2=input2,
+            elo_diff=Decimal("25.0"),
+            swiss_diff=Decimal("25.0"),
+            is_recommended=False,
+            times_played_sum=1,
             player_behind_schedule_count=0,
         ),
     ]

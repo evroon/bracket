@@ -1,3 +1,4 @@
+import itertools
 import random
 from collections import defaultdict
 
@@ -78,14 +79,27 @@ def get_possible_upcoming_matches_for_swiss(
         if input_.id not in times_played_per_input:
             times_played_per_input[input_.id] = 0
 
-    min_times_played = (
-        min(times_played_per_input.values()) if len(times_played_per_input) > 0 else 0
-    )
+    # If there are more possible matches to schedule (N * (N - 1)) than iteration count, then
+    # pick random combinations.
+    # Otherwise, when there's not too many inputs, just take all possible combinations.
+    # Note: `itertools.product` creates N * N results, so we look at N * N instead of N * (N - 1).
+    # For example: iteration count: 2_000, number of inputs: 20. Then N * N = 380,
+    # 380 is less than 2_000, so we just loop over all possible combinations.
+    N = len(inputs_to_schedule)
+    Item = tuple[StageItemInput, StageItemInput]
+    inputs_iter: itertools.product[Item] | zip[Item]
+    if N * N <= filter_.iterations:
+        inputs1 = inputs_to_schedule.copy()
+        inputs2 = inputs_to_schedule.copy()
+        random.shuffle(inputs1)
+        random.shuffle(inputs2)
+        inputs_iter = itertools.product(inputs1, inputs2)
+    else:
+        inputs1 = random.choices(inputs_to_schedule, k=filter_.iterations)
+        inputs2 = random.choices(inputs_to_schedule, k=filter_.iterations)
+        inputs_iter = zip(inputs1, inputs2)
 
-    inputs1_random = random.choices(inputs_to_schedule, k=filter_.iterations)
-    inputs2_random = random.choices(inputs_to_schedule, k=filter_.iterations)
-
-    for i1, i2 in zip(inputs1_random, inputs2_random):
+    for i1, i2 in inputs_iter:
         if assert_some(i1.id) > assert_some(i2.id):
             input2, input1 = i1, i2
         elif assert_some(i1.id) < assert_some(i2.id):
@@ -97,22 +111,27 @@ def get_possible_upcoming_matches_for_swiss(
         if get_match_hash(input1.id, input2.id) in previous_match_input_hashes:
             continue
 
-        times_played_min = min(
-            times_played_per_input[input1.id],
-            times_played_per_input[input2.id],
-        )
         suggested_match = check_input_combination_adheres_to_filter(
-            input1, input2, filter_, is_recommended=times_played_min <= min_times_played
+            input1,
+            input2,
+            filter_,
+            times_played_per_input[input1.id] + times_played_per_input[input2.id],
         )
-        if (
-            suggested_match
-            and match_hash not in scheduled_hashes
-            and (not filter_.only_recommended or suggested_match.is_recommended)
-        ):
+        if suggested_match and match_hash not in scheduled_hashes:
             suggestions.append(suggested_match)
             scheduled_hashes.append(match_hash)
             scheduled_hashes.append(get_match_hash(input2.id, input1.id))
 
+    if len(suggestions) < 1:
+        return []
+
+    lowest_times_played_sum = min(sug.times_played_sum for sug in suggestions)
+    for sug in suggestions:
+        sug.is_recommended = sug.times_played_sum == lowest_times_played_sum
+
+    if filter_.only_recommended:
+        suggestions = [sug for sug in suggestions if sug.is_recommended]
+
     sorted_by_elo = sorted(suggestions, key=lambda x: x.elo_diff)
-    sorted_by_times_played = sorted(sorted_by_elo, key=lambda x: x.is_recommended, reverse=True)
+    sorted_by_times_played = sorted(sorted_by_elo, key=lambda x: x.times_played_sum)
     return sorted_by_times_played[: filter_.limit]

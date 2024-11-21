@@ -69,8 +69,8 @@ export default function TournamentPage() {
   const swrStagesResponse: SWRResponse = getStages(id);
   const swrCourtsResponse = getCourts(tournamentData.id);
   const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only-recommended', 'true');
-  const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 100);
-  const [iterations, setIterations] = useRouterQueryState('iterations', 1000);
+  const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 200);
+  const [iterations, setIterations] = useRouterQueryState('iterations', 2_000);
   const [limit, setLimit] = useRouterQueryState('limit', 50);
   const [matchVisibility, setMatchVisibility] = useRouterQueryState('match-visibility', 'all');
   const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('which-names', 'team-names');

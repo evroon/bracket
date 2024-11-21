@@ -4,7 +4,6 @@ from bracket.logic.scheduling.ladder_teams import get_possible_upcoming_matches_
 from bracket.models.db.match import MatchFilter, SuggestedMatch
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
-from bracket.sql.rounds import get_rounds_for_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.id_types import StageItemId, TournamentId
 
@@ -28,10 +27,9 @@ async def get_draft_round_in_stage_item(
     return draft_round, stage_item
 
 
-async def get_upcoming_matches_for_swiss(
+def get_upcoming_matches_for_swiss(
     match_filter: MatchFilter,
     stage_item: StageItemWithRounds,
-    tournament_id: TournamentId,
     draft_round: RoundWithMatches | None = None,
 ) -> list[SuggestedMatch]:
     if stage_item.type is not StageType.SWISS:
@@ -40,7 +38,6 @@ async def get_upcoming_matches_for_swiss(
     if draft_round is not None and not draft_round.is_draft:
         raise HTTPException(400, "There is no draft round, so no matches can be scheduled.")
 
-    rounds = await get_rounds_for_stage_item(tournament_id, stage_item.id)
     return get_possible_upcoming_matches_for_swiss(
-        match_filter, rounds, stage_item.inputs, draft_round
+        match_filter, stage_item.rounds, stage_item.inputs, draft_round
     )

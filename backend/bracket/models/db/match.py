@@ -131,6 +131,7 @@ class SuggestedMatch(BaseModel):
     elo_diff: Decimal
     swiss_diff: Decimal
     is_recommended: bool
+    times_played_sum: int
     player_behind_schedule_count: int
 
     @property
