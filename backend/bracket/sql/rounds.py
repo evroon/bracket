@@ -72,7 +72,7 @@ async def sql_delete_round(round_id: RoundId) -> None:
     query = """
         DELETE FROM rounds
         WHERE rounds.id = :round_id
-        """
+    """
     await database.execute(query=query, values={"round_id": round_id})
 
 
