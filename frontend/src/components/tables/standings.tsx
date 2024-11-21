@@ -33,6 +33,7 @@ export function StandingsTableForStageItem({
     .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) =>
       sortTableEntries(p1, p2, tableState)
     )
+    .slice(0, 14)
     .map((team_with_input, index) => (
       <Table.Tr key={team_with_input.id}>
         <Table.Td style={{ width: '2rem' }}>{index + 1}</Table.Td>
