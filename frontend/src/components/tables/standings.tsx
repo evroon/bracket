@@ -41,7 +41,7 @@ export function StandingsTableForStageItem({
             {formatStageItemInput(team_with_input, stageItemsLookup)}
           </Text>
         </Table.Td>
-        <Table.Td visibleFrom="sm" style={{ minWidth: '6rem' }}>
+        <Table.Td visibleFrom="sm" style={{ minWidth: '8rem' }}>
           <Text truncate="end" lineClamp={1} inherit>
             {team_with_input.points}
           </Text>

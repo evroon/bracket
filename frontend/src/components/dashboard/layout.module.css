@@ -1,12 +1,15 @@
 .header {
-  height: rem(56px);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   width: 100%;
   background-color: var(--mantine-color-body);
   border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
 .inner {
-  display: flex;
+  @media (min-width: 25rem) {
+    display: flex;
+  }
   margin: auto;
   height: 100%;
   align-items: center;
@@ -14,7 +17,7 @@
 }
 
 .links {
-  display: flex;
+  min-width: 11rem;
   flex-direction: column;
   justify-content: space-between;
 }

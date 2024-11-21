@@ -102,12 +102,10 @@ export function DoubleHeader({ tournamentData }: { tournamentData: Tournament })
   return (
     <header className={classes.header}>
       <Container className={classes.inner}>
-        <UnstyledButton
-          onClick={() => {
-            router.push(`/tournaments/${endpoint}/dashboard`);
-          }}
-        >
-          <Title size="lg">{tournamentData.name}</Title>
+        <UnstyledButton component={Link} href={`/tournaments/${endpoint}/dashboard`}>
+          <Title size="lg" lineClamp={1}>
+            {tournamentData.name}
+          </Title>
         </UnstyledButton>
         <Box className={classes.links}>
           <Group gap={0} className={classes.mainLinks}>
