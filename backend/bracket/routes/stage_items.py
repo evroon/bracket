@@ -3,6 +3,8 @@ from heliclockter import datetime_utc
 from starlette import status
 
 from bracket.database import database
+from bracket.logic.planning.conflicts import handle_conflicts
+from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.planning.rounds import (
     MatchTimingAdjustmentInfeasible,
     get_draft_round,
@@ -42,6 +44,7 @@ from bracket.sql.rounds import (
 )
 from bracket.sql.shared import sql_delete_stage_item_with_foreign_keys
 from bracket.sql.stage_items import (
+    get_stage_item,
     sql_create_stage_item_with_empty_inputs,
 )
 from bracket.sql.stages import get_full_tournament_details
@@ -69,6 +72,7 @@ async def delete_stage_item(
         {ForeignKey.matches_stage_item_input1_id_fkey, ForeignKey.matches_stage_item_input2_id_fkey}
     ):
         await sql_delete_stage_item_with_foreign_keys(stage_item_id)
+    await update_start_times_of_matches(tournament_id)
     return SuccessResponse()
 
 
@@ -130,8 +134,8 @@ async def start_next_round(
     active_next_body: StageItemActivateNextBody,
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
     user: UserPublic = Depends(user_authenticated_for_tournament),
-    elo_diff_threshold: int = 100,
-    iterations: int = 200,
+    elo_diff_threshold: int = 200,
+    iterations: int = 2_000,
     only_recommended: bool = False,
 ) -> SuccessResponse:
     draft_round = get_draft_round(stage_item)
@@ -147,9 +151,7 @@ async def start_next_round(
         limit=1,
         iterations=iterations,
     )
-    all_matches_to_schedule = await get_upcoming_matches_for_swiss(
-        match_filter, stage_item, tournament_id
-    )
+    all_matches_to_schedule = get_upcoming_matches_for_swiss(match_filter, stage_item)
     if len(all_matches_to_schedule) < 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -179,8 +181,10 @@ async def start_next_round(
 
     limit = len(courts) - len(draft_round.matches)
     for ___ in range(limit):
-        all_matches_to_schedule = await get_upcoming_matches_for_swiss(
-            match_filter, stage_item, tournament_id
+        stage_item = await get_stage_item(tournament_id, stage_item_id)
+        draft_round = next(round_ for round_ in stage_item.rounds if round_.is_draft)
+        all_matches_to_schedule = get_upcoming_matches_for_swiss(
+            match_filter, stage_item, draft_round
         )
         if len(all_matches_to_schedule) < 1:
             break
@@ -216,5 +220,5 @@ async def start_next_round(
         ) from exc
 
     await set_round_active_or_draft(draft_round.id, tournament_id, is_draft=False)
-
+    await handle_conflicts(await get_full_tournament_details(tournament_id))
     return SuccessResponse()

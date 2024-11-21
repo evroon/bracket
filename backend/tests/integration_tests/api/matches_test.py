@@ -454,6 +454,7 @@ async def test_upcoming_matches_endpoint(
                     },
                     "elo_diff": "0",
                     "swiss_diff": "0",
+                    "times_played_sum": 0,
                     "is_recommended": True,
                     "player_behind_schedule_count": 0,
                 }

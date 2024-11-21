@@ -68,6 +68,14 @@ async def sql_delete_rounds_for_stage_item_id(stage_item_id: StageItemId) -> Non
     await database.execute(query=query, values={"stage_item_id": stage_item_id})
 
 
+async def sql_delete_round(round_id: RoundId) -> None:
+    query = """
+        DELETE FROM rounds
+        WHERE rounds.id = :round_id
+    """
+    await database.execute(query=query, values={"round_id": round_id})
+
+
 async def set_round_active_or_draft(
     round_id: RoundId, tournament_id: TournamentId, *, is_draft: bool
 ) -> None:

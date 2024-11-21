@@ -20,8 +20,13 @@ from bracket.routes.util import (
     round_dependency,
     round_with_matches_dependency,
 )
-from bracket.schema import rounds
-from bracket.sql.rounds import get_next_round_name, set_round_active_or_draft, sql_create_round
+from bracket.sql.matches import sql_delete_match
+from bracket.sql.rounds import (
+    get_next_round_name,
+    set_round_active_or_draft,
+    sql_create_round,
+    sql_delete_round,
+)
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
@@ -38,17 +43,10 @@ async def delete_round(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     round_with_matches: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
-    if len(round_with_matches.matches) > 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Round contains matches, delete those first",
-        )
+    for match in round_with_matches.matches:
+        await sql_delete_match(match.id)
 
-    await database.execute(
-        query=rounds.delete().where(
-            rounds.c.id == round_id and rounds.c.tournament_id == tournament_id
-        ),
-    )
+    await sql_delete_round(round_id)
 
     stage_item = await get_stage_item(tournament_id, round_with_matches.stage_item_id)
     await recalculate_ranking_for_stage_item(tournament_id, stage_item)

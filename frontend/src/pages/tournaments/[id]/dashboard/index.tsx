@@ -134,7 +134,7 @@ export function Schedule({
     .filter((m1: any) => m1.match.start_time != null)
     .sort(
       (m1: any, m2: any) =>
-        formatTime(m1.match.start_time).localeCompare(formatTime(m2.match.start_time)) ||
+        -formatTime(m1.match.start_time).localeCompare(formatTime(m2.match.start_time)) ||
         m1.match.court?.name.localeCompare(m2.match.court?.name)
     );
 
