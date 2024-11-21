@@ -9,7 +9,7 @@ from bracket.models.db.match import (
     SuggestedMatch,
     get_match_hash,
 )
-from bracket.models.db.stage_item_inputs import StageItemInput
+from bracket.models.db.stage_item_inputs import StageItemInput, StageItemInputFinal
 from bracket.models.db.util import RoundWithMatches
 from bracket.utils.id_types import StageItemInputId
 from bracket.utils.types import assert_some
@@ -65,7 +65,10 @@ def get_possible_upcoming_matches_for_swiss(
     draft_round_input_ids = get_draft_round_input_ids(draft_round) if draft_round else frozenset()
 
     inputs_to_schedule = [
-        input_ for input_ in stage_item_inputs if input_.id not in draft_round_input_ids
+        input_
+        for input_ in stage_item_inputs
+        if input_.id not in draft_round_input_ids
+        and (not isinstance(input_, StageItemInputFinal) or input_.team.active)
     ]
 
     if len(inputs_to_schedule) < 1:
