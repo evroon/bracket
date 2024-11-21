@@ -59,6 +59,7 @@ def get_possible_upcoming_matches_for_swiss(
     stage_item_inputs: list[StageItemInput],
     draft_round: RoundWithMatches | None = None,
 ) -> list[SuggestedMatch]:
+    # pylint: disable=too-many-branches,unsubscriptable-object
     suggestions: list[SuggestedMatch] = []
     scheduled_hashes: list[str] = []
     draft_round_input_ids = get_draft_round_input_ids(draft_round) if draft_round else frozenset()
