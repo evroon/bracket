@@ -55,6 +55,7 @@ export default function Standings() {
           <StandingsContent
             swrStagesResponse={swrStagesResponse}
             fontSizeInPixels={fontSizeInPixels}
+            maxTeamsToDisplay={14}
           />
         </Grid.Col>
       </Grid>
