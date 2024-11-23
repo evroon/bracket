@@ -16,11 +16,13 @@ export function StandingsTableForStageItem({
   stageItem,
   fontSizeInPixels,
   stageItemsLookup,
+  maxTeamsToDisplay,
 }: {
   teams_with_inputs: StageItemInputFinal[];
   stageItem: StageItemWithRounds;
   fontSizeInPixels: number;
   stageItemsLookup: any;
+  maxTeamsToDisplay: number;
 }) {
   const { t } = useTranslation();
   const tableState = getTableState('points', false);
@@ -33,7 +35,7 @@ export function StandingsTableForStageItem({
     .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) =>
       sortTableEntries(p1, p2, tableState)
     )
-    .slice(0, 14)
+    .slice(0, maxTeamsToDisplay)
     .map((team_with_input, index) => (
       <Table.Tr key={team_with_input.id}>
         <Table.Td style={{ width: '2rem' }}>{index + 1}</Table.Td>
@@ -80,17 +82,24 @@ export function StandingsTableForStageItem({
           <ThSortable state={tableState} field="name">
             {t('name_table_header')}
           </ThSortable>
-          <ThSortable visibleFrom="sm" state={tableState} field="points">
-            {t('points_table_header')}
-          </ThSortable>
           {stageItem.type === 'SWISS' ? (
-            <ThSortable state={tableState} field="elo_score">
-              {t('elo_score')}
-            </ThSortable>
+            <>
+              <ThSortable visibleFrom="sm" state={tableState} field="points">
+                {t('elo_score')}
+              </ThSortable>
+              <ThSortable state={tableState} field="elo_score">
+                {t('elo_score')}
+              </ThSortable>
+            </>
           ) : (
-            <ThNotSortable>
-              <WinDistributionTitle />
-            </ThNotSortable>
+            <>
+              <ThSortable visibleFrom="sm" state={tableState} field="points">
+                {t('points_table_header')}
+              </ThSortable>
+              <ThNotSortable>
+                <WinDistributionTitle />
+              </ThNotSortable>
+            </>
           )}
         </Table.Tr>
       </Table.Thead>

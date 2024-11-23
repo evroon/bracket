@@ -20,9 +20,11 @@ import { getTournamentResponseByEndpointName } from '../../../../services/tourna
 export function StandingsContent({
   swrStagesResponse,
   fontSizeInPixels,
+  maxTeamsToDisplay,
 }: {
   swrStagesResponse: SWRResponse;
   fontSizeInPixels: number;
+  maxTeamsToDisplay: number;
 }) {
   const { t } = useTranslation();
 
@@ -46,6 +48,7 @@ export function StandingsContent({
           stageItem={stageItemsLookup[stageItemId]}
           stageItemsLookup={stageItemsLookup}
           fontSizeInPixels={fontSizeInPixels}
+          maxTeamsToDisplay={maxTeamsToDisplay}
         />
       </div>
     ));
@@ -92,7 +95,11 @@ export default function Standings() {
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
-          <StandingsContent swrStagesResponse={swrStagesResponse} fontSizeInPixels={16} />
+          <StandingsContent
+            swrStagesResponse={swrStagesResponse}
+            fontSizeInPixels={16}
+            maxTeamsToDisplay={100}
+          />
         </Container>
       </Container>
       <DashboardFooter />
