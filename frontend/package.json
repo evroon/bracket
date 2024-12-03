@@ -31,7 +31,7 @@
     "@mantine/spotlight": "7.12.1",
     "@next/bundle-analyzer": "^15.0.0",
     "@react-icons/all-files": "^4.1.0",
-    "@tabler/icons-react": "^3.23.0",
+    "@tabler/icons-react": "^3.24.0",
     "axios": "^1.7.4",
     "clsx": "^2.0.0",
     "cookies-next": "^5.0.2",
