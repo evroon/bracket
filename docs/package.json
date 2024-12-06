@@ -41,7 +41,7 @@
     "@babel/core": "^7.23.5",
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@next/eslint-plugin-next": "^15.0.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.0.1",
     "@types/jest": "^29.5.11",
     "@types/node": "^22.7.5",
     "@types/react": "^18.2.42",
