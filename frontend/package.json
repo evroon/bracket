@@ -46,7 +46,7 @@
     "react-i18next": "^15.1.0",
     "react-icons": "^5.4.0",
     "react-qr-code": "^2.0.12",
-    "react-redux": "^9.0.2",
+    "react-redux": "^9.2.0",
     "swr": "^2.2.4",
     "yarn-upgrade-all": "^0.7.2"
   },
