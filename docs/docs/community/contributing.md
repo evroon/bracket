@@ -79,6 +79,14 @@ translation for you, and then carefully check and correct any mistakes.
             <sub><b>IzStriker</b></sub>
         </a>
     </td></tr>
+<tr>
+    <td align="center">
+        <a href="https://github.com/babeuh">
+            <img src="https://avatars.githubusercontent.com/u/60193302?v=4" width="100;" alt="babeuh"/>
+            <br />
+            <sub><b>Raphael Le Goaller</b></sub>
+        </a>
+    </td></tr>
 </table>
 <!-- readme: collaborators,contributors,dependabot/- -end -->
 
