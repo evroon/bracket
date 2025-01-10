@@ -48,7 +48,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
 
       - name: Build and push frontend Docker image
-        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
+        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc
         with:
           context: frontend
           push: true
@@ -58,7 +58,7 @@ jobs:
           platforms: linux/amd64
 
       - name: Build and push backend Docker image
-        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
+        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc
         with:
           context: backend
           push: true
