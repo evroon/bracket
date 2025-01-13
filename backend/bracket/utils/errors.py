@@ -84,9 +84,9 @@ def check_foreign_key_violation(expected_violations: set[ForeignKey]) -> Iterato
     except asyncpg.exceptions.ForeignKeyViolationError as exc:
         constraint_name = exc.as_dict()["constraint_name"]
         assert constraint_name, "ForeignKeyViolationError occurred but no constraint_name defined"
-        assert (
-            constraint_name in ForeignKey.values()
-        ), f"Unknown ForeignKeyViolationError occurred: {constraint_name}"
+        assert constraint_name in ForeignKey.values(), (
+            f"Unknown ForeignKeyViolationError occurred: {constraint_name}"
+        )
         constraint = ForeignKey(constraint_name)
 
         if (

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# ruff: noqa: TCH001,TCH002
+# ruff: noqa: TC001,TCH002
 import json
 from decimal import Decimal
 from typing import Annotated
