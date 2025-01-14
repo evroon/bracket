@@ -77,9 +77,9 @@ async def get_team_update_for_input(
             detail="Please first assign teams to all stage items in the current stage.",
         )
 
-    assert isinstance(
-        target_stage_item_input, StageItemInputFinal
-    ), f"Unexpected stage item type: {type(target_stage_item_input)}"
+    assert isinstance(target_stage_item_input, StageItemInputFinal), (
+        f"Unexpected stage item type: {type(target_stage_item_input)}"
+    )
     return StageItemInputUpdate(
         stage_item_input=stage_item_input, team=target_stage_item_input.team
     )

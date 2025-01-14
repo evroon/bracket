@@ -112,7 +112,7 @@ select = [
     "UP",
     "W",
 ]
-ignore = ["FIX002", "TD002", "TD003", "TCH001", "TCH002", "TCH003", "ISC001"]
+ignore = ["FIX002", "TD002", "TD003", "TC001", "TC002", "TC003", "ISC001"]
 
 [tool.vulture]
 min_confidence = 0
