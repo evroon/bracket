@@ -86,7 +86,7 @@ skips = [
 line-length = 100
 respect-gitignore = false
 show-fixes = true
-output-format = "text"
+output-format = "full"
 target-version = "py311"
 exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]
 
