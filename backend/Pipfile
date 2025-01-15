@@ -42,7 +42,7 @@ pytest-asyncio = "0.21.2"
 pytest-cov = "4.0.0"
 pytest-xdist = "3.2.1"
 ruff = "0.9.1"
-vulture = "2.10"
+vulture = "2.14"
 
 [requires]
 python_version = "3.12"
