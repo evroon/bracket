@@ -14,8 +14,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "test": "yarn run prettier:write && yarn run markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
-    "test-check": "yarn run prettier:check && yarn run markdownlint-cli2",
+    "test": "yarn run prettier:write && yarn run markdownlint-cli2 --fix",
+    "test-check": "yarn run prettier:check && yarn run markdownlint-cli2 --config .markdownlint-cli2.mjs",
     "lint:markdown": "markdownlint-cli2"
   },
   "dependencies": {
