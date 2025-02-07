@@ -62,8 +62,8 @@ export default function Home() {
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Layout
-        title={""}
-        description="Description will go into a meta tag in <head />"
+        title={"Bracket documentation"}
+        description="Free and open source tournament scheduling system"
       >
         <HeroTitle />
         <main>
