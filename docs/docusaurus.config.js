@@ -7,7 +7,7 @@ const { themes } = require("prism-react-renderer");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Bracket - Free & open source tournament management",
-  tagline: "Free and open source tournament scheduling system",
+  tagline: "Bracket is a free and open source tournament system. Set up a tournament, add teams, schedule matches, track scores and present live rankings.",
   favicon: "img/logo.svg",
   url: "https://docs.bracketapp.nl",
   baseUrl: "/",
