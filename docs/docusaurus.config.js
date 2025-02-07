@@ -6,7 +6,7 @@ const { themes } = require("prism-react-renderer");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Bracket",
+  title: "Bracket - Free & open source tournament management",
   tagline: "Free and open source tournament scheduling system",
   favicon: "img/logo.svg",
   url: "https://docs.bracketapp.nl",
