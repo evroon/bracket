@@ -26,7 +26,11 @@ import SaveButton from '../buttons/save';
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
   return (
-    <Image radius="md" src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`} />
+    <Image
+      radius="md"
+      alt="Logo of the tournament"
+      src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
+    />
   );
 }
 

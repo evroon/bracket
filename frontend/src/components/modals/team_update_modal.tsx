@@ -27,7 +27,13 @@ import { DropzoneButton } from '../utils/file_upload';
 
 function TeamLogo({ team }: { team: TeamInterface | null }) {
   if (team == null || team.logo_path == null) return null;
-  return <Image radius="md" src={`${getBaseApiUrl()}/static/team-logos/${team.logo_path}`} />;
+  return (
+    <Image
+      radius="md"
+      alt="Logo of the team"
+      src={`${getBaseApiUrl()}/static/team-logos/${team.logo_path}`}
+    />
+  );
 }
 
 export default function TeamUpdateModal({
