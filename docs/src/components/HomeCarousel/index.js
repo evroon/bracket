@@ -15,24 +15,31 @@ export function HomeCarousel() {
       >
         <Carousel.Slide>
           <Image
+            alt="preview image of the tournament builder page in Bracket"
             src={require("@site/static/img/builder_preview.png").default}
           />
         </Carousel.Slide>
         <Carousel.Slide>
           <Image
+            alt="preview image of the tournament planning page in Bracket"
             src={require("@site/static/img/planning_preview.png").default}
           />
         </Carousel.Slide>
         <Carousel.Slide>
           <Image
+            alt="preview image of the tournament scheduling page in Bracket"
             src={require("@site/static/img/schedule_preview.png").default}
           />
         </Carousel.Slide>
         <Carousel.Slide>
-          <Image src={require("@site/static/img/courts_preview.png").default} />
+          <Image
+            alt="preview image of the courts page in Bracket"
+            src={require("@site/static/img/courts_preview.png").default}
+          />
         </Carousel.Slide>
         <Carousel.Slide>
           <Image
+            alt="preview image of the standings page in Bracket"
             src={require("@site/static/img/standings_preview.png").default}
           />
         </Carousel.Slide>
