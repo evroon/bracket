@@ -16,6 +16,7 @@ export function TournamentLogo({ tournament }: { tournament: Tournament }) {
   return (
     <Image
       radius="md"
+      alt="Logo of the tournament"
       src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
       fallbackSrc={`https://placehold.co/318x160?text=${tournament.name}`}
       height={160}

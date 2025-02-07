@@ -70,6 +70,7 @@ export default function Home() {
           <Center>
             <Container mt="lg" px="0px" mx="1rem">
               <Image
+                alt="Design of the Bracket dashboard"
                 src={
                   require("@site/static/img/bracket-screenshot-design.png")
                     .default
