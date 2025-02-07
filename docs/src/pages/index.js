@@ -63,7 +63,7 @@ export default function Home() {
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Layout
         title={""}
-        description="Free and open source tournament scheduling system"
+        description="Bracket is a free and open source tournament system. Set up a tournament, add teams, schedule matches, track scores and present live rankings."
       >
         <HeroTitle />
         <main>
