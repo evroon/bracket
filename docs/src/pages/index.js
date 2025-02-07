@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Layout
-        title={"Bracket documentation"}
+        title={"Bracket"}
         description="Free and open source tournament scheduling system"
       >
         <HeroTitle />
