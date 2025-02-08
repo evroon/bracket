@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.models.db.user_x_club import UserXClubInsertable, UserXClubRelation
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_MOCK_TIME
@@ -7,6 +9,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_club, inserted_user_x_club
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_clubs_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -21,6 +24,7 @@ async def test_clubs_endpoint(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_club(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -37,6 +41,7 @@ async def test_create_club(
     assert response["data"]["name"] == payload["name"]
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_club(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

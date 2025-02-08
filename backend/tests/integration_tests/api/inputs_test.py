@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.models.db.stage_item_inputs import StageItemInputInsertable
 from bracket.utils.dummy_records import (
     DUMMY_STAGE1,
@@ -17,6 +19,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_available_inputs(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -40,6 +43,7 @@ async def test_available_inputs(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_stage_item_input(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -74,6 +78,7 @@ async def test_update_stage_item_input(
     assert response == {"success": True}
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_stage_item_input_invalid_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

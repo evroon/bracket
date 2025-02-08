@@ -1,5 +1,6 @@
 import aiofiles.os
 import aiohttp
+import pytest
 
 from bracket.database import database
 from bracket.models.db.team import Team
@@ -12,6 +13,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear, inserted_team
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_teams_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -41,6 +43,7 @@ async def test_teams_endpoint(
         }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -50,6 +53,7 @@ async def test_create_team(
     await assert_row_count_and_clear(teams, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_teams(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -61,6 +65,7 @@ async def test_create_teams(
     await assert_row_count_and_clear(teams, 2)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -76,6 +81,7 @@ async def test_delete_team(
         await assert_row_count_and_clear(teams, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_team(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -95,6 +101,7 @@ async def test_update_team(
         await assert_row_count_and_clear(teams, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_team_invalid_players(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -108,6 +115,7 @@ async def test_update_team_invalid_players(
         assert response == {"detail": "Could not find Player(s) with ID {-1}"}
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_team_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

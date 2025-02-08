@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
 from bracket.models.db.match import MatchBody, MatchWithDetailsDefinitive
 from bracket.models.db.stage_item import StageItemWithInputsCreate
@@ -28,6 +30,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_activate_next_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

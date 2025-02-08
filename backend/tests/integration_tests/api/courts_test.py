@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.models.db.court import Court
 from bracket.schema import courts
@@ -9,6 +11,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear, inserted_court, inserted_team
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_courts_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -30,6 +33,7 @@ async def test_courts_endpoint(
             }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -39,6 +43,7 @@ async def test_create_court(
     await assert_row_count_and_clear(courts, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -57,6 +62,7 @@ async def test_delete_court(
             await assert_row_count_and_clear(courts, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_court(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

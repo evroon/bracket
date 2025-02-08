@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User
@@ -10,6 +12,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_users_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -31,6 +34,7 @@ async def test_users_endpoint(
     assert await send_auth_request(HTTPMethod.GET, "users/me", auth_context, {}) == expected_data
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_user(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -47,6 +51,7 @@ async def test_create_user(
     await delete_user(response["data"]["user_id"])
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_demo_user(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -58,6 +63,7 @@ async def test_create_demo_user(
     await delete_user(response["data"]["user_id"])
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_user(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from unittest.mock import Mock, patch
 
 import jwt
+import pytest
 
 from bracket.config import config
 from bracket.models.db.account import UserAccountType
@@ -21,6 +22,7 @@ def mock_auth_time() -> Generator[None, None, None]:
         yield
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> None:
     mock_user = get_mock_user()
     body = {
@@ -38,6 +40,7 @@ async def test_get_token_success(startup_and_shutdown_uvicorn_server: None) -> N
     assert decoded == {"user": mock_user.email, "exp": 7258723200}
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server: None) -> None:
     mock_user = get_mock_user()
     body = {
@@ -51,6 +54,7 @@ async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server
     assert response == {"detail": "Incorrect email or password"}
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: None) -> None:
     mock_user = get_mock_user()
     headers = {"Authorization": f"Bearer {get_mock_token(mock_user)}"}
@@ -71,6 +75,7 @@ async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: N
         }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_invalid_token(startup_and_shutdown_uvicorn_server: None) -> None:
     headers = {"Authorization": "Bearer some.invalid.token"}
 
@@ -78,6 +83,7 @@ async def test_invalid_token(startup_and_shutdown_uvicorn_server: None) -> None:
     assert response == {"detail": "Could not validate credentials"}
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_not_authenticated_for_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
