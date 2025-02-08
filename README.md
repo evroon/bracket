@@ -93,7 +93,7 @@ sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
 
 # Usage
-Read the [usage guide](https://docs.bracketapp.nl/docs/usage/introduction) for how to organise a tournament in Bracket from start to finish.
+Read the [usage guide](https://docs.bracketapp.nl/docs/usage/guide) for how to organise a tournament in Bracket from start to finish.
 
 # Configuration
 Read the [configuration docs](https://docs.bracketapp.nl/docs/running-bracket/configuration) for how to configure Bracket.
