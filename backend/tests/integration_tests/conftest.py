@@ -1,7 +1,5 @@
 # pylint: disable=redefined-outer-name
-import asyncio
 import os
-from asyncio import AbstractEventLoop
 from collections.abc import AsyncIterator
 from time import sleep
 
@@ -15,19 +13,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
 
 
-# @pytest_asyncio.fixture(loop_scope="session")
-# def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
-#     try:
-#         loop = asyncio.get_running_loop()
-#     except RuntimeError:
-#         loop = asyncio.new_event_loop()
-#
-#     yield loop
-#     loop.close()
-
-
-# @pytest.fixture(scope="session", autouse=True)
-@pytest_asyncio.fixture(loop_scope="session", scope="session", autouse=True)
+@pytest_asyncio.fixture(scope="session", autouse=True)
 async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
     """
     Creates the test database on the first test run in the session.
