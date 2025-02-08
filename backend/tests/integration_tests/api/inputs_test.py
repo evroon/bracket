@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.models.db.stage_item_inputs import StageItemInputInsertable
 from bracket.utils.dummy_records import (
     DUMMY_STAGE1,
@@ -15,7 +17,6 @@ from tests.integration_tests.sql import (
     inserted_stage_item_input,
     inserted_team,
 )
-import pytest
 
 
 @pytest.mark.asyncio(loop_scope="session")

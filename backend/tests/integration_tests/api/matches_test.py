@@ -1,12 +1,13 @@
 from decimal import Decimal
 
+import pytest
+
 from bracket.database import database
 from bracket.models.db.match import Match
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputInsertable,
 )
-import pytest
 from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (

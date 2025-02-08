@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.logic.scheduling.builder import build_matches_for_stage_item
 from bracket.models.db.stage_item import StageItemWithInputsCreate
 from bracket.models.db.stage_item_inputs import (
@@ -14,7 +16,6 @@ from bracket.utils.dummy_records import (
     DUMMY_STAGE_ITEM3,
     DUMMY_TEAM1,
 )
-import pytest
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,

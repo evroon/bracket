@@ -10,7 +10,6 @@ from bracket.utils.dummy_records import (
     DUMMY_STAGE_ITEM1,
     DUMMY_TEAM1,
 )
-import pytest
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,

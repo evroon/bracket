@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User
@@ -9,7 +11,6 @@ from tests.integration_tests.api.shared import send_auth_request, send_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear
 
-import pytest
 
 @pytest.mark.asyncio(loop_scope="session")
 async def test_users_endpoint(

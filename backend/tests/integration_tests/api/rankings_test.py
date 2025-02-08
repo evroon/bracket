@@ -1,6 +1,8 @@
 from decimal import Decimal
 from unittest.mock import ANY
 
+import pytest
+
 from bracket.database import database
 from bracket.models.db.ranking import Ranking
 from bracket.schema import rankings
@@ -15,7 +17,6 @@ from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_ranking, inserted_team
 
-import pytest
 
 @pytest.mark.asyncio(loop_scope="session")
 async def test_rankings_endpoint(

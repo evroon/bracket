@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.models.db.player import Player
 from bracket.schema import players
@@ -9,7 +11,6 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear, inserted_player, inserted_team
 
 
-import pytest
 @pytest.mark.asyncio(loop_scope="session")
 async def test_players_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext

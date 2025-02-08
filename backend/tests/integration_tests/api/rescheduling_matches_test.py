@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.models.db.match import MatchRescheduleBody
 from bracket.models.db.stage_item_inputs import StageItemInputInsertable
 from bracket.schema import matches
@@ -12,7 +14,6 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM1,
     DUMMY_TEAM2,
 )
-import pytest
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
 from tests.integration_tests.models import AuthContext

@@ -1,8 +1,8 @@
 import aiofiles
 import aiofiles.os
 import aiohttp
-
 import pytest
+
 from bracket.database import database
 from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.tournament import Tournament

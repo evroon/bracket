@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBodyFinal
 from bracket.schema import matches, rounds, stage_items, stages
@@ -13,7 +15,6 @@ from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_tournament_request,
 )
-import pytest
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
     assert_row_count_and_clear,

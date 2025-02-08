@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.models.db.round import Round
 from bracket.models.db.stage_item import StageType
@@ -14,7 +16,6 @@ from tests.integration_tests.sql import (
     inserted_stage_item,
     inserted_team,
 )
-import pytest
 
 
 @pytest.mark.asyncio(loop_scope="session")
