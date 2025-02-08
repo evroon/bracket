@@ -98,9 +98,14 @@ items. This requires the following steps:
 - Assign `1st of Round Robin` and `2nd of Round Robin` to the slots of the single elimination
   stage item.
 
-## 5. Schedule Matches
+## 5. Add Courts and Schedule Matches
 
 To schedule the matches (assign the start time and courts), go to the `Planning` page.
+
+### Create courts
+Add all the courts of your tournament before scheduling matches. You just need to provide a name.
+
+### Schedule matches
 
 Press the `Schedule All Unscheduled Matches` button. This will automatically assign courts and start
 times to all matches from the stage items you defined in the previous section.
