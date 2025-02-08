@@ -15,7 +15,9 @@ from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_ranking, inserted_team
 
+import pytest
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_rankings_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -38,6 +40,7 @@ async def test_rankings_endpoint(
         }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_ranking(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -50,6 +53,7 @@ async def test_create_ranking(
             await sql_delete_ranking(tournament_id, ranking.id)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_ranking(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -67,6 +71,7 @@ async def test_delete_ranking(
             )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_ranking(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

@@ -1,3 +1,4 @@
+import pytest
 from heliclockter import datetime_utc
 
 from bracket.models.db.round import RoundInsertable
@@ -28,6 +29,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_start_next_round(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

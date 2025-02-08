@@ -2,6 +2,7 @@ import aiofiles
 import aiofiles.os
 import aiohttp
 
+import pytest
 from bracket.database import database
 from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.tournament import Tournament
@@ -20,6 +21,7 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_tournament
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_tournaments_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -43,6 +45,7 @@ async def test_tournaments_endpoint(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_tournament_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -66,6 +69,7 @@ async def test_tournament_endpoint(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -91,6 +95,7 @@ async def test_create_tournament(
     await sql_delete_tournament_completely(tournament.id)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_tournament_duplicate_dashboard_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -110,6 +115,7 @@ async def test_create_tournament_duplicate_dashboard_endpoint(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -135,6 +141,7 @@ async def test_update_tournament(
     assert updated_tournament.dashboard_public == body["dashboard_public"]
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -155,6 +162,7 @@ async def test_delete_tournament(
     await sql_delete_tournament(tournament_inserted.id)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_tournament_upload_and_remove_logo(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

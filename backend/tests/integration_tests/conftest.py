@@ -6,6 +6,7 @@ from collections.abc import AsyncIterator
 from time import sleep
 
 import pytest
+import pytest_asyncio
 from databases import Database
 
 from bracket.database import database, engine
@@ -14,19 +15,20 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
 
 
-@pytest.fixture(scope="session")
-def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
+# @pytest_asyncio.fixture(loop_scope="session")
+# def event_loop() -> AsyncIterator[AbstractEventLoop]:  # type: ignore[misc]
+#     try:
+#         loop = asyncio.get_running_loop()
+#     except RuntimeError:
+#         loop = asyncio.new_event_loop()
+#
+#     yield loop
+#     loop.close()
 
-    yield loop
-    loop.close()
 
-
-@pytest.fixture(scope="session", autouse=True)
-async def reinit_database(event_loop: AbstractEventLoop, worker_id: str) -> AsyncIterator[Database]:
+# @pytest.fixture(scope="session", autouse=True)
+@pytest_asyncio.fixture(loop_scope="session", scope="session", autouse=True)
+async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
     """
     Creates the test database on the first test run in the session.
 

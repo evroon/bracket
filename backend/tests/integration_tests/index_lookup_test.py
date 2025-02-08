@@ -1,3 +1,5 @@
+import pytest
+
 from bracket.database import database
 from bracket.utils.errors import (
     foreign_key_violation_error_lookup,
@@ -5,6 +7,7 @@ from bracket.utils.errors import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_all_unique_indices_in_lookup() -> None:
     query = """
     SELECT
@@ -26,6 +29,7 @@ async def test_all_unique_indices_in_lookup() -> None:
     assert indices == expected_indices
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_known_foreign_keys_in_lookup() -> None:
     query = """
         SELECT conrelid::regclass AS table_name,

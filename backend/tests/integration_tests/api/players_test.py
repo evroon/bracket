@@ -9,6 +9,8 @@ from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import assert_row_count_and_clear, inserted_player, inserted_team
 
 
+import pytest
+@pytest.mark.asyncio(loop_scope="session")
 async def test_players_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -39,6 +41,7 @@ async def test_players_endpoint(
             }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_player(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -48,6 +51,7 @@ async def test_create_player(
     await assert_row_count_and_clear(players, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_players(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -59,6 +63,7 @@ async def test_create_players(
     await assert_row_count_and_clear(players, 2)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_player(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -77,6 +82,7 @@ async def test_delete_player(
             await assert_row_count_and_clear(players, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_player(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

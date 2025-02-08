@@ -13,6 +13,7 @@ from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_tournament_request,
 )
+import pytest
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import (
     assert_row_count_and_clear,
@@ -22,6 +23,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_stage_item(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -61,6 +63,7 @@ async def test_create_stage_item(
         await assert_row_count_and_clear(stages, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_stage_item(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -84,6 +87,7 @@ async def test_delete_stage_item(
         await assert_row_count_and_clear(stages, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_stage_item(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

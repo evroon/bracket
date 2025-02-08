@@ -6,6 +6,7 @@ from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputInsertable,
 )
+import pytest
 from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
@@ -37,6 +38,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -82,6 +84,7 @@ async def test_create_match(
         await assert_row_count_and_clear(matches, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -148,6 +151,7 @@ async def test_delete_match(
         await assert_row_count_and_clear(matches, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_match(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -227,6 +231,7 @@ async def test_update_match(
         await assert_row_count_and_clear(matches, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_endpoint_custom_duration_margin(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -306,6 +311,7 @@ async def test_update_endpoint_custom_duration_margin(
         await assert_row_count_and_clear(matches, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_upcoming_matches_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

@@ -10,6 +10,7 @@ from bracket.utils.dummy_records import (
     DUMMY_STAGE_ITEM1,
     DUMMY_TEAM1,
 )
+import pytest
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
@@ -27,6 +28,7 @@ from tests.integration_tests.sql import (
 
 
 @pytest.mark.parametrize(("with_auth",), [(True,), (False,)])
+@pytest.mark.asyncio(loop_scope="session")
 async def test_stages_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext, with_auth: bool
 ) -> None:
@@ -87,6 +89,7 @@ async def test_stages_endpoint(
         }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -106,6 +109,7 @@ async def test_create_stage(
         await assert_row_count_and_clear(stages, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -124,6 +128,7 @@ async def test_delete_stage(
         await assert_row_count_and_clear(stages, 0)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_update_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -153,6 +158,7 @@ async def test_update_stage(
         await assert_row_count_and_clear(stages, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_activate_stage(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -176,6 +182,7 @@ async def test_activate_stage(
         await assert_row_count_and_clear(stages, 1)
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_get_next_stage_rankings(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

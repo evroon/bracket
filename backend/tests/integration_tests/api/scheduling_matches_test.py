@@ -14,6 +14,7 @@ from bracket.utils.dummy_records import (
     DUMMY_STAGE_ITEM3,
     DUMMY_TEAM1,
 )
+import pytest
 from bracket.utils.http import HTTPMethod
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
@@ -27,6 +28,7 @@ from tests.integration_tests.sql import (
 )
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_schedule_all_matches(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:

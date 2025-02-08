@@ -6,7 +6,9 @@ from tests.integration_tests.api.shared import send_auth_request
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_club, inserted_user_x_club
 
+import pytest
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_clubs_endpoint(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -21,6 +23,7 @@ async def test_clubs_endpoint(
     }
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_create_club(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
@@ -37,6 +40,7 @@ async def test_create_club(
     assert response["data"]["name"] == payload["name"]
 
 
+@pytest.mark.asyncio(loop_scope="session")
 async def test_delete_club(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
