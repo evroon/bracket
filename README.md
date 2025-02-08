@@ -92,10 +92,8 @@ sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
 
 See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
 
-# Development setup
-Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
-
-Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
+# Usage
+Read the [usage guide](https://docs.bracketapp.nl/docs/usage/introduction) for how to use Bracket as a user.
 
 # Configuration
 Read the [configuration docs](https://docs.bracketapp.nl/docs/running-bracket/configuration) for how to configure Bracket.
@@ -109,6 +107,11 @@ The frontend doesn't can be configured by environment variables as well, as well
 Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how to deploy Bracket and run it in production.
 
 Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
+
+# Development setup
+Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
+
+Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
 
 # Translations
 Based on your browser settings, your language should be automatically detected and loaded. For now,
