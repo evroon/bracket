@@ -123,10 +123,11 @@ min_confidence = 0
 paths = ["."]
 ignore_decorators = ["@pytest.*", "@*router*", "@app.*", "@*validator*"]
 ignore_names = [
-    "todo*",
     "RestartableUvicornWorker",
     "_generate_next_value_",
     "downgrade",
-    "upgrade"
+    "startup_and_shutdown_uvicorn_server"
+    "todo*",
+    "upgrade",
 ]
 sort_by_size = true
