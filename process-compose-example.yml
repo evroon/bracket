@@ -33,3 +33,18 @@ processes:
       timeout_seconds: 10
       failure_threshold: 999
       period_seconds: 10
+
+   docs:
+    working_dir: "docs"
+    command: "yarn run docusaurus start -p 3001"
+    availability:
+      restart: "on_failure"
+    readiness_probe:
+      http_get:
+        host: 127.0.0.1
+        scheme: http
+        path: "/"
+        port: 3001
+      timeout_seconds: 10
+      failure_threshold: 999
+      period_seconds: 10
