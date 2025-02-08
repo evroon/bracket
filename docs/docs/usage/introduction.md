@@ -103,6 +103,7 @@ items. This requires the following steps:
 To schedule the matches (assign the start time and courts), go to the `Planning` page.
 
 ### Create courts
+
 Add all the courts of your tournament before scheduling matches. You just need to provide a name.
 
 ### Schedule matches
