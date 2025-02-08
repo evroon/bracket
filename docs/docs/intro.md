@@ -43,6 +43,6 @@ experience to a project with a real purpose.
 ## Quickstart
 
 To get started in selfhosting Bracket, follow the steps described
-in [quickstart](running-bracket/quickstart.md)
+in [quickstart](running-bracket/quickstart.md).
 
 To learn how to organize a tournament in Bracket, read the [usage guide](usage/guide.md).
