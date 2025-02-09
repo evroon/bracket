@@ -40,5 +40,5 @@ export async function updateTeam(
       active,
       player_ids,
     })
-  ).catch((response: any) => handleRequestError(response));
+  );
 }

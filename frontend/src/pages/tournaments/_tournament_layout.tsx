@@ -1,4 +1,4 @@
-import { Badge, Group, Text, ThemeIcon, Title, Tooltip } from '@mantine/core';
+import { Group, ThemeIcon, Title, Tooltip } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { HiArchiveBoxArrowDown } from 'react-icons/hi2';
