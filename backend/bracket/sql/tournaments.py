@@ -35,7 +35,7 @@ async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament 
 async def sql_get_tournaments(
     club_ids: tuple[int, ...],
     endpoint_name: str | None = None,
-    filter_: Literal["all", "open", "archived"] = "open",
+    filter_: Literal["ALL", "OPEN", "ARCHIVED"] = "ALL",
 ) -> list[Tournament]:
     query = """
         SELECT *
@@ -49,9 +49,9 @@ async def sql_get_tournaments(
         query += "AND dashboard_endpoint = :endpoint_name"
         params = {**params, "endpoint_name": endpoint_name}
 
-    if filter_ == "open":
+    if filter_ == "OPEN":
         query += "AND status = 'OPEN'"
-    elif filter_ == "archived":
+    elif filter_ == "ARCHIVED":
         query += "AND status = 'ARCHIVED'"
 
     result = await database.fetch_all(query=query, values=params)

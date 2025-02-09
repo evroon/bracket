@@ -74,7 +74,7 @@ async def get_tournament(
 @router.get("/tournaments", response_model=TournamentsResponse)
 async def get_tournaments(
     user: UserPublic | None = Depends(user_authenticated_or_public_dashboard_by_endpoint_name),
-    filter_: Literal["all", "open", "archived"] = "open",
+    filter_: Literal["ALL", "OPEN", "ARCHIVED"] = "OPEN",
     endpoint_name: str | None = None,
 ) -> TournamentsResponse:
     match user, endpoint_name:

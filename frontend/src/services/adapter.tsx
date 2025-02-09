@@ -7,6 +7,7 @@ import useSWR, { SWRResponse } from 'swr';
 import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
+import { TournamentFilter } from '../interfaces/tournament';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 // TODO: This is a workaround for the fact that axios is not properly typed.
@@ -114,8 +115,8 @@ export function getTournamentById(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}`, fetcher);
 }
 
-export function getTournaments(): SWRResponse {
-  return useSWR('tournaments', fetcher);
+export function getTournaments(filter: TournamentFilter): SWRResponse {
+  return useSWR(`tournaments?filter_=${filter}`, fetcher);
 }
 
 export function getPlayers(tournament_id: number, not_in_team: boolean = false): SWRResponse {

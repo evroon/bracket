@@ -1,7 +1,6 @@
 .fullWithMobile {
   @media (max-width: $mantine-breakpoint-xs) {
       width: 100%;
-      padding-left: 0;
-      padding-right: 1rem;
+      padding: var(--mantine-spacing-sm) var(--mantine-spacing-sm);
   }
 }
