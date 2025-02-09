@@ -11,6 +11,7 @@ export interface Tournament {
   logo_path: string;
   duration_minutes: number;
   margin_minutes: number;
+  status: 'OPEN' | 'ARCHIVED';
 }
 export interface TournamentMinimal {
   id: number;

@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.player import Player, PlayerBody, PlayerMultiBody
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import (
@@ -11,6 +12,7 @@ from bracket.routes.models import (
     SinglePlayerResponse,
     SuccessResponse,
 )
+from bracket.routes.util import disallow_archived_tournament
 from bracket.schema import players
 from bracket.sql.players import (
     get_all_players_in_tournament,
@@ -49,6 +51,7 @@ async def update_player_by_id(
     player_id: PlayerId,
     player_body: PlayerBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SinglePlayerResponse:
     await database.execute(
         query=players.update().where(
@@ -74,6 +77,7 @@ async def delete_player(
     tournament_id: TournamentId,
     player_id: PlayerId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await sql_delete_player(tournament_id, player_id)
     return SuccessResponse()
@@ -84,6 +88,7 @@ async def create_single_player(
     player_body: PlayerBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     existing_players = await get_all_players_in_tournament(tournament_id)
     check_requirement(existing_players, user, "max_players")
@@ -96,6 +101,7 @@ async def create_multiple_players(
     player_body: PlayerMultiBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     player_names = [player.strip() for player in player_body.names.split("\n") if len(player) > 0]
     existing_players = await get_all_players_in_tournament(tournament_id)

@@ -5,12 +5,14 @@ from starlette import status
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.court import Court, CourtBody, CourtToInsert
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
     user_authenticated_or_public_dashboard,
 )
 from bracket.routes.models import CourtsResponse, SingleCourtResponse, SuccessResponse
+from bracket.routes.util import disallow_archived_tournament
 from bracket.schema import courts
 from bracket.sql.courts import get_all_courts_in_tournament, sql_delete_court, update_court
 from bracket.sql.stages import get_full_tournament_details
@@ -35,6 +37,7 @@ async def update_court_by_id(
     court_id: CourtId,
     court_body: CourtBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SingleCourtResponse:
     await update_court(
         tournament_id=tournament_id,
@@ -59,6 +62,7 @@ async def delete_court(
     tournament_id: TournamentId,
     court_id: CourtId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     stages = await get_full_tournament_details(tournament_id, no_draft_rounds=False)
     used_in_matches_count = 0
@@ -84,6 +88,7 @@ async def create_court(
     court_body: CourtBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SingleCourtResponse:
     existing_courts = await get_all_courts_in_tournament(tournament_id)
     check_requirement(existing_courts, user, "max_courts")

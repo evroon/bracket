@@ -83,6 +83,8 @@
     "delete_round_button": "Delete Round",
     "delete_team_button": "Delete Team",
     "delete_tournament_button": "Delete Tournament",
+    "archive_tournament_button": "Archive Tournament",
+    "unarchive_tournament_button": "Unarchive Tournament",
     "demo_description": "To test Bracket, you can start a demo. A demo will last for 30 minutes, after which your demo account be deleted. Please make fair use of it.",
     "demo_policy_title": "Demo policy",
     "draft_round_checkbox_label": "This round is a draft round",

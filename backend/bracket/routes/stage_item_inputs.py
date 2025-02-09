@@ -8,13 +8,14 @@ from bracket.models.db.stage_item_inputs import (
     StageItemInputUpdateBodyFinal,
     StageItemInputUpdateBodyTentative,
 )
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageItemWithRounds
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
 )
 from bracket.routes.models import SuccessResponse
-from bracket.routes.util import stage_item_dependency
+from bracket.routes.util import disallow_archived_tournament, stage_item_dependency
 from bracket.sql.stage_item_inputs import get_stage_item_input_by_id
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.teams import get_team_by_id
@@ -72,6 +73,7 @@ async def update_stage_item_input(
     stage_item_body: StageItemInputUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: StageItemWithRounds = Depends(stage_item_dependency),
+    ___: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     stage_item_input = await get_stage_item_input_by_id(tournament_id, stage_item_input_id)
     await validate_stage_item_update(stage_item_input, stage_item_body, tournament_id)

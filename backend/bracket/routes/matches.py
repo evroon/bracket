@@ -25,10 +25,11 @@ from bracket.models.db.match import (
     MatchRescheduleBody,
 )
 from bracket.models.db.stage_item import StageType
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
-from bracket.routes.util import match_dependency
+from bracket.routes.util import disallow_archived_tournament, match_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
 from bracket.sql.rounds import get_round_by_id
@@ -76,6 +77,7 @@ async def get_matches_to_schedule(
 async def delete_match(
     tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     round_ = await get_round_by_id(tournament_id, match.round_id)
@@ -100,6 +102,7 @@ async def create_match(
     tournament_id: TournamentId,
     match_body: MatchCreateBodyFrontend,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SingleMatchResponse:
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
 
@@ -126,6 +129,7 @@ async def create_match(
 async def schedule_matches(
     tournament_id: TournamentId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     stages = await get_full_tournament_details(tournament_id)
     await schedule_all_unscheduled_matches(tournament_id, stages)
@@ -140,6 +144,7 @@ async def reschedule_match(
     match_id: MatchId,
     body: MatchRescheduleBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(body, tournament_id)
     await handle_match_reschedule(tournament_id, body, match_id)
@@ -153,6 +158,7 @@ async def update_match_by_id(
     match_id: MatchId,
     match_body: MatchBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     match: Match = Depends(match_dependency),
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
