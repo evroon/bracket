@@ -65,7 +65,7 @@ export default function TournamentsCardTable({
             </Card.Section>
 
             <Group justify="space-between" mt="md" mb="xs">
-              <Text fw={500}>{tournament.name}</Text>
+              <Text fw={500} lineClamp={1}>{tournament.name}</Text>
             </Group>
 
             <Card.Section className={classes.section}>
