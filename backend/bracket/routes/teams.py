@@ -180,6 +180,7 @@ async def create_team(
     team_to_insert: TeamBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SingleTeamResponse:
     await check_foreign_keys_belong_to_tournament(team_to_insert, tournament_id)
 
@@ -206,6 +207,7 @@ async def create_multiple_teams(
     team_body: TeamMultiBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     team_names = [team.strip() for team in team_body.names.split("\n") if len(team) > 0]
     existing_teams = await get_teams_with_members(tournament_id)
