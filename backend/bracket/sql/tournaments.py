@@ -1,7 +1,12 @@
-from typing import Any
+from typing import Any, Literal
 
 from bracket.database import database
-from bracket.models.db.tournament import Tournament, TournamentBody, TournamentUpdateBody
+from bracket.models.db.tournament import (
+    Tournament,
+    TournamentBody,
+    TournamentChangeStatusBody,
+    TournamentUpdateBody,
+)
 from bracket.utils.id_types import TournamentId
 
 
@@ -28,7 +33,9 @@ async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament 
 
 
 async def sql_get_tournaments(
-    club_ids: tuple[int, ...], endpoint_name: str | None = None
+    club_ids: tuple[int, ...],
+    endpoint_name: str | None = None,
+    filter_: Literal["ALL", "OPEN", "ARCHIVED"] = "ALL",
 ) -> list[Tournament]:
     query = """
         SELECT *
@@ -41,6 +48,11 @@ async def sql_get_tournaments(
     if endpoint_name is not None:
         query += "AND dashboard_endpoint = :endpoint_name"
         params = {**params, "endpoint_name": endpoint_name}
+
+    if filter_ == "OPEN":
+        query += "AND status = 'OPEN'"
+    elif filter_ == "ARCHIVED":
+        query += "AND status = 'ARCHIVED'"
 
     result = await database.fetch_all(query=query, values=params)
     return [Tournament.model_validate(x) for x in result]
@@ -74,6 +86,23 @@ async def sql_update_tournament(
         query=query,
         values={"tournament_id": tournament_id, **tournament.model_dump()},
     )
+
+
+async def sql_update_tournament_status(
+    tournament_id: TournamentId, body: TournamentChangeStatusBody
+) -> None:
+    query = """
+        UPDATE tournaments
+        SET
+            status = :state,
+            dashboard_public = :dashboard_public
+        WHERE tournaments.id = :tournament_id
+        """
+
+    # Make dashboard non-public when archiving.
+    # When tournament is archived, setting dashboard_public to False shouldn't have an effect.
+    params = {"tournament_id": tournament_id, "state": body.status.value, "dashboard_public": False}
+    await database.execute(query=query, values=params)
 
 
 async def sql_create_tournament(tournament: TournamentBody) -> TournamentId:

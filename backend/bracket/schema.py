@@ -29,6 +29,17 @@ tournaments = Table(
     Column("auto_assign_courts", Boolean, nullable=False, server_default="f"),
     Column("duration_minutes", Integer, nullable=False, server_default="15"),
     Column("margin_minutes", Integer, nullable=False, server_default="5"),
+    Column(
+        "status",
+        Enum(
+            "OPEN",
+            "ARCHIVED",
+            name="tournament_status",
+        ),
+        nullable=False,
+        server_default="OPEN",
+        index=True,
+    ),
 )
 
 stages = Table(

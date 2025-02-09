@@ -1,4 +1,5 @@
 import os
+from typing import Literal
 from uuid import uuid4
 
 import aiofiles.os
@@ -11,7 +12,9 @@ from bracket.logic.subscriptions import check_requirement
 from bracket.logic.tournaments import get_tournament_logo_path
 from bracket.models.db.ranking import RankingCreateBody
 from bracket.models.db.tournament import (
+    Tournament,
     TournamentBody,
+    TournamentChangeStatusBody,
     TournamentUpdateBody,
 )
 from bracket.models.db.user import UserPublic
@@ -22,6 +25,7 @@ from bracket.routes.auth import (
     user_authenticated_or_public_dashboard_by_endpoint_name,
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
+from bracket.routes.util import disallow_archived_tournament
 from bracket.schema import tournaments
 from bracket.sql.rankings import (
     get_all_rankings_in_tournament,
@@ -35,6 +39,7 @@ from bracket.sql.tournaments import (
     sql_get_tournament_by_endpoint_name,
     sql_get_tournaments,
     sql_update_tournament,
+    sql_update_tournament_status,
 )
 from bracket.sql.users import get_user_access_to_club, get_which_clubs_has_user_access_to
 from bracket.utils.errors import (
@@ -69,6 +74,7 @@ async def get_tournament(
 @router.get("/tournaments", response_model=TournamentsResponse)
 async def get_tournaments(
     user: UserPublic | None = Depends(user_authenticated_or_public_dashboard_by_endpoint_name),
+    filter_: Literal["ALL", "OPEN", "ARCHIVED"] = "OPEN",
     endpoint_name: str | None = None,
 ) -> TournamentsResponse:
     match user, endpoint_name:
@@ -88,7 +94,7 @@ async def get_tournaments(
         case _, _ if isinstance(user, UserPublic):
             user_club_ids = await get_which_clubs_has_user_access_to(user.id)
             return TournamentsResponse(
-                data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name)
+                data=await sql_get_tournaments(tuple(user_club_ids), endpoint_name, filter_)
             )
 
     raise RuntimeError()
@@ -99,6 +105,7 @@ async def update_tournament_by_id(
     tournament_id: TournamentId,
     tournament_body: TournamentUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     with check_unique_constraint_violation({UniqueIndex.ix_tournaments_dashboard_endpoint}):
         await sql_update_tournament(tournament_id, tournament_body)
@@ -124,6 +131,28 @@ async def delete_tournament(
     ):
         await sql_delete_tournament(tournament_id)
 
+    return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/change-status", response_model=SuccessResponse)
+async def change_status(
+    tournament_id: TournamentId,
+    body: TournamentChangeStatusBody,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    """
+    Make a tournament archived or non-archived.
+    """
+
+    tournament = await sql_get_tournament(tournament_id)
+    if tournament.status == body.status:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Tournament already has the requested status",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    await sql_update_tournament_status(tournament_id, body)
     return SuccessResponse()
 
 
@@ -157,6 +186,7 @@ async def upload_logo(
     tournament_id: TournamentId,
     file: UploadFile | None = None,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> TournamentResponse:
     old_logo_path = await get_tournament_logo_path(tournament_id)
     filename: str | None = None

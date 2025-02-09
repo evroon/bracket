@@ -4,7 +4,7 @@ import React from 'react';
 
 export function Brand() {
   return (
-    <Center mr="1rem">
+    <Center mr="1rem" miw="12rem">
       <UnstyledButton component={Link} href="/">
         <Group>
           <Image

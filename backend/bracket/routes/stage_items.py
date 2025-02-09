@@ -27,13 +27,14 @@ from bracket.models.db.stage_item import (
     StageItemUpdateBody,
     StageType,
 )
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageItemWithRounds
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
 )
 from bracket.routes.models import SuccessResponse
-from bracket.routes.util import stage_item_dependency
+from bracket.routes.util import disallow_archived_tournament, stage_item_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import sql_create_match
 from bracket.sql.rounds import (
@@ -101,6 +102,7 @@ async def update_stage_item(
     stage_item_id: StageItemId,
     stage_item_body: StageItemUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     stage_item: StageItemWithRounds = Depends(stage_item_dependency),
 ) -> SuccessResponse:
     if stage_item is None:
@@ -137,6 +139,7 @@ async def start_next_round(
     elo_diff_threshold: int = 200,
     iterations: int = 2_000,
     only_recommended: bool = False,
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     draft_round = get_draft_round(stage_item)
     if draft_round is not None:

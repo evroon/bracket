@@ -1,4 +1,4 @@
-import { Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
+import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React from 'react';
@@ -65,8 +65,9 @@ export default function TournamentsCardTable({
             </Card.Section>
 
             <Group justify="space-between" mt="md" mb="xs">
-              <Text fw={500}>{tournament.name}</Text>
-              {/*<Badge color="pink">Archived</Badge>*/}
+              <Text fw={500} lineClamp={1}>
+                {tournament.name}
+              </Text>
             </Group>
 
             <Card.Section className={classes.section}>
@@ -74,15 +75,26 @@ export default function TournamentsCardTable({
             </Card.Section>
 
             <Card.Section className={classes.section}>
-              <Button
-                component={Link}
-                color="blue"
-                fullWidth
-                radius="md"
-                href={`/tournaments/${tournament.id}/stages`}
-              >
-                OPEN
-              </Button>
+              <Group w="100%">
+                <Badge
+                  fullWidth
+                  color="yellow"
+                  variant="outline"
+                  size="lg"
+                  style={{ visibility: tournament.status === 'ARCHIVED' ? 'visible' : 'hidden' }}
+                >
+                  {t('archived_label')}
+                </Badge>
+                <Button
+                  component={Link}
+                  color="blue"
+                  fullWidth
+                  radius="md"
+                  href={`/tournaments/${tournament.id}/stages`}
+                >
+                  OPEN
+                </Button>
+              </Group>
             </Card.Section>
           </Card>
         </UnstyledButton>

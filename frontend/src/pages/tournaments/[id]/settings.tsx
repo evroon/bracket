@@ -4,8 +4,10 @@ import {
   Checkbox,
   Container,
   CopyButton,
+  Divider,
   Fieldset,
   Grid,
+  Group,
   Image,
   NumberInput,
   Select,
@@ -15,12 +17,14 @@ import {
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
-import { IconCalendar, IconCalendarTime, IconCopy } from '@tabler/icons-react';
+import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
+import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from '@tabler/icons-react';
 import assert from 'assert';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { MdArchive } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../404';
@@ -36,7 +40,12 @@ import {
   handleRequestError,
   removeTournamentLogo,
 } from '../../../services/adapter';
-import { deleteTournament, updateTournament } from '../../../services/tournament';
+import {
+  archiveTournament,
+  deleteTournament,
+  unarchiveTournament,
+  updateTournament,
+} from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
@@ -47,6 +56,62 @@ export function TournamentLogo({ tournament }: { tournament: Tournament | null }
       alt="Logo of the tournament"
       src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
     />
+  );
+}
+
+function ArchiveTournamentButton({
+  t,
+  tournament,
+  swrTournamentResponse,
+}: {
+  t: any;
+  tournament: Tournament;
+  swrTournamentResponse: SWRResponse;
+}) {
+  return (
+    <Button
+      variant="outline"
+      mt="sm"
+      color="orange"
+      size="lg"
+      leftSection={<MdArchive size={36} />}
+      onClick={async () => {
+        await archiveTournament(tournament.id).catch((response: any) =>
+          handleRequestError(response)
+        );
+        await swrTournamentResponse.mutate();
+      }}
+    >
+      {t('archive_tournament_button')}
+    </Button>
+  );
+}
+
+function UnarchiveTournamentButton({
+  t,
+  tournament,
+  swrTournamentResponse,
+}: {
+  t: any;
+  tournament: Tournament;
+  swrTournamentResponse: SWRResponse;
+}) {
+  return (
+    <Button
+      variant="outline"
+      mt="sm"
+      color="orange"
+      size="lg"
+      leftSection={<MdUnarchive size={36} />}
+      onClick={async () => {
+        await unarchiveTournament(tournament.id).catch((response: any) =>
+          handleRequestError(response)
+        );
+        await swrTournamentResponse.mutate();
+      }}
+    >
+      {t('unarchive_tournament_button')}
+    </Button>
   );
 }
 
@@ -233,27 +298,50 @@ function GeneralTournamentForm({
         />
       </Fieldset>
 
-      <Button fullWidth mt={24} color="green" type="submit">
+      <Button
+        fullWidth
+        mt={24}
+        size="md"
+        color="green"
+        type="submit"
+        leftSection={<IconPencil size={36} />}
+      >
         {t('save_button')}
       </Button>
 
-      <Button
-        fullWidth
-        variant="outline"
-        mt="sm"
-        color="red"
-        size="sm"
-        leftSection={<MdDelete size={20} />}
-        onClick={async () => {
-          await deleteTournament(tournament.id)
-            .then(async () => {
-              await router.push('/');
-            })
-            .catch((response: any) => handleRequestError(response));
-        }}
-      >
-        {t('delete_tournament_button')}
-      </Button>
+      <Divider mt="2rem" mb="1rem" size="2px" />
+      <Group grow>
+        <Button
+          variant="outline"
+          mt="sm"
+          color="red"
+          size="lg"
+          leftSection={<MdDelete size={36} />}
+          onClick={async () => {
+            await deleteTournament(tournament.id)
+              .then(async () => {
+                await router.push('/');
+              })
+              .catch((response: any) => handleRequestError(response));
+          }}
+        >
+          {t('delete_tournament_button')}
+        </Button>
+
+        {tournament.status === 'OPEN' ? (
+          <ArchiveTournamentButton
+            tournament={tournament}
+            t={t}
+            swrTournamentResponse={swrTournamentResponse}
+          />
+        ) : (
+          <UnarchiveTournamentButton
+            tournament={tournament}
+            t={t}
+            swrTournamentResponse={swrTournamentResponse}
+          />
+        )}
+      </Group>
     </form>
   );
 }

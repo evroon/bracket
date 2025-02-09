@@ -12,11 +12,13 @@ from bracket.models.db.round import (
     RoundInsertable,
     RoundUpdateBody,
 )
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import RoundWithMatches
 from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SuccessResponse
 from bracket.routes.util import (
+    disallow_archived_tournament,
     round_dependency,
     round_with_matches_dependency,
 )
@@ -41,6 +43,7 @@ async def delete_round(
     tournament_id: TournamentId,
     round_id: RoundId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     round_with_matches: RoundWithMatches = Depends(round_with_matches_dependency),
 ) -> SuccessResponse:
     for match in round_with_matches.matches:
@@ -58,6 +61,7 @@ async def create_round(
     tournament_id: TournamentId,
     round_body: RoundCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(round_body, tournament_id)
 
@@ -98,6 +102,7 @@ async def update_round_by_id(
     round_body: RoundUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: Round = Depends(round_dependency),
+    ___: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     query = """
         UPDATE rounds

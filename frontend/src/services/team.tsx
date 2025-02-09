@@ -6,11 +6,13 @@ export async function createTeam(
   active: boolean,
   player_ids: string[]
 ) {
-  return createAxios().post(`tournaments/${tournament_id}/teams`, {
-    name,
-    active,
-    player_ids,
-  });
+  return createAxios()
+    .post(`tournaments/${tournament_id}/teams`, {
+      name,
+      active,
+      player_ids,
+    })
+    .catch((response: any) => handleRequestError(response));
 }
 
 export async function createTeams(tournament_id: number, names: string, active: boolean) {

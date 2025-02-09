@@ -10,6 +10,7 @@ from bracket.logic.scheduling.handle_stage_activation import (
 )
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.stage import Stage, StageActivateBody, StageUpdateBody
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import (
@@ -22,7 +23,7 @@ from bracket.routes.models import (
     StagesWithStageItemsResponse,
     SuccessResponse,
 )
-from bracket.routes.util import stage_dependency
+from bracket.routes.util import disallow_archived_tournament, stage_dependency
 from bracket.sql.stages import (
     get_full_tournament_details,
     get_next_stage_in_tournament,
@@ -57,6 +58,7 @@ async def delete_stage(
     tournament_id: TournamentId,
     stage_id: StageId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     stage: StageWithStageItems = Depends(stage_dependency),
 ) -> SuccessResponse:
     if len(stage.stage_items) > 0:
@@ -80,6 +82,7 @@ async def delete_stage(
 async def create_stage(
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     existing_stages = await get_full_tournament_details(tournament_id)
     check_requirement(existing_stages, user, "max_stages")
@@ -94,6 +97,7 @@ async def update_stage(
     stage_id: StageId,
     stage_body: StageUpdateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
     stage: Stage = Depends(stage_dependency),  # pylint: disable=redefined-builtin
 ) -> SuccessResponse:
     values = {"tournament_id": tournament_id, "stage_id": stage_id}
@@ -115,6 +119,7 @@ async def activate_next_stage(
     tournament_id: TournamentId,
     stage_body: StageActivateBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     new_active_stage_id = await get_next_stage_in_tournament(tournament_id, stage_body.direction)
     if new_active_stage_id is None:

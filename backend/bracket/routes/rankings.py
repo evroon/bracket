@@ -7,6 +7,7 @@ from bracket.logic.ranking.elimination import (
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.ranking import RankingBody, RankingCreateBody
 from bracket.models.db.stage_item import StageType
+from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
 from bracket.routes.auth import (
     user_authenticated_for_tournament,
@@ -16,6 +17,7 @@ from bracket.routes.models import (
     RankingsResponse,
     SuccessResponse,
 )
+from bracket.routes.util import disallow_archived_tournament
 from bracket.sql.rankings import (
     get_all_rankings_in_tournament,
     sql_create_ranking,
@@ -43,6 +45,7 @@ async def update_ranking_by_id(
     ranking_id: RankingId,
     ranking_body: RankingBody,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await sql_update_ranking(
         tournament_id=tournament_id,
@@ -64,6 +67,7 @@ async def delete_ranking(
     tournament_id: TournamentId,
     ranking_id: RankingId,
     _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await sql_delete_ranking(tournament_id, ranking_id)
     return SuccessResponse()
@@ -74,6 +78,7 @@ async def create_ranking(
     ranking_body: RankingCreateBody,
     tournament_id: TournamentId,
     user: UserPublic = Depends(user_authenticated_for_tournament),
+    _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     existing_rankings = await get_all_rankings_in_tournament(tournament_id)
     check_requirement(existing_rankings, user, "max_rankings")
