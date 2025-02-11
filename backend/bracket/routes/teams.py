@@ -1,3 +1,4 @@
+import csv
 import os
 from uuid import uuid4
 
@@ -9,6 +10,7 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.teams import get_team_logo_path
+from bracket.models.db.player import PlayerBody
 from bracket.models.db.team import (
     FullTeamWithPlayers,
     Team,
@@ -34,6 +36,7 @@ from bracket.routes.util import (
     team_with_players_dependency,
 )
 from bracket.schema import players_x_teams, teams
+from bracket.sql.players import insert_player
 from bracket.sql.teams import (
     get_team_by_id,
     get_team_count,
@@ -209,19 +212,26 @@ async def create_multiple_teams(
     user: UserPublic = Depends(user_authenticated_for_tournament),
     _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
-    team_names = [team.strip() for team in team_body.names.split("\n") if len(team) > 0]
+    reader = list(csv.reader(team_body.names.split("\n"), delimiter=","))
     existing_teams = await get_teams_with_members(tournament_id)
-    check_requirement(existing_teams, user, "max_teams", additions=len(team_names))
+    check_requirement(existing_teams, user, "max_teams", additions=len(reader))
 
-    for team_name in team_names:
-        await database.execute(
-            query=teams.insert(),
-            values=TeamInsertable(
-                name=team_name,
-                active=team_body.active,
-                created=datetime_utc.now(),
-                tournament_id=tournament_id,
-            ).model_dump(),
-        )
+    async with database.transaction():
+        for team in reader:
+            team_name = team[0]
+            players = team[1:] if len(team) > 1 else []
+
+            await database.execute(
+                query=teams.insert(),
+                values=TeamInsertable(
+                    name=team_name,
+                    active=team_body.active,
+                    created=datetime_utc.now(),
+                    tournament_id=tournament_id,
+                ).model_dump(),
+            )
+            for player in players:
+                player_body = PlayerBody(name=player, active=team_body.active)
+                await insert_player(player_body, tournament_id)
 
     return SuccessResponse()
