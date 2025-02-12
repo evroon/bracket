@@ -8,7 +8,7 @@ on:
 jobs:
   trigger_crowdin_tm:
     name: Crowdin Translation Memory Trigger
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Prevent this workflow from running (and failing) on forks
     if: github.repository == 'evroon/bracket'
     steps:

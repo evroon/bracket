@@ -5,10 +5,12 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn
+# Increase timeout for slow QEMU arm64 builds
+# https://github.com/nodejs/docker-node/issues/1335
+RUN yarn --network-timeout 1000000
 
 # Rebuild the source code only when needed
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -20,11 +22,11 @@ RUN NEXT_PUBLIC_API_BASE_URL=http://NEXT_PUBLIC_API_BASE_URL_PLACEHOLDER \
     yarn build
 
 # Production image, copy all the files and run next
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next

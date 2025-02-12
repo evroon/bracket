@@ -7,7 +7,7 @@ on:
 
 jobs:
     update-contributors-readme:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         name: Update contributors in README.md
         steps:
             - name: Contribute List
@@ -19,7 +19,7 @@ jobs:
                   pr_title_on_protected: "Update contributors in readme"
 
     update-contributors-docs:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         name: Update contributors in docs
         steps:
             - name: Contribute List
