@@ -36,7 +36,7 @@ from bracket.routes.util import (
     team_with_players_dependency,
 )
 from bracket.schema import players_x_teams, teams
-from bracket.sql.players import insert_player
+from bracket.sql.players import get_all_players_in_tournament, insert_player
 from bracket.sql.teams import (
     get_team_by_id,
     get_team_count,
@@ -213,14 +213,19 @@ async def create_multiple_teams(
     _: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     reader = list(csv.reader(team_body.names.split("\n"), delimiter=","))
+    teams_and_players = [
+        (row[0], row[1:] if len(row) > 1 else []) for row in reader if len(row) > 0
+    ]
+    players = [player for row in teams_and_players for player in row[1]]
+
     existing_teams = await get_teams_with_members(tournament_id)
+    existing_players = await get_all_players_in_tournament(tournament_id)
+
     check_requirement(existing_teams, user, "max_teams", additions=len(reader))
+    check_requirement(existing_players, user, "max_players", additions=len(players))
 
     async with database.transaction():
-        for team in reader:
-            team_name = team[0]
-            players = team[1:] if len(team) > 1 else []
-
+        for team_name, players in teams_and_players:
             await database.execute(
                 query=teams.insert(),
                 values=TeamInsertable(
