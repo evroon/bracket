@@ -4,7 +4,7 @@ import pytest
 
 from bracket.database import database
 from bracket.models.db.team import Team
-from bracket.schema import teams
+from bracket.schema import players, teams
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
@@ -57,12 +57,13 @@ async def test_create_team(
 async def test_create_teams(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {"names": "Team -1\nTeam -2", "active": True}
+    body = {"names": "Team -1,Player 42,Player 43\nTeam -2", "active": True}
     response = await send_tournament_request(
         HTTPMethod.POST, "teams_multi", auth_context, None, body
     )
     assert response["success"] is True
     await assert_row_count_and_clear(teams, 2)
+    await assert_row_count_and_clear(players, 3)
 
 
 @pytest.mark.asyncio(loop_scope="session")
