@@ -1,0 +1,48 @@
+name: docker
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'docker-compose.yml'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build frontend Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          push: false
+          file: frontend/Dockerfile
+          tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
+          # Don't build linux/arm64/v8 because it's very slow with QEMU
+          platforms: linux/amd64
+
+      - name: Build backend Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: false
+          file: backend/Dockerfile
+          tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
+          # Don't build linux/arm64/v8 because it's very slow with QEMU
+          platforms: linux/amd64
