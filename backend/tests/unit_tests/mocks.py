@@ -1,3 +1,5 @@
+from heliclockter import datetime_utc
+
 from bracket.models.db.match import MatchWithDetails, MatchWithDetailsDefinitive
 from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import StageItemInputFinal
@@ -55,7 +57,7 @@ def get_stage_item_inputs_mock(tournament_id: TournamentId) -> list[StageItemInp
 
 
 def get_2_definitive_matches_mock(
-    stage_item_inputs: list[StageItemInputFinal],
+    stage_item_inputs: list[StageItemInputFinal], match1_start_time: datetime_utc = DUMMY_MOCK_TIME
 ) -> tuple[MatchWithDetailsDefinitive, MatchWithDetailsDefinitive]:
     match1 = MatchWithDetailsDefinitive(
         id=MatchId(-1),
@@ -64,7 +66,7 @@ def get_2_definitive_matches_mock(
         stage_item_input1_id=stage_item_inputs[0].id,
         stage_item_input2_id=stage_item_inputs[1].id,
         created=DUMMY_MOCK_TIME,
-        start_time=DUMMY_MOCK_TIME,
+        start_time=match1_start_time,
         duration_minutes=90,
         margin_minutes=15,
         round_id=RoundId(-3),

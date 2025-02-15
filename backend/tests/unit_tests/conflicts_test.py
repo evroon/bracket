@@ -37,8 +37,9 @@ def test_get_conflicting_matches_conflicts_to_clear() -> None:
     """
     tournament_id = TournamentId(-1)
     stage_item_inputs = get_stage_item_inputs_mock(tournament_id)
-    match1, match2 = get_2_definitive_matches_mock(stage_item_inputs)
-    match1 = match1.model_copy(update={"start_time": DUMMY_MOCK_TIME.future(hours=1)})
+    match1, match2 = get_2_definitive_matches_mock(
+        stage_item_inputs, DUMMY_MOCK_TIME.future(hours=1)
+    )
     rounds = get_one_round_with_two_definitive_matches(match1, match2)
     stage_item = StageWithStageItems(
         id=StageId(-1),
