@@ -57,7 +57,7 @@ async def test_create_team(
 async def test_create_teams(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    body = {"names": "Team -1,Player 42,Player 43\nTeam -2", "active": True}
+    body = {"names": "Team -1,Player 42,Player 43\nTeam -2,", "active": True}
     response = await send_tournament_request(
         HTTPMethod.POST, "teams_multi", auth_context, None, body
     )
