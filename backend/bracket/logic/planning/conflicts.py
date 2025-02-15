@@ -6,7 +6,7 @@ from bracket.models.db.util import StageWithStageItems
 from bracket.utils.id_types import MatchId
 
 
-def matchesOverlap(match1: Match, match2: Match) -> bool:
+def matches_overlap(match1: Match, match2: Match) -> bool:
     if (
         match1.start_time is None
         or match1.end_time is None
@@ -55,7 +55,7 @@ def get_conflicting_matches(
             if len(conflicting_input_ids) < 1:
                 continue
 
-            if matchesOverlap(match1, match2):
+            if matches_overlap(match1, match2):
                 for match in (match1, match2):
                     if not conflicts_to_set[match.id][0]:
                         conflicts_to_set[match.id][0] = (
