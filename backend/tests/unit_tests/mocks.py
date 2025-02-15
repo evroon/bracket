@@ -13,6 +13,7 @@ from bracket.utils.dummy_records import (
     DUMMY_TEAM4,
 )
 from bracket.utils.id_types import (
+    CourtId,
     MatchId,
     RoundId,
     StageId,
@@ -70,10 +71,12 @@ def get_2_definitive_matches_mock(
         duration_minutes=90,
         margin_minutes=15,
         round_id=RoundId(-3),
+        court_id=CourtId(-1),
         stage_item_input1_score=2,
         stage_item_input2_score=0,
         stage_item_input1_conflict=False,
         stage_item_input2_conflict=False,
+        position_in_schedule=1,
     )
     match2 = MatchWithDetailsDefinitive(
         id=MatchId(-2),
@@ -86,10 +89,12 @@ def get_2_definitive_matches_mock(
         duration_minutes=90,
         margin_minutes=15,
         round_id=RoundId(-3),
+        court_id=CourtId(-2),
         stage_item_input1_score=2,
         stage_item_input2_score=3,
         stage_item_input1_conflict=False,
         stage_item_input2_conflict=False,
+        position_in_schedule=1,
     )
     return match1, match2
 

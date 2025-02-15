@@ -7,8 +7,8 @@ from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.planning.rounds import (
     MatchTimingAdjustmentInfeasible,
+    get_all_scheduling_operations_for_swiss_round,
     get_draft_round,
-    schedule_all_matches_for_swiss_round,
 )
 from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
 from bracket.logic.ranking.elimination import (
@@ -36,7 +36,10 @@ from bracket.routes.auth import (
 from bracket.routes.models import SuccessResponse
 from bracket.routes.util import disallow_archived_tournament, stage_item_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
-from bracket.sql.matches import sql_create_match
+from bracket.sql.matches import (
+    sql_create_match,
+    sql_reschedule_match_and_determine_duration_and_margin,
+)
 from bracket.sql.rounds import (
     get_next_round_name,
     get_round_by_id,
@@ -213,9 +216,16 @@ async def start_next_round(
 
     draft_round = await get_round_by_id(tournament_id, round_id)
     try:
-        await schedule_all_matches_for_swiss_round(
-            tournament_id, draft_round, active_next_body.adjust_to_time
+        stages = await get_full_tournament_details(tournament_id)
+        court_ids = [court.id for court in courts]
+
+        rescheduling_operations = get_all_scheduling_operations_for_swiss_round(
+            court_ids, stages, tournament, draft_round.matches, active_next_body.adjust_to_time
         )
+
+        # TODO: if safe: await asyncio.gather(*rescheduling_operations)
+        for op in rescheduling_operations:
+            await sql_reschedule_match_and_determine_duration_and_margin(*op)
     except MatchTimingAdjustmentInfeasible as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

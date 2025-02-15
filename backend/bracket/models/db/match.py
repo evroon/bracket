@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from heliclockter import datetime_utc
+from heliclockter import datetime_utc, timedelta
 from pydantic import BaseModel
 
 from bracket.models.db.court import Court
@@ -28,7 +28,7 @@ class MatchBaseInsertable(BaseModelORM):
     @property
     def end_time(self) -> datetime_utc:
         assert self.start_time
-        return self.start_time.future(minutes=self.duration_minutes + self.margin_minutes)
+        return self.start_time + timedelta(minutes=self.duration_minutes + self.margin_minutes)
 
 
 class MatchInsertable(MatchBaseInsertable):
