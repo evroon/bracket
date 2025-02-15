@@ -1,3 +1,6 @@
+from fastapi import HTTPException
+from starlette import status
+
 from bracket.models.db.match import Match, MatchCreateBody
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.util import RoundWithMatches, StageItemWithRounds
@@ -86,12 +89,17 @@ def get_number_of_rounds_to_create_single_elimination(team_count: int) -> int:
     if team_count < 1:
         return 0
 
-    assert team_count % 2 == 0
-
     game_count_lookup = {
         2: 1,
         4: 2,
         8: 3,
         16: 4,
+        32: 5,
     }
+    if team_count not in game_count_lookup:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Number of teams invalid, should be one of {list(game_count_lookup.keys())}",
+        )
+
     return game_count_lookup[team_count]
