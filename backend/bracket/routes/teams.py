@@ -214,7 +214,9 @@ async def create_multiple_teams(
 ) -> SuccessResponse:
     reader = list(csv.reader(team_body.names.split("\n"), delimiter=","))
     teams_and_players = [
-        (row[0], row[1:] if len(row) > 1 else []) for row in reader if len(row) > 0
+        (row[0], [p for p in row[1:] if len(p) > 0] if len(row) > 1 else [])
+        for row in reader
+        if len(row) > 0
     ]
     players = [player for row in teams_and_players for player in row[1]]
 
