@@ -30,14 +30,37 @@ async def test_create_club(
 ) -> None:
     payload = {"name": "Some Cool Club"}
     response = await send_auth_request(HTTPMethod.POST, "clubs", auth_context, json=payload)
-    user_id = auth_context.user.id
 
-    clubs = await get_clubs_for_user_id(user_id)
+    clubs = await get_clubs_for_user_id(auth_context.user.id)
     club_id = response["data"]["id"]
 
     await sql_delete_club(club_id)
 
     assert len(clubs) == 2
+    assert response["data"]["name"] == payload["name"]
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_update_club(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    payload = {"name": "Some Cool Club"}
+    async with inserted_club(DUMMY_CLUB) as club_inserted:
+        async with inserted_user_x_club(
+            UserXClubInsertable(
+                user_id=auth_context.user.id,
+                club_id=club_inserted.id,
+                relation=UserXClubRelation.OWNER,
+            )
+        ):
+            response = await send_auth_request(
+                HTTPMethod.PUT, f"clubs/{club_inserted.id}", auth_context, json=payload
+            )
+
+    clubs = await get_clubs_for_user_id(auth_context.user.id)
+    await sql_delete_club(response["data"]["id"])
+
+    assert len(clubs) == 1
     assert response["data"]["name"] == payload["name"]
 
 
