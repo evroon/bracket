@@ -52,15 +52,6 @@ async def sql_delete_club(club_id: ClubId) -> None:
     await database.execute(query=query, values={"club_id": club_id})
 
 
-async def todo_sql_remove_user_from_club(club_id: ClubId, user_id: UserId) -> None:
-    query = """
-        DELETE FROM users_x_clubs
-        WHERE club_id = :club_id
-        AND user_id = :user_id
-        """
-    await database.execute(query=query, values={"club_id": club_id, "user_id": user_id})
-
-
 async def get_clubs_for_user_id(user_id: UserId) -> list[Club]:
     query = """
         SELECT clubs.* FROM clubs
@@ -69,14 +60,3 @@ async def get_clubs_for_user_id(user_id: UserId) -> list[Club]:
         """
     results = await database.fetch_all(query=query, values={"user_id": user_id})
     return [Club.model_validate(dict(result._mapping)) for result in results]
-
-
-async def todo_get_club_for_user_id(club_id: ClubId, user_id: UserId) -> Club | None:
-    query = """
-        SELECT clubs.* FROM clubs
-        JOIN users_x_clubs uxc on clubs.id = uxc.club_id
-        WHERE uxc.user_id = :user_id
-        AND club_id = :club_id
-        """
-    result = await database.fetch_one(query=query, values={"user_id": user_id, "club_id": club_id})
-    return Club.model_validate(dict(result._mapping)) if result is not None else None
