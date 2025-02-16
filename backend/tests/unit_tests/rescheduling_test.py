@@ -50,7 +50,7 @@ def test_rescheduling_swiss() -> None:
     """
     Test `get_all_scheduling_operations_for_swiss_round`
     """
-    tournament, stage, (match1, match2, match3, match4) = _setup_tournament()
+    tournament, stage, (_, _, match3, match4) = _setup_tournament()
     court_ids = [CourtId(-1), CourtId(-2)]
 
     assert get_all_scheduling_operations_for_swiss_round(
