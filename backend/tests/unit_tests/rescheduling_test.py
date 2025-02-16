@@ -95,7 +95,7 @@ def test_rescheduling_swiss_with_time_adjustment_infeasible() -> None:
     """
     Test `get_all_scheduling_operations_for_swiss_round` with `adjust_to_time` parameter
     """
-    tournament, stage, (match1, match2, match3, match4) = _setup_tournament()
+    tournament, stage, (_, _, match3, match4) = _setup_tournament()
     court_ids = [CourtId(-1), CourtId(-2)]
 
     with pytest.raises(MatchTimingAdjustmentInfeasible):
@@ -112,7 +112,7 @@ def test_rescheduling_swiss_no_courts() -> None:
     """
     Test `get_all_scheduling_operations_for_swiss_round` when there are no courts
     """
-    tournament, stage, (match1, match2, match3, match4) = _setup_tournament()
+    tournament, stage, (match1, match2, _, _) = _setup_tournament()
 
     assert not get_all_scheduling_operations_for_swiss_round(
         [], [stage], tournament, [match1, match2], None
