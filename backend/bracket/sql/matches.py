@@ -182,7 +182,6 @@ async def sql_reschedule_match(
 
 
 async def sql_reschedule_match_and_determine_duration_and_margin(
-    match_id: MatchId,
     court_id: CourtId | None,
     start_time: datetime_utc,
     position_in_schedule: int | None,
@@ -200,7 +199,7 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
         else match.custom_margin_minutes
     )
     await sql_reschedule_match(
-        match_id,
+        match.id,
         court_id,
         start_time,
         position_in_schedule,

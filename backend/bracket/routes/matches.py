@@ -143,11 +143,11 @@ async def reschedule_match(
     tournament_id: TournamentId,
     match_id: MatchId,
     body: MatchRescheduleBody,
+    tournament: Tournament = Depends(disallow_archived_tournament),
     _: UserPublic = Depends(user_authenticated_for_tournament),
-    __: Tournament = Depends(disallow_archived_tournament),
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(body, tournament_id)
-    await handle_match_reschedule(tournament_id, body, match_id)
+    await handle_match_reschedule(tournament, body, match_id)
     await handle_conflicts(await get_full_tournament_details(tournament_id))
     return SuccessResponse()
 

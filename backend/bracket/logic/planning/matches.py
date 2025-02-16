@@ -41,7 +41,6 @@ async def schedule_all_unscheduled_matches(
             for match in round_.matches:
                 if match.start_time is None and match.position_in_schedule is None:
                     await sql_reschedule_match_and_determine_duration_and_margin(
-                        match.id,
                         court.id,
                         start_time,
                         position_in_schedule,
@@ -64,7 +63,6 @@ async def schedule_all_unscheduled_matches(
 
                     if match.start_time is None and match.position_in_schedule is None:
                         await sql_reschedule_match_and_determine_duration_and_margin(
-                            match.id,
                             courts[-1].id,
                             start_time,
                             position_in_schedule,
@@ -93,7 +91,6 @@ async def reorder_matches_for_court(
     last_start_time = tournament.start_time
     for i, match_pos in enumerate(matches_this_court):
         await sql_reschedule_match_and_determine_duration_and_margin(
-            match_pos.match.id,
             court_id,
             last_start_time,
             position_in_schedule=i,
@@ -106,13 +103,12 @@ async def reorder_matches_for_court(
 
 
 async def handle_match_reschedule(
-    tournament_id: TournamentId, body: MatchRescheduleBody, match_id: MatchId
+    tournament: Tournament, body: MatchRescheduleBody, match_id: MatchId
 ) -> None:
     if body.old_position == body.new_position and body.old_court_id == body.new_court_id:
         return
 
-    stages = await get_full_tournament_details(tournament_id)
-    tournament = await sql_get_tournament(tournament_id)
+    stages = await get_full_tournament_details(tournament.id)
     scheduled_matches_old = get_scheduled_matches(stages)
 
     # For match in prev position: set new position

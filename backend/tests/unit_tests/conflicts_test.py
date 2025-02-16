@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from bracket.logic.planning.conflicts import get_conflicting_matches
 from bracket.models.db.util import StageWithStageItems
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME
@@ -38,7 +40,7 @@ def test_get_conflicting_matches_conflicts_to_clear() -> None:
     tournament_id = TournamentId(-1)
     stage_item_inputs = get_stage_item_inputs_mock(tournament_id)
     match1, match2 = get_2_definitive_matches_mock(
-        stage_item_inputs, DUMMY_MOCK_TIME.future(hours=1)
+        stage_item_inputs, DUMMY_MOCK_TIME + timedelta(hours=1)
     )
     rounds = get_one_round_with_two_definitive_matches(match1, match2)
     stage_item = StageWithStageItems(
