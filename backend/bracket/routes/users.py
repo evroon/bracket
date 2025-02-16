@@ -71,7 +71,8 @@ async def put_user_password(
     user_to_update: UserPasswordToUpdate,
     user_public: UserPublic = Depends(user_authenticated),
 ) -> SuccessResponse:
-    assert user_public.id == user_id
+    if user_public.id != user_id:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Can't change details of this user")
     await update_user_password(user_public.id, hash_password(user_to_update.password))
     return SuccessResponse()
 
