@@ -9,7 +9,7 @@ import React from 'react';
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
-import {Time, formatTime, compareDateTime} from '../../../../components/utils/datetime';
+import { Time, compareDateTime, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
 import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
