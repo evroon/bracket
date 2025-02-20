@@ -9,7 +9,7 @@ import React from 'react';
 import { DashboardFooter } from '../../../../components/dashboard/footer';
 import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
-import { Time, formatTime } from '../../../../components/utils/datetime';
+import { Time, compareDateTime, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
 import { responseIsValid } from '../../../../components/utils/util';
 import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
@@ -134,7 +134,7 @@ export function Schedule({
     .filter((m1: any) => m1.match.start_time != null)
     .sort(
       (m1: any, m2: any) =>
-        -formatTime(m1.match.start_time).localeCompare(formatTime(m2.match.start_time)) ||
+        compareDateTime(m1.match.start_time, m2.match.start_time) ||
         m1.match.court?.name.localeCompare(m2.match.court?.name)
     );
 
