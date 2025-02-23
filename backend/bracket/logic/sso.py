@@ -22,7 +22,7 @@ async def get_discovery_document(discovery_url: str) -> DiscoveryDocument:
         }
 
 
-async def build_openid_sso(sso_config: SSOConfig) -> SSOBase:
+async def get_openid_provider(sso_config: SSOConfig) -> type[SSOBase]:
     assert sso_config.openid_discovery_url is not None, (
         "`openid_discovery_url` should be set for OpenID SSO"
     )
@@ -31,39 +31,27 @@ async def build_openid_sso(sso_config: SSOConfig) -> SSOBase:
     def convert_openid(response: dict[str, Any], _client: AsyncClient | None) -> OpenID:
         return OpenID(display_name=response["sub"])
 
-    GenericSSO = create_provider(
+    return create_provider(
         name="oidc",
         discovery_document=await get_discovery_document(sso_config.openid_discovery_url),
         response_convertor=convert_openid,
-    )
-
-    return GenericSSO(
-        client_id=sso_config.client_id,
-        client_secret=sso_config.client_secret,
-        redirect_uri=sso_config.redirect_uri,
-        allow_insecure_http=sso_config.allow_insecure_http,
-        scope=sso_config.openid_scopes.split(","),
+        default_scope=sso_config.openid_scopes.split(","),
     )
 
 
 async def build_sso(sso_config: SSOConfig) -> SSOBase:
-    match sso_config.provider:
-        case SSOProvider.google:
-            return GoogleSSO(
-                client_id=sso_config.client_id,
-                client_secret=sso_config.client_secret,
-                redirect_uri=sso_config.redirect_uri,
-                allow_insecure_http=sso_config.allow_insecure_http,
-            )
-        case SSOProvider.github:
-            return GithubSSO(
-                client_id=sso_config.client_id,
-                client_secret=sso_config.client_secret,
-                redirect_uri=sso_config.redirect_uri,
-                allow_insecure_http=sso_config.allow_insecure_http,
-            )
-        case SSOProvider.openid:
-            return await build_openid_sso(sso_config)
+    provider_class_lookup: dict[SSOProvider, type[SSOBase]] = {
+        SSOProvider.google: GoogleSSO,
+        SSOProvider.github: GithubSSO,
+        SSOProvider.openid: await get_openid_provider(sso_config),
+    }
+
+    return provider_class_lookup[sso_config.provider](
+        client_id=sso_config.client_id,
+        client_secret=sso_config.client_secret,
+        redirect_uri=sso_config.redirect_uri,
+        allow_insecure_http=sso_config.allow_insecure_http,
+    )
 
 
 @cache
