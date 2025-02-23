@@ -8,6 +8,7 @@ import sentry_sdk
 from pydantic import Field, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from bracket.models.sso import SSOProvider
 from bracket.utils.types import EnumAutoStr
 
 
@@ -29,8 +30,8 @@ class Environment(EnumAutoStr):
 class Config(BaseSettings):
     admin_email: str | None = None
     admin_password: str | None = None
-    allow_insecure_http_sso: bool = False
     allow_user_registration: bool = True
+    allow_user_basic_login: bool = True
     allow_demo_user_registration: bool = True
     captcha_secret: str | None = None
     base_url: str = "http://localhost:8400"
@@ -40,6 +41,13 @@ class Config(BaseSettings):
     auto_run_migrations: bool = True
     pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
     sentry_dsn: str | None = None
+
+    sso_1_provider: SSOProvider | None = None
+    sso_1_client_id: str | None = None
+    sso_1_client_secret: str | None = None
+    sso_1_allow_insecure_http_sso: bool = False
+    sso_1_openid_discovery_url: str | None = None
+    sso_1_openid_scopes: str | None = None
 
     def is_cors_enabled(self) -> bool:
         return self.cors_origins != "*"
