@@ -14,7 +14,7 @@ click = ">=8.1.3"
 databases = {extras = ["asyncpg"], version = "<=0.8.0"}
 fastapi = "0.115.6"
 fastapi-cache2 = ">=0.2.0"
-fastapi-sso = ">=0.6.4"
+fastapi-sso = "0.17.0"
 gunicorn = ">=20.1.0"
 heliclockter = ">=1.3.0"
 parameterized = ">=0.8.1"
