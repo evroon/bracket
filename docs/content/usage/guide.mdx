@@ -1,0 +1,163 @@
+---
+title: Usage guide
+---
+
+import {Callout} from 'nextra/components'
+
+# Usage guide
+
+Setting up a tournament in a tournament management system like Bracket typically involves several
+key steps. Below is a general guide on how to set up a tournament step-by-step.
+
+<Callout type="info">
+This guide assumes you are logged in to Bracket. This guide also assumes you use the demo of Bracket
+(`https://www.bracketapp.nl`). If you are selfhosting Bracket, just use your own domain instead.
+</Callout>
+
+## 1. Create a New Tournament
+
+From the homepage (e.g. `https://www.bracketapp.nl`), press the `Create Tournament` button.
+Enter the tournament’s metadata:
+
+- **Tournament Name:** Choose a clear, descriptive name.
+- **Club** Select the club you want this tournament to be part of. A club is nothing more than a
+  collection of tournaments that a user has access to. A default club was created when you created
+  your account. If you want to link this tournament to a new club, go to the `/clubs` page.
+- **Dashboard Link:** The suffix of the URL (slug) where your tournament will be presented to the
+  public. For example, if you enter `my_tournament`, the outside world will be able to view the
+  rankings and matches at `https://www.bracketapp.nl/tournaments/my_tournament/dashboard`.
+- **Start Time:** The start time of the tournament decides when the first match will be played.
+- **Match Duration:** Default duration of matches. Can be customized per match.
+- **Time Between Matches:** Default time between matches, useful when teams have to move between
+  courts between matches which takes some time. Can be customized per match.
+- **Allow anyone to see the dashboard of rounds and matches:** Whether the dashboard is publicly
+  accessible
+- **Allow players to be in multiple teams**: Usually players are only part of one team and Bracket
+  will not allow you to add players to be in multiple teams because that's usually not what you
+  want. This option overrides that behavior and does allow one player to be in multiple teams.
+- **Automatically assign courts to matches**: Whether you want to manually assign courts to matches
+  or not.
+
+Press `Save` when you're finished. These settings can all be changed later.
+
+Now you should have been able to create a tournament and you're on the page of the tournament. In
+the sidebar (menu on the left on desktop or at the top on mobile), you can navigate to different
+pages responsible for different aspects of the tournament (courts, teams etc.).
+
+## 2. Register Teams and Players
+
+You need to add the teams (and optionally players) who will participate in the tournament.
+
+<Callout type="info">
+Adding players is optional and for display purposes only.
+
+Players are part of teams and therefore it can be useful to add players in the system to know which
+player plays in which team. In case you are organising a tournament where every person plays for
+themselves, create teams with the names of these persons and don't add any players to those teams.
+</Callout>
+
+### Adding Players
+
+To add players, go to the `Players` page by clicking on the icon in the sidebar. Press the
+`Add Player` button. You can either create a single player or multiple players at once. To create
+multiple players at once, put every player on a separate line, like this:
+
+```text
+Alex
+Bob
+Charlie
+```
+
+### Adding Teams
+
+Adding teams works basically the same, go to the `Teams` page by clicking on the icon in the
+sidebar. Press the `Add Team` button.
+
+You can either create a single team or multiple teams at once. To create a single team, enter the
+name. You can specify whether this team is active or not (this only matters for Swiss stage items
+and determines whether the team will be able to be scheduled in the next Swiss round or not).
+
+## 3. Create Your Tournament Structure
+
+Now, decide on the format of your tournament. Bracket currently supports:
+
+- **Single Elimination:** Teams compete in matches, and the loser is eliminated after each round.
+- **Round Robin:** Every team plays against every other team exactly once.
+- **Swiss:** Teams play a set number of rounds, and the number of rounds is based on the number of
+  teams. This is a more advanced type of tournament, because the matches (who plays vs who) are not
+  known at the start of the tournament, but created dynamically during the tournament based on the
+  outcome of the previous rounds.
+
+To create the tournament structure, go to the `Stages` page. Every stage consists of stage items.
+
+A common tournament consists of a group stage which contains multiple round-robing stage items (
+called pools), followed by a knock-out stage that consists of one or more single elimination stage
+items. This requires the following steps:
+
+- Create the `Add Stage` button twice to create two stages
+- In the first stage, create two stage items and select the `Round Robin` type with half of the
+  teams in your tournament each.
+- In the second stage, create one stage item and select the `Single Elimination` type with 2 teams
+  advancing from the previous stage.
+- Assign all teams randomly to the round robin stage items in the first stage by clicking on the
+  empty slots.
+- Assign `1st of Round Robin` and `2nd of Round Robin` to the slots of the single elimination
+  stage item.
+
+## 5. Add Courts and Schedule Matches
+
+To schedule the matches (assign the start time and courts), go to the `Planning` page.
+
+### Create courts
+
+Add all the courts of your tournament before scheduling matches. You just need to provide a name.
+
+### Schedule matches
+
+Press the `Schedule All Unscheduled Matches` button. This will automatically assign courts and start
+times to all matches from the stage items you defined in the previous section.
+
+Make sure that:
+
+- There are no conflicting matches (matches where the same team plays on multiple courts at the same
+  time)
+- The planning is efficient by distributing the matches over all courts evenly.
+- The matches are scheduled in order of stage. E.g. group stage matches should be before the
+  knock-off
+  matches since the knock-offs depend on the results of the group stage.
+
+## 6. Define Rules and Scoring
+
+In the `Ranking` page, you can customize the ranking or create more rankings that can be assigned
+to individual matches. The ranking determines the final standing of each stage item. You can define
+the points for a win, draw or loss. `Award points for match score` adds the score of each team to
+their standing (e.g. if the result of a match was 21-5, team 1 receives 21 points and team 2
+receives 5 points).
+
+## 7. Launch the Tournament
+
+Once all the teams are added and the bracket is set, you can launch the tournament. There is nothing
+you need to do in Bracket, everything should be set up by now.
+
+Ensure that:
+
+- **Dashboard:** Enable the public dashboard so participants and spectators can view the matches and
+  results live.
+
+## 8. Start and Track Matches
+
+As the tournament progresses:
+
+- **Track Scores:** After each match, you’ll need to input scores or results. You can do this in
+  the `Results` page
+- **Next Stage:** At the end of each stage (once all matches in the stage items have been played),
+  press the `Next Stage` button. This will show which teams will be assigned to the stage items of
+  the next stage.
+- **Communicate with Players:** Keep participants informed about upcoming matches, any delays, and
+  results.
+
+## 9. Finalize the Tournament
+
+At the end of the tournament:
+
+- **Announce Winners:** View the standings page on the dashboard to see who the winners are
