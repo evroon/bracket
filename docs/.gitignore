@@ -1,32 +1,22 @@
-# deps
+# Dependencies
 /node_modules
 
-# generated content
-.contentlayer
-.content-collections
-.source
-
-# test & build
-/coverage
-/.next/
-/out/
+# Production
 /build
-*.tsbuildinfo
+/out
 
-# misc
-.DS_Store
-*.pem
-/.pnp
-.pnp.js
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# others
-.env*.local
-.vercel
+# Next files
+.next
 next-env.d.ts
 
+# Misc
+.DS_Store
+.env*
+.vercel
 .idea
 
 _pagefind/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
