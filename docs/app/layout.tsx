@@ -43,9 +43,7 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
       className="dark"
     >
-      <Head
-      // ... Your additional head options
-      >
+      <Head>
         <script
           async
           src="https://analytics.bracketapp.nl/script.js"
