@@ -61,7 +61,7 @@ It has the following features:
 - Create **multiple clubs**, with **multiple tournaments** per club.
 - **Swiss tournaments** can be handled dynamically, with automatic scheduling of matches.
 
-<img alt="" src="docs/static/img/bracket-screenshot-design.png" width="100%" />
+<img alt="" src="docs/content/img/bracket-screenshot-design.png" width="100%" />
 
 <p align="center">
 <a href="https://docs.bracketapp.nl"><strong>Explore the Bracket docs&nbsp;&nbsp;▶</strong></a>
