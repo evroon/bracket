@@ -50,6 +50,7 @@ export default async function RootLayout({ children }) {
           data-website-id="9c5b1839-5cbd-4d04-b95b-a217838898a9"
           data-domains="docs.bracketapp.nl"
         ></script>
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <body>
         <Layout
