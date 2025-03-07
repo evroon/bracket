@@ -122,10 +122,10 @@ To add/refine translations, [Crowdin](https://crowdin.com/project/bracket) is us
 See the [docs](https://docs.bracketapp.nl/docs/community/contributing/#translating) for more information.
 
 # More screenshots
-<img alt="" src="docs/static/img/schedule_preview.png" width="50%" /><img alt=""
-src="docs/static/img/planning_preview.png" width="50%" /> <img alt=""
-src="docs/static/img/builder_preview.png" width="50%" /><img alt=""
-src="docs/static/img/standings_preview.png" width="50%" />
+<img alt="" src="docs/public/img/schedule_preview.png" width="50%" /><img alt=""
+src="docs/public/img/planning_preview.png" width="50%" /> <img alt=""
+src="docs/public/img/builder_preview.png" width="50%" /><img alt=""
+src="docs/public/img/standings_preview.png" width="50%" />
 
 # Help
 If you're having trouble getting Bracket up and running, or have a question about usage or configuration, feel free to ask.
