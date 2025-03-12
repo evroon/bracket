@@ -14,7 +14,8 @@ services:
       ENVIRONMENT: DEVELOPMENT
       CORS_ORIGINS: http://localhost:3000
       PG_DSN: postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev
-    image: ghcr.io/evroon/bracket-backend
+    build: backend
+#    image: ghcr.io/evroon/bracket-backend
     networks:
       - bracket_lan
     ports:

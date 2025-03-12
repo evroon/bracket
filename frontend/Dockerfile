@@ -51,7 +51,7 @@ EXPOSE 3000
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
-    CMD curl --fail http://localhost:3000 || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
+    CMD wget --spider http://localhost:3000 || exit 1
 
 CMD yarn start
