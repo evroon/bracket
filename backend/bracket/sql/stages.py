@@ -189,7 +189,7 @@ async def get_next_stage_in_tournament(
             CASE WHEN NOT :direction='next' THEN id END DESC
     """
     return cast(
-        StageId | None,
+        "StageId | None",
         await database.execute(
             query=select_query,
             values={"tournament_id": tournament_id, "direction": direction},
