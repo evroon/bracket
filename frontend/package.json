@@ -32,7 +32,7 @@
     "@next/bundle-analyzer": "^15.2.0",
     "@react-icons/all-files": "^4.1.0",
     "@tabler/icons-react": "^3.31.0",
-    "axios": "^1.8.1",
+    "axios": "^1.8.2",
     "clsx": "^2.0.0",
     "cookies-next": "^5.1.0",
     "date-fns": "^4.1.0",
