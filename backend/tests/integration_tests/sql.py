@@ -69,43 +69,43 @@ async def inserted_generic(
 @asynccontextmanager
 async def inserted_user(user: UserInsertable) -> AsyncIterator[UserInDB]:
     async with inserted_generic(user, users, UserInDB) as row_inserted:
-        yield cast(UserInDB, row_inserted)
+        yield cast("UserInDB", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_club(club: ClubInsertable) -> AsyncIterator[Club]:
     async with inserted_generic(club, clubs, Club) as row_inserted:
-        yield cast(Club, row_inserted)
+        yield cast("Club", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_tournament(tournament: TournamentInsertable) -> AsyncIterator[Tournament]:
     async with inserted_generic(tournament, tournaments, Tournament) as row_inserted:
-        yield cast(Tournament, row_inserted)
+        yield cast("Tournament", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_team(team: TeamInsertable) -> AsyncIterator[Team]:
     async with inserted_generic(team, teams, Team) as row_inserted:
-        yield cast(Team, row_inserted)
+        yield cast("Team", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_court(court: CourtInsertable) -> AsyncIterator[Court]:
     async with inserted_generic(court, courts, Court) as row_inserted:
-        yield cast(Court, row_inserted)
+        yield cast("Court", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_ranking(ranking: RankingInsertable) -> AsyncIterator[Ranking]:
     async with inserted_generic(ranking, rankings, Ranking) as row_inserted:
-        yield cast(Ranking, row_inserted)
+        yield cast("Ranking", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_player(player: PlayerInsertable) -> AsyncIterator[Player]:
     async with inserted_generic(player, players, Player) as row_inserted:
-        yield cast(Player, row_inserted)
+        yield cast("Player", row_inserted)
 
 
 @asynccontextmanager
@@ -114,17 +114,17 @@ async def inserted_player_in_team(
 ) -> AsyncIterator[Player]:
     async with inserted_generic(player, players, Player) as row_inserted:
         async with inserted_generic(
-            PlayerXTeamInsertable(player_id=cast(Player, row_inserted).id, team_id=team_id),
+            PlayerXTeamInsertable(player_id=cast("Player", row_inserted).id, team_id=team_id),
             players_x_teams,
             PlayerXTeamInsertable,
         ):
-            yield cast(Player, row_inserted)
+            yield cast("Player", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_stage(stage: StageInsertable) -> AsyncIterator[Stage]:
     async with inserted_generic(stage, stages, Stage) as row_inserted:
-        yield cast(Stage, row_inserted)
+        yield cast("Stage", row_inserted)
 
 
 @asynccontextmanager
@@ -154,19 +154,19 @@ async def inserted_stage_item_input(
 @asynccontextmanager
 async def inserted_round(round_: RoundInsertable) -> AsyncIterator[Round]:
     async with inserted_generic(round_, rounds, Round) as row_inserted:
-        yield cast(Round, row_inserted)
+        yield cast("Round", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_match(match: MatchInsertable) -> AsyncIterator[Match]:
     async with inserted_generic(match, matches, Match) as row_inserted:
-        yield cast(Match, row_inserted)
+        yield cast("Match", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_user_x_club(user_x_club: UserXClubInsertable) -> AsyncIterator[UserXClub]:
     async with inserted_generic(user_x_club, users_x_clubs, UserXClub) as row_inserted:
-        yield cast(UserXClub, row_inserted)
+        yield cast("UserXClub", row_inserted)
 
 
 @asynccontextmanager

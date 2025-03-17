@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-# ruff: noqa: E402. We first need to insert the path
+# ruff: noqa: E402 We first need to insert the path
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context

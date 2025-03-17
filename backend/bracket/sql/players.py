@@ -1,5 +1,4 @@
 from decimal import Decimal
-from typing import cast
 
 from heliclockter import datetime_utc
 
@@ -74,7 +73,7 @@ async def get_player_count(
         WHERE players.tournament_id = :tournament_id
         {not_in_team_filter}
         """
-    return cast(int, await database.fetch_val(query=query, values={"tournament_id": tournament_id}))
+    return int(await database.fetch_val(query=query, values={"tournament_id": tournament_id}))
 
 
 async def sql_delete_player(tournament_id: TournamentId, player_id: PlayerId) -> None:

@@ -87,7 +87,7 @@ async def get_team_count(
         {active_team_filter}
         """
     values = dict_without_none({"tournament_id": tournament_id})
-    return cast(int, await database.fetch_val(query=query, values=values))
+    return cast("int", await database.fetch_val(query=query, values=values))
 
 
 async def update_team_stats(
