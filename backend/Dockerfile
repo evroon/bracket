@@ -19,10 +19,14 @@ RUN set -ex \
 EXPOSE 8400
 
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
-    CMD wget --spider http://0.0.0.0:8400/ping || exit 1
+    CMD ["wget", "--spider", "http://0.0.0.0:8400/ping", "||", "exit", "1"]
 
-CMD pipenv run gunicorn \
-    -k uvicorn.workers.UvicornWorker \
-    bracket.app:app \
-    --bind 0.0.0.0:8400 \
-    --workers 1
+CMD [ \
+    "pipenv", \
+    "run", \
+    "gunicorn", \
+    "-k", "uvicorn.workers.UvicornWorker", \
+    "bracket.app:app", \
+    "--bind", "0.0.0.0:8400", \
+    "--workers", "1" \
+]

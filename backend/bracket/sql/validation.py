@@ -126,7 +126,7 @@ async def check_foreign_keys_belong_to_tournament(
         CourtId: check_court_belongs_to_tournament,
     }
 
-    for field_key, field_info in some_body.model_fields.items():
+    for field_key, field_info in type(some_body).model_fields.items():
         field_value = getattr(some_body, field_key)
         if field_value is None:
             continue
