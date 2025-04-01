@@ -19,7 +19,7 @@ RUN set -ex \
 EXPOSE 8400
 
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
-    CMD ["wget", "--spider", "http://0.0.0.0:8400/ping", "||", "exit", "1"]
+    CMD ["wget", "--spider", "http://localhost:8400/ping", "||", "exit", "1"]
 
 CMD [ \
     "pipenv", \
