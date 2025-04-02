@@ -28,18 +28,16 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
+RUN addgroup -g 1001 --system nodejs && \
+    adduser --system nextjs -u 1001 -G nodejs
+
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/docker-entrypoint.sh ./entrypoint.sh
+COPY --from=builder --chmod=0755 /app/docker-entrypoint.sh ./entrypoint.sh
 COPY --from=builder /app/next.config.js ./next.config.js
 COPY --from=builder /app/next-i18next.config.js ./next-i18next.config.js
-
-RUN addgroup -g 1001 --system nodejs && \
-    adduser --system nextjs -u 1001 -G nodejs && \
-    chown -R nextjs:nodejs /app/.next && \
-    chmod +x /app/entrypoint.sh
 
 RUN apk add bash
 
