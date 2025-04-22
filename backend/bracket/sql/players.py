@@ -95,7 +95,6 @@ async def insert_player(player_body: PlayerBody, tournament_id: TournamentId) ->
             **player_body.model_dump(),
             created=datetime_utc.now(),
             tournament_id=tournament_id,
-            elo_score=START_ELO,
             swiss_score=Decimal("0.0"),
         ).model_dump(),
     )
