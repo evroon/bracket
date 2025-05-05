@@ -31,7 +31,7 @@
     "all_matches_scheduled_description": "Matches have been scheduled on all courts in this round. Add a new round or add a new court for more matches.",
     "api_docs_title": "Documentation de l'API",
     "archive_tournament_button": "Archive Tournament",
-    "archived_header_label": "This tournament is archived. It is now read-only.",
+    "archived_header_label": ".",
     "archived_label": "Archived",
     "at_least_one_player_validation": "Entrez au moins un joueur",
     "at_least_one_team_validation": "Entrez au moins une équipe",
