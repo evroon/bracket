@@ -3,5 +3,11 @@ import { Text } from '@mantine/core';
 import { TeamInterface } from '../../interfaces/team';
 
 export default function PlayerList({ team }: { team: TeamInterface }) {
-  return <Text inherit>{team.name}</Text>;
+  const getPlayerNames = () => team.players.map(p => p.name).sort().join(", ") || "-";
+
+  return (
+    <Text lineClamp={1} title={getPlayerNames()}>
+      {getPlayerNames()}
+    </Text>
+  );
 }
