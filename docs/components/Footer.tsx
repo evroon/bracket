@@ -52,7 +52,7 @@ export const Footer = () => {
 
           <div>
             <Link
-              href="/docs/deployment/"
+              href="/docs/deployment"
               className="opacity-60 hover:opacity-100"
             >
               Deployment
