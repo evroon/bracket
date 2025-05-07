@@ -153,7 +153,7 @@
     "multiple_players_input_placeholder": "Speler 1",
     "multiple_players_title": "Meerdere spelers",
     "multiple_teams": "Meerdere teams",
-    "multiple_teams_input_label": "Add multiple teams. Put every team on a separate line. You can also add players per team, separated by `,`.",
+    "multiple_teams_input_label": "",
     "multiple_teams_input_placeholder": "Team 1",
     "name_field_text": "naam",
     "name_input_label": "Naam",
