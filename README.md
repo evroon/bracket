@@ -197,6 +197,13 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/MaxRickettsUy">
+            <img src="https://avatars.githubusercontent.com/u/22103252?v=4" width="100;" alt="MaxRickettsUy"/>
+            <br />
+            <sub><b>Max Ricketts-Uy</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/babeuh">
             <img src="https://avatars.githubusercontent.com/u/60193302?v=4" width="100;" alt="babeuh"/>
             <br />
