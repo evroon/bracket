@@ -175,10 +175,10 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/Sevichecc">
-            <img src="https://avatars.githubusercontent.com/u/91365763?v=4" width="100;" alt="Sevichecc"/>
+        <a href="https://github.com/sevi418">
+            <img src="https://avatars.githubusercontent.com/u/91365763?v=4" width="100;" alt="sevi418"/>
             <br />
-            <sub><b>SevicheCC</b></sub>
+            <sub><b>Sevi C</b></sub>
         </a>
     </td>
     <td align="center">
