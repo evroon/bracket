@@ -36,7 +36,7 @@ processes:
 
    docs:
     working_dir: "docs"
-    command: "yarn run docusaurus start -p 3001"
+    command: "yarn run dev -p 3001"
     availability:
       restart: "on_failure"
     readiness_probe:
