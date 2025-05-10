@@ -1,0 +1,14 @@
+.socialLink {
+  padding: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  border: 3px solid #333;
+}
+
+.socialLink:hover {
+  border: 3px solid #8545c7;
+}
