@@ -35,6 +35,7 @@ export default function PlayerUpdateModal({
     initialValues: {
       name: player == null ? '' : player.name,
       active: player == null ? true : player.active,
+      elo_score: player == null ? 1200 : player.elo_score
     },
     validate: {
       name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
@@ -46,7 +47,7 @@ export default function PlayerUpdateModal({
       <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_player')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
-            await updatePlayer(tournament_id, player.id, values.name, values.active, null);
+            await updatePlayer(tournament_id, player.id, values.name, values.active, null, values.elo_score);
             await swrPlayersResponse.mutate();
             setOpened(false);
           })}
@@ -56,6 +57,11 @@ export default function PlayerUpdateModal({
             label={t('name_input_label')}
             placeholder={t('player_name_input_placeholder')}
             {...form.getInputProps('name')}
+          />
+          <TextInput
+            label={t('edit_elo_score_label')}
+            placeholder={t('player_elo_score_input_placeholder')}
+            {...form.getInputProps('elo_score')}
           />
 
           <Checkbox
