@@ -37,7 +37,7 @@ function StageSelectCard({
   onClick: () => void;
 }) {
   return (
-    <UnstyledButton onClick={onClick}>
+    <UnstyledButton onClick={onClick} w="100%">
       <Card
         shadow="sm"
         padding="lg"
@@ -74,7 +74,7 @@ export function CreateStagesFromTemplateButtons({
 }) {
   return (
     <Grid grow>
-      <Grid.Col span={4}>
+      <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
           title={t('round_robin_label')}
           description={t('round_robin_description')}
@@ -85,7 +85,7 @@ export function CreateStagesFromTemplateButtons({
           }}
         />
       </Grid.Col>
-      <Grid.Col span={4}>
+      <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
           title={t('single_elimination_label')}
           description={t('single_elimination_description')}
@@ -96,7 +96,7 @@ export function CreateStagesFromTemplateButtons({
           }}
         />
       </Grid.Col>
-      <Grid.Col span={4}>
+      <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
           title={t('swiss_label')}
           description={t('swiss_description')}
