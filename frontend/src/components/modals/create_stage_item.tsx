@@ -1,6 +1,7 @@
 import {
   Button,
-  Card, Divider,
+  Card,
+  Divider,
   Grid,
   Image,
   Modal,
@@ -126,8 +127,9 @@ function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) 
       label={t('team_count_select_elimination_label')}
       placeholder={t('team_count_select_elimination_placeholder')}
       searchable
-      limit={20} mt={'1rem'}
-      maw={'50%'}
+      limit={20}
+      mt="1rem"
+      maw="50%"
       {...form.getInputProps('team_count_elimination')}
     />
   );
@@ -139,8 +141,9 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
     <NumberInput
       withAsterisk
       label={t('team_count_input_round_robin_label')}
-      placeholder="" mt={'1rem'}
-      maw={'50%'}
+      placeholder=""
+      mt="1rem"
+      maw="50%"
       {...form.getInputProps('team_count_round_robin')}
     />
   );
@@ -231,7 +234,7 @@ export function CreateStageItemModal({
               form.setFieldValue('type', _type);
             }}
           />
-          <Divider mt={'1rem'} />
+          <Divider mt="1rem" />
           <TeamCountInput form={form} />
 
           <Button fullWidth mt="1.5rem" color="green" type="submit">
