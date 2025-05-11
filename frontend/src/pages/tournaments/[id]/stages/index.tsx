@@ -1,15 +1,12 @@
-import { Container, Group, Stack, Text, Title } from '@mantine/core';
+import { Group, Stack } from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
-import { HiMiniWrenchScrewdriver } from 'react-icons/hi2';
 
 import Builder from '../../../../components/builder/builder';
 import { CreateStageButtonLarge } from '../../../../components/buttons/create_stage';
 import ActivateNextStageModal from '../../../../components/modals/activate_next_stage_modal';
 import ActivatePreviousStageModal from '../../../../components/modals/activate_previous_stage_modal';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
-import classes from '../../../../components/no_content/empty_table_info.module.css';
 import { TableSkeletonTwoColumnsSmall } from '../../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../../components/utils/util';
 import { Ranking } from '../../../../interfaces/ranking';
@@ -24,7 +21,6 @@ import {
 import TournamentLayout from '../../_tournament_layout';
 
 export default function StagesPage() {
-  const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
   const swrRankingsResponse = getRankings(tournamentData.id);

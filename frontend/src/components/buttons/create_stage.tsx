@@ -1,18 +1,4 @@
-import {
-  Button,
-  Card,
-  Center,
-  Container,
-  Divider,
-  Flex,
-  Grid,
-  Group,
-  Image,
-  Stack,
-  Text,
-  Title,
-  UnstyledButton,
-} from '@mantine/core';
+import { Button, Card, Flex, Grid, Image, Text, Title, UnstyledButton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
