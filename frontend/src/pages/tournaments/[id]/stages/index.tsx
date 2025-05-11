@@ -1,4 +1,4 @@
-import { Group, Stack } from '@mantine/core';
+import {Container, Group, Stack, Text, Title} from '@mantine/core';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
@@ -20,6 +20,8 @@ import {
   getTournamentById,
 } from '../../../../services/adapter';
 import TournamentLayout from '../../_tournament_layout';
+import classes from "../../../../components/no_content/empty_table_info.module.css";
+import {HiMiniWrenchScrewdriver} from "react-icons/hi2";
 
 export default function StagesPage() {
   const { t } = useTranslation();
@@ -47,7 +49,6 @@ export default function StagesPage() {
   } else if (stages.length < 1) {
     content = (
       <Stack align="center">
-        <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />
         <CreateStageButtonLarge
           tournament={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
