@@ -17,16 +17,3 @@ jobs:
               with:
                   commit_message: "Update contributors in readme"
                   pr_title_on_protected: "Update contributors in readme"
-
-    update-contributors-docs:
-        runs-on: ubuntu-24.04
-        name: Update contributors in docs
-        steps:
-            - name: Contribute List
-              uses: akhilmhdh/contributors-readme-action@v2.3.6
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  readme_path: "docs/docs/community/contributing.md"
-                  commit_message: "Update contributors in docs"
-                  pr_title_on_protected: "Update contributors in docs"
