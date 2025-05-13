@@ -8,8 +8,8 @@ import { PreviewImage } from "../components/PreviewImage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bracket",
-  description: "Bracket - free and open-source tournament system",
+  title: "Bracket docs",
+  description: "Bracket (docs) - free and open-source tournament system",
 };
 export default function Page() {
   return (
