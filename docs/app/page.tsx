@@ -5,12 +5,11 @@ import { Features } from "../components/Features";
 import { Cta } from "../components/Cta";
 import "./page.css";
 import { PreviewImage } from "../components/PreviewImage";
-import {Metadata} from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Bracket',
-  description:
-    'Bracket - free and open-source tournament system',
+  title: "Bracket",
+  description: "Bracket - free and open-source tournament system",
 };
 export default function Page() {
   return (
