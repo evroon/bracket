@@ -9,7 +9,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Bracket",
-  description: "Bracket (documentation) - free and open-source tournament system",
+  description:
+    "Bracket (documentation) - free and open-source tournament system",
 };
 export default function Page() {
   return (
