@@ -44,6 +44,9 @@
   ·
   <a href="https://github.com/evroon/bracket/releases">Releases</a>
 </p>
+<p align="center">
+<a href="https://trendshift.io/repositories/13714" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13714" alt="evroon/bracket | Trendshift" width="250" height="55"/></a>
+</p>
 <h1></h1>
 
 Tournament system meant to be easy to use. Bracket is written in async Python (with
