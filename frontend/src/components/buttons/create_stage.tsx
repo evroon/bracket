@@ -1,13 +1,15 @@
 import { Button, Card, Flex, Grid, Image, Text, Title, UnstyledButton } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, {useState} from 'react';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
 import { createStage } from '../../services/stage';
 import { Translator } from '../utils/types';
 import classes from './create_stage.module.css';
+import {CreateStageItemModal} from "../modals/create_stage_item";
+import {getAvailableStageItemInputs} from "../../services/adapter";
 
 export default function CreateStageButton({
   tournament,
@@ -49,6 +51,7 @@ export function CreateStageButtonLarge({
   swrStagesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
+  const swrAvailableInputsResponse = getAvailableStageItemInputs(tournament.id);
 
   return (
     <>
@@ -58,7 +61,7 @@ export function CreateStageButtonLarge({
       <Text size="lg" ta="center" className={classes.description} inherit>
         {t('no_matches_description')}
       </Text>
-      <CreateStagesFromTemplateButtons t={t} />
+      <CreateStagesFromTemplateButtons t={t} swrStagesResponse={swrStagesResponse} />
     </>
   );
 }
@@ -67,13 +70,17 @@ function StageSelectCard({
   title,
   descriptions,
   images,
-  onClick,
+    tournament, swrStagesResponse,swrAvailableInputsResponse, t
 }: {
   title: string;
   descriptions: string[];
   images: string[];
-  onClick: () => void;
+  tournament: Tournament;
+  swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
+  t: Translator;
 }) {
+  const [opened, setOpened] = useState(false);
   const image_components = images.map((image) => <Image src={image} fit="scale-down"></Image>);
   const description_components = descriptions.map((description) => (
     <>
@@ -82,7 +89,8 @@ function StageSelectCard({
     </>
   ));
   return (
-    <UnstyledButton onClick={onClick} w="100%">
+      <>
+    <UnstyledButton onClick={() => {setOpened(true)}} w="100%">
       <Card
         shadow="sm"
         padding="lg"
@@ -106,10 +114,23 @@ function StageSelectCard({
         </Text>
       </Card>
     </UnstyledButton>
+        <CreateStageItemModal
+            t={t}
+          tournament={tournament}
+          stage={null}
+          swrStagesResponse={swrStagesResponse}
+          swrAvailableInputsResponse={swrAvailableInputsResponse}
+          opened={opened}
+          setOpened={setOpened}
+        /></>
   );
 }
 
-export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
+export function CreateStagesFromTemplateButtons({ t, tournament, swrStagesResponse, swrAvailableInputsResponse }: { t: Translator;
+  tournament: Tournament;
+  swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
+}) {
   return (
     <>
       <Title>1 Stage</Title>
@@ -119,7 +140,10 @@ export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
             title={t('round_robin_label')}
             descriptions={[t('round_robin_description')]}
             images={['/icons/group-stage-item.svg']}
-            onClick={() => {}}
+            tournament={tournament}
+            swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
+            t={t}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 4, md: 6 }}>
@@ -127,7 +151,10 @@ export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
             title={t('single_elimination_label')}
             descriptions={[t('single_elimination_description')]}
             images={['/icons/single-elimination-stage-item.svg']}
-            onClick={() => {}}
+            tournament={tournament}
+            swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
+            t={t}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 4, md: 6 }}>
@@ -135,7 +162,10 @@ export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
             title={t('swiss_label')}
             descriptions={[t('swiss_description')]}
             images={['/icons/swiss-stage-item.svg']}
-            onClick={() => {}}
+            tournament={tournament}
+            swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
+            t={t}
           />
         </Grid.Col>
       </Grid>
@@ -149,7 +179,10 @@ export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
               t('single_elimination_label') + ': ' + t('single_elimination_description'),
             ]}
             images={['/icons/group-stage-item.svg', '/icons/single-elimination-stage-item.svg']}
-            onClick={() => {}}
+            tournament={tournament}
+            swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
+            t={t}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, lg: 6 }}>
@@ -160,7 +193,10 @@ export function CreateStagesFromTemplateButtons({ t }: { t: Translator }) {
               t('single_elimination_label') + ': ' + t('single_elimination_description'),
             ]}
             images={['/icons/group-stage-item.svg', '/icons/swiss-stage-item.svg']}
-            onClick={() => {}}
+            tournament={tournament}
+            swrStagesResponse={swrStagesResponse}
+            swrAvailableInputsResponse={swrAvailableInputsResponse}
+            t={t}
           />
         </Grid.Col>
       </Grid>

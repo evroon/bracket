@@ -19,7 +19,7 @@ import { SWRResponse } from 'swr';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
-import { createStageItem } from '../../services/stage_item';
+import {createStageItem, createStageItemFromSingleTemplate} from '../../services/stage_item';
 import { Translator } from '../utils/types';
 import classes from './create_stage_item.module.css';
 
@@ -171,19 +171,22 @@ interface FormValues {
   team_count_elimination: number;
 }
 export function CreateStageItemModal({
+    t,
   tournament,
   stage,
   swrStagesResponse,
   swrAvailableInputsResponse,
+  opened,
+  setOpened,
 }: {
+  t:Translator;
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
+  opened: boolean;
+  setOpened: (value: boolean) => void;
 }) {
-  const { t } = useTranslation();
-  const [opened, setOpened] = useState(false);
-
   const form = useForm<FormValues>({
     initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
@@ -191,14 +194,6 @@ export function CreateStageItemModal({
       team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
     },
   });
-
-  // TODO: Refactor lookups into one request.
-  const teamsMap = getTeamsLookup(tournament != null ? tournament.id : -1);
-  const stageItemMap = getStageItemLookup(swrStagesResponse);
-
-  if (teamsMap == null || stageItemMap == null) {
-    return null;
-  }
 
   return (
     <>
@@ -221,7 +216,11 @@ export function CreateStageItemModal({
                 winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
               };
             });
-            await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
+            if (stage !== null) {
+              await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
+            } else {
+              await createStageItemFromSingleTemplate(tournament.id, values.type, teamCount, inputs);
+            }
             await swrStagesResponse.mutate();
             await swrAvailableInputsResponse.mutate();
             setOpened(false);
@@ -242,16 +241,50 @@ export function CreateStageItemModal({
           </Button>
         </form>
       </Modal>
+    </>
+  );
+}
 
-      <Button
-        variant="outline"
-        color="green"
-        size="xs"
-        onClick={() => setOpened(true)}
-        leftSection={<GoPlus size={24} />}
-      >
-        {t('add_stage_item_modal_title')}
-      </Button>
+export function CreateStageItemModalWithButton({
+  tournament,
+  stage,
+  swrStagesResponse,
+  swrAvailableInputsResponse,
+}: {
+  tournament: Tournament;
+  stage: StageWithStageItems;
+  swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse;
+}) {
+  const { t } = useTranslation();
+  const [opened, setOpened] = useState(false);
+  const modal = (
+    <CreateStageItemModal
+        t={t}
+      tournament={tournament}
+      stage={stage}
+      swrStagesResponse={swrStagesResponse}
+      swrAvailableInputsResponse={swrAvailableInputsResponse}
+      opened={opened}
+      setOpened={setOpened}
+    />
+  );
+
+  return (
+    <>
+      {modal}
+
+      {modal !== null && (
+        <Button
+          variant="outline"
+          color="green"
+          size="xs"
+          onClick={() => setOpened(true)}
+          leftSection={<GoPlus size={24} />}
+        >
+          {t('add_stage_item_modal_title')}
+        </Button>
+      )}
     </>
   );
 }
