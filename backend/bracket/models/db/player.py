@@ -3,6 +3,7 @@ from decimal import Decimal
 from heliclockter import datetime_utc
 from pydantic import Field
 
+from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.shared import BaseModelORM
 from bracket.utils.id_types import PlayerId, TournamentId
 
@@ -29,6 +30,7 @@ class Player(PlayerInsertable):
 class PlayerBody(BaseModelORM):
     name: str = Field(..., min_length=1, max_length=30)
     active: bool
+    elo_score: Decimal = START_ELO
 
 
 class PlayerMultiBody(BaseModelORM):
@@ -39,7 +41,7 @@ class PlayerMultiBody(BaseModelORM):
 class PlayerToInsert(PlayerBody):
     created: datetime_utc
     tournament_id: TournamentId
-    elo_score: Decimal = Decimal("1200.0")
+    elo_score: Decimal = START_ELO
     swiss_score: Decimal
     wins: int = 0
     draws: int = 0
