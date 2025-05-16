@@ -19,7 +19,11 @@ export async function createStageItemFromSingleTemplate(
   inputs: StageItemInputCreateBody[]
 ) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stage_items/from_single_template`, { type, team_count, inputs })
+    .post(`tournaments/${tournament_id}/stage_items/from_single_template`, {
+      type,
+      team_count,
+      inputs,
+    })
     .catch((response: any) => handleRequestError(response));
 }
 

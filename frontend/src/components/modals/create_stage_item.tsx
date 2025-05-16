@@ -19,7 +19,7 @@ import { SWRResponse } from 'swr';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
-import {createStageItem, createStageItemFromSingleTemplate} from '../../services/stage_item';
+import { createStageItem, createStageItemFromSingleTemplate } from '../../services/stage_item';
 import { Translator } from '../utils/types';
 import classes from './create_stage_item.module.css';
 
@@ -149,7 +149,7 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
   );
 }
 
-function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
+export function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
   if (form.values.type === 'SINGLE_ELIMINATION') {
     return <TeamCountSelectElimination form={form} />;
   }
@@ -157,7 +157,7 @@ function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
   return <TeamCountInputRoundRobin form={form} />;
 }
 
-function getTeamCount(values: any) {
+export function getTeamCount(values: any) {
   return Number(
     values.type === 'SINGLE_ELIMINATION'
       ? values.team_count_elimination
@@ -171,24 +171,26 @@ interface FormValues {
   team_count_elimination: number;
 }
 export function CreateStageItemModal({
-    t,
+  t,
   tournament,
   stage,
   swrStagesResponse,
   swrAvailableInputsResponse,
   opened,
   setOpened,
+  initial_type,
 }: {
-  t:Translator;
+  t: Translator;
   tournament: Tournament;
   stage: StageWithStageItems;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
   opened: boolean;
   setOpened: (value: boolean) => void;
+  initial_type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
 }) {
   const form = useForm<FormValues>({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
+    initialValues: { type: initial_type, team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
       team_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
       team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
@@ -219,7 +221,12 @@ export function CreateStageItemModal({
             if (stage !== null) {
               await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
             } else {
-              await createStageItemFromSingleTemplate(tournament.id, values.type, teamCount, inputs);
+              await createStageItemFromSingleTemplate(
+                tournament.id,
+                values.type,
+                teamCount,
+                inputs
+              );
             }
             await swrStagesResponse.mutate();
             await swrAvailableInputsResponse.mutate();
@@ -260,13 +267,14 @@ export function CreateStageItemModalWithButton({
   const [opened, setOpened] = useState(false);
   const modal = (
     <CreateStageItemModal
-        t={t}
+      t={t}
       tournament={tournament}
       stage={stage}
       swrStagesResponse={swrStagesResponse}
       swrAvailableInputsResponse={swrAvailableInputsResponse}
       opened={opened}
       setOpened={setOpened}
+      initial_type={'ROUND_ROBIN'}
     />
   );
 
