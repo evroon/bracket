@@ -62,7 +62,12 @@ export function CreateStageButtonLarge({
       <Text size="lg" ta="center" className={classes.description} inherit>
         {t('no_matches_description')}
       </Text>
-      <CreateStagesFromTemplateButtons t={t} swrStagesResponse={swrStagesResponse} />
+      <CreateStagesFromTemplateButtons
+        t={t}
+        tournament={tournament}
+        swrStagesResponse={swrStagesResponse}
+        swrAvailableInputsResponse={swrAvailableInputsResponse}
+      />
     </>
   );
 }
@@ -146,7 +151,7 @@ function DualStageItemSelectCard({
   swrStagesResponse,
   swrAvailableInputsResponse,
   t,
-  stage_item_type,
+  first_stage_type,
 }: {
   title: string;
   descriptions: string[];
@@ -155,7 +160,7 @@ function DualStageItemSelectCard({
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
   t: Translator;
-  stage_item_type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
+  first_stage_type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
 }) {
   const [opened, setOpened] = useState(false);
   const image_components = images.map((image) => <Image src={image} fit="scale-down"></Image>);
@@ -199,12 +204,11 @@ function DualStageItemSelectCard({
       <CreateStagesFromTemplateModal
         t={t}
         tournament={tournament}
-        stage={null}
         swrStagesResponse={swrStagesResponse}
         swrAvailableInputsResponse={swrAvailableInputsResponse}
         opened={opened}
         setOpened={setOpened}
-        initial_type={stage_item_type}
+        first_stage_type={first_stage_type}
       />
     </>
   );
@@ -234,7 +238,7 @@ export function CreateStagesFromTemplateButtons({
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
             t={t}
-            stage_item_type={'ROUND_ROBIN'}
+            stage_item_type="ROUND_ROBIN"
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 4, md: 6 }}>
@@ -246,7 +250,7 @@ export function CreateStagesFromTemplateButtons({
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
             t={t}
-            stage_item_type={'SINGLE_ELIMINATION'}
+            stage_item_type="SINGLE_ELIMINATION"
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 4, md: 6 }}>
@@ -258,7 +262,7 @@ export function CreateStagesFromTemplateButtons({
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
             t={t}
-            stage_item_type={'SWISS'}
+            stage_item_type="SWISS"
           />
         </Grid.Col>
       </Grid>
@@ -266,30 +270,32 @@ export function CreateStagesFromTemplateButtons({
       <Grid maw="80rem">
         <Grid.Col span={{ base: 12, lg: 6 }}>
           <DualStageItemSelectCard
-            title={t('round_robin_label') + ' + ' + t('single_elimination_label')}
+            title={`${t('round_robin_label')} + ${t('single_elimination_label')}`}
             descriptions={[
-              t('round_robin_label') + ': ' + t('round_robin_description'),
-              t('single_elimination_label') + ': ' + t('single_elimination_description'),
+              `${t('round_robin_label')}: ${t('round_robin_description')}`,
+              `${t('single_elimination_label')}: ${t('single_elimination_description')}`,
             ]}
             images={['/icons/group-stage-item.svg', '/icons/single-elimination-stage-item.svg']}
             tournament={tournament}
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
             t={t}
+            first_stage_type="ROUND_ROBIN"
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, lg: 6 }}>
           <DualStageItemSelectCard
-            title={t('swiss_label') + ' + ' + t('single_elimination_label')}
+            title={`${t('swiss_label')} + ${t('single_elimination_label')}`}
             descriptions={[
-              t('swiss_label') + ': ' + t('swiss_description'),
-              t('single_elimination_label') + ': ' + t('single_elimination_description'),
+              `${t('swiss_label')}: ${t('swiss_description')}`,
+              `${t('single_elimination_label')}: ${t('single_elimination_description')}`,
             ]}
             images={['/icons/swiss-stage-item.svg', '/icons/single-elimination-stage-item.svg']}
             tournament={tournament}
             swrStagesResponse={swrStagesResponse}
             swrAvailableInputsResponse={swrAvailableInputsResponse}
             t={t}
+            first_stage_type="SWISS"
           />
         </Grid.Col>
       </Grid>

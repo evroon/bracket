@@ -15,14 +15,12 @@ export async function createStageItem(
 export async function createStageItemFromSingleTemplate(
   tournament_id: number,
   type: string,
-  team_count: number,
-  inputs: StageItemInputCreateBody[]
+  team_count: number
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/stage_items/from_single_template`, {
       type,
       team_count,
-      inputs,
     })
     .catch((response: any) => handleRequestError(response));
 }

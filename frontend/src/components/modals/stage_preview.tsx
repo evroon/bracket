@@ -7,8 +7,18 @@ export function PreviewRoundRobinGroup({
   i: number;
   teams_per_group: number;
 }) {
-  const teams = [...Array(teams_per_group).keys()].map((j) => (
-    <div key={j} style={{ width: '100%', backgroundColor: '#333', height: '16px' }} />
+  const teams = Array.from(Array(teams_per_group)).map((j) => (
+    <div
+      key={j}
+      style={{
+        width: '100%',
+        backgroundColor: '#6725ae',
+        height: '12px',
+        marginTop: '4px',
+        marginBottom: '4px',
+        borderRadius: '4px',
+      }}
+    />
   ));
   return (
     <div
@@ -16,11 +26,12 @@ export function PreviewRoundRobinGroup({
       style={{
         width: '100%',
         backgroundColor: '#ddd',
-        padding: '16px',
+        padding: '4px 8px',
         marginTop: '8px',
+        marginBottom: '8px',
         borderRadius: '8px',
-      justifyContent: 'space-between',
-      gap: '8px'
+        justifyContent: 'space-between',
+        gap: '8px',
       }}
     >
       {teams}
@@ -35,7 +46,7 @@ export function StagePreviewRoundRobin({
   group_count: number;
   teams_per_group: number;
 }) {
-  const preview = [...Array(5).keys()].map((i) => (
+  const preview = Array.from(Array(group_count)).map((i) => (
     <PreviewRoundRobinGroup i={i} teams_per_group={teams_per_group} />
   ));
   return <Container>{preview}</Container>;

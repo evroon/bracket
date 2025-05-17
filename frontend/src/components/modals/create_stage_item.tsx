@@ -18,7 +18,6 @@ import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
 import { Tournament } from '../../interfaces/tournament';
-import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem, createStageItemFromSingleTemplate } from '../../services/stage_item';
 import { Translator } from '../utils/types';
 import classes from './create_stage_item.module.css';
@@ -182,7 +181,7 @@ export function CreateStageItemModal({
 }: {
   t: Translator;
   tournament: Tournament;
-  stage: StageWithStageItems;
+  stage: StageWithStageItems | null;
   swrStagesResponse: SWRResponse;
   swrAvailableInputsResponse: SWRResponse;
   opened: boolean;
@@ -208,25 +207,20 @@ export function CreateStageItemModal({
         <form
           onSubmit={form.onSubmit(async (values) => {
             const teamCount = getTeamCount(values);
-            const inputs = Array.from(Array(teamCount).keys()).map((i) => {
-              const teamId = values[`team_${i + 1}` as keyof typeof values];
-              return {
-                slot: i + 1,
-                team_id: Number(teamId),
-                winner_from_stage_item_id:
-                  typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
-              };
-            });
             if (stage !== null) {
+              const inputs = Array.from(Array(teamCount).keys()).map((i) => {
+                const teamId = values[`team_${i + 1}` as keyof typeof values];
+                return {
+                  slot: i + 1,
+                  team_id: Number(teamId),
+                  winner_from_stage_item_id:
+                    typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
+                  winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
+                };
+              });
               await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
             } else {
-              await createStageItemFromSingleTemplate(
-                tournament.id,
-                values.type,
-                teamCount,
-                inputs
-              );
+              await createStageItemFromSingleTemplate(tournament.id, values.type, teamCount);
             }
             await swrStagesResponse.mutate();
             await swrAvailableInputsResponse.mutate();
@@ -274,7 +268,7 @@ export function CreateStageItemModalWithButton({
       swrAvailableInputsResponse={swrAvailableInputsResponse}
       opened={opened}
       setOpened={setOpened}
-      initial_type={'ROUND_ROBIN'}
+      initial_type="ROUND_ROBIN"
     />
   );
 

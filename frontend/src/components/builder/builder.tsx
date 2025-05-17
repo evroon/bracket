@@ -39,7 +39,7 @@ import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
 import { updateStageItemInput } from '../../services/stage_item_input';
 import CreateStageButton from '../buttons/create_stage';
-import { CreateStageItemModal, CreateStageItemModalWithButton } from '../modals/create_stage_item';
+import { CreateStageItemModalWithButton } from '../modals/create_stage_item';
 import { UpdateStageModal } from '../modals/update_stage';
 import { UpdateStageItemModal } from '../modals/update_stage_item';
 import RequestErrorAlert from '../utils/error_alert';
