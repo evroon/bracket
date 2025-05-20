@@ -1,4 +1,4 @@
-import { Button, Grid, Modal, NumberInput, Text } from '@mantine/core';
+import {Button, Divider, Grid, Modal, NumberInput, Text} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React from 'react';
 import { SWRResponse } from 'swr';
@@ -35,7 +35,7 @@ export function CreateStagesFromTemplateModal({
     initialValues: {
       group_count_round_robin: 4,
       group_size_round_robin: 4,
-      team_count_elimination: 2,
+      team_count_elimination: 4,
     },
     validate: {
       group_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
@@ -77,6 +77,7 @@ export function CreateStagesFromTemplateModal({
                 mt="1rem"
                 {...form.getInputProps('group_size_round_robin')}
               />
+              <Divider mt="1rem"/>
               <NumberInput
                 withAsterisk
                 label="Number of teams that advance to single elimination"
