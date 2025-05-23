@@ -69,14 +69,12 @@ async def get_sso_providers() -> dict[SSOID, SSOBase]:
     if (
         config.sso_1_provider is not None
         and config.sso_1_client_id is not None
-        and config.sso_1_client_secret is not None
     ):
         configs.append(
             SSOConfig(
                 id=SSOID(1),
                 provider=config.sso_1_provider,
                 client_id=config.sso_1_client_id,
-                client_secret=config.sso_1_client_secret,
                 redirect_uri=f"{config.base_url}/sso-callback/1",
                 allow_insecure_http=config.sso_1_allow_insecure_http_sso,
             )

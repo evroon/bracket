@@ -44,7 +44,6 @@ class Config(BaseSettings):
 
     sso_1_provider: SSOProvider | None = None
     sso_1_client_id: str | None = None
-    sso_1_client_secret: str | None = None
     sso_1_allow_insecure_http_sso: bool = False
     sso_1_openid_discovery_url: str | None = None
     sso_1_openid_scopes: str | None = None
