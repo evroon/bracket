@@ -26,6 +26,9 @@ export default function Page() {
   return (
     <>
       <Head>
+        {
+          // https://developers.google.com/search/docs/appearance/site-names#json-ld_1
+        }
         <script type="application/ld+json">
           {"{" +
             '"@context": "https://schema.org",' +
