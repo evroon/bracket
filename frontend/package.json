@@ -34,7 +34,7 @@
     "@tabler/icons-react": "^3.33.0",
     "axios": "^1.9.0",
     "clsx": "^2.0.0",
-    "cookies-next": "^5.1.0",
+    "cookies-next": "^6.0.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.10",
     "i18next": "^25.2.0",
