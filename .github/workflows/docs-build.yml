@@ -32,5 +32,5 @@ jobs:
         working-directory: docs
 
       - name: Build docs
-        run: yarn build
+        run: SITE_URL=https://docs.bracketapp.nl yarn build
         working-directory: docs

@@ -1,6 +1,9 @@
+# *
 User-agent: *
 Allow: /
 
+# Host
 Host: https://docs.bracketapp.nl
 
+# Sitemaps
 Sitemap: https://docs.bracketapp.nl/sitemap.xml
