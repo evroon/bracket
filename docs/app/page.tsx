@@ -31,7 +31,7 @@ export default function Page() {
             '"@context": "https://schema.org",' +
             '"@type": "WebSite",' +
             '"name": "Bracket",' +
-            '"alternativeName": ["Bracket | Open-source tournament system", "Bracket documentation"],' +
+            '"alternativeName": ["Bracket | Open-source tournament system", "Bracket documentation", "docs.bracketapp.nl"],' +
             '"url": "https://docs.bracketapp.nl"' +
             "}"}
         </script>
