@@ -6,7 +6,7 @@ import { Cta } from "../components/Cta";
 import "./page.css";
 import { PreviewImage } from "../components/PreviewImage";
 import { Metadata } from "next";
-import {Head} from "nextra/components";
+import { Head } from "nextra/components";
 
 export const metadata: Metadata = {
   title: "Bracket | Open-source tournament system",
@@ -14,8 +14,9 @@ export const metadata: Metadata = {
     "Bracket is a free and open source tournament system. Set up a tournament, add teams, schedule matches, track scores and present live rankings.",
   openGraph: {
     title: "Bracket | Open-source tournament system",
-    description: "Bracket is a free and open source tournament system. Set up a tournament, add teams, schedule matches, track scores and present live rankings.",
-    locale: 'en_US',
+    description:
+      "Bracket is a free and open source tournament system. Set up a tournament, add teams, schedule matches, track scores and present live rankings.",
+    locale: "en_US",
     url: "https://docs.bracketapp.nl",
     siteName: "Bracket",
     images: [{ url: "https://docs.bracketapp.nl/bracket-social-image.png" }],
@@ -24,25 +25,25 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-        <Head>
-            <script type="application/ld+json">
-            {'{' +
-                '"@context": "https://schema.org",' +
-                '"@type": "WebSite",' +
-                '"name": "Bracket",' +
-                '"alternativeName": ["Bracket | Open-source tournament system", "Bracket documentation"],' +
-                '"url": "https://docs.bracketapp.nl"' +
-            '}'}
-            </script>
-        </Head>
-        <Hero/>
-        <PreviewImage/>
-        <About/>
-        <HowItWorks/>
-        <Features/>
-        {/*<AdvancedFeatures />*/}
-        <Cta/>
-        {/*<FAQ />*/}
+      <Head>
+        <script type="application/ld+json">
+          {"{" +
+            '"@context": "https://schema.org",' +
+            '"@type": "WebSite",' +
+            '"name": "Bracket",' +
+            '"alternativeName": ["Bracket | Open-source tournament system", "Bracket documentation"],' +
+            '"url": "https://docs.bracketapp.nl"' +
+            "}"}
+        </script>
+      </Head>
+      <Hero />
+      <PreviewImage />
+      <About />
+      <HowItWorks />
+      <Features />
+      {/*<AdvancedFeatures />*/}
+      <Cta />
+      {/*<FAQ />*/}
     </>
   );
 }
