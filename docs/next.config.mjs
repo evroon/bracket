@@ -6,7 +6,8 @@ const withNextra = nextra({
 
 export default withNextra({
   reactStrictMode: true,
-  skipTrailingSlashRedirect: false,
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   // Export only when building in GitHub Actions
   output: process.env.GITHUB_ACTION ? 'export' : 'export',
   images: {
