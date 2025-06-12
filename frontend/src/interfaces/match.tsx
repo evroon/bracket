@@ -32,6 +32,7 @@ export interface MatchBodyInterface {
   court_id: number | null;
   custom_duration_minutes: number | null;
   custom_margin_minutes: number | null;
+  played: boolean;
 }
 
 export interface MatchRescheduleInterface {

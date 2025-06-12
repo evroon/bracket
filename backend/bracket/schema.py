@@ -139,6 +139,7 @@ matches = Table(
     Column("stage_item_input1_score", Integer, nullable=False),
     Column("stage_item_input2_score", Integer, nullable=False),
     Column("position_in_schedule", Integer, nullable=True),
+    Column("played", Boolean, nullable=False),
 )
 
 teams = Table(
