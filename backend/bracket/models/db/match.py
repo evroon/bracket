@@ -24,6 +24,7 @@ class MatchBaseInsertable(BaseModelORM):
     court_id: CourtId | None = None
     stage_item_input1_conflict: bool
     stage_item_input2_conflict: bool
+    played: bool = False
 
     @property
     def end_time(self) -> datetime_utc:
@@ -60,9 +61,7 @@ class MatchWithDetails(Match):
     court: Court | None = None
 
 
-def get_match_hash(
-    stage_item_input1_id: StageItemInputId | None, stage_item_input2_id: StageItemInputId | None
-) -> str:
+def get_match_hash(stage_item_input1_id: StageItemInputId | None, stage_item_input2_id: StageItemInputId | None) -> str:
     return f"{stage_item_input1_id}-{stage_item_input2_id}"
 
 
@@ -93,6 +92,7 @@ class MatchBody(BaseModelORM):
     court_id: CourtId | None = None
     custom_duration_minutes: int | None = None
     custom_margin_minutes: int | None = None
+    played: bool = False
 
 
 class MatchCreateBodyFrontend(BaseModelORM):
