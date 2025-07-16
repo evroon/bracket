@@ -2356,10 +2356,10 @@ cookie@^1.0.1:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-1.0.1.tgz#e1a00d20420e0266aff817815640289eef142751"
   integrity sha512-Xd8lFX4LM9QEEwxQpF9J9NTUh8pmdJO0cyRJhFiDoLTk2eH8FXlRv2IFGYVadZpqI3j8fhNrSdKCeYPxiAhLXw==
 
-cookies-next@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/cookies-next/-/cookies-next-6.0.0.tgz#d560e3761169652cadb222079cb68bee25400548"
-  integrity sha512-Xq87TPIe7faqluf7gr3mobzO2JRe65oX+pnv4nrnDE/ak49Ic6QhNZSLCk+E5xOKtpVm1EoEazu0iBNyr5TXTA==
+cookies-next@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/cookies-next/-/cookies-next-6.1.0.tgz#0bdfe6e78166d494a0b3d30afcdac9456d1164da"
+  integrity sha512-8MqWliHg6YRatqlup5HlKCqXM5cFtwq9BVowDpPniPfbTOmrfIEXUQOcRFVXQltV+hyvKDRGJPNtceICkiJ/IA==
   dependencies:
     cookie "^1.0.1"
 
