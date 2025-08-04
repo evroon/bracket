@@ -55,7 +55,7 @@ jobs:
           file: frontend/Dockerfile
           tags: ${{ steps.meta_frontend.outputs.tags }}
           labels: ${{ steps.meta_frontend.outputs.labels }}
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
 
       - name: Build and push backend Docker image
         uses: docker/build-push-action@v6
@@ -65,4 +65,4 @@ jobs:
           file: backend/Dockerfile
           tags: ${{ steps.meta_backend.outputs.tags }}
           labels: ${{ steps.meta_backend.outputs.labels }}
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
