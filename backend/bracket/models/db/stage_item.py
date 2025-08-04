@@ -1,8 +1,8 @@
 from enum import auto
-from typing import Any
+from typing import Any, Literal
 
 from heliclockter import datetime_utc
-from pydantic import Field, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage_item_inputs import StageItemInputCreateBody
@@ -53,6 +53,16 @@ class StageItemCreateBody(BaseModelORM):
         return self.name if self.name is not None else self.type.value.replace("_", " ").title()
 
 
+class StageItemCreateWithoutStageIdBody(BaseModelORM):
+    name: str | None = None
+    type: StageType
+    team_count: int = Field(ge=2, le=64)
+    ranking_id: RankingId | None = None
+
+    def get_name_or_default_name(self) -> str:
+        return self.name if self.name is not None else self.type.value.replace("_", " ").title()
+
+
 class StageItemWithInputsCreate(StageItemCreateBody):
     inputs: list[StageItemInputCreateBody]
 
@@ -66,3 +76,16 @@ class StageItemWithInputsCreate(StageItemCreateBody):
         ):
             raise ValueError("team_count doesn't match length of inputs")
         return values
+
+
+class StageItemsTemplateCreate(BaseModel):
+    fill_teams: bool
+    second_stage_type: StageType
+
+
+class StageItemsRoundRobinTemplateCreate(StageItemsTemplateCreate):
+    groups_count: int = Field(ge=2, le=16)
+    teams_per_group: int = Field(ge=2, le=32)
+    advances_count: Literal[2, 4, 8, 16, 32, 64] = Field(
+        description="Number of teams that advanced in the first stage to the second stage in total"
+    )

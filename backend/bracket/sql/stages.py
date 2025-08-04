@@ -114,6 +114,11 @@ async def get_full_tournament_details(
     return [StageWithStageItems.model_validate(dict(x._mapping)) for x in result]
 
 
+async def does_tournament_have_no_stages(tournament_id: TournamentId) -> bool:
+    stages = await get_full_tournament_details(tournament_id)
+    return len(stages) == 0
+
+
 async def sql_delete_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
     async with database.transaction():
         query = """

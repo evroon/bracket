@@ -1,5 +1,4 @@
 import { Group, Stack } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
 
@@ -7,7 +6,6 @@ import Builder from '../../../../components/builder/builder';
 import { CreateStageButtonLarge } from '../../../../components/buttons/create_stage';
 import ActivateNextStageModal from '../../../../components/modals/activate_next_stage_modal';
 import ActivatePreviousStageModal from '../../../../components/modals/activate_previous_stage_modal';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { TableSkeletonTwoColumnsSmall } from '../../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../../components/utils/util';
 import { Ranking } from '../../../../interfaces/ranking';
@@ -22,7 +20,6 @@ import {
 import TournamentLayout from '../../_tournament_layout';
 
 export default function StagesPage() {
-  const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
   const swrRankingsResponse = getRankings(tournamentData.id);
@@ -47,7 +44,6 @@ export default function StagesPage() {
   } else if (stages.length < 1) {
     content = (
       <Stack align="center">
-        <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />
         <CreateStageButtonLarge
           tournament={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}
