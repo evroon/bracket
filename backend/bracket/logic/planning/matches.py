@@ -29,46 +29,41 @@ async def schedule_all_unscheduled_matches(
     if len(stages) < 1 or len(courts) < 1:
         return
 
-    stage = stages[0]
-    stage_items = sorted(stage.stage_items, key=lambda x: x.name)
+    time_last_match_from_previous_stage = tournament.start_time
+    position_last_match_from_previous_stage = 0
 
-    # First schedule all matches from the first stage
-    for i, stage_item in enumerate(stage_items):
-        court = courts[min(i, len(courts) - 1)]
-        start_time = tournament.start_time
-        position_in_schedule = 0
-        for round_ in stage_item.rounds:
-            for match in round_.matches:
-                if match.start_time is None and match.position_in_schedule is None:
-                    await sql_reschedule_match_and_determine_duration_and_margin(
-                        court.id,
-                        start_time,
-                        position_in_schedule,
-                        match,
-                        tournament,
-                    )
+    for stage in stages:
+        stage_items = sorted(stage.stage_items, key=lambda x: x.name)
 
-                start_time += timedelta(minutes=match.duration_minutes)
-                position_in_schedule += 1
+        stage_start_time = time_last_match_from_previous_stage
+        stage_position_in_schedule = position_last_match_from_previous_stage
 
-    # Then, all other stages
-    for stage in stages[1:]:
-        start_time = tournament.start_time
-        position_in_schedule = 0
-        for stage_item in stage.stage_items:
-            for round_ in stage_item.rounds:
+        for i, stage_item in enumerate(stage_items):
+            court = courts[min(i, len(courts) - 1)]
+            start_time = stage_start_time
+            position_in_schedule = stage_position_in_schedule
+            for round_ in sorted(stage_item.rounds, key=lambda r: r.id):
                 for match in round_.matches:
-                    start_time += timedelta(minutes=match.duration_minutes)
-                    position_in_schedule += 1
-
                     if match.start_time is None and match.position_in_schedule is None:
                         await sql_reschedule_match_and_determine_duration_and_margin(
-                            courts[-1].id,
+                            court.id,
                             start_time,
                             position_in_schedule,
                             match,
                             tournament,
                         )
+
+                    start_time += timedelta(minutes=match.duration_minutes)
+                    position_in_schedule += 1
+
+                    time_last_match_from_previous_stage = max(
+                        time_last_match_from_previous_stage, start_time)
+
+                    position_last_match_from_previous_stage = max(
+                        position_last_match_from_previous_stage, position_in_schedule)
+
+        stage_start_time = time_last_match_from_previous_stage
+        stage_position_in_schedule = position_last_match_from_previous_stage
 
     await update_start_times_of_matches(tournament_id)
 
