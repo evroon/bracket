@@ -57,10 +57,12 @@ async def schedule_all_unscheduled_matches(
                     position_in_schedule += 1
 
                     time_last_match_from_previous_stage = max(
-                        time_last_match_from_previous_stage, start_time)
+                        time_last_match_from_previous_stage, start_time
+                    )
 
                     position_last_match_from_previous_stage = max(
-                        position_last_match_from_previous_stage, position_in_schedule)
+                        position_last_match_from_previous_stage, position_in_schedule
+                    )
 
     await update_start_times_of_matches(tournament_id)
 
