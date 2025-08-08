@@ -200,6 +200,13 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/FelipeGdM">
+            <img src="https://avatars.githubusercontent.com/u/1054087?v=4" width="100;" alt="FelipeGdM"/>
+            <br />
+            <sub><b>Felipe Gomes De Melo</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/IzStriker">
             <img src="https://avatars.githubusercontent.com/u/44909896?v=4" width="100;" alt="IzStriker"/>
             <br />
