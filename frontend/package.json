@@ -54,7 +54,7 @@
     "@babel/core": "^7.28.0",
     "@next/eslint-plugin-next": "^15.4.1",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.1",
+    "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
