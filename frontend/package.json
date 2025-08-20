@@ -29,7 +29,7 @@
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "7.12.1",
     "@mantine/spotlight": "7.12.1",
-    "@next/bundle-analyzer": "^15.4.1",
+    "@next/bundle-analyzer": "^15.5.0",
     "@react-icons/all-files": "^4.1.0",
     "@tabler/icons-react": "^3.34.0",
     "axios": "^1.11.0",
