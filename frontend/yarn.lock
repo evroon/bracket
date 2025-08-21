@@ -5689,10 +5689,10 @@ react-ellipsis-text@^1.2.1:
     react "^16.8.6"
     react-dom "^16.8.6"
 
-react-i18next@^15.6.0:
-  version "15.6.0"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-15.6.0.tgz#f1705587621bd3cc1c92af0145949cdad8fd2e15"
-  integrity sha512-W135dB0rDfiFmbMipC17nOhGdttO5mzH8BivY+2ybsQBbXvxWIwl3cmeH3T9d+YPBSJu/ouyJKFJTtkK7rJofw==
+react-i18next@^15.7.0:
+  version "15.7.0"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-15.7.0.tgz#c5d0cb9976335395f877575a7e8cfc3eec33cf07"
+  integrity sha512-hogS6K+7hJnGN1k5hpxcY0x3SnQ30K2Cj9PMKSwP8lqyhfbj7DEdjFhc7tXh9+z+npDQaxvPCGnpkRmCnRNCcQ==
   dependencies:
     "@babel/runtime" "^7.27.6"
     html-parse-stringify "^3.0.1"
