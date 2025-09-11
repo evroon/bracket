@@ -26,6 +26,7 @@ import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../../i
 import { getCourts, getStages } from '../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
+import { Tabs } from '@mantine/core';
 
 function ScheduleRow({
   data,
@@ -150,15 +151,18 @@ function Schedule({
   stageItemsLookup,
   openMatchModal,
   matchesLookup,
+  matchPlayedFilter,
 }: {
   t: Translator;
   stageItemsLookup: any;
   openMatchModal: CallableFunction;
   matchesLookup: any;
+  matchPlayedFilter: boolean;
 }) {
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
+    .filter((m1: any) => m1.match.played === matchPlayedFilter)
     .sort((m1: any, m2: any) => (m1.match.court?.name > m2.match.court?.name ? 1 : -1))
     .sort((m1: any, m2: any) => (m1.match.start_time > m2.match.start_time ? 1 : -1));
 
@@ -225,6 +229,7 @@ function Schedule({
 }
 
 export default function SchedulePage() {
+  const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [modalOpened, modalSetOpened] = useState(false);
   const [match, setMatch] = useState<MatchInterface | null>(null);
 
@@ -265,14 +270,36 @@ export default function SchedulePage() {
         round={null}
       />
       <Title>{t('results_title')}</Title>
-      <Center mt="1rem">
-        <Schedule
-          t={t}
-          matchesLookup={matchesLookup}
-          stageItemsLookup={stageItemsLookup}
-          openMatchModal={openMatchModal}
-        />
-      </Center>
+      
+      <Tabs value={activeTab} onChange={setActiveTab} mt="md">
+        <Tabs.List>
+          <Tabs.Tab value="upcoming">{t('results_tab_upcoming')}</Tabs.Tab>
+          <Tabs.Tab value="past">{t('results_tab_past')}</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="upcoming" pt="md">
+          <Center mt="1rem">
+            <Schedule
+              t={t}
+              matchesLookup={matchesLookup}
+              stageItemsLookup={stageItemsLookup}
+              openMatchModal={openMatchModal}
+              matchPlayedFilter={false}
+            />
+          </Center>
+        </Tabs.Panel>
+        <Tabs.Panel value="past" pt="md">
+          <Center mt="1rem">
+            <Schedule
+              t={t}
+              matchesLookup={matchesLookup}
+              stageItemsLookup={stageItemsLookup}
+              openMatchModal={openMatchModal}
+              matchPlayedFilter={true}
+            />
+          </Center>
+        </Tabs.Panel>
+      </Tabs>
+
     </TournamentLayout>
   );
 }

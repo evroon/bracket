@@ -16,6 +16,7 @@ import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/mat
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
+import { finished } from 'stream';
 
 function ScheduleRow({
   data,
@@ -45,77 +46,54 @@ function ScheduleRow({
 
   return (
     <Card shadow="sm" radius="md" withBorder mt="md" pt="0rem">
-      <Card.Section withBorder>
-        <Grid pt="0.75rem" pb="0.5rem">
-          <Grid.Col mb="0rem" span={4}>
-            <Text pl="sm" mt="sm" fw={800}>
-              {data.match.court.name}
-            </Text>
-          </Grid.Col>
-          <Grid.Col mb="0rem" span={4}>
-            <Center>
-              <Text mt="sm" fw={800}>
-                {data.match.start_time != null ? <Time datetime={data.match.start_time} /> : null}
+      <Grid pt="0.5rem" pb="0.5rem">
+        <Grid.Col span={6}  pb="0rem">
+          <Grid>
+            <Grid.Col span="auto" pb="0rem">
+              <Text fw={500}>
+                {formatMatchInput1(t, stageItemsLookup, matchesLookup, data.match)}
               </Text>
-            </Center>
-          </Grid.Col>
-          <Grid.Col mb="0rem" span={4}>
-            <Flex justify="right">
-              <Badge
-                color={stringToColour(`${data.stageItem.id}`)}
-                variant="outline"
-                mr="md"
-                mt="0.8rem"
-                size="md"
+            </Grid.Col>
+            <Grid.Col span="content" pb="0rem">
+              <div
+                style={{
+                  backgroundColor: team1_color,
+                  borderRadius: '0.5rem',
+                  width: '2.5rem',
+                  color: 'white',
+                  fontWeight: 800,
+                }}
               >
-                {data.stageItem.name}
-              </Badge>
-            </Flex>
-          </Grid.Col>
-        </Grid>
-      </Card.Section>
-      <Stack pt="sm">
-        <Grid>
-          <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>
-              {formatMatchInput1(t, stageItemsLookup, matchesLookup, data.match)}
-            </Text>
-          </Grid.Col>
-          <Grid.Col span="content" pb="0rem">
-            <div
-              style={{
-                backgroundColor: team1_color,
-                borderRadius: '0.5rem',
-                width: '2.5rem',
-                color: 'white',
-                fontWeight: 800,
-              }}
-            >
-              <Center>{data.match.stage_item_input1_score}</Center>
-            </div>
-          </Grid.Col>
-        </Grid>
-        <Grid mb="0rem">
-          <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>
-              {formatMatchInput2(t, stageItemsLookup, matchesLookup, data.match)}
-            </Text>
-          </Grid.Col>
-          <Grid.Col span="content" pb="0rem">
-            <div
-              style={{
-                backgroundColor: team2_color,
-                borderRadius: '0.5rem',
-                width: '2.5rem',
-                color: 'white',
-                fontWeight: 800,
-              }}
-            >
-              <Center>{data.match.stage_item_input2_score}</Center>
-            </div>
-          </Grid.Col>
-        </Grid>
-      </Stack>
+                <Center>{data.match.stage_item_input1_score}</Center>
+                
+              </div>
+            </Grid.Col>
+          </Grid>
+        </Grid.Col>
+        <Grid.Col span={6} pb="0rem">
+          <Grid mb="0rem">
+            <Grid.Col span="auto" pb="0rem">
+              <div
+                style={{
+                  backgroundColor: team2_color,
+                  borderRadius: '0.5rem',
+                  width: '2.5rem',
+                  color: 'white',
+                  fontWeight: 800,
+                }}
+              >
+                <Center>{data.match.stage_item_input2_score}</Center>
+              </div>
+            </Grid.Col>
+            <Grid.Col span="content" pb="0rem">
+              <Text fw={500}>
+                {formatMatchInput2(t, stageItemsLookup, matchesLookup, data.match)}
+              </Text>
+            </Grid.Col>
+            
+          </Grid>
+        </Grid.Col>
+      </Grid>
     </Card>
   );
 }
@@ -132,7 +110,7 @@ export function Schedule({
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
     .filter((m1: any) => m1.match.start_time != null)
-    .filter((m1: any) => m1.match.played === false)
+    .filter((m1: any) => m1.match.played)
     .sort(
       (m1: any, m2: any) =>
         compareDateTime(m1.match.start_time, m2.match.start_time) ||
@@ -145,13 +123,13 @@ export function Schedule({
     const data = sortedMatches[c];
 
     rows.push(
-      <ScheduleRow
-        key={data.match.id}
-        data={data}
-        stageItemsLookup={stageItemsLookup}
-        matchesLookup={matchesLookup}
-      />
-    );
+    <ScheduleRow
+      key={data.match.id}
+      data={data}
+      stageItemsLookup={stageItemsLookup}
+      matchesLookup={matchesLookup}
+    />
+  );
   }
 
   if (rows.length < 1) {

@@ -53,7 +53,8 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             stage_item_input2_score,
             stage_item_input1_conflict,
             stage_item_input2_conflict,
-            created
+            created,
+            played
         )
         VALUES (
             :round_id,
@@ -70,7 +71,8 @@ async def sql_create_match(match: MatchCreateBody) -> Match:
             0,
             false,
             false,
-            NOW()
+            NOW(),
+            false
         )
         RETURNING *
     """
@@ -92,20 +94,17 @@ async def sql_update_match(match_id: MatchId, match: MatchBody, tournament: Tour
             custom_duration_minutes = :custom_duration_minutes,
             custom_margin_minutes = :custom_margin_minutes,
             duration_minutes = :duration_minutes,
-            margin_minutes = :margin_minutes
+            margin_minutes = :margin_minutes,
+            played = :played
         WHERE matches.id = :match_id
         RETURNING *
         """
 
     duration_minutes = (
-        match.custom_duration_minutes
-        if match.custom_duration_minutes is not None
-        else tournament.duration_minutes
+        match.custom_duration_minutes if match.custom_duration_minutes is not None else tournament.duration_minutes
     )
     margin_minutes = (
-        match.custom_margin_minutes
-        if match.custom_margin_minutes is not None
-        else tournament.margin_minutes
+        match.custom_margin_minutes if match.custom_margin_minutes is not None else tournament.margin_minutes
     )
     await database.execute(
         query=query,
@@ -189,15 +188,9 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
     tournament: Tournament,
 ) -> None:
     duration_minutes = (
-        tournament.duration_minutes
-        if match.custom_duration_minutes is None
-        else match.custom_duration_minutes
+        tournament.duration_minutes if match.custom_duration_minutes is None else match.custom_duration_minutes
     )
-    margin_minutes = (
-        tournament.margin_minutes
-        if match.custom_margin_minutes is None
-        else match.custom_margin_minutes
-    )
+    margin_minutes = tournament.margin_minutes if match.custom_margin_minutes is None else match.custom_margin_minutes
     await sql_reschedule_match(
         match.id,
         court_id,
@@ -226,9 +219,7 @@ async def sql_get_match(match_id: MatchId) -> Match:
     return Match.model_validate(dict(result._mapping))
 
 
-async def clear_scores_for_matches_in_stage_item(
-    tournament_id: TournamentId, stage_item_id: StageItemId
-) -> None:
+async def clear_scores_for_matches_in_stage_item(tournament_id: TournamentId, stage_item_id: StageItemId) -> None:
     query = """
         UPDATE matches
         SET stage_item_input1_score = 0,
