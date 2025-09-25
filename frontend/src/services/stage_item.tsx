@@ -12,6 +12,18 @@ export async function createStageItem(
     .post(`tournaments/${tournament_id}/stage_items`, { stage_id, type, team_count, inputs })
     .catch((response: any) => handleRequestError(response));
 }
+export async function createStageItemFromSingleTemplate(
+  tournament_id: number,
+  type: string,
+  team_count: number
+) {
+  return createAxios()
+    .post(`tournaments/${tournament_id}/stage_items/from_single_template`, {
+      type,
+      team_count,
+    })
+    .catch((response: any) => handleRequestError(response));
+}
 
 export async function updateStageItem(
   tournament_id: number,
