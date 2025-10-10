@@ -24,8 +24,9 @@ from bracket.models.db.round import RoundInsertable
 from bracket.models.db.stage_item import (
     StageItemActivateNextBody,
     StageItemCreateBody,
+    StageItemsRoundRobinTemplateCreate,
     StageItemUpdateBody,
-    StageType,
+    StageType, StageItemCreateWithoutStageIdBody,
 )
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserPublic
@@ -51,7 +52,11 @@ from bracket.sql.stage_items import (
     get_stage_item,
     sql_create_stage_item_with_empty_inputs,
 )
-from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.stages import (
+    does_tournament_have_no_stages,
+    get_full_tournament_details,
+    sql_create_stage,
+)
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.errors import (
@@ -94,6 +99,89 @@ async def create_stage_item(
 
     stage_item = await sql_create_stage_item_with_empty_inputs(tournament_id, stage_body)
     await build_matches_for_stage_item(stage_item, tournament_id)
+    return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/stage_items/from_single_template", response_model=SuccessResponse)
+async def create_stage_item_from_single_template(
+    tournament_id: TournamentId,
+    stage_body: StageItemCreateWithoutStageIdBody,
+    user: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    """
+    Same as POST /tournaments/{tournament_id}/stage_items, but also creates a new stage.
+
+    Use only when the tournament has no stages yet.
+    """
+    await check_foreign_keys_belong_to_tournament(stage_body, tournament_id)
+
+    if not await does_tournament_have_no_stages(tournament_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only create stage items from a template if there aren't stages already",
+        )
+
+    check_requirement([], user, "max_stages", additions=2)
+    await sql_create_stage(tournament_id)
+
+    check_requirement([], user, "max_stage_items")
+
+    stage_item = await sql_create_stage_item_with_empty_inputs(tournament_id, stage_body)
+    await build_matches_for_stage_item(stage_item, tournament_id)
+    return SuccessResponse()
+
+
+@router.post(
+    "/tournaments/{tournament_id}/stage_items/from_round_robin_template",
+    response_model=SuccessResponse,
+)
+async def create_stage_items_from_template(
+    tournament_id: TournamentId,
+    body: StageItemsRoundRobinTemplateCreate,
+    user: UserPublic = Depends(user_authenticated_for_tournament),
+) -> SuccessResponse:
+    await check_foreign_keys_belong_to_tournament(body, tournament_id)
+
+    if not await does_tournament_have_no_stages(tournament_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only create stage items from a template if there aren't stages already",
+        )
+
+    created_stages, created_stage_items = [], []
+
+    async with database.transaction():
+        check_requirement(created_stages, user, "max_stages", additions=2)
+        created_stages.append(await sql_create_stage(tournament_id))
+        created_stages.append(await sql_create_stage(tournament_id))
+
+        check_requirement(
+            created_stage_items, user, "max_stage_items", additions=body.groups_count + 1
+        )
+
+        for i in range(body.groups_count):
+            stage_item = await sql_create_stage_item_with_empty_inputs(
+                tournament_id,
+                StageItemCreateBody(
+                    stage_id=created_stages[0].id,
+                    type=StageType.ROUND_ROBIN,
+                    team_count=body.teams_per_group,
+                ),
+            )
+            created_stage_items.append(stage_item)
+            await build_matches_for_stage_item(stage_item, tournament_id)
+
+        stage_item = await sql_create_stage_item_with_empty_inputs(
+            tournament_id,
+            StageItemCreateBody(
+                stage_id=created_stages[1].id,
+                type=StageType.SINGLE_ELIMINATION,
+                team_count=body.advances_count,
+            ),
+        )
+        created_stage_items.append(stage_item)
+        await build_matches_for_stage_item(stage_item, tournament_id)
+
     return SuccessResponse()
 
 
