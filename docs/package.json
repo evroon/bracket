@@ -45,7 +45,7 @@
     "@types/react-dom": "^19.0.4",
     "autoprefixer": "^10.4.19",
     "eslint": "^9",
-    "eslint-config-next": "15.1.7",
+    "eslint-config-next": "16.0.0",
     "markdownlint-cli2": "^0.14.0",
     "markdownlint-rule-relative-links": "^4.0.1",
     "postcss": "^8.5.3",
