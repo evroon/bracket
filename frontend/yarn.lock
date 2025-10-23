@@ -551,18 +551,18 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.1.tgz"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
-"@hcaptcha/loader@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-2.0.0.tgz#674b14262ca3d3302f39628a46bdfbb6f3f903f1"
-  integrity sha512-fFQH6ApU/zCCl6Y1bnbsxsp1Er/lKX+qlgljrpWDeFcenpEtoP68hExlKSXECospzKLeSWcr06cbTjlR/x3IJA==
+"@hcaptcha/loader@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-2.2.0.tgz#7c85bea567c63c77fc40338d588167f6408f6042"
+  integrity sha512-LAd0XRt1Mu0hLpUpWAx5OS9FS0d6V+V0aCSYUKFAz0a6tTDHeAuwm5iO81mp2HIEhXFOSSB8AwCCOU9zq695lg==
 
-"@hcaptcha/react-hcaptcha@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.12.0.tgz#0d4d416edfc5a4c9b6e7e658f414abdad3c5825d"
-  integrity sha512-QiHnQQ52k8SJJSHkc3cq4TlYzag7oPd4f5ZqnjVSe4fJDSlZaOQFtu5F5AYisVslwaitdDELPVLRsRJxiiI0Aw==
+"@hcaptcha/react-hcaptcha@^1.13.1":
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.13.1.tgz#3d6675c8198ca97c428671ed35b4c280d9df102a"
+  integrity sha512-uBnuraDoR+u7ImoVawPmoJCsj4zwMyoL8Tm6YBZzneKv5WGz5Hldb/eBjbbX5tPIxjehHixLfmxPXfai7zpUIw==
   dependencies:
     "@babel/runtime" "^7.17.9"
-    "@hcaptcha/loader" "^2.0.0"
+    "@hcaptcha/loader" "^2.2.0"
 
 "@hello-pangea/dnd@^18.0.1":
   version "18.0.1"
