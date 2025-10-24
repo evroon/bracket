@@ -221,6 +221,13 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/oscartobar">
+            <img src="https://avatars.githubusercontent.com/u/10423124?v=4" width="100;" alt="oscartobar"/>
+            <br />
+            <sub><b>Oscar Tobar Rios</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/babeuh">
             <img src="https://avatars.githubusercontent.com/u/60193302?v=4" width="100;" alt="babeuh"/>
             <br />
