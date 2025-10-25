@@ -116,19 +116,46 @@ async def create_admin_user() -> UserId:
     return user.id
 
 
+async def check_alembic_sync() -> bool:
+    """Check if the database is in sync with Alembic migrations."""
+    try:
+        # Check if alembic_version table exists
+        alembic_version_exists = await database.fetch_val(
+            "SELECT EXISTS (SELECT FROM information_schema.tables "
+            "WHERE table_schema = 'public' AND table_name = 'alembic_version')"
+        )
+        return bool(alembic_version_exists)
+    except Exception:
+        return False
+
+
 async def init_db_when_empty() -> UserId | None:
     table_count = await database.fetch_val(
         "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'"
     )
+    
+    # Check if we have a completely empty database (no tables at all)
+    is_empty_db = table_count == 0
+    # Check if Alembic tracking is in place
+    is_alembic_synced = await check_alembic_sync()
+    
     if config.admin_email and config.admin_password:
         if (table_count <= 1 and environment != Environment.CI) or (
             environment is Environment.DEVELOPMENT and await get_user(config.admin_email) is None
         ):
-            logger.warning("Empty db detected, creating tables...")
-            metadata.create_all(engine)
-            alembic_stamp_head()
+            if is_empty_db or not is_alembic_synced:
+                logger.warning("Fresh database detected, creating all tables from schema...")
+                # Create all tables directly from the schema models
+                metadata.create_all(engine)
+                # Mark the database as up-to-date with Alembic to prevent migration conflicts
+                alembic_stamp_head()
+                logger.warning("Database initialized successfully with all tables and Alembic sync")
+            else:
+                logger.warning("Existing database detected, ensuring tables exist...")
+                metadata.create_all(engine)
+                alembic_stamp_head()
 
-            logger.warning("Empty db detected, creating admin user...")
+            logger.warning("Creating admin user...")
             return await create_admin_user()
 
     return None

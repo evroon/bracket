@@ -40,9 +40,13 @@ init_sentry()
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
-    await init_db_when_empty()
-
-    if config.auto_run_migrations and environment is not Environment.CI:
+    
+    # Initialize database if empty (this will create tables and stamp Alembic)
+    admin_user_created = await init_db_when_empty()
+    
+    # Only run migrations if the database was not just initialized from scratch
+    if config.auto_run_migrations and environment is not Environment.CI and admin_user_created is None:
+        logger.info("Running Alembic migrations...")
         alembic_run_migrations()
 
     if environment is Environment.PRODUCTION:
