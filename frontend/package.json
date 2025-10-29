@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
-    "@next/eslint-plugin-next": "^15.5.0",
+    "@next/eslint-plugin-next": "^16.0.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/react": "^16.3.0",
