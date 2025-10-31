@@ -53,9 +53,21 @@ export function requestSucceeded(result: AxiosResponse | AxiosError) {
 }
 
 export function getBaseApiUrl() {
-  return process.env.NEXT_PUBLIC_API_BASE_URL != null
-    ? process.env.NEXT_PUBLIC_API_BASE_URL
-    : 'http://localhost:8400';
+  // Check if internal proxy should be used (private API)
+  const usePrivateApi = process.env.NEXT_PUBLIC_USE_PRIVATE_API === 'true';
+  
+  if (usePrivateApi) {
+    // Private mode: use frontend API routes as proxy
+    // Users never see /api in URLs, only used internally
+    return typeof window !== 'undefined' && window.location.origin 
+      ? `${window.location.origin}/api`
+      : '/api';
+  } else {
+    // Public mode: connect directly to backend
+    return process.env.NEXT_PUBLIC_API_BASE_URL != null
+      ? process.env.NEXT_PUBLIC_API_BASE_URL
+      : 'http://localhost:8400';
+  }
 }
 
 export function createAxios() {
