@@ -13,18 +13,19 @@ services:
     environment:
       ENVIRONMENT: PRODUCTION
       # Dynamic CORS based on mode
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://bracket-frontend:3000}
+      CORS_ORIGINS: http://bracket-frontend:3000
       PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
-      JWT_SECRET: ${JWT_SECRET:-change_me_in_production}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@yourdomain.com}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change_me_in_production}
-      BASE_URL: ${BASE_URL:-https://yourdomain.com}
+      JWT_SECRET: change_me_in_production
+      ADMIN_EMAIL: admin@yourdomain.com
+      ADMIN_PASSWORD: change_me_in_production
+      BASE_URL: https://yourdomain.com
     image: ghcr.io/evroon/bracket-backend
     networks:
       - bracket_lan
     ports:
       # Expose port only if using public API
-      - "${BACKEND_PORT_MAPPING:-}"
+      # 8400:8400 
+      -
     restart: unless-stopped
     volumes:
       - ./backend/static:/app/static
@@ -33,18 +34,18 @@ services:
     container_name: bracket-frontend
     environment:
       # Main variable to toggle between public/private
-      NEXT_PUBLIC_USE_PRIVATE_API: ${USE_PRIVATE_API:-true}
+      NEXT_PUBLIC_USE_PRIVATE_API: true
       # URL for public API (only used if USE_PRIVATE_API=false)
-      NEXT_PUBLIC_API_BASE_URL: ${PUBLIC_API_URL:-https://api.yourdomain.com}
+      NEXT_PUBLIC_API_BASE_URL: https://api.yourdomain.com
       # Internal URL for proxy (only used if USE_PRIVATE_API=true)
       # This variable is NOT visible to browser, only used server-side
-      INTERNAL_API_BASE_URL: ${INTERNAL_API_URL:-http://bracket-backend:8400}
-      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: ${HCAPTCHA_SITE_KEY:-10000000-ffff-ffff-ffff-000000000001}
+      INTERNAL_API_BASE_URL: http://bracket-backend:8400
+      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: 10000000-ffff-ffff-ffff-000000000001
     image: ghcr.io/evroon/bracket-frontend
     networks:
       - bracket_lan
     ports:
-      - "${FRONTEND_PORT_MAPPING:-172.16.0.4:3000:3000}"
+      - 3000:3000
     restart: unless-stopped
 
   postgres:
