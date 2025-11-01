@@ -12,20 +12,19 @@ services:
       - postgres
     environment:
       ENVIRONMENT: PRODUCTION
-      # Dynamic CORS based on mode
+      # CORS - Internal communication between frontend and backend
       CORS_ORIGINS: http://bracket-frontend:3000
       PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
       JWT_SECRET: change_me_in_production
       ADMIN_EMAIL: admin@yourdomain.com
       ADMIN_PASSWORD: change_me_in_production
-      BASE_URL: https://yourdomain.com
+      BASE_URL: http://192.168.100.10:3000
     image: ghcr.io/evroon/bracket-backend
     networks:
       - bracket_lan
-    ports:
-      # Expose port only if using public API
-      # 8400:8400 
-      -
+    # Backend is PRIVATE - Uncomment ports below for PUBLIC API mode
+    # ports:
+    #   - "8400:8400"
     restart: unless-stopped
     volumes:
       - ./backend/static:/app/static
@@ -33,19 +32,19 @@ services:
   bracket-frontend:
     container_name: bracket-frontend
     environment:
-      # Main variable to toggle between public/private
-      NEXT_PUBLIC_USE_PRIVATE_API: true
-      # URL for public API (only used if USE_PRIVATE_API=false)
-      NEXT_PUBLIC_API_BASE_URL: https://api.yourdomain.com
-      # Internal URL for proxy (only used if USE_PRIVATE_API=true)
-      # This variable is NOT visible to browser, only used server-side
+      # Private API mode - Uses internal proxy to communicate with backend
+      NEXT_PUBLIC_USE_PRIVATE_API: "true"
+      # Backend URL (for proxy reference)
+      NEXT_PUBLIC_API_BASE_URL: http://bracket-backend:8400
+      # Internal URL for proxy (server-side only)
       INTERNAL_API_BASE_URL: http://bracket-backend:8400
-      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: 10000000-ffff-ffff-ffff-000000000001
-    image: ghcr.io/evroon/bracket-frontend
+      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+    # Use local image with internal proxy
+    image: bracket-frontend-local
     networks:
       - bracket_lan
     ports:
-      - 3000:3000
+      - "3000:3000"
     restart: unless-stopped
 
   postgres:
@@ -53,7 +52,7 @@ services:
       POSTGRES_DB: bracket_prod
       POSTGRES_PASSWORD: bracket_prod
       POSTGRES_USER: bracket_prod
-    image: postgres
+    image: postgres:15
     networks:
       - bracket_lan
     restart: always
