@@ -124,7 +124,7 @@ services:
       # Private API mode - Uses internal proxy to communicate with backend
       ENVIRONMENT: PRODUCTION
       # CORS - Internal communication between frontend and backend
-      CORS_ORIGINS: http://bracket-frontend:3000
+      CORS_ORIGINS: https://youdomain.com
       PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
       JWT_SECRET: change_me_in_production
       ADMIN_EMAIL: admin@yourdomain.com
@@ -146,9 +146,7 @@ services:
       # Private API mode - Uses internal proxy to communicate with backend
       NEXT_PUBLIC_USE_PRIVATE_API: "false"
       # Backend URL (for proxy reference)
-      NEXT_PUBLIC_API_BASE_URL: http://bracket-backend:8400
-      # Internal URL for proxy (server-side only)
-      INTERNAL_API_BASE_URL: http://bracket-backend:8400
+      NEXT_PUBLIC_API_BASE_URL: https://api.youdomain.com
       NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
     # Use local image with internal proxy
     image: ghcr.io/evroon/bracket-frontend
