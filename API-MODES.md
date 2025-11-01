@@ -1,423 +1,844 @@
-# API Configuration: Public vs Private Modes# API Configuration: Public vs Private
+# API Configuration: Public vs Private Modes# API Configuration: Public vs Private Modes# API Configuration: Public vs Private
 
 
 
-This project supports two API operation modes for different deployment scenarios.This project supports two API operation modes:
+This project supports two API operation modes for different deployment scenarios.
 
 
 
----## 🔒 Private Mode (Recommended)
+---This project supports two API operation modes for different deployment scenarios.This project supports two API operation modes:
 
 
 
-## 🔒 Private Mode (Recommended for Production)**Features:**
+## 🔒 Private Mode (Recommended for Production)
 
-- ✅ Backend NOT accessible from Internet
 
-### Overview- ✅ Enhanced security
 
-In **Private Mode**, the backend API is **NOT exposed to the internet**. The frontend acts as a transparent proxy, forwarding all API requests internally to the backend container. This provides enhanced security and eliminates CORS issues.- ✅ Frontend acts as transparent proxy
+### Overview---## 🔒 Private Mode (Recommended)
 
-- ✅ No CORS issues
 
-### Features- ✅ Centralized logging
 
-- ✅ **Backend NOT accessible from Internet** - Only internal Docker network access- ✅ **Users NEVER see /api in URLs**
+In **Private Mode**, the backend API is **NOT exposed to the internet**. The frontend acts as a transparent proxy, forwarding all API requests internally to the backend container. This provides enhanced security and eliminates CORS issues.
+
+
+
+### Features## 🔒 Private Mode (Recommended for Production)**Features:**
+
+
+
+- ✅ **Backend NOT accessible from Internet** - Only internal Docker network access- ✅ Backend NOT accessible from Internet
 
 - ✅ **Enhanced security** - Attack surface reduced
 
-- ✅ **Frontend acts as transparent proxy** - Server-side forwarding via `/api/*` routes**What users see:**
+- ✅ **Frontend acts as transparent proxy** - Server-side forwarding via `/api/*` routes### Overview- ✅ Enhanced security
 
-- ✅ **No CORS issues** - Same-origin requests- ✅ `https://yourdomain.com/login`
+- ✅ **No CORS issues** - Same-origin requests
 
-- ✅ **Single domain** - Only frontend needs to be publicly exposed- ✅ `https://yourdomain.com/tournaments`
+- ✅ **Single domain** - Only frontend needs to be publicly exposedIn **Private Mode**, the backend API is **NOT exposed to the internet**. The frontend acts as a transparent proxy, forwarding all API requests internally to the backend container. This provides enhanced security and eliminates CORS issues.- ✅ Frontend acts as transparent proxy
 
-- ✅ **Users NEVER see internal URLs** - All requests appear as frontend URLs- ✅ Normal frontend URLs
+- ✅ **Users NEVER see internal URLs** - All requests appear as frontend URLs
 
+- ✅ No CORS issues
 
+### What Users See
 
-### What Users See**What happens internally (invisible):**
+### Features- ✅ Centralized logging
 
-```- 🔄 `yourdomain.com/api/token` → `bracket-backend:8400/token`
+```
 
-✅ https://yourdomain.com/login- 🔄 Transparent server-side proxy
+✅ https://yourdomain.com/login- ✅ **Backend NOT accessible from Internet** - Only internal Docker network access- ✅ **Users NEVER see /api in URLs**
 
 ✅ https://yourdomain.com/tournaments
 
+✅ https://yourdomain.com/ (all routes are frontend URLs)- ✅ **Enhanced security** - Attack surface reduced
+
+```
+
+- ✅ **Frontend acts as transparent proxy** - Server-side forwarding via `/api/*` routes**What users see:**
+
+### What Happens Internally (Transparent)
+
+- ✅ **No CORS issues** - Same-origin requests- ✅ `https://yourdomain.com/login`
+
+```
+
+Browser Request:    GET https://yourdomain.com/- ✅ **Single domain** - Only frontend needs to be publicly exposed- ✅ `https://yourdomain.com/tournaments`
+
+                    ↓
+
+Next.js Frontend:   Calls /api/clubs internally- ✅ **Users NEVER see internal URLs** - All requests appear as frontend URLs- ✅ Normal frontend URLs
+
+                    ↓
+
+Proxy Handler:      /api/clubs → http://bracket-backend:8400/clubs
+
+                    ↓
+
+Backend Response:   Returns data to frontend### What Users See**What happens internally (invisible):**
+
+                    ↓
+
+User Receives:      Data rendered on page```- 🔄 `yourdomain.com/api/token` → `bracket-backend:8400/token`
+
+```
+
+✅ https://yourdomain.com/login- 🔄 Transparent server-side proxy
+
+### Docker Compose Configuration
+
+✅ https://yourdomain.com/tournaments
+
+#### Method 1: Direct Configuration (Simplest)
+
 ✅ https://yourdomain.com/ (all routes are frontend URLs)**Configuration:**
+
+Edit `docker-compose.yml`:
 
 ``````bash
 
-./switch-api-mode.sh private
+```yaml
 
-### What Happens Internally (Transparent)docker-compose down && docker-compose up -d
-
-``````
-
-Browser Request:    GET https://yourdomain.com/
-
-                    ↓**Nginx (frontend only):**
-
-Next.js Frontend:   Calls /api/clubs internally```nginx
-
-                    ↓server {
-
-Proxy Handler:      /api/clubs → http://bracket-backend:8400/clubs    server_name yourdomain.com;
-
-                    ↓    location / {
-
-Backend Response:   Returns data to frontend        proxy_pass http://172.16.0.4:3000;
-
-                    ↓    }
-
-User Receives:      Data rendered on page}
-
-``````
-
-
-
-### Docker Compose Configuration## 🌐 Public Mode
-
-
-
-**Method 1: Direct Configuration (Simplest)****Features:**
-
-- ⚠️ Backend accessible from Internet
-
-Edit `docker-compose.yml`:- ⚠️ Requires correct CORS configuration
-
-- ⚠️ Two subdomains needed
-
-```yaml- ✅ Potentially lower latency
-
-services:
-
-  bracket-backend:**What users see:**
-
-    container_name: bracket-backend- ✅ `https://yourdomain.com/login`
-
-    environment:- ⚠️ Requests go to `https://api.yourdomain.com/token`
-
-      ENVIRONMENT: PRODUCTION
-
-      # CORS - Only allow internal frontend communication**Configuration:**
-
-      CORS_ORIGINS: http://bracket-frontend:3000```bash
-
-      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod./switch-api-mode.sh public
-
-      JWT_SECRET: change_me_in_productiondocker-compose down && docker-compose up -d
-
-      ADMIN_EMAIL: admin@yourdomain.com```
-
-      ADMIN_PASSWORD: change_me_in_production
-
-      BASE_URL: https://yourdomain.com**Nginx (frontend + backend):**
-
-    image: ghcr.io/evroon/bracket-backend```nginx
-
-    networks:# Frontend
-
-      - bracket_lanserver {
-
-    # Backend is PRIVATE - NO ports exposed    server_name yourdomain.com;
-
-    restart: unless-stopped    location / {
-
-        proxy_pass http://172.16.0.4:3000;
-
-  bracket-frontend:    }
-
-    container_name: bracket-frontend}
-
-    environment:
-
-      # Enable Private API mode# Backend
-
-      NEXT_PUBLIC_USE_PRIVATE_API: "true"server {
-
-      # Internal backend URL (for proxy)    server_name api.yourdomain.com;
-
-      NEXT_PUBLIC_API_BASE_URL: http://bracket-backend:8400    location / {
-
-      INTERNAL_API_BASE_URL: http://bracket-backend:8400        proxy_pass http://172.16.0.4:8400;
-
-      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"    }
-
-    image: bracket-frontend-local  # Must use local image with proxy}
-
-    networks:```
-
-      - bracket_lan
-
-    ports:## Environment Variables
-
-      - "3000:3000"  # Only frontend is exposed
-
-    restart: unless-stopped| Variable | Description | Private | Public |
-
-```|----------|-------------|---------|---------|
-
-| `USE_PRIVATE_API` | Operation mode | `true` | `false` |
-
-**Method 2: Using Environment Files**| `BACKEND_PORT_MAPPING` | Backend port | empty | `172.16.0.4:8400:8400` |
-
-| `CORS_ORIGINS` | Allowed domains | internal | public |
-
-Create `.env.private`:| `PUBLIC_API_URL` | Public API URL | `/api` | `https://api.yourdomain.com` |
-
-
-
-```bash## Quick Switch
-
-# Private API Mode - Backend NOT publicly accessible
-
-NEXT_PUBLIC_USE_PRIVATE_API=true```bash
-
-CORS_ORIGINS=http://bracket-frontend:3000# Secure mode (recommended)
-
-BACKEND_PORT_MAPPING=./switch-api-mode.sh private
-
-INTERNAL_API_URL=http://bracket-backend:8400
-
-NEXT_PUBLIC_API_BASE_URL=http://bracket-backend:8400# Public mode  
-
-FRONTEND_PORT_MAPPING=3000:3000./switch-api-mode.sh public
-
-JWT_SECRET=change_me_in_production```
-
-ADMIN_EMAIL=admin@yourdomain.com
-
-ADMIN_PASSWORD=change_me_in_production## Troubleshooting
-
-BASE_URL=https://yourdomain.com
-
-NEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001### Error: `bracket-backend:8400 not resolved`
-
-```- Verify that `USE_PRIVATE_API=true` in `.env`
-
-- Make sure `/pages/api/[...path].ts` file exists
-
-Then use variables in `docker-compose.yml`:
-
-### Error: `CORS policy`
-
-```yaml- Public mode: verify `CORS_ORIGINS` in backend
-
-services:- Private mode: should not occur
+services:./switch-api-mode.sh private
 
   bracket-backend:
 
-    environment:### Backend not responding
+    container_name: bracket-backend### What Happens Internally (Transparent)docker-compose down && docker-compose up -d
 
-      CORS_ORIGINS: ${CORS_ORIGINS}- Private mode: check frontend logs
+    environment:
 
-      JWT_SECRET: ${JWT_SECRET}- Public mode: verify nginx points to `172.16.0.4:8400`
+      ENVIRONMENT: PRODUCTION``````
 
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      # CORS - Only allow internal frontend communication
 
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}## Variables de Entorno
+      CORS_ORIGINS: http://bracket-frontend:3000Browser Request:    GET https://yourdomain.com/
 
-      BASE_URL: ${BASE_URL}
+      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
 
-    ports:| Variable | Descripción | Privado | Público |
+      JWT_SECRET: change_me_in_production                    ↓**Nginx (frontend only):**
 
-      - "${BACKEND_PORT_MAPPING:-}"  # Empty = not exposed|----------|-------------|---------|---------|
+      ADMIN_EMAIL: admin@yourdomain.com
 
-| `USE_PRIVATE_API` | Modo de operación | `true` | `false` |
+      ADMIN_PASSWORD: change_me_in_productionNext.js Frontend:   Calls /api/clubs internally```nginx
 
-  bracket-frontend:| `BACKEND_PORT_MAPPING` | Puerto del backend | vacío | `172.16.0.4:8400:8400` |
+      BASE_URL: https://yourdomain.com
 
-    environment:| `CORS_ORIGINS` | Dominios permitidos | interno | público |
+    image: ghcr.io/evroon/bracket-backend                    ↓server {
 
-      NEXT_PUBLIC_USE_PRIVATE_API: ${NEXT_PUBLIC_USE_PRIVATE_API}| `PUBLIC_API_URL` | URL pública del API | `/api` | `https://api.pinar.campeonatos.co` |
+    networks:
 
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+      - bracket_lanProxy Handler:      /api/clubs → http://bracket-backend:8400/clubs    server_name yourdomain.com;
 
-      INTERNAL_API_BASE_URL: ${INTERNAL_API_URL}## Cambio Rápido
+    # Backend is PRIVATE - NO ports exposed
+
+    restart: unless-stopped                    ↓    location / {
+
+
+
+  bracket-frontend:Backend Response:   Returns data to frontend        proxy_pass http://172.16.0.4:3000;
+
+    container_name: bracket-frontend
+
+    environment:                    ↓    }
+
+      # Enable Private API mode
+
+      NEXT_PUBLIC_USE_PRIVATE_API: "true"User Receives:      Data rendered on page}
+
+      # Internal backend URL (for proxy)
+
+      NEXT_PUBLIC_API_BASE_URL: http://bracket-backend:8400``````
+
+      INTERNAL_API_BASE_URL: http://bracket-backend:8400
+
+      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+
+    image: bracket-frontend-local  # Must use local image with proxy
+
+    networks:### Docker Compose Configuration## 🌐 Public Mode
+
+      - bracket_lan
 
     ports:
 
-      - "${FRONTEND_PORT_MAPPING}"```bash
+      - "3000:3000"  # Only frontend is exposed
 
-```# Modo seguro (recomendado)
+    restart: unless-stopped**Method 1: Direct Configuration (Simplest)****Features:**
 
-./switch-api-mode.sh private
+```
+
+- ⚠️ Backend accessible from Internet
+
+#### Method 2: Using Environment Files
+
+Edit `docker-compose.yml`:- ⚠️ Requires correct CORS configuration
+
+Create `.env.private`:
+
+- ⚠️ Two subdomains needed
+
+```bash
+
+# Private API Mode - Backend NOT publicly accessible```yaml- ✅ Potentially lower latency
+
+NEXT_PUBLIC_USE_PRIVATE_API=true
+
+CORS_ORIGINS=http://bracket-frontend:3000services:
+
+BACKEND_PORT_MAPPING=
+
+INTERNAL_API_URL=http://bracket-backend:8400  bracket-backend:**What users see:**
+
+NEXT_PUBLIC_API_BASE_URL=http://bracket-backend:8400
+
+FRONTEND_PORT_MAPPING=3000:3000    container_name: bracket-backend- ✅ `https://yourdomain.com/login`
+
+JWT_SECRET=change_me_in_production
+
+ADMIN_EMAIL=admin@yourdomain.com    environment:- ⚠️ Requests go to `https://api.yourdomain.com/token`
+
+ADMIN_PASSWORD=change_me_in_production
+
+BASE_URL=https://yourdomain.com      ENVIRONMENT: PRODUCTION
+
+NEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001
+
+```      # CORS - Only allow internal frontend communication**Configuration:**
+
+
+
+Then use variables in `docker-compose.yml`:      CORS_ORIGINS: http://bracket-frontend:3000```bash
+
+
+
+```yaml      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod./switch-api-mode.sh public
+
+services:
+
+  bracket-backend:      JWT_SECRET: change_me_in_productiondocker-compose down && docker-compose up -d
+
+    environment:
+
+      CORS_ORIGINS: ${CORS_ORIGINS}      ADMIN_EMAIL: admin@yourdomain.com```
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      ADMIN_EMAIL: ${ADMIN_EMAIL}      ADMIN_PASSWORD: change_me_in_production
+
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      BASE_URL: ${BASE_URL}      BASE_URL: https://yourdomain.com**Nginx (frontend + backend):**
+
+    ports:
+
+      - "${BACKEND_PORT_MAPPING:-}"  # Empty = not exposed    image: ghcr.io/evroon/bracket-backend```nginx
+
+
+
+  bracket-frontend:    networks:# Frontend
+
+    environment:
+
+      NEXT_PUBLIC_USE_PRIVATE_API: ${NEXT_PUBLIC_USE_PRIVATE_API}      - bracket_lanserver {
+
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+
+      INTERNAL_API_BASE_URL: ${INTERNAL_API_URL}    # Backend is PRIVATE - NO ports exposed    server_name yourdomain.com;
+
+    ports:
+
+      - "${FRONTEND_PORT_MAPPING}"    restart: unless-stopped    location / {
+
+```
+
+        proxy_pass http://172.16.0.4:3000;
 
 ### Deployment
 
-# Modo público  
+  bracket-frontend:    }
 
-```bash./switch-api-mode.sh public
+```bash
 
-# Using .env.private```
+# Using .env.private    container_name: bracket-frontend}
 
 cp .env.private .env
 
-docker-compose down## Troubleshooting
+docker-compose down    environment:
 
 docker-compose up -d
+
+      # Enable Private API mode# Backend
+
+# Or with direct configuration
+
+docker-compose down      NEXT_PUBLIC_USE_PRIVATE_API: "true"server {
+
+docker-compose up -d
+
+```      # Internal backend URL (for proxy)    server_name api.yourdomain.com;
+
+
+
+### Nginx Configuration (Frontend Only)      NEXT_PUBLIC_API_BASE_URL: http://bracket-backend:8400    location / {
+
+
+
+```nginx      INTERNAL_API_BASE_URL: http://bracket-backend:8400        proxy_pass http://172.16.0.4:8400;
+
+server {
+
+    listen 443 ssl http2;      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"    }
+
+    server_name yourdomain.com;
+
+    image: bracket-frontend-local  # Must use local image with proxy}
+
+    ssl_certificate /path/to/cert.pem;
+
+    ssl_certificate_key /path/to/key.pem;    networks:```
+
+
+
+    location / {      - bracket_lan
+
+        proxy_pass http://localhost:3000;
+
+        proxy_http_version 1.1;    ports:## Environment Variables
+
+        proxy_set_header Upgrade $http_upgrade;
+
+        proxy_set_header Connection 'upgrade';      - "3000:3000"  # Only frontend is exposed
+
+        proxy_set_header Host $host;
+
+        proxy_cache_bypass $http_upgrade;    restart: unless-stopped| Variable | Description | Private | Public |
+
+        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;```|----------|-------------|---------|---------|
+
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+    }| `USE_PRIVATE_API` | Operation mode | `true` | `false` |
+
+}
+
+```**Method 2: Using Environment Files**| `BACKEND_PORT_MAPPING` | Backend port | empty | `172.16.0.4:8400:8400` |
+
+
+
+---| `CORS_ORIGINS` | Allowed domains | internal | public |
+
+
+
+## 🌐 Public Mode (Direct API Access)Create `.env.private`:| `PUBLIC_API_URL` | Public API URL | `/api` | `https://api.yourdomain.com` |
+
+
+
+### Overview
+
+
+
+In **Public Mode**, both frontend and backend are exposed to the internet. The frontend makes direct requests to the backend API. This requires proper CORS configuration and typically uses two subdomains.```bash## Quick Switch
+
+
+
+### Features# Private API Mode - Backend NOT publicly accessible
+
+
+
+- ⚠️ **Backend accessible from Internet** - Requires security considerationsNEXT_PUBLIC_USE_PRIVATE_API=true```bash
+
+- ⚠️ **Requires CORS configuration** - Cross-origin requests must be allowed
+
+- ⚠️ **Two domains/subdomains needed** - Frontend and API separately exposedCORS_ORIGINS=http://bracket-frontend:3000# Secure mode (recommended)
+
+- ✅ **Potentially lower latency** - Direct backend communication
+
+- ✅ **API can be used by other clients** - Third-party integrations possibleBACKEND_PORT_MAPPING=./switch-api-mode.sh private
+
+
+
+### What Users SeeINTERNAL_API_URL=http://bracket-backend:8400
+
+
+
+```NEXT_PUBLIC_API_BASE_URL=http://bracket-backend:8400# Public mode  
+
+✅ https://yourdomain.com/login
+
+⚠️ Browser requests go to: https://api.yourdomain.com/tokenFRONTEND_PORT_MAPPING=3000:3000./switch-api-mode.sh public
+
+⚠️ Browser requests go to: https://api.yourdomain.com/clubs
+
+```JWT_SECRET=change_me_in_production```
+
+
+
+### Docker Compose ConfigurationADMIN_EMAIL=admin@yourdomain.com
+
+
+
+#### Method 1: Direct ConfigurationADMIN_PASSWORD=change_me_in_production## Troubleshooting
+
+
+
+Edit `docker-compose.yml`:BASE_URL=https://yourdomain.com
+
+
+
+```yamlNEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001### Error: `bracket-backend:8400 not resolved`
+
+services:
+
+  bracket-backend:```- Verify that `USE_PRIVATE_API=true` in `.env`
+
+    container_name: bracket-backend
+
+    environment:- Make sure `/pages/api/[...path].ts` file exists
+
+      ENVIRONMENT: PRODUCTION
+
+      # CORS - Allow requests from frontend domainThen use variables in `docker-compose.yml`:
+
+      CORS_ORIGINS: https://yourdomain.com,http://localhost:3000
+
+      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod### Error: `CORS policy`
+
+      JWT_SECRET: change_me_in_production
+
+      ADMIN_EMAIL: admin@yourdomain.com```yaml- Public mode: verify `CORS_ORIGINS` in backend
+
+      ADMIN_PASSWORD: change_me_in_production
+
+      BASE_URL: https://api.yourdomain.comservices:- Private mode: should not occur
+
+    image: ghcr.io/evroon/bracket-backend
+
+    networks:  bracket-backend:
+
+      - bracket_lan
+
+    # Backend is PUBLIC - Port exposed    environment:### Backend not responding
+
+    ports:
+
+      - "8400:8400"      CORS_ORIGINS: ${CORS_ORIGINS}- Private mode: check frontend logs
+
+    restart: unless-stopped
+
+      JWT_SECRET: ${JWT_SECRET}- Public mode: verify nginx points to `172.16.0.4:8400`
+
+  bracket-frontend:
+
+    container_name: bracket-frontend      ADMIN_EMAIL: ${ADMIN_EMAIL}
+
+    environment:
+
+      # Disable Private API mode      ADMIN_PASSWORD: ${ADMIN_PASSWORD}## Variables de Entorno
+
+      NEXT_PUBLIC_USE_PRIVATE_API: "false"
+
+      # Public backend URL      BASE_URL: ${BASE_URL}
+
+      NEXT_PUBLIC_API_BASE_URL: https://api.yourdomain.com
+
+      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"    ports:| Variable | Descripción | Privado | Público |
+
+    image: ghcr.io/evroon/bracket-frontend  # Can use official image
+
+    networks:      - "${BACKEND_PORT_MAPPING:-}"  # Empty = not exposed|----------|-------------|---------|---------|
+
+      - bracket_lan
+
+    ports:| `USE_PRIVATE_API` | Modo de operación | `true` | `false` |
+
+      - "3000:3000"
+
+    restart: unless-stopped  bracket-frontend:| `BACKEND_PORT_MAPPING` | Puerto del backend | vacío | `172.16.0.4:8400:8400` |
+
+```
+
+    environment:| `CORS_ORIGINS` | Dominios permitidos | interno | público |
+
+#### Method 2: Using Environment Files
+
+      NEXT_PUBLIC_USE_PRIVATE_API: ${NEXT_PUBLIC_USE_PRIVATE_API}| `PUBLIC_API_URL` | URL pública del API | `/api` | `https://api.pinar.campeonatos.co` |
+
+Create `.env.public`:
+
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+
+```bash
+
+# Public API Mode - Backend IS publicly accessible      INTERNAL_API_BASE_URL: ${INTERNAL_API_URL}## Cambio Rápido
+
+NEXT_PUBLIC_USE_PRIVATE_API=false
+
+CORS_ORIGINS=https://yourdomain.com,http://localhost:3000    ports:
+
+BACKEND_PORT_MAPPING=8400:8400
+
+NEXT_PUBLIC_API_BASE_URL=https://api.yourdomain.com      - "${FRONTEND_PORT_MAPPING}"```bash
+
+INTERNAL_API_URL=http://bracket-backend:8400
+
+FRONTEND_PORT_MAPPING=3000:3000```# Modo seguro (recomendado)
+
+JWT_SECRET=change_me_in_production
+
+ADMIN_EMAIL=admin@yourdomain.com./switch-api-mode.sh private
+
+ADMIN_PASSWORD=change_me_in_production
+
+BASE_URL=https://api.yourdomain.com### Deployment
+
+NEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001
+
+```# Modo público  
+
+
+
+### Deployment```bash./switch-api-mode.sh public
+
+
+
+```bash# Using .env.private```
+
+# Using .env.public
+
+cp .env.public .envcp .env.private .env
+
+docker-compose down
+
+docker-compose up -ddocker-compose down## Troubleshooting
+
+```
+
+docker-compose up -d
+
+### Nginx Configuration (Frontend + Backend)
 
 ### Error: `bracket-backend:8400 not resolved`
 
-# Or with direct configuration- Verifica que `USE_PRIVATE_API=true` en `.env`
+```nginx
 
-docker-compose down- Asegúrate de que el archivo `/pages/api/[...path].ts` existe
+# Frontend# Or with direct configuration- Verifica que `USE_PRIVATE_API=true` en `.env`
+
+server {
+
+    listen 443 ssl http2;docker-compose down- Asegúrate de que el archivo `/pages/api/[...path].ts` existe
+
+    server_name yourdomain.com;
 
 docker-compose up -d
 
-```### Error: `CORS policy`
-
-- En modo público: verifica `CORS_ORIGINS` en backend
-
-### Nginx Configuration (Frontend Only)- En modo privado: no debería ocurrir
-
-
-
-```nginx### Backend no responde
-
-server {- Modo privado: verifica logs del frontend
-
-    listen 443 ssl http2;- Modo público: verifica que nginx apunte a `172.16.0.4:8400`
-    server_name yourdomain.com;
-
     ssl_certificate /path/to/cert.pem;
+
+    ssl_certificate_key /path/to/key.pem;```### Error: `CORS policy`
+
+
+
+    location / {- En modo público: verifica `CORS_ORIGINS` en backend
+
+        proxy_pass http://localhost:3000;
+
+        proxy_http_version 1.1;### Nginx Configuration (Frontend Only)- En modo privado: no debería ocurrir
+
+        proxy_set_header Upgrade $http_upgrade;
+
+        proxy_set_header Connection 'upgrade';
+
+        proxy_set_header Host $host;
+
+        proxy_cache_bypass $http_upgrade;```nginx### Backend no responde
+
+    }
+
+}server {- Modo privado: verifica logs del frontend
+
+
+
+# Backend API    listen 443 ssl http2;- Modo público: verifica que nginx apunte a `172.16.0.4:8400`
+
+server {    server_name yourdomain.com;
+
+    listen 443 ssl http2;
+
+    server_name api.yourdomain.com;    ssl_certificate /path/to/cert.pem;
+
     ssl_certificate_key /path/to/key.pem;
 
-    location / {
+    ssl_certificate /path/to/cert.pem;
+
+    ssl_certificate_key /path/to/key.pem;    location / {
+
         proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
+
+    location / {        proxy_http_version 1.1;
+
+        proxy_pass http://localhost:8400;        proxy_set_header Upgrade $http_upgrade;
+
+        proxy_http_version 1.1;        proxy_set_header Connection 'upgrade';
+
+        proxy_set_header Host $host;        proxy_set_header Host $host;
+
+        proxy_set_header X-Real-IP $remote_addr;        proxy_cache_bypass $http_upgrade;
+
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_set_header X-Forwarded-Proto $scheme;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    }        proxy_set_header X-Forwarded-Proto $scheme;
+
+}    }
+
+```}
+
 ```
 
 ---
 
+---
+
+## Environment Variables Reference
+
 ## 🌐 Public Mode (Direct API Access)
 
+### Frontend Environment Variables
+
 ### Overview
-In **Public Mode**, both frontend and backend are exposed to the internet. The frontend makes direct requests to the backend API. This requires proper CORS configuration and typically uses two subdomains.
 
-### Features
-- ⚠️ **Backend accessible from Internet** - Requires security considerations
-- ⚠️ **Requires CORS configuration** - Cross-origin requests must be allowed
-- ⚠️ **Two domains/subdomains needed** - Frontend and API separately exposed
+| Variable | Description | Private Mode | Public Mode | Required |In **Public Mode**, both frontend and backend are exposed to the internet. The frontend makes direct requests to the backend API. This requires proper CORS configuration and typically uses two subdomains.
+
+|----------|-------------|--------------|-------------|----------|
+
+| `NEXT_PUBLIC_USE_PRIVATE_API` | Enables/disables private API mode | `"true"` | `"false"` | ✅ Yes |### Features
+
+| `NEXT_PUBLIC_API_BASE_URL` | Backend API URL visible to browser | `http://bracket-backend:8400` | `https://api.yourdomain.com` | ✅ Yes |- ⚠️ **Backend accessible from Internet** - Requires security considerations
+
+| `INTERNAL_API_BASE_URL` | Backend URL for server-side proxy | `http://bracket-backend:8400` | `http://bracket-backend:8400` | Private only |- ⚠️ **Requires CORS configuration** - Cross-origin requests must be allowed
+
+| `NEXT_PUBLIC_HCAPTCHA_SITE_KEY` | hCaptcha site key for forms | `10000000-ffff-ffff-ffff-000000000001` (test key) | Same | ✅ Yes |- ⚠️ **Two domains/subdomains needed** - Frontend and API separately exposed
+
 - ✅ **Potentially lower latency** - Direct backend communication
-- ✅ **API can be used by other clients** - Third-party integrations possible
 
-### What Users See
+**Important:** `NEXT_PUBLIC_*` variables are **embedded at build time** in Next.js. Changes require rebuilding the Docker image.- ✅ **API can be used by other clients** - Third-party integrations possible
+
+
+
+### Backend Environment Variables### What Users See
+
 ```
-✅ https://yourdomain.com/login
-⚠️ Browser requests go to: https://api.yourdomain.com/token
-⚠️ Browser requests go to: https://api.yourdomain.com/clubs
-```
 
-### Docker Compose Configuration
+| Variable | Description | Private Mode | Public Mode | Required |✅ https://yourdomain.com/login
 
-**Method 1: Direct Configuration**
+|----------|-------------|--------------|-------------|----------|⚠️ Browser requests go to: https://api.yourdomain.com/token
+
+| `ENVIRONMENT` | Deployment environment | `PRODUCTION` | `PRODUCTION` | ✅ Yes |⚠️ Browser requests go to: https://api.yourdomain.com/clubs
+
+| `CORS_ORIGINS` | Allowed origin domains | `http://bracket-frontend:3000` | `https://yourdomain.com` | ✅ Yes |```
+
+| `PG_DSN` | PostgreSQL connection string | `postgresql://user:pass@postgres:5432/db` | Same | ✅ Yes |
+
+| `JWT_SECRET` | Secret for JWT token signing | Strong random string | Same | ✅ Yes |### Docker Compose Configuration
+
+| `ADMIN_EMAIL` | Initial admin user email | `admin@yourdomain.com` | Same | ✅ Yes |
+
+| `ADMIN_PASSWORD` | Initial admin password | Strong password | Same | ✅ Yes |**Method 1: Direct Configuration**
+
+| `BASE_URL` | Public base URL of application | `https://yourdomain.com` | `https://api.yourdomain.com` | ✅ Yes |
 
 Edit `docker-compose.yml`:
 
+### Docker Compose Variables
+
 ```yaml
-services:
-  bracket-backend:
-    container_name: bracket-backend
-    environment:
+
+| Variable | Description | Private Mode | Public Mode |services:
+
+|----------|-------------|--------------|-------------|  bracket-backend:
+
+| `BACKEND_PORT_MAPPING` | Backend container port mapping | (empty or omit) | `8400:8400` |    container_name: bracket-backend
+
+| `FRONTEND_PORT_MAPPING` | Frontend container port mapping | `3000:3000` | `3000:3000` |    environment:
+
       ENVIRONMENT: PRODUCTION
-      # CORS - Allow requests from frontend domain
+
+---      # CORS - Allow requests from frontend domain
+
       CORS_ORIGINS: https://yourdomain.com,http://localhost:3000
-      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
+
+## Quick Mode Switching      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
+
       JWT_SECRET: change_me_in_production
-      ADMIN_EMAIL: admin@yourdomain.com
+
+If using the `switch-api-mode.sh` script:      ADMIN_EMAIL: admin@yourdomain.com
+
       ADMIN_PASSWORD: change_me_in_production
-      BASE_URL: https://api.yourdomain.com
-    image: ghcr.io/evroon/bracket-backend
-    networks:
-      - bracket_lan
+
+```bash      BASE_URL: https://api.yourdomain.com
+
+# Switch to Private Mode (secure)    image: ghcr.io/evroon/bracket-backend
+
+./switch-api-mode.sh private    networks:
+
+docker-compose down && docker-compose up -d      - bracket_lan
+
     # Backend is PUBLIC - Port exposed
-    ports:
-      - "8400:8400"
-    restart: unless-stopped
+
+# Switch to Public Mode    ports:
+
+./switch-api-mode.sh public      - "8400:8400"
+
+docker-compose down && docker-compose up -d    restart: unless-stopped
+
+```
 
   bracket-frontend:
-    container_name: bracket-frontend
+
+---    container_name: bracket-frontend
+
     environment:
-      # Disable Private API mode
+
+## Troubleshooting      # Disable Private API mode
+
       NEXT_PUBLIC_USE_PRIVATE_API: "false"
-      # Public backend URL
+
+### Error: `bracket-backend:8400 net::ERR_NAME_NOT_RESOLVED`      # Public backend URL
+
       NEXT_PUBLIC_API_BASE_URL: https://api.yourdomain.com
-      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+
+**Cause:** Frontend is trying to connect directly to internal Docker hostname from browser.      NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+
     image: ghcr.io/evroon/bracket-frontend  # Can use official image
-    networks:
+
+**Solutions:**    networks:
+
       - bracket_lan
-    ports:
-      - "3000:3000"
-    restart: unless-stopped
-```
 
-**Method 2: Using Environment Files**
+1. Verify `NEXT_PUBLIC_USE_PRIVATE_API="true"` in frontend environment    ports:
 
-Create `.env.public`:
+2. Ensure frontend image is `bracket-frontend-local` (has proxy code)      - "3000:3000"
 
-```bash
+3. Rebuild frontend image: `docker build -t bracket-frontend-local ./frontend`    restart: unless-stopped
+
+4. Check that `/frontend/src/pages/api/[...path].ts` exists in your source code```
+
+
+
+### Error: `CORS policy: No 'Access-Control-Allow-Origin' header`**Method 2: Using Environment Files**
+
+
+
+**Cause:** Backend CORS settings don't match frontend origin.Create `.env.public`:
+
+
+
+**Solutions:**```bash
+
 # Public API Mode - Backend IS publicly accessible
-NEXT_PUBLIC_USE_PRIVATE_API=false
-CORS_ORIGINS=https://yourdomain.com,http://localhost:3000
-BACKEND_PORT_MAPPING=8400:8400
+
+1. **Private Mode:** Set `CORS_ORIGINS=http://bracket-frontend:3000` in backendNEXT_PUBLIC_USE_PRIVATE_API=false
+
+2. **Public Mode:** Set `CORS_ORIGINS=https://yourdomain.com` in backend (match frontend domain)CORS_ORIGINS=https://yourdomain.com,http://localhost:3000
+
+3. Restart backend: `docker-compose restart bracket-backend`BACKEND_PORT_MAPPING=8400:8400
+
 NEXT_PUBLIC_API_BASE_URL=https://api.yourdomain.com
-INTERNAL_API_URL=http://bracket-backend:8400
+
+### Backend not respondingINTERNAL_API_URL=http://bracket-backend:8400
+
 FRONTEND_PORT_MAPPING=3000:3000
-JWT_SECRET=change_me_in_production
+
+**Private Mode:**JWT_SECRET=change_me_in_production
+
 ADMIN_EMAIL=admin@yourdomain.com
-ADMIN_PASSWORD=change_me_in_production
-BASE_URL=https://api.yourdomain.com
-NEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001
+
+- Check frontend logs: `docker-compose logs bracket-frontend`ADMIN_PASSWORD=change_me_in_production
+
+- Verify proxy is working: `docker exec bracket-frontend curl http://bracket-backend:8400`BASE_URL=https://api.yourdomain.com
+
+- Ensure backend has no `ports:` section in docker-compose.ymlNEXT_PUBLIC_HCAPTCHA_SITE_KEY=10000000-ffff-ffff-ffff-000000000001
+
 ```
+
+**Public Mode:**
 
 ### Deployment
 
-```bash
-# Using .env.public
-cp .env.public .env
+- Check backend logs: `docker-compose logs bracket-backend`
+
+- Verify backend port is exposed: `docker-compose ps` should show `8400:8400````bash
+
+- Test direct access: `curl http://localhost:8400`# Using .env.public
+
+- Check Nginx proxy configurationcp .env.public .env
+
 docker-compose down
-docker-compose up -d
+
+### Frontend shows blank page or errorsdocker-compose up -d
+
 ```
 
-### Nginx Configuration (Frontend + Backend)
+1. Check browser console (F12) for errors
 
-```nginx
+2. Verify environment variables: `docker exec bracket-frontend env | grep NEXT_PUBLIC`### Nginx Configuration (Frontend + Backend)
+
+3. Ensure correct image is running: `docker inspect bracket-frontend | grep Image`
+
+4. Clear browser cache (Ctrl+Shift+R) or try incognito mode```nginx
+
 # Frontend
-server {
-    listen 443 ssl http2;
-    server_name yourdomain.com;
 
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
+### Changes to environment variables not taking effectserver {
+
+    listen 443 ssl http2;
+
+**For `NEXT_PUBLIC_*` variables:**    server_name yourdomain.com;
+
+
+
+- These are **embedded at build time** in Next.js    ssl_certificate /path/to/cert.pem;
+
+- Must rebuild frontend image: `docker build --no-cache -t bracket-frontend-local ./frontend`    ssl_certificate_key /path/to/key.pem;
+
+- Then restart: `docker-compose up -d`
 
     location / {
-        proxy_pass http://localhost:3000;
+
+**For backend variables:**        proxy_pass http://localhost:3000;
+
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+
+- Simply restart: `docker-compose restart bracket-backend`        proxy_set_header Upgrade $http_upgrade;
+
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
+
+---        proxy_set_header Host $host;
+
         proxy_cache_bypass $http_upgrade;
-    }
+
+## Summary: Which Mode Should I Use?    }
+
 }
 
-# Backend API
-server {
-    listen 443 ssl http2;
-    server_name api.yourdomain.com;
+| Scenario | Recommended Mode | Reason |
 
-    ssl_certificate /path/to/cert.pem;
+|----------|------------------|--------|# Backend API
+
+| Production deployment with Cloudflare/Nginx | **Private** | Enhanced security, simpler SSL setup |server {
+
+| Development/testing | **Private** | Easier setup, no CORS issues |    listen 443 ssl http2;
+
+| Need third-party API access | **Public** | Backend must be directly accessible |    server_name api.yourdomain.com;
+
+| Multi-client architecture (mobile app + web) | **Public** | Shared API endpoint |
+
+| Simple single-app deployment | **Private** | Reduced attack surface |    ssl_certificate /path/to/cert.pem;
+
     ssl_certificate_key /path/to/key.pem;
+
+**Default recommendation:** Use **Private Mode** for most deployments.
 
     location / {
         proxy_pass http://localhost:8400;
