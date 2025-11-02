@@ -18,7 +18,8 @@ logger = logging.getLogger("alembic")
 
 
 def run_migrations_offline() -> None:
-    url = ALEMBIC_CONFIG.get_main_option("sqlalchemy.url")
+    # Use the environment configuration instead of alembic.ini
+    url = str(config.pg_dsn)
     context.configure(url=url, target_metadata=Base.metadata, compare_type=True)
 
     with context.begin_transaction():

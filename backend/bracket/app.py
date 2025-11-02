@@ -40,10 +40,39 @@ init_sentry()
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await database.connect()
+    
+    # Check database state before any operations
+    table_count = await database.fetch_val(
+        "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'"
+    )
+    is_completely_empty = table_count == 0
+    
+    # Check if alembic_version table exists (indicates migrations were run before)
+    alembic_version_exists = await database.fetch_val(
+        "SELECT EXISTS (SELECT FROM information_schema.tables "
+        "WHERE table_schema = 'public' AND table_name = 'alembic_version')"
+    )
+    
+    logger.info(f"Database state: table_count={table_count}, alembic_version_exists={alembic_version_exists}")
+    
+    # Initialize database if needed
     await init_db_when_empty()
-
+    
+    # Decision logic for migrations:
     if config.auto_run_migrations and environment is not Environment.CI:
-        alembic_run_migrations()
+        if is_completely_empty:
+            # Fresh database: tables created from schema, no migrations needed
+            logger.info("Fresh database detected, skipping Alembic migrations (tables already created from schema)")
+        elif alembic_version_exists:
+            # Existing database with Alembic history: run migrations to update
+            logger.info("Existing database with migration history detected, running Alembic migrations...")
+            alembic_run_migrations()
+        else:
+            # Existing database without Alembic history: dangerous, log warning
+            logger.warning(
+                "Existing database without Alembic history detected. "
+                "Manual intervention may be required. Skipping migrations to prevent conflicts."
+            )
 
     if environment is Environment.PRODUCTION:
         start_cronjobs()

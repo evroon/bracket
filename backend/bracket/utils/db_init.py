@@ -116,20 +116,72 @@ async def create_admin_user() -> UserId:
     return user.id
 
 
+async def check_alembic_sync() -> bool:
+    """Check if the database is in sync with Alembic migrations."""
+    try:
+        # Check if alembic_version table exists
+        alembic_version_exists = await database.fetch_val(
+            "SELECT EXISTS (SELECT FROM information_schema.tables "
+            "WHERE table_schema = 'public' AND table_name = 'alembic_version')"
+        )
+        return bool(alembic_version_exists)
+    except Exception:
+        return False
+
+
 async def init_db_when_empty() -> UserId | None:
     table_count = await database.fetch_val(
         "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'"
     )
+    
+    # Check if we have a completely empty database (no tables at all)
+    is_completely_empty = table_count == 0
+    # Check if Alembic tracking is in place
+    is_alembic_synced = await check_alembic_sync()
+    
     if config.admin_email and config.admin_password:
-        if (table_count <= 1 and environment != Environment.CI) or (
-            environment is Environment.DEVELOPMENT and await get_user(config.admin_email) is None
-        ):
-            logger.warning("Empty db detected, creating tables...")
-            metadata.create_all(engine)
-            alembic_stamp_head()
-
-            logger.warning("Empty db detected, creating admin user...")
-            return await create_admin_user()
+        # Only initialize if database is truly empty OR in development
+        should_initialize = (
+            is_completely_empty or 
+            (environment is Environment.DEVELOPMENT and not is_alembic_synced)
+        )
+        
+        if should_initialize:
+            if is_completely_empty:
+                logger.warning("Completely empty database detected, initializing from schema...")
+                # Create all tables directly from the schema models
+                metadata.create_all(engine)
+                # Mark the database as up-to-date with Alembic
+                alembic_stamp_head()
+                logger.warning("Database initialized successfully from schema with Alembic sync")
+            elif environment is Environment.DEVELOPMENT:
+                logger.warning("Development environment: ensuring tables exist...")
+                metadata.create_all(engine)
+                if not is_alembic_synced:
+                    alembic_stamp_head()
+            
+            # Try to create admin user if needed
+            try:
+                existing_user = await get_user(config.admin_email)
+                if existing_user is None:
+                    logger.warning("Creating admin user...")
+                    return await create_admin_user()
+                else:
+                    logger.info("Admin user already exists")
+            except Exception as e:
+                logger.warning(f"Could not check/create admin user: {e}")
+        
+        elif table_count > 0:
+            logger.info(f"Existing database detected with {table_count} tables, skipping initialization")
+            # In production with existing database, only try to ensure admin user exists
+            if environment is Environment.PRODUCTION:
+                try:
+                    existing_user = await get_user(config.admin_email)
+                    if existing_user is None:
+                        logger.warning("Admin user missing in existing database, creating...")
+                        return await create_admin_user()
+                except Exception as e:
+                    logger.warning(f"Could not check admin user in existing database: {e}")
 
     return None
 
