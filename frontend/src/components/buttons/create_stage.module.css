@@ -1,0 +1,35 @@
+.socialLink {
+  padding: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  border: 3px solid #333;
+}
+
+.socialLink:hover {
+  border: 3px solid #8545c7;
+}
+.title {
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
+  text-align: center;
+  font-weight: 900;
+  font-size: rem(38px);
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: rem(32px);
+  }
+}
+
+.description {
+  max-width: rem(1000px);
+  margin: auto;
+  margin-top: var(--mantine-spacing-xl);
+  margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}
