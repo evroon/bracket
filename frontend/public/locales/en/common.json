@@ -272,5 +272,7 @@
     "win_distribution_text_draws": "draws",
     "win_distribution_text_losses": "losses",
     "win_distribution_text_win": "wins",
-    "win_points_input_label": "Points for a win"
+    "win_points_input_label": "Points for a win",
+    "results_tab_upcoming": "Upcoming Matches",
+    "results_tab_past": "Past Matches"
 }

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.logger import get_logger
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import (
     get_scheduled_matches,
@@ -8,14 +9,9 @@ from bracket.logic.planning.matches import (
     reorder_matches_for_court,
     schedule_all_unscheduled_matches,
 )
-from bracket.logic.ranking.calculation import (
-    recalculate_ranking_for_stage_item,
-)
+from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
 from bracket.logic.ranking.elimination import update_inputs_in_subsequent_elimination_rounds
-from bracket.logic.scheduling.upcoming_matches import (
-    get_draft_round_in_stage_item,
-    get_upcoming_matches_for_swiss,
-)
+from bracket.logic.scheduling.upcoming_matches import get_draft_round_in_stage_item, get_upcoming_matches_for_swiss
 from bracket.models.db.match import (
     Match,
     MatchBody,
@@ -41,6 +37,7 @@ from bracket.utils.id_types import MatchId, StageItemId, TournamentId
 from bracket.utils.types import assert_some
 
 router = APIRouter()
+logger = get_logger("bracket")
 
 
 @router.get(
@@ -68,9 +65,7 @@ async def get_matches_to_schedule(
     if len(courts) <= len(draft_round.matches):
         return UpcomingMatchesResponse(data=[])
 
-    return UpcomingMatchesResponse(
-        data=get_upcoming_matches_for_swiss(match_filter, stage_item, draft_round)
-    )
+    return UpcomingMatchesResponse(data=get_upcoming_matches_for_swiss(match_filter, stage_item, draft_round))
 
 
 @router.delete("/tournaments/{tournament_id}/matches/{match_id}", response_model=SuccessResponse)
@@ -136,9 +131,7 @@ async def schedule_matches(
     return SuccessResponse()
 
 
-@router.post(
-    "/tournaments/{tournament_id}/matches/{match_id}/reschedule", response_model=SuccessResponse
-)
+@router.post("/tournaments/{tournament_id}/matches/{match_id}/reschedule", response_model=SuccessResponse)
 async def reschedule_match(
     tournament_id: TournamentId,
     match_id: MatchId,
@@ -163,6 +156,8 @@ async def update_match_by_id(
 ) -> SuccessResponse:
     await check_foreign_keys_belong_to_tournament(match_body, tournament_id)
     tournament = await sql_get_tournament(tournament_id)
+
+    logger.info(f"Updating match {match_id} with body: {match_body.model_dump()}")
 
     await sql_update_match(match_id, match_body, tournament)
 
