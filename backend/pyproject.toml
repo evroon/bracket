@@ -10,7 +10,7 @@ dependencies = [
     "bcrypt==5.0.0",
     "click==8.2.0",
     "databases[asyncpg]<=0.8.0",
-    "fastapi==0.116.0",
+    "fastapi==0.121.1",
     "fastapi-sso==0.18.0",
     "gunicorn==23.0.0",
     "heliclockter==2.0.0",
