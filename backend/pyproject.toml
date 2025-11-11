@@ -7,7 +7,7 @@ dependencies = [
     "aiohttp==3.12.14",
     "aiopg==1.4.0",
     "alembic==1.16.1",
-    "bcrypt==4.3.0",
+    "bcrypt==5.0.0",
     "click==8.2.0",
     "databases[asyncpg]<=0.8.0",
     "fastapi==0.116.0",
