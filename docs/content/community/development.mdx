@@ -35,7 +35,7 @@ The database URL can be specified per environment in the `.env` files (see
 
 ## Running the frontend and backend
 
-To run Bracket (frontend and backend) locally without Docker, one needs `yarn` and `pipenv`.
+To run Bracket (frontend and backend) locally without Docker, one needs `yarn` and `uv`.
 
 The following starts the frontend and backend for local development in the root
 directory of Bracket:
@@ -63,8 +63,8 @@ yarn run dev
 
 ```bash
 cd backend
-pipenv install -d
-pipenv shell
+uv install -d
+uv shell
 ./run.sh
 ```
 

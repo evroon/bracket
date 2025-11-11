@@ -1,3 +1,36 @@
+[project]
+name = "bracket-backend"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles==24.1.0",
+    "aiohttp==3.12.2",
+    "aiopg==1.4.0",
+    "alembic==1.16.1",
+    "bcrypt==4.3.0",
+    "click==8.2.0",
+    "databases[asyncpg]<=0.8.0",
+    "fastapi==0.116.0",
+    "fastapi-sso==0.18.0",
+    "gunicorn==23.0.0",
+    "heliclockter==2.0.0",
+    "parameterized==0.9.0",
+    "passlib==1.7.4",
+    "pydantic==2.11.1",
+    "pydantic_settings==2.1.0",
+    "pyjwt==2.10.1",
+    "python-dotenv==1.1.0",
+    "python-multipart==0.0.20",
+    "sentry-sdk==2.35.0",
+    "sqlalchemy==1.4.54",
+    "sqlalchemy-stubs==0.4",
+    "starlette==0.46.2",
+    "types-aiofiles==24.1.0.20241221",
+    "types-passlib==1.7.7.20241221",
+    "types-simplejson==3.20.0.20250218",
+    "uvicorn==0.35.0",
+]
+
 [tool.pytest.ini_options]
 addopts = [
     '--junitxml=.junit_report.xml',
@@ -14,10 +47,20 @@ filterwarnings = [
     'ignore:.*The event_loop fixture provided by pytest-asyncio has been redefined.*:DeprecationWarning',
     'ignore:.*Please use `import python_multipart` instead.*:PendingDeprecationWarning',
 ]
-# Enable these once `asyncio_default_test_loop_scope` has been released
-# Then remove the `@pytest.mark.asyncio(loop_scope="session")` calls.
-#asyncio_default_fixture_loop_scope = "session"
-#asyncio_default_test_loop_scope = "session"
+
+[dependency-groups]
+dev = [
+    "aioresponses==0.7.4",
+    "mypy==1.17.0",
+    "pluggy==1.6.0",
+    "pylint==3.3.1",
+    "pytest==8.4.0",
+    "pytest-asyncio==1.1.0",
+    "pytest-cov==6.2.0",
+    "pytest-xdist==3.8.0",
+    "ruff==0.12.2",
+    "vulture==2.14",
+]
 
 [tool.mypy]
     junit_xml = '.junit_report.xml'
@@ -38,13 +81,19 @@ filterwarnings = [
     no_implicit_reexport = true
     show_error_codes = true
 
+[tool.uv]
+package = false
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
 warn_untyped_fields = true
 
-# Per-module options:
 [[tool.mypy.overrides]]
 module = ['aioresponses.*']
 disallow_any_explicit = false
@@ -92,7 +141,7 @@ respect-gitignore = false
 show-fixes = true
 output-format = "full"
 target-version = "py311"
-exclude = [".mypy_cache", ".pytest_cache", "__pycache__"]
+exclude = [".venv", ".mypy_cache", ".pytest_cache", "__pycache__"]
 
 [tool.ruff.lint]
 select = [
@@ -121,6 +170,7 @@ ignore = ["FIX002", "TD002", "TD003", "TC001", "TC002", "TC003", "ISC001"]
 [tool.vulture]
 min_confidence = 0
 paths = ["."]
+exclude = [".venv"]
 ignore_decorators = ["@pytest.*", "@*router*", "@app.*", "@*validator*"]
 ignore_names = [
     "RestartableUvicornWorker",

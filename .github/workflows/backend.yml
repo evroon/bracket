@@ -27,22 +27,18 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install pipenv
-        run: python3 -m pip install --upgrade pipenv wheel virtualenv
+      - name: Install uv
+        run: python3 -m pip install --upgrade uv wheel virtualenv
         working-directory: backend
 
-      - id: cache-pipenv
+      - id: cache-uv
         uses: actions/cache@v4
         with:
           path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-      - name: Install dependencies
-        run: pipenv install -d
-        working-directory: backend
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/Pipfile.lock') }}
 
       - name: Run tests
-        run: pipenv run pytest --cov --cov-report=xml .
+        run: uv run pytest --cov --cov-report=xml .
         working-directory: backend
         env:
           ENVIRONMENT: CI
@@ -53,21 +49,21 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run mypy
-        run: pipenv run mypy --version && pipenv run mypy .
+        run: uv run mypy --version && uv run mypy .
         working-directory: backend
 
       - name: Run pylint
-        run: pipenv run pylint bracket tests cli.py
+        run: uv run pylint bracket tests cli.py
         working-directory: backend
 
       - name: Run ruff format
-        run: pipenv run ruff format --check .
+        run: uv run ruff format --check .
         working-directory: backend
 
       - name: Run ruff
-        run: pipenv run ruff check .
+        run: uv run ruff check .
         working-directory: backend
 
       - name: Run vulture
-        run: '! pipenv run vulture |grep "unused function\|unused class\|unused method"'
+        run: '! uv run vulture |grep "unused function\|unused class\|unused method"'
         working-directory: backend

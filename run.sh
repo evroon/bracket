@@ -6,7 +6,7 @@ function run_frontend() {
 }
 
 function run_backend() {
-  cd backend && ENVIRONMENT=DEVELOPMENT pipenv run gunicorn \
+  cd backend && ENVIRONMENT=DEVELOPMENT uv run gunicorn \
       -k bracket.uvicorn.RestartableUvicornWorker \
       bracket.app:app \
       --bind localhost:8400 \

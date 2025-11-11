@@ -46,7 +46,7 @@ job "bracket-backend" {
       config {
         image   = "ghcr.io/evroon/bracket-backend"
         ports   = ["uvicorn"]
-        command = "pipenv"
+        command = "uv"
         args    = [
           "run",
           "uvicorn",
