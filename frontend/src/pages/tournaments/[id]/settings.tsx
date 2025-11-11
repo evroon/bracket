@@ -19,15 +19,14 @@ import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
 import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from '@tabler/icons-react';
-import assert from 'assert';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdArchive } from 'react-icons/md';
+import { useNavigate } from 'react-router';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../404';
+import { assert_not_none } from '../../../components/utils/assert';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
@@ -124,7 +123,7 @@ function GeneralTournamentForm({
   swrTournamentResponse: SWRResponse;
   clubs: Club[];
 }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const form = useForm({
@@ -154,7 +153,7 @@ function GeneralTournamentForm({
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        assert(values.club_id != null);
+        assert_not_none(values.club_id);
 
         await updateTournament(
           tournament.id,
@@ -320,7 +319,7 @@ function GeneralTournamentForm({
           onClick={async () => {
             await deleteTournament(tournament.id)
               .then(async () => {
-                await router.push('/');
+                await navigate('/');
               })
               .catch((response: any) => handleRequestError(response));
           }}
@@ -377,9 +376,3 @@ export default function SettingsPage() {
     </TournamentLayout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

@@ -1,7 +1,6 @@
 import { Grid, Title } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import PlayerCreateModal from '../../../components/modals/player_create_modal';
 import PlayersTable from '../../../components/tables/players';
@@ -41,9 +40,3 @@ export default function Players() {
     </TournamentLayout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

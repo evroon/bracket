@@ -51,7 +51,7 @@ After=network.target
 Type=simple
 User=bracket
 WorkingDirectory=/var/lib/bracket/frontend
-ExecStart=/usr/local/bin/yarn start
+ExecStart=/usr/local/bin/pnpm start
 Environment=NODE_ENV=production
 TimeoutSec=15
 Restart=always

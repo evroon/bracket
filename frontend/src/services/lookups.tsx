@@ -1,6 +1,6 @@
-import assert from 'assert';
 import { SWRResponse } from 'swr';
 
+import { assert_not_none } from '../components/utils/assert';
 import { groupBy, responseIsValid } from '../components/utils/util';
 import { Court } from '../interfaces/court';
 import { MatchInterface } from '../interfaces/match';
@@ -120,9 +120,9 @@ export function getScheduleData(
     matches: (matchesByCourtId[court.id] || [])
       .filter((match: MatchInterface) => match.start_time != null)
       .sort((m1: MatchInterface, m2: MatchInterface) => {
-        assert(m1.position_in_schedule != null);
-        assert(m2.position_in_schedule != null);
-        return m1.position_in_schedule > m2.position_in_schedule ? 1 : -1 || [];
+        return assert_not_none(m1.position_in_schedule) > assert_not_none(m2.position_in_schedule)
+          ? 1
+          : -1 || [];
       }),
     court,
   }));

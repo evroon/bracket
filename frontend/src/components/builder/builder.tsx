@@ -17,10 +17,8 @@ import { useColorScheme } from '@mantine/hooks';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
-import assert from 'assert';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
@@ -42,7 +40,9 @@ import CreateStageButton from '../buttons/create_stage';
 import { CreateStageItemModal } from '../modals/create_stage_item';
 import { UpdateStageModal } from '../modals/update_stage';
 import { UpdateStageItemModal } from '../modals/update_stage_item';
+import { assert_not_none } from '../utils/assert';
 import RequestErrorAlert from '../utils/error_alert';
+import PreloadLink from '../utils/link';
 import { responseIsValid } from '../utils/util';
 
 function StageItemInputComboBox({
@@ -163,7 +163,7 @@ export function getAvailableInputs(
 ) {
   const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
     if (option.winner_from_stage_item_id != null) {
-      assert(option.winner_position != null);
+      option.winner_position = assert_not_none(option.winner_position);
       const stageItem = stageItemMap[option.winner_from_stage_item_id];
 
       if (stageItem == null) return null;
@@ -180,9 +180,8 @@ export function getAvailableInputs(
     if (option.team_id == null) return null;
     const team = teamsMap[option.team_id];
     if (team == null) return null;
-    assert(option.team_id === team.id);
     return {
-      value: `${option.team_id}`,
+      value: `${assert_not_none(option.team_id)}`,
       label: team.name,
       team_id: team.id,
       winner_from_stage_item_id: null,
@@ -301,7 +300,7 @@ function StageItemRow({
                 <ActionIcon
                   variant="transparent"
                   color="gray"
-                  component={Link}
+                  component={PreloadLink}
                   href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
                 >
                   <BiSolidWrench size="1.25rem" />
@@ -327,7 +326,7 @@ function StageItemRow({
                 {stageItem.type === 'SWISS' ? (
                   <Menu.Item
                     leftSection={<BiSolidWrench size="1.5rem" />}
-                    component={Link}
+                    component={PreloadLink}
                     href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
                   >
                     {t('handle_swiss_system')}

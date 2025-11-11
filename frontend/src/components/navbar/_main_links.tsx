@@ -14,12 +14,12 @@ import {
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
 
 import { getBaseApiUrl } from '../../services/adapter';
+import PreloadLink from '../utils/link';
 import { capitalize } from '../utils/util';
 import classes from './_main_links.module.css';
 
@@ -35,7 +35,7 @@ function MainLinkMobile({ item, pathName }: { item: MainLinkProps; pathName: Str
     <>
       <UnstyledButton
         hiddenFrom="sm"
-        component={Link}
+        component={PreloadLink}
         href={item.link}
         className={classes.mobileLink}
         style={{ width: '100%' }}
@@ -57,7 +57,7 @@ function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String })
       <Tooltip position="right" label={item.label} transitionProps={{ duration: 0 }}>
         <UnstyledButton
           visibleFrom="sm"
-          component={Link}
+          component={PreloadLink}
           href={item.link}
           className={classes.link}
           data-active={pathName.startsWith(item.link) || undefined}
@@ -100,18 +100,18 @@ export function getBaseLinksDict() {
 }
 
 export function getBaseLinks() {
-  const router = useRouter();
-  const pathName = router.pathname.replace(/\/+$/, '');
+  const location = useLocation();
+  const pathName = location.pathname.replace(/\/+$/, '');
   return getBaseLinksDict()
     .filter((link) => link.links.length < 1)
     .map((link) => <MainLinkMobile key={link.label} item={link} pathName={pathName} />);
 }
 
 export function TournamentLinks({ tournament_id }: any) {
-  const router = useRouter();
+  const location = useLocation();
   const { t } = useTranslation();
   const tm_prefix = `/tournaments/${tournament_id}`;
-  const pathName = router.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
+  const pathName = location.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
 
   const data = [
     {

@@ -1,6 +1,6 @@
 import { Badge, Center, Pagination, Table, Text } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';

@@ -21,12 +21,12 @@ import NotFoundTitle from './404';
 //   },
 // }));
 
-export default function ForgotPassword() {
+export default function PasswordReset() {
   // TODO: Implement this page.
   return <NotFoundTitle />;
 
   // const { classes } = useStyles();
-  // const router = useRouter();
+  // const navigate = useNavigate();
   //
   // return (
   //   <Container size={460} my={30}>

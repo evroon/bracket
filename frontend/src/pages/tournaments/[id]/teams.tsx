@@ -1,7 +1,6 @@
 import { Grid, Select, Title } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import TeamCreateModal from '../../../components/modals/team_create_modal';
 import { getTableState, tableStateToPagination } from '../../../components/tables/table';
@@ -100,9 +99,3 @@ export default function Teams() {
     </TournamentLayout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

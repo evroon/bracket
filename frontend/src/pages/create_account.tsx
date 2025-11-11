@@ -12,10 +12,9 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 import { PasswordStrength } from '../components/utils/password';
 import { ClientOnly } from '../components/utils/react';
@@ -23,14 +22,8 @@ import { HCaptchaInput } from '../components/utils/util';
 import { registerUser } from '../services/user';
 import classes from './create_account.module.css';
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});
-
 export default function CreateAccount() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
@@ -39,7 +32,7 @@ export default function CreateAccount() {
 
     if (response != null && response.data != null && response.data.data != null) {
       localStorage.setItem('login', JSON.stringify(response.data.data));
-      await router.push('/');
+      await navigate('/');
     }
   }
 
@@ -96,14 +89,14 @@ export default function CreateAccount() {
           <Group justify="space-between" mt="lg" className={classes.controls}>
             <ClientOnly>
               <HCaptchaInput
-                siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
+                siteKey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
                 setCaptchaToken={setCaptchaToken}
               />
             </ClientOnly>
             <Anchor c="dimmed" size="sm" className={classes.control}>
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
-                <Box ml={5} onClick={() => router.push('/login')}>
+                <Box ml={5} onClick={() => navigate('/login')}>
                   {' '}
                   {t('back_to_login_nav')}
                 </Box>

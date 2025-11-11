@@ -1,7 +1,6 @@
 import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
@@ -9,6 +8,7 @@ import { getBaseApiUrl } from '../../services/adapter';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
 import RequestErrorAlert from '../utils/error_alert';
+import PreloadLink from '../utils/link';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import classes from './tournaments.module.css';
 
@@ -58,7 +58,11 @@ export default function TournamentsCardTable({
     .sort((t1: Tournament, t2: Tournament) => t1.name.localeCompare(t2.name))
     .map((tournament) => (
       <Group key={tournament.id} className={classes.card}>
-        <UnstyledButton component={Link} href={`/tournaments/${tournament.id}/stages`} w="100%">
+        <UnstyledButton
+          component={PreloadLink}
+          href={`/tournaments/${tournament.id}/stages`}
+          w="100%"
+        >
           <Card shadow="sm" padding="lg" radius="md" withBorder w="100%">
             <Card.Section>
               <TournamentLogo tournament={tournament} />
@@ -86,7 +90,7 @@ export default function TournamentsCardTable({
                   {t('archived_label')}
                 </Badge>
                 <Button
-                  component={Link}
+                  component={PreloadLink}
                   color="blue"
                   fullWidth
                   radius="md"

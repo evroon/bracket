@@ -1,6 +1,6 @@
 import { Select } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Ranking } from '../../interfaces/ranking';
 

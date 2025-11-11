@@ -44,9 +44,9 @@ AUTO_RUN_MIGRATIONS=true
 
 ## Frontend
 
-- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
+- `VITE_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha.
-- `NEXT_PUBLIC_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
+- `VITE_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
 - `ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
   analytics
@@ -61,8 +61,8 @@ You can store the config in `.env.local` (as described in the [Next docs][next-c
 This is an example of how the config file should look like:
 
 ```shell
-NEXT_PUBLIC_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
-NEXT_PUBLIC_API_BASE_URL='https://api.bracket.com'
+VITE_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
+VITE_API_BASE_URL='https://api.bracket.com'
 ANALYTICS_SCRIPT_SRC='https://analytics.bracket.com/script.js'
 ANALYTICS_DATA_DOMAIN='bracket.com'
 ANALYTICS_DATA_WEBSITE_ID='bracket.com'

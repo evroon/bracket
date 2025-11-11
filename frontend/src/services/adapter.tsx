@@ -1,7 +1,6 @@
 import { showNotification } from '@mantine/notifications';
-import type Axios from 'axios';
-import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { useRouter } from 'next/router';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router';
 import useSWR, { SWRResponse } from 'swr';
 
 import { Pagination } from '../components/utils/util';
@@ -9,9 +8,6 @@ import { SchedulerSettings } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
 import { TournamentFilter } from '../interfaces/tournament';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
-
-// TODO: This is a workaround for the fact that axios is not properly typed.
-const axios: typeof Axios = require('axios').default;
 
 export function handleRequestError(response: AxiosError) {
   if (response.code === 'ERR_NETWORK') {
@@ -53,8 +49,8 @@ export function requestSucceeded(result: AxiosResponse | AxiosError) {
 }
 
 export function getBaseApiUrl() {
-  return process.env.NEXT_PUBLIC_API_BASE_URL != null
-    ? process.env.NEXT_PUBLIC_API_BASE_URL
+  return import.meta.env.VITE_API_BASE_URL != null
+    ? import.meta.env.VITE_API_BASE_URL
     : 'http://localhost:8400';
 }
 
@@ -239,8 +235,8 @@ export async function removeTeamLogo(tournament_id: number, team_id: number) {
 
 export function checkForAuthError(response: any) {
   if (typeof window !== 'undefined' && !tokenPresent()) {
-    const router = useRouter();
-    router.push('/login');
+    const navigate = useNavigate();
+    navigate('/login');
   }
 
   // We send a simple GET `/clubs` request to test whether we really should log out. // Next

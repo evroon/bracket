@@ -12,8 +12,8 @@ import {
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IoOptions } from '@react-icons/all-files/io5/IoOptions';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 

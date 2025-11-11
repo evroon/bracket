@@ -1,6 +1,6 @@
 import { Group, ThemeIcon, Title, Tooltip } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { HiArchiveBoxArrowDown } from 'react-icons/hi2';
 
 import { TournamentLinks } from '../../components/navbar/_main_links';

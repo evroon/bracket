@@ -31,12 +31,12 @@ See [the config docs](/docs/running-bracket/configuration.mdx) for more informat
 
 The following configuration variables need to be adjusted for the frontend to run it in production:
 
-- `NEXT_PUBLIC_API_BASE_URL`: The base URL of the backend API to which the frontend sends requests.
+- `VITE_API_BASE_URL`: The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
 
 Optional:
 
-- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
+- `VITE_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha. If left blank, HCaptcha will
   be disabled for your site.
 

@@ -10,7 +10,7 @@ title: FAQ
 This is likely because you are trying to access Bracket on a different address than
 `http://localhost:3000` in the browser. In that case, two things need to be changed:
 
-- Change `NEXT_PUBLIC_API_BASE_URL` to the address of the backend, e.g `https://api.example.org`.
+- Change `VITE_API_BASE_URL` to the address of the backend, e.g `https://api.example.org`.
 - You will also need to update `CORS_ORIGINS` to the address of the frontend, e.g.
   `https://app.example.org`.
 

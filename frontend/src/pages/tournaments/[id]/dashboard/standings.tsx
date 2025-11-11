@@ -1,18 +1,16 @@
 import { Container, Text } from '@mantine/core';
 import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../../404';
 import { DashboardFooter } from '../../../../components/dashboard/footer';
-import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
+import { DoubleHeader, getTournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { StandingsTableForStageItem } from '../../../../components/tables/standings';
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
-import { responseIsValid } from '../../../../components/utils/util';
+import { responseIsValid, setTitle } from '../../../../components/utils/util';
 import { getStagesLive } from '../../../../services/adapter';
 import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
@@ -65,7 +63,7 @@ export function StandingsContent({
   return rows;
 }
 
-export default function Standings() {
+export default function DashboardStandingsPage() {
   const tournamentResponse = getTournamentResponseByEndpointName();
 
   const tournamentDataFull = tournamentResponse ? tournamentResponse[0] : null;
@@ -74,6 +72,8 @@ export default function Standings() {
   const tournamentId = !notFound ? tournamentDataFull.id : null;
 
   const swrStagesResponse = getStagesLive(tournamentId);
+
+  setTitle(getTournamentHeadTitle(tournamentDataFull));
 
   if (!tournamentResponse) {
     return <TableSkeletonTwoColumns />;
@@ -89,9 +89,6 @@ export default function Standings() {
 
   return (
     <>
-      <Head>
-        <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
-      </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
@@ -106,9 +103,3 @@ export default function Standings() {
     </>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

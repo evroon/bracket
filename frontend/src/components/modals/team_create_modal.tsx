@@ -1,8 +1,8 @@
 import { Button, Checkbox, Modal, MultiSelect, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUser, IconUsers, IconUsersPlus } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Player } from '../../interfaces/player';

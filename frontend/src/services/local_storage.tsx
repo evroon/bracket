@@ -1,7 +1,7 @@
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
-import { NextRouter } from 'next/router';
 import React from 'react';
+import { NavigateFunction } from 'react-router';
 
 import { Translator } from '../components/utils/types';
 
@@ -9,7 +9,7 @@ export function performLogout() {
   localStorage.removeItem('login');
 }
 
-export function performLogoutAndRedirect(t: Translator, router: NextRouter) {
+export function performLogoutAndRedirect(t: Translator, navigate: NavigateFunction) {
   performLogout();
 
   showNotification({
@@ -19,7 +19,7 @@ export function performLogoutAndRedirect(t: Translator, router: NextRouter) {
     message: '',
     autoClose: 10000,
   });
-  router.push('/login');
+  navigate('/login');
 }
 
 export function getLogin() {

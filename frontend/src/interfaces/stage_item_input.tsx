@@ -1,5 +1,4 @@
-import assert from 'assert';
-
+import { assert_not_none } from '../components/utils/assert';
 import { TeamInterface } from './team';
 
 export interface StageItemInput {
@@ -70,10 +69,7 @@ export function formatStageItemInputTentative(
   stage_item_input: StageItemInput | StageItemInputOption,
   stageItemsLookup: any
 ) {
-  assert(
-    stage_item_input.winner_from_stage_item_id != null && stage_item_input.winner_position != null
-  );
-  return `${getPositionName(stage_item_input.winner_position)} of ${stageItemsLookup[stage_item_input.winner_from_stage_item_id].name}`;
+  return `${getPositionName(assert_not_none(stage_item_input.winner_position))} of ${stageItemsLookup[assert_not_none(stage_item_input.winner_from_stage_item_id)].name}`;
 }
 
 export function formatStageItemInput(
@@ -83,7 +79,7 @@ export function formatStageItemInput(
   if (stage_item_input == null) return null;
   if (stage_item_input?.team != null) return stage_item_input.team.name;
   if (stage_item_input?.winner_from_stage_item_id != null) {
-    assert(stage_item_input.winner_position != null);
+    assert_not_none(stage_item_input.winner_position);
     return formatStageItemInputTentative(stage_item_input, stageItemsLookup);
   }
   return null;

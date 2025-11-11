@@ -1,8 +1,6 @@
 import { Grid, Select, Title } from '@mantine/core';
-import { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import TournamentsCardTable from '../components/card_tables/tournaments';
 import TournamentModal from '../components/modals/tournament_modal';
@@ -48,10 +46,3 @@ export default function HomePage() {
     </Layout>
   );
 }
-
-type Props = {};
-export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
-  },
-});

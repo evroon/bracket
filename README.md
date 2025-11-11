@@ -50,7 +50,7 @@
 <h1></h1>
 
 Tournament system meant to be easy to use. Bracket is written in async Python (with
-[FastAPI](https://fastapi.tiangolo.com)) and [Next.js](https://nextjs.org/) as frontend using the
+[FastAPI](https://fastapi.tiangolo.com)) and [Vite](https://vite.dev/) as frontend using the
 [Mantine](https://mantine.dev/) library.
 
 It has the following features:
@@ -104,17 +104,17 @@ Read the [configuration docs](https://docs.bracketapp.nl/docs/running-bracket/co
 Bracket's backend is configured using `.env` files (`prod.env` for production, `dev.env` for development etc.).
 But you can also configure Bracket using environment variables directly, for example by specifying them in the `docker-compose.yml`.
 
-The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Next.js' way of loading environment variables.
+The frontend doesn't can be configured by environment variables as well, as well as `.env` files using Vite's way of loading environment variables.
 
 # Running Bracket in production
 Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how to deploy Bracket and run it in production.
 
-Bracket can be run in Docker or by itself (using `uv` and `yarn`).
+Bracket can be run in Docker or by itself (using `uv` and `pnpm`).
 
 # Development setup
 Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
 
-Prerequisites are `yarn`, `postgresql` and `uv` to run the frontend, database and backend.
+Prerequisites are `pnpm`, `postgresql` and `uv` to run the frontend, database and backend.
 
 # Translations
 Based on your browser settings, your language should be automatically detected and loaded. For now,

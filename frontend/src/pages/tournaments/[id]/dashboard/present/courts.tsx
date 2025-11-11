@@ -1,20 +1,18 @@
 import { Grid } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import NotFoundTitle from '../../../../404';
 import CourtsLarge, { CourtBadge } from '../../../../../components/brackets/courts_large';
 import {
-  TournamentHeadTitle,
   TournamentLogo,
   TournamentQRCode,
   TournamentTitle,
+  getTournamentHeadTitle,
 } from '../../../../../components/dashboard/layout';
 import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
-import { responseIsValid } from '../../../../../components/utils/util';
+import { responseIsValid, setTitle } from '../../../../../components/utils/util';
 import { Court } from '../../../../../interfaces/court';
 import {
   MatchInterface,
@@ -36,6 +34,10 @@ export default function CourtsPage() {
   const swrStagesResponse: SWRResponse = getStagesLive(tournamentId);
   const swrCourtsResponse: SWRResponse = getCourtsLive(tournamentId);
 
+  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
+
+  setTitle(getTournamentHeadTitle(tournamentDataFull));
+
   if (swrStagesResponse.isLoading || swrCourtsResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
   }
@@ -45,7 +47,6 @@ export default function CourtsPage() {
   }
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
-  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
   const courts = responseIsValid(swrCourtsResponse) ? swrCourtsResponse.data.data : [];
   const matchesByCourtId = responseIsValid(swrStagesResponse)
     ? getMatchLookupByCourt(swrStagesResponse)
@@ -73,9 +74,6 @@ export default function CourtsPage() {
 
   return (
     <>
-      <Head>
-        <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
-      </Head>
       <Grid style={{ margin: '1rem' }} gutter="2rem">
         <Grid.Col span={{ base: 12, lg: 2 }}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
@@ -98,9 +96,3 @@ export default function CourtsPage() {
     </>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

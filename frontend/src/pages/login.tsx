@@ -11,10 +11,11 @@ import {
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
+// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useNavigate } from 'react-router';
 
 // import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
@@ -22,11 +23,11 @@ import { performLogin } from '../services/user';
 
 export default function Login() {
   // const { classes } = useStyles();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   useEffect(() => {
     if (tokenPresent()) {
-      router.replace('/');
+      navigate('/');
     }
   }, []);
 
@@ -40,7 +41,7 @@ export default function Login() {
         message: '',
       });
 
-      await router.push('/');
+      await navigate('/');
     }
   }
 
@@ -110,11 +111,11 @@ export default function Login() {
             </Button>
           </form>
           <Text c="dimmed" size="sm" ta="center" mt={15}>
-            <Anchor<'a'> onClick={() => router.push('/create_account')} size="sm">
+            <Anchor<'a'> onClick={() => navigate('/create-account')} size="sm">
               {t('create_account_button')}
             </Anchor>
             {' - '}
-            <Anchor<'a'> onClick={() => router.push('/password_reset')} size="sm">
+            <Anchor<'a'> onClick={() => navigate('/password-reset')} size="sm">
               {t('forgot_password_button')}
             </Anchor>
           </Text>
@@ -123,9 +124,3 @@ export default function Login() {
     </>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

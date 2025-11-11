@@ -2,9 +2,8 @@ import { Button, Select, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiGlobe } from '@react-icons/all-files/bi/BiGlobe';
 import { IconHash, IconLogout, IconUser } from '@tabler/icons-react';
-import assert from 'assert';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useNavigate } from 'react-router';
 
 import { UserInterface } from '../../interfaces/user';
 import { performLogoutAndRedirect } from '../../services/local_storage';
@@ -12,7 +11,7 @@ import { updatePassword, updateUser } from '../../services/user';
 import { PasswordStrength } from '../utils/password';
 
 export default function UserForm({ user, t, i18n }: { user: UserInterface; t: any; i18n: any }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const details_form = useForm({
     initialValues: {
       name: user != null ? user.name : '',
@@ -50,9 +49,8 @@ export default function UserForm({ user, t, i18n }: { user: UserInterface; t: an
   ];
 
   const changeLanguage = (newLocale: string | null) => {
-    const { pathname, asPath, query } = router;
-    assert(newLocale != null);
-    router.push({ pathname, query }, asPath, { locale: newLocale });
+    i18n.changeLanguage(newLocale);
+    navigate(`/user?lng=${newLocale}`);
   };
 
   return (
@@ -96,7 +94,7 @@ export default function UserForm({ user, t, i18n }: { user: UserInterface; t: an
             color="red"
             variant="outline"
             leftSection={<IconLogout />}
-            onClick={() => performLogoutAndRedirect(t, router)}
+            onClick={() => performLogoutAndRedirect(t, navigate)}
           >
             {t('logout_title')}
           </Button>

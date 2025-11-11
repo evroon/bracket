@@ -1,6 +1,6 @@
 import { Table, Text } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { StageItemInputFinal, formatStageItemInput } from '../../interfaces/stage_item_input';
