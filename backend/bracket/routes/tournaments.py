@@ -81,7 +81,7 @@ async def get_tournaments(
         case None, None:
             raise unauthorized_exception
 
-        case _, str(endpoint_name):
+        case _, str() as endpoint_name:
             tournament = await sql_get_tournament_by_endpoint_name(endpoint_name)
             if tournament is None:
                 raise HTTPException(
