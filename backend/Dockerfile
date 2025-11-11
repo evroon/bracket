@@ -2,7 +2,7 @@ FROM python:3.12-alpine3.17
 ARG packages
 RUN apk --update add ${packages} \
     && rm -rf /var/cache/apk/* \
-    && pip3 install --upgrade pip pipenv wheel virtualenv
+    && pip3 install --upgrade pip uv wheel virtualenv
 
 COPY . /app
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN addgroup --system bracket && adduser --system bracket --ingroup bracket \
 USER bracket
 
 RUN set -ex \
-    && pip3 install --upgrade pip pipenv wheel virtualenv \
-    && pipenv install --deploy
+    && pip3 install --upgrade pip uv wheel virtualenv \
+    && uv install --deploy
 
 EXPOSE 8400
 
@@ -22,7 +22,7 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
     CMD ["wget", "--spider", "http://localhost:8400/ping", "||", "exit", "1"]
 
 CMD [ \
-    "pipenv", \
+    "uv", \
     "run", \
     "gunicorn", \
     "-k", "uvicorn.workers.UvicornWorker", \

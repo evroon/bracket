@@ -90,7 +90,7 @@ be able to view bracket at http://localhost:3000. You can log in with the follow
 
 To insert dummy rows into the database, run:
 ```bash
-sudo docker exec bracket-backend pipenv run ./cli.py create-dev-db
+sudo docker exec bracket-backend uv run ./cli.py create-dev-db
 ```
 
 See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
@@ -109,12 +109,12 @@ The frontend doesn't can be configured by environment variables as well, as well
 # Running Bracket in production
 Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how to deploy Bracket and run it in production.
 
-Bracket can be run in Docker or by itself (using `pipenv` and `yarn`).
+Bracket can be run in Docker or by itself (using `uv` and `yarn`).
 
 # Development setup
 Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
 
-Prerequisites are `yarn`, `postgresql` and `pipenv` to run the frontend, database and backend.
+Prerequisites are `yarn`, `postgresql` and `uv` to run the frontend, database and backend.
 
 # Translations
 Based on your browser settings, your language should be automatically detected and loaded. For now,
