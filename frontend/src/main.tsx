@@ -1,6 +1,10 @@
-import { MantineProvider, createTheme } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/dropzone/styles.css';
 import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
