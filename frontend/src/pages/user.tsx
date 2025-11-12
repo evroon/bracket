@@ -1,19 +1,12 @@
 import { Group, Stack, Title } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
 
 import UserForm from '../components/forms/user';
 import { TableSkeletonSingleColumn } from '../components/utils/skeletons';
 import { checkForAuthError, getUser } from '../services/adapter';
 import Layout from './_layout';
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});
-
-export default function HomePage() {
+export default function UserPage() {
   const { t, i18n } = useTranslation();
 
   const swrUserResponse = getUser();

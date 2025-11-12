@@ -1,17 +1,15 @@
 import { Alert, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from '@mantine/core';
 import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardFooter } from '../../../../components/dashboard/footer';
-import { DoubleHeader, TournamentHeadTitle } from '../../../../components/dashboard/layout';
+import { DoubleHeader, getTournamentHeadTitle } from '../../../../components/dashboard/layout';
 import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { Time, compareDateTime, formatTime } from '../../../../components/utils/datetime';
 import { Translator } from '../../../../components/utils/types';
-import { responseIsValid } from '../../../../components/utils/util';
+import { responseIsValid, setTitle } from '../../../../components/utils/util';
 import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
@@ -192,14 +190,15 @@ export function Schedule({
     </Group>
   );
 }
-
-export default function SchedulePage() {
+export default function DashboardSchedulePage() {
   const { t } = useTranslation();
   const tournamentResponse = getTournamentResponseByEndpointName();
 
   const notFound = tournamentResponse == null || tournamentResponse[0] == null;
   const tournamentId = !notFound ? tournamentResponse[0].id : null;
   const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
+
+  setTitle(getTournamentHeadTitle(tournamentDataFull));
 
   const swrStagesResponse = getStagesLive(tournamentId);
   const swrCourtsResponse = getCourtsLive(tournamentId);
@@ -211,12 +210,8 @@ export default function SchedulePage() {
 
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;
-
   return (
     <>
-      <Head>
-        <TournamentHeadTitle tournamentDataFull={tournamentDataFull} />
-      </Head>
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Center>
         <Group style={{ maxWidth: '48rem', width: '100%' }} px="1rem">
@@ -227,9 +222,3 @@ export default function SchedulePage() {
     </>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

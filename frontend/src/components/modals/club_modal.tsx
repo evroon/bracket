@@ -2,8 +2,8 @@ import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Club } from '../../interfaces/club';

@@ -14,9 +14,8 @@ import {
 } from '@mantine/core';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import CourtModal from '../../../components/modals/create_court_modal';
@@ -340,9 +339,3 @@ export default function SchedulePage() {
     </TournamentLayout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

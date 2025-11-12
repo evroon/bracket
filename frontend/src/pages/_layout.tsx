@@ -11,12 +11,12 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
+import { useLocation } from 'react-router';
 
 import { Brand } from '../components/navbar/_brand';
 import { getBaseLinks, getBaseLinksDict } from '../components/navbar/_main_links';
+import PreloadLink from '../components/utils/link';
 import classes from './_layout.module.css';
 
 interface HeaderActionLink {
@@ -44,13 +44,13 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, pathName: st
   return (
     <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
       <Menu.Target>
-        <Link
+        <PreloadLink
           className={classes.link}
           href={link.link || ''}
           data-active={pathName === link.link || undefined}
         >
           <>{link.label}</>
-        </Link>
+        </PreloadLink>
       </Menu.Target>
       {menuItems.length > 0 ? <Menu.Dropdown>{menuItems}</Menu.Dropdown> : null}
     </Menu>
@@ -58,8 +58,8 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, pathName: st
 }
 
 export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionProps) {
-  const router = useRouter();
-  const pathName = router.pathname;
+  const location = useLocation();
+  const pathName = location.pathname;
 
   const [opened, { toggle }] = navbarState != null ? navbarState : [false, { toggle: () => {} }];
   const { setColorScheme } = useMantineColorScheme();
@@ -71,14 +71,14 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
     }
 
     return (
-      <Link
+      <PreloadLink
         key={link.label}
         className={classes.link}
         href={link.link || ''}
         data-active={pathName === link.link || undefined}
       >
         {link.label}
-      </Link>
+      </PreloadLink>
     );
   });
   return (
@@ -91,7 +91,7 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
             {breadcrumbs}
           </Group>
         </Center>
-        <Group gap={5} className={classes.links} visibleFrom="sm">
+        <Group gap={5} visibleFrom="sm">
           {items}
           <ActionIcon
             variant="default"

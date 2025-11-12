@@ -1,11 +1,12 @@
 import { Center, Group, Image, Text, Title, UnstyledButton } from '@mantine/core';
-import Link from 'next/link';
 import React from 'react';
+
+import PreloadLink from '../utils/link';
 
 export function Brand() {
   return (
     <Center mr="1rem" miw="12rem">
-      <UnstyledButton component={Link} href="/">
+      <UnstyledButton component={PreloadLink} href="/">
         <Group>
           <Image
             style={{ width: '38px', marginRight: '0px' }}

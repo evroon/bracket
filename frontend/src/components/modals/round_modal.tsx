@@ -1,8 +1,8 @@
 import { ActionIcon, Button, Modal, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuConstruction } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 

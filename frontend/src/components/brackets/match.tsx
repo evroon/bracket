@@ -1,8 +1,7 @@
 import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { useColorScheme } from '@mantine/hooks';
-import assert from 'assert';
-import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import {
@@ -15,6 +14,7 @@ import { RoundInterface } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
+import { assert_not_none } from '../utils/assert';
 import { Time } from '../utils/datetime';
 import classes from './match.module.css';
 
@@ -99,7 +99,6 @@ export default function Match({
   if (readOnly) {
     return <div className={classes.root}>{bracket}</div>;
   }
-  assert(swrStagesResponse != null);
 
   return (
     <>
@@ -107,7 +106,7 @@ export default function Match({
         {bracket}
       </UnstyledButton>
       <MatchModal
-        swrStagesResponse={swrStagesResponse}
+        swrStagesResponse={assert_not_none(swrStagesResponse)}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         tournamentData={tournamentData}
         match={match}

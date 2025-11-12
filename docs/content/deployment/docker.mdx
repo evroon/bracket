@@ -26,8 +26,8 @@ services:
             - "3000:3000"
         environment:
             NODE_ENV: "production"
-            NEXT_PUBLIC_API_BASE_URL: "http://your-site.com:8400"
-            NEXT_PUBLIC_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
+            VITE_API_BASE_URL: "http://your-site.com:8400"
+            VITE_HCAPTCHA_SITE_KEY: "10000000-ffff-ffff-ffff-000000000001"
         restart: unless-stopped
 
     bracket-backend:
@@ -63,9 +63,9 @@ Replace the lines that are highlighted in the code block from the previous step.
 
 Replace the following values for `bracket-frontend`:
 
-- `NEXT_PUBLIC_API_BASE_URL`: The address of your backend. The frontend will send
+- `VITE_API_BASE_URL`: The address of your backend. The frontend will send
   requests to this address.
-- `NEXT_PUBLIC_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or
+- `VITE_HCAPTCHA_SITE_KEY`: Either leave empty to disable it or
   [signup for hCaptcha](https://dashboard.hcaptcha.com/signup), create a site and
   put the site key here
 

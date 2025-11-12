@@ -1,6 +1,6 @@
 import { Group, PasswordInput, Progress, Stack, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'react-i18next';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (

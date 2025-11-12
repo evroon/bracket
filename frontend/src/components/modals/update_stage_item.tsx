@@ -1,7 +1,7 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Ranking } from '../../interfaces/ranking';

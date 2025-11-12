@@ -1,6 +1,5 @@
 import { Grid, Title } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
 
 import ClubModal from '../components/modals/club_modal';
 import ClubsTable from '../components/tables/clubs';
@@ -9,7 +8,7 @@ import { checkForAuthError, getClubs } from '../services/adapter';
 import Layout from './_layout';
 import classes from './index.module.css';
 
-export default function HomePage() {
+export default function ClubsPage() {
   const swrClubsResponse = getClubs();
   const { t } = useTranslation();
 
@@ -29,9 +28,3 @@ export default function HomePage() {
     </Layout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

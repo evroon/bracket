@@ -6,6 +6,7 @@ uv.lock
 .mypy_cache
 .dmypy.json
 .pytest_cache
+.yarn
 
 *.env
 !ci.env

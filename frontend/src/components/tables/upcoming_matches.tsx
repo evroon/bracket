@@ -1,8 +1,8 @@
 import { Badge, Button, Center, Stack, Table } from '@mantine/core';
 import { GoChecklist } from '@react-icons/all-files/go/GoChecklist';
 import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 

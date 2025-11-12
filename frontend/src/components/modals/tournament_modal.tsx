@@ -12,9 +12,8 @@ import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
-import assert from 'assert';
-import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Club } from '../../interfaces/club';
@@ -22,6 +21,7 @@ import { Tournament } from '../../interfaces/tournament';
 import { getBaseApiUrl, getClubs } from '../../services/adapter';
 import { createTournament } from '../../services/tournament';
 import SaveButton from '../buttons/save';
+import { assert_not_none } from '../utils/assert';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -71,9 +71,8 @@ function GeneralTournamentForm({
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        assert(values.club_id != null);
         await createTournament(
-          parseInt(values.club_id, 10),
+          parseInt(assert_not_none(values.club_id), 10),
           values.name,
           values.dashboard_public,
           values.dashboard_endpoint,

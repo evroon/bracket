@@ -2,8 +2,8 @@ import { Alert, Button, Container, Grid, Modal, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { FaArrowRight } from '@react-icons/all-files/fa/FaArrowRight';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { StageItemWithRounds } from '../../interfaces/stage_item';

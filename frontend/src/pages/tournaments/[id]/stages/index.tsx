@@ -1,7 +1,6 @@
 import { Group, Stack } from '@mantine/core';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Builder from '../../../../components/builder/builder';
 import { CreateStageButtonLarge } from '../../../../components/buttons/create_stage';
@@ -84,9 +83,3 @@ export default function StagesPage() {
 
   return <TournamentLayout tournament_id={tournamentData.id}>{content}</TournamentLayout>;
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

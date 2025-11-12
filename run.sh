@@ -2,7 +2,7 @@
 set -eo pipefail
 
 function run_frontend() {
-  cd frontend && yarn run dev
+  cd frontend && pnpm run dev
 }
 
 function run_backend() {

@@ -1,8 +1,7 @@
 import { Accordion, Badge, Button, Center, Checkbox, Container, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import DeleteButton from '../../../components/buttons/delete';
@@ -201,9 +200,3 @@ export default function RankingsPage() {
     </TournamentLayout>
   );
 }
-
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});

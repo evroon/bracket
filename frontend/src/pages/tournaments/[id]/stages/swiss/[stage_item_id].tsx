@@ -1,9 +1,8 @@
 import { Button, Container, Grid, Group, SegmentedControl, Stack, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Link from 'next/link';
+import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState, useQueryStates } from 'nuqs';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuNavigation } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
@@ -12,7 +11,7 @@ import { RoundsGridCols } from '../../../../../components/brackets/brackets';
 import { NoContent } from '../../../../../components/no_content/empty_table_info';
 import Scheduler from '../../../../../components/scheduling/scheduling';
 import classes from '../../../../../components/utility.module.css';
-import { useRouterQueryState } from '../../../../../components/utils/query_parameters';
+import PreloadLink from '../../../../../components/utils/link';
 import { Translator } from '../../../../../components/utils/types';
 import {
   getStageItemIdFromRouter,
@@ -34,12 +33,6 @@ import {
 import { getStageItemLookup } from '../../../../../services/lookups';
 import TournamentLayout from '../../../_tournament_layout';
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});
-
 function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: Tournament }) {
   return (
     <Stack align="center">
@@ -49,7 +42,7 @@ function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: 
         size="lg"
         leftSection={<LuNavigation size={24} />}
         variant="outline"
-        component={Link}
+        component={PreloadLink}
         className={classes.mobileLink}
         href={`/tournaments/${tournamentData.id}/schedule`}
       >
@@ -59,7 +52,7 @@ function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: 
   );
 }
 
-export default function TournamentPage() {
+export default function SwissTournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();
   const stageItemId = getStageItemIdFromRouter();
   const { t } = useTranslation();
@@ -68,15 +61,31 @@ export default function TournamentPage() {
   checkForAuthError(swrTournamentResponse);
   const swrStagesResponse: SWRResponse = getStages(id);
   const swrCourtsResponse = getCourts(tournamentData.id);
-  const [onlyRecommended, setOnlyRecommended] = useRouterQueryState('only-recommended', 'true');
-  const [eloThreshold, setEloThreshold] = useRouterQueryState('max-elo-diff', 200);
-  const [iterations, setIterations] = useRouterQueryState('iterations', 2_000);
-  const [limit, setLimit] = useRouterQueryState('limit', 50);
-  const [matchVisibility, setMatchVisibility] = useRouterQueryState('match-visibility', 'all');
-  const [teamNamesDisplay, setTeamNamesDisplay] = useRouterQueryState('which-names', 'team-names');
-  const [showAdvancedSchedulingOptions, setShowAdvancedSchedulingOptions] = useRouterQueryState(
+
+  const [onlyRecommended, setOnlyRecommended] = useQueryState(
+    'only-recommended',
+    parseAsString.withDefault('true')
+  );
+  const [eloThreshold, setEloThreshold] = useQueryState(
+    'max-elo-diff',
+    parseAsInteger.withDefault(200)
+  );
+  const [iterations, setIterations] = useQueryState(
+    'iterations',
+    parseAsInteger.withDefault(2_000)
+  );
+  const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(50));
+  const [matchVisibility, setMatchVisibility] = useQueryState(
+    'match-visibility',
+    parseAsString.withDefault('all')
+  );
+  const [teamNamesDisplay, setTeamNamesDisplay] = useQueryState(
+    'which-names',
+    parseAsString.withDefault('team-names')
+  );
+  const [showAdvancedSchedulingOptions, setShowAdvancedSchedulingOptions] = useQueryState(
     'advanced',
-    'false'
+    parseAsString.withDefault('false')
   );
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,

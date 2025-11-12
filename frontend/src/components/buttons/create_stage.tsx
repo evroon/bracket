@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';

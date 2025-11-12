@@ -1,8 +1,8 @@
 import { Alert, Button, Checkbox, Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 

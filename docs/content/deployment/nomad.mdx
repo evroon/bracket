@@ -89,15 +89,15 @@ job "bracket-frontend" {
       driver = "docker"
 
       env {
-        NEXT_PUBLIC_API_BASE_URL = "https://my.bracketdomain.com"
-        NEXT_PUBLIC_HCAPTCHA_SITE_KEY = "xxxxx"
+        VITE_API_BASE_URL = "https://my.bracketdomain.com"
+        VITE_HCAPTCHA_SITE_KEY = "xxxxx"
         NODE_ENV = "production"
       }
 
       config {
         image   = "ghcr.io/evroon/bracket-frontend"
         ports   = ["nextjs"]
-        args = ["yarn", "start", "-p", "${NOMAD_PORT_nextjs}"]
+        args = ["pnpm", "start", "-p", "${NOMAD_PORT_nextjs}"]
       }
 
       resources {

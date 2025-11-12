@@ -1,7 +1,7 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Center } from '@mantine/core';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useParams } from 'react-router';
 import { SWRResponse } from 'swr';
 
 import classes from '../../pages/create_account.module.css';
@@ -37,22 +37,22 @@ export function getDefaultTimeRange(selectMultipleDates: boolean) {
 }
 
 export function getTournamentIdFromRouter() {
-  const router = useRouter();
-  const { id: idString }: any = router.query;
+  const params = useParams();
+  const { id: idString }: any = params;
   const id = parseInt(idString, 10);
   const tournamentData = { id };
   return { id, tournamentData };
 }
 
 export function getStageItemIdFromRouter() {
-  const router = useRouter();
-  const { stage_item_id: idString }: any = router.query;
+  const params = useParams();
+  const { stage_item_id: idString }: any = params;
   return parseInt(idString, 10);
 }
 
 export function getTournamentEndpointFromRouter() {
-  const router = useRouter();
-  const { id }: any = router.query;
+  const params = useParams();
+  const { id }: any = params;
   return id;
 }
 
@@ -100,3 +100,7 @@ export interface Pagination {
   sort_by: string;
   sort_direction: 'asc' | 'desc';
 }
+
+export const setTitle = (title: string) => {
+  document.title = title;
+};

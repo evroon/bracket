@@ -1,24 +1,17 @@
 import { Alert, Button, Checkbox, Container, Paper, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 import { ClientOnly } from '../components/utils/react';
 import { HCaptchaInput } from '../components/utils/util';
 import { registerDemoUser } from '../services/user';
 import classes from './create_account.module.css';
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-  },
-});
-
-export default function CreateDemoAccount() {
-  const router = useRouter();
+export default function CreateDemoAccountPage() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
@@ -27,7 +20,7 @@ export default function CreateDemoAccount() {
 
     if (response != null && response.data != null && response.data.data != null) {
       localStorage.setItem('login', JSON.stringify(response.data.data));
-      await router.push('/');
+      await navigate('/');
     }
   }
 
@@ -59,7 +52,7 @@ export default function CreateDemoAccount() {
         <form onSubmit={form.onSubmit(registerAndRedirect)}>
           <ClientOnly>
             <HCaptchaInput
-              siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
+              siteKey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
               setCaptchaToken={setCaptchaToken}
             />
           </ClientOnly>
