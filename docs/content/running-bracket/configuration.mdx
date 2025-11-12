@@ -48,24 +48,22 @@ AUTO_RUN_MIGRATIONS=true
   accounts. You get the secret when you create a new site in HCaptcha.
 - `VITE_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com`
-- `ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
+- `VITE_ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
   analytics
-- `ANALYTICS_DATA_WEBSITE_ID`: The `data-website-id` attribute passed to the script for Umami
+- `VITE_ANALYTICS_DATA_WEBSITE_ID`: The `data-website-id` attribute passed to the script for Umami
   analytics
-- `ANALYTICS_SCRIPT_SRC`: The URL to the script for analytics purposes.
+- `VITE_ANALYTICS_SCRIPT_SRC`: The URL to the script for analytics purposes.
 
 ### Frontend: Example configuration file
 
-You can store the config in `.env.local` (as described in the [Next docs][next-config-url]).
+You can store the config in `.env.local` (as described in the [Vite docs][https://vite.dev/guide/env-and-mode]).
 
 This is an example of how the config file should look like:
 
 ```shell
 VITE_HCAPTCHA_SITE_KEY='10000000-ffff-ffff-ffff-000000000001'
 VITE_API_BASE_URL='https://api.bracket.com'
-ANALYTICS_SCRIPT_SRC='https://analytics.bracket.com/script.js'
-ANALYTICS_DATA_DOMAIN='bracket.com'
-ANALYTICS_DATA_WEBSITE_ID='bracket.com'
+VITE_ANALYTICS_SCRIPT_SRC='https://analytics.bracket.com/script.js'
+VITE_ANALYTICS_DATA_DOMAIN='bracket.com'
+VITE_ANALYTICS_DATA_WEBSITE_ID='bracket.com'
 ```
-
-[next-config-url]: https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#loading-environment-variables

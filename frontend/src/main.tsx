@@ -51,6 +51,19 @@ const theme = createTheme({
   },
 });
 
+function AnalyticsScript() {
+  if (import.meta.env.VITE_ANALYTICS_SCRIPT_SRC == null) {
+    return null;
+  }
+
+  var script = document.createElement('script');
+  script.setAttribute('async', '');
+  script.setAttribute('data-domain', import.meta.env.VITE_ANALYTICS_DATA_DOMAIN);
+  script.setAttribute('data-website-id', import.meta.env.VITE_ANALYTICS_DATA_WEBSITE_ID);
+  script.setAttribute('src', import.meta.env.VITE_ANALYTICS_SCRIPT_SRC);
+  document.head.appendChild(script);
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <NuqsAdapter>
@@ -98,3 +111,5 @@ createRoot(document.getElementById('root')!).render(
     </NuqsAdapter>
   </StrictMode>
 );
+
+AnalyticsScript();
