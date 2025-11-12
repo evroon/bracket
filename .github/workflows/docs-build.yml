@@ -16,21 +16,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Setup yarn
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup pnpm
         uses: actions/setup-node@v6
         with:
           node-version: '22'
-          cache: 'yarn'
-          cache-dependency-path: docs/yarn.lock
+          cache: 'pnpm'
+          cache-dependency-path: docs/pnpm-lock.yaml
 
-      - name: Install npm modules
-        run: yarn
+      - name: Install pnpm modules
+        run: pnpm i
         working-directory: docs
 
       - name: Run tests
-        run: yarn test-check
+        run: pnpm test-check
         working-directory: docs
 
       - name: Build docs
-        run: SITE_URL=https://docs.bracketapp.nl yarn build
+        run: SITE_URL=https://docs.bracketapp.nl pnpm build
         working-directory: docs

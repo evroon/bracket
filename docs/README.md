@@ -6,7 +6,7 @@ Nextra and [shadcn-landing-page](https://github.com/leoMirandaa/shadcn-landing-p
 Run development server:
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 Open <http://localhost:3000> with your browser to see the result.
