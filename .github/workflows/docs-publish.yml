@@ -1,13 +1,13 @@
 name: docs
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
     branches:
       - 'master'
-
-permissions:
-  contents: write
 
 jobs:
   build:

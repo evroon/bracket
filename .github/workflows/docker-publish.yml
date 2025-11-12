@@ -1,5 +1,8 @@
 name: docker publish
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   push:
