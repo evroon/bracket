@@ -1,5 +1,9 @@
 # Run pre-translate with translation memory, all files/langs, at midnight daily.
 name: Crowdin Updates
+
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: '0 0 * * *'
