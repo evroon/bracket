@@ -22,7 +22,7 @@ import { HCaptchaInput } from '../components/utils/util';
 import { registerUser } from '../services/user';
 import classes from './create_account.module.css';
 
-export default function CreateAccount() {
+export default function CreateAccountPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);

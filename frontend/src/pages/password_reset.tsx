@@ -21,7 +21,7 @@ import NotFoundTitle from './404';
 //   },
 // }));
 
-export default function PasswordReset() {
+export default function PasswordResetPage() {
   // TODO: Implement this page.
   return <NotFoundTitle />;
 

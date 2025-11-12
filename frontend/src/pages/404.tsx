@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 import classes from './404.module.css';
 
-export default function NotFoundTitle() {
+export default function NotFoundPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 

@@ -10,7 +10,7 @@ import { HCaptchaInput } from '../components/utils/util';
 import { registerDemoUser } from '../services/user';
 import classes from './create_account.module.css';
 
-export default function CreateDemoAccount() {
+export default function CreateDemoAccountPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);

@@ -23,7 +23,7 @@ import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
 import { getMatchLookupByCourt, getStageItemLookup } from '../../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
 
-export default function CourtsPage() {
+export default function CourtsPresentPage() {
   const { t } = useTranslation();
   const tournamentResponse = getTournamentResponseByEndpointName();
 

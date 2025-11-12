@@ -42,7 +42,7 @@ function StageItemSelect({
   );
 }
 
-export default function Teams() {
+export default function TeamsPage() {
   const tableState = getTableState('name');
   const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);

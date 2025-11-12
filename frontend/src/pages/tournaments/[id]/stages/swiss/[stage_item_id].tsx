@@ -52,7 +52,7 @@ function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: 
   );
 }
 
-export default function TournamentPage() {
+export default function SwissTournamentPage() {
   const { id, tournamentData } = getTournamentIdFromRouter();
   const stageItemId = getStageItemIdFromRouter();
   const { t } = useTranslation();

@@ -9,7 +9,7 @@ import { capitalize, getTournamentIdFromRouter } from '../../../components/utils
 import { getPlayersPaginated } from '../../../services/adapter';
 import TournamentLayout from '../_tournament_layout';
 
-export default function Players() {
+export default function PlayersPage() {
   const tableState = getTableState('name');
   const { tournamentData } = getTournamentIdFromRouter();
   const swrPlayersResponse = getPlayersPaginated(

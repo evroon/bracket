@@ -13,16 +13,12 @@ import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { useTranslation } from 'react-i18next';
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useNavigate } from 'react-router';
 
-// import useStyles from '../components/login/login.styles';
 import { tokenPresent } from '../services/local_storage';
 import { performLogin } from '../services/user';
 
-export default function Login() {
-  // const { classes } = useStyles();
+export default function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   useEffect(() => {

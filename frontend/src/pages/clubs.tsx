@@ -8,7 +8,7 @@ import { checkForAuthError, getClubs } from '../services/adapter';
 import Layout from './_layout';
 import classes from './index.module.css';
 
-export default function Clubs() {
+export default function ClubsPage() {
   const swrClubsResponse = getClubs();
   const { t } = useTranslation();
 
