@@ -26,7 +26,7 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: docs/pnpm-lock.yaml
 
-      - name: Install npm modules
+      - name: Install pnpm modules
         run: pnpm i
         working-directory: docs
 
