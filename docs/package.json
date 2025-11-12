@@ -8,8 +8,8 @@
     "start": "next start",
     "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "test": "yarn run prettier:write && yarn run markdownlint-cli2 --fix",
-    "test-check": "yarn run prettier:check && yarn run markdownlint-cli2 --config .markdownlint-cli2.mjs",
+    "test": "pnpm run prettier:write && pnpm run markdownlint-cli2 --fix",
+    "test-check": "pnpm run prettier:check && pnpm run markdownlint-cli2 --config .markdownlint-cli2.mjs",
     "lint:markdown": "markdownlint-cli2",
     "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind && next-sitemap"
   },
