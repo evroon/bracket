@@ -113,6 +113,7 @@ disable = [
     'dangerous-default-value',
     'duplicate-code',
     'fixme',
+    'not-callable',
     'import-outside-toplevel',
     'invalid-name',
     'logging-fstring-interpolation',
