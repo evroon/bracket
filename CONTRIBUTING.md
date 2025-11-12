@@ -4,4 +4,6 @@ Thanks for your interest in contributing to Bracket. Contributions are greatly a
 
 Please see the [contributing docs](https://docs.bracketapp.nl/docs/community/contributing/) for more information.
 
-Note: please open an issue first before creating non-trivial PRs.
+> [!IMPORTANT]
+>
+> Note: please open an issue first before creating non-trivial PRs.
