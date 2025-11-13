@@ -2,6 +2,7 @@ import { Button, Container, Group, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
+import { tokenPresent } from '../services/local_storage';
 import classes from './404.module.css';
 
 export default function NotFoundPage() {
@@ -16,7 +17,11 @@ export default function NotFoundPage() {
         {t('not_found_description')}
       </Text>
       <Group justify="center">
-        <Button variant="subtle" size="md" onClick={() => navigate('/')}>
+        <Button
+          variant="subtle"
+          size="md"
+          onClick={() => (tokenPresent() ? navigate('/') : navigate('/login'))}
+        >
           {t('back_home_nav')}
         </Button>
       </Group>

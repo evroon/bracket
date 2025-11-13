@@ -8,7 +8,7 @@ This section describes how to deploy Bracket (frontend and backend) as a Systemd
 
 This assumes:
 
-- You have installed `yarn` and `pipenv`.
+- You have installed `pnpm` and `uv`.
 - You have a PostgreSQL cluster running.
 - You have cloned Bracket in `/var/lib/bracket`.
 - You have created a new user called Bracket with the permissions to read
@@ -29,7 +29,7 @@ After=network.target
 Type=simple
 User=bracket
 WorkingDirectory=/var/lib/bracket/backend
-ExecStart=pipenv run gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind localhost:8400 --workers 1
+ExecStart=uv run gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind localhost:8400 --workers 1
 Environment=ENVIRONMENT=PRODUCTION
 TimeoutSec=15
 Restart=always

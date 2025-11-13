@@ -1,7 +1,31 @@
 ---
 title: Cloud services
 ---
+import {Callout} from "nextra/components"
+
 # Cloud services
+
+The frontend of Bracket is powered by Vite and can be simply statically hosted on any cloud
+service, such as Vercel or Cloudflare. Vite's [documentation](https://vite.dev/guide/static-deploy)
+provides detailed instructions on how to deploy your Vite application.
+
+<Callout type="info">
+Essentially, the only thing you (or a cloud provider) needs to do is to run `pnpm run build`
+to generate a production build, and then serve the contents of the `dist` directory to the internet.
+</Callout>
+
+## Cloudflare
+
+To deploy the frontend to Cloudflare, go to `Workers & Pages` and click on `Import an existing Git repository`.
+
+Make sure to:
+- Select `React (Vite)` as framework
+- Select the `frontend` directory as root directory
+
+## GitHub Pages
+
+To deploy the frontend to GitHub Pages, follow the steps outlined in
+Vite's [docs](https://vite.dev/guide/static-deploy#github-pages).
 
 ## Vercel
 
@@ -11,4 +35,16 @@ To deploy the frontend to Vercel, use the following link:
 https://vercel.com/new/project?template=https://github.com/evroon/bracket
 ```
 
-Make sure to select the `frontend` directory as root directory, and use Next.js as framework.
+Make sure to:
+- Select `Vite` as framework
+- Select the `frontend` directory as root directory
+
+This should work. If it fails, Vercel didn't automatically detect the right build settings.
+Change the following settings under `Build and Output settings`:
+- Set the build command to `pnpm run build`
+- Set the install command to `pnpm install`
+
+## Other cloud providers
+
+Vite's [documentation](https://vite.dev/guide/static-deploy)
+provides detailed instructions on how to deploy your Vite application.

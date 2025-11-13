@@ -6,7 +6,6 @@ uv.lock
 .mypy_cache
 .dmypy.json
 .pytest_cache
-.yarn
 
 *.env
 !ci.env
@@ -15,7 +14,6 @@ node_modules
 coverage.xml
 coverage.json
 
-backend/yarn.lock
 backend/static
 
 /process-compose.yml

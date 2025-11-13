@@ -4,7 +4,7 @@ log_level: debug
 processes:
   frontend:
     working_dir: "frontend"
-    command: "yarn run dev"
+    command: "pnpm run dev"
     availability:
       restart: "on_failure"
     readiness_probe:
@@ -19,7 +19,7 @@ processes:
 
   backend:
     working_dir: "backend"
-    command: "pipenv run gunicorn -k bracket.uvicorn.RestartableUvicornWorker bracket.app:app --bind localhost:8400 --workers 1 --reload"
+    command: "uv run gunicorn -k bracket.uvicorn.RestartableUvicornWorker bracket.app:app --bind localhost:8400 --workers 1 --reload"
     availability:
       restart: "on_failure"
     environment:
@@ -36,7 +36,7 @@ processes:
 
    docs:
     working_dir: "docs"
-    command: "yarn run dev -p 3001"
+    command: "pnpm run dev -p 3001"
     availability:
       restart: "on_failure"
     readiness_probe:
