@@ -9,7 +9,7 @@ dependencies = [
     "alembic==1.16.1",
     "asyncpg==0.30.0",
     "bcrypt==5.0.0",
-    "click==8.2.0",
+    "click==8.3.0",
     "databases[asyncpg]==0.9.0",
     "fastapi==0.121.1",
     "fastapi-sso==0.18.0",
