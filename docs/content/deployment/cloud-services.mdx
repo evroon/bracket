@@ -16,9 +16,11 @@ to generate a production build, and then serve the contents of the `dist` direct
 
 ## Cloudflare
 
-To deploy the frontend to Cloudflare, go to `Workers & Pages` and click on `Import an existing Git repository`.
+To deploy the frontend to Cloudflare, go to `Workers & Pages` and click on
+`Import an existing Git repository`.
 
 Make sure to:
+
 - Select `React (Vite)` as framework
 - Select the `frontend` directory as root directory
 
@@ -36,11 +38,13 @@ https://vercel.com/new/project?template=https://github.com/evroon/bracket
 ```
 
 Make sure to:
+
 - Select `Vite` as framework
 - Select the `frontend` directory as root directory
 
 This should work. If it fails, Vercel didn't automatically detect the right build settings.
 Change the following settings under `Build and Output settings`:
+
 - Set the build command to `pnpm run build`
 - Set the install command to `pnpm install`
 
