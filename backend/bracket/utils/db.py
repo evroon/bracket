@@ -1,34 +1,35 @@
 from databases import Database
+from pydantic import BaseModel
 from sqlalchemy import Table
 from sqlalchemy.sql import Select
 
 from bracket.config import Environment, environment
 from bracket.utils.conversion import to_string_mapping
 from bracket.utils.logging import logger
-from bracket.utils.types import BaseModelT, assert_some
+from bracket.utils.types import assert_some
 
 
-async def fetch_one_parsed(
+async def fetch_one_parsed[BaseModelT: BaseModel](
     database: Database, model: type[BaseModelT], query: Select
 ) -> BaseModelT | None:
     record = await database.fetch_one(query)
     return model.model_validate(dict(record._mapping)) if record is not None else None
 
 
-async def fetch_one_parsed_certain(
+async def fetch_one_parsed_certain[BaseModelT: BaseModel](
     database: Database, model: type[BaseModelT], query: Select
 ) -> BaseModelT:
     return assert_some(await fetch_one_parsed(database, model, query))
 
 
-async def fetch_all_parsed(
+async def fetch_all_parsed[BaseModelT: BaseModel](
     database: Database, model: type[BaseModelT], query: Select
 ) -> list[BaseModelT]:
     records = await database.fetch_all(query)
     return [model.model_validate(dict(record._mapping)) for record in records]
 
 
-async def insert_generic(
+async def insert_generic[BaseModelT: BaseModel](
     database: Database, data_model: BaseModelT, table: Table, return_type: type[BaseModelT]
 ) -> tuple[int, BaseModelT]:
     assert environment is not Environment.PRODUCTION, "Below code can allow SQL injection"

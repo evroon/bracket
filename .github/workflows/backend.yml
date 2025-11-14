@@ -56,6 +56,10 @@ jobs:
         run: uv run mypy --version && uv run mypy .
         working-directory: backend
 
+      - name: Run pyrefly
+        run: uv run pyrefly --version && uv run pyrefly check
+        working-directory: backend
+
       - name: Run pylint
         run: uv run pylint bracket tests cli.py
         working-directory: backend

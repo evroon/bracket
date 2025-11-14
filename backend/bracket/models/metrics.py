@@ -34,7 +34,7 @@ class RequestDefinition(BaseModel):
         )
 
     def to_value_lookup(self, value: float) -> tuple[dict[str, str], float]:
-        return {"url": self.url, "method": self.method.value}, value
+        return {"url": self.url, "method": str(self.method.value)}, value
 
     def __hash__(self) -> int:
         return str.__hash__(f"{self.method}-{self.url}")

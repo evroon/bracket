@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
 
 from heliclockter import datetime_utc
-from pydantic import BaseModel, constr
+from pydantic import BaseModel, StringConstraints
 
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.shared import BaseModelORM
@@ -30,8 +30,9 @@ class UserInsertable(UserBase):
     password_hash: str | None = None
 
 
-class User(UserInsertable):
+class User(UserBase):
     id: UserId
+    password_hash: str | None = None
 
 
 class UserPublic(UserBase):
@@ -44,7 +45,7 @@ class UserToUpdate(BaseModel):
 
 
 class UserPasswordToUpdate(BaseModel):
-    password: constr(min_length=8, max_length=48)  # type: ignore[valid-type]
+    password: Annotated[str, StringConstraints(min_length=8, max_length=48)]
 
 
 class DemoUserToRegister(BaseModelORM):
@@ -58,6 +59,6 @@ class UserToRegister(BaseModelORM):
     captcha_token: str
 
 
-class UserInDB(User):
+class UserInDB(UserBase):
     id: UserId
     password_hash: str

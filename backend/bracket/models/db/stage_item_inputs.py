@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from decimal import Decimal
 
 from pydantic import BaseModel, Field
@@ -15,9 +17,6 @@ class StageItemInputBase(BaseModelORM):
 
 
 class StageItemInputGeneric(BaseModel):
-    team_id: TeamId | None = None
-    winner_from_stage_item_id: StageItemId | None = None
-    winner_position: int | None = None
     points: Decimal = Decimal("0.0")
     wins: int = 0
     draws: int = 0
@@ -30,12 +29,15 @@ class StageItemInputGeneric(BaseModel):
         """
         return self.points
 
-    def __hash__(self) -> int:
-        return (
-            self.team_id,
-            self.winner_from_stage_item_id,
-            self.winner_position,
-        ).__hash__()
+
+def hash_stage_item_input(
+    self: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty,
+) -> int:
+    return (
+        self.team_id,
+        self.winner_from_stage_item_id,
+        self.winner_position,
+    ).__hash__()
 
 
 class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
@@ -46,16 +48,24 @@ class StageItemInputTentative(StageItemInputBase, StageItemInputGeneric):
     def get_lookup_key(self) -> tuple[StageItemId, int]:
         return self.winner_from_stage_item_id, self.winner_position
 
+    __hash__ = hash_stage_item_input
+
 
 class StageItemInputFinal(StageItemInputBase, StageItemInputGeneric):
     team_id: TeamId
+    winner_from_stage_item_id: StageItemId | None = None
+    winner_position: int | None = None
     team: Team
+
+    __hash__ = hash_stage_item_input
 
 
 class StageItemInputEmpty(StageItemInputBase, StageItemInputGeneric):
     team_id: None = None
     winner_from_stage_item_id: None = None
     winner_position: None = None
+
+    __hash__ = hash_stage_item_input
 
 
 StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty

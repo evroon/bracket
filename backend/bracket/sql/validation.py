@@ -115,7 +115,7 @@ async def check_foreign_keys_belong_to_tournament(
     """
     stages = await get_full_tournament_details(tournament_id)
 
-    check_lookup: dict[type[Any], CheckCallableT] = {
+    check_lookup: dict[type[Any], CheckCallableT] = {  # pyrefly: ignore [bad-assignment]
         StageId: check_stage_belongs_to_tournament,
         TeamId: check_team_belongs_to_tournament,
         StageItemId: check_stage_item_belongs_to_tournament,
@@ -142,8 +142,9 @@ async def check_foreign_keys_belong_to_tournament(
         else:
             possible_types = [field_info.annotation, *get_args(field_info.annotation)]
             for possible_type in possible_types:
-                check_callable = check_lookup.get(possible_type)
-                if check_callable is not None and not await check_callable(
-                    field_value, stages, tournament_id
-                ):
-                    raise_exception(possible_type, field_value)
+                if possible_type is not None:
+                    check_callable = check_lookup.get(possible_type)
+                    if check_callable is not None and not await check_callable(
+                        field_value, stages, tournament_id
+                    ):
+                        raise_exception(possible_type, field_value)

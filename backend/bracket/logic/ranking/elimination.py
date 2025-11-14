@@ -38,15 +38,19 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
         ]
         original_inputs = updated_inputs.copy()
 
-        if subsequent_match.stage_item_input1_winner_from_match_id in affected_matches:
-            updated_inputs[0] = affected_matches[
+        if subsequent_match.stage_item_input1_winner_from_match_id is not None and (
+            affected_match1 := affected_matches.get(
                 subsequent_match.stage_item_input1_winner_from_match_id
-            ].get_winner()
+            )
+        ):
+            updated_inputs[0] = affected_match1.get_winner()
 
-        if subsequent_match.stage_item_input2_winner_from_match_id in affected_matches:
-            updated_inputs[1] = affected_matches[
+        if subsequent_match.stage_item_input2_winner_from_match_id is not None and (
+            affected_match2 := affected_matches.get(
                 subsequent_match.stage_item_input2_winner_from_match_id
-            ].get_winner()
+            )
+        ):
+            updated_inputs[1] = affected_match2.get_winner()
 
         if original_inputs != updated_inputs:
             input_ids = [input_.id if input_ else None for input_ in updated_inputs]

@@ -75,7 +75,7 @@ async def send_request(
 ) -> JsonDict:
     async with aiohttp.ClientSession() as session:
         async with session.request(
-            method=method.value,
+            method=str(method.value),
             url=get_root_uvicorn_url() + endpoint,
             data=body,
             json=json,
@@ -88,7 +88,7 @@ async def send_request(
 async def send_request_raw(method: HTTPMethod, endpoint: str) -> str:
     async with aiohttp.ClientSession() as session:
         async with session.request(
-            method=method.value,
+            method=str(method.value),
             url=get_root_uvicorn_url() + endpoint,
         ) as resp:
             return await resp.text()

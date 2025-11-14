@@ -38,7 +38,7 @@ class Config(BaseSettings):
     cors_origins: str = "*"
     jwt_secret: str
     auto_run_migrations: bool = True
-    pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
+    pg_dsn: PostgresDsn = PostgresDsn("postgresql://user:pass@localhost:5432/db")
     sentry_dsn: str | None = None
 
     def is_cors_enabled(self) -> bool:
@@ -50,8 +50,8 @@ class CIConfig(Config):
 
 
 class DevelopmentConfig(Config):
-    admin_email: Annotated[str, Field("test@example.org")]
-    admin_password: Annotated[str, Field("aeGhoe1ahng2Aezai0Dei6Aih6dieHoo")]
+    admin_email: Annotated[str | None, Field("test@example.org")]
+    admin_password: Annotated[str | None, Field("aeGhoe1ahng2Aezai0Dei6Aih6dieHoo")]
     allow_insecure_http_sso: Annotated[bool, Field(True)]
     jwt_secret: Annotated[
         str, Field("7495204c062787f257b12d03b88d80da1d338796a6449666eb634c9efbbf5fa7")

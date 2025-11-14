@@ -46,7 +46,8 @@ class TeamWithPlayers(BaseModel):
         return [player.id for player in self.players]
 
     @field_validator("players", mode="before")
-    def handle_players(values: list[Player]) -> list[Player]:  # type: ignore[misc]
+    @staticmethod
+    def handle_players(values: list[Player]) -> list[Player]:
         if isinstance(values, str):
             values_json = json.loads(values)
             if values_json == [None]:
