@@ -19,5 +19,5 @@ COPY --from=builder /app/Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
-    CMD ["wget", "--spider", "http://0.0.0.0:3000", "||", "exit", "1"]
+HEALTHCHECK --interval=3s --timeout=5s --retries=10 \
+    CMD ["wget", "-O", "/dev/null", "http://localhost:3000"]
