@@ -33,7 +33,7 @@ class StageItemWithRounds(StageItem):
             case str() as type_:
                 values["type_name"] = type_.lower().capitalize().replace("_", " ")
             case StageType() as type_:
-                values["type_name"] = type_.value.lower().capitalize().replace("_", " ")
+                values["type_name"] = str(type_.value).lower().capitalize().replace("_", " ")
 
         return values
 

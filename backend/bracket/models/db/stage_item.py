@@ -50,14 +50,18 @@ class StageItemCreateBody(BaseModelORM):
     ranking_id: RankingId | None = None
 
     def get_name_or_default_name(self) -> str:
-        return self.name if self.name is not None else self.type.value.replace("_", " ").title()
+        return (
+            self.name if self.name is not None else str(self.type.value).replace("_", " ").title()
+        )
 
 
 class StageItemWithInputsCreate(StageItemCreateBody):
     inputs: list[StageItemInputCreateBody]
 
     def get_name_or_default_name(self) -> str:
-        return self.name if self.name is not None else self.type.value.replace("_", " ").title()
+        return (
+            self.name if self.name is not None else str(self.type.value).replace("_", " ").title()
+        )
 
     @model_validator(mode="before")
     def handle_inputs_length(cls, values: Any) -> Any:

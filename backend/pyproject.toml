@@ -20,6 +20,7 @@ dependencies = [
     "pydantic==2.12.4",
     "pydantic_settings==2.1.0",
     "pyjwt==2.10.1",
+    "pyrefly>=0.41.3",
     "python-dotenv==1.2.1",
     "python-multipart==0.0.20",
     "sentry-sdk==2.44.0",
@@ -183,3 +184,6 @@ ignore_names = [
     "upgrade",
 ]
 sort_by_size = true
+
+[tool.pyrefly]
+ignore-missing-imports = ["fastapi_sso.*"]

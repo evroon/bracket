@@ -58,6 +58,6 @@ class UserToRegister(BaseModelORM):
     captcha_token: str
 
 
-class UserInDB(User):
+class UserInDB(UserBase):
     id: UserId
     password_hash: str

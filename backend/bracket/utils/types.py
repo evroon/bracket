@@ -25,7 +25,7 @@ class EnumValues(Enum):
 
 class EnumAutoStr(EnumValues):
     @staticmethod
-    def _generate_next_value_(  # pylint: disable=arguments-differ
+    def _generate_next_value_(  # pylint: disable=arguments-differ # pyrefly: ignore [bad-override]
         name: str, start: int, count: int, last_values: Sequence[str]
     ) -> str:
         return name
