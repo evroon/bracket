@@ -1,7 +1,6 @@
 import math
 from collections import defaultdict
 from decimal import Decimal
-from typing import TypeVar
 
 from bracket.logic.ranking.statistics import START_ELO, TeamStatistics
 from bracket.models.db.match import MatchWithDetailsDefinitive
@@ -10,13 +9,10 @@ from bracket.models.db.stage_item import StageType
 from bracket.models.db.util import StageItemWithRounds
 from bracket.sql.rankings import get_ranking_for_stage_item
 from bracket.sql.teams import update_team_stats
-from bracket.utils.id_types import PlayerId, StageItemInputId, TeamId, TournamentId
+from bracket.utils.id_types import StageItemInputId, TournamentId
 
 K = 32
 D = 400
-
-
-TeamIdOrPlayerId = TypeVar("TeamIdOrPlayerId", bound=PlayerId | TeamId)
 
 
 def set_statistics_for_stage_item_input(

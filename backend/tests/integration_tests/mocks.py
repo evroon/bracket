@@ -27,8 +27,8 @@ def get_mock_user() -> UserInsertable:
     )
 
 
-def get_mock_token(mock_user: UserInsertable) -> str:
+def get_mock_token(mock_user_email: str) -> str:
     return create_access_token(
-        data={"user": mock_user.email},
+        data={"user": mock_user_email},
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )

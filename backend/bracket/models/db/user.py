@@ -30,8 +30,9 @@ class UserInsertable(UserBase):
     password_hash: str | None = None
 
 
-class User(UserInsertable):
+class User(UserBase):
     id: UserId
+    password_hash: str | None = None
 
 
 class UserPublic(UserBase):

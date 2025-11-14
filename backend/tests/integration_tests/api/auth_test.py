@@ -17,7 +17,7 @@ from tests.integration_tests.sql import inserted_club, inserted_tournament, inse
 
 
 @contextmanager
-def mock_auth_time() -> Generator[None, None, None]:
+def mock_auth_time() -> Generator[None]:
     with patch("bracket.routes.auth.datetime_utc.now", Mock(return_value=MOCK_NOW)):
         yield
 
@@ -57,7 +57,7 @@ async def test_get_token_invalid_credentials(startup_and_shutdown_uvicorn_server
 @pytest.mark.asyncio(loop_scope="session")
 async def test_auth_on_protected_endpoint(startup_and_shutdown_uvicorn_server: None) -> None:
     mock_user = get_mock_user()
-    headers = {"Authorization": f"Bearer {get_mock_token(mock_user)}"}
+    headers = {"Authorization": f"Bearer {get_mock_token(mock_user.email)}"}
 
     async with inserted_user(mock_user) as user_inserted:
         response = JsonDict(

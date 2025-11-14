@@ -2,6 +2,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import cast
 
+from pydantic import BaseModel
 from sqlalchemy import Table
 
 from bracket.database import database
@@ -44,7 +45,6 @@ from bracket.sql.teams import get_teams_by_id
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_RANKING1, DUMMY_TOURNAMENT
 from bracket.utils.id_types import TeamId
-from bracket.utils.types import BaseModelT
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
@@ -55,7 +55,7 @@ async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
 
 
 @asynccontextmanager
-async def inserted_generic(
+async def inserted_generic[BaseModelT: BaseModel](
     data_model: BaseModelT, table: Table, return_type: type[BaseModelT]
 ) -> AsyncIterator[BaseModelT]:
     last_record_id, row_inserted = await insert_generic(database, data_model, table, return_type)
@@ -172,7 +172,7 @@ async def inserted_user_x_club(user_x_club: UserXClubInsertable) -> AsyncIterato
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
     mock_user = get_mock_user()
-    headers = {"Authorization": f"Bearer {get_mock_token(mock_user)}"}
+    headers = {"Authorization": f"Bearer {get_mock_token(mock_user.email)}"}
     async with (
         inserted_user(mock_user) as user_inserted,
         inserted_club(DUMMY_CLUB) as club_inserted,

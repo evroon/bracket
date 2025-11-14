@@ -115,7 +115,7 @@ async def check_foreign_keys_belong_to_tournament(
     """
     stages = await get_full_tournament_details(tournament_id)
 
-    check_lookup: dict[type[Any], CheckCallableT] = { # pyrefly: ignore [bad-assignment]
+    check_lookup: dict[type[Any], CheckCallableT] = {  # pyrefly: ignore [bad-assignment]
         StageId: check_stage_belongs_to_tournament,
         TeamId: check_team_belongs_to_tournament,
         StageItemId: check_stage_item_belongs_to_tournament,

@@ -1,5 +1,3 @@
-from typing import Generic, TypeVar
-
 from pydantic import BaseModel
 
 from bracket.logic.scheduling.handle_stage_activation import StageItemInputUpdate
@@ -19,14 +17,12 @@ from bracket.models.db.util import StageWithStageItems
 from bracket.routes.auth import Token
 from bracket.utils.id_types import StageId, StageItemId
 
-DataT = TypeVar("DataT")
-
 
 class SuccessResponse(BaseModel):
     success: bool = True
 
 
-class DataResponse(BaseModel, Generic[DataT]):
+class DataResponse[DataT](BaseModel):
     data: DataT
 
 

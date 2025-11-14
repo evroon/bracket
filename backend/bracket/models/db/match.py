@@ -67,8 +67,8 @@ def get_match_hash(
 
 
 class MatchWithDetailsDefinitive(Match):
-    stage_item_input1: StageItemInput # pyrefly: ignore [bad-override]
-    stage_item_input2: StageItemInput # pyrefly: ignore [bad-override]
+    stage_item_input1: StageItemInput  # pyrefly: ignore [bad-override]
+    stage_item_input2: StageItemInput  # pyrefly: ignore [bad-override]
     court: Court | None = None
 
     @property

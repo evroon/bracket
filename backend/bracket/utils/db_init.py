@@ -1,7 +1,8 @@
 import random
-from typing import TYPE_CHECKING, Any, TypeVar
-from pydantic import BaseModel
+from typing import TYPE_CHECKING, Any
+
 from heliclockter import datetime_utc
+from pydantic import BaseModel
 
 from bracket.config import Environment, config, environment
 from bracket.database import database, engine
@@ -81,10 +82,7 @@ from bracket.utils.dummy_records import (
 )
 from bracket.utils.id_types import (
     ClubId,
-    CourtId,
     PlayerId,
-    PlayerXTeamId,
-    RankingId,
     StageId,
     TeamId,
     TournamentId,
@@ -92,22 +90,10 @@ from bracket.utils.id_types import (
 )
 from bracket.utils.logging import logger
 from bracket.utils.security import hash_password
-from bracket.utils.types import BaseModelT, assert_some
+from bracket.utils.types import assert_some
 
 if TYPE_CHECKING:
     from sqlalchemy import Table
-
-type ForeignKey = (
-    TournamentId
-    | ClubId
-    | CourtId
-    | PlayerId
-    | PlayerXTeamId
-    | RankingId
-    | StageId
-    | TeamId
-    | UserId
-)
 
 
 async def create_admin_user() -> UserId:

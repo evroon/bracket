@@ -1,9 +1,10 @@
 #!/bin/bash
 set -evo pipefail
 
-ruff format .
-ruff check --fix .
-! vulture | grep "unused function\|unused class\|unused method"
-dmypy run -- --follow-imports=normal --junit-xml= .
-ENVIRONMENT=CI pytest --cov --cov-report=xml . -vvv
-pylint cli.py bracket tests
+uv run ruff format .
+uv run ruff check --fix .
+! uv run vulture | grep "unused function\|unused class\|unused method"
+uv run pyrefly check
+uv run dmypy run -- --follow-imports=normal --junit-xml= .
+ENVIRONMENT=CI uv run pytest --cov --cov-report=xml . -vvv
+uv run pylint cli.py bracket tests

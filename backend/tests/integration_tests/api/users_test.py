@@ -81,7 +81,7 @@ async def temporary_user() -> AsyncIterator[tuple[User, dict[str, str]]]:
             account_type=UserAccountType.REGULAR,
         )
         user_created = await create_user(new_user)
-        headers = {"Authorization": f"Bearer {get_mock_token(user_created)}"}
+        headers = {"Authorization": f"Bearer {get_mock_token(user_created.email)}"}
         yield user_created, headers
     finally:
         if user_created is not None:
