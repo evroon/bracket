@@ -19,7 +19,7 @@ export function performLogoutAndRedirect(t: Translator, navigate: NavigateFuncti
     message: '',
     autoClose: 10000,
   });
-  navigate('/login');
+  navigate('/login', { replace: true });
 }
 
 export function getLogin() {

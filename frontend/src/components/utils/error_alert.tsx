@@ -1,4 +1,4 @@
-import { Alert } from '@mantine/core';
+import { Alert, Center } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 
@@ -10,6 +10,7 @@ export function ErrorAlert({ title, message }: { title: string; message: string 
       color="red"
       radius="lg"
       variant="outline"
+      w="40rem"
     >
       {message}
     </Alert>
@@ -23,5 +24,9 @@ export default function RequestErrorAlert({ error }: any) {
       : 'Error';
   const message = `${status_code}: ${error.response ? error.response.data.detail : error.message}`;
 
-  return <ErrorAlert message={message} title="Error" />;
+  return (
+    <Center>
+      <ErrorAlert message={message} title="Error" />
+    </Center>
+  );
 }
