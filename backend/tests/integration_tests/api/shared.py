@@ -53,7 +53,6 @@ class UvicornTestServer(uvicorn.Server):
     async def startup(self, sockets: Sequence[socket.socket] | None = None) -> None:
         sockets_list = list(sockets) if sockets is not None else sockets
         await super().startup(sockets=sockets_list)
-        self.config.setup_event_loop()
         self._startup_done.set()
 
     async def up(self) -> None:
