@@ -23,7 +23,7 @@ async def test_all_unique_indices_in_lookup() -> None:
         AND idx.relname !='alembic_version_pkc'
     """
     result = await database.fetch_all(query)
-    indices = {ix.index_name for ix in result}  # type: ignore[attr-defined]
+    indices = {ix["index_name"] for ix in result}
 
     expected_indices = {ix.name for ix in unique_index_violation_error_lookup.keys()}
     assert indices == expected_indices
@@ -40,7 +40,7 @@ async def test_known_foreign_keys_in_lookup() -> None:
         ORDER  BY conrelid::regclass::text, contype DESC;
     """
     result = await database.fetch_all(query)
-    indices = {ix.foreign_key for ix in result}  # type: ignore[attr-defined]
+    indices = {ix["foreign_key"] for ix in result}
 
     for foreign_key in foreign_key_violation_error_lookup.keys():
         msg = f"Unexpected foreign key in lookup: {foreign_key.value}"

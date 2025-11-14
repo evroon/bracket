@@ -38,7 +38,7 @@ class Config(BaseSettings):
     cors_origins: str = "*"
     jwt_secret: str
     auto_run_migrations: bool = True
-    pg_dsn: PostgresDsn = "postgresql://user:pass@localhost:5432/db"  # type: ignore[assignment]
+    pg_dsn: PostgresDsn = PostgresDsn("postgresql://user:pass@localhost:5432/db")
     sentry_dsn: str | None = None
 
     def is_cors_enabled(self) -> bool:
