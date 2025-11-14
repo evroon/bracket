@@ -4,7 +4,7 @@ log_level: debug
 processes:
   frontend:
     working_dir: "frontend"
-    command: "pnpm run dev"
+    command: "pnpm run dev --port 3000"
     availability:
       restart: "on_failure"
     readiness_probe:
@@ -36,7 +36,7 @@ processes:
 
    docs:
     working_dir: "docs"
-    command: "pnpm run dev -p 3001"
+    command: "pnpm run dev --port 3001"
     availability:
       restart: "on_failure"
     readiness_probe:
