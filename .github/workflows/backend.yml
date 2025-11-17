@@ -31,6 +31,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install libgcc
+        run: sudo apt install gcc
+        working-directory: backend
+
       - name: Install uv
         run: python3 -m pip install --upgrade uv wheel virtualenv
         working-directory: backend
