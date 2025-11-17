@@ -28,6 +28,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Install libgcc
+        run: sudo apt install gcc
+        working-directory: backend
+
       - name: Build frontend Docker image
         uses: docker/build-push-action@v6
         with:
