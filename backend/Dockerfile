@@ -13,6 +13,7 @@ RUN addgroup --system bracket && adduser --system bracket --ingroup bracket \
 USER bracket
 
 RUN set -ex \
+    && apt install gcc \
     && pip3 install --upgrade pip uv wheel virtualenv \
     && uv sync
 
