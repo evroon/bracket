@@ -14,7 +14,7 @@ USER bracket
 
 RUN set -ex \
     && pip3 install --upgrade pip uv wheel virtualenv \
-    && uv sync
+    && uv sync --no-dev
 
 EXPOSE 8400
 
