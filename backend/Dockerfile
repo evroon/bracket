@@ -9,13 +9,12 @@ WORKDIR /app
 
 # -- Install dependencies:
 RUN addgroup --system bracket && adduser --system bracket --ingroup bracket \
-    && chown -R bracket:bracket /app \
-    && apk --update add gcc
+    && chown -R bracket:bracket /app
 USER bracket
 
 RUN set -ex \
     && pip3 install --upgrade pip uv wheel virtualenv \
-    && uv sync
+    && uv sync --no-dev
 
 EXPOSE 8400
 
