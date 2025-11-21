@@ -46,7 +46,7 @@ function GeneralTournamentForm({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      start_time: new Date(),
+      start_time: new Date().toISOString(),
       name: '',
       club_id: null,
       dashboard_public: true,
@@ -78,7 +78,7 @@ function GeneralTournamentForm({
           values.dashboard_endpoint,
           values.players_can_be_in_multiple_teams,
           values.auto_assign_courts,
-          values.start_time.toISOString(),
+          values.start_time,
           values.duration_minutes,
           values.margin_minutes
         );
@@ -124,7 +124,7 @@ function GeneralTournamentForm({
             color="indigo"
             leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
             onClick={() => {
-              form.setFieldValue('start_time', new Date());
+              form.setFieldValue('start_time', new Date().toISOString());
             }}
           >
             {t('now_button')}
