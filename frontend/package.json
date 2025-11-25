@@ -18,7 +18,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
-    "@hcaptcha/react-hcaptcha": "^1.14.0",
+    "@hcaptcha/react-hcaptcha": "^1.15.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@mantine/core": "8.3.7",
     "@mantine/dates": "8.3.7",

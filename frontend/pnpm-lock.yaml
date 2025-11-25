@@ -15,8 +15,8 @@ importers:
         specifier: ^11.11.0
         version: 11.11.0
       '@hcaptcha/react-hcaptcha':
-        specifier: ^1.14.0
-        version: 1.14.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^1.15.0
+        version: 1.15.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@hello-pangea/dnd':
         specifier: ^18.0.1
         version: 18.0.1(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -500,8 +500,8 @@ packages:
   '@hcaptcha/loader@2.2.0':
     resolution: {integrity: sha512-LAd0XRt1Mu0hLpUpWAx5OS9FS0d6V+V0aCSYUKFAz0a6tTDHeAuwm5iO81mp2HIEhXFOSSB8AwCCOU9zq695lg==}
 
-  '@hcaptcha/react-hcaptcha@1.14.0':
-    resolution: {integrity: sha512-XHFhmRjw4L6spgRfTEUj/uW4cN4iWTp7BxLHyheF5zEle6g65fIHUCmqKMrIA/6OKLzBSElUKyc1IuDU+V8RaQ==}
+  '@hcaptcha/react-hcaptcha@1.15.0':
+    resolution: {integrity: sha512-UYWolOtoL8dnGkdjZGG+haqS3GEEUwQfs9Z/RkmQj8YxEROJCCgV4PtZaMeUbKu6kIkNx7y/RQhwNtC4F9FAXA==}
     peerDependencies:
       react: '>= 16.3.0'
       react-dom: '>= 16.3.0'
@@ -3193,7 +3193,7 @@ snapshots:
 
   '@hcaptcha/loader@2.2.0': {}
 
-  '@hcaptcha/react-hcaptcha@1.14.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@hcaptcha/react-hcaptcha@1.15.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@hcaptcha/loader': 2.2.0
