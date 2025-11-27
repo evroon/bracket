@@ -15,8 +15,8 @@ importers:
         specifier: ^11.11.0
         version: 11.11.0
       '@hcaptcha/react-hcaptcha':
-        specifier: ^1.15.0
-        version: 1.15.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^1.16.0
+        version: 1.16.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@hello-pangea/dnd':
         specifier: ^18.0.1
         version: 18.0.1(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -497,11 +497,11 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@hcaptcha/loader@2.2.0':
-    resolution: {integrity: sha512-LAd0XRt1Mu0hLpUpWAx5OS9FS0d6V+V0aCSYUKFAz0a6tTDHeAuwm5iO81mp2HIEhXFOSSB8AwCCOU9zq695lg==}
+  '@hcaptcha/loader@2.3.0':
+    resolution: {integrity: sha512-i4lnNxKBe+COf3R1nFZEWaZoHIoJjvDgWqvcNrdZq8ehoSNMN6KVZ56dcQ02qKie2h3+BkbkwlJA9DOIuLlK/g==}
 
-  '@hcaptcha/react-hcaptcha@1.15.0':
-    resolution: {integrity: sha512-UYWolOtoL8dnGkdjZGG+haqS3GEEUwQfs9Z/RkmQj8YxEROJCCgV4PtZaMeUbKu6kIkNx7y/RQhwNtC4F9FAXA==}
+  '@hcaptcha/react-hcaptcha@1.16.0':
+    resolution: {integrity: sha512-ALRsAwQDCtGeR9QXrLjf7IQsWlaIg1dQWpPYdBR03KHkUrLgRjmqLKkOXaq8L+0qcicXRasHRuvXp2Vinun9aw==}
     peerDependencies:
       react: '>= 16.3.0'
       react-dom: '>= 16.3.0'
@@ -3191,12 +3191,12 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@hcaptcha/loader@2.2.0': {}
+  '@hcaptcha/loader@2.3.0': {}
 
-  '@hcaptcha/react-hcaptcha@1.15.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@hcaptcha/react-hcaptcha@1.16.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@babel/runtime': 7.28.4
-      '@hcaptcha/loader': 2.2.0
+      '@hcaptcha/loader': 2.3.0
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
