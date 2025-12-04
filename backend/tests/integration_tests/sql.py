@@ -138,7 +138,7 @@ async def inserted_stage_item_input(
     stage_item_input: StageItemInputInsertable,
 ) -> AsyncIterator[StageItemInputFinal | StageItemInputEmpty]:
     async with inserted_generic(
-        stage_item_input, stage_item_inputs, StageItemInputBase  # type: ignore[bad-argument-type]
+        stage_item_input, stage_item_inputs, StageItemInputBase  # pyrefly: ignore[bad-argument-type]
     ) as row_inserted:
         if stage_item_input.team_id is not None:
             [team] = await get_teams_by_id(
