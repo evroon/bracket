@@ -23,7 +23,7 @@ from bracket.models.db.stage_item_inputs import (
 )
 from bracket.models.db.team import Team, TeamInsertable
 from bracket.models.db.tournament import Tournament, TournamentInsertable
-from bracket.models.db.user import UserInDB, UserInsertable, UserBase
+from bracket.models.db.user import UserBase, UserInDB
 from bracket.models.db.user_x_club import UserXClub, UserXClubInsertable, UserXClubRelation
 from bracket.schema import (
     clubs,
@@ -138,7 +138,9 @@ async def inserted_stage_item_input(
     stage_item_input: StageItemInputInsertable,
 ) -> AsyncIterator[StageItemInputFinal | StageItemInputEmpty]:
     async with inserted_generic(
-        stage_item_input, stage_item_inputs, StageItemInputBase  # pyrefly: ignore[bad-argument-type]
+        stage_item_input,
+        stage_item_inputs,
+        StageItemInputBase,  # pyrefly: ignore[bad-argument-type]
     ) as row_inserted:
         if stage_item_input.team_id is not None:
             [team] = await get_teams_by_id(
