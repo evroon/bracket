@@ -23,7 +23,7 @@ from bracket.models.db.stage_item_inputs import (
 )
 from bracket.models.db.team import Team, TeamInsertable
 from bracket.models.db.tournament import Tournament, TournamentInsertable
-from bracket.models.db.user import UserInDB, UserInsertable
+from bracket.models.db.user import UserInDB, UserInsertable, UserBase
 from bracket.models.db.user_x_club import UserXClub, UserXClubInsertable, UserXClubRelation
 from bracket.schema import (
     clubs,
@@ -67,7 +67,7 @@ async def inserted_generic[BaseModelT: BaseModel](
 
 
 @asynccontextmanager
-async def inserted_user(user: UserInsertable) -> AsyncIterator[UserInDB]:
+async def inserted_user(user: UserBase) -> AsyncIterator[UserInDB]:
     async with inserted_generic(user, users, UserInDB) as row_inserted:
         yield cast("UserInDB", row_inserted)
 
@@ -138,7 +138,7 @@ async def inserted_stage_item_input(
     stage_item_input: StageItemInputInsertable,
 ) -> AsyncIterator[StageItemInputFinal | StageItemInputEmpty]:
     async with inserted_generic(
-        stage_item_input, stage_item_inputs, StageItemInputBase
+        stage_item_input, stage_item_inputs, StageItemInputBase  # type: ignore[bad-argument-type]
     ) as row_inserted:
         if stage_item_input.team_id is not None:
             [team] = await get_teams_by_id(
