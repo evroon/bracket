@@ -174,7 +174,6 @@ async def inserted_user_x_club(user_x_club: UserXClubInsertable) -> AsyncIterato
 @asynccontextmanager
 async def inserted_auth_context() -> AsyncIterator[AuthContext]:
     mock_user = get_mock_user()
-    headers = {"Authorization": f"Bearer {get_mock_token(mock_user.email)}"}
     async with (
         inserted_user(mock_user) as user_inserted,
         inserted_club(DUMMY_CLUB) as club_inserted,
@@ -193,7 +192,7 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         ) as user_x_club_inserted,
     ):
         yield AuthContext(
-            headers=headers,
+            headers={"Authorization": f"Bearer {get_mock_token(mock_user.email)}"},
             user=user_inserted,
             club=club_inserted,
             tournament=tournament_inserted,
