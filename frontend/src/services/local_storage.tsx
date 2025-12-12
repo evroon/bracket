@@ -1,3 +1,4 @@
+typescript
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
@@ -22,9 +23,13 @@ export function performLogoutAndRedirect(t: Translator, navigate: NavigateFuncti
   navigate('/login', { replace: true });
 }
 
-export function getLogin() {
+export function getLogin(): Record<string, unknown> {
   const login = localStorage.getItem('login');
-  return login != null ? JSON.parse(login) : {};
+  try {
+    return login != null ? JSON.parse(login) : {};
+  } catch (error) {
+    return {};
+  }
 }
 
 export function tokenPresent() {
