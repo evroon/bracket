@@ -58,7 +58,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-react": "^7.37.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-testing-library": "^7.14.0",
+    "eslint-plugin-testing-library": "^7.15.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "postcss": "^8.5.0",
