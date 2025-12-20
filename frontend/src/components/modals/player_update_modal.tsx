@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../interfaces/player';
+import { Player } from '../../openapi';
 import { updatePlayer } from '../../services/player';
 
 export default function PlayerUpdateModal({

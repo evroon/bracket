@@ -10,8 +10,8 @@
     "start": "vite start",
     "typecheck": "tsc",
     "export": "vite build && vite export",
-    "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
+    "prettier:check": "prettier --list-different --check \"**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --list-different --write \"**/*.{ts,tsx}\"",
     "test": "tsc && pnpm run prettier:write"
   },
   "dependencies": {

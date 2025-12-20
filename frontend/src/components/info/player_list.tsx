@@ -1,8 +1,8 @@
 import { Text } from '@mantine/core';
 
-import { TeamInterface } from '../../interfaces/team';
+import { FullTeamWithPlayers } from '../../openapi';
 
-export default function PlayerList({ team }: { team: TeamInterface }) {
+export default function PlayerList({ team }: { team: FullTeamWithPlayers }) {
   const getPlayerNames = () =>
     team.players
       .map((p) => p.name)

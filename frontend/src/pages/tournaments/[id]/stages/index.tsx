@@ -9,8 +9,8 @@ import ActivatePreviousStageModal from '../../../../components/modals/activate_p
 import { NoContent } from '../../../../components/no_content/empty_table_info';
 import { TableSkeletonTwoColumnsSmall } from '../../../../components/utils/skeletons';
 import { getTournamentIdFromRouter } from '../../../../components/utils/util';
-import { Ranking } from '../../../../interfaces/ranking';
 import { StageWithStageItems } from '../../../../interfaces/stage';
+import { Ranking } from '../../../../openapi';
 import {
   getAvailableStageItemInputs,
   getRankings,
@@ -30,7 +30,7 @@ export default function StagesPage() {
   const swrRankingsPerStageItemResponse = getRankingsPerStageItem(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
-  const rankings: Ranking[] = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
+  const rankings = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
 
   const stages: StageWithStageItems[] =
     swrStagesResponse.data != null ? swrStagesResponse.data.data : [];
@@ -43,6 +43,9 @@ export default function StagesPage() {
     swrRankingsResponse.isLoading
   ) {
     content = <TableSkeletonTwoColumnsSmall />;
+  } else if (tournamentDataFull == null) {
+    // TODO: show loading icon.
+    return null;
   } else if (stages.length < 1) {
     content = (
       <Stack align="center">

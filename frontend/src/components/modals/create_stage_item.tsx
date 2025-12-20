@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem } from '../../services/stage_item';
 import { Translator } from '../utils/types';

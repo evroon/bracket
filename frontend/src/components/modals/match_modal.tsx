@@ -10,7 +10,7 @@ import {
   formatMatchInput1,
   formatMatchInput2,
 } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import { deleteMatch, updateMatch } from '../../services/match';
@@ -56,7 +56,7 @@ function MatchModalForm({
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   setOpened: any;
-  round: RoundInterface | null;
+  round: Round | null;
 }) {
   if (match == null) {
     return null;
@@ -211,7 +211,7 @@ export default function MatchModal({
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
-  round: RoundInterface | null;
+  round: Round | null;
 }) {
   const { t } = useTranslation();
 

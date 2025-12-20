@@ -9,9 +9,9 @@ export async function createRanking(tournament_id: number) {
 export async function editRanking(
   tournament_id: number,
   ranking_id: number,
-  win_points: number,
-  draw_points: number,
-  loss_points: number,
+  win_points: string,
+  draw_points: string,
+  loss_points: string,
   add_score_points: boolean,
   position: number
 ) {

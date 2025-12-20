@@ -6,8 +6,7 @@ import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { TeamInterface } from '../../interfaces/team';
-import { Tournament } from '../../interfaces/tournament';
+import { FullTeamWithPlayers, Tournament } from '../../openapi';
 import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '../../services/adapter';
 
 export function DropzoneButton({
@@ -19,7 +18,7 @@ export function DropzoneButton({
   tournamentId: Tournament['id'];
   swrResponse: SWRResponse;
   variant: 'tournament' | 'team';
-  teamId?: TeamInterface['id'];
+  teamId?: FullTeamWithPlayers['id'];
 }) {
   // const { classes, theme } = useStyles();
   const openRef = useRef<() => void>(null);

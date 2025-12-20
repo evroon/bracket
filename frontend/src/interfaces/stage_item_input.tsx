@@ -1,5 +1,5 @@
 import { assert_not_none } from '../components/utils/assert';
-import { TeamInterface } from './team';
+import { FullTeamWithPlayers } from '../openapi';
 
 export interface StageItemInput {
   id: number;
@@ -11,7 +11,7 @@ export interface StageItemInput {
   losses: number;
   points: number;
   team_id: number | null;
-  team: TeamInterface | null;
+  team: FullTeamWithPlayers | null;
   winner_from_stage_item_id: number | null;
   winner_position: number | null;
 }
@@ -26,7 +26,7 @@ export interface StageItemInputFinal {
   losses: number;
   points: number;
   team_id: number;
-  team: TeamInterface;
+  team: FullTeamWithPlayers;
   winner_from_stage_item_id: number | null;
   winner_position: number | null;
 }
