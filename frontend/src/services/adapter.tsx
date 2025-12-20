@@ -7,6 +7,13 @@ import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
 import { TournamentFilter } from '../interfaces/tournament';
+import {
+  ClubsResponse,
+  CourtsResponse,
+  GetClubsClubsGetResponses,
+  getClubsClubsGet,
+} from '../openapi';
+import { RequestResult } from '../openapi/client';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
@@ -99,7 +106,7 @@ const fetcherWithTimestamp = (url: string) =>
     .get(url)
     .then((res: { data: any }) => ({ ...res.data, ...getTimeState() }));
 
-export function getClubs(): SWRResponse {
+export function getClubs(): SWRResponse<ClubsResponse> {
   return useSWR('clubs', fetcher);
 }
 
@@ -183,7 +190,7 @@ export function getRankingsPerStageItem(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/next_stage_rankings`, fetcher);
 }
 
-export function getCourts(tournament_id: number): SWRResponse {
+export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club } from '../../interfaces/club';
+import { Club } from '../../openapi';
 import { deleteClub } from '../../services/club';
 import DeleteButton from '../buttons/delete';
 import ClubModal from '../modals/club_modal';

@@ -1,3 +1,4 @@
+import { getClubsClubsGet } from '../openapi/sdk.gen';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createClub(name: string) {

@@ -16,8 +16,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club } from '../../interfaces/club';
 import { Tournament } from '../../interfaces/tournament';
+import { Club } from '../../openapi';
 import { getBaseApiUrl, getClubs } from '../../services/adapter';
 import { createTournament } from '../../services/tournament';
 import SaveButton from '../buttons/save';

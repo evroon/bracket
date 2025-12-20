@@ -1,5 +1,5 @@
 import { Translator } from '../components/utils/types';
-import { Court } from './court';
+import { Court } from '../openapi';
 import { StageItemInput, formatStageItemInput } from './stage_item_input';
 
 export interface MatchInterface {

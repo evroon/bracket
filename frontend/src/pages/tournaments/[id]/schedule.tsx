@@ -24,9 +24,9 @@ import { NoContent } from '../../../components/no_content/empty_table_info';
 import { Time } from '../../../components/utils/datetime';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
-import { Court } from '../../../interfaces/court';
 import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../../interfaces/match';
 import { TournamentMinimal } from '../../../interfaces/tournament';
+import { Court } from '../../../openapi';
 import { getCourts, getStages } from '../../../services/adapter';
 import { deleteCourt } from '../../../services/court';
 import {

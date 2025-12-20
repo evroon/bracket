@@ -2,10 +2,10 @@ import { SWRResponse } from 'swr';
 
 import { assert_not_none } from '../components/utils/assert';
 import { groupBy, responseIsValid } from '../components/utils/util';
-import { Court } from '../interfaces/court';
 import { MatchInterface } from '../interfaces/match';
 import { StageWithStageItems } from '../interfaces/stage';
 import { TeamInterface } from '../interfaces/team';
+import { Court } from '../openapi';
 import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {

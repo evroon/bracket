@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club } from '../../interfaces/club';
+import { Club } from '../../openapi';
 import { createClub, updateClub } from '../../services/club';
 import SaveButton from '../buttons/save';
 

@@ -30,8 +30,8 @@ import { assert_not_none } from '../../../components/utils/assert';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
-import { Club } from '../../../interfaces/club';
 import { Tournament } from '../../../interfaces/tournament';
+import { Club } from '../../../openapi';
 import {
   getBaseApiUrl,
   getClubs,
@@ -347,12 +347,12 @@ function GeneralTournamentForm({
 
 export default function SettingsPage() {
   const { tournamentData } = getTournamentIdFromRouter();
-  const swrClubsResponse: SWRResponse = getClubs();
+  const swrClubsResponse = getClubs();
   const swrTournamentResponse = getTournamentById(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
-  const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
+  const clubs = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
 
   let content = <NotFoundTitle />;
 

@@ -146,7 +146,11 @@ export default function SwissTournamentPage() {
     return <NotFoundTitle />;
   }
 
-  if (!swrCourtsResponse.isLoading && swrCourtsResponse.data.data.length < 1) {
+  if (
+    !swrCourtsResponse.isLoading &&
+    swrCourtsResponse.data &&
+    swrCourtsResponse.data.data.length < 1
+  ) {
     return (
       <TournamentLayout tournament_id={tournamentData.id}>
         <Container mt="1rem">
