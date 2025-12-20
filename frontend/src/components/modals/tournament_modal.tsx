@@ -17,11 +17,11 @@ import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { Tournament } from '../../interfaces/tournament';
+import { Club } from '../../openapi';
 import { getBaseApiUrl, getClubs } from '../../services/adapter';
 import { createTournament } from '../../services/tournament';
 import SaveButton from '../buttons/save';
 import { assert_not_none } from '../utils/assert';
-import { Club } from '../../openapi';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;

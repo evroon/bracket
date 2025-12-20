@@ -13,12 +13,12 @@ import {
 } from '../../../../../components/dashboard/layout';
 import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
 import { responseIsValid, setTitle } from '../../../../../components/utils/util';
-import { Court } from '../../../../../interfaces/court';
 import {
   MatchInterface,
   isMatchHappening,
   isMatchInTheFuture,
 } from '../../../../../interfaces/match';
+import { Court } from '../../../../../openapi';
 import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
 import { getMatchLookupByCourt, getStageItemLookup } from '../../../../../services/lookups';
 import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';

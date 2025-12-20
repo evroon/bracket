@@ -31,6 +31,7 @@ import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
 import { Tournament } from '../../../interfaces/tournament';
+import { Club } from '../../../openapi';
 import {
   getBaseApiUrl,
   getClubs,
@@ -45,7 +46,6 @@ import {
   updateTournament,
 } from '../../../services/tournament';
 import TournamentLayout from '../_tournament_layout';
-import { Club } from '../../../openapi';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;

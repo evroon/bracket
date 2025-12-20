@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
+import { Club } from '../../openapi';
 import { deleteClub } from '../../services/club';
 import DeleteButton from '../buttons/delete';
 import ClubModal from '../modals/club_modal';
@@ -10,7 +11,6 @@ import { EmptyTableInfo } from '../no_content/empty_table_info';
 import RequestErrorAlert from '../utils/error_alert';
 import { TableSkeletonSingleColumn } from '../utils/skeletons';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
-import { Club } from '../../openapi';
 
 export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWRResponse }) {
   const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];

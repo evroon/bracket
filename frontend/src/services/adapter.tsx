@@ -7,9 +7,14 @@ import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
 import { TournamentFilter } from '../interfaces/tournament';
-import { getLogin, performLogout, tokenPresent } from './local_storage';
-import { ClubsResponse, getClubsClubsGet, GetClubsClubsGetResponses } from '../openapi';
+import {
+  ClubsResponse,
+  CourtsResponse,
+  GetClubsClubsGetResponses,
+  getClubsClubsGet,
+} from '../openapi';
 import { RequestResult } from '../openapi/client';
+import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
   if (response.code === 'ERR_NETWORK') {
@@ -185,7 +190,7 @@ export function getRankingsPerStageItem(tournament_id: number): SWRResponse {
   return useSWR(`tournaments/${tournament_id}/next_stage_rankings`, fetcher);
 }
 
-export function getCourts(tournament_id: number): SWRResponse {
+export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
