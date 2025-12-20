@@ -174,7 +174,7 @@ ignore = ["FIX002", "TD002", "TD003", "TC001", "TC002", "TC003", "ISC001"]
 min_confidence = 0
 paths = ["."]
 exclude = [".venv"]
-ignore_decorators = ["@pytest.*", "@*router*", "@app.*", "@*validator*"]
+ignore_decorators = ["@pytest.*", "@*router*", "@app.*", "@*validator*", "@cli.command*"]
 ignore_names = [
     "RestartableUvicornWorker",
     "_generate_next_value_",
