@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 import asyncio
 import functools
+import json
+from pathlib import Path
 from typing import Any
 
 import click
 from heliclockter import datetime_utc
 
+from bracket.app import app
 from bracket.config import config
 from bracket.database import database
 from bracket.logger import get_logger
@@ -17,6 +20,8 @@ from bracket.sql.users import (
 )
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import hash_password
+
+OPENAPI_JSON_PATH = "openapi/openapi.json"
 
 logger = get_logger("cli")
 
@@ -49,7 +54,14 @@ def cli() -> None:
     pass
 
 
-@click.command()
+@cli.command()
+def generate_openapi() -> None:
+    schema = app.openapi()
+    Path("openapi/openapi.json").write_text(json.dumps(schema, indent=2, sort_keys=True))
+    logger.info(f"OpenAPI schema saved to {OPENAPI_JSON_PATH}")
+
+
+@cli.command()
 def hash_password_cmd() -> None:
     if config.admin_password is None:
         logger.error("No admin password is given")
@@ -59,13 +71,13 @@ def hash_password_cmd() -> None:
         logger.info(hashed_pwd)
 
 
-@click.command()
+@cli.command()
 @run_async
 async def create_dev_db() -> None:
     await sql_create_dev_db()
 
 
-@click.command()
+@cli.command()
 @click.option("--email", prompt="Email", help="The email used to log into the account.")
 @click.option("--password", prompt="Password", help="The password used to log into the account.")
 @click.option("--name", prompt="Name", help="The name associated with the account.")
@@ -86,7 +98,4 @@ async def register_user(email: str, password: str, name: str) -> None:
 
 
 if __name__ == "__main__":
-    cli.add_command(create_dev_db)
-    cli.add_command(hash_password_cmd)
-    cli.add_command(register_user)
     cli()

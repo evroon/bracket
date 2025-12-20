@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club } from '../../interfaces/club';
 import { createClub, updateClub } from '../../services/club';
 import SaveButton from '../buttons/save';
+import { Club } from '../../openapi';
 
 export default function ClubModal({
   club,

@@ -8,6 +8,8 @@ import { SchedulerSettings } from '../interfaces/match';
 import { RoundInterface } from '../interfaces/round';
 import { TournamentFilter } from '../interfaces/tournament';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
+import { ClubsResponse, getClubsClubsGet, GetClubsClubsGetResponses } from '../openapi';
+import { RequestResult } from '../openapi/client';
 
 export function handleRequestError(response: AxiosError) {
   if (response.code === 'ERR_NETWORK') {
@@ -99,7 +101,7 @@ const fetcherWithTimestamp = (url: string) =>
     .get(url)
     .then((res: { data: any }) => ({ ...res.data, ...getTimeState() }));
 
-export function getClubs(): SWRResponse {
+export function getClubs(): SWRResponse<ClubsResponse> {
   return useSWR('clubs', fetcher);
 }
 
