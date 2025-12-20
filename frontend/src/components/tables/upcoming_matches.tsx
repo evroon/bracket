@@ -7,8 +7,8 @@ import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 
 import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
-import { Tournament } from '../../interfaces/tournament';
+import { Round } from '../../interfaces/round';
+import { Tournament } from '../../openapi';
 import { createMatch } from '../../services/match';
 import { updateRound } from '../../services/round';
 import { NoContent } from '../no_content/empty_table_info';
@@ -21,7 +21,7 @@ export default function UpcomingMatchesTable({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
 }: {
-  draftRound: RoundInterface;
+  draftRound: Round;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;

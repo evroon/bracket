@@ -5,14 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../../../interfaces/match';
-import { RoundInterface } from '../../../interfaces/round';
+import { Round } from '../../../interfaces/round';
 
 export type SchedulingProgress = { courtsCount: number; scheduledMatchesCount: number };
 
-export function getSwissRoundSchedulingProgress(
-  draftRound: RoundInterface,
-  swrCourtsResponse: SWRResponse
-) {
+export function getSwissRoundSchedulingProgress(draftRound: Round, swrCourtsResponse: SWRResponse) {
   return {
     courtsCount: swrCourtsResponse.data?.data?.length || 0,
     scheduledMatchesCount: draftRound?.matches.length,

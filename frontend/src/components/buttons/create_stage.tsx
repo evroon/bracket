@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import { createStage } from '../../services/stage';
 
 export default function CreateStageButton({

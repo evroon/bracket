@@ -20,9 +20,9 @@ import {
 } from '../../../../../components/utils/util';
 import { BracketDisplaySettings } from '../../../../../interfaces/brackets';
 import { SchedulerSettings } from '../../../../../interfaces/match';
-import { RoundInterface } from '../../../../../interfaces/round';
+import { Round } from '../../../../../interfaces/round';
 import { getStageById } from '../../../../../interfaces/stage';
-import { Tournament } from '../../../../../interfaces/tournament';
+import { Tournament } from '../../../../../openapi';
 import {
   checkForAuthError,
   getCourts,
@@ -107,8 +107,7 @@ export default function SwissTournamentPage() {
     setIterations,
   };
 
-  const tournamentDataFull =
-    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
+  const tournamentDataFull = swrTournamentResponse.data?.data;
 
   let activeStage = null;
   let draftRound = null;
@@ -120,7 +119,7 @@ export default function SwissTournamentPage() {
 
     if (activeStage != null && activeStage.stage_items != null) {
       const draftRounds = stageItem.rounds.filter(
-        (round: RoundInterface) => round.stage_item_id === stageItemId && round.is_draft
+        (round: Round) => round.stage_item_id === stageItemId && round.is_draft
       );
 
       if (draftRounds != null && draftRounds.length > 0) {
@@ -144,6 +143,9 @@ export default function SwissTournamentPage() {
 
   if (!swrTournamentResponse.isLoading && tournamentDataFull == null) {
     return <NotFoundTitle />;
+  } else if (tournamentDataFull == null) {
+    // TODO: show loading icon.
+    return null;
   }
 
   if (

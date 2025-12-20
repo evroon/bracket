@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
+import { StageRankingResponse } from '../../openapi';
 import { activateNextStage } from '../../services/stage';
 
 export default function ActivatePreviousStageModal({
@@ -14,7 +15,7 @@ export default function ActivatePreviousStageModal({
 }: {
   tournamentId: number;
   swrStagesResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

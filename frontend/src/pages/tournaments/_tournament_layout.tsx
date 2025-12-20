@@ -21,7 +21,7 @@ export default function TournamentLayout({ children, tournament_id }: any) {
         /
       </Title>
       <Title order={2} maw="20rem" lineClamp={1}>
-        {tournamentResponse.data.data.name}
+        {tournamentResponse.data?.data.name}
       </Title>
 
       <Tooltip label={`${t('archived_header_label')}`}>
@@ -29,7 +29,7 @@ export default function TournamentLayout({ children, tournament_id }: any) {
           color="yellow"
           variant="light"
           style={{
-            visibility: tournamentResponse.data.data.status === 'ARCHIVED' ? 'visible' : 'hidden',
+            visibility: tournamentResponse.data?.data.status === 'ARCHIVED' ? 'visible' : 'hidden',
           }}
         >
           <HiArchiveBoxArrowDown />

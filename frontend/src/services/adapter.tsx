@@ -5,12 +5,20 @@ import useSWR, { SWRResponse } from 'swr';
 
 import { Pagination } from '../components/utils/util';
 import { SchedulerSettings } from '../interfaces/match';
-import { RoundInterface } from '../interfaces/round';
+import { Round } from '../interfaces/round';
 import { TournamentFilter } from '../interfaces/tournament';
 import {
   ClubsResponse,
   CourtsResponse,
   GetClubsClubsGetResponses,
+  GetTournamentsTournamentsGetResponse,
+  PlayersResponse,
+  RankingsResponse,
+  StageItemInputOptionsResponse,
+  StageRankingResponse,
+  TournamentResponse,
+  TournamentsResponse,
+  UserPublicResponse,
   getClubsClubsGet,
 } from '../openapi';
 import { RequestResult } from '../openapi/client';
@@ -114,22 +122,28 @@ export function getTournamentByEndpointName(tournament_endpoint_name: string): S
   return useSWR(`tournaments?endpoint_name=${tournament_endpoint_name}`, fetcher);
 }
 
-export function getTournamentById(tournament_id: number): SWRResponse {
+export function getTournamentById(tournament_id: number): SWRResponse<TournamentResponse> {
   return useSWR(`tournaments/${tournament_id}`, fetcher);
 }
 
-export function getTournaments(filter: TournamentFilter): SWRResponse {
+export function getTournaments(filter: TournamentFilter): SWRResponse<TournamentsResponse> {
   return useSWR(`tournaments?filter_=${filter}`, fetcher);
 }
 
-export function getPlayers(tournament_id: number, not_in_team: boolean = false): SWRResponse {
+export function getPlayers(
+  tournament_id: number,
+  not_in_team: boolean = false
+): SWRResponse<PlayersResponse> {
   return useSWR(
     `tournaments/${tournament_id}/players?not_in_team=${not_in_team}&limit=100`,
     fetcher
   );
 }
 
-export function getPlayersPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
+export function getPlayersPaginated(
+  tournament_id: number,
+  pagination: Pagination
+): SWRResponse<PlayersResponse> {
   return useSWR(
     `tournaments/${tournament_id}/players?limit=${pagination.limit}&offset=${pagination.offset}&sort_by=${pagination.sort_by}&sort_direction=${pagination.sort_direction}`,
     fetcher
@@ -156,7 +170,9 @@ export function getTeamsLive(tournament_id: number | null): SWRResponse {
   });
 }
 
-export function getAvailableStageItemInputs(tournament_id: number): SWRResponse {
+export function getAvailableStageItemInputs(
+  tournament_id: number
+): SWRResponse<StageItemInputOptionsResponse> {
   return useSWR(`tournaments/${tournament_id}/available_inputs`, fetcher);
 }
 
@@ -182,11 +198,11 @@ export function getStagesLive(tournament_id: number | null): SWRResponse {
   );
 }
 
-export function getRankings(tournament_id: number): SWRResponse {
+export function getRankings(tournament_id: number): SWRResponse<RankingsResponse> {
   return useSWR(`tournaments/${tournament_id}/rankings`, fetcher);
 }
 
-export function getRankingsPerStageItem(tournament_id: number): SWRResponse {
+export function getRankingsPerStageItem(tournament_id: number): SWRResponse<StageRankingResponse> {
   return useSWR(`tournaments/${tournament_id}/next_stage_rankings`, fetcher);
 }
 
@@ -194,20 +210,20 @@ export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
-export function getCourtsLive(tournament_id: number): SWRResponse {
+export function getCourtsLive(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher, {
     refreshInterval: 60_000,
   });
 }
 
-export function getUser(): SWRResponse {
+export function getUser(): SWRResponse<UserPublicResponse> {
   return useSWR('users/me', fetcher);
 }
 
 export function getUpcomingMatches(
   tournament_id: number,
   stage_item_id: number,
-  draftRound: RoundInterface | null,
+  draftRound: Round | null,
   schedulerSettings: SchedulerSettings
 ): SWRResponse {
   return useSWR(

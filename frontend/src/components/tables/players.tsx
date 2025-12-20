@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../interfaces/player';
 import { TournamentMinimal } from '../../interfaces/tournament';
+import { Player } from '../../openapi';
 import { deletePlayer } from '../../services/player';
 import DeleteButton from '../buttons/delete';
 import PlayerUpdateModal from '../modals/player_update_modal';

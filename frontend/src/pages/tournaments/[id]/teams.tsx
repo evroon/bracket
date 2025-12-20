@@ -12,7 +12,7 @@ import {
 } from '../../../components/utils/util';
 import { StageItemWithRounds } from '../../../interfaces/stage_item';
 import { StageItemInput } from '../../../interfaces/stage_item_input';
-import { TeamInterface } from '../../../interfaces/team';
+import { FullTeamWithPlayers } from '../../../openapi';
 import { getStages, getTeamsPaginated } from '../../../services/adapter';
 import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
 import TournamentLayout from '../_tournament_layout';
@@ -56,7 +56,7 @@ export default function TeamsPage() {
     ? getStageItemTeamIdsLookup(swrStagesResponse)
     : {};
 
-  let teams: TeamInterface[] =
+  let teams: FullTeamWithPlayers[] =
     swrTeamsResponse.data != null ? swrTeamsResponse.data.data.teams : [];
   const teamCount = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.count : 1;
 

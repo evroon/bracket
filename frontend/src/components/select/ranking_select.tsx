@@ -2,7 +2,7 @@ import { Select } from '@mantine/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Ranking } from '../../interfaces/ranking';
+import { Ranking } from '../../openapi';
 
 export function RankingSelect({ form, rankings }: { form: any; rankings: Ranking[] }) {
   const { t } = useTranslation();

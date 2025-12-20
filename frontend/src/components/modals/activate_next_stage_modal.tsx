@@ -8,13 +8,13 @@ import { SWRResponse } from 'swr';
 
 import { StageItemWithRounds } from '../../interfaces/stage_item';
 import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
-import { TeamInterface } from '../../interfaces/team';
+import { FullTeamWithPlayers } from '../../openapi';
 import { getStageItemLookup } from '../../services/lookups';
 import { activateNextStage } from '../../services/stage';
 import RequestErrorAlert from '../utils/error_alert';
 import { GenericSkeleton } from '../utils/skeletons';
 
-type Update = { stage_item_input: StageItemInput; team: TeamInterface };
+type Update = { stage_item_input: StageItemInput; team: FullTeamWithPlayers };
 type StageItemUpdate = { updates: Update[]; stageItem: StageItemWithRounds };
 
 function UpdatesToStageItemInputsTable({

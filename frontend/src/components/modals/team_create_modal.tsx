@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../interfaces/player';
+import { Player } from '../../openapi';
 import { getPlayers } from '../../services/adapter';
 import { createTeam, createTeams } from '../../services/team';
 import SaveButton from '../buttons/save';

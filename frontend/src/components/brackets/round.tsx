@@ -8,12 +8,12 @@ import {
   isMatchHappening,
   isMatchInTheFutureOrPresent,
 } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import RoundModal from '../modals/round_modal';
 import Match from './match';
 
-export default function Round({
+export default function RoundComponent({
   tournamentData,
   round,
   swrStagesResponse,
@@ -22,7 +22,7 @@ export default function Round({
   displaySettings,
 }: {
   tournamentData: TournamentMinimal;
-  round: RoundInterface;
+  round: Round;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;

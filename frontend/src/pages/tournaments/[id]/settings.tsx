@@ -30,8 +30,7 @@ import { assert_not_none } from '../../../components/utils/assert';
 import { DropzoneButton } from '../../../components/utils/file_upload';
 import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
 import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
-import { Tournament } from '../../../interfaces/tournament';
-import { Club } from '../../../openapi';
+import { Club, Tournament, TournamentResponse } from '../../../openapi';
 import {
   getBaseApiUrl,
   getClubs,
@@ -65,7 +64,7 @@ function ArchiveTournamentButton({
 }: {
   t: any;
   tournament: Tournament;
-  swrTournamentResponse: SWRResponse;
+  swrTournamentResponse: SWRResponse<TournamentResponse>;
 }) {
   return (
     <Button
@@ -93,7 +92,7 @@ function UnarchiveTournamentButton({
 }: {
   t: any;
   tournament: Tournament;
-  swrTournamentResponse: SWRResponse;
+  swrTournamentResponse: SWRResponse<TournamentResponse>;
 }) {
   return (
     <Button
@@ -120,7 +119,7 @@ function GeneralTournamentForm({
   clubs,
 }: {
   tournament: Tournament;
-  swrTournamentResponse: SWRResponse;
+  swrTournamentResponse: SWRResponse<TournamentResponse>;
   clubs: Club[];
 }) {
   const navigate = useNavigate();

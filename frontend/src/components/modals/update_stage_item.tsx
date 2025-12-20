@@ -4,9 +4,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Ranking } from '../../interfaces/ranking';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { Tournament } from '../../interfaces/tournament';
+import { Ranking, Tournament } from '../../openapi';
 import { updateStageItem } from '../../services/stage_item';
 import { RankingSelect } from '../select/ranking_select';
 

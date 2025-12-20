@@ -10,7 +10,7 @@ import {
   formatMatchInput2,
   isMatchHappening,
 } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
 import MatchModal from '../modals/match_modal';
@@ -56,7 +56,7 @@ export default function Match({
   match: MatchInterface;
   readOnly: boolean;
 
-  round: RoundInterface;
+  round: Round;
 }) {
   const { t } = useTranslation();
   const theme = useMantineTheme();

@@ -12,7 +12,7 @@ import React from 'react';
 import QRCode from 'react-qr-code';
 import { useLocation, useNavigate } from 'react-router';
 
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import { getBaseApiUrl } from '../../services/adapter';
 import PreloadLink from '../utils/link';
 import { getBaseURL } from '../utils/util';
@@ -77,7 +77,7 @@ export function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: To
 
 export function DoubleHeader({ tournamentData }: { tournamentData: Tournament }) {
   const navigate = useLocation();
-  const endpoint = tournamentData.dashboard_endpoint;
+  const endpoint = tournamentData.dashboard_endpoint || '';
   const pathName = navigate.pathname.replace('[id]', endpoint).replace(/\/+$/, '');
 
   const mainLinks = [

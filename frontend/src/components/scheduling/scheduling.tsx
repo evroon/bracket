@@ -3,9 +3,9 @@ import React from 'react';
 import { SWRResponse } from 'swr';
 
 import { SchedulerSettings } from '../../interfaces/match';
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { StageWithStageItems } from '../../interfaces/stage';
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import UpcomingMatchesTable from '../tables/upcoming_matches';
 import SwissSettings, { getSwissRoundSchedulingProgress } from './settings/ladder_fixed';
 
@@ -19,7 +19,7 @@ export default function Scheduler({
   schedulerSettings,
 }: {
   activeStage: StageWithStageItems;
-  draftRound: RoundInterface;
+  draftRound: Round;
   tournamentData: Tournament;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse;

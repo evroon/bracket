@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LuConstruction } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { deleteRound, updateRound } from '../../services/round';
 import DeleteButton from '../buttons/delete';
@@ -18,7 +18,7 @@ function RoundDeleteButton({
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  round: RoundInterface;
+  round: Round;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
@@ -45,7 +45,7 @@ export default function RoundModal({
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  round: RoundInterface;
+  round: Round;
   swrStagesResponse: SWRResponse;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {

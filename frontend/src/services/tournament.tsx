@@ -43,7 +43,7 @@ export async function updateTournament(
   tournament_id: number,
   name: string,
   dashboard_public: boolean,
-  dashboard_endpoint: string,
+  dashboard_endpoint: string | null | undefined,
   players_can_be_in_multiple_teams: boolean,
   auto_assign_courts: boolean,
   start_time: string,

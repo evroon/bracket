@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { TeamInterface } from '../../interfaces/team';
 import { TournamentMinimal } from '../../interfaces/tournament';
+import { FullTeamWithPlayers } from '../../openapi';
 import { deleteTeam } from '../../services/team';
 import DeleteButton from '../buttons/delete';
 import PlayerList from '../info/player_list';
@@ -24,7 +24,7 @@ export default function TeamsTable({
 }: {
   tournamentData: TournamentMinimal;
   swrTeamsResponse: SWRResponse;
-  teams: TeamInterface[];
+  teams: FullTeamWithPlayers[];
   tableState: TableState;
   teamCount: number;
 }) {
@@ -36,7 +36,9 @@ export default function TeamsTable({
   }
 
   const rows = teams
-    .sort((p1: TeamInterface, p2: TeamInterface) => sortTableEntries(p1, p2, tableState))
+    .sort((p1: FullTeamWithPlayers, p2: FullTeamWithPlayers) =>
+      sortTableEntries(p1, p2, tableState)
+    )
     .map((team) => (
       <Table.Tr key={team.id}>
         <Table.Td>

@@ -22,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
-import { Ranking } from '../../interfaces/ranking';
 import { StageWithStageItems } from '../../interfaces/stage';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
 import {
@@ -31,7 +30,7 @@ import {
   StageItemInputOption,
   formatStageItemInputTentative,
 } from '../../interfaces/stage_item_input';
-import { Tournament } from '../../interfaces/tournament';
+import { Ranking, StageItemInputOptionsResponse, Tournament } from '../../openapi';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
@@ -469,7 +468,7 @@ export default function Builder({
 }: {
   tournament: Tournament;
   swrStagesResponse: SWRResponse;
-  swrAvailableInputsResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
   swrRankingsPerStageItemResponse: SWRResponse;
   rankings: Ranking[];
 }) {

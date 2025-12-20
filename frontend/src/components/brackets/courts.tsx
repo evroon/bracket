@@ -2,14 +2,14 @@ import { Grid, Title } from '@mantine/core';
 import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getStages } from '../../services/adapter';
 import Match from './match';
 
 function getRoundsGridCols(
   swrStagesResponse: SWRResponse,
-  activeRound: RoundInterface,
+  activeRound: Round,
   tournamentData: TournamentMinimal
 ) {
   return activeRound.matches
@@ -36,7 +36,7 @@ export default function Courts({
   activeRound,
 }: {
   tournamentData: TournamentMinimal;
-  activeRound: RoundInterface;
+  activeRound: Round;
 }) {
   const swrStagesResponse = getStages(tournamentData.id);
   return (

@@ -14,8 +14,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../interfaces/player';
-import { TeamInterface } from '../../interfaces/team';
+import { FullTeamWithPlayers, Player } from '../../openapi';
 import {
   getBaseApiUrl,
   getPlayers,
@@ -25,7 +24,7 @@ import {
 import { updateTeam } from '../../services/team';
 import { DropzoneButton } from '../utils/file_upload';
 
-function TeamLogo({ team }: { team: TeamInterface | null }) {
+function TeamLogo({ team }: { team: FullTeamWithPlayers | null }) {
   if (team == null || team.logo_path == null) return null;
   return (
     <Image
@@ -42,7 +41,7 @@ export default function TeamUpdateModal({
   swrTeamsResponse,
 }: {
   tournament_id: number;
-  team: TeamInterface;
+  team: FullTeamWithPlayers;
   swrTeamsResponse: SWRResponse;
 }) {
   const { t } = useTranslation();

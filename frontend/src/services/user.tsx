@@ -1,4 +1,4 @@
-import { UserBodyInterface, UserToRegisterInterface } from '../interfaces/user';
+import { UserToRegister, UserToUpdate } from '../openapi';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function performLogin(username: string, password: string) {
@@ -27,7 +27,7 @@ export async function performLogin(username: string, password: string) {
   return true;
 }
 
-export async function updateUser(user_id: number, user: UserBodyInterface) {
+export async function updateUser(user_id: number, user: UserToUpdate) {
   return createAxios()
     .put(`users/${user_id}`, user)
     .catch((response: any) => handleRequestError(response));
@@ -39,7 +39,7 @@ export async function updatePassword(user_id: number, password: string) {
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function registerUser(user: UserToRegisterInterface, captchaToken: string | null) {
+export async function registerUser(user: UserToRegister, captchaToken: string | null) {
   return createAxios()
     .post('users/register', {
       email: user.email,

@@ -18,15 +18,16 @@ import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
 import { BracketDisplaySettings } from '../../interfaces/brackets';
-import { RoundInterface } from '../../interfaces/round';
+import { Round } from '../../interfaces/round';
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { Tournament, TournamentMinimal } from '../../interfaces/tournament';
+import { TournamentMinimal } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import { createRound } from '../../services/round';
 import ActivateNextRoundModal from '../modals/activate_next_round_modal';
 import { NoContent } from '../no_content/empty_table_info';
 import { Translator } from '../utils/types';
 import { responseIsValid } from '../utils/util';
-import Round from './round';
+import RoundComponent from './round';
 
 function AddRoundButton({
   t,
@@ -86,12 +87,9 @@ export function RoundsGridCols({
 
   let result: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
-    .filter(
-      (round: RoundInterface) =>
-        round.matches.length > 0 || displaySettings.matchVisibility === 'all'
-    )
-    .map((round: RoundInterface) => (
-      <Round
+    .filter((round: Round) => round.matches.length > 0 || displaySettings.matchVisibility === 'all')
+    .map((round: Round) => (
+      <RoundComponent
         key={round.id}
         tournamentData={tournamentData}
         round={round}

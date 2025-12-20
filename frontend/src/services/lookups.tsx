@@ -4,8 +4,7 @@ import { assert_not_none } from '../components/utils/assert';
 import { groupBy, responseIsValid } from '../components/utils/util';
 import { MatchInterface } from '../interfaces/match';
 import { StageWithStageItems } from '../interfaces/stage';
-import { TeamInterface } from '../interfaces/team';
-import { Court } from '../openapi';
+import { Court, FullTeamWithPlayers } from '../openapi';
 import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {
@@ -15,7 +14,9 @@ export function getTeamsLookup(tournamentId: number) {
   if (!isResponseValid) {
     return null;
   }
-  return Object.fromEntries(swrTeamsResponse.data.data.teams.map((x: TeamInterface) => [x.id, x]));
+  return Object.fromEntries(
+    swrTeamsResponse.data.data.teams.map((x: FullTeamWithPlayers) => [x.id, x])
+  );
 }
 
 export function getStageItemLookup(swrStagesResponse: SWRResponse) {

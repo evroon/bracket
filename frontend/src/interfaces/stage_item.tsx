@@ -1,4 +1,4 @@
-import { RoundInterface } from './round';
+import { Round } from './round';
 import { StageItemInput } from './stage_item_input';
 
 export interface StageItemWithRounds {
@@ -8,7 +8,7 @@ export interface StageItemWithRounds {
   name: string;
   type_name: string;
   team_count: number;
-  rounds: RoundInterface[];
+  rounds: Round[];
   inputs: StageItemInput[];
   stage_id: number;
 }

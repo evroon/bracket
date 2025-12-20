@@ -10,8 +10,7 @@ import RequestErrorAlert from '../../../components/utils/error_alert';
 import { TableSkeletonSingleColumn } from '../../../components/utils/skeletons';
 import { Translator } from '../../../components/utils/types';
 import { getTournamentIdFromRouter } from '../../../components/utils/util';
-import { Ranking } from '../../../interfaces/ranking';
-import { Tournament } from '../../../interfaces/tournament';
+import { Ranking, Tournament } from '../../../openapi';
 import { getRankings, getTournamentById } from '../../../services/adapter';
 import { createRanking, deleteRanking, editRanking } from '../../../services/ranking';
 import TournamentLayout from '../_tournament_layout';
@@ -172,9 +171,13 @@ export default function RankingsPage() {
   const swrRankingsResponse = getRankings(tournamentData.id);
 
   const swrTournamentResponse = getTournamentById(tournamentData.id);
-  const tournamentDataFull =
-    swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
+  const tournamentDataFull = swrTournamentResponse.data?.data;
   const { t } = useTranslation();
+
+  // TODO: show loading icon.
+  if (tournamentDataFull == null) {
+    return null;
+  }
 
   return (
     <TournamentLayout tournament_id={tournamentData.id}>

@@ -5,12 +5,12 @@ import { IconHash, IconLogout, IconUser } from '@tabler/icons-react';
 import React from 'react';
 import { useNavigate } from 'react-router';
 
-import { UserInterface } from '../../interfaces/user';
+import { UserPublic } from '../../openapi';
 import { performLogoutAndRedirect } from '../../services/local_storage';
 import { updatePassword, updateUser } from '../../services/user';
 import { PasswordStrength } from '../utils/password';
 
-export default function UserForm({ user, t, i18n }: { user: UserInterface; t: any; i18n: any }) {
+export default function UserForm({ user, t, i18n }: { user: UserPublic; t: any; i18n: any }) {
   const navigate = useNavigate();
   const details_form = useForm({
     initialValues: {

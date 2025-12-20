@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Tournament } from '../../interfaces/tournament';
+import { Tournament } from '../../openapi';
 import { getBaseApiUrl } from '../../services/adapter';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
 import { DateTime } from '../utils/datetime';
