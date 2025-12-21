@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "analyze": "ANALYZE=true vite build",
-    "openapi-ts": "openapi-ts",
+    "openapi-ts": "openapi-ts && prettier --list-different --write \"**/*.{ts,tsx}\"",
     "start": "vite start",
     "typecheck": "tsc",
     "export": "vite build && vite export",
