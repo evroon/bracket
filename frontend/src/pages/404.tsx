@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { tokenPresent } from '@services/local_storage';
-import classes from './404.module.css';
+import classes from '@pages/404.module.css';
 
 export default function NotFoundPage() {
   const navigate = useNavigate();

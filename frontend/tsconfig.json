@@ -3,6 +3,9 @@
     "baseUrl": "src",
     "paths": {
       "@*": ["*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@openapi/*": ["openapi/*"],
     },
     "target": "es6",
     "allowJs": true,
