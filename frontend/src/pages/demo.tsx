@@ -1,14 +1,14 @@
 import { Alert, Button, Checkbox, Container, Paper, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { ClientOnly } from '../components/utils/react';
-import { HCaptchaInput } from '../components/utils/util';
-import { tokenPresent } from '../services/local_storage';
-import { registerDemoUser } from '../services/user';
+import { ClientOnly } from '@components/utils/react';
+import { HCaptchaInput } from '@components/utils/util';
+import { tokenPresent } from '@services/local_storage';
+import { registerDemoUser } from '@services/user';
 import classes from './create_account.module.css';
 
 export default function CreateDemoAccountPage() {

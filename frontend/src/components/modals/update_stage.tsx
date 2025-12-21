@@ -1,12 +1,10 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { StageWithStageItems } from '../../interfaces/stage';
-import { Tournament } from '../../openapi';
-import { updateStage } from '../../services/stage';
+import { StageWithStageItems, StagesWithStageItemsResponse, Tournament } from '@openapi';
+import { updateStage } from '@services/stage';
 
 export function UpdateStageModal({
   tournament,
@@ -19,7 +17,7 @@ export function UpdateStageModal({
   opened: boolean;
   setOpened: any;
   stage: StageWithStageItems;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const { t } = useTranslation();
   const form = useForm({

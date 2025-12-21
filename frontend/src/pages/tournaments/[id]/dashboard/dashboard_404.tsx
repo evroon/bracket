@@ -1,7 +1,7 @@
 import { Container, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import classes from '../../../404.module.css';
+import classes from '@pages/404.module.css';
 
 export default function DashboardNotFoundPage() {
   const { t } = useTranslation();

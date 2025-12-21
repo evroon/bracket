@@ -1,37 +1,35 @@
 import { Button, Container, Grid, Group, SegmentedControl, Stack, Title } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
-import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState, useQueryStates } from 'nuqs';
-import React from 'react';
+import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 import { LuNavigation } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../../404';
-import { RoundsGridCols } from '../../../../../components/brackets/brackets';
-import { NoContent } from '../../../../../components/no_content/empty_table_info';
-import Scheduler from '../../../../../components/scheduling/scheduling';
-import classes from '../../../../../components/utility.module.css';
-import PreloadLink from '../../../../../components/utils/link';
-import { Translator } from '../../../../../components/utils/types';
+import { RoundsGridCols } from '@components/brackets/brackets';
+import { NoContent } from '@components/no_content/empty_table_info';
+import Scheduler from '@components/scheduling/scheduling';
+import classes from '@components/utility.module.css';
+import { BracketDisplaySettings } from '@components/utils/brackets';
+import PreloadLink from '@components/utils/link';
+import { SchedulerSettings } from '@components/utils/match';
+import { getStageById } from '@components/utils/stage';
+import { Translator } from '@components/utils/types';
 import {
   getStageItemIdFromRouter,
   getTournamentIdFromRouter,
   responseIsValid,
-} from '../../../../../components/utils/util';
-import { BracketDisplaySettings } from '../../../../../interfaces/brackets';
-import { SchedulerSettings } from '../../../../../interfaces/match';
-import { Round } from '../../../../../interfaces/round';
-import { getStageById } from '../../../../../interfaces/stage';
-import { Tournament } from '../../../../../openapi';
+} from '@components/utils/util';
+import { RoundWithMatches, Tournament } from '@openapi';
+import NotFoundTitle from '@pages/404';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   checkForAuthError,
   getCourts,
   getStages,
   getTournamentById,
   getUpcomingMatches,
-} from '../../../../../services/adapter';
-import { getStageItemLookup } from '../../../../../services/lookups';
-import TournamentLayout from '../../../_tournament_layout';
+} from '@services/adapter';
+import { getStageItemLookup } from '@services/lookups';
 
 function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: Tournament }) {
   return (
@@ -119,7 +117,7 @@ export default function SwissTournamentPage() {
 
     if (activeStage != null && activeStage.stage_items != null) {
       const draftRounds = stageItem.rounds.filter(
-        (round: Round) => round.stage_item_id === stageItemId && round.is_draft
+        (round: RoundWithMatches) => round.stage_item_id === stageItemId && round.is_draft
       );
 
       if (draftRounds != null && draftRounds.length > 0) {

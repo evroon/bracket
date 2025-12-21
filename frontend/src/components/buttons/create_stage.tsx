@@ -1,11 +1,15 @@
 import { Button } from '@mantine/core';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Tournament } from '../../openapi';
-import { createStage } from '../../services/stage';
+import {
+  StageItemInputOptionsResponse,
+  StageRankingResponse,
+  StagesWithStageItemsResponse,
+  Tournament,
+} from '@openapi';
+import { createStage } from '@services/stage';
 
 export default function CreateStageButton({
   tournament,
@@ -14,9 +18,9 @@ export default function CreateStageButton({
   swrRankingsPerStageItemResponse,
 }: {
   tournament: Tournament;
-  swrStagesResponse: SWRResponse;
-  swrAvailableInputsResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const { t } = useTranslation();
 
@@ -44,7 +48,7 @@ export function CreateStageButtonLarge({
   swrStagesResponse,
 }: {
   tournament: Tournament;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const { t } = useTranslation();
 

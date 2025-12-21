@@ -1,4 +1,4 @@
-import { UserToRegister, UserToUpdate } from '../openapi';
+import { UserToRegister, UserToUpdate } from '@openapi';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function performLogin(username: string, password: string) {

@@ -6,17 +6,22 @@ import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { FullTeamWithPlayers, Tournament } from '../../openapi';
-import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '../../services/adapter';
+import {
+  FullTeamWithPlayers,
+  TeamsWithPlayersResponse,
+  Tournament,
+  TournamentResponse,
+} from '@openapi';
+import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '@services/adapter';
 
 export function DropzoneButton({
   tournamentId,
-  swrResponse,
+  swrResponse: swrTeamsResponse,
   variant,
   teamId,
 }: {
   tournamentId: Tournament['id'];
-  swrResponse: SWRResponse;
+  swrResponse: SWRResponse<TeamsWithPlayersResponse> | SWRResponse<TournamentResponse>;
   variant: 'tournament' | 'team';
   teamId?: FullTeamWithPlayers['id'];
 }) {
@@ -40,7 +45,7 @@ export function DropzoneButton({
         openRef={openRef}
         onDrop={async (files) => {
           const response = await useUploadLogo(files[0]);
-          await swrResponse.mutate();
+          await swrTeamsResponse.mutate();
           handleRequestError(response as unknown as AxiosError); // TODO: Check with Erik if this is correct
         }}
         // className={classes.dropzone}

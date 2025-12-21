@@ -14,15 +14,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { FullTeamWithPlayers, Player } from '../../openapi';
-import {
-  getBaseApiUrl,
-  getPlayers,
-  removeTeamLogo,
-  requestSucceeded,
-} from '../../services/adapter';
-import { updateTeam } from '../../services/team';
-import { DropzoneButton } from '../utils/file_upload';
+import { DropzoneButton } from '@components/utils/file_upload';
+import { FullTeamWithPlayers, Player, TeamsWithPlayersResponse } from '@openapi';
+import { getBaseApiUrl, getPlayers, removeTeamLogo, requestSucceeded } from '@services/adapter';
+import { updateTeam } from '@services/team';
 
 function TeamLogo({ team }: { team: FullTeamWithPlayers | null }) {
   if (team == null || team.logo_path == null) return null;
@@ -42,7 +37,7 @@ export default function TeamUpdateModal({
 }: {
   tournament_id: number;
   team: FullTeamWithPlayers;
-  swrTeamsResponse: SWRResponse;
+  swrTeamsResponse: SWRResponse<TeamsWithPlayersResponse>;
 }) {
   const { t } = useTranslation();
   const { data } = getPlayers(tournament_id, false);

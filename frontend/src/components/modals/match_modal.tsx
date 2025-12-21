@@ -1,25 +1,25 @@
 import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../interfaces/match';
-import { Round } from '../../interfaces/round';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
-import { deleteMatch, updateMatch } from '../../services/match';
-import DeleteButton from '../buttons/delete';
+import DeleteButton from '@components/buttons/delete';
+import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { getMatchLookup, getStageItemLookup } from '@services/lookups';
+import { deleteMatch, updateMatch } from '@services/match';
 
 function MatchDeleteButton({
   tournamentData,
   match,
-  swrRoundsResponse,
+  swrStagesResponse,
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  match: MatchInterface;
-  swrRoundsResponse: SWRResponse;
+  match: MatchWithDetails;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ function MatchDeleteButton({
       fullWidth
       onClick={async () => {
         await deleteMatch(tournamentData.id, match.id);
-        await swrRoundsResponse.mutate();
+        await swrStagesResponse.mutate();
         if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
       }}
       style={{ marginTop: '1rem' }}
@@ -47,11 +47,11 @@ function MatchModalForm({
   round,
 }: {
   tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
+  match: MatchWithDetails | null;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
   setOpened: any;
-  round: Round | null;
+  round: RoundWithMatches | null;
 }) {
   if (match == null) {
     return null;
@@ -181,7 +181,7 @@ function MatchModalForm({
       </form>
       {round && round.is_draft && (
         <MatchDeleteButton
-          swrRoundsResponse={swrStagesResponse}
+          swrStagesResponse={swrStagesResponse}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
           tournamentData={tournamentData}
           match={match}
@@ -201,12 +201,12 @@ export default function MatchModal({
   round,
 }: {
   tournamentData: TournamentMinimal;
-  match: MatchInterface | null;
-  swrStagesResponse: SWRResponse;
+  match: MatchWithDetails | null;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
   opened: boolean;
   setOpened: any;
-  round: Round | null;
+  round: RoundWithMatches | null;
 }) {
   const { t } = useTranslation();
 

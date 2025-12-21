@@ -8,14 +8,13 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
-import React from 'react';
 import QRCode from 'react-qr-code';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
-import { Tournament } from '../../openapi';
-import { getBaseApiUrl } from '../../services/adapter';
-import PreloadLink from '../utils/link';
-import { getBaseURL } from '../utils/util';
+import PreloadLink from '@components/utils/link';
+import { getBaseURL } from '@components/utils/util';
+import { Tournament } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
 import classes from './layout.module.css';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {

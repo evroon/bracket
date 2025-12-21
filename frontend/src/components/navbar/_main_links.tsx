@@ -14,13 +14,12 @@ import {
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
-import { getBaseApiUrl } from '../../services/adapter';
-import PreloadLink from '../utils/link';
-import { capitalize } from '../utils/util';
+import PreloadLink from '@components/utils/link';
+import { capitalize } from '@components/utils/util';
+import { getBaseApiUrl } from '@services/adapter';
 import classes from './_main_links.module.css';
 
 interface MainLinkProps {

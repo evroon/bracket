@@ -6,13 +6,13 @@ import {
   TournamentQRCode,
   TournamentTitle,
   getTournamentHeadTitle,
-} from '../../../../../components/dashboard/layout';
-import RequestErrorAlert from '../../../../../components/utils/error_alert';
-import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
-import { setTitle } from '../../../../../components/utils/util';
-import { getStagesLive, getTeamsLive } from '../../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../../services/dashboard';
-import { StandingsContent } from '../standings';
+} from '@components/dashboard/layout';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonTwoColumns } from '@components/utils/skeletons';
+import { setTitle } from '@components/utils/util';
+import { StandingsContent } from '@pages/tournaments/[id]/dashboard/standings';
+import { getStagesLive, getTeamsLive } from '@services/adapter';
+import { getTournamentResponseByEndpointName } from '@services/dashboard';
 
 export default function StandingsPresentPage() {
   const tournamentDataFull = getTournamentResponseByEndpointName();

@@ -1,11 +1,12 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { createCourt } from '../../services/court';
+import { CourtsResponse } from '@openapi';
+import { createCourt } from '@services/court';
 
 export default function CourtModal({
   tournamentId,
@@ -14,7 +15,7 @@ export default function CourtModal({
 }: {
   buttonSize: 'xs' | 'lg';
   tournamentId: number;
-  swrCourtsResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse<CourtsResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

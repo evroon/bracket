@@ -1,21 +1,15 @@
 import { Grid, Select, Title } from '@mantine/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import TeamCreateModal from '../../../components/modals/team_create_modal';
-import { getTableState, tableStateToPagination } from '../../../components/tables/table';
-import TeamsTable from '../../../components/tables/teams';
-import {
-  capitalize,
-  getTournamentIdFromRouter,
-  responseIsValid,
-} from '../../../components/utils/util';
-import { StageItemWithRounds } from '../../../interfaces/stage_item';
-import { StageItemInput } from '../../../interfaces/stage_item_input';
-import { FullTeamWithPlayers } from '../../../openapi';
-import { getStages, getTeamsPaginated } from '../../../services/adapter';
-import { getStageItemList, getStageItemTeamIdsLookup } from '../../../services/lookups';
-import TournamentLayout from '../_tournament_layout';
+import TeamCreateModal from '@components/modals/team_create_modal';
+import { getTableState, tableStateToPagination } from '@components/tables/table';
+import TeamsTable from '@components/tables/teams';
+import { capitalize, getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
+import { FullTeamWithPlayers, StageItemWithRounds } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getStages, getTeamsPaginated } from '@services/adapter';
+import { getStageItemList, getStageItemTeamIdsLookup } from '@services/lookups';
 
 function StageItemSelect({
   groupStageItems,

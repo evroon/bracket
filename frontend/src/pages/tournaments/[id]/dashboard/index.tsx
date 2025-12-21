@@ -4,16 +4,16 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DashboardFooter } from '../../../../components/dashboard/footer';
-import { DoubleHeader, getTournamentHeadTitle } from '../../../../components/dashboard/layout';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
-import { Time, compareDateTime, formatTime } from '../../../../components/utils/datetime';
-import { Translator } from '../../../../components/utils/types';
-import { responseIsValid, setTitle } from '../../../../components/utils/util';
-import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
-import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../services/dashboard';
-import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
+import { DashboardFooter } from '@components/dashboard/footer';
+import { DoubleHeader, getTournamentHeadTitle } from '@components/dashboard/layout';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { Time, compareDateTime, formatTime } from '@components/utils/datetime';
+import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
+import { Translator } from '@components/utils/types';
+import { responseIsValid, setTitle } from '@components/utils/util';
+import { getCourtsLive, getStagesLive } from '@services/adapter';
+import { getTournamentResponseByEndpointName } from '@services/dashboard';
+import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
 
 function ScheduleRow({
   data,

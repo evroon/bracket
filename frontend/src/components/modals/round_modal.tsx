@@ -1,15 +1,15 @@
 import { ActionIcon, Button, Modal, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuConstruction } from 'react-icons/lu';
 import { SWRResponse } from 'swr';
 
-import { Round } from '../../interfaces/round';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { deleteRound, updateRound } from '../../services/round';
-import DeleteButton from '../buttons/delete';
+import DeleteButton from '@components/buttons/delete';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { deleteRound, updateRound } from '@services/round';
 
 function RoundDeleteButton({
   tournamentData,
@@ -18,8 +18,8 @@ function RoundDeleteButton({
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  round: Round;
-  swrStagesResponse: SWRResponse;
+  round: RoundWithMatches;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const { t } = useTranslation();
@@ -45,8 +45,8 @@ export default function RoundModal({
   swrUpcomingMatchesResponse,
 }: {
   tournamentData: TournamentMinimal;
-  round: Round;
-  swrStagesResponse: SWRResponse;
+  round: RoundWithMatches;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
 }) {
   const { t } = useTranslation();

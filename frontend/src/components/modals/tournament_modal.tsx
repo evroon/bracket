@@ -12,15 +12,15 @@ import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
 import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club, Tournament } from '../../openapi';
-import { getBaseApiUrl, getClubs } from '../../services/adapter';
-import { createTournament } from '../../services/tournament';
-import SaveButton from '../buttons/save';
-import { assert_not_none } from '../utils/assert';
+import SaveButton from '@components/buttons/save';
+import { assert_not_none } from '@components/utils/assert';
+import { Club, Tournament, TournamentsResponse } from '@openapi';
+import { getBaseApiUrl, getClubs } from '@services/adapter';
+import { createTournament } from '@services/tournament';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -39,7 +39,7 @@ function GeneralTournamentForm({
   clubs,
 }: {
   setOpened: any;
-  swrTournamentsResponse: SWRResponse;
+  swrTournamentsResponse: SWRResponse<TournamentsResponse>;
   clubs: Club[];
 }) {
   const { t } = useTranslation();
@@ -174,7 +174,7 @@ function GeneralTournamentForm({
 export default function TournamentModal({
   swrTournamentsResponse,
 }: {
-  swrTournamentsResponse: SWRResponse;
+  swrTournamentsResponse: SWRResponse<TournamentsResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

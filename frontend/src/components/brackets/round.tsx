@@ -1,16 +1,11 @@
 import { Center, Grid, Title } from '@mantine/core';
-import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { BracketDisplaySettings } from '../../interfaces/brackets';
-import {
-  MatchInterface,
-  isMatchHappening,
-  isMatchInTheFutureOrPresent,
-} from '../../interfaces/match';
-import { Round } from '../../interfaces/round';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import RoundModal from '../modals/round_modal';
+import RoundModal from '@components/modals/round_modal';
+import { BracketDisplaySettings } from '@components/utils/brackets';
+import { isMatchHappening, isMatchInTheFutureOrPresent } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
 import Match from './match';
 
 export default function RoundComponent({
@@ -22,8 +17,8 @@ export default function RoundComponent({
   displaySettings,
 }: {
   tournamentData: TournamentMinimal;
-  round: Round;
-  swrStagesResponse: SWRResponse;
+  round: RoundWithMatches;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
   readOnly: boolean;
   displaySettings: BracketDisplaySettings;
@@ -33,7 +28,7 @@ export default function RoundComponent({
       (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
     )
     .filter(
-      (match: MatchInterface) =>
+      (match: MatchWithDetails) =>
         displaySettings.matchVisibility === 'all' ||
         (displaySettings.matchVisibility === 'future-only' && isMatchInTheFutureOrPresent(match)) ||
         (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match))

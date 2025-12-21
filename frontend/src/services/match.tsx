@@ -1,6 +1,6 @@
 import { showNotification } from '@mantine/notifications';
 
-import { MatchBody, MatchCreateBodyFrontend, MatchRescheduleBody } from '../openapi';
+import { MatchBody, MatchCreateBodyFrontend, MatchRescheduleBody } from '@openapi';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createMatch(tournament_id: number, match: MatchCreateBodyFrontend) {

@@ -1,19 +1,18 @@
 import { Accordion, Badge, Button, Center, Checkbox, Container, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import DeleteButton from '../../../components/buttons/delete';
-import { EmptyTableInfo } from '../../../components/no_content/empty_table_info';
-import RequestErrorAlert from '../../../components/utils/error_alert';
-import { TableSkeletonSingleColumn } from '../../../components/utils/skeletons';
-import { Translator } from '../../../components/utils/types';
-import { getTournamentIdFromRouter } from '../../../components/utils/util';
-import { Ranking, Tournament } from '../../../openapi';
-import { getRankings, getTournamentById } from '../../../services/adapter';
-import { createRanking, deleteRanking, editRanking } from '../../../services/ranking';
-import TournamentLayout from '../_tournament_layout';
+import DeleteButton from '@components/buttons/delete';
+import { EmptyTableInfo } from '@components/no_content/empty_table_info';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { Translator } from '@components/utils/types';
+import { getTournamentIdFromRouter } from '@components/utils/util';
+import { Ranking, RankingsResponse, Tournament } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getRankings, getTournamentById } from '@services/adapter';
+import { createRanking, deleteRanking, editRanking } from '@services/ranking';
 
 function RankingDeleteButton({
   t,
@@ -24,7 +23,7 @@ function RankingDeleteButton({
   t: Translator;
   tournament: Tournament;
   ranking: Ranking;
-  swrRankingsResponse: SWRResponse;
+  swrRankingsResponse: SWRResponse<RankingsResponse>;
 }) {
   if (ranking.position === 0) {
     return (
@@ -56,7 +55,7 @@ function EditRankingForm({
   t: Translator;
   tournament: Tournament;
   ranking: Ranking;
-  swrRankingsResponse: SWRResponse;
+  swrRankingsResponse: SWRResponse<RankingsResponse>;
 }) {
   const form = useForm({
     initialValues: {
@@ -136,7 +135,7 @@ function RankingForm({
 }: {
   t: Translator;
   tournament: Tournament;
-  swrRankingsResponse: SWRResponse;
+  swrRankingsResponse: SWRResponse<RankingsResponse>;
 }) {
   const rankings: Ranking[] = swrRankingsResponse.data != null ? swrRankingsResponse.data.data : [];
 

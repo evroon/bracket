@@ -1,13 +1,17 @@
 import { Alert, Button, Checkbox, Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
-import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { startNextRound } from '../../services/round';
+import {
+  StageItemWithRounds,
+  StagesWithStageItemsResponse,
+  UpcomingMatchesResponse,
+} from '@openapi';
+import { startNextRound } from '@services/round';
 
 export default function ActivateNextRoundModal({
   tournamentId,
@@ -17,8 +21,8 @@ export default function ActivateNextRoundModal({
 }: {
   tournamentId: number;
   stageItem: StageItemWithRounds;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

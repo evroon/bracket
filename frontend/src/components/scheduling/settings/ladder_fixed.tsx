@@ -1,15 +1,17 @@
 import { Divider, Flex, Group, NumberInput, Progress, Radio, Stack } from '@mantine/core';
 import { IconListNumbers, IconMedal, IconRepeat } from '@tabler/icons-react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { SchedulerSettings } from '../../../interfaces/match';
-import { Round } from '../../../interfaces/round';
+import { SchedulerSettings } from '@components/utils/match';
+import { RoundWithMatches } from '@openapi';
 
 export type SchedulingProgress = { courtsCount: number; scheduledMatchesCount: number };
 
-export function getSwissRoundSchedulingProgress(draftRound: Round, swrCourtsResponse: SWRResponse) {
+export function getSwissRoundSchedulingProgress(
+  draftRound: RoundWithMatches,
+  swrCourtsResponse: SWRResponse
+) {
   return {
     courtsCount: swrCourtsResponse.data?.data?.length || 0,
     scheduledMatchesCount: draftRound?.matches.length,

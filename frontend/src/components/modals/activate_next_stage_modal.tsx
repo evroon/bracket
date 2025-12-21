@@ -2,32 +2,26 @@ import { Alert, Button, Container, Grid, Modal, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { FaArrowRight } from '@react-icons/all-files/fa/FaArrowRight';
 import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { StageItemInput, formatStageItemInput } from '../../interfaces/stage_item_input';
-import { FullTeamWithPlayers } from '../../openapi';
-import { getStageItemLookup } from '../../services/lookups';
-import { activateNextStage } from '../../services/stage';
-import RequestErrorAlert from '../utils/error_alert';
-import { GenericSkeleton } from '../utils/skeletons';
-
-type Update = { stage_item_input: StageItemInput; team: FullTeamWithPlayers };
-type StageItemUpdate = { updates: Update[]; stageItem: StageItemWithRounds };
+import RequestErrorAlert from '@components/utils/error_alert';
+import { GenericSkeleton } from '@components/utils/skeletons';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { StageItemInputUpdate, StageRankingResponse, StagesWithStageItemsResponse } from '@openapi';
+import { getStageItemLookup } from '@services/lookups';
+import { activateNextStage } from '@services/stage';
 
 function UpdatesToStageItemInputsTable({
   stageItemsLookup,
   updates,
 }: {
   stageItemsLookup: any;
-  updates: Update[];
+  updates: StageItemInputUpdate[];
 }) {
   return updates
-    .sort((si1: Update, si2: Update) =>
-      si1.stage_item_input.slot > si2.stage_item_input.slot ? 1 : -1
-    )
+    .sort((si1, si2) => (si1.stage_item_input.slot > si2.stage_item_input.slot ? 1 : -1))
     .map((update) => (
       <Grid>
         <Grid.Col span={{ sm: 6 }}>
@@ -46,7 +40,7 @@ function UpdatesToStageItemInputsTables({
   swrRankingsPerStageItemResponse,
 }: {
   stageItemsLookup: any;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   if (swrRankingsPerStageItemResponse.isLoading) {
     return <GenericSkeleton />;
@@ -55,17 +49,15 @@ function UpdatesToStageItemInputsTables({
     return <RequestErrorAlert error={swrRankingsPerStageItemResponse.error} />;
   }
 
-  const items = swrRankingsPerStageItemResponse.data.data;
+  const items = swrRankingsPerStageItemResponse.data?.data || {};
   return Object.keys(items)
     .map((stageItemId) => ({
       updates: items[stageItemId],
       stageItem: stageItemsLookup[stageItemId],
     }))
-    .filter((item: StageItemUpdate) => item.stageItem != null)
-    .sort((si1: StageItemUpdate, si2: StageItemUpdate) =>
-      si1.stageItem.name > si2.stageItem.name ? 1 : -1
-    )
-    .map((item: StageItemUpdate) => (
+    .filter((item) => item.stageItem != null)
+    .sort((si1, si2) => (si1.stageItem.name > si2.stageItem.name ? 1 : -1))
+    .map((item) => (
       <>
         <Title size="h2" mt="1rem">
           {item.stageItem.name}
@@ -81,7 +73,7 @@ export default function ActivateNextStageModal({
   swrRankingsPerStageItemResponse,
 }: {
   tournamentId: number;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrRankingsPerStageItemResponse: SWRResponse;
 }) {
   const { t } = useTranslation();

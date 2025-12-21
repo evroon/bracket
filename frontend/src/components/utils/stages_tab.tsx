@@ -2,7 +2,7 @@ import { Tabs } from '@mantine/core';
 import { BiCircle } from '@react-icons/all-files/bi/BiCircle';
 import { MdPlayCircleFilled } from '@react-icons/all-files/md/MdPlayCircleFilled';
 
-import { StageWithStageItems } from '../../interfaces/stage';
+import { StageWithStageItems } from '@openapi';
 import { responseIsValid } from './util';
 
 export default function StagesTab({ swrStagesResponse, selectedStageId, setSelectedStageId }: any) {

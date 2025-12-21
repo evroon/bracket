@@ -1,7 +1,6 @@
 import { Center, Group, Image, Text, Title, UnstyledButton } from '@mantine/core';
-import React from 'react';
 
-import PreloadLink from '../utils/link';
+import PreloadLink from '@components/utils/link';
 
 export function Brand() {
   return (

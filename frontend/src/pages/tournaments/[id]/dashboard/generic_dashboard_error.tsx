@@ -1,6 +1,6 @@
 import { Container, Text, Title } from '@mantine/core';
 
-import classes from '../../../404.module.css';
+import classes from '@pages/404.module.css';
 
 export default function GenericErrorPage() {
   return (

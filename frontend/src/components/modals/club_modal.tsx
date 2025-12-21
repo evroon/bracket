@@ -6,16 +6,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Club } from '../../openapi';
-import { createClub, updateClub } from '../../services/club';
-import SaveButton from '../buttons/save';
+import SaveButton from '@components/buttons/save';
+import { Club, ClubsResponse } from '@openapi';
+import { createClub, updateClub } from '@services/club';
 
 export default function ClubModal({
   club,
   swrClubsResponse,
 }: {
   club: Club | null;
-  swrClubsResponse: SWRResponse;
+  swrClubsResponse: SWRResponse<ClubsResponse>;
 }) {
   const { t } = useTranslation();
   const is_create_form = club == null;

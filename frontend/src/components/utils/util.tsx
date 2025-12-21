@@ -1,10 +1,9 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Center } from '@mantine/core';
-import React from 'react';
 import { useParams } from 'react-router';
 import { SWRResponse } from 'swr';
 
-import classes from '../../pages/create_account.module.css';
+import classes from '@pages/create_account.module.css';
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);

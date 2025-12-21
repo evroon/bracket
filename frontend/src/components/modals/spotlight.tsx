@@ -12,11 +12,10 @@ import {
   IconUsers,
   IconUsersGroup,
 } from '@tabler/icons-react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { getTournamentIdFromRouter } from '../utils/util';
+import { getTournamentIdFromRouter } from '@components/utils/util';
 
 export function BracketSpotlight() {
   const { t } = useTranslation();

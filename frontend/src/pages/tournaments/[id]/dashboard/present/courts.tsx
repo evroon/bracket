@@ -2,24 +2,20 @@ import { Grid } from '@mantine/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CourtsLarge, { CourtBadge } from '../../../../../components/brackets/courts_large';
+import CourtsLarge, { CourtBadge } from '@components/brackets/courts_large';
 import {
   TournamentLogo,
   TournamentQRCode,
   TournamentTitle,
   getTournamentHeadTitle,
-} from '../../../../../components/dashboard/layout';
-import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
-import { responseIsValid, setTitle } from '../../../../../components/utils/util';
-import {
-  MatchInterface,
-  isMatchHappening,
-  isMatchInTheFuture,
-} from '../../../../../interfaces/match';
-import { Court } from '../../../../../openapi';
-import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../../services/dashboard';
-import { getMatchLookupByCourt, getStageItemLookup } from '../../../../../services/lookups';
+} from '@components/dashboard/layout';
+import { isMatchHappening, isMatchInTheFuture } from '@components/utils/match';
+import { TableSkeletonTwoColumns } from '@components/utils/skeletons';
+import { responseIsValid, setTitle } from '@components/utils/util';
+import { Court, MatchWithDetails } from '@openapi';
+import { getCourtsLive, getStagesLive } from '@services/adapter';
+import { getTournamentResponseByEndpointName } from '@services/dashboard';
+import { getMatchLookupByCourt, getStageItemLookup } from '@services/lookups';
 
 export default function CourtsPresentPage() {
   const { t } = useTranslation();
@@ -48,10 +44,10 @@ export default function CourtsPresentPage() {
 
   const rows = courts.map((court: Court) => {
     const matchesForCourt = matchesByCourtId[court.id] || [];
-    const activeMatch = matchesForCourt.filter((m: MatchInterface) => isMatchHappening(m))[0];
+    const activeMatch = matchesForCourt.filter((m: MatchWithDetails) => isMatchHappening(m))[0];
     const futureMatch = matchesForCourt
-      .filter((m: MatchInterface) => isMatchInTheFuture(m))
-      .sort((m1: MatchInterface, m2: MatchInterface) =>
+      .filter((m: MatchWithDetails) => isMatchInTheFuture(m))
+      .sort((m1: MatchWithDetails, m2: MatchWithDetails) =>
         (m1.start_time || '') > (m2.start_time || '') ? 1 : -1
       )[0];
 

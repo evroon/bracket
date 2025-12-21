@@ -4,23 +4,23 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../404';
-import { DashboardFooter } from '../../../../components/dashboard/footer';
-import { DoubleHeader, getTournamentHeadTitle } from '../../../../components/dashboard/layout';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
-import { StandingsTableForStageItem } from '../../../../components/tables/standings';
-import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
-import { responseIsValid, setTitle } from '../../../../components/utils/util';
-import { getStagesLive } from '../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../services/dashboard';
-import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../services/lookups';
+import { DashboardFooter } from '@components/dashboard/footer';
+import { DoubleHeader, getTournamentHeadTitle } from '@components/dashboard/layout';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { StandingsTableForStageItem } from '@components/tables/standings';
+import { TableSkeletonTwoColumns } from '@components/utils/skeletons';
+import { responseIsValid, setTitle } from '@components/utils/util';
+import { StagesWithStageItemsResponse } from '@openapi';
+import { getStagesLive } from '@services/adapter';
+import { getTournamentResponseByEndpointName } from '@services/dashboard';
+import { getStageItemLookup, getStageItemTeamsLookup } from '@services/lookups';
 
 export function StandingsContent({
   swrStagesResponse,
   fontSizeInPixels,
   maxTeamsToDisplay,
 }: {
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   fontSizeInPixels: number;
   maxTeamsToDisplay: number;
 }) {

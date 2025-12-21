@@ -1,6 +1,5 @@
 import { Code, Text, Textarea } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function MultiPlayersInput({ form }: { form: UseFormReturnType<any> }) {

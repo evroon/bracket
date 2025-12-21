@@ -1,6 +1,6 @@
 import { Anchor, Container, Group } from '@mantine/core';
 
-import { BrandFooter } from '../navbar/_brand';
+import { BrandFooter } from '@components/navbar/_brand';
 import classes from './footer.module.css';
 
 const links = [
