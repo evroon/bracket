@@ -13,7 +13,6 @@ def field_is_required(
     which causes hey-api to type fields as `field?: string | null` which is hard to work with.
 
     Field can still be typed as `type: ["string", "null"]` to allow for nullable values.
-
     """
     return True
 
