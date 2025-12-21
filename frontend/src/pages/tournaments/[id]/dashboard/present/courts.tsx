@@ -1,9 +1,7 @@
 import { Grid } from '@mantine/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../../404';
 import CourtsLarge, { CourtBadge } from '../../../../../components/brackets/courts_large';
 import {
   TournamentLogo,
@@ -20,31 +18,27 @@ import {
 } from '../../../../../interfaces/match';
 import { Court } from '../../../../../openapi';
 import { getCourtsLive, getStagesLive } from '../../../../../services/adapter';
+import { getTournamentResponseByEndpointName } from '../../../../../services/dashboard';
 import { getMatchLookupByCourt, getStageItemLookup } from '../../../../../services/lookups';
-import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
 
 export default function CourtsPresentPage() {
   const { t } = useTranslation();
-  const tournamentResponse = getTournamentResponseByEndpointName();
+  const tournamentDataFull = getTournamentResponseByEndpointName();
+  const tournamentValid = !React.isValidElement(tournamentDataFull);
 
-  // Hack to avoid unequal number of rendered hooks.
-  const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : null;
+  const swrCourtsResponse = getCourtsLive(tournamentValid ? tournamentDataFull.id : null);
+  const swrStagesResponse = getStagesLive(tournamentValid ? tournamentDataFull.id : null);
 
-  const swrStagesResponse: SWRResponse = getStagesLive(tournamentId);
-  const swrCourtsResponse: SWRResponse = getCourtsLive(tournamentId);
+  if (!tournamentValid) {
+    return tournamentDataFull;
+  }
 
-  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
-
-  setTitle(getTournamentHeadTitle(tournamentDataFull));
-
-  if (swrStagesResponse.isLoading || swrCourtsResponse.isLoading) {
+  if (swrStagesResponse.isLoading || swrCourtsResponse.data == null || !tournamentValid) {
     return <TableSkeletonTwoColumns />;
   }
 
-  if (notFound) {
-    return <NotFoundTitle />;
-  }
+  setTitle(getTournamentHeadTitle(tournamentDataFull));
+
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
 
   const courts = responseIsValid(swrCourtsResponse) ? swrCourtsResponse.data.data : [];
@@ -58,7 +52,7 @@ export default function CourtsPresentPage() {
     const futureMatch = matchesForCourt
       .filter((m: MatchInterface) => isMatchInTheFuture(m))
       .sort((m1: MatchInterface, m2: MatchInterface) =>
-        m1.start_time > m2.start_time ? 1 : -1
+        (m1.start_time || '') > (m2.start_time || '') ? 1 : -1
       )[0];
 
     return (

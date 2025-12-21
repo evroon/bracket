@@ -54,8 +54,12 @@
           }
         },
         "required": [
+          "grant_type",
           "username",
-          "password"
+          "password",
+          "scope",
+          "client_id",
+          "client_secret"
         ],
         "title": "Body_login_for_access_token_token_post",
         "type": "object"
@@ -75,6 +79,9 @@
             "title": "File"
           }
         },
+        "required": [
+          "file"
+        ],
         "title": "Body_update_team_logo_tournaments__tournament_id__teams__team_id__logo_post",
         "type": "object"
       },
@@ -93,6 +100,9 @@
             "title": "File"
           }
         },
+        "required": [
+          "file"
+        ],
         "title": "Body_upload_logo_tournaments__tournament_id__logo_post",
         "type": "object"
       },
@@ -326,6 +336,12 @@
           "name",
           "tournament_id",
           "active",
+          "elo_score",
+          "swiss_score",
+          "wins",
+          "draws",
+          "losses",
+          "logo_path",
           "id",
           "players"
         ],
@@ -521,14 +537,25 @@
         },
         "required": [
           "created",
+          "start_time",
           "duration_minutes",
           "margin_minutes",
+          "custom_duration_minutes",
+          "custom_margin_minutes",
+          "position_in_schedule",
           "round_id",
           "stage_item_input1_score",
           "stage_item_input2_score",
+          "court_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
-          "id"
+          "stage_item_input1_id",
+          "stage_item_input2_id",
+          "stage_item_input1_winner_from_match_id",
+          "stage_item_input2_winner_from_match_id",
+          "id",
+          "stage_item_input1",
+          "stage_item_input2"
         ],
         "title": "Match",
         "type": "object"
@@ -584,7 +611,12 @@
           }
         },
         "required": [
-          "round_id"
+          "round_id",
+          "stage_item_input1_score",
+          "stage_item_input2_score",
+          "court_id",
+          "custom_duration_minutes",
+          "custom_margin_minutes"
         ],
         "title": "MatchBody",
         "type": "object"
@@ -652,7 +684,12 @@
           }
         },
         "required": [
-          "round_id"
+          "round_id",
+          "court_id",
+          "stage_item_input1_id",
+          "stage_item_input2_id",
+          "stage_item_input1_winner_from_match_id",
+          "stage_item_input2_winner_from_match_id"
         ],
         "title": "MatchCreateBodyFrontend",
         "type": "object"
@@ -872,14 +909,26 @@
         },
         "required": [
           "created",
+          "start_time",
           "duration_minutes",
           "margin_minutes",
+          "custom_duration_minutes",
+          "custom_margin_minutes",
+          "position_in_schedule",
           "round_id",
           "stage_item_input1_score",
           "stage_item_input2_score",
+          "court_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
-          "id"
+          "stage_item_input1_id",
+          "stage_item_input2_id",
+          "stage_item_input1_winner_from_match_id",
+          "stage_item_input2_winner_from_match_id",
+          "id",
+          "stage_item_input1",
+          "stage_item_input2",
+          "court"
         ],
         "title": "MatchWithDetails",
         "type": "object"
@@ -1064,16 +1113,26 @@
         },
         "required": [
           "created",
+          "start_time",
           "duration_minutes",
           "margin_minutes",
+          "custom_duration_minutes",
+          "custom_margin_minutes",
+          "position_in_schedule",
           "round_id",
           "stage_item_input1_score",
           "stage_item_input2_score",
+          "court_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
+          "stage_item_input1_id",
+          "stage_item_input2_id",
+          "stage_item_input1_winner_from_match_id",
+          "stage_item_input2_winner_from_match_id",
           "id",
           "stage_item_input1",
-          "stage_item_input2"
+          "stage_item_input2",
+          "court"
         ],
         "title": "MatchWithDetailsDefinitive",
         "type": "object"
@@ -1176,6 +1235,11 @@
           "name",
           "created",
           "tournament_id",
+          "elo_score",
+          "swiss_score",
+          "wins",
+          "draws",
+          "losses",
           "id"
         ],
         "title": "Player",
@@ -1388,6 +1452,12 @@
             "title": "Win Points"
           }
         },
+        "required": [
+          "win_points",
+          "draw_points",
+          "loss_points",
+          "add_score_points"
+        ],
         "title": "RankingCreateBody",
         "type": "object"
       },
@@ -1426,6 +1496,7 @@
           }
         },
         "required": [
+          "name",
           "stage_item_id"
         ],
         "title": "RoundCreateBody",
@@ -1558,6 +1629,9 @@
             "type": "string"
           }
         },
+        "required": [
+          "direction"
+        ],
         "title": "StageActivateBody",
         "type": "object"
       },
@@ -1576,6 +1650,9 @@
             "title": "Adjust To Time"
           }
         },
+        "required": [
+          "adjust_to_time"
+        ],
         "title": "StageItemActivateNextBody",
         "type": "object"
       },
@@ -1619,8 +1696,10 @@
         },
         "required": [
           "stage_id",
+          "name",
           "type",
-          "team_count"
+          "team_count",
+          "ranking_id"
         ],
         "title": "StageItemCreateBody",
         "type": "object"
@@ -1685,9 +1764,17 @@
           }
         },
         "required": [
+          "points",
+          "wins",
+          "draws",
+          "losses",
           "id",
           "slot",
-          "tournament_id"
+          "tournament_id",
+          "stage_item_id",
+          "team_id",
+          "winner_from_stage_item_id",
+          "winner_position"
         ],
         "title": "StageItemInputEmpty",
         "type": "object"
@@ -1769,10 +1856,17 @@
           }
         },
         "required": [
+          "points",
+          "wins",
+          "draws",
+          "losses",
           "id",
           "slot",
           "tournament_id",
+          "stage_item_id",
           "team_id",
+          "winner_from_stage_item_id",
+          "winner_position",
           "team"
         ],
         "title": "StageItemInputFinal",
@@ -1906,9 +2000,15 @@
           }
         },
         "required": [
+          "points",
+          "wins",
+          "draws",
+          "losses",
           "id",
           "slot",
           "tournament_id",
+          "stage_item_id",
+          "team_id",
           "winner_from_stage_item_id",
           "winner_position"
         ],
@@ -1946,6 +2046,11 @@
             "type": "null"
           }
         },
+        "required": [
+          "team_id",
+          "winner_from_stage_item_id",
+          "winner_position"
+        ],
         "title": "StageItemInputUpdateBodyEmpty",
         "type": "object"
       },
@@ -2073,6 +2178,7 @@
           "created",
           "type",
           "team_count",
+          "ranking_id",
           "id",
           "rounds",
           "inputs",
@@ -2188,6 +2294,9 @@
             "type": "boolean"
           }
         },
+        "required": [
+          "success"
+        ],
         "title": "SuccessResponse",
         "type": "object"
       },
@@ -2323,6 +2432,12 @@
           "name",
           "tournament_id",
           "active",
+          "elo_score",
+          "swiss_score",
+          "wins",
+          "draws",
+          "losses",
+          "logo_path",
           "id"
         ],
         "title": "Team",
@@ -2504,8 +2619,11 @@
           "duration_minutes",
           "margin_minutes",
           "dashboard_public",
+          "dashboard_endpoint",
+          "logo_path",
           "players_can_be_in_multiple_teams",
           "auto_assign_courts",
+          "status",
           "id"
         ],
         "title": "Tournament",
@@ -2562,6 +2680,7 @@
           "start_time",
           "name",
           "dashboard_public",
+          "dashboard_endpoint",
           "players_can_be_in_multiple_teams",
           "auto_assign_courts",
           "duration_minutes",
@@ -2650,6 +2769,7 @@
           "start_time",
           "name",
           "dashboard_public",
+          "dashboard_endpoint",
           "players_can_be_in_multiple_teams",
           "auto_assign_courts",
           "duration_minutes",

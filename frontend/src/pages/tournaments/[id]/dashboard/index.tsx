@@ -12,8 +12,8 @@ import { Translator } from '../../../../components/utils/types';
 import { responseIsValid, setTitle } from '../../../../components/utils/util';
 import { formatMatchInput1, formatMatchInput2 } from '../../../../interfaces/match';
 import { getCourtsLive, getStagesLive } from '../../../../services/adapter';
+import { getTournamentResponseByEndpointName } from '../../../../services/dashboard';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../../services/lookups';
-import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 function ScheduleRow({
   data,
@@ -192,24 +192,27 @@ export function Schedule({
 }
 export default function DashboardSchedulePage() {
   const { t } = useTranslation();
-  const tournamentResponse = getTournamentResponseByEndpointName();
+  const tournamentDataFull = getTournamentResponseByEndpointName();
+  const tournamentValid = !React.isValidElement(tournamentDataFull);
 
-  const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : null;
-  const tournamentDataFull = tournamentResponse != null ? tournamentResponse[0] : null;
+  const swrStagesResponse = getStagesLive(tournamentValid ? tournamentDataFull.id : null);
+  const swrCourtsResponse = getCourtsLive(tournamentValid ? tournamentDataFull.id : null);
+
+  if (!tournamentValid) {
+    return tournamentDataFull;
+  }
 
   setTitle(getTournamentHeadTitle(tournamentDataFull));
-
-  const swrStagesResponse = getStagesLive(tournamentId);
-  const swrCourtsResponse = getCourtsLive(tournamentId);
 
   const stageItemsLookup = responseIsValid(swrStagesResponse)
     ? getStageItemLookup(swrStagesResponse)
     : [];
   const matchesLookup = responseIsValid(swrStagesResponse) ? getMatchLookup(swrStagesResponse) : [];
 
+  // TODO: show loading icon.
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;
+
   return (
     <>
       <DoubleHeader tournamentData={tournamentDataFull} />

@@ -1,8 +1,6 @@
 import { Grid } from '@mantine/core';
 import React from 'react';
-import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../../../404';
 import {
   TournamentLogo,
   TournamentQRCode,
@@ -13,30 +11,25 @@ import RequestErrorAlert from '../../../../../components/utils/error_alert';
 import { TableSkeletonTwoColumns } from '../../../../../components/utils/skeletons';
 import { setTitle } from '../../../../../components/utils/util';
 import { getStagesLive, getTeamsLive } from '../../../../../services/adapter';
-import { getTournamentResponseByEndpointName } from '../../../../../services/tournament';
+import { getTournamentResponseByEndpointName } from '../../../../../services/dashboard';
 import { StandingsContent } from '../standings';
 
 export default function StandingsPresentPage() {
-  const tournamentResponse = getTournamentResponseByEndpointName();
+  const tournamentDataFull = getTournamentResponseByEndpointName();
+  const tournamentValid = !React.isValidElement(tournamentDataFull);
 
-  // Hack to avoid unequal number of rendered hooks.
-  const notFound = tournamentResponse == null || tournamentResponse[0] == null;
-  const tournamentId = !notFound ? tournamentResponse[0].id : null;
+  const swrTeamsResponse = getTeamsLive(tournamentValid ? tournamentDataFull.id : null);
+  const swrStagesResponse = getStagesLive(tournamentValid ? tournamentDataFull.id : null);
 
-  const swrTeamsResponse: SWRResponse = getTeamsLive(tournamentId);
-  const swrStagesResponse = getStagesLive(tournamentId);
+  if (!tournamentValid) {
+    return tournamentDataFull;
+  }
 
-  const tournamentDataFull = tournamentResponse[0];
-
-  setTitle(getTournamentHeadTitle(tournamentDataFull));
-
-  if (swrTeamsResponse.isLoading) {
+  if (swrTeamsResponse.isLoading || tournamentDataFull == null) {
     return <TableSkeletonTwoColumns />;
   }
 
-  if (notFound) {
-    return <NotFoundTitle />;
-  }
+  setTitle(getTournamentHeadTitle(tournamentDataFull));
 
   if (swrTeamsResponse.error) return <RequestErrorAlert error={swrTeamsResponse.error} />;
 

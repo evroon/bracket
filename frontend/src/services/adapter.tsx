@@ -10,18 +10,15 @@ import { TournamentFilter } from '../interfaces/tournament';
 import {
   ClubsResponse,
   CourtsResponse,
-  GetClubsClubsGetResponses,
-  GetTournamentsTournamentsGetResponse,
   PlayersResponse,
   RankingsResponse,
   StageItemInputOptionsResponse,
   StageRankingResponse,
+  TeamsWithPlayersResponse,
   TournamentResponse,
   TournamentsResponse,
   UserPublicResponse,
-  getClubsClubsGet,
 } from '../openapi';
-import { RequestResult } from '../openapi/client';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
@@ -118,7 +115,9 @@ export function getClubs(): SWRResponse<ClubsResponse> {
   return useSWR('clubs', fetcher);
 }
 
-export function getTournamentByEndpointName(tournament_endpoint_name: string): SWRResponse {
+export function getTournamentByEndpointName(
+  tournament_endpoint_name: string
+): SWRResponse<TournamentsResponse> {
   return useSWR(`tournaments?endpoint_name=${tournament_endpoint_name}`, fetcher);
 }
 
@@ -150,21 +149,24 @@ export function getPlayersPaginated(
   );
 }
 
-export function getTeams(tournament_id: number | null): SWRResponse {
+export function getTeams(tournament_id: number | undefined): SWRResponse<TeamsWithPlayersResponse> {
   return useSWR(
     tournament_id == null ? null : `tournaments/${tournament_id}/teams?limit=100`,
     fetcher
   );
 }
 
-export function getTeamsPaginated(tournament_id: number, pagination: Pagination): SWRResponse {
+export function getTeamsPaginated(
+  tournament_id: number,
+  pagination: Pagination
+): SWRResponse<TeamsWithPlayersResponse> {
   return useSWR(
     `tournaments/${tournament_id}/teams?limit=${pagination.limit}&offset=${pagination.offset}&sort_by=${pagination.sort_by}&sort_direction=${pagination.sort_direction}`,
     fetcher
   );
 }
 
-export function getTeamsLive(tournament_id: number | null): SWRResponse {
+export function getTeamsLive(tournament_id: number | null): SWRResponse<TeamsWithPlayersResponse> {
   return useSWR(tournament_id == null ? null : `tournaments/${tournament_id}/teams`, fetcher, {
     refreshInterval: 5_000,
   });
@@ -210,8 +212,8 @@ export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
-export function getCourtsLive(tournament_id: number): SWRResponse<CourtsResponse> {
-  return useSWR(`tournaments/${tournament_id}/courts`, fetcher, {
+export function getCourtsLive(tournament_id: number | null): SWRResponse<CourtsResponse> {
+  return useSWR(tournament_id == null ? null : `tournaments/${tournament_id}/courts`, fetcher, {
     refreshInterval: 60_000,
   });
 }

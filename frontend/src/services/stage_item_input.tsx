@@ -2,7 +2,7 @@ import { createAxios, handleRequestError } from './adapter';
 
 export async function updateStageItemInput(
   tournament_id: number,
-  stage_item_id: number,
+  stage_item_id: number | null,
   stage_item_input_id: number,
   team_id: number | null,
   winner_position: number | null,

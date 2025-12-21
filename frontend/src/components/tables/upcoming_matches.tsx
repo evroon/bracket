@@ -6,9 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { FaCheck } from 'react-icons/fa6';
 import { SWRResponse } from 'swr';
 
-import { MatchCreateBodyInterface, UpcomingMatchInterface } from '../../interfaces/match';
 import { Round } from '../../interfaces/round';
-import { Tournament } from '../../openapi';
+import { SuggestedMatch, Tournament } from '../../openapi';
 import { createMatch } from '../../services/match';
 import { updateRound } from '../../services/round';
 import { NoContent } from '../no_content/empty_table_info';
@@ -27,7 +26,7 @@ export default function UpcomingMatchesTable({
   swrUpcomingMatchesResponse: SWRResponse;
 }) {
   const { t } = useTranslation();
-  const upcoming_matches: UpcomingMatchInterface[] =
+  const upcoming_matches: SuggestedMatch[] =
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
   const tableState = getTableState('elo_diff');
 
@@ -39,16 +38,18 @@ export default function UpcomingMatchesTable({
     return <RequestErrorAlert error={swrUpcomingMatchesResponse.error} />;
   }
 
-  async function scheduleMatch(upcoming_match: UpcomingMatchInterface) {
+  async function scheduleMatch(upcoming_match: SuggestedMatch) {
     if (
       upcoming_match.stage_item_input1.id != null &&
       upcoming_match.stage_item_input2.id != null
     ) {
-      const match_to_schedule: MatchCreateBodyInterface = {
+      const match_to_schedule = {
+        stage_item_input1_winner_from_match_id: null,
+        stage_item_input2_winner_from_match_id: null,
         stage_item_input1_id: upcoming_match.stage_item_input1.id,
         stage_item_input2_id: upcoming_match.stage_item_input2.id,
         round_id: draftRound.id,
-        label: '',
+        court_id: null,
       };
 
       await createMatch(tournamentData.id, match_to_schedule);
@@ -58,10 +59,8 @@ export default function UpcomingMatchesTable({
   }
 
   const rows = upcoming_matches
-    .sort((m1: UpcomingMatchInterface, m2: UpcomingMatchInterface) =>
-      sortTableEntries(m1, m2, tableState)
-    )
-    .map((upcoming_match: UpcomingMatchInterface) => (
+    .sort((m1, m2) => sortTableEntries(m1, m2, tableState))
+    .map((upcoming_match: SuggestedMatch) => (
       <Table.Tr
         key={`${upcoming_match.stage_item_input1.id} - ${upcoming_match.stage_item_input2.id}`}
       >
@@ -72,8 +71,18 @@ export default function UpcomingMatchesTable({
             </Badge>
           ) : null}
         </Table.Td>
-        <Table.Td>{upcoming_match.stage_item_input1.team?.name}</Table.Td>
-        <Table.Td>{upcoming_match.stage_item_input2.team?.name}</Table.Td>
+        <Table.Td>
+          {
+            ('team' in upcoming_match.stage_item_input1 ? upcoming_match.stage_item_input1 : null)
+              ?.team?.name
+          }
+        </Table.Td>
+        <Table.Td>
+          {
+            ('team' in upcoming_match.stage_item_input2 ? upcoming_match.stage_item_input2 : null)
+              ?.team?.name
+          }
+        </Table.Td>
         <Table.Td>{Number(upcoming_match.elo_diff).toFixed(0)}</Table.Td>
         <Table.Td>{Number(upcoming_match.swiss_diff).toFixed(1)}</Table.Td>
         <Table.Td>

@@ -12,8 +12,8 @@ import { StandingsTableForStageItem } from '../../../../components/tables/standi
 import { TableSkeletonTwoColumns } from '../../../../components/utils/skeletons';
 import { responseIsValid, setTitle } from '../../../../components/utils/util';
 import { getStagesLive } from '../../../../services/adapter';
+import { getTournamentResponseByEndpointName } from '../../../../services/dashboard';
 import { getStageItemLookup, getStageItemTeamsLookup } from '../../../../services/lookups';
-import { getTournamentResponseByEndpointName } from '../../../../services/tournament';
 
 export function StandingsContent({
   swrStagesResponse,
@@ -64,27 +64,19 @@ export function StandingsContent({
 }
 
 export default function DashboardStandingsPage() {
-  const tournamentResponse = getTournamentResponseByEndpointName();
+  const tournamentDataFull = getTournamentResponseByEndpointName();
+  const tournamentValid = !React.isValidElement(tournamentDataFull);
 
-  const tournamentDataFull = tournamentResponse ? tournamentResponse[0] : null;
+  const swrStagesResponse = getStagesLive(tournamentValid ? tournamentDataFull.id : null);
 
-  const notFound = tournamentDataFull == null;
-  const tournamentId = !notFound ? tournamentDataFull.id : null;
-
-  const swrStagesResponse = getStagesLive(tournamentId);
+  if (!tournamentValid) {
+    return tournamentDataFull;
+  }
 
   setTitle(getTournamentHeadTitle(tournamentDataFull));
 
-  if (!tournamentResponse) {
-    return <TableSkeletonTwoColumns />;
-  }
-
   if (swrStagesResponse.isLoading) {
     return <TableSkeletonTwoColumns />;
-  }
-
-  if (notFound) {
-    return <NotFoundTitle />;
   }
 
   return (

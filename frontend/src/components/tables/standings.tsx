@@ -3,7 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { StageItemInputFinal, formatStageItemInput } from '../../interfaces/stage_item_input';
+import { formatStageItemInput } from '../../interfaces/stage_item_input';
+import { StageItemInputFinal } from '../../openapi';
 import { PlayerScore } from '../info/player_score';
 import { WinDistribution } from '../info/player_statistics';
 import { EmptyTableInfo } from '../no_content/empty_table_info';
@@ -27,8 +28,8 @@ export function StandingsTableForStageItem({
   const { t } = useTranslation();
   const tableState = getTableState('points', false);
 
-  const minPoints = Math.min(...teams_with_inputs.map((input) => input.points));
-  const maxPoints = Math.max(...teams_with_inputs.map((input) => input.points));
+  const minPoints = Math.min(...teams_with_inputs.map((input) => parseFloat(input.points)));
+  const maxPoints = Math.max(...teams_with_inputs.map((input) => parseFloat(input.points)));
 
   const rows = teams_with_inputs
     .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) => (p1.points > p2.points ? 1 : -1))
@@ -52,7 +53,7 @@ export function StandingsTableForStageItem({
         {stageItem.type === 'SWISS' ? (
           <Table.Td style={{ minWidth: '10rem' }}>
             <PlayerScore
-              score={team_with_input.points}
+              score={parseFloat(team_with_input.points)}
               min_score={minPoints}
               max_score={maxPoints}
               decimals={0}
