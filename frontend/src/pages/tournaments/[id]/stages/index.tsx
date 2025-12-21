@@ -1,24 +1,22 @@
 import { Group, Stack } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Builder from '../../../../components/builder/builder';
-import { CreateStageButtonLarge } from '../../../../components/buttons/create_stage';
-import ActivateNextStageModal from '../../../../components/modals/activate_next_stage_modal';
-import ActivatePreviousStageModal from '../../../../components/modals/activate_previous_stage_modal';
-import { NoContent } from '../../../../components/no_content/empty_table_info';
-import { TableSkeletonTwoColumnsSmall } from '../../../../components/utils/skeletons';
-import { getTournamentIdFromRouter } from '../../../../components/utils/util';
-import { StageWithStageItems } from '../../../../interfaces/stage';
-import { Ranking } from '../../../../openapi';
+import Builder from '@components/builder/builder';
+import { CreateStageButtonLarge } from '@components/buttons/create_stage';
+import ActivateNextStageModal from '@components/modals/activate_next_stage_modal';
+import ActivatePreviousStageModal from '@components/modals/activate_previous_stage_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { TableSkeletonTwoColumnsSmall } from '@components/utils/skeletons';
+import { getTournamentIdFromRouter } from '@components/utils/util';
+import { StageWithStageItems } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   getAvailableStageItemInputs,
   getRankings,
   getRankingsPerStageItem,
   getStages,
   getTournamentById,
-} from '../../../../services/adapter';
-import TournamentLayout from '../../_tournament_layout';
+} from '@services/adapter';
 
 export default function StagesPage() {
   const { t } = useTranslation();

@@ -2,11 +2,11 @@ import { Grid, Select, Title } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import TournamentsCardTable from '../components/card_tables/tournaments';
-import TournamentModal from '../components/modals/tournament_modal';
-import { capitalize } from '../components/utils/util';
-import { TournamentFilter } from '../interfaces/tournament';
-import { checkForAuthError, getTournaments } from '../services/adapter';
+import TournamentsCardTable from '@components/card_tables/tournaments';
+import TournamentModal from '@components/modals/tournament_modal';
+import { TournamentFilter } from '@components/utils/tournament';
+import { capitalize } from '@components/utils/util';
+import { checkForAuthError, getTournaments } from '@services/adapter';
 import Layout from './_layout';
 import classes from './index.module.css';
 

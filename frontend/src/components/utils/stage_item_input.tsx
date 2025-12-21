@@ -1,11 +1,11 @@
-import { assert_not_none } from '../components/utils/assert';
 import {
   StageItemInputEmpty,
   StageItemInputFinal,
   StageItemInputOptionFinal,
   StageItemInputOptionTentative,
   StageItemInputTentative,
-} from '../openapi';
+} from '@openapi';
+import { assert_not_none } from './assert';
 
 export type StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty;
 export type StageItemInputOption = StageItemInputOptionTentative | StageItemInputOptionFinal;

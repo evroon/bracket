@@ -1,12 +1,16 @@
 import { Divider } from '@mantine/core';
-import React from 'react';
 import { SWRResponse } from 'swr';
 
-import { SchedulerSettings } from '../../interfaces/match';
-import { Round } from '../../interfaces/round';
-import { StageWithStageItems } from '../../interfaces/stage';
-import { Tournament } from '../../openapi';
-import UpcomingMatchesTable from '../tables/upcoming_matches';
+import UpcomingMatchesTable from '@components/tables/upcoming_matches';
+import { SchedulerSettings } from '@components/utils/match';
+import {
+  CourtsResponse,
+  RoundWithMatches,
+  StageWithStageItems,
+  StagesWithStageItemsResponse,
+  Tournament,
+  UpcomingMatchesResponse,
+} from '@openapi';
 import SwissSettings, { getSwissRoundSchedulingProgress } from './settings/ladder_fixed';
 
 export default function Scheduler({
@@ -19,11 +23,11 @@ export default function Scheduler({
   schedulerSettings,
 }: {
   activeStage: StageWithStageItems;
-  draftRound: Round;
+  draftRound: RoundWithMatches;
   tournamentData: Tournament;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
-  swrCourtsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse>;
+  swrCourtsResponse: SWRResponse<CourtsResponse>;
   schedulerSettings: SchedulerSettings;
 }) {
   return (

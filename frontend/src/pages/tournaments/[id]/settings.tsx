@@ -19,32 +19,31 @@ import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
 import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from '@tabler/icons-react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdArchive } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { SWRResponse } from 'swr';
 
-import NotFoundTitle from '../../404';
-import { assert_not_none } from '../../../components/utils/assert';
-import { DropzoneButton } from '../../../components/utils/file_upload';
-import { GenericSkeletonThreeRows } from '../../../components/utils/skeletons';
-import { capitalize, getBaseURL, getTournamentIdFromRouter } from '../../../components/utils/util';
-import { Club, Tournament, TournamentResponse } from '../../../openapi';
+import { assert_not_none } from '@components/utils/assert';
+import { DropzoneButton } from '@components/utils/file_upload';
+import { GenericSkeletonThreeRows } from '@components/utils/skeletons';
+import { capitalize, getBaseURL, getTournamentIdFromRouter } from '@components/utils/util';
+import { Club, Tournament, TournamentResponse } from '@openapi';
+import NotFoundTitle from '@pages/404';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   getBaseApiUrl,
   getClubs,
   getTournamentById,
   handleRequestError,
   removeTournamentLogo,
-} from '../../../services/adapter';
+} from '@services/adapter';
 import {
   archiveTournament,
   deleteTournament,
   unarchiveTournament,
   updateTournament,
-} from '../../../services/tournament';
-import TournamentLayout from '../_tournament_layout';
+} from '@services/tournament';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;

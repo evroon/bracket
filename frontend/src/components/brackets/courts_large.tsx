@@ -1,8 +1,6 @@
 import { Center, Grid, MantineColor, useMantineTheme } from '@mantine/core';
-import React from 'react';
 
-import { MatchInterface } from '../../interfaces/match';
-import { Court } from '../../openapi';
+import { Court, MatchWithDetails } from '@openapi';
 import MatchLarge from './match_large';
 
 export function CourtBadge({ name, color }: { name: string; color: MantineColor }) {
@@ -30,8 +28,8 @@ export default function CourtsLarge({
   stageItemsLookup,
 }: {
   court: Court;
-  activeMatch: MatchInterface | null;
-  nextMatch: MatchInterface | null;
+  activeMatch: MatchWithDetails | null;
+  nextMatch: MatchWithDetails | null;
   stageItemsLookup: any;
 }) {
   return (

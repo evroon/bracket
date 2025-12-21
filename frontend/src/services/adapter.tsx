@@ -3,22 +3,24 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router';
 import useSWR, { SWRResponse } from 'swr';
 
-import { Pagination } from '../components/utils/util';
-import { SchedulerSettings } from '../interfaces/match';
-import { Round } from '../interfaces/round';
-import { TournamentFilter } from '../interfaces/tournament';
+import { SchedulerSettings } from '@components/utils/match';
+import { TournamentFilter } from '@components/utils/tournament';
+import { Pagination } from '@components/utils/util';
 import {
   ClubsResponse,
   CourtsResponse,
   PlayersResponse,
   RankingsResponse,
+  RoundWithMatches,
   StageItemInputOptionsResponse,
   StageRankingResponse,
+  StagesWithStageItemsResponse,
   TeamsWithPlayersResponse,
   TournamentResponse,
   TournamentsResponse,
+  UpcomingMatchesResponse,
   UserPublicResponse,
-} from '../openapi';
+} from '@openapi';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
@@ -181,7 +183,7 @@ export function getAvailableStageItemInputs(
 export function getStages(
   tournament_id: number | null,
   no_draft_rounds: boolean = false
-): SWRResponse {
+): SWRResponse<StagesWithStageItemsResponse> {
   return useSWR(
     tournament_id == null || tournament_id === -1
       ? null
@@ -190,7 +192,9 @@ export function getStages(
   );
 }
 
-export function getStagesLive(tournament_id: number | null): SWRResponse {
+export function getStagesLive(
+  tournament_id: number | null
+): SWRResponse<StagesWithStageItemsResponse> {
   return useSWR(
     tournament_id == null ? null : `tournaments/${tournament_id}/stages?no_draft_rounds=true`,
     fetcherWithTimestamp,
@@ -225,9 +229,9 @@ export function getUser(): SWRResponse<UserPublicResponse> {
 export function getUpcomingMatches(
   tournament_id: number,
   stage_item_id: number,
-  draftRound: Round | null,
+  draftRound: RoundWithMatches | null,
   schedulerSettings: SchedulerSettings
-): SWRResponse {
+): SWRResponse<UpcomingMatchesResponse> {
   return useSWR(
     stage_item_id == null || draftRound == null
       ? null

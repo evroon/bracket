@@ -1,8 +1,6 @@
-import { Translator } from '../components/utils/types';
-import { MatchWithDetails } from '../openapi';
+import { MatchWithDetails } from '@openapi';
 import { formatStageItemInput } from './stage_item_input';
-
-export type MatchInterface = MatchWithDetails;
+import { Translator } from './types';
 
 export interface SchedulerSettings {
   eloThreshold: number;
@@ -15,25 +13,25 @@ export interface SchedulerSettings {
   setOnlyRecommended: any;
 }
 
-export function getMatchStartTime(match: MatchInterface) {
+export function getMatchStartTime(match: MatchWithDetails) {
   return new Date(match.start_time || '');
 }
 
-export function getMatchEndTime(match: MatchInterface) {
+export function getMatchEndTime(match: MatchWithDetails) {
   return new Date(
     getMatchStartTime(match).getTime() + 60000 * (match.duration_minutes + match.margin_minutes)
   );
 }
 
-export function isMatchHappening(match: MatchInterface) {
+export function isMatchHappening(match: MatchWithDetails) {
   return getMatchStartTime(match) < new Date() && getMatchEndTime(match) > new Date();
 }
 
-export function isMatchInTheFutureOrPresent(match: MatchInterface) {
+export function isMatchInTheFutureOrPresent(match: MatchWithDetails) {
   return getMatchEndTime(match) > new Date();
 }
 
-export function isMatchInTheFuture(match: MatchInterface) {
+export function isMatchInTheFuture(match: MatchWithDetails) {
   return getMatchStartTime(match) > new Date();
 }
 
@@ -41,7 +39,7 @@ export function formatMatchInput1(
   t: Translator,
   stageItemsLookup: any,
   matchesLookup: any,
-  match: MatchInterface
+  match: MatchWithDetails
 ): string {
   const formatted = formatStageItemInput(match.stage_item_input1, stageItemsLookup);
   if (formatted != null) return formatted;
@@ -59,7 +57,7 @@ export function formatMatchInput2(
   t: Translator,
   stageItemsLookup: any,
   matchesLookup: any,
-  match: MatchInterface
+  match: MatchWithDetails
 ): string {
   const formatted = formatStageItemInput(match.stage_item_input2, stageItemsLookup);
   if (formatted != null) return formatted;

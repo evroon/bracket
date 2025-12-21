@@ -2,7 +2,7 @@ import { Button, Container, Group, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { tokenPresent } from '../services/local_storage';
+import { tokenPresent } from '@services/local_storage';
 import classes from './404.module.css';
 
 export default function NotFoundPage() {

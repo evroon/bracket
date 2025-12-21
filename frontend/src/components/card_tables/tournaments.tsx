@@ -1,15 +1,14 @@
 import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Tournament } from '../../openapi';
-import { getBaseApiUrl } from '../../services/adapter';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
-import { DateTime } from '../utils/datetime';
-import RequestErrorAlert from '../utils/error_alert';
-import PreloadLink from '../utils/link';
-import { TableSkeletonSingleColumn } from '../utils/skeletons';
+import { EmptyTableInfo } from '@components/no_content/empty_table_info';
+import { DateTime } from '@components/utils/datetime';
+import RequestErrorAlert from '@components/utils/error_alert';
+import PreloadLink from '@components/utils/link';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { Tournament, TournamentsResponse } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
 import classes from './tournaments.module.css';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament }) {
@@ -40,7 +39,7 @@ function Stat({ title, value }: { title: string; value: any }) {
 export default function TournamentsCardTable({
   swrTournamentsResponse,
 }: {
-  swrTournamentsResponse: SWRResponse;
+  swrTournamentsResponse: SWRResponse<TournamentsResponse>;
 }) {
   const { t } = useTranslation();
 

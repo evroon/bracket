@@ -14,30 +14,30 @@ import {
 } from '@mantine/core';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import CourtModal from '../../../components/modals/create_court_modal';
-import MatchModal from '../../../components/modals/match_modal';
-import { NoContent } from '../../../components/no_content/empty_table_info';
-import { Time } from '../../../components/utils/datetime';
-import { Translator } from '../../../components/utils/types';
-import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
-import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../../interfaces/match';
-import { TournamentMinimal } from '../../../interfaces/tournament';
-import { Court } from '../../../openapi';
-import { getCourts, getStages } from '../../../services/adapter';
-import { deleteCourt } from '../../../services/court';
+import CourtModal from '@components/modals/create_court_modal';
+import MatchModal from '@components/modals/match_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { Time } from '@components/utils/datetime';
+import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { Translator } from '@components/utils/types';
+import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
+import { Court, CourtsResponse, MatchWithDetails } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getCourts, getStages } from '@services/adapter';
+import { deleteCourt } from '@services/court';
 import {
   getMatchLookup,
   getMatchLookupByCourt,
   getScheduleData,
   getStageItemLookup,
   stringToColour,
-} from '../../../services/lookups';
-import { rescheduleMatch, scheduleMatches } from '../../../services/match';
-import TournamentLayout from '../_tournament_layout';
+} from '@services/lookups';
+import { rescheduleMatch, scheduleMatches } from '@services/match';
 
 function ScheduleRow({
   index,
@@ -47,7 +47,7 @@ function ScheduleRow({
   matchesLookup,
 }: {
   index: number;
-  match: MatchInterface;
+  match: MatchWithDetails;
   openMatchModal: any;
   stageItemsLookup: any;
   matchesLookup: any;
@@ -115,14 +115,14 @@ function ScheduleColumn({
 }: {
   tournamentId: number;
   court: Court;
-  matches: MatchInterface[];
+  matches: MatchWithDetails[];
   openMatchModal: any;
   stageItemsLookup: any;
-  swrCourtsResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse<CourtsResponse>;
   matchesLookup: any;
 }) {
   const { t } = useTranslation();
-  const rows = matches.map((match: MatchInterface, index: number) => (
+  const rows = matches.map((match: MatchWithDetails, index: number) => (
     <ScheduleRow
       index={index}
       stageItemsLookup={stageItemsLookup}
@@ -197,10 +197,10 @@ function Schedule({
 }: {
   t: Translator;
   tournament: TournamentMinimal;
-  swrCourtsResponse: SWRResponse;
+  swrCourtsResponse: SWRResponse<CourtsResponse>;
   stageItemsLookup: any;
   matchesLookup: any;
-  schedule: { court: Court; matches: MatchInterface[] }[];
+  schedule: { court: Court; matches: MatchWithDetails[] }[];
   openMatchModal: CallableFunction;
 }) {
   const columns = schedule.map((item) => (
@@ -247,7 +247,7 @@ function Schedule({
 
 export default function SchedulePage() {
   const [modalOpened, modalSetOpened] = useState(false);
-  const [match, setMatch] = useState<MatchInterface | null>(null);
+  const [match, setMatch] = useState<MatchWithDetails | null>(null);
 
   const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
@@ -270,7 +270,7 @@ export default function SchedulePage() {
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;
 
-  function openMatchModal(matchToOpen: MatchInterface) {
+  function openMatchModal(matchToOpen: MatchWithDetails) {
     setMatch(matchToOpen);
     modalSetOpened(true);
   }

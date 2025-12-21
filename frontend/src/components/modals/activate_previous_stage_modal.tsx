@@ -1,12 +1,12 @@
 import { Alert, Button, Modal } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconSquareArrowLeft } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { StageRankingResponse } from '../../openapi';
-import { activateNextStage } from '../../services/stage';
+import { StageRankingResponse, StagesWithStageItemsResponse } from '@openapi';
+import { activateNextStage } from '@services/stage';
 
 export default function ActivatePreviousStageModal({
   tournamentId,
@@ -14,7 +14,7 @@ export default function ActivatePreviousStageModal({
   swrRankingsPerStageItemResponse,
 }: {
   tournamentId: number;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const { t } = useTranslation();

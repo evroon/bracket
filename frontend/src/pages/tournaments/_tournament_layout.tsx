@@ -1,11 +1,10 @@
 import { Group, ThemeIcon, Title, Tooltip } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiArchiveBoxArrowDown } from 'react-icons/hi2';
 
-import { TournamentLinks } from '../../components/navbar/_main_links';
-import { responseIsValid } from '../../components/utils/util';
-import { checkForAuthError, getTournamentById } from '../../services/adapter';
+import { TournamentLinks } from '@components/navbar/_main_links';
+import { responseIsValid } from '@components/utils/util';
+import { checkForAuthError, getTournamentById } from '@services/adapter';
 import Layout from '../_layout';
 
 export default function TournamentLayout({ children, tournament_id }: any) {

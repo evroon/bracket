@@ -1,17 +1,16 @@
 import { Badge, Center, Pagination, Table, Text } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { Player } from '../../openapi';
-import { deletePlayer } from '../../services/player';
-import DeleteButton from '../buttons/delete';
-import PlayerUpdateModal from '../modals/player_update_modal';
-import { NoContent } from '../no_content/empty_table_info';
-import { DateTime } from '../utils/datetime';
-import RequestErrorAlert from '../utils/error_alert';
-import { TableSkeletonSingleColumn } from '../utils/skeletons';
+import DeleteButton from '@components/buttons/delete';
+import PlayerUpdateModal from '@components/modals/player_update_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { DateTime } from '@components/utils/datetime';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { Player, PlayersResponse } from '@openapi';
+import { deletePlayer } from '@services/player';
 import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export function WinDistributionTitle() {
@@ -39,7 +38,7 @@ export default function PlayersTable({
   tableState,
   playerCount,
 }: {
-  swrPlayersResponse: SWRResponse;
+  swrPlayersResponse: SWRResponse<PlayersResponse>;
   tournamentData: TournamentMinimal;
   tableState: TableState;
   playerCount: number;

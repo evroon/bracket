@@ -1,13 +1,12 @@
 import { Grid, Title } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import PlayerCreateModal from '../../../components/modals/player_create_modal';
-import PlayersTable from '../../../components/tables/players';
-import { getTableState, tableStateToPagination } from '../../../components/tables/table';
-import { capitalize, getTournamentIdFromRouter } from '../../../components/utils/util';
-import { getPlayersPaginated } from '../../../services/adapter';
-import TournamentLayout from '../_tournament_layout';
+import PlayerCreateModal from '@components/modals/player_create_modal';
+import PlayersTable from '@components/tables/players';
+import { getTableState, tableStateToPagination } from '@components/tables/table';
+import { capitalize, getTournamentIdFromRouter } from '@components/utils/util';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getPlayersPaginated } from '@services/adapter';
 
 export default function PlayersPage() {
   const tableState = getTableState('name');

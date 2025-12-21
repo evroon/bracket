@@ -16,15 +16,16 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MatchModal from '../../../components/modals/match_modal';
-import { NoContent } from '../../../components/no_content/empty_table_info';
-import { Time, formatTime } from '../../../components/utils/datetime';
-import { Translator } from '../../../components/utils/types';
-import { getTournamentIdFromRouter, responseIsValid } from '../../../components/utils/util';
-import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../../interfaces/match';
-import { getCourts, getStages } from '../../../services/adapter';
-import { getMatchLookup, getStageItemLookup, stringToColour } from '../../../services/lookups';
-import TournamentLayout from '../_tournament_layout';
+import MatchModal from '@components/modals/match_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { Time, formatTime } from '@components/utils/datetime';
+import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
+import { Translator } from '@components/utils/types';
+import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
+import { MatchWithDetails } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getCourts, getStages } from '@services/adapter';
+import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
 
 function ScheduleRow({
   data,
@@ -225,7 +226,7 @@ function Schedule({
 
 export default function ResultsPage() {
   const [modalOpened, modalSetOpened] = useState(false);
-  const [match, setMatch] = useState<MatchInterface | null>(null);
+  const [match, setMatch] = useState<MatchWithDetails | null>(null);
 
   const { t } = useTranslation();
   const { tournamentData } = getTournamentIdFromRouter();
@@ -240,7 +241,7 @@ export default function ResultsPage() {
   if (!responseIsValid(swrStagesResponse)) return null;
   if (!responseIsValid(swrCourtsResponse)) return null;
 
-  function openMatchModal(matchToOpen: MatchInterface) {
+  function openMatchModal(matchToOpen: MatchWithDetails) {
     setMatch(matchToOpen);
     modalSetOpened(true);
   }

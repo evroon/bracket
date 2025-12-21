@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../openapi';
-import { getPlayers } from '../../services/adapter';
-import { createTeam, createTeams } from '../../services/team';
-import SaveButton from '../buttons/save';
-import { MultiTeamsInput } from '../forms/player_create_csv_input';
+import SaveButton from '@components/buttons/save';
+import { MultiTeamsInput } from '@components/forms/player_create_csv_input';
+import { Player, TeamsWithPlayersResponse } from '@openapi';
+import { getPlayers } from '@services/adapter';
+import { createTeam, createTeams } from '@services/team';
 
 function MultiTeamTab({
   tournament_id,
@@ -17,7 +17,7 @@ function MultiTeamTab({
   setOpened,
 }: {
   tournament_id: number;
-  swrTeamsResponse: SWRResponse;
+  swrTeamsResponse: SWRResponse<TeamsWithPlayersResponse>;
   setOpened: any;
 }) {
   const { t } = useTranslation();
@@ -59,7 +59,7 @@ function SingleTeamTab({
   setOpened,
 }: {
   tournament_id: number;
-  swrTeamsResponse: SWRResponse;
+  swrTeamsResponse: SWRResponse<TeamsWithPlayersResponse>;
   setOpened: any;
 }) {
   const { t } = useTranslation();
@@ -118,7 +118,7 @@ export default function TeamCreateModal({
   swrTeamsResponse,
 }: {
   tournament_id: number;
-  swrTeamsResponse: SWRResponse;
+  swrTeamsResponse: SWRResponse<TeamsWithPlayersResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

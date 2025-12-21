@@ -2,13 +2,12 @@ import { Button, Select, Tabs, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { BiGlobe } from '@react-icons/all-files/bi/BiGlobe';
 import { IconHash, IconLogout, IconUser } from '@tabler/icons-react';
-import React from 'react';
 import { useNavigate } from 'react-router';
 
-import { UserPublic } from '../../openapi';
-import { performLogoutAndRedirect } from '../../services/local_storage';
-import { updatePassword, updateUser } from '../../services/user';
-import { PasswordStrength } from '../utils/password';
+import { PasswordStrength } from '@components/utils/password';
+import { UserPublic } from '@openapi';
+import { performLogoutAndRedirect } from '@services/local_storage';
+import { updatePassword, updateUser } from '@services/user';
 
 export default function UserForm({ user, t, i18n }: { user: UserPublic; t: any; i18n: any }) {
   const navigate = useNavigate();

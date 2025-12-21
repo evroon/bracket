@@ -34,6 +34,7 @@
     "dayjs": "1.11.10",
     "i18next": "25.7.1",
     "nuqs": "2.8.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-i18next": "16.5.0",
@@ -44,7 +45,6 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "0.89.2",
-    "@trivago/prettier-plugin-sort-imports": "6.0.0",
     "@types/node": "25.0.0",
     "@types/react": "19.2.4",
     "@types/react-dom": "19.2.3",

@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { createMultiplePlayers, createPlayer } from '../../services/player';
-import SaveButton from '../buttons/save';
-import { MultiPlayersInput } from '../forms/player_create_csv_input';
+import SaveButton from '@components/buttons/save';
+import { MultiPlayersInput } from '@components/forms/player_create_csv_input';
+import { PlayersResponse } from '@openapi';
+import { createMultiplePlayers, createPlayer } from '@services/player';
 
 function MultiPlayerTab({
   tournament_id,
@@ -15,7 +16,7 @@ function MultiPlayerTab({
   setOpened,
 }: {
   tournament_id: number;
-  swrPlayersResponse: SWRResponse;
+  swrPlayersResponse: SWRResponse<PlayersResponse>;
   setOpened: any;
 }) {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ function SinglePlayerTab({
   setOpened,
 }: {
   tournament_id: number;
-  swrPlayersResponse: SWRResponse;
+  swrPlayersResponse: SWRResponse<PlayersResponse>;
   setOpened: any;
 }) {
   const { t } = useTranslation();
@@ -104,7 +105,7 @@ export default function PlayerCreateModal({
   swrPlayersResponse,
 }: {
   tournament_id: number;
-  swrPlayersResponse: SWRResponse;
+  swrPlayersResponse: SWRResponse<PlayersResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

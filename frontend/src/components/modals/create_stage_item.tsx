@@ -12,15 +12,19 @@ import {
 } from '@mantine/core';
 import { UseFormReturnType, useForm } from '@mantine/form';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { StageWithStageItems } from '../../interfaces/stage';
-import { StageItemCreateBody, Tournament } from '../../openapi';
-import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
-import { createStageItem } from '../../services/stage_item';
-import { Translator } from '../utils/types';
+import { Translator } from '@components/utils/types';
+import {
+  StageItemInputOptionsResponse,
+  StageWithStageItems,
+  StagesWithStageItemsResponse,
+  Tournament,
+} from '@openapi';
+import { getStageItemLookup, getTeamsLookup } from '@services/lookups';
+import { createStageItem } from '@services/stage_item';
 import classes from './create_stage_item.module.css';
 
 function StageSelectCard({
@@ -178,8 +182,8 @@ export function CreateStageItemModal({
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
-  swrStagesResponse: SWRResponse;
-  swrAvailableInputsResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

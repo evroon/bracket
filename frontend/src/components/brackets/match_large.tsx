@@ -1,15 +1,14 @@
 import { Card, Center, Grid, Text } from '@mantine/core';
-import React from 'react';
 
-import { MatchInterface } from '../../interfaces/match';
-import { formatStageItemInput } from '../../interfaces/stage_item_input';
-import { Time } from '../utils/datetime';
+import { Time } from '@components/utils/datetime';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { MatchWithDetails } from '@openapi';
 
 export default function MatchLarge({
   match,
   stageItemsLookup,
 }: {
-  match: MatchInterface;
+  match: MatchWithDetails;
   stageItemsLookup: any;
 }) {
   const bracket = (

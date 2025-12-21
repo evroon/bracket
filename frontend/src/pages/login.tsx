@@ -11,12 +11,12 @@ import {
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { tokenPresent } from '../services/local_storage';
-import { performLogin } from '../services/user';
+import { tokenPresent } from '@services/local_storage';
+import { performLogin } from '@services/user';
 
 export default function LoginPage() {
   const navigate = useNavigate();

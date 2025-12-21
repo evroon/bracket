@@ -1,15 +1,8 @@
 import { SWRResponse } from 'swr';
 
-import { assert_not_none } from '../components/utils/assert';
-import { groupBy, responseIsValid } from '../components/utils/util';
-import { MatchInterface } from '../interfaces/match';
-import { StageWithStageItems } from '../interfaces/stage';
-import {
-  Court,
-  FullTeamWithPlayers,
-  StageItemInputFinal,
-  StageItemInputTentative,
-} from '../openapi';
+import { assert_not_none } from '@components/utils/assert';
+import { groupBy, responseIsValid } from '@components/utils/util';
+import { Court, FullTeamWithPlayers, MatchWithDetails, StageWithStageItems } from '@openapi';
 import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {
@@ -123,11 +116,11 @@ export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
 export function getScheduleData(
   swrCourtsResponse: SWRResponse,
   matchesByCourtId: any
-): { court: Court; matches: MatchInterface[] }[] {
+): { court: Court; matches: MatchWithDetails[] }[] {
   return swrCourtsResponse.data.data.map((court: Court) => ({
     matches: (matchesByCourtId[court.id] || [])
-      .filter((match: MatchInterface) => match.start_time != null)
-      .sort((m1: MatchInterface, m2: MatchInterface) => {
+      .filter((match: MatchWithDetails) => match.start_time != null)
+      .sort((m1: MatchWithDetails, m2: MatchWithDetails) => {
         return assert_not_none(m1.position_in_schedule) > assert_not_none(m2.position_in_schedule)
           ? 1
           : -1 || [];

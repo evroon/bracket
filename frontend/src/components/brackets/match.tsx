@@ -1,24 +1,19 @@
 import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { useColorScheme } from '@mantine/hooks';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import {
-  MatchInterface,
-  formatMatchInput1,
-  formatMatchInput2,
-  isMatchHappening,
-} from '../../interfaces/match';
-import { Round } from '../../interfaces/round';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
-import MatchModal from '../modals/match_modal';
-import { assert_not_none } from '../utils/assert';
-import { Time } from '../utils/datetime';
+import MatchModal from '@components/modals/match_modal';
+import { assert_not_none } from '@components/utils/assert';
+import { Time } from '@components/utils/datetime';
+import { formatMatchInput1, formatMatchInput2, isMatchHappening } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { getMatchLookup, getStageItemLookup } from '@services/lookups';
 import classes from './match.module.css';
 
-export function MatchBadge({ match, theme }: { match: MatchInterface; theme: any }) {
+export function MatchBadge({ match, theme }: { match: MatchWithDetails; theme: any }) {
   const visibility = match.court ? 'visible' : 'hidden';
   const badgeColor = useColorScheme() ? theme.colors.blue[7] : theme.colors.blue[7];
   return (
@@ -50,13 +45,13 @@ export default function Match({
   readOnly,
   round,
 }: {
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse | null;
   tournamentData: TournamentMinimal;
-  match: MatchInterface;
+  match: MatchWithDetails;
   readOnly: boolean;
 
-  round: Round;
+  round: RoundWithMatches;
 }) {
   const { t } = useTranslation();
   const theme = useMantineTheme();

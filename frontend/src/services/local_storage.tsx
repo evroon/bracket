@@ -1,9 +1,8 @@
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
-import React from 'react';
 import { NavigateFunction } from 'react-router';
 
-import { Translator } from '../components/utils/types';
+import { Translator } from '@components/utils/types';
 
 export function performLogout() {
   localStorage.removeItem('login');

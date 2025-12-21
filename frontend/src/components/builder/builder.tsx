@@ -17,37 +17,38 @@ import { useColorScheme } from '@mantine/hooks';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiSolidWrench } from 'react-icons/bi';
 import { SWRResponse } from 'swr';
 
-import { StageWithStageItems } from '../../interfaces/stage';
-import { StageItemWithRounds } from '../../interfaces/stage_item';
+import CreateStageButton from '@components/buttons/create_stage';
+import { CreateStageItemModal } from '@components/modals/create_stage_item';
+import { UpdateStageModal } from '@components/modals/update_stage';
+import { UpdateStageItemModal } from '@components/modals/update_stage_item';
+import { assert_not_none } from '@components/utils/assert';
+import RequestErrorAlert from '@components/utils/error_alert';
+import PreloadLink from '@components/utils/link';
 import {
   StageItemInput,
   StageItemInputChoice,
   StageItemInputOption,
   formatStageItemInputTentative,
-} from '../../interfaces/stage_item_input';
+} from '@components/utils/stage_item_input';
+import { responseIsValid } from '@components/utils/util';
 import {
   Ranking,
-  StageItemInputOptionFinal,
   StageItemInputOptionsResponse,
+  StageItemWithRounds,
+  StageRankingResponse,
+  StageWithStageItems,
+  StagesWithStageItemsResponse,
   Tournament,
-} from '../../openapi';
-import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
-import { deleteStage } from '../../services/stage';
-import { deleteStageItem } from '../../services/stage_item';
-import { updateStageItemInput } from '../../services/stage_item_input';
-import CreateStageButton from '../buttons/create_stage';
-import { CreateStageItemModal } from '../modals/create_stage_item';
-import { UpdateStageModal } from '../modals/update_stage';
-import { UpdateStageItemModal } from '../modals/update_stage_item';
-import { assert_not_none } from '../utils/assert';
-import RequestErrorAlert from '../utils/error_alert';
-import PreloadLink from '../utils/link';
-import { responseIsValid } from '../utils/util';
+} from '@openapi';
+import { getStageItemLookup, getTeamsLookup } from '@services/lookups';
+import { deleteStage } from '@services/stage';
+import { deleteStageItem } from '@services/stage_item';
+import { updateStageItemInput } from '@services/stage_item_input';
 
 function StageItemInputComboBox({
   tournament,
@@ -62,9 +63,9 @@ function StageItemInputComboBox({
   stageItemInput: StageItemInput;
   current_key: string | null;
   availableInputs: StageItemInputChoice[];
-  swrAvailableInputsResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
-  swrStagesResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const { t } = useTranslation();
   const [selectedInput, setSelectedInput] = useState<StageItemInputChoice | null>(
@@ -218,9 +219,9 @@ function StageItemInputSection({
   currentOptionValue: string | null;
   lastInList: boolean;
   availableInputs: StageItemInputChoice[];
-  swrAvailableInputsResponse: SWRResponse;
-  swrStagesResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
 
@@ -250,11 +251,11 @@ function StageItemRow({
 }: {
   tournament: Tournament;
   stageItem: StageItemWithRounds;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   availableInputs: StageItemInputChoice[];
   rankings: Ranking[];
-  swrAvailableInputsResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
@@ -366,9 +367,9 @@ function StageColumn({
 }: {
   tournament: Tournament;
   stage: StageWithStageItems;
-  swrStagesResponse: SWRResponse;
-  swrAvailableInputsResponse: SWRResponse;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
   rankings: Ranking[];
 }) {
   const { t } = useTranslation();
@@ -471,9 +472,9 @@ export default function Builder({
   rankings,
 }: {
   tournament: Tournament;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
   rankings: Ranking[];
 }) {
   const stages: StageWithStageItems[] =

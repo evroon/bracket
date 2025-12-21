@@ -12,14 +12,14 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { PasswordStrength } from '../components/utils/password';
-import { ClientOnly } from '../components/utils/react';
-import { HCaptchaInput } from '../components/utils/util';
-import { registerUser } from '../services/user';
+import { PasswordStrength } from '@components/utils/password';
+import { ClientOnly } from '@components/utils/react';
+import { HCaptchaInput } from '@components/utils/util';
+import { registerUser } from '@services/user';
 import classes from './create_account.module.css';
 
 export default function CreateAccountPage() {

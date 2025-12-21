@@ -1,13 +1,11 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { Ranking, Tournament } from '../../openapi';
-import { updateStageItem } from '../../services/stage_item';
-import { RankingSelect } from '../select/ranking_select';
+import { RankingSelect } from '@components/select/ranking_select';
+import { Ranking, StageItemWithRounds, StagesWithStageItemsResponse, Tournament } from '@openapi';
+import { updateStageItem } from '@services/stage_item';
 
 export function UpdateStageItemModal({
   tournament,
@@ -21,7 +19,7 @@ export function UpdateStageItemModal({
   opened: boolean;
   setOpened: any;
   stageItem: StageItemWithRounds;
-  swrStagesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   rankings: Ranking[];
 }) {
   const { t } = useTranslation();

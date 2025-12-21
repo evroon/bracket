@@ -1,13 +1,11 @@
 import { Table, Text } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { formatStageItemInput } from '../../interfaces/stage_item_input';
-import { StageItemInputFinal } from '../../openapi';
-import { PlayerScore } from '../info/player_score';
-import { WinDistribution } from '../info/player_statistics';
-import { EmptyTableInfo } from '../no_content/empty_table_info';
+import { PlayerScore } from '@components/info/player_score';
+import { WinDistribution } from '@components/info/player_statistics';
+import { EmptyTableInfo } from '@components/no_content/empty_table_info';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { StageItemInputFinal, StageItemWithRounds } from '@openapi';
 import { WinDistributionTitle } from './players';
 import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 import TableLayoutLarge from './table_large';

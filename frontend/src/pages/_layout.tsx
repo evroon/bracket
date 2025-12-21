@@ -11,12 +11,12 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useLocation } from 'react-router';
 
-import { Brand } from '../components/navbar/_brand';
-import { getBaseLinks, getBaseLinksDict } from '../components/navbar/_main_links';
-import PreloadLink from '../components/utils/link';
+import { Brand } from '@components/navbar/_brand';
+import { getBaseLinks, getBaseLinksDict } from '@components/navbar/_main_links';
+import PreloadLink from '@components/utils/link';
 import classes from './_layout.module.css';
 
 interface HeaderActionLink {

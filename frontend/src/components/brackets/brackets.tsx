@@ -17,16 +17,20 @@ import { useTranslation } from 'react-i18next';
 import { MdOutlineAutoFixHigh } from 'react-icons/md';
 import { SWRResponse } from 'swr';
 
-import { BracketDisplaySettings } from '../../interfaces/brackets';
-import { Round } from '../../interfaces/round';
-import { StageItemWithRounds } from '../../interfaces/stage_item';
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { Tournament } from '../../openapi';
-import { createRound } from '../../services/round';
-import ActivateNextRoundModal from '../modals/activate_next_round_modal';
-import { NoContent } from '../no_content/empty_table_info';
-import { Translator } from '../utils/types';
-import { responseIsValid } from '../utils/util';
+import ActivateNextRoundModal from '@components/modals/activate_next_round_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { BracketDisplaySettings } from '@components/utils/brackets';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { Translator } from '@components/utils/types';
+import { responseIsValid } from '@components/utils/util';
+import {
+  RoundWithMatches,
+  StageItemWithRounds,
+  StagesWithStageItemsResponse,
+  Tournament,
+  UpcomingMatchesResponse,
+} from '@openapi';
+import { createRound } from '@services/round';
 import RoundComponent from './round';
 
 function AddRoundButton({
@@ -40,8 +44,8 @@ function AddRoundButton({
   t: Translator;
   tournamentData: TournamentMinimal;
   stageItem: StageItemWithRounds;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse>;
   size: 'md' | 'lg';
 }) {
   return (
@@ -71,8 +75,8 @@ export function RoundsGridCols({
 }: {
   stageItem: StageItemWithRounds;
   tournamentData: Tournament;
-  swrStagesResponse: SWRResponse;
-  swrUpcomingMatchesResponse: SWRResponse;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse>;
   readOnly: boolean;
   displaySettings: BracketDisplaySettings;
 }) {
@@ -87,8 +91,11 @@ export function RoundsGridCols({
 
   let result: React.JSX.Element[] | React.JSX.Element = stageItem.rounds
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
-    .filter((round: Round) => round.matches.length > 0 || displaySettings.matchVisibility === 'all')
-    .map((round: Round) => (
+    .filter(
+      (round: RoundWithMatches) =>
+        round.matches.length > 0 || displaySettings.matchVisibility === 'all'
+    )
+    .map((round: RoundWithMatches) => (
       <RoundComponent
         key={round.id}
         tournamentData={tournamentData}

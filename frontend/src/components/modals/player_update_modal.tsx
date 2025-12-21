@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { Player } from '../../openapi';
-import { updatePlayer } from '../../services/player';
+import { Player, PlayersResponse } from '@openapi';
+import { updatePlayer } from '@services/player';
 
 export default function PlayerUpdateModal({
   tournament_id,
@@ -15,7 +15,7 @@ export default function PlayerUpdateModal({
 }: {
   tournament_id: number;
   player: Player;
-  swrPlayersResponse: SWRResponse;
+  swrPlayersResponse: SWRResponse<PlayersResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

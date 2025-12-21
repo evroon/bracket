@@ -1,18 +1,17 @@
 import { Badge, Center, Pagination, Table } from '@mantine/core';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import { TournamentMinimal } from '../../interfaces/tournament';
-import { FullTeamWithPlayers } from '../../openapi';
-import { deleteTeam } from '../../services/team';
-import DeleteButton from '../buttons/delete';
-import PlayerList from '../info/player_list';
-import TeamUpdateModal from '../modals/team_update_modal';
-import { NoContent } from '../no_content/empty_table_info';
-import { DateTime } from '../utils/datetime';
-import RequestErrorAlert from '../utils/error_alert';
-import { TableSkeletonSingleColumn } from '../utils/skeletons';
+import DeleteButton from '@components/buttons/delete';
+import PlayerList from '@components/info/player_list';
+import TeamUpdateModal from '@components/modals/team_update_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { DateTime } from '@components/utils/datetime';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { FullTeamWithPlayers, TeamsWithPlayersResponse } from '@openapi';
+import { deleteTeam } from '@services/team';
 import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export default function TeamsTable({
@@ -23,7 +22,7 @@ export default function TeamsTable({
   teamCount,
 }: {
   tournamentData: TournamentMinimal;
-  swrTeamsResponse: SWRResponse;
+  swrTeamsResponse: SWRResponse<TeamsWithPlayersResponse>;
   teams: FullTeamWithPlayers[];
   tableState: TableState;
   teamCount: number;
