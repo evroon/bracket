@@ -1,60 +1,8 @@
 import { Translator } from '../components/utils/types';
-import { Court } from '../openapi';
-import { StageItemInput, formatStageItemInput } from './stage_item_input';
+import { MatchWithDetails } from '../openapi';
+import { formatStageItemInput } from './stage_item_input';
 
-export interface MatchInterface {
-  id: number;
-  round_id: number;
-  created: string;
-  stage_item_input1_score: number;
-  stage_item_input2_score: number;
-  stage_item_input1: StageItemInput | null;
-  stage_item_input2: StageItemInput | null;
-  stage_item_input1_winner_from_match_id: number | null;
-  stage_item_input2_winner_from_match_id: number | null;
-  court_id: number | null;
-  court: Court | null;
-  start_time: string;
-  position_in_schedule: number | null;
-  duration_minutes: number;
-  margin_minutes: number;
-  custom_duration_minutes: number | null;
-  custom_margin_minutes: number | null;
-  stage_item_input1_conflict: boolean;
-  stage_item_input2_conflict: boolean;
-}
-
-export interface MatchBodyInterface {
-  id: number;
-  round_id: number;
-  stage_item_input1_score: number;
-  stage_item_input2_score: number;
-  court_id: number | null;
-  custom_duration_minutes: number | null;
-  custom_margin_minutes: number | null;
-}
-
-export interface MatchRescheduleInterface {
-  new_court_id: number;
-  new_position: number;
-  old_court_id: number;
-  old_position: number;
-}
-
-export interface UpcomingMatchInterface {
-  is_recommended: boolean;
-  stage_item_input1: StageItemInput;
-  stage_item_input2: StageItemInput;
-  elo_diff: number;
-  swiss_diff: number;
-}
-
-export interface MatchCreateBodyInterface {
-  round_id: number;
-  stage_item_input1_id: number;
-  stage_item_input2_id: number;
-  label: string;
-}
+export type MatchInterface = MatchWithDetails;
 
 export interface SchedulerSettings {
   eloThreshold: number;
@@ -68,7 +16,7 @@ export interface SchedulerSettings {
 }
 
 export function getMatchStartTime(match: MatchInterface) {
-  return new Date(match.start_time);
+  return new Date(match.start_time || '');
 }
 
 export function getMatchEndTime(match: MatchInterface) {

@@ -1,5 +1,4 @@
-import { getTournamentEndpointFromRouter } from '../components/utils/util';
-import { createAxios, getTournamentByEndpointName, handleRequestError } from './adapter';
+import { createAxios, handleRequestError } from './adapter';
 
 export async function createTournament(
   club_id: number,
@@ -62,11 +61,4 @@ export async function updateTournament(
       margin_minutes,
     })
     .catch((response: any) => handleRequestError(response));
-}
-
-export function getTournamentResponseByEndpointName() {
-  const endpointName = getTournamentEndpointFromRouter();
-  const swrTournamentsResponse = getTournamentByEndpointName(endpointName);
-
-  return swrTournamentsResponse.data?.data;
 }

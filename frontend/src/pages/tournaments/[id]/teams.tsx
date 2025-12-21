@@ -61,8 +61,9 @@ export default function TeamsPage() {
   const teamCount = swrTeamsResponse.data != null ? swrTeamsResponse.data.data.count : 1;
 
   if (filteredStageItemId != null) {
-    teams = swrTeamsResponse.data.data.teams.filter(
-      (team: StageItemInput) => stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
+    teams = (swrTeamsResponse.data?.data.teams || []).filter(
+      (team: FullTeamWithPlayers) =>
+        stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
     );
   }
 

@@ -1,15 +1,13 @@
-import { StageItemInputCreateBody } from '../interfaces/stage_item_input';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createStageItem(
   tournament_id: number,
   stage_id: number,
   type: string,
-  team_count: number,
-  inputs: StageItemInputCreateBody[]
+  team_count: number
 ) {
   return createAxios()
-    .post(`tournaments/${tournament_id}/stage_items`, { stage_id, type, team_count, inputs })
+    .post(`tournaments/${tournament_id}/stage_items`, { stage_id, type, team_count })
     .catch((response: any) => handleRequestError(response));
 }
 

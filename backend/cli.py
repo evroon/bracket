@@ -20,6 +20,7 @@ from bracket.sql.users import (
 )
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import hash_password
+from openapi import openapi  # noqa: F401
 
 OPENAPI_JSON_PATH = "openapi/openapi.json"
 

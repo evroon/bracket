@@ -30,7 +30,12 @@ import {
   StageItemInputOption,
   formatStageItemInputTentative,
 } from '../../interfaces/stage_item_input';
-import { Ranking, StageItemInputOptionsResponse, Tournament } from '../../openapi';
+import {
+  Ranking,
+  StageItemInputOptionFinal,
+  StageItemInputOptionsResponse,
+  Tournament,
+} from '../../openapi';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { deleteStage } from '../../services/stage';
 import { deleteStageItem } from '../../services/stage_item';
@@ -161,7 +166,7 @@ export function getAvailableInputs(
   stageItemMap: any
 ) {
   const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
-    if (option.winner_from_stage_item_id != null) {
+    if ('winner_from_stage_item_id' in option) {
       option.winner_position = assert_not_none(option.winner_position);
       const stageItem = stageItemMap[option.winner_from_stage_item_id];
 
@@ -176,7 +181,6 @@ export function getAvailableInputs(
       };
     }
 
-    if (option.team_id == null) return null;
     const team = teamsMap[option.team_id];
     if (team == null) return null;
     return {

@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import { StageWithStageItems } from '../../interfaces/stage';
-import { Tournament } from '../../openapi';
+import { StageItemCreateBody, Tournament } from '../../openapi';
 import { getStageItemLookup, getTeamsLookup } from '../../services/lookups';
 import { createStageItem } from '../../services/stage_item';
 import { Translator } from '../utils/types';
@@ -210,18 +210,7 @@ export function CreateStageItemModal({
       >
         <form
           onSubmit={form.onSubmit(async (values) => {
-            const teamCount = getTeamCount(values);
-            const inputs = Array.from(Array(teamCount).keys()).map((i) => {
-              const teamId = values[`team_${i + 1}` as keyof typeof values];
-              return {
-                slot: i + 1,
-                team_id: Number(teamId),
-                winner_from_stage_item_id:
-                  typeof teamId === 'string' ? Number(teamId.split('_')[0]) : null,
-                winner_position: typeof teamId === 'string' ? Number(teamId.split('_')[1]) : null,
-              };
-            });
-            await createStageItem(tournament.id, stage.id, values.type, teamCount, inputs);
+            await createStageItem(tournament.id, stage.id, values.type, getTeamCount(values));
             await swrStagesResponse.mutate();
             await swrAvailableInputsResponse.mutate();
             setOpened(false);

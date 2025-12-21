@@ -71,7 +71,7 @@ function GeneralTournamentForm({
     <form
       onSubmit={form.onSubmit(async (values) => {
         await createTournament(
-          parseInt(assert_not_none(values.club_id), 10),
+          parseInt(assert_not_none(values.club_id as unknown as string), 10),
           values.name,
           values.dashboard_public,
           values.dashboard_endpoint,

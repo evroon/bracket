@@ -4,12 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
-import {
-  MatchBodyInterface,
-  MatchInterface,
-  formatMatchInput1,
-  formatMatchInput2,
-} from '../../interfaces/match';
+import { MatchInterface, formatMatchInput1, formatMatchInput2 } from '../../interfaces/match';
 import { Round } from '../../interfaces/round';
 import { TournamentMinimal } from '../../interfaces/tournament';
 import { getMatchLookup, getStageItemLookup } from '../../services/lookups';
@@ -98,12 +93,12 @@ function MatchModalForm({
     <>
       <form
         onSubmit={form.onSubmit(async (values) => {
-          const updatedMatch: MatchBodyInterface = {
+          const updatedMatch = {
             id: match.id,
             round_id: match.round_id,
             stage_item_input1_score: values.stage_item_input1_score,
             stage_item_input2_score: values.stage_item_input2_score,
-            court_id: match.court_id,
+            court_id: match.court_id || null,
             custom_duration_minutes: customDurationEnabled ? values.custom_duration_minutes : null,
             custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
           };

@@ -129,6 +129,7 @@ disable = [
     'unspecified-encoding',
     'unused-argument',  # Gives false positives.
     'wrong-import-position',
+    'unused-import',  # Ruff checks this
 ]
 
 [tool.bandit]

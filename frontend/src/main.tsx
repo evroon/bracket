@@ -21,6 +21,7 @@ import CreateDemoAccountPage from './pages/demo';
 import LoginPage from './pages/login';
 import PasswordResetPage from './pages/password_reset';
 import DashboardSchedulePage from './pages/tournaments/[id]/dashboard';
+import DashboardNotFoundPage from './pages/tournaments/[id]/dashboard/dashboard_404';
 import CourtsPresentPage from './pages/tournaments/[id]/dashboard/present/courts';
 import StandingsPresentPage from './pages/tournaments/[id]/dashboard/present/standings';
 import DashboardStandingsPage from './pages/tournaments/[id]/dashboard/standings';
@@ -100,6 +101,7 @@ createRoot(document.getElementById('root')!).render(
                       <Route path="courts" element={<CourtsPresentPage />} />
                       <Route path="standings" element={<StandingsPresentPage />} />
                     </Route>
+                    <Route path="*" element={<DashboardNotFoundPage />} />
                   </Route>
                 </Route>
               </Route>

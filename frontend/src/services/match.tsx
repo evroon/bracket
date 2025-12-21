@@ -1,13 +1,9 @@
 import { showNotification } from '@mantine/notifications';
 
-import {
-  MatchBodyInterface,
-  MatchCreateBodyInterface,
-  MatchRescheduleInterface,
-} from '../interfaces/match';
+import { MatchBody, MatchCreateBodyFrontend, MatchRescheduleBody } from '../openapi';
 import { createAxios, handleRequestError } from './adapter';
 
-export async function createMatch(tournament_id: number, match: MatchCreateBodyInterface) {
+export async function createMatch(tournament_id: number, match: MatchCreateBodyFrontend) {
   return createAxios()
     .post(`tournaments/${tournament_id}/matches`, match)
     .catch((response: any) => handleRequestError(response));
@@ -19,11 +15,7 @@ export async function deleteMatch(tournament_id: number, match_id: number) {
     .catch((response: any) => handleRequestError(response));
 }
 
-export async function updateMatch(
-  tournament_id: number,
-  match_id: number,
-  match: MatchBodyInterface
-) {
+export async function updateMatch(tournament_id: number, match_id: number, match: MatchBody) {
   return createAxios()
     .put(`tournaments/${tournament_id}/matches/${match_id}`, match)
     .catch((response: any) => handleRequestError(response));
@@ -32,7 +24,7 @@ export async function updateMatch(
 export async function rescheduleMatch(
   tournament_id: number,
   match_id: number,
-  match: MatchRescheduleInterface
+  match: MatchRescheduleBody
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/matches/${match_id}/reschedule`, match)

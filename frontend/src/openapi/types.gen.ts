@@ -11,15 +11,15 @@ export type BodyLoginForAccessTokenTokenPost = {
   /**
    * Client Id
    */
-  client_id?: string | null;
+  client_id: string | null;
   /**
    * Client Secret
    */
-  client_secret?: string | null;
+  client_secret: string | null;
   /**
    * Grant Type
    */
-  grant_type?: string | null;
+  grant_type: string | null;
   /**
    * Password
    */
@@ -27,7 +27,7 @@ export type BodyLoginForAccessTokenTokenPost = {
   /**
    * Scope
    */
-  scope?: string;
+  scope: string;
   /**
    * Username
    */
@@ -41,7 +41,7 @@ export type BodyUpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPost = {
   /**
    * File
    */
-  file?: Blob | File | null;
+  file: Blob | File | null;
 };
 
 /**
@@ -51,7 +51,7 @@ export type BodyUploadLogoTournamentsTournamentIdLogoPost = {
   /**
    * File
    */
-  file?: Blob | File | null;
+  file: Blob | File | null;
 };
 
 /**
@@ -176,11 +176,11 @@ export type FullTeamWithPlayers = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Elo Score
    */
-  elo_score?: string;
+  elo_score: string;
   /**
    * Id
    */
@@ -188,11 +188,11 @@ export type FullTeamWithPlayers = {
   /**
    * Logo Path
    */
-  logo_path?: string | null;
+  logo_path: string | null;
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Name
    */
@@ -204,7 +204,7 @@ export type FullTeamWithPlayers = {
   /**
    * Swiss Score
    */
-  swiss_score?: string;
+  swiss_score: string;
   /**
    * Tournament Id
    */
@@ -212,7 +212,7 @@ export type FullTeamWithPlayers = {
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -232,7 +232,7 @@ export type Match = {
   /**
    * Court Id
    */
-  court_id?: number | null;
+  court_id: number | null;
   /**
    * Created
    */
@@ -240,11 +240,11 @@ export type Match = {
   /**
    * Custom Duration Minutes
    */
-  custom_duration_minutes?: number | null;
+  custom_duration_minutes: number | null;
   /**
    * Custom Margin Minutes
    */
-  custom_margin_minutes?: number | null;
+  custom_margin_minutes: number | null;
   /**
    * Duration Minutes
    */
@@ -260,7 +260,7 @@ export type Match = {
   /**
    * Position In Schedule
    */
-  position_in_schedule?: number | null;
+  position_in_schedule: number | null;
   /**
    * Round Id
    */
@@ -268,7 +268,7 @@ export type Match = {
   /**
    * Stage Item Input1
    */
-  stage_item_input1?: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
+  stage_item_input1: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
   /**
    * Stage Item Input1 Conflict
    */
@@ -276,7 +276,7 @@ export type Match = {
   /**
    * Stage Item Input1 Id
    */
-  stage_item_input1_id?: number | null;
+  stage_item_input1_id: number | null;
   /**
    * Stage Item Input1 Score
    */
@@ -284,11 +284,11 @@ export type Match = {
   /**
    * Stage Item Input1 Winner From Match Id
    */
-  stage_item_input1_winner_from_match_id?: number | null;
+  stage_item_input1_winner_from_match_id: number | null;
   /**
    * Stage Item Input2
    */
-  stage_item_input2?: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
+  stage_item_input2: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
   /**
    * Stage Item Input2 Conflict
    */
@@ -296,7 +296,7 @@ export type Match = {
   /**
    * Stage Item Input2 Id
    */
-  stage_item_input2_id?: number | null;
+  stage_item_input2_id: number | null;
   /**
    * Stage Item Input2 Score
    */
@@ -304,11 +304,11 @@ export type Match = {
   /**
    * Stage Item Input2 Winner From Match Id
    */
-  stage_item_input2_winner_from_match_id?: number | null;
+  stage_item_input2_winner_from_match_id: number | null;
   /**
    * Start Time
    */
-  start_time?: string | null;
+  start_time: string | null;
 };
 
 /**
@@ -318,15 +318,15 @@ export type MatchBody = {
   /**
    * Court Id
    */
-  court_id?: number | null;
+  court_id: number | null;
   /**
    * Custom Duration Minutes
    */
-  custom_duration_minutes?: number | null;
+  custom_duration_minutes: number | null;
   /**
    * Custom Margin Minutes
    */
-  custom_margin_minutes?: number | null;
+  custom_margin_minutes: number | null;
   /**
    * Round Id
    */
@@ -334,11 +334,11 @@ export type MatchBody = {
   /**
    * Stage Item Input1 Score
    */
-  stage_item_input1_score?: number;
+  stage_item_input1_score: number;
   /**
    * Stage Item Input2 Score
    */
-  stage_item_input2_score?: number;
+  stage_item_input2_score: number;
 };
 
 /**
@@ -348,7 +348,7 @@ export type MatchCreateBodyFrontend = {
   /**
    * Court Id
    */
-  court_id?: number | null;
+  court_id: number | null;
   /**
    * Round Id
    */
@@ -356,19 +356,19 @@ export type MatchCreateBodyFrontend = {
   /**
    * Stage Item Input1 Id
    */
-  stage_item_input1_id?: number | null;
+  stage_item_input1_id: number | null;
   /**
    * Stage Item Input1 Winner From Match Id
    */
-  stage_item_input1_winner_from_match_id?: number | null;
+  stage_item_input1_winner_from_match_id: number | null;
   /**
    * Stage Item Input2 Id
    */
-  stage_item_input2_id?: number | null;
+  stage_item_input2_id: number | null;
   /**
    * Stage Item Input2 Winner From Match Id
    */
-  stage_item_input2_winner_from_match_id?: number | null;
+  stage_item_input2_winner_from_match_id: number | null;
 };
 
 /**
@@ -399,11 +399,11 @@ export type MatchRescheduleBody = {
  * MatchWithDetails has zero or one defined stage item inputs, but not both.
  */
 export type MatchWithDetails = {
-  court?: Court | null;
+  court: Court | null;
   /**
    * Court Id
    */
-  court_id?: number | null;
+  court_id: number | null;
   /**
    * Created
    */
@@ -411,11 +411,11 @@ export type MatchWithDetails = {
   /**
    * Custom Duration Minutes
    */
-  custom_duration_minutes?: number | null;
+  custom_duration_minutes: number | null;
   /**
    * Custom Margin Minutes
    */
-  custom_margin_minutes?: number | null;
+  custom_margin_minutes: number | null;
   /**
    * Duration Minutes
    */
@@ -431,7 +431,7 @@ export type MatchWithDetails = {
   /**
    * Position In Schedule
    */
-  position_in_schedule?: number | null;
+  position_in_schedule: number | null;
   /**
    * Round Id
    */
@@ -439,7 +439,7 @@ export type MatchWithDetails = {
   /**
    * Stage Item Input1
    */
-  stage_item_input1?: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
+  stage_item_input1: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
   /**
    * Stage Item Input1 Conflict
    */
@@ -447,7 +447,7 @@ export type MatchWithDetails = {
   /**
    * Stage Item Input1 Id
    */
-  stage_item_input1_id?: number | null;
+  stage_item_input1_id: number | null;
   /**
    * Stage Item Input1 Score
    */
@@ -455,11 +455,11 @@ export type MatchWithDetails = {
   /**
    * Stage Item Input1 Winner From Match Id
    */
-  stage_item_input1_winner_from_match_id?: number | null;
+  stage_item_input1_winner_from_match_id: number | null;
   /**
    * Stage Item Input2
    */
-  stage_item_input2?: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
+  stage_item_input2: StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty | null;
   /**
    * Stage Item Input2 Conflict
    */
@@ -467,7 +467,7 @@ export type MatchWithDetails = {
   /**
    * Stage Item Input2 Id
    */
-  stage_item_input2_id?: number | null;
+  stage_item_input2_id: number | null;
   /**
    * Stage Item Input2 Score
    */
@@ -475,22 +475,22 @@ export type MatchWithDetails = {
   /**
    * Stage Item Input2 Winner From Match Id
    */
-  stage_item_input2_winner_from_match_id?: number | null;
+  stage_item_input2_winner_from_match_id: number | null;
   /**
    * Start Time
    */
-  start_time?: string | null;
+  start_time: string | null;
 };
 
 /**
  * MatchWithDetailsDefinitive
  */
 export type MatchWithDetailsDefinitive = {
-  court?: Court | null;
+  court: Court | null;
   /**
    * Court Id
    */
-  court_id?: number | null;
+  court_id: number | null;
   /**
    * Created
    */
@@ -498,11 +498,11 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Custom Duration Minutes
    */
-  custom_duration_minutes?: number | null;
+  custom_duration_minutes: number | null;
   /**
    * Custom Margin Minutes
    */
-  custom_margin_minutes?: number | null;
+  custom_margin_minutes: number | null;
   /**
    * Duration Minutes
    */
@@ -518,7 +518,7 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Position In Schedule
    */
-  position_in_schedule?: number | null;
+  position_in_schedule: number | null;
   /**
    * Round Id
    */
@@ -534,7 +534,7 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Stage Item Input1 Id
    */
-  stage_item_input1_id?: number | null;
+  stage_item_input1_id: number | null;
   /**
    * Stage Item Input1 Score
    */
@@ -542,7 +542,7 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Stage Item Input1 Winner From Match Id
    */
-  stage_item_input1_winner_from_match_id?: number | null;
+  stage_item_input1_winner_from_match_id: number | null;
   /**
    * Stage Item Input2
    */
@@ -554,7 +554,7 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Stage Item Input2 Id
    */
-  stage_item_input2_id?: number | null;
+  stage_item_input2_id: number | null;
   /**
    * Stage Item Input2 Score
    */
@@ -562,11 +562,11 @@ export type MatchWithDetailsDefinitive = {
   /**
    * Stage Item Input2 Winner From Match Id
    */
-  stage_item_input2_winner_from_match_id?: number | null;
+  stage_item_input2_winner_from_match_id: number | null;
   /**
    * Start Time
    */
-  start_time?: string | null;
+  start_time: string | null;
 };
 
 /**
@@ -612,11 +612,11 @@ export type Player = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Elo Score
    */
-  elo_score?: string;
+  elo_score: string;
   /**
    * Id
    */
@@ -624,7 +624,7 @@ export type Player = {
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Name
    */
@@ -632,7 +632,7 @@ export type Player = {
   /**
    * Swiss Score
    */
-  swiss_score?: string;
+  swiss_score: string;
   /**
    * Tournament Id
    */
@@ -640,7 +640,7 @@ export type Player = {
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -749,19 +749,19 @@ export type RankingCreateBody = {
   /**
    * Add Score Points
    */
-  add_score_points?: boolean;
+  add_score_points: boolean;
   /**
    * Draw Points
    */
-  draw_points?: number | string;
+  draw_points: number | string;
   /**
    * Loss Points
    */
-  loss_points?: number | string;
+  loss_points: number | string;
   /**
    * Win Points
    */
-  win_points?: number | string;
+  win_points: number | string;
 };
 
 /**
@@ -781,7 +781,7 @@ export type RoundCreateBody = {
   /**
    * Name
    */
-  name?: string | null;
+  name: string | null;
   /**
    * Stage Item Id
    */
@@ -867,7 +867,7 @@ export type StageActivateBody = {
   /**
    * Direction
    */
-  direction?: 'next' | 'previous';
+  direction: 'next' | 'previous';
 };
 
 /**
@@ -877,7 +877,7 @@ export type StageItemActivateNextBody = {
   /**
    * Adjust To Time
    */
-  adjust_to_time?: string | null;
+  adjust_to_time: string | null;
 };
 
 /**
@@ -887,11 +887,11 @@ export type StageItemCreateBody = {
   /**
    * Name
    */
-  name?: string | null;
+  name: string | null;
   /**
    * Ranking Id
    */
-  ranking_id?: number | null;
+  ranking_id: number | null;
   /**
    * Stage Id
    */
@@ -910,7 +910,7 @@ export type StageItemInputEmpty = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Id
    */
@@ -918,11 +918,11 @@ export type StageItemInputEmpty = {
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Points
    */
-  points?: string;
+  points: string;
   /**
    * Slot
    */
@@ -930,11 +930,11 @@ export type StageItemInputEmpty = {
   /**
    * Stage Item Id
    */
-  stage_item_id?: number | null;
+  stage_item_id: number | null;
   /**
    * Team Id
    */
-  team_id?: null;
+  team_id: null;
   /**
    * Tournament Id
    */
@@ -942,15 +942,15 @@ export type StageItemInputEmpty = {
   /**
    * Winner From Stage Item Id
    */
-  winner_from_stage_item_id?: null;
+  winner_from_stage_item_id: null;
   /**
    * Winner Position
    */
-  winner_position?: null;
+  winner_position: null;
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -960,7 +960,7 @@ export type StageItemInputFinal = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Id
    */
@@ -968,11 +968,11 @@ export type StageItemInputFinal = {
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Points
    */
-  points?: string;
+  points: string;
   /**
    * Slot
    */
@@ -980,7 +980,7 @@ export type StageItemInputFinal = {
   /**
    * Stage Item Id
    */
-  stage_item_id?: number | null;
+  stage_item_id: number | null;
   team: Team;
   /**
    * Team Id
@@ -993,15 +993,15 @@ export type StageItemInputFinal = {
   /**
    * Winner From Stage Item Id
    */
-  winner_from_stage_item_id?: number | null;
+  winner_from_stage_item_id: number | null;
   /**
    * Winner Position
    */
-  winner_position?: number | null;
+  winner_position: number | null;
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -1055,7 +1055,7 @@ export type StageItemInputTentative = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Id
    */
@@ -1063,11 +1063,11 @@ export type StageItemInputTentative = {
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Points
    */
-  points?: string;
+  points: string;
   /**
    * Slot
    */
@@ -1075,11 +1075,11 @@ export type StageItemInputTentative = {
   /**
    * Stage Item Id
    */
-  stage_item_id?: number | null;
+  stage_item_id: number | null;
   /**
    * Team Id
    */
-  team_id?: null;
+  team_id: null;
   /**
    * Tournament Id
    */
@@ -1095,7 +1095,7 @@ export type StageItemInputTentative = {
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -1113,15 +1113,15 @@ export type StageItemInputUpdateBodyEmpty = {
   /**
    * Team Id
    */
-  team_id?: null;
+  team_id: null;
   /**
    * Winner From Stage Item Id
    */
-  winner_from_stage_item_id?: null;
+  winner_from_stage_item_id: null;
   /**
    * Winner Position
    */
-  winner_position?: null;
+  winner_position: null;
 };
 
 /**
@@ -1185,7 +1185,7 @@ export type StageItemWithRounds = {
   /**
    * Ranking Id
    */
-  ranking_id?: number | null;
+  ranking_id: number | null;
   /**
    * Rounds
    */
@@ -1279,7 +1279,7 @@ export type SuccessResponse = {
   /**
    * Success
    */
-  success?: boolean;
+  success: boolean;
 };
 
 /**
@@ -1331,11 +1331,11 @@ export type Team = {
   /**
    * Draws
    */
-  draws?: number;
+  draws: number;
   /**
    * Elo Score
    */
-  elo_score?: string;
+  elo_score: string;
   /**
    * Id
    */
@@ -1343,11 +1343,11 @@ export type Team = {
   /**
    * Logo Path
    */
-  logo_path?: string | null;
+  logo_path: string | null;
   /**
    * Losses
    */
-  losses?: number;
+  losses: number;
   /**
    * Name
    */
@@ -1355,7 +1355,7 @@ export type Team = {
   /**
    * Swiss Score
    */
-  swiss_score?: string;
+  swiss_score: string;
   /**
    * Tournament Id
    */
@@ -1363,7 +1363,7 @@ export type Team = {
   /**
    * Wins
    */
-  wins?: number;
+  wins: number;
 };
 
 /**
@@ -1449,7 +1449,7 @@ export type Tournament = {
   /**
    * Dashboard Endpoint
    */
-  dashboard_endpoint?: string | null;
+  dashboard_endpoint: string | null;
   /**
    * Dashboard Public
    */
@@ -1465,7 +1465,7 @@ export type Tournament = {
   /**
    * Logo Path
    */
-  logo_path?: string | null;
+  logo_path: string | null;
   /**
    * Margin Minutes
    */
@@ -1482,7 +1482,7 @@ export type Tournament = {
    * Start Time
    */
   start_time: string;
-  status?: TournamentStatus;
+  status: TournamentStatus;
 };
 
 /**
@@ -1500,7 +1500,7 @@ export type TournamentBody = {
   /**
    * Dashboard Endpoint
    */
-  dashboard_endpoint?: unknown | string;
+  dashboard_endpoint: unknown | string;
   /**
    * Dashboard Public
    */
@@ -1557,7 +1557,7 @@ export type TournamentUpdateBody = {
   /**
    * Dashboard Endpoint
    */
-  dashboard_endpoint?: unknown | string;
+  dashboard_endpoint: unknown | string;
   /**
    * Dashboard Public
    */

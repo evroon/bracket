@@ -4,7 +4,12 @@ import { assert_not_none } from '../components/utils/assert';
 import { groupBy, responseIsValid } from '../components/utils/util';
 import { MatchInterface } from '../interfaces/match';
 import { StageWithStageItems } from '../interfaces/stage';
-import { Court, FullTeamWithPlayers } from '../openapi';
+import {
+  Court,
+  FullTeamWithPlayers,
+  StageItemInputFinal,
+  StageItemInputTentative,
+} from '../openapi';
 import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {
@@ -59,9 +64,11 @@ export function getStageItemTeamsLookup(swrStagesResponse: SWRResponse) {
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items
-      .sort((si1: any, si2: any) => (si1.name > si2.name ? 1 : -1))
+      .sort((si1, si2) => (si1.name > si2.name ? 1 : -1))
       .forEach((stageItem) => {
-        const teams_with_inputs = stageItem.inputs.filter((input) => input.team != null);
+        const teams_with_inputs = stageItem.inputs.filter(
+          (input) => 'team' in input && input.team != null
+        );
 
         if (teams_with_inputs.length > 0) {
           result = result.concat([[stageItem.id, teams_with_inputs]]);

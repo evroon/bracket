@@ -26,7 +26,7 @@ export default function MatchLarge({
           </Grid.Col>
           <Grid.Col span={{ sm: 3 }}>
             <Center>
-              <Time datetime={match.start_time} />
+              <Time datetime={match.start_time || ''} />
             </Center>
           </Grid.Col>
         </Grid>
