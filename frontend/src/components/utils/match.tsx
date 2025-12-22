@@ -19,10 +19,7 @@ export function getMatchStartTime(match: MatchWithDetails) {
 }
 
 export function getMatchEndTime(match: MatchWithDetails) {
-  return getMatchStartTime(match).add(
-    60 * (match.duration_minutes + match.margin_minutes),
-    'second'
-  );
+  return getMatchStartTime(match).add(match.duration_minutes + match.margin_minutes, 'minutes');
 }
 
 export function isMatchHappening(match: MatchWithDetails) {

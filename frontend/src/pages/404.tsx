@@ -2,8 +2,8 @@ import { Button, Container, Group, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-import { tokenPresent } from '@services/local_storage';
 import classes from '@pages/404.module.css';
+import { tokenPresent } from '@services/local_storage';
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
