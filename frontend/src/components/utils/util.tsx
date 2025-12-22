@@ -14,26 +14,6 @@ function getTodayAtMidnight() {
   return dayjs().hour(0);
 }
 
-export function getDefaultTimeRange(selectMultipleDates: boolean) {
-  const maxDate = getTodayAtMidnight();
-  const minDate = getTodayAtMidnight();
-
-  let offset = 1;
-  if (minDate.day() === 0) {
-    offset = 2;
-  } else if (minDate.day() === 1) {
-    offset = 3;
-  }
-
-  minDate.subtract(offset, 'day');
-
-  if (!selectMultipleDates) {
-    maxDate.date(minDate.date());
-  }
-
-  return [minDate, maxDate];
-}
-
 export function getTournamentIdFromRouter() {
   const params = useParams();
   const { id: idString }: any = params;
