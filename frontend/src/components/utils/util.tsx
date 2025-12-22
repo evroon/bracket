@@ -4,14 +4,9 @@ import { useParams } from 'react-router';
 import { SWRResponse } from 'swr';
 
 import classes from '@pages/create_account.module.css';
-import dayjs from 'dayjs';
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function getTodayAtMidnight() {
-  return dayjs().hour(0);
 }
 
 export function getTournamentIdFromRouter() {
