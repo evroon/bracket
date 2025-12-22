@@ -12,6 +12,7 @@ import {
   UpcomingMatchesResponse,
 } from '@openapi';
 import { startNextRound } from '@services/round';
+import dayjs from 'dayjs';
 
 export default function ActivateNextRoundModal({
   tournamentId,
@@ -46,7 +47,7 @@ export default function ActivateNextRoundModal({
             await startNextRound(
               tournamentId,
               stageItem.id,
-              values.adjust_to_time ? new Date() : null
+              values.adjust_to_time ? dayjs() : null
             );
             await swrStagesResponse.mutate();
             await swrUpcomingMatchesResponse.mutate();

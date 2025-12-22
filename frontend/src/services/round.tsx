@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import { createAxios, handleRequestError } from './adapter';
 
 export async function createRound(tournament_id: number, stage_item_id: number) {
@@ -28,7 +29,7 @@ export async function updateRound(
 export async function startNextRound(
   tournament_id: number,
   stage_item_id: number,
-  adjust_to_time: Date | null
+  adjust_to_time: Dayjs | null
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/stage_items/${stage_item_id}/start_next_round`, {

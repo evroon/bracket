@@ -44,6 +44,7 @@ import {
   unarchiveTournament,
   updateTournament,
 } from '@services/tournament';
+import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -126,7 +127,7 @@ function GeneralTournamentForm({
 
   const form = useForm({
     initialValues: {
-      start_time: new Date(tournament.start_time),
+      start_time: dayjs(tournament.start_time),
       name: tournament.name,
       club_id: `${tournament.club_id}`,
       dashboard_public: tournament.dashboard_public,
@@ -202,7 +203,7 @@ function GeneralTournamentForm({
               color="indigo"
               leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
               onClick={() => {
-                form.setFieldValue('start_time', new Date());
+                form.setFieldValue('start_time', dayjs());
               }}
             >
               {t('set_to_new_button')}

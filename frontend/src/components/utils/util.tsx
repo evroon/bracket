@@ -4,15 +4,14 @@ import { useParams } from 'react-router';
 import { SWRResponse } from 'swr';
 
 import classes from '@pages/create_account.module.css';
+import dayjs from 'dayjs';
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function getTodayAtMidnight() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
+  return dayjs().hour(0);
 }
 
 export function getDefaultTimeRange(selectMultipleDates: boolean) {
@@ -20,16 +19,16 @@ export function getDefaultTimeRange(selectMultipleDates: boolean) {
   const minDate = getTodayAtMidnight();
 
   let offset = 1;
-  if (minDate.getDay() === 0) {
+  if (minDate.day() === 0) {
     offset = 2;
-  } else if (minDate.getDay() === 1) {
+  } else if (minDate.day() === 1) {
     offset = 3;
   }
 
-  minDate.setDate(minDate.getDate() - offset);
+  minDate.subtract(offset, 'day');
 
   if (!selectMultipleDates) {
-    maxDate.setDate(minDate.getDate());
+    maxDate.date(minDate.date());
   }
 
   return [minDate, maxDate];
