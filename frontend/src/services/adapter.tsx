@@ -21,6 +21,7 @@ import {
   UpcomingMatchesResponse,
   UserPublicResponse,
 } from '@openapi';
+import dayjs from 'dayjs';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
@@ -100,7 +101,7 @@ function getTimeState() {
   // Used to force a refresh on SWRResponse, even when the response stays the same.
   // For example, when the page layout depends on time, but the response contains
   // timestamps that don't change, this is necessary.
-  return { time: new Date() };
+  return { time: dayjs() };
 }
 
 const fetcher = (url: string) =>

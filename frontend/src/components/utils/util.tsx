@@ -9,32 +9,6 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function getTodayAtMidnight() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-export function getDefaultTimeRange(selectMultipleDates: boolean) {
-  const maxDate = getTodayAtMidnight();
-  const minDate = getTodayAtMidnight();
-
-  let offset = 1;
-  if (minDate.getDay() === 0) {
-    offset = 2;
-  } else if (minDate.getDay() === 1) {
-    offset = 3;
-  }
-
-  minDate.setDate(minDate.getDate() - offset);
-
-  if (!selectMultipleDates) {
-    maxDate.setDate(minDate.getDate());
-  }
-
-  return [minDate, maxDate];
-}
-
 export function getTournamentIdFromRouter() {
   const params = useParams();
   const { id: idString }: any = params;

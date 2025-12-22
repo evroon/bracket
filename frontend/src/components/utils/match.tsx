@@ -1,4 +1,5 @@
 import { MatchWithDetails } from '@openapi';
+import dayjs from 'dayjs';
 import { formatStageItemInput } from './stage_item_input';
 import { Translator } from './types';
 
@@ -14,25 +15,23 @@ export interface SchedulerSettings {
 }
 
 export function getMatchStartTime(match: MatchWithDetails) {
-  return new Date(match.start_time || '');
+  return dayjs(match.start_time || '');
 }
 
 export function getMatchEndTime(match: MatchWithDetails) {
-  return new Date(
-    getMatchStartTime(match).getTime() + 60000 * (match.duration_minutes + match.margin_minutes)
-  );
+  return getMatchStartTime(match).add(match.duration_minutes + match.margin_minutes, 'minutes');
 }
 
 export function isMatchHappening(match: MatchWithDetails) {
-  return getMatchStartTime(match) < new Date() && getMatchEndTime(match) > new Date();
+  return getMatchStartTime(match) < dayjs() && getMatchEndTime(match) > dayjs();
 }
 
 export function isMatchInTheFutureOrPresent(match: MatchWithDetails) {
-  return getMatchEndTime(match) > new Date();
+  return getMatchEndTime(match) > dayjs();
 }
 
 export function isMatchInTheFuture(match: MatchWithDetails) {
-  return getMatchStartTime(match) > new Date();
+  return getMatchStartTime(match) > dayjs();
 }
 
 export function formatMatchInput1(

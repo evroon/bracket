@@ -21,6 +21,7 @@ import { assert_not_none } from '@components/utils/assert';
 import { Club, Tournament, TournamentsResponse } from '@openapi';
 import { getBaseApiUrl, getClubs } from '@services/adapter';
 import { createTournament } from '@services/tournament';
+import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -45,7 +46,7 @@ function GeneralTournamentForm({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      start_time: new Date().toISOString(),
+      start_time: dayjs(),
       name: '',
       club_id: null,
       dashboard_public: true,
@@ -123,7 +124,7 @@ function GeneralTournamentForm({
             color="indigo"
             leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
             onClick={() => {
-              form.setFieldValue('start_time', new Date().toISOString());
+              form.setFieldValue('start_time', dayjs());
             }}
           >
             {t('now_button')}
