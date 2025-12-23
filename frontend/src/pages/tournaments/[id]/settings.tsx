@@ -161,7 +161,7 @@ function GeneralTournamentForm({
           values.dashboard_endpoint,
           values.players_can_be_in_multiple_teams,
           values.auto_assign_courts,
-          values.start_time.toISOString(),
+          new Date(values.start_time).toISOString(),
           values.duration_minutes,
           values.margin_minutes
         );
