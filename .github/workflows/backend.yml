@@ -38,8 +38,8 @@ jobs:
       - id: cache-uv
         uses: actions/cache@v5
         with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-uv-${{ hashFiles('**/Pipfile.lock') }}
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv
 
       - name: Run tests
         run: uv run pytest --cov --cov-report=xml .
