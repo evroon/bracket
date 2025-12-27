@@ -2,12 +2,12 @@ import { Grid, Title } from '@mantine/core';
 import { SWRResponse } from 'swr';
 
 import { TournamentMinimal } from '@components/utils/tournament';
-import { RoundWithMatches } from '@openapi';
+import { RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
 import { getStages } from '@services/adapter';
 import Match from './match';
 
 function getRoundsGridCols(
-  swrStagesResponse: SWRResponse,
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>,
   activeRound: RoundWithMatches,
   tournamentData: TournamentMinimal
 ) {

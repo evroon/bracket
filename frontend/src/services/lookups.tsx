@@ -2,7 +2,13 @@ import { SWRResponse } from 'swr';
 
 import { assert_not_none } from '@components/utils/assert';
 import { groupBy, responseIsValid } from '@components/utils/util';
-import { Court, FullTeamWithPlayers, MatchWithDetails, StageWithStageItems } from '@openapi';
+import {
+  Court,
+  CourtsResponse,
+  FullTeamWithPlayers,
+  MatchWithDetails,
+  StageWithStageItems,
+} from '@openapi';
 import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {
@@ -114,10 +120,10 @@ export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
 }
 
 export function getScheduleData(
-  swrCourtsResponse: SWRResponse,
+  swrCourtsResponse: SWRResponse<CourtsResponse>,
   matchesByCourtId: any
 ): { court: Court; matches: MatchWithDetails[] }[] {
-  return swrCourtsResponse.data.data.map((court: Court) => ({
+  return (swrCourtsResponse.data?.data || []).map((court: Court) => ({
     matches: (matchesByCourtId[court.id] || [])
       .filter((match: MatchWithDetails) => match.start_time != null)
       .sort((m1: MatchWithDetails, m2: MatchWithDetails) => {
