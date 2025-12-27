@@ -209,7 +209,7 @@ export default function SwissTournamentPage() {
           displaySettings={displaySettings}
           swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         />
-        {showScheduler ? (
+        {showScheduler && activeStage ? (
           <Scheduler
             activeStage={activeStage}
             draftRound={draftRound}

@@ -74,7 +74,7 @@ export default function ActivateNextStageModal({
 }: {
   tournamentId: number;
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
-  swrRankingsPerStageItemResponse: SWRResponse;
+  swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);

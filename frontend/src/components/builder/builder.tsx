@@ -35,7 +35,6 @@ import {
   StageItemInputOption,
   formatStageItemInputTentative,
 } from '@components/utils/stage_item_input';
-import { responseIsValid } from '@components/utils/util';
 import {
   Ranking,
   StageItemInputOptionsResponse,
@@ -162,7 +161,7 @@ function StageItemInputComboBox({
 }
 
 export function getAvailableInputs(
-  swrAvailableInputsResponse: SWRResponse,
+  swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>,
   teamsMap: any,
   stageItemMap: any
 ) {
@@ -193,9 +192,9 @@ export function getAvailableInputs(
       already_taken: option.already_taken,
     };
   };
-  return responseIsValid(swrAvailableInputsResponse)
-    ? Object.keys(swrAvailableInputsResponse.data.data).reduce((result: any, stage_id: string) => {
-        const option = swrAvailableInputsResponse.data.data[stage_id];
+  return swrAvailableInputsResponse.data != undefined
+    ? Object.keys(swrAvailableInputsResponse.data?.data).reduce((result: any, stage_id: string) => {
+        const option = assert_not_none(swrAvailableInputsResponse.data?.data[stage_id]);
         result[stage_id] = option
           .map((opt: StageItemInputOption) => getComboBoxOptionForStageItemInput(opt))
           .filter((o: StageItemInputOption | null) => o != null);

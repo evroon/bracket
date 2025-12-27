@@ -7,11 +7,15 @@ import ClubModal from '@components/modals/club_modal';
 import { EmptyTableInfo } from '@components/no_content/empty_table_info';
 import RequestErrorAlert from '@components/utils/error_alert';
 import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
-import { Club } from '@openapi';
+import { Club, ClubsResponse } from '@openapi';
 import { deleteClub } from '@services/club';
 import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
 
-export default function ClubsTable({ swrClubsResponse }: { swrClubsResponse: SWRResponse }) {
+export default function ClubsTable({
+  swrClubsResponse,
+}: {
+  swrClubsResponse: SWRResponse<ClubsResponse>;
+}) {
   const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
   const tableState = getTableState('name');
   const { t } = useTranslation();

@@ -1,7 +1,10 @@
 import { SWRResponse } from 'swr';
 
-import { StageWithStageItems } from '@openapi';
+import { StagesWithStageItemsResponse } from '@openapi';
 
-export function getStageById(swrStagesResponse: SWRResponse, stageId: number) {
-  return swrStagesResponse.data.data.filter((stage: StageWithStageItems) => stage.id === stageId);
+export function getStageById(
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>,
+  stageId: number
+) {
+  return (swrStagesResponse.data?.data || []).filter((stage) => stage.id === stageId);
 }

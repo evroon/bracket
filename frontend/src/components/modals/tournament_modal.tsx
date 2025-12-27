@@ -180,8 +180,8 @@ export default function TournamentModal({
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
   const operation_text = t('create_tournament_button');
-  const swrClubsResponse: SWRResponse = getClubs();
-  const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
+  const swrClubsResponse = getClubs();
+  const clubs = swrClubsResponse.data?.data || [];
 
   return (
     <>
