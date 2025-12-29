@@ -4,34 +4,27 @@ networks:
 
 volumes:
   bracket_pg_data:
+  bracket_static_data:
 
 services:
-  bracket-backend:
-    container_name: bracket-backend
+  bracket:
+    container_name: bracket
     depends_on:
       - postgres
     environment:
       ENVIRONMENT: DEVELOPMENT
-      CORS_ORIGINS: http://localhost:3000
+      CORS_ORIGINS: http://localhost:8400
       PG_DSN: postgresql://bracket_dev:bracket_dev@postgres:5432/bracket_dev
-    image: ghcr.io/evroon/bracket-backend
+      SERVE_FRONTEND: true
+      API_PREFIX: '/api'
+    image: ghcr.io/evroon/bracket
     networks:
       - bracket_lan
     ports:
       - 8400:8400
     restart: unless-stopped
     volumes:
-      - ./backend/static:/app/static
-
-  bracket-frontend:
-    container_name: bracket-frontend
-    environment:
-      VITE_API_BASE_URL: http://localhost:8400
-      VITE_HCAPTCHA_SITE_KEY: 10000000-ffff-ffff-ffff-000000000001
-    image: ghcr.io/evroon/bracket-frontend
-    ports:
-      - 3000:3000
-    restart: unless-stopped
+      - bracket_static_data:/app/static
 
   postgres:
     environment:
