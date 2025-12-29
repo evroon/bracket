@@ -165,7 +165,7 @@ if config.serve_frontend:
     async def frontend(full_path: str) -> FileResponse:
         p = frontend_root / Path(full_path)
 
-        # Checking `str(path) in allowed_paths` should be enough here but we check for more cases
+        # Checking `str(p) in allowed_paths` should be enough here but we check for more cases
         # to be sure and avoid AI tools raising false positives.
         if p.exists() and p.is_file() and str(p) in allowed_paths and frontend_root in p.parents:
             return FileResponse(p)
