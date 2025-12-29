@@ -163,16 +163,11 @@ if config.serve_frontend:
 
     @app.get("/{full_path:path}")
     async def frontend(full_path: str) -> FileResponse:
-        path = frontend_root / Path(full_path)
+        p = frontend_root / Path(full_path)
 
         # Checking `str(path) in allowed_paths` should be enough here but we check for more cases
         # to be sure and avoid AI tools raising false positives.
-        if (
-            path.exists()
-            and path.is_file()
-            and str(path) in allowed_paths
-            and frontend_root in path.parents
-        ):
-            return FileResponse(path)
+        if p.exists() and p.is_file() and str(p) in allowed_paths and frontend_root in p.parents:
+            return FileResponse(p)
 
         return FileResponse(frontend_root / Path("index.html"))
