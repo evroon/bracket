@@ -13,6 +13,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME_FRONTEND: ${{ github.repository }}-frontend
   IMAGE_NAME_BACKEND: ${{ github.repository }}-backend
+  IMAGE_NAME_COMBINED: ${{ github.repository }}
 
 jobs:
   build-and-push-image:
@@ -50,6 +51,12 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
 
+      - name: Extract metadata (tags, labels) for combined Docker image
+        id: meta_combined
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_COMBINED }}
+
       - name: Build and push frontend Docker image
         uses: docker/build-push-action@v6
         with:
@@ -68,4 +75,14 @@ jobs:
           file: backend/Dockerfile
           tags: ${{ steps.meta_backend.outputs.tags }}
           labels: ${{ steps.meta_backend.outputs.labels }}
+          platforms: linux/amd64,linux/arm64/v8
+
+      - name: Build and push combined Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          push: true
+          file: Dockerfile
+          tags: ${{ steps.meta_combined.outputs.tags }}
+          labels: ${{ steps.meta_combined.outputs.labels }}
           platforms: linux/amd64,linux/arm64/v8
