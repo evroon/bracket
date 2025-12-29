@@ -23,6 +23,11 @@ Copy `ci.env` to `prod.env` and fill in the values:
   SSO auth.
 - `AUTO_RUN_MIGRATIONS`: Whether to run (alembic) migrations automatically on startup or not.
   Migrations can be applied manually using `uv run alembic upgrade head`.
+- `SERVE_FRONTEND`: Allows to serve the frontend using the FastAPI backend. This way, the frontend
+  and backend can be served on the same domain, which makes it easier to run and avoids CORS issues.
+- `API_PREFIX`: Must be set to `/api` when `SERVE_FRONTEND` is True. This makes all the backend requests go to
+  `localhost:8400/api/ping` instead of `localhost:8400/ping`. Make sure that `VITE_API_BASE_URL` of the frontend
+  contains this prefix as well.
 
 ### Backend: Example configuration file
 
@@ -40,6 +45,8 @@ ALLOW_USER_REGISTRATION=false
 ALLOW_INSECURE_HTTP_SSO=false
 CAPTCHA_SECRET='xxx'
 AUTO_RUN_MIGRATIONS=true
+SERVE_FRONTEND=true
+API_PREFIX=/api
 ```
 
 ## Frontend
@@ -47,7 +54,7 @@ AUTO_RUN_MIGRATIONS=true
 - `VITE_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha.
 - `VITE_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
-  For example: `https://api.bracket.com`
+  For example: `https://api.bracket.com/api`.
 - `VITE_ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
   analytics
 - `VITE_ANALYTICS_DATA_WEBSITE_ID`: The `data-website-id` attribute passed to the script for Umami
