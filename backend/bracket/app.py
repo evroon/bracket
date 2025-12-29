@@ -159,7 +159,9 @@ for tag, router in routers.items():
     app.include_router(router, tags=[tag])
 
 if config.serve_frontend:
-    assert config.api_prefix, "API_PREFIX env var must be set when serving the frontend"
+    msg = "API_PREFIX env var must be set (e.g. `/api`) when serving the frontend"
+    assert config.api_prefix.startswith("/"), msg
+
     frontend_root = Path("frontend-dist")
     allowed_paths = list(glob.iglob("frontend-dist/**/*", recursive=True))
 
