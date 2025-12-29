@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.models.db.stage_item_inputs import (
     StageItemInput,
@@ -26,8 +27,6 @@ from bracket.utils.errors import (
     check_unique_constraint_violation,
 )
 from bracket.utils.id_types import StageItemId, StageItemInputId, TournamentId
-
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 

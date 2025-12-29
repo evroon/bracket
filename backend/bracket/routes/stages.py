@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.scheduling.builder import determine_available_inputs
 from bracket.logic.scheduling.handle_stage_activation import (
@@ -33,8 +34,6 @@ from bracket.sql.stages import (
 )
 from bracket.sql.teams import get_teams_with_members
 from bracket.utils.id_types import StageId, TournamentId
-
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 

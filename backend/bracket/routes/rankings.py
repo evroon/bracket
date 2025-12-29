@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.config import config
 from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
 from bracket.logic.ranking.elimination import (
     update_inputs_in_complete_elimination_stage_item,
@@ -27,8 +28,6 @@ from bracket.sql.rankings import (
 from bracket.sql.stage_item_inputs import get_stage_item_input_ids_by_ranking_id
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.id_types import RankingId, TournamentId
-
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 

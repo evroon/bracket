@@ -33,8 +33,6 @@ from bracket.utils.id_types import UserId
 from bracket.utils.security import hash_password, verify_captcha_token
 from bracket.utils.types import assert_some
 
-from bracket.config import config
-
 router = APIRouter(prefix=config.api_prefix)
 
 

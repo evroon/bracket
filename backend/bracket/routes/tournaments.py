@@ -6,6 +6,7 @@ import aiofiles.os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.subscriptions import check_requirement
@@ -50,7 +51,6 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import TournamentId
 from bracket.utils.logging import logger
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 

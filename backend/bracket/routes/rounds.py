@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.ranking.calculation import (
     recalculate_ranking_for_stage_item,
@@ -34,8 +35,6 @@ from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.id_types import RoundId, TournamentId
 from tests.integration_tests.mocks import MOCK_NOW
-
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 

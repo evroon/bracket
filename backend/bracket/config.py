@@ -41,7 +41,7 @@ class Config(BaseSettings):
     pg_dsn: PostgresDsn = PostgresDsn("postgresql://user:pass@localhost:5432/db")
     sentry_dsn: str | None = None
     serve_frontend: bool = False
-    api_prefix: str = ''
+    api_prefix: str = ""
 
     def is_cors_enabled(self) -> bool:
         return self.cors_origins != "*"

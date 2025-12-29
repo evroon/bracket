@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import update_start_times_of_matches
@@ -59,8 +60,6 @@ from bracket.utils.errors import (
     check_foreign_key_violation,
 )
 from bracket.utils.id_types import StageItemId, TournamentId
-
-from bracket.config import config
 
 router = APIRouter(prefix=config.api_prefix)
 
