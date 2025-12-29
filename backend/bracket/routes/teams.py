@@ -51,7 +51,9 @@ from bracket.utils.logging import logger
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 async def update_team_members(

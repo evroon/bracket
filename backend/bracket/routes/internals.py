@@ -3,7 +3,9 @@ from fastapi.responses import PlainTextResponse
 
 from bracket.models.metrics import get_request_metrics
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/metrics", response_class=PlainTextResponse)

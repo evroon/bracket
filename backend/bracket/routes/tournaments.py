@@ -50,8 +50,10 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import TournamentId
 from bracket.utils.logging import logger
+from bracket.config import config
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
+
 unauthorized_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="You don't have access to this tournament",

@@ -20,7 +20,7 @@ from bracket.utils.id_types import ClubId, TournamentId, UserId
 from bracket.utils.security import verify_password
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 7 * 24 * 60  # 1 week

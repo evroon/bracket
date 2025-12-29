@@ -20,7 +20,9 @@ from bracket.utils.db import fetch_one_parsed
 from bracket.utils.id_types import CourtId, TournamentId
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/tournaments/{tournament_id}/courts", response_model=CourtsResponse)

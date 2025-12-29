@@ -60,7 +60,9 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import StageItemId, TournamentId
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.delete(

@@ -28,7 +28,9 @@ from bracket.sql.stage_item_inputs import get_stage_item_input_ids_by_ranking_id
 from bracket.sql.stage_items import get_stage_item
 from bracket.utils.id_types import RankingId, TournamentId
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/tournaments/{tournament_id}/rankings")

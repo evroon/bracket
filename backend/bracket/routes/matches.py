@@ -40,7 +40,9 @@ from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.id_types import MatchId, StageItemId, TournamentId
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+from bracket.config import config
+
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get(
