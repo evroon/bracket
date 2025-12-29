@@ -163,7 +163,7 @@ if config.serve_frontend:
 
     @app.get("/{full_path:path}")
     async def frontend(full_path: str) -> FileResponse:
-        p = frontend_root / Path(full_path)
+        p = (frontend_root / Path(full_path)).resolve()
 
         # Checking `str(p) in allowed_paths` should be enough here but we check for more cases
         # to be sure and avoid AI tools raising false positives.
