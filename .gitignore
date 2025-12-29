@@ -15,5 +15,6 @@ coverage.xml
 coverage.json
 
 backend/static
+backend/frontend-dist
 
 /process-compose.yml

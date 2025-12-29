@@ -40,6 +40,7 @@ class Config(BaseSettings):
     auto_run_migrations: bool = True
     pg_dsn: PostgresDsn = PostgresDsn("postgresql://user:pass@localhost:5432/db")
     sentry_dsn: str | None = None
+    serve_frontend: bool = False
 
     def is_cors_enabled(self) -> bool:
         return self.cors_origins != "*"
