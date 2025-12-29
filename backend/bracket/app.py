@@ -1,8 +1,10 @@
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.cors import CORSMiddleware
@@ -120,7 +122,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=config.cors_origins,
+    allow_origins=["localhost:8400", "http://localhost:8400"],
     allow_origin_regex=config.cors_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
@@ -153,3 +155,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 for tag, router in routers.items():
     app.include_router(router, tags=[tag])
+
+if config.serve_frontend:
+
+    @app.get("/{full_path:path}")
+    async def frontend(full_path: str) -> FileResponse:
+        path = Path(f"frontend-dist/{full_path}")
+        if path.exists():
+            return FileResponse(path)
+
+        return FileResponse("frontend-dist/index.html")
