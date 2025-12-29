@@ -1,3 +1,4 @@
+import glob
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -157,11 +158,13 @@ for tag, router in routers.items():
     app.include_router(router, tags=[tag])
 
 if config.serve_frontend:
+    allowed_paths = list(glob.iglob("frontend-dist/**/*", recursive=True))
 
     @app.get("/{full_path:path}")
     async def frontend(full_path: str) -> FileResponse:
         path = Path(f"frontend-dist/{full_path}")
-        if path.exists():
+
+        if path.exists() and path.is_file() and str(path) in allowed_paths:
             return FileResponse(path)
 
         return FileResponse("frontend-dist/index.html")

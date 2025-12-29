@@ -90,7 +90,7 @@ be able to view bracket at http://localhost:3000. You can log in with the follow
 
 To insert dummy rows into the database, run:
 ```bash
-sudo docker exec bracket-backend uv run ./cli.py create-dev-db
+docker exec bracket-backend uv run --no-dev ./cli.py create-dev-db
 ```
 
 See also the [quickstart docs](https://docs.bracketapp.nl/docs/running-bracket/quickstart).
