@@ -2,6 +2,7 @@ name: docker
 
 permissions:
   contents: read
+  packages: read
 
 on:
   workflow_dispatch:
@@ -10,6 +11,7 @@ on:
       - '.github/**'
       - 'backend/**'
       - 'frontend/**'
+      - 'Dockerfile'
       - 'docker-compose.yml'
   push:
     branches:
@@ -18,9 +20,6 @@ on:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      packages: read
 
     steps:
       - name: Checkout repository
@@ -35,8 +34,6 @@ jobs:
           context: frontend
           push: false
           file: frontend/Dockerfile
-          tags: ${{ steps.meta_frontend.outputs.tags }}
-          labels: ${{ steps.meta_frontend.outputs.labels }}
           # Don't build linux/arm64/v8 because it's very slow with QEMU
           platforms: linux/amd64
 
@@ -46,7 +43,14 @@ jobs:
           context: backend
           push: false
           file: backend/Dockerfile
-          tags: ${{ steps.meta_backend.outputs.tags }}
-          labels: ${{ steps.meta_backend.outputs.labels }}
+          # Don't build linux/arm64/v8 because it's very slow with QEMU
+          platforms: linux/amd64
+
+      - name: Build combined Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          push: false
+          file: Dockerfile
           # Don't build linux/arm64/v8 because it's very slow with QEMU
           platforms: linux/amd64
