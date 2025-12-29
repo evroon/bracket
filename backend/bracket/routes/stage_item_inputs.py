@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.models.db.stage_item_inputs import (
     StageItemInput,
@@ -27,7 +28,7 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import StageItemId, StageItemInputId, TournamentId
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 async def validate_stage_item_update(

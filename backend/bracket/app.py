@@ -152,18 +152,22 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
     return JSONResponse({"detail": "Internal server error"}, status_code=500)
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(f"{config.api_prefix}/static", StaticFiles(directory="static"), name="static")
 
 for tag, router in routers.items():
+    assert router.prefix == config.api_prefix, f"Prefix not set on router with tag `{tag}`"
     app.include_router(router, tags=[tag])
 
 if config.serve_frontend:
-    frontend_root = Path("frontend-dist").resolve()
+    msg = "API_PREFIX env var must be set (e.g. `/api`) when serving the frontend"
+    assert config.api_prefix.startswith("/"), msg
+
+    frontend_root = Path("frontend-dist")
     allowed_paths = list(glob.iglob("frontend-dist/**/*", recursive=True))
 
     @app.get("/{full_path:path}")
     async def frontend(full_path: str) -> FileResponse:
-        path = (frontend_root / Path(full_path)).resolve()
+        path = frontend_root / Path(full_path)
 
         # Checking `str(path) in allowed_paths` should be enough here but we check for more cases
         # to be sure and avoid AI tools raising false positives.

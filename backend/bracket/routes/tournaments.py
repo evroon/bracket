@@ -6,6 +6,7 @@ import aiofiles.os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.planning.matches import update_start_times_of_matches
 from bracket.logic.subscriptions import check_requirement
@@ -51,7 +52,8 @@ from bracket.utils.errors import (
 from bracket.utils.id_types import TournamentId
 from bracket.utils.logging import logger
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
+
 unauthorized_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="You don't have access to this tournament",

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from bracket.config import config
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import (
     get_scheduled_matches,
@@ -40,7 +41,7 @@ from bracket.sql.validation import check_foreign_keys_belong_to_tournament
 from bracket.utils.id_types import MatchId, StageItemId, TournamentId
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get(

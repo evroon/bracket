@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.court import Court, CourtBody, CourtToInsert
@@ -20,7 +21,7 @@ from bracket.utils.db import fetch_one_parsed
 from bracket.utils.id_types import CourtId, TournamentId
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/tournaments/{tournament_id}/courts", response_model=CourtsResponse)

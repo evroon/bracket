@@ -7,6 +7,7 @@ import aiofiles.os
 from fastapi import APIRouter, Depends, UploadFile
 from heliclockter import datetime_utc
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.logic.teams import get_team_logo_path
@@ -51,7 +52,7 @@ from bracket.utils.logging import logger
 from bracket.utils.pagination import PaginationTeams
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 async def update_team_members(

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from heliclockter import datetime_utc
 from starlette import status
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.planning.conflicts import handle_conflicts
 from bracket.logic.planning.matches import update_start_times_of_matches
@@ -60,7 +61,7 @@ from bracket.utils.errors import (
 )
 from bracket.utils.id_types import StageItemId, TournamentId
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.delete(

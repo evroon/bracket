@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.config import config
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.club import ClubCreateBody, ClubUpdateBody
 from bracket.models.db.user import UserPublic
@@ -9,7 +10,7 @@ from bracket.sql.clubs import create_club, get_clubs_for_user_id, sql_delete_clu
 from bracket.utils.errors import ForeignKey, check_foreign_key_violation
 from bracket.utils.id_types import ClubId
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/clubs", response_model=ClubsResponse)

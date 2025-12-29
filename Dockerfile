@@ -7,7 +7,9 @@ ENV NODE_ENV=production
 
 COPY frontend .
 
-RUN corepack enable && CI=true pnpm install && pnpm build
+RUN corepack enable && \
+    CI=true pnpm install && \
+    VITE_API_BASE_URL=http://localhost:8400/api pnpm build
 
 # Build backend image that also serves frontend (stored in `/app/frontend-dist`)
 FROM python:3.14-alpine3.22

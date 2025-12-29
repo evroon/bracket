@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from bracket.config import config
 from bracket.database import database
 from bracket.logic.subscriptions import check_requirement
 from bracket.models.db.player import Player, PlayerBody, PlayerMultiBody
@@ -25,7 +26,7 @@ from bracket.utils.id_types import PlayerId, TournamentId
 from bracket.utils.pagination import PaginationPlayers
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/tournaments/{tournament_id}/players", response_model=PlayersResponse)

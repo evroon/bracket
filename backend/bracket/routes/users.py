@@ -33,7 +33,7 @@ from bracket.utils.id_types import UserId
 from bracket.utils.security import hash_password, verify_captcha_token
 from bracket.utils.types import assert_some
 
-router = APIRouter()
+router = APIRouter(prefix=config.api_prefix)
 
 
 @router.get("/users/me", response_model=UserPublicResponse)
