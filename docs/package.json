@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "prettier:check": "prettier --list-different --check \"**/*.{js,jsx,ts,tsx}\"",
+    "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:write": "prettier --list-different --write \"**/*.{js,jsx,ts,tsx}\"",
     "test": "pnpm run prettier:write && pnpm markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
     "test-check": "pnpm run prettier:check && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
