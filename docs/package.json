@@ -24,7 +24,7 @@
     "@tabler/icons-react": "^3.19.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.424.0",
+    "lucide-react": "^0.562.0",
     "next": "^16.0.10",
     "next-sitemap": "^4.2.3",
     "nextra": "^4.2.13",
