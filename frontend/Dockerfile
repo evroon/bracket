@@ -7,7 +7,9 @@ ENV NODE_ENV=production
 
 COPY . .
 
-RUN corepack enable && pnpm install && pnpm build
+RUN apk add pnpm && \
+    CI=true pnpm install && \
+    pnpm build
 
 # Production image, copy all the static files and run next
 FROM caddy:2-alpine AS runner

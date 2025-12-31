@@ -7,7 +7,7 @@ ENV NODE_ENV=production
 
 COPY frontend .
 
-RUN corepack enable && \
+RUN apk add pnpm && \
     CI=true pnpm install && \
     VITE_API_BASE_URL=http://localhost:8400/api pnpm build
 
