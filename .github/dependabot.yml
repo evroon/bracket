@@ -1,5 +1,3 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
@@ -8,7 +6,7 @@ updates:
   - package-ecosystem: "uv"
     directory: "/backend"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     reviewers:
       - "evroon"
     ignore:
@@ -16,27 +14,44 @@ updates:
         update-types: ["version-update:semver-patch"]
 
   - package-ecosystem: "npm"
-    directory: "/frontend"
+    directories:
+      - "/frontend"
+      - "/docs"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     reviewers:
       - "evroon"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
 
-  - package-ecosystem: "npm"
-    directory: "/docs"
-    schedule:
-      interval: "daily"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch", "version-update:semver-minor"]
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    reviewers:
+      - "evroon"
+    ignore:
+        - dependency-name: "*"
+          update-types: ["version-update:semver-patch"]
+
+  - package-ecosystem: "docker"
+    directories:
+      - "/frontend"
+      - "/backend"
+      - "/"
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "evroon"
+    ignore:
+        - dependency-name: "*"
+          update-types: ["version-update:semver-patch"]
+
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "weekly"
     reviewers:
       - "evroon"
     ignore:
