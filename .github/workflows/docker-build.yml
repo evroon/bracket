@@ -1,4 +1,4 @@
-name: docker
+name: docker build
 
 permissions:
   contents: read
@@ -18,7 +18,7 @@ on:
       - 'master'
 
 jobs:
-  build-and-push-image:
+  docker-build:
     runs-on: ubuntu-24.04
 
     steps:
