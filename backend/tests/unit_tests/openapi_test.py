@@ -7,5 +7,12 @@ from openapi import openapi  # noqa: F401
 
 def test_openapi_up_to_date() -> None:
     schema = app.openapi()
-    if Path("openapi/openapi.json").read_text() != json.dumps(schema, indent=2, sort_keys=True):
-        raise Exception("OpenAPI schema is out of date")
+    
+    file_path = Path("openapi/openapi.json")
+    
+    if not file_path.exists():
+        pytest.fail(f"OpenAPI file not found at {file_path}")
+        
+    stored_schema = json.loads(file_path.read_text(encoding="utf-8"))  
+    
+    assert stored_schema == schema

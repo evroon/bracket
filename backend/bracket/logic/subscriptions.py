@@ -56,9 +56,13 @@ regular_subscription = Subscription(
     max_rankings=16,
 )
 
+# Just for now until evroon decide what admins are allowed to do
+admin_subscription = regular_subscription
+
 subscription_lookup = {
     UserAccountType.DEMO: demo_subscription,
     UserAccountType.REGULAR: regular_subscription,
+    UserAccountType.ADMIN: admin_subscription,
 }
 
 
