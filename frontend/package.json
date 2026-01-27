@@ -32,7 +32,7 @@
     "axios": "1.13.0",
     "date-fns": "4.1.0",
     "dayjs": "1.11.10",
-    "i18next": "25.7.1",
+    "i18next": "25.8.0",
     "nuqs": "2.8.0",
     "prettier-plugin-organize-imports": "^4.3.0",
     "react": "19.2.0",
