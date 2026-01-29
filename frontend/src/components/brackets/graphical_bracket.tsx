@@ -1,4 +1,4 @@
-import { Box, Stack, Title } from '@mantine/core';
+import { Box, Title } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
@@ -104,6 +104,7 @@ function BracketRound({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   readOnly,
+  alignEnd,
 }: {
   round: RoundWithMatches;
   roundIndex: number;
@@ -112,6 +113,7 @@ function BracketRound({
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse> | null;
   readOnly: boolean;
+  alignEnd?: boolean;
 }) {
   // Calculate spacing multiplier based on round (doubles each round for proper bracket alignment)
   const spacingMultiplier = Math.pow(2, roundIndex);
@@ -125,7 +127,9 @@ function BracketRound({
           display: 'flex',
           flexDirection: 'column',
           gap: `${matchSpacing}px`,
-          paddingTop: `${(matchSpacing - 60) / 2}px`,
+          ...(alignEnd
+            ? { paddingBottom: `${(matchSpacing - 60) / 2}px` }
+            : { paddingTop: `${(matchSpacing - 60) / 2}px` }),
         }}
       >
         {round.matches.map((match) => (
@@ -152,6 +156,8 @@ function BracketSection({
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   readOnly,
+  className,
+  alignEnd,
 }: {
   title: string;
   rounds: RoundWithMatches[];
@@ -159,18 +165,20 @@ function BracketSection({
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse> | null;
   readOnly: boolean;
+  className?: string;
+  alignEnd?: boolean;
 }) {
   if (rounds.length === 0) {
     return null;
   }
 
   return (
-    <Box>
+    <Box className={className}>
       <Title order={4} className={classes.sectionTitle}>
         {title}
       </Title>
       <div className={classes.bracketContainer}>
-        <div className={classes.bracket}>
+        <div className={`${classes.bracket} ${alignEnd ? classes.bracketAlignEnd : ''}`}>
           {rounds.map((round, index) => (
             <BracketRound
               key={round.id}
@@ -181,6 +189,7 @@ function BracketSection({
               swrStagesResponse={swrStagesResponse}
               swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
               readOnly={readOnly}
+              alignEnd={alignEnd}
             />
           ))}
         </div>
@@ -236,8 +245,9 @@ export function GraphicalBracket({
   }
 
   return (
-    <Stack gap="xl">
+    <div className={classes.doubleEliminationLayout}>
       <BracketSection
+        className={classes.winnersSection}
         title={t('winners_bracket')}
         rounds={winnersRounds}
         tournamentData={tournamentData}
@@ -247,26 +257,27 @@ export function GraphicalBracket({
       />
 
       <BracketSection
+        className={classes.losersSection}
         title={t('losers_bracket')}
         rounds={losersRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         readOnly={readOnly}
+        alignEnd
       />
 
       {grandFinalsRounds.length > 0 && (
-        <Box className={classes.grandFinals}>
-          <BracketSection
-            title={t('grand_finals')}
-            rounds={grandFinalsRounds}
-            tournamentData={tournamentData}
-            swrStagesResponse={swrStagesResponse}
-            swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
-            readOnly={readOnly}
-          />
-        </Box>
+        <BracketSection
+          className={classes.grandFinalsSection}
+          title={t('grand_finals')}
+          rounds={grandFinalsRounds}
+          tournamentData={tournamentData}
+          swrStagesResponse={swrStagesResponse}
+          swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+          readOnly={readOnly}
+        />
       )}
-    </Stack>
+    </div>
   );
 }

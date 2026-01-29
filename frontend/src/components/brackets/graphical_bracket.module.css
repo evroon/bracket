@@ -130,8 +130,34 @@
   color: var(--mantine-color-dimmed);
 }
 
-.grandFinals {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 2px solid var(--mantine-color-default-border);
+.doubleEliminationLayout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.winnersSection {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: flex-start;
+}
+
+.losersSection {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: flex-end;
+  justify-self: end;
+}
+
+.grandFinalsSection {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  padding-left: 1rem;
+}
+
+.bracketAlignEnd {
+  align-items: flex-end;
 }
