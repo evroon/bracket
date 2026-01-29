@@ -31,6 +31,7 @@ import ResultsPage from './pages/tournaments/[id]/results';
 import SchedulePage from './pages/tournaments/[id]/schedule';
 import SettingsPage from './pages/tournaments/[id]/settings';
 import StagesPage from './pages/tournaments/[id]/stages';
+import EliminationBracketPage from './pages/tournaments/[id]/stages/elimination/[stage_item_id]';
 import SwissTournamentPage from './pages/tournaments/[id]/stages/swiss/[stage_item_id]';
 import TeamsPage from './pages/tournaments/[id]/teams';
 import UserPage from './pages/user';
@@ -93,6 +94,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="stages">
                     <Route index element={<StagesPage />} />
                     <Route path="swiss/:stage_item_id" element={<SwissTournamentPage />} />
+                    <Route path="elimination/:stage_item_id" element={<EliminationBracketPage />} />
                   </Route>
                   <Route path="dashboard">
                     <Route index element={<DashboardSchedulePage />} />
