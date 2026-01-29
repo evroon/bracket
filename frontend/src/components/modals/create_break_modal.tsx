@@ -48,8 +48,8 @@ export default function BreakModal({
             await createTournamentBreak(
               tournamentId,
               values.title,
-              values.start_time,
-              values.end_time
+              new Date(dayjs(values.start_time).valueOf()).toISOString(),
+              new Date(dayjs(values.end_time).valueOf()).toISOString()
             );
             await swrBreaksResponse.mutate();
             setOpened(false);
