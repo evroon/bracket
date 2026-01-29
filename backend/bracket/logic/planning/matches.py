@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import NamedTuple
 
-from heliclockter import timedelta
+from heliclockter import datetime_utc, timedelta
 
 from bracket.models.db.match import (
     MatchRescheduleBody,
@@ -74,6 +74,7 @@ async def schedule_all_unscheduled_matches(
     - Assigns each match to the court that's free soonest
     - Processes rounds in order (earlier rounds before later rounds)
     - Skips matches that don't have two participants (byes)
+    - Respects match dependencies: matches wait for prerequisite matches to finish
     """
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
@@ -83,6 +84,8 @@ async def schedule_all_unscheduled_matches(
 
     # Track next available time for each court
     court_next_available = {court.id: tournament.start_time for court in courts}
+    # Track when each match ends, so dependent matches wait for prerequisites
+    match_end_times: dict[MatchId, datetime_utc] = {}
     position_counter = 0
 
     # Collect all matches grouped by round, maintaining round order
@@ -118,9 +121,25 @@ async def schedule_all_unscheduled_matches(
 
             # Schedule each match in this round to the court that's available soonest
             for match in round_matches:
-                # Find the court with the earliest available time
-                best_court_id = min(court_next_available, key=lambda c: court_next_available[c])
-                start_time = court_next_available[best_court_id]
+                # Determine earliest start based on prerequisite matches
+                earliest_start = tournament.start_time
+                for prereq_id in (
+                    match.stage_item_input1_winner_from_match_id,
+                    match.stage_item_input2_winner_from_match_id,
+                    match.stage_item_input1_loser_from_match_id,
+                    match.stage_item_input2_loser_from_match_id,
+                ):
+                    if prereq_id is not None and prereq_id in match_end_times:
+                        if match_end_times[prereq_id] > earliest_start:
+                            earliest_start = match_end_times[prereq_id]
+
+                # Find the court that results in the earliest actual start time
+                # (accounting for both court availability and dependency constraints)
+                best_court_id = min(
+                    court_next_available,
+                    key=lambda c: max(court_next_available[c], earliest_start),
+                )
+                start_time = max(court_next_available[best_court_id], earliest_start)
 
                 await sql_reschedule_match_and_determine_duration_and_margin(
                     best_court_id,
@@ -130,14 +149,12 @@ async def schedule_all_unscheduled_matches(
                     tournament,
                 )
 
-                # Update court availability
+                # Update court availability and track this match's end time
                 match_duration = match.duration_minutes + (match.margin_minutes or 0)
-                court_next_available[best_court_id] = start_time + timedelta(
-                    minutes=match_duration
-                )
+                end_time = start_time + timedelta(minutes=match_duration)
+                court_next_available[best_court_id] = end_time
+                match_end_times[match.id] = end_time
                 position_counter += 1
-
-    await update_start_times_of_matches(tournament_id)
 
 
 class MatchPosition(NamedTuple):

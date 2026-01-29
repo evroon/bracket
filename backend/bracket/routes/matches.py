@@ -194,7 +194,9 @@ async def update_match_by_id(
         scheduled_matches = get_scheduled_matches(await get_full_tournament_details(tournament_id))
         await reorder_matches_for_court(tournament, scheduled_matches, assert_some(match.court_id))
 
-    if stage_item.type == StageType.SINGLE_ELIMINATION:
+    if stage_item.type in (StageType.SINGLE_ELIMINATION, StageType.DOUBLE_ELIMINATION):
         await update_inputs_in_subsequent_elimination_rounds(round_.id, stage_item, {match_id})
+        stages = await get_full_tournament_details(tournament_id)
+        await schedule_all_unscheduled_matches(tournament_id, stages)
 
     return SuccessResponse()

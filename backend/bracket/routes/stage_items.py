@@ -125,7 +125,7 @@ async def update_stage_item(
         values={"stage_item_id": stage_item_id, "name": stage_item_body.name},
     )
     await recalculate_ranking_for_stage_item(tournament_id, stage_item)
-    if stage_item.type == StageType.SINGLE_ELIMINATION:
+    if stage_item.type in (StageType.SINGLE_ELIMINATION, StageType.DOUBLE_ELIMINATION):
         await update_inputs_in_complete_elimination_stage_item(stage_item)
     return SuccessResponse()
 

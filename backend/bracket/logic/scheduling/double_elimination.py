@@ -65,62 +65,47 @@ def get_total_rounds_double_elimination(team_count: int) -> int:
     return sum(round_counts.values())
 
 
-def distribute_byes(team_count: int) -> list[bool]:
+def generate_seeded_bracket(bracket_size: int) -> list[int]:
+    """Generate standard seeded bracket positions.
+
+    Returns list of seed numbers in bracket order.
+    For bracket_size=8: [1, 8, 4, 5, 2, 7, 3, 6]
+
+    Ensures top seeds are on opposite sides and face lowest seeds first.
     """
-    Create a list indicating which first-round slots are byes.
+    if bracket_size == 1:
+        return [1]
 
-    Byes are distributed to spread them out - placed at alternating positions
-    starting from the top and bottom of the bracket.
+    bracket = [1, 2]
+    while len(bracket) < bracket_size:
+        total = len(bracket) * 2 + 1
+        new_bracket = []
+        for seed in bracket:
+            new_bracket.append(seed)
+            new_bracket.append(total - seed)
+        bracket = new_bracket
 
-    Returns a list where True = bye slot, False = team plays.
-    Length is bracket_size (next power of 2).
-    """
-    bracket_size = next_power_of_2(team_count)
-    num_byes = bracket_size - team_count
-
-    # Start with no byes
-    bye_slots = [False] * bracket_size
-
-    # Distribute byes evenly - place at positions that will spread them out
-    # For standard seeding, byes go to top seeds (positions 0, bracket_size-1, etc.)
-    # We'll use a simple pattern: alternate top and bottom
-    bye_positions = []
-    for i in range(num_byes):
-        if i % 2 == 0:
-            # Top of bracket
-            pos = i // 2
-        else:
-            # Bottom of bracket
-            pos = bracket_size - 1 - (i // 2)
-        bye_positions.append(pos)
-
-    for pos in bye_positions:
-        bye_slots[pos] = True
-
-    return bye_slots
+    return bracket
 
 
 def create_first_round_slots(
-    inputs: list[StageItemInput], bye_slots: list[bool]
+    inputs: list[StageItemInput],
 ) -> list[BracketSlot]:
-    """
-    Assign teams to bracket slots, with byes in designated positions.
+    """Assign teams to bracket slots using standard seeding.
 
-    Returns slots for the first round (bracket_size slots).
+    Top seeds get byes when team_count < bracket_size.
+    Seeding ensures top seeds are on opposite halves of the bracket.
     """
+    team_count = len(inputs)
+    bracket_size = next_power_of_2(team_count)
+    seeded_positions = generate_seeded_bracket(bracket_size)
+
     slots: list[BracketSlot] = []
-    team_idx = 0
-
-    for is_bye in bye_slots:
-        if is_bye:
+    for seed in seeded_positions:
+        if seed > team_count:
             slots.append(BracketSlot(is_bye=True))
         else:
-            if team_idx < len(inputs):
-                slots.append(BracketSlot(team_input=inputs[team_idx]))
-                team_idx += 1
-            else:
-                # Should not happen if bye calculation is correct
-                slots.append(BracketSlot(is_bye=True))
+            slots.append(BracketSlot(team_input=inputs[seed - 1]))
 
     return slots
 
@@ -243,8 +228,7 @@ async def build_double_elimination_stage_item(
 
     # Calculate bracket structure
     bracket_size = next_power_of_2(team_count)
-    bye_slots = distribute_byes(team_count)
-    first_round_slots = create_first_round_slots(stage_item.inputs, bye_slots)
+    first_round_slots = create_first_round_slots(stage_item.inputs)
 
     # Track matches and slots for building connections
     winners_matches_by_round: list[list[Match]] = []
