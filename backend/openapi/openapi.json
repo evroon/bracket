@@ -106,6 +106,16 @@
         "title": "Body_upload_logo_tournaments__tournament_id__logo_post",
         "type": "object"
       },
+      "BracketPosition": {
+        "enum": [
+          "WINNERS",
+          "LOSERS",
+          "GRAND_FINALS",
+          "NONE"
+        ],
+        "title": "BracketPosition",
+        "type": "string"
+      },
       "Club": {
         "properties": {
           "created": {
@@ -460,6 +470,17 @@
             ],
             "title": "Stage Item Input1 Id"
           },
+          "stage_item_input1_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input1 Loser From Match Id"
+          },
           "stage_item_input1_score": {
             "title": "Stage Item Input1 Score",
             "type": "integer"
@@ -507,6 +528,17 @@
             ],
             "title": "Stage Item Input2 Id"
           },
+          "stage_item_input2_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input2 Loser From Match Id"
+          },
           "stage_item_input2_score": {
             "title": "Stage Item Input2 Score",
             "type": "integer"
@@ -553,6 +585,8 @@
           "stage_item_input2_id",
           "stage_item_input1_winner_from_match_id",
           "stage_item_input2_winner_from_match_id",
+          "stage_item_input1_loser_from_match_id",
+          "stage_item_input2_loser_from_match_id",
           "id",
           "stage_item_input1",
           "stage_item_input2"
@@ -649,6 +683,17 @@
             ],
             "title": "Stage Item Input1 Id"
           },
+          "stage_item_input1_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input1 Loser From Match Id"
+          },
           "stage_item_input1_winner_from_match_id": {
             "anyOf": [
               {
@@ -671,6 +716,17 @@
             ],
             "title": "Stage Item Input2 Id"
           },
+          "stage_item_input2_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input2 Loser From Match Id"
+          },
           "stage_item_input2_winner_from_match_id": {
             "anyOf": [
               {
@@ -689,7 +745,9 @@
           "stage_item_input1_id",
           "stage_item_input2_id",
           "stage_item_input1_winner_from_match_id",
-          "stage_item_input2_winner_from_match_id"
+          "stage_item_input2_winner_from_match_id",
+          "stage_item_input1_loser_from_match_id",
+          "stage_item_input2_loser_from_match_id"
         ],
         "title": "MatchCreateBodyFrontend",
         "type": "object"
@@ -832,6 +890,17 @@
             ],
             "title": "Stage Item Input1 Id"
           },
+          "stage_item_input1_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input1 Loser From Match Id"
+          },
           "stage_item_input1_score": {
             "title": "Stage Item Input1 Score",
             "type": "integer"
@@ -879,6 +948,17 @@
             ],
             "title": "Stage Item Input2 Id"
           },
+          "stage_item_input2_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input2 Loser From Match Id"
+          },
           "stage_item_input2_score": {
             "title": "Stage Item Input2 Score",
             "type": "integer"
@@ -925,6 +1005,8 @@
           "stage_item_input2_id",
           "stage_item_input1_winner_from_match_id",
           "stage_item_input2_winner_from_match_id",
+          "stage_item_input1_loser_from_match_id",
+          "stage_item_input2_loser_from_match_id",
           "id",
           "stage_item_input1",
           "stage_item_input2",
@@ -1039,6 +1121,17 @@
             ],
             "title": "Stage Item Input1 Id"
           },
+          "stage_item_input1_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input1 Loser From Match Id"
+          },
           "stage_item_input1_score": {
             "title": "Stage Item Input1 Score",
             "type": "integer"
@@ -1082,6 +1175,17 @@
               }
             ],
             "title": "Stage Item Input2 Id"
+          },
+          "stage_item_input2_loser_from_match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Item Input2 Loser From Match Id"
           },
           "stage_item_input2_score": {
             "title": "Stage Item Input2 Score",
@@ -1129,6 +1233,8 @@
           "stage_item_input2_id",
           "stage_item_input1_winner_from_match_id",
           "stage_item_input2_winner_from_match_id",
+          "stage_item_input1_loser_from_match_id",
+          "stage_item_input2_loser_from_match_id",
           "id",
           "stage_item_input1",
           "stage_item_input2",
@@ -1522,6 +1628,10 @@
       },
       "RoundWithMatches": {
         "properties": {
+          "bracket_position": {
+            "$ref": "#/components/schemas/BracketPosition",
+            "default": "NONE"
+          },
           "created": {
             "format": "date-time",
             "title": "Created",
@@ -1563,6 +1673,7 @@
           "stage_item_id",
           "is_draft",
           "name",
+          "bracket_position",
           "id",
           "matches"
         ],
@@ -2210,6 +2321,7 @@
         "enum": [
           "ROUND_ROBIN",
           "SINGLE_ELIMINATION",
+          "DOUBLE_ELIMINATION",
           "SWISS"
         ],
         "title": "StageType",

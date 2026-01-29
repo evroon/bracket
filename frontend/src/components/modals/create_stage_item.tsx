@@ -67,18 +67,20 @@ function StageSelectCard({
   );
 }
 
+type StageTypeOption = 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION';
+
 export function CreateStagesFromTemplateButtons({
   selectedType,
   setSelectedType,
   t,
 }: {
-  selectedType: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
-  setSelectedType: (type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION') => void;
+  selectedType: StageTypeOption;
+  setSelectedType: (type: StageTypeOption) => void;
   t: Translator;
 }) {
   return (
     <Grid grow>
-      <Grid.Col span={{ base: 12, sm: 4 }}>
+      <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
         <StageSelectCard
           title={t('round_robin_label')}
           description={t('round_robin_description')}
@@ -89,7 +91,7 @@ export function CreateStagesFromTemplateButtons({
           }}
         />
       </Grid.Col>
-      <Grid.Col span={{ base: 12, sm: 4 }}>
+      <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
         <StageSelectCard
           title={t('single_elimination_label')}
           description={t('single_elimination_description')}
@@ -100,7 +102,18 @@ export function CreateStagesFromTemplateButtons({
           }}
         />
       </Grid.Col>
-      <Grid.Col span={{ base: 12, sm: 4 }}>
+      <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+        <StageSelectCard
+          title={t('double_elimination_label')}
+          description={t('double_elimination_description')}
+          image="/icons/single-elimination-stage-item.svg"
+          selected={selectedType === 'DOUBLE_ELIMINATION'}
+          onClick={() => {
+            setSelectedType('DOUBLE_ELIMINATION');
+          }}
+        />
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
         <StageSelectCard
           title={t('swiss_label')}
           description={t('swiss_description')}
@@ -115,7 +128,7 @@ export function CreateStagesFromTemplateButtons({
   );
 }
 
-function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) {
+function TeamCountSelectSingleElimination({ form }: { form: UseFormReturnType<any> }) {
   const { t } = useTranslation();
   const data = [
     { value: '2', label: '2' },
@@ -134,7 +147,22 @@ function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) 
       limit={20}
       mt="1rem"
       maw="50%"
-      {...form.getInputProps('team_count_elimination')}
+      {...form.getInputProps('team_count_single_elimination')}
+    />
+  );
+}
+
+function TeamCountInputDoubleElimination({ form }: { form: UseFormReturnType<any> }) {
+  const { t } = useTranslation();
+  return (
+    <NumberInput
+      withAsterisk
+      label={t('team_count_input_double_elimination_label')}
+      placeholder=""
+      min={2}
+      mt="1rem"
+      maw="50%"
+      {...form.getInputProps('team_count_double_elimination')}
     />
   );
 }
@@ -155,24 +183,30 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
 
 function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
   if (form.values.type === 'SINGLE_ELIMINATION') {
-    return <TeamCountSelectElimination form={form} />;
+    return <TeamCountSelectSingleElimination form={form} />;
+  }
+  if (form.values.type === 'DOUBLE_ELIMINATION') {
+    return <TeamCountInputDoubleElimination form={form} />;
   }
 
   return <TeamCountInputRoundRobin form={form} />;
 }
 
 function getTeamCount(values: any) {
-  return Number(
-    values.type === 'SINGLE_ELIMINATION'
-      ? values.team_count_elimination
-      : values.team_count_round_robin
-  );
+  if (values.type === 'SINGLE_ELIMINATION') {
+    return Number(values.team_count_single_elimination);
+  }
+  if (values.type === 'DOUBLE_ELIMINATION') {
+    return Number(values.team_count_double_elimination);
+  }
+  return Number(values.team_count_round_robin);
 }
 
 interface FormValues {
-  type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
+  type: StageTypeOption;
   team_count_round_robin: number;
-  team_count_elimination: number;
+  team_count_single_elimination: string;
+  team_count_double_elimination: number;
 }
 export function CreateStageItemModal({
   tournament,
@@ -189,10 +223,18 @@ export function CreateStageItemModal({
   const [opened, setOpened] = useState(false);
 
   const form = useForm<FormValues>({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
+    initialValues: {
+      type: 'ROUND_ROBIN',
+      team_count_round_robin: 4,
+      team_count_single_elimination: '4',
+      team_count_double_elimination: 4,
+    },
     validate: {
       team_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
-      team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
+      team_count_single_elimination: (value) =>
+        Number(value) >= 2 ? null : t('at_least_two_team_validation'),
+      team_count_double_elimination: (value) =>
+        value >= 2 ? null : t('at_least_two_team_validation'),
     },
   });
 

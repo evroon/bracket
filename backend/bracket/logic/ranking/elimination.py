@@ -20,6 +20,8 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
 
     Crucial aspect is that entering a winner for a match will influence matches of subsequent
     rounds, because of the tree-like structure of elimination stage items.
+
+    For double elimination, this also handles loser propagation to the losers bracket.
     """
     current_round = next(round_ for round_ in stage_item.rounds if round_.id == current_round_id)
     affected_matches: dict[MatchId, Match] = {
@@ -38,6 +40,7 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
         ]
         original_inputs = updated_inputs.copy()
 
+        # Handle winner propagation for input 1
         if subsequent_match.stage_item_input1_winner_from_match_id is not None and (
             affected_match1 := affected_matches.get(
                 subsequent_match.stage_item_input1_winner_from_match_id
@@ -45,12 +48,37 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
         ):
             updated_inputs[0] = affected_match1.get_winner()
 
+        # Handle winner propagation for input 2
         if subsequent_match.stage_item_input2_winner_from_match_id is not None and (
             affected_match2 := affected_matches.get(
                 subsequent_match.stage_item_input2_winner_from_match_id
             )
         ):
             updated_inputs[1] = affected_match2.get_winner()
+
+        # Handle loser propagation for input 1 (double elimination)
+        if (
+            hasattr(subsequent_match, "stage_item_input1_loser_from_match_id")
+            and subsequent_match.stage_item_input1_loser_from_match_id is not None
+            and (
+                affected_match1_loser := affected_matches.get(
+                    subsequent_match.stage_item_input1_loser_from_match_id
+                )
+            )
+        ):
+            updated_inputs[0] = affected_match1_loser.get_loser()
+
+        # Handle loser propagation for input 2 (double elimination)
+        if (
+            hasattr(subsequent_match, "stage_item_input2_loser_from_match_id")
+            and subsequent_match.stage_item_input2_loser_from_match_id is not None
+            and (
+                affected_match2_loser := affected_matches.get(
+                    subsequent_match.stage_item_input2_loser_from_match_id
+                )
+            )
+        ):
+            updated_inputs[1] = affected_match2_loser.get_loser()
 
         if original_inputs != updated_inputs:
             input_ids = [input_.id if input_ else None for input_ in updated_inputs]

@@ -1,5 +1,11 @@
 :3000 {
-    root * /app/dist
-    file_server
-    try_files {path} /index.html
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy {$BACKEND_URL:bracket-backend:8400}
+    }
+    handle {
+        root * /app/dist
+        file_server
+        try_files {path} /index.html
+    }
 }

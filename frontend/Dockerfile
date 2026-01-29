@@ -4,6 +4,8 @@ FROM node:25-alpine AS builder
 WORKDIR /app
 
 ENV NODE_ENV=production
+ARG VITE_API_BASE_URL=/api
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 COPY . .
 

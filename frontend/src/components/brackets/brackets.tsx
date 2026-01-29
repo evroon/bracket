@@ -31,6 +31,7 @@ import {
   UpcomingMatchesResponse,
 } from '@openapi';
 import { createRound } from '@services/round';
+import { DoubleEliminationBracket } from './double_elimination_bracket';
 import RoundComponent from './round';
 
 function AddRoundButton({
@@ -87,6 +88,20 @@ export function RoundsGridCols({
   }
   if (!responseIsValid(swrStagesResponse)) {
     return <NoRoundsAlert readOnly={readOnly} />;
+  }
+
+  // Use specialized component for double elimination brackets
+  if (stageItem.type === 'DOUBLE_ELIMINATION') {
+    return (
+      <DoubleEliminationBracket
+        stageItem={stageItem}
+        tournamentData={tournamentData}
+        swrStagesResponse={swrStagesResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        readOnly={readOnly}
+        displaySettings={displaySettings}
+      />
+    );
   }
 
   let result: React.JSX.Element[] | React.JSX.Element = stageItem.rounds

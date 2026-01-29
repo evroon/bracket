@@ -310,6 +310,18 @@ function StageItemRow({
                 </ActionIcon>
               </Tooltip>
             ) : null}
+            {stageItem.type === 'SINGLE_ELIMINATION' || stageItem.type === 'DOUBLE_ELIMINATION' ? (
+              <Tooltip label={t('view_bracket')}>
+                <ActionIcon
+                  variant="transparent"
+                  color="gray"
+                  component={PreloadLink}
+                  href={`/tournaments/${tournament.id}/stages/elimination/${stageItem.id}`}
+                >
+                  <BiSolidWrench size="1.25rem" />
+                </ActionIcon>
+              </Tooltip>
+            ) : null}
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon variant="transparent" color="gray">
@@ -333,6 +345,16 @@ function StageItemRow({
                     href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
                   >
                     {t('handle_swiss_system')}
+                  </Menu.Item>
+                ) : null}
+                {stageItem.type === 'SINGLE_ELIMINATION' ||
+                stageItem.type === 'DOUBLE_ELIMINATION' ? (
+                  <Menu.Item
+                    leftSection={<BiSolidWrench size="1.5rem" />}
+                    component={PreloadLink}
+                    href={`/tournaments/${tournament.id}/stages/elimination/${stageItem.id}`}
+                  >
+                    {t('view_bracket')}
                   </Menu.Item>
                 ) : null}
                 <Menu.Item

@@ -65,6 +65,7 @@ stage_items = Table(
         "type",
         Enum(
             "SINGLE_ELIMINATION",
+            "DOUBLE_ELIMINATION",
             "SWISS",
             "ROUND_ROBIN",
             name="stage_type",
@@ -105,6 +106,18 @@ rounds = Table(
     Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
     Column("is_draft", Boolean, nullable=False),
     Column("stage_item_id", BigInteger, ForeignKey("stage_items.id"), nullable=False),
+    Column(
+        "bracket_position",
+        Enum(
+            "WINNERS",
+            "LOSERS",
+            "GRAND_FINALS",
+            "NONE",
+            name="bracket_position",
+        ),
+        nullable=False,
+        server_default="NONE",
+    ),
 )
 
 
@@ -131,6 +144,18 @@ matches = Table(
     ),
     Column(
         "stage_item_input2_winner_from_match_id",
+        BigInteger,
+        ForeignKey("matches.id"),
+        nullable=True,
+    ),
+    Column(
+        "stage_item_input1_loser_from_match_id",
+        BigInteger,
+        ForeignKey("matches.id"),
+        nullable=True,
+    ),
+    Column(
+        "stage_item_input2_loser_from_match_id",
         BigInteger,
         ForeignKey("matches.id"),
         nullable=True,

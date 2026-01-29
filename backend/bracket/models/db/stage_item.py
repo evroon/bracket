@@ -13,6 +13,7 @@ from bracket.utils.types import EnumAutoStr
 class StageType(EnumAutoStr):
     ROUND_ROBIN = auto()
     SINGLE_ELIMINATION = auto()
+    DOUBLE_ELIMINATION = auto()
     SWISS = auto()
 
     @property

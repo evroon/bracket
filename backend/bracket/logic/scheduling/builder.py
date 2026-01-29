@@ -1,6 +1,10 @@
 from fastapi import HTTPException
 
 from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
+from bracket.logic.scheduling.double_elimination import (
+    build_double_elimination_stage_item,
+    create_rounds_for_double_elimination,
+)
 from bracket.logic.scheduling.elimination import (
     build_single_elimination_stage_item,
     get_number_of_rounds_to_create_single_elimination,
@@ -34,6 +38,12 @@ async def create_rounds_for_new_stage_item(
             rounds_count = get_number_of_rounds_to_create_round_robin(stage_item.team_count)
         case StageType.SINGLE_ELIMINATION:
             rounds_count = get_number_of_rounds_to_create_single_elimination(stage_item.team_count)
+        case StageType.DOUBLE_ELIMINATION:
+            # Double elimination creates its own rounds with bracket positions
+            await create_rounds_for_double_elimination(
+                tournament_id, stage_item.id, stage_item.team_count
+            )
+            return None
         case StageType.SWISS:
             return None
         case other:
@@ -59,6 +69,8 @@ async def build_matches_for_stage_item(stage_item: StageItem, tournament_id: Tou
             await build_round_robin_stage_item(tournament_id, stage_item_with_rounds)
         case StageType.SINGLE_ELIMINATION:
             await build_single_elimination_stage_item(tournament_id, stage_item_with_rounds)
+        case StageType.DOUBLE_ELIMINATION:
+            await build_double_elimination_stage_item(tournament_id, stage_item_with_rounds)
         case StageType.SWISS:
             return None
 

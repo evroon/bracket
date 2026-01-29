@@ -36,6 +36,8 @@ class MatchInsertable(MatchBaseInsertable):
     stage_item_input2_id: StageItemInputId | None = None
     stage_item_input1_winner_from_match_id: MatchId | None = None
     stage_item_input2_winner_from_match_id: MatchId | None = None
+    stage_item_input1_loser_from_match_id: MatchId | None = None
+    stage_item_input2_loser_from_match_id: MatchId | None = None
 
 
 class Match(MatchInsertable):
@@ -47,6 +49,14 @@ class Match(MatchInsertable):
         if self.stage_item_input1_score > self.stage_item_input2_score:
             return self.stage_item_input1
         if self.stage_item_input1_score < self.stage_item_input2_score:
+            return self.stage_item_input2
+
+        return None
+
+    def get_loser(self) -> StageItemInput | None:
+        if self.stage_item_input1_score < self.stage_item_input2_score:
+            return self.stage_item_input1
+        if self.stage_item_input1_score > self.stage_item_input2_score:
             return self.stage_item_input2
 
         return None
@@ -102,6 +112,8 @@ class MatchCreateBodyFrontend(BaseModelORM):
     stage_item_input2_id: StageItemInputId | None = None
     stage_item_input1_winner_from_match_id: MatchId | None = None
     stage_item_input2_winner_from_match_id: MatchId | None = None
+    stage_item_input1_loser_from_match_id: MatchId | None = None
+    stage_item_input2_loser_from_match_id: MatchId | None = None
 
 
 class MatchCreateBody(MatchCreateBodyFrontend):
