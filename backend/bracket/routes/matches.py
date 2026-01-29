@@ -32,7 +32,12 @@ from bracket.routes.auth import user_authenticated_for_tournament
 from bracket.routes.models import SingleMatchResponse, SuccessResponse, UpcomingMatchesResponse
 from bracket.routes.util import disallow_archived_tournament, match_dependency
 from bracket.sql.courts import get_all_courts_in_tournament
-from bracket.sql.matches import sql_create_match, sql_delete_match, sql_update_match
+from bracket.sql.matches import (
+    sql_clear_all_schedules,
+    sql_create_match,
+    sql_delete_match,
+    sql_update_match,
+)
 from bracket.sql.rounds import get_round_by_id
 from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
@@ -134,6 +139,16 @@ async def schedule_matches(
 ) -> SuccessResponse:
     stages = await get_full_tournament_details(tournament_id)
     await schedule_all_unscheduled_matches(tournament_id, stages)
+    return SuccessResponse()
+
+
+@router.post("/tournaments/{tournament_id}/clear_schedule", response_model=SuccessResponse)
+async def clear_schedule(
+    tournament_id: TournamentId,
+    _: UserPublic = Depends(user_authenticated_for_tournament),
+    __: Tournament = Depends(disallow_archived_tournament),
+) -> SuccessResponse:
+    await sql_clear_all_schedules(tournament_id)
     return SuccessResponse()
 
 

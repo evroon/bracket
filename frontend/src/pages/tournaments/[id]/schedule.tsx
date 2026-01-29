@@ -13,7 +13,13 @@ import {
   Title,
 } from '@mantine/core';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
-import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from '@tabler/icons-react';
+import {
+  IconAlertCircle,
+  IconCalendarOff,
+  IconCalendarPlus,
+  IconDots,
+  IconTrash,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
@@ -37,7 +43,7 @@ import {
   getStageItemLookup,
   stringToColour,
 } from '@services/lookups';
-import { rescheduleMatch, scheduleMatches } from '@services/match';
+import { clearSchedule, rescheduleMatch, scheduleMatches } from '@services/match';
 
 function ScheduleRow({
   index,
@@ -295,6 +301,19 @@ export default function SchedulePage() {
         <Grid.Col span={6}>
           {data.length < 1 ? null : (
             <Group justify="right">
+              <Button
+                color="red"
+                size="md"
+                variant="outline"
+                style={{ marginBottom: 10 }}
+                leftSection={<IconCalendarOff size={24} />}
+                onClick={async () => {
+                  await clearSchedule(tournamentData.id);
+                  await swrStagesResponse.mutate();
+                }}
+              >
+                {t('clear_schedule')}
+              </Button>
               <Button
                 color="indigo"
                 size="md"

@@ -216,6 +216,25 @@ async def sql_reschedule_match_and_determine_duration_and_margin(
     )
 
 
+async def sql_clear_all_schedules(tournament_id: TournamentId) -> None:
+    """Clear scheduling info (court, start_time, position) from all matches in a tournament."""
+    query = """
+        UPDATE matches
+        SET court_id = NULL,
+            start_time = NULL,
+            position_in_schedule = NULL,
+            stage_item_input1_conflict = FALSE,
+            stage_item_input2_conflict = FALSE
+        WHERE matches.round_id IN (
+            SELECT rounds.id FROM rounds
+            JOIN stage_items ON rounds.stage_item_id = stage_items.id
+            JOIN stages ON stage_items.stage_id = stages.id
+            WHERE stages.tournament_id = :tournament_id
+        )
+        """
+    await database.execute(query=query, values={"tournament_id": tournament_id})
+
+
 async def sql_get_match(match_id: MatchId) -> Match:
     query = """
         SELECT *

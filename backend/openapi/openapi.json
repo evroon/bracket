@@ -3710,6 +3710,53 @@
         ]
       }
     },
+    "/tournaments/{tournament_id}/clear_schedule": {
+      "post": {
+        "operationId": "clear_schedule_tournaments__tournament_id__clear_schedule_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Clear Schedule",
+        "tags": [
+          "Matches"
+        ]
+      }
+    },
     "/tournaments/{tournament_id}/courts": {
       "get": {
         "operationId": "get_courts_tournaments__tournament_id__courts_get",

@@ -45,3 +45,9 @@ export async function scheduleMatches(tournament_id: number) {
     .post(`tournaments/${tournament_id}/schedule_matches`)
     .catch((response: any) => handleRequestError(response));
 }
+
+export async function clearSchedule(tournament_id: number) {
+  return createAxios()
+    .post(`tournaments/${tournament_id}/clear_schedule`)
+    .catch((response: any) => handleRequestError(response));
+}
