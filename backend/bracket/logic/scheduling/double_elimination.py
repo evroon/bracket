@@ -419,34 +419,33 @@ async def build_double_elimination_stage_item(
 
     # ========== BUILD GRAND FINALS ==========
 
-    # Get winners bracket champion (winner of last winners round)
-    winners_final_matches = winners_matches_by_round[-1] if winners_matches_by_round else []
-    winners_final_slot = winners_slots_by_round[-1][0] if winners_slots_by_round[-1] else None
+    # Winners bracket final match (the actual last match played)
+    winners_final_match = winners_matches_by_round[-1][0] if winners_matches_by_round[-1] else None
 
-    # Get losers bracket champion (winner of last losers round)
+    # Losers bracket champion (winner of last losers round)
     losers_final_slot = losers_slots[0] if losers_slots else None
 
-    if grand_finals_rounds and winners_final_slot and losers_final_slot:
+    if grand_finals_rounds and winners_final_match and losers_final_slot:
         grand_finals_round = grand_finals_rounds[0]
 
-        # Create grand finals match 1
+        # Grand finals match 1: WB champion vs LB champion
         gf_match = await sql_create_match(
             create_match_body(
                 round_id=grand_finals_round.id,
                 tournament=tournament,
-                winner1_from=winners_final_slot.winner_from_match_id,
+                winner1_from=winners_final_match.id,
                 winner2_from=losers_final_slot.winner_from_match_id,
                 loser2_from=losers_final_slot.loser_from_match_id,
             )
         )
 
-        # Create bracket reset match (played if losers champion wins GF match 1)
-        # This match takes the loser and winner of GF match 1
+        # Bracket reset match (played only if LB champion wins GF match 1)
+        # Winner of GF1 in position 1, loser of GF1 in position 2
         await sql_create_match(
             create_match_body(
                 round_id=grand_finals_round.id,
                 tournament=tournament,
                 winner1_from=gf_match.id,
-                loser1_from=gf_match.id,
+                loser2_from=gf_match.id,
             )
         )

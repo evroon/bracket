@@ -29,9 +29,14 @@ def get_inputs_to_update_in_subsequent_elimination_rounds(
         for match in current_round.matches
         if match_ids is None or match.id in match_ids
     }
-    subsequent_rounds = [round_ for round_ in stage_item.rounds if round_.id > current_round.id]
+    subsequent_rounds = [round_ for round_ in stage_item.rounds if round_.id >= current_round.id]
     subsequent_rounds.sort(key=lambda round_: round_.id)
-    subsequent_matches = [match for round_ in subsequent_rounds for match in round_.matches]
+    subsequent_matches = [
+        match
+        for round_ in subsequent_rounds
+        for match in round_.matches
+        if match.id not in affected_matches
+    ]
 
     for subsequent_match in subsequent_matches:
         updated_inputs: list[StageItemInput | None] = [
