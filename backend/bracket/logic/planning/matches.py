@@ -23,46 +23,68 @@ from bracket.utils.types import assert_some
 async def schedule_all_unscheduled_matches(
     tournament_id: TournamentId, stages: list[StageWithStageItems]
 ) -> None:
+    """
+    Schedule all unscheduled matches across all available courts.
+
+    Distributes matches across courts to maximize parallelism:
+    - Tracks when each court becomes available
+    - Assigns each match to the court that's free soonest
+    - Processes rounds in order (earlier rounds before later rounds)
+    """
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
 
     if len(stages) < 1 or len(courts) < 1:
         return
 
-    time_last_match_from_previous_stage = tournament.start_time
-    position_last_match_from_previous_stage = 0
+    # Track next available time for each court
+    court_next_available = {court.id: tournament.start_time for court in courts}
+    position_counter = 0
 
+    # Collect all matches grouped by round, maintaining round order
+    # Process rounds in sequence (all round 1 matches before round 2, etc.)
     for stage in stages:
         stage_items = sorted(stage.stage_items, key=lambda x: x.name)
 
-        stage_start_time = time_last_match_from_previous_stage
-        stage_position_in_schedule = position_last_match_from_previous_stage
+        # Get max number of rounds across all stage items in this stage
+        max_rounds = max(
+            (len(stage_item.rounds) for stage_item in stage_items),
+            default=0,
+        )
 
-        for i, stage_item in enumerate(stage_items):
-            court = courts[min(i, len(courts) - 1)]
-            start_time = stage_start_time
-            position_in_schedule = stage_position_in_schedule
-            for round_ in sorted(stage_item.rounds, key=lambda r: r.id):
-                for match in round_.matches:
-                    if match.start_time is None and match.position_in_schedule is None:
-                        await sql_reschedule_match_and_determine_duration_and_margin(
-                            court.id,
-                            start_time,
-                            position_in_schedule,
-                            match,
-                            tournament,
-                        )
+        # Process round by round across all stage items
+        for round_idx in range(max_rounds):
+            round_matches = []
 
-                    start_time += timedelta(minutes=match.duration_minutes)
-                    position_in_schedule += 1
+            # Collect all matches from this round index across all stage items
+            for stage_item in stage_items:
+                sorted_rounds = sorted(stage_item.rounds, key=lambda r: r.id)
+                if round_idx < len(sorted_rounds):
+                    round_ = sorted_rounds[round_idx]
+                    for match in round_.matches:
+                        if match.start_time is None and match.position_in_schedule is None:
+                            round_matches.append(match)
 
-                    time_last_match_from_previous_stage = max(
-                        time_last_match_from_previous_stage, start_time
-                    )
+            # Schedule each match in this round to the court that's available soonest
+            for match in round_matches:
+                # Find the court with the earliest available time
+                best_court_id = min(court_next_available, key=lambda c: court_next_available[c])
+                start_time = court_next_available[best_court_id]
 
-                    position_last_match_from_previous_stage = max(
-                        position_last_match_from_previous_stage, position_in_schedule
-                    )
+                await sql_reschedule_match_and_determine_duration_and_margin(
+                    best_court_id,
+                    start_time,
+                    position_counter,
+                    match,
+                    tournament,
+                )
+
+                # Update court availability
+                match_duration = match.duration_minutes + (match.margin_minutes or 0)
+                court_next_available[best_court_id] = start_time + timedelta(
+                    minutes=match_duration
+                )
+                position_counter += 1
 
     await update_start_times_of_matches(tournament_id)
 
