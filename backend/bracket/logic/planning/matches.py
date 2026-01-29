@@ -20,6 +20,49 @@ from bracket.utils.id_types import CourtId, MatchId, TournamentId
 from bracket.utils.types import assert_some
 
 
+def match_has_two_participants(match: MatchWithDetails | MatchWithDetailsDefinitive) -> bool:
+    """
+    Check if a match has two actual participants.
+
+    A match is playable if both sides have either:
+    - A direct team assignment (stage_item_input with team_id)
+    - A winner/loser from a completed match
+
+    Matches where one or both sides are empty (byes) should not be scheduled.
+    """
+    def side_has_participant(
+        stage_item_input: any,
+        input_id: int | None,
+        winner_from: int | None,
+        loser_from: int | None,
+    ) -> bool:
+        # Has a direct team assignment with an actual team
+        if stage_item_input is not None and stage_item_input.team_id is not None:
+            return True
+        # Has a reference to get winner/loser from another match
+        if winner_from is not None or loser_from is not None:
+            return True
+        # Has an input slot assigned (even if team not yet determined)
+        if input_id is not None:
+            return True
+        return False
+
+    side1_has = side_has_participant(
+        match.stage_item_input1,
+        match.stage_item_input1_id,
+        match.stage_item_input1_winner_from_match_id,
+        match.stage_item_input1_loser_from_match_id,
+    )
+    side2_has = side_has_participant(
+        match.stage_item_input2,
+        match.stage_item_input2_id,
+        match.stage_item_input2_winner_from_match_id,
+        match.stage_item_input2_loser_from_match_id,
+    )
+
+    return side1_has and side2_has
+
+
 async def schedule_all_unscheduled_matches(
     tournament_id: TournamentId, stages: list[StageWithStageItems]
 ) -> None:
@@ -30,6 +73,7 @@ async def schedule_all_unscheduled_matches(
     - Tracks when each court becomes available
     - Assigns each match to the court that's free soonest
     - Processes rounds in order (earlier rounds before later rounds)
+    - Skips matches that don't have two participants (byes)
     """
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
@@ -62,7 +106,14 @@ async def schedule_all_unscheduled_matches(
                 if round_idx < len(sorted_rounds):
                     round_ = sorted_rounds[round_idx]
                     for match in round_.matches:
-                        if match.start_time is None and match.position_in_schedule is None:
+                        # Only schedule matches that:
+                        # 1. Haven't been scheduled yet
+                        # 2. Have two actual participants (not byes)
+                        if (
+                            match.start_time is None
+                            and match.position_in_schedule is None
+                            and match_has_two_participants(match)
+                        ):
                             round_matches.append(match)
 
             # Schedule each match in this round to the court that's available soonest
