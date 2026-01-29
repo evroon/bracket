@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Add Stage Item",
     "add_team_button": "Add Team",
     "adjust_start_times_checkbox_label": "Adjust start time of matches in this round to the current time",
+    "admin_dashboard_title": "Settings",
+    "admin_title": "Admin",
     "all_matches_radio_label": "All matches",
     "all_matches_scheduled_description": "Matches have been scheduled on all courts in this round. Add a new round or add a new court for more matches.",
     "api_docs_title": "API docs",

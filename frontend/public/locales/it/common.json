@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Aggiungi Elemento Fase",
     "add_team_button": "Aggiungi Squadra",
     "adjust_start_times_checkbox_label": "Regola l'ora d'inizio delle partite in questo turno all'ora corrente",
+    "admin_dashboard_title": "Impostazioni",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Tutte le partite",
     "all_matches_scheduled_description": "Le partite sono state programmate su tutti gli incontri in questo round. Aggiungi un nuovo round o aggiungi una nuova corte per altre partite.",
     "api_docs_title": "Documentazione API",

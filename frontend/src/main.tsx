@@ -11,6 +11,8 @@ import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
+import { AdminGuard } from '@components/guards/admin.guard';
+import AdminDashboardPage from '@pages/admin/dashboard';
 import i18n from '../i18n';
 import { BracketSpotlight } from './components/modals/spotlight';
 import HomePage from './pages';
@@ -82,6 +84,10 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/password-reset" element={<PasswordResetPage />} />
               <Route path="/create-account" element={<CreateAccountPage />} />
 
+              <Route element={<AdminGuard />}>
+                <Route path="/admin" element={<AdminDashboardPage />} />
+              </Route>
+
               <Route path="/tournaments">
                 <Route path=":id">
                   <Route path="players" element={<PlayersPage />} />
@@ -105,6 +111,7 @@ createRoot(document.getElementById('root')!).render(
                   </Route>
                 </Route>
               </Route>
+
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </MantineProvider>
