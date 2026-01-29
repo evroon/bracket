@@ -228,6 +228,7 @@
     "double_elimination_label": "Double Elimination",
     "double_elimination_description": "Losers get a second chance in the lower bracket. Finalists from both brackets compete in the grand finals.",
     "bracket": "Bracket",
+    "no_elimination_brackets": "No elimination brackets in this tournament",
     "winners_bracket": "Winners Bracket",
     "losers_bracket": "Losers Bracket",
     "grand_finals": "Grand Finals",
