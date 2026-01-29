@@ -2,6 +2,7 @@ import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
 import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
@@ -23,8 +24,8 @@ export default function BreakModal({
   const form = useForm({
     initialValues: {
       title: '',
-      start_time: null as Date | null,
-      end_time: null as Date | null,
+      start_time: null as Dayjs | null,
+      end_time: null as Dayjs | null,
     },
 
     validate: {
@@ -32,7 +33,7 @@ export default function BreakModal({
       start_time: (value) => (value != null ? null : t('break_start_time_label')),
       end_time: (value, values) => {
         if (value == null) return t('break_end_time_label');
-        if (values.start_time != null && value <= values.start_time)
+        if (values.start_time != null && dayjs(value).isBefore(dayjs(values.start_time)))
           return t('end_time_after_start_validation');
         return null;
       },
@@ -44,17 +45,15 @@ export default function BreakModal({
       <Modal opened={opened} onClose={() => setOpened(false)} title={t('add_break_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
-            if (values.start_time && values.end_time) {
-              await createTournamentBreak(
-                tournamentId,
-                values.title,
-                values.start_time.toISOString(),
-                values.end_time.toISOString()
-              );
-              await swrBreaksResponse.mutate();
-              setOpened(false);
-              form.reset();
-            }
+            await createTournamentBreak(
+              tournamentId,
+              values.title,
+              values.start_time,
+              values.end_time
+            );
+            await swrBreaksResponse.mutate();
+            setOpened(false);
+            form.reset();
           })}
         >
           <TextInput
