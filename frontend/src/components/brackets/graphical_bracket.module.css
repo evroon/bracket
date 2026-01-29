@@ -1,0 +1,137 @@
+.bracketContainer {
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.bracket {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 200px;
+  position: relative;
+}
+
+.roundTitle {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--mantine-color-dimmed);
+  font-size: 0.85rem;
+}
+
+.matchWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.matchBox {
+  background: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 4px;
+  min-width: 180px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.matchBox:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.matchBoxReadOnly {
+  cursor: default;
+}
+
+.matchBoxReadOnly:hover {
+  box-shadow: none;
+}
+
+.team {
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.teamName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
+}
+
+.teamScore {
+  font-weight: bold;
+  min-width: 24px;
+  text-align: right;
+}
+
+.teamWinner {
+  background: var(--mantine-color-green-9);
+  color: white;
+}
+
+.teamTop {
+  border-radius: 4px 4px 0 0;
+}
+
+.teamBottom {
+  border-radius: 0 0 4px 4px;
+}
+
+.teamDivider {
+  height: 1px;
+  background: var(--mantine-color-default-border);
+}
+
+.connector {
+  position: absolute;
+  right: -20px;
+  width: 20px;
+  height: 2px;
+  background: var(--mantine-color-default-border);
+}
+
+.connectorVertical {
+  position: absolute;
+  right: -20px;
+  width: 2px;
+  background: var(--mantine-color-default-border);
+}
+
+.matchTime {
+  font-size: 0.7rem;
+  color: var(--mantine-color-dimmed);
+  text-align: center;
+  padding: 0.2rem;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.byeMatch {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem 0;
+  color: var(--mantine-color-dimmed);
+}
+
+.grandFinals {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--mantine-color-default-border);
+}

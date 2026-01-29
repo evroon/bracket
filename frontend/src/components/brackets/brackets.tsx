@@ -31,7 +31,7 @@ import {
   UpcomingMatchesResponse,
 } from '@openapi';
 import { createRound } from '@services/round';
-import { DoubleEliminationBracket } from './double_elimination_bracket';
+import { GraphicalBracket } from './graphical_bracket';
 import RoundComponent from './round';
 
 function AddRoundButton({
@@ -90,16 +90,15 @@ export function RoundsGridCols({
     return <NoRoundsAlert readOnly={readOnly} />;
   }
 
-  // Use specialized component for double elimination brackets
-  if (stageItem.type === 'DOUBLE_ELIMINATION') {
+  // Use graphical bracket for elimination brackets
+  if (stageItem.type === 'DOUBLE_ELIMINATION' || stageItem.type === 'SINGLE_ELIMINATION') {
     return (
-      <DoubleEliminationBracket
+      <GraphicalBracket
         stageItem={stageItem}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
         readOnly={readOnly}
-        displaySettings={displaySettings}
       />
     );
   }
