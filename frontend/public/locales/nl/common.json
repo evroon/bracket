@@ -272,5 +272,10 @@
     "win_distribution_text_draws": "gelijkspellen",
     "win_distribution_text_losses": "verliezen",
     "win_distribution_text_win": "zeges",
-    "win_points_input_label": "Punten voor een overwinning"
+    "win_points_input_label": "Punten voor een overwinning",
+    "add_break_title": "Add Break",
+    "break_name_input_placeholder": "Lunch Break",
+    "break_start_time_label": "Break Start Time",
+    "break_end_time_label": "Break End Time",
+    "end_time_after_start_validation": "End time must be after start time"
 }

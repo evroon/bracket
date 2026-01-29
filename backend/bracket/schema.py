@@ -251,6 +251,17 @@ courts = Table(
     Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
 )
 
+tournament_breaks = Table(
+    "tournament_breaks",
+    metadata,
+    Column("id", BigInteger, primary_key=True, index=True),
+    Column("title", Text, nullable=False),
+    Column("start_time", DateTimeTZ, nullable=False),
+    Column("end_time", DateTimeTZ, nullable=False),
+    Column("created", DateTimeTZ, nullable=False, server_default=func.now()),
+    Column("tournament_id", BigInteger, ForeignKey("tournaments.id"), nullable=False, index=True),
+)
+
 rankings = Table(
     "rankings",
     metadata,

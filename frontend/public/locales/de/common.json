@@ -272,5 +272,10 @@
     "win_distribution_text_draws": "zeichnet",
     "win_distribution_text_losses": "Niederlagen",
     "win_distribution_text_win": "Siege",
-    "win_points_input_label": "Punkte für einen Sieg"
+    "win_points_input_label": "Punkte für einen Sieg",
+    "add_break_title": "Add Break",
+    "break_name_input_placeholder": "Lunch Break",
+    "break_start_time_label": "Break Start Time",
+    "break_end_time_label": "Break End Time",
+    "end_time_after_start_validation": "End time must be after start time"
 }

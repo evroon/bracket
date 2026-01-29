@@ -9,12 +9,14 @@ from bracket.models.db.match import (
     MatchWithDetailsDefinitive,
 )
 from bracket.models.db.tournament import Tournament
+from bracket.models.db.tournament_break import TournamentBreak
 from bracket.models.db.util import StageWithStageItems
 from bracket.sql.courts import get_all_courts_in_tournament
 from bracket.sql.matches import (
     sql_reschedule_match_and_determine_duration_and_margin,
 )
 from bracket.sql.stages import get_full_tournament_details
+from bracket.sql.tournament_breaks import get_all_breaks_in_tournament
 from bracket.sql.tournaments import sql_get_tournament
 from bracket.utils.id_types import CourtId, MatchId, TournamentId
 from bracket.utils.types import assert_some
@@ -63,6 +65,25 @@ def match_has_two_participants(match: MatchWithDetails | MatchWithDetailsDefinit
     return side1_has and side2_has
 
 
+def adjust_for_breaks(
+    start_time: datetime_utc,
+    duration_minutes: int,
+    breaks: list[TournamentBreak],
+) -> datetime_utc:
+    """Push start_time past any overlapping break windows."""
+    sorted_breaks = sorted(breaks, key=lambda b: b.start_time)
+    changed = True
+    while changed:
+        changed = False
+        for brk in sorted_breaks:
+            match_end = start_time + timedelta(minutes=duration_minutes)
+            if start_time < brk.end_time and match_end > brk.start_time:
+                start_time = brk.end_time
+                changed = True
+                break
+    return start_time
+
+
 async def schedule_all_unscheduled_matches(
     tournament_id: TournamentId, stages: list[StageWithStageItems]
 ) -> None:
@@ -78,6 +99,7 @@ async def schedule_all_unscheduled_matches(
     """
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
+    breaks = await get_all_breaks_in_tournament(tournament_id)
 
     if len(stages) < 1 or len(courts) < 1:
         return
@@ -134,12 +156,21 @@ async def schedule_all_unscheduled_matches(
                             earliest_start = match_end_times[prereq_id]
 
                 # Find the court that results in the earliest actual start time
-                # (accounting for both court availability and dependency constraints)
+                # (accounting for both court availability, dependency constraints, and breaks)
+                match_duration = match.duration_minutes + (match.margin_minutes or 0)
                 best_court_id = min(
                     court_next_available,
-                    key=lambda c: max(court_next_available[c], earliest_start),
+                    key=lambda c: adjust_for_breaks(
+                        max(court_next_available[c], earliest_start),
+                        match_duration,
+                        breaks,
+                    ),
                 )
-                start_time = max(court_next_available[best_court_id], earliest_start)
+                start_time = adjust_for_breaks(
+                    max(court_next_available[best_court_id], earliest_start),
+                    match_duration,
+                    breaks,
+                )
 
                 await sql_reschedule_match_and_determine_duration_and_margin(
                     best_court_id,
@@ -166,6 +197,7 @@ async def reorder_matches_for_court(
     tournament: Tournament,
     scheduled_matches: list[MatchPosition],
     court_id: CourtId,
+    breaks: list[TournamentBreak] | None = None,
 ) -> None:
     matches_this_court = sorted(
         (match_pos for match_pos in scheduled_matches if match_pos.match.court_id == court_id),
@@ -174,6 +206,9 @@ async def reorder_matches_for_court(
 
     last_start_time = tournament.start_time
     for i, match_pos in enumerate(matches_this_court):
+        match_duration = match_pos.match.duration_minutes + match_pos.match.margin_minutes
+        if breaks:
+            last_start_time = adjust_for_breaks(last_start_time, match_duration, breaks)
         await sql_reschedule_match_and_determine_duration_and_margin(
             court_id,
             last_start_time,
@@ -182,7 +217,7 @@ async def reorder_matches_for_court(
             tournament=tournament,
         )
         last_start_time = last_start_time + timedelta(
-            minutes=match_pos.match.duration_minutes + match_pos.match.margin_minutes
+            minutes=match_duration
         )
 
 
@@ -193,6 +228,7 @@ async def handle_match_reschedule(
         return
 
     stages = await get_full_tournament_details(tournament.id)
+    breaks = await get_all_breaks_in_tournament(tournament.id)
     scheduled_matches_old = get_scheduled_matches(stages)
 
     # For match in prev position: set new position
@@ -219,20 +255,21 @@ async def handle_match_reschedule(
         else:
             scheduled_matches.append(match_pos)
 
-    await reorder_matches_for_court(tournament, scheduled_matches, body.new_court_id)
+    await reorder_matches_for_court(tournament, scheduled_matches, body.new_court_id, breaks)
 
     if body.new_court_id != body.old_court_id:
-        await reorder_matches_for_court(tournament, scheduled_matches, body.old_court_id)
+        await reorder_matches_for_court(tournament, scheduled_matches, body.old_court_id, breaks)
 
 
 async def update_start_times_of_matches(tournament_id: TournamentId) -> None:
     stages = await get_full_tournament_details(tournament_id)
     tournament = await sql_get_tournament(tournament_id)
     courts = await get_all_courts_in_tournament(tournament_id)
+    breaks = await get_all_breaks_in_tournament(tournament_id)
     scheduled_matches = get_scheduled_matches(stages)
 
     for court in courts:
-        await reorder_matches_for_court(tournament, scheduled_matches, court.id)
+        await reorder_matches_for_court(tournament, scheduled_matches, court.id, breaks)
 
 
 def get_scheduled_matches(stages: list[StageWithStageItems]) -> list[MatchPosition]:

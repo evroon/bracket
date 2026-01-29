@@ -17,6 +17,7 @@ import {
   IconAlertCircle,
   IconCalendarOff,
   IconCalendarPlus,
+  IconClock,
   IconDots,
   IconTrash,
 } from '@tabler/icons-react';
@@ -24,6 +25,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
+import BreakModal from '@components/modals/create_break_modal';
 import CourtModal from '@components/modals/create_court_modal';
 import MatchModal from '@components/modals/match_modal';
 import { NoContent } from '@components/no_content/empty_table_info';
@@ -34,8 +36,9 @@ import { Translator } from '@components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
 import { Court, CourtsResponse, MatchWithDetails } from '@openapi';
 import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getCourts, getStages } from '@services/adapter';
+import { getBreaks, getCourts, getStages } from '@services/adapter';
 import { deleteCourt } from '@services/court';
+import { deleteTournamentBreak } from '@services/tournament_break';
 import {
   getMatchLookup,
   getMatchLookupByCourt,
@@ -259,6 +262,7 @@ export default function SchedulePage() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrStagesResponse = getStages(tournamentData.id);
   const swrCourtsResponse = getCourts(tournamentData.id);
+  const swrBreaksResponse = getBreaks(tournamentData.id);
 
   const stageItemsLookup = responseIsValid(swrStagesResponse)
     ? getStageItemLookup(swrStagesResponse)
@@ -331,6 +335,38 @@ export default function SchedulePage() {
           )}
         </Grid.Col>
       </Grid>
+      <Group mt="md" gap="sm" align="center">
+        <BreakModal
+          swrBreaksResponse={swrBreaksResponse}
+          tournamentId={tournamentData.id}
+          buttonSize="xs"
+        />
+        {responseIsValid(swrBreaksResponse) &&
+          swrBreaksResponse.data!.data.map((brk) => (
+            <Badge
+              key={brk.id}
+              color="orange"
+              variant="light"
+              size="lg"
+              rightSection={
+                <ActionIcon
+                  size="xs"
+                  color="orange"
+                  variant="transparent"
+                  onClick={async () => {
+                    await deleteTournamentBreak(tournamentData.id, brk.id);
+                    await swrBreaksResponse.mutate();
+                  }}
+                >
+                  <IconTrash size={14} />
+                </ActionIcon>
+              }
+              leftSection={<IconClock size={14} />}
+            >
+              {brk.title}: <Time datetime={brk.start_time} /> - <Time datetime={brk.end_time} />
+            </Badge>
+          ))}
+      </Group>
       <Group grow mt="1rem">
         <DragDropContext
           onDragEnd={async ({ destination, source, draggableId: matchId }) => {

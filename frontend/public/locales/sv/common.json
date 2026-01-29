@@ -272,5 +272,10 @@
     "win_distribution_text_draws": "ritningar",
     "win_distribution_text_losses": "förluster",
     "win_distribution_text_win": "vinner",
-    "win_points_input_label": "Poäng för en vinst"
+    "win_points_input_label": "Poäng för en vinst",
+    "add_break_title": "Add Break",
+    "break_name_input_placeholder": "Lunch Break",
+    "break_start_time_label": "Break Start Time",
+    "break_end_time_label": "Break End Time",
+    "end_time_after_start_validation": "End time must be after start time"
 }

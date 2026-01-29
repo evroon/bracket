@@ -217,6 +217,23 @@ export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
+export interface TournamentBreak {
+  id: number;
+  title: string;
+  start_time: string;
+  end_time: string;
+  created: string;
+  tournament_id: number;
+}
+
+export interface TournamentBreaksResponse {
+  data: TournamentBreak[];
+}
+
+export function getBreaks(tournament_id: number): SWRResponse<TournamentBreaksResponse> {
+  return useSWR(`tournaments/${tournament_id}/breaks`, fetcher);
+}
+
 export function getCourtsLive(tournament_id: number | null): SWRResponse<CourtsResponse> {
   return useSWR(tournament_id == null ? null : `tournaments/${tournament_id}/courts`, fetcher, {
     refreshInterval: 60_000,

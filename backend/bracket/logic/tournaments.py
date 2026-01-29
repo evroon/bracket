@@ -2,6 +2,7 @@ import aiofiles.os
 
 from bracket.sql.courts import sql_delete_courts_of_tournament
 from bracket.sql.players import sql_delete_players_of_tournament
+from bracket.sql.tournament_breaks import sql_delete_breaks_of_tournament
 from bracket.sql.rankings import get_all_rankings_in_tournament, sql_delete_ranking
 from bracket.sql.shared import sql_delete_stage_item_matches, sql_delete_stage_item_relations
 from bracket.sql.stage_items import sql_delete_stage_item
@@ -45,6 +46,7 @@ async def sql_delete_tournament_completely(tournament_id: TournamentId) -> None:
         await sql_delete_ranking(tournament_id, ranking.id)
 
     await sql_delete_players_of_tournament(tournament_id)
+    await sql_delete_breaks_of_tournament(tournament_id)
     await sql_delete_courts_of_tournament(tournament_id)
     await sql_delete_teams_of_tournament(tournament_id)
     await sql_delete_tournament(tournament_id)

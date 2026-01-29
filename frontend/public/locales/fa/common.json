@@ -258,5 +258,10 @@
     "user_settings_title": "تنظیمات کاربری",
     "view_tournament_button": "مشاهده مسابقه",
     "win_points_input_label": "امتیاز برد",
-    "your_tournaments_title": "مسابقات شما"
+    "your_tournaments_title": "مسابقات شما",
+    "add_break_title": "Add Break",
+    "break_name_input_placeholder": "Lunch Break",
+    "break_start_time_label": "Break Start Time",
+    "break_end_time_label": "Break End Time",
+    "end_time_after_start_validation": "End time must be after start time"
 } 
