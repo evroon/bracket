@@ -1,10 +1,11 @@
 import { Box, Title } from '@mantine/core';
+import { parseISO } from 'date-fns';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import MatchModal from '@components/modals/match_modal';
-import { Time } from '@components/utils/datetime';
+import { formatTime, Time } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import {
@@ -21,6 +22,130 @@ type BracketPosition = 'WINNERS' | 'LOSERS' | 'GRAND_FINALS' | 'NONE';
 
 interface RoundWithMatchesExtended extends RoundWithMatches {
   bracket_position?: BracketPosition;
+}
+
+interface TimeGridColumn {
+  type: 'time-label' | 'winners' | 'separator' | 'losers' | 'grand-finals';
+  round?: RoundWithMatches;
+  label: string;
+}
+
+interface TimeGridCell {
+  col: number;
+  row: number;
+  matches: MatchWithDetails[];
+  round: RoundWithMatches;
+}
+
+interface TimeGridData {
+  columns: TimeGridColumn[];
+  timeSlots: Array<{ time: string }>;
+  hasUnscheduled: boolean;
+  cells: TimeGridCell[];
+}
+
+function buildTimeGrid(
+  winnersRounds: RoundWithMatches[],
+  losersRounds: RoundWithMatches[],
+  grandFinalsRounds: RoundWithMatches[]
+): TimeGridData | null {
+  const allRoundsWithBracket: Array<{
+    round: RoundWithMatches;
+    bracket: 'winners' | 'losers' | 'grand-finals';
+  }> = [
+    ...winnersRounds.map((r) => ({ round: r, bracket: 'winners' as const })),
+    ...losersRounds.map((r) => ({ round: r, bracket: 'losers' as const })),
+    ...grandFinalsRounds.map((r) => ({ round: r, bracket: 'grand-finals' as const })),
+  ];
+
+  // Collect all unique start_times
+  const timeSet = new Set<string>();
+  let winnersHasTimes = false;
+  let losersHasTimes = false;
+
+  for (const { round, bracket } of allRoundsWithBracket) {
+    for (const match of round.matches) {
+      if (match.start_time) {
+        timeSet.add(match.start_time);
+        if (bracket === 'winners') winnersHasTimes = true;
+        if (bracket === 'losers') losersHasTimes = true;
+      }
+    }
+  }
+
+  // Fallback if no cross-bracket alignment is possible
+  if (!winnersHasTimes || !losersHasTimes) {
+    return null;
+  }
+
+  // Sort unique times chronologically
+  const sortedTimes = Array.from(timeSet).sort(
+    (a, b) => parseISO(a).getTime() - parseISO(b).getTime()
+  );
+
+  const timeSlots = sortedTimes.map((time) => ({ time }));
+  const timeIndex = new Map(sortedTimes.map((t, i) => [t, i]));
+
+  // Build columns: time-label, winners rounds, separator, losers rounds, grand finals
+  const columns: TimeGridColumn[] = [{ type: 'time-label', label: '' }];
+
+  for (const round of winnersRounds) {
+    columns.push({ type: 'winners', round, label: round.name });
+  }
+
+  columns.push({ type: 'separator', label: '' });
+
+  for (const round of losersRounds) {
+    columns.push({ type: 'losers', round, label: round.name });
+  }
+
+  for (const round of grandFinalsRounds) {
+    columns.push({ type: 'grand-finals', round, label: round.name });
+  }
+
+  // Build a lookup from round id to column index
+  const roundColIndex = new Map<number, number>();
+  columns.forEach((col, idx) => {
+    if (col.round) {
+      roundColIndex.set(col.round.id, idx);
+    }
+  });
+
+  // Group matches into cells: (col, row) -> matches
+  const cellMap = new Map<string, { matches: MatchWithDetails[]; round: RoundWithMatches }>();
+  let hasUnscheduled = false;
+
+  for (const { round } of allRoundsWithBracket) {
+    const colIdx = roundColIndex.get(round.id);
+    if (colIdx === undefined) continue;
+
+    for (const match of round.matches) {
+      let rowIdx: number;
+      if (match.start_time && timeIndex.has(match.start_time)) {
+        rowIdx = timeIndex.get(match.start_time)!;
+      } else {
+        // Unscheduled matches go to an extra row at the bottom
+        rowIdx = sortedTimes.length;
+        hasUnscheduled = true;
+      }
+
+      const key = `${colIdx}:${rowIdx}`;
+      const existing = cellMap.get(key);
+      if (existing) {
+        existing.matches.push(match);
+      } else {
+        cellMap.set(key, { matches: [match], round });
+      }
+    }
+  }
+
+  const cells: TimeGridCell[] = [];
+  for (const [key, value] of cellMap) {
+    const [col, row] = key.split(':').map(Number);
+    cells.push({ col, row, matches: value.matches, round: value.round });
+  }
+
+  return { columns, timeSlots, hasUnscheduled, cells };
 }
 
 function MatchBox({
@@ -198,6 +323,162 @@ function BracketSection({
   );
 }
 
+function TimeAlignedBracket({
+  gridData,
+  tournamentData,
+  swrStagesResponse,
+  swrUpcomingMatchesResponse,
+  readOnly,
+}: {
+  gridData: TimeGridData;
+  tournamentData: TournamentMinimal;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
+  swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse> | null;
+  readOnly: boolean;
+}) {
+  const { t } = useTranslation();
+  const { columns, timeSlots, hasUnscheduled, cells } = gridData;
+
+  // Compute column spans for section titles
+  const winnersColIndices = columns
+    .map((c, i) => (c.type === 'winners' ? i : -1))
+    .filter((i) => i >= 0);
+  const losersColIndices = columns
+    .map((c, i) => (c.type === 'losers' ? i : -1))
+    .filter((i) => i >= 0);
+  const gfColIndices = columns
+    .map((c, i) => (c.type === 'grand-finals' ? i : -1))
+    .filter((i) => i >= 0);
+
+  // Grid column sizes: 60px for time label, 200px per round, 24px separator
+  const colSizes = columns
+    .map((c) => {
+      if (c.type === 'time-label') return '60px';
+      if (c.type === 'separator') return '24px';
+      return '200px';
+    })
+    .join(' ');
+
+  const totalTimeRows = timeSlots.length + (hasUnscheduled ? 1 : 0);
+  const rowSizes = `auto auto repeat(${totalTimeRows}, minmax(80px, auto))`;
+
+  // Row offsets: row 0 = section titles, row 1 = round headers, row 2+ = time slots
+  const headerRows = 2;
+
+  // Build a lookup for cells by (col, row)
+  const cellLookup = new Map<string, TimeGridCell>();
+  for (const cell of cells) {
+    cellLookup.set(`${cell.col}:${cell.row}`, cell);
+  }
+
+  return (
+    <div
+      className={classes.timeAlignedGrid}
+      style={{
+        gridTemplateColumns: colSizes,
+        gridTemplateRows: rowSizes,
+      }}
+    >
+      {/* Row 1: Section titles */}
+      {winnersColIndices.length > 0 && (
+        <div
+          className={classes.sectionTitleCell}
+          style={{
+            gridColumn: `${winnersColIndices[0] + 1} / ${winnersColIndices[winnersColIndices.length - 1] + 2}`,
+            gridRow: 1,
+          }}
+        >
+          {t('winners_bracket')}
+        </div>
+      )}
+      {losersColIndices.length > 0 && (
+        <div
+          className={classes.sectionTitleCell}
+          style={{
+            gridColumn: `${losersColIndices[0] + 1} / ${losersColIndices[losersColIndices.length - 1] + 2}`,
+            gridRow: 1,
+          }}
+        >
+          {t('losers_bracket')}
+        </div>
+      )}
+      {gfColIndices.length > 0 && (
+        <div
+          className={classes.sectionTitleCell}
+          style={{
+            gridColumn: `${gfColIndices[0] + 1} / ${gfColIndices[gfColIndices.length - 1] + 2}`,
+            gridRow: 1,
+          }}
+        >
+          {t('grand_finals')}
+        </div>
+      )}
+
+      {/* Row 2: Round headers */}
+      {columns.map((col, colIdx) => {
+        if (col.type === 'time-label' || col.type === 'separator') return null;
+        return (
+          <div
+            key={`header-${colIdx}`}
+            className={classes.roundHeaderCell}
+            style={{ gridColumn: colIdx + 1, gridRow: 2 }}
+          >
+            {col.label}
+          </div>
+        );
+      })}
+
+      {/* Time slot rows */}
+      {timeSlots.map((slot, slotIdx) => {
+        const gridRow = slotIdx + headerRows + 1;
+        return (
+          <div
+            key={`time-${slotIdx}`}
+            className={classes.timeLabel}
+            style={{ gridColumn: 1, gridRow }}
+          >
+            {formatTime(slot.time)}
+          </div>
+        );
+      })}
+
+      {/* Unscheduled row time label */}
+      {hasUnscheduled && (
+        <div
+          className={classes.timeLabel}
+          style={{ gridColumn: 1, gridRow: timeSlots.length + headerRows + 1 }}
+        >
+          —
+        </div>
+      )}
+
+      {/* Match cells */}
+      {cells.map((cell) => {
+        const gridRow = cell.row + headerRows + 1;
+        return (
+          <div
+            key={`cell-${cell.col}-${cell.row}`}
+            className={classes.gridMatchCell}
+            style={{ gridColumn: cell.col + 1, gridRow }}
+          >
+            {cell.matches.map((match) => (
+              <MatchBox
+                key={match.id}
+                match={match}
+                round={cell.round}
+                tournamentData={tournamentData}
+                swrStagesResponse={swrStagesResponse}
+                swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+                readOnly={readOnly}
+              />
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function GraphicalBracket({
   stageItem,
   tournamentData,
@@ -236,6 +517,19 @@ export function GraphicalBracket({
       <BracketSection
         title={t('bracket')}
         rounds={noneRounds}
+        tournamentData={tournamentData}
+        swrStagesResponse={swrStagesResponse}
+        swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
+        readOnly={readOnly}
+      />
+    );
+  }
+
+  const timeGridData = buildTimeGrid(winnersRounds, losersRounds, grandFinalsRounds);
+  if (timeGridData) {
+    return (
+      <TimeAlignedBracket
+        gridData={timeGridData}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
