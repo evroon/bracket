@@ -3,7 +3,6 @@ import {
   ActionIcon,
   Alert,
   Badge,
-  Button,
   Card,
   Grid,
   Group,
@@ -11,13 +10,10 @@ import {
   Select,
   Stack,
   Text,
-  Title,
 } from '@mantine/core';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import {
   IconAlertCircle,
-  IconCalendarOff,
-  IconCalendarPlus,
   IconClock,
   IconDots,
   IconTrash,
@@ -47,7 +43,7 @@ import {
   getStageItemLookup,
   stringToColour,
 } from '@services/lookups';
-import { clearSchedule, rescheduleMatch, scheduleMatches, updateMatch } from '@services/match';
+import { rescheduleMatch, updateMatch } from '@services/match';
 
 function ScheduleRow({
   index,
@@ -348,43 +344,6 @@ export default function SchedulePage() {
           round={null}
         />
       ) : null}
-      <Grid grow>
-        <Grid.Col span={6}>
-          <Title>{t('planning_title')}</Title>
-        </Grid.Col>
-        <Grid.Col span={6}>
-          {data.length < 1 ? null : (
-            <Group justify="right">
-              <Button
-                color="red"
-                size="md"
-                variant="outline"
-                style={{ marginBottom: 10 }}
-                leftSection={<IconCalendarOff size={24} />}
-                onClick={async () => {
-                  await clearSchedule(tournamentData.id);
-                  await swrStagesResponse.mutate();
-                }}
-              >
-                {t('clear_schedule')}
-              </Button>
-              <Button
-                color="indigo"
-                size="md"
-                variant="filled"
-                style={{ marginBottom: 10 }}
-                leftSection={<IconCalendarPlus size={24} />}
-                onClick={async () => {
-                  await scheduleMatches(tournamentData.id);
-                  await swrStagesResponse.mutate();
-                }}
-              >
-                {t('schedule_description')}
-              </Button>
-            </Group>
-          )}
-        </Grid.Col>
-      </Grid>
       <Group mt="md" gap="sm" align="center">
         <BreakModal
           swrBreaksResponse={swrBreaksResponse}
