@@ -1,11 +1,10 @@
 import { Box, Title } from '@mantine/core';
-import { parseISO } from 'date-fns';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
 import MatchModal from '@components/modals/match_modal';
-import { formatTime, Time } from '@components/utils/datetime';
+import { Time } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import {
@@ -24,80 +23,74 @@ interface RoundWithMatchesExtended extends RoundWithMatches {
   bracket_position?: BracketPosition;
 }
 
-interface TimeGridColumn {
-  type: 'time-label' | 'round' | 'grand-finals';
+interface GridColumn {
+  type: 'label' | 'round' | 'grand-finals';
   winnersRound?: RoundWithMatches;
   losersRound?: RoundWithMatches;
   grandFinalsRound?: RoundWithMatches;
 }
 
-interface TimeGridCellEntry {
+interface GridCellEntry {
   match: MatchWithDetails;
   round: RoundWithMatches;
 }
 
-interface TimeGridCell {
+interface GridCell {
   col: number;
   row: number;
-  entries: TimeGridCellEntry[];
+  entries: GridCellEntry[];
 }
 
-interface TimeGridRow {
-  type: 'header' | 'time' | 'unscheduled' | 'gap';
+interface GridRow {
+  type: 'header' | 'court' | 'unassigned' | 'gap';
   section?: 'winners' | 'losers';
-  time?: string;
+  courtName?: string;
 }
 
-interface TimeGridData {
-  columns: TimeGridColumn[];
-  rows: TimeGridRow[];
-  cells: TimeGridCell[];
+interface GridData {
+  columns: GridColumn[];
+  rows: GridRow[];
+  cells: GridCell[];
 }
 
-// Losers round 1 shares a column with winners round 2
-const LOSERS_COLUMN_OFFSET = 1;
+// Losers round 1 shares a column with winners round 3
+const LOSERS_COLUMN_OFFSET = 2;
 
-function sortTimes(times: Set<string>): string[] {
-  return Array.from(times).sort(
-    (a, b) => parseISO(a).getTime() - parseISO(b).getTime()
-  );
-}
-
-function buildTimeGrid(
+function buildCourtGrid(
   winnersRounds: RoundWithMatches[],
   losersRounds: RoundWithMatches[],
   grandFinalsRounds: RoundWithMatches[]
-): TimeGridData | null {
+): GridData | null {
   const allRounds = [
     ...winnersRounds.map((r) => ({ round: r, bracket: 'winners' as const })),
     ...losersRounds.map((r) => ({ round: r, bracket: 'losers' as const })),
     ...grandFinalsRounds.map((r) => ({ round: r, bracket: 'grand-finals' as const })),
   ];
 
-  // Collect per-section times and check activation
-  const winnersTimeSet = new Set<string>();
-  const losersTimeSet = new Set<string>(); // includes grand finals
-  let winnersHasUnscheduled = false;
-  let losersHasUnscheduled = false;
+  // Collect per-section courts and check activation
+  const winnersCourts = new Map<number, string>(); // court id → name
+  const losersCourts = new Map<number, string>();
+  let winnersHasUnassigned = false;
+  let losersHasUnassigned = false;
 
   for (const { round, bracket } of allRounds) {
     for (const match of round.matches) {
-      if (match.start_time) {
-        if (bracket === 'winners') winnersTimeSet.add(match.start_time);
-        else losersTimeSet.add(match.start_time);
+      if (match.court_id != null && match.court) {
+        if (bracket === 'winners') winnersCourts.set(match.court_id, match.court.name);
+        else losersCourts.set(match.court_id, match.court.name);
       } else {
-        if (bracket === 'winners') winnersHasUnscheduled = true;
-        else losersHasUnscheduled = true;
+        if (bracket === 'winners') winnersHasUnassigned = true;
+        else losersHasUnassigned = true;
       }
     }
   }
 
-  // Fallback if no cross-bracket alignment is possible
-  if (winnersTimeSet.size === 0 || losersTimeSet.size === 0) {
+  // Fallback if no courts assigned in both brackets
+  if (winnersCourts.size === 0 || losersCourts.size === 0) {
     return null;
   }
 
-  // Build columns with offset (LR1 under WR2)
+  // Build columns with offset (LR1 under WR3)
   const winnersColStart = 1;
   const losersColStart = winnersColStart + LOSERS_COLUMN_OFFSET;
 
@@ -106,10 +99,10 @@ function buildTimeGrid(
     losersRounds.length > 0 ? losersColStart + losersRounds.length - 1 : 0
   );
 
-  const columns: TimeGridColumn[] = [{ type: 'time-label' }];
+  const columns: GridColumn[] = [{ type: 'label' }];
 
   for (let c = 1; c <= maxRoundCol; c++) {
-    const col: TimeGridColumn = { type: 'round' };
+    const col: GridColumn = { type: 'round' };
     const wIdx = c - winnersColStart;
     if (wIdx >= 0 && wIdx < winnersRounds.length) {
       col.winnersRound = winnersRounds[wIdx];
@@ -133,61 +126,60 @@ function buildTimeGrid(
     if (col.grandFinalsRound) roundColIndex.set(col.grandFinalsRound.id, idx);
   });
 
+  // Sort courts by name
+  const sortedWinnersCourts = Array.from(winnersCourts.entries()).sort((a, b) =>
+    a[1].localeCompare(b[1])
+  );
+  const sortedLosersCourts = Array.from(losersCourts.entries()).sort((a, b) =>
+    a[1].localeCompare(b[1])
+  );
+
   // Build row sequence: winners section, gap, losers section
-  const winnersTimes = sortTimes(winnersTimeSet);
-  const losersTimes = sortTimes(losersTimeSet);
+  const rows: GridRow[] = [];
+  const winnersCourtRow = new Map<number, number>(); // court id → row index
+  const losersCourtRow = new Map<number, number>();
+  let winnersUnassignedRow = -1;
+  let losersUnassignedRow = -1;
 
-  const rows: TimeGridRow[] = [];
   rows.push({ type: 'header', section: 'winners' });
-  for (const time of winnersTimes) {
-    rows.push({ type: 'time', section: 'winners', time });
+  for (const [courtId, courtName] of sortedWinnersCourts) {
+    winnersCourtRow.set(courtId, rows.length);
+    rows.push({ type: 'court', section: 'winners', courtName });
   }
-  if (winnersHasUnscheduled) {
-    rows.push({ type: 'unscheduled', section: 'winners' });
+  if (winnersHasUnassigned) {
+    winnersUnassignedRow = rows.length;
+    rows.push({ type: 'unassigned', section: 'winners' });
   }
+
   rows.push({ type: 'gap' });
+
   rows.push({ type: 'header', section: 'losers' });
-  for (const time of losersTimes) {
-    rows.push({ type: 'time', section: 'losers', time });
+  for (const [courtId, courtName] of sortedLosersCourts) {
+    losersCourtRow.set(courtId, rows.length);
+    rows.push({ type: 'court', section: 'losers', courtName });
   }
-  if (losersHasUnscheduled) {
-    rows.push({ type: 'unscheduled', section: 'losers' });
+  if (losersHasUnassigned) {
+    losersUnassignedRow = rows.length;
+    rows.push({ type: 'unassigned', section: 'losers' });
   }
-
-  // Build time-to-row maps for each section
-  const winnersTimeRow = new Map<string, number>();
-  const losersTimeRow = new Map<string, number>();
-  let winnersUnschedRow = -1;
-  let losersUnschedRow = -1;
-
-  rows.forEach((row, idx) => {
-    if (row.type === 'time' && row.time) {
-      if (row.section === 'winners') winnersTimeRow.set(row.time, idx);
-      else losersTimeRow.set(row.time, idx);
-    }
-    if (row.type === 'unscheduled') {
-      if (row.section === 'winners') winnersUnschedRow = idx;
-      else losersUnschedRow = idx;
-    }
-  });
 
   // Group matches into cells using absolute row indices
-  const cellMap = new Map<string, TimeGridCellEntry[]>();
+  const cellMap = new Map<string, GridCellEntry[]>();
 
   for (const { round, bracket } of allRounds) {
     const colIdx = roundColIndex.get(round.id);
     if (colIdx === undefined) continue;
 
     const isWinners = bracket === 'winners';
-    const timeRowMap = isWinners ? winnersTimeRow : losersTimeRow;
-    const unschedRow = isWinners ? winnersUnschedRow : losersUnschedRow;
+    const courtRowMap = isWinners ? winnersCourtRow : losersCourtRow;
+    const unassignedRow = isWinners ? winnersUnassignedRow : losersUnassignedRow;
 
     for (const match of round.matches) {
       let rowIdx: number;
-      if (match.start_time && timeRowMap.has(match.start_time)) {
-        rowIdx = timeRowMap.get(match.start_time)!;
-      } else if (unschedRow >= 0) {
-        rowIdx = unschedRow;
+      if (match.court_id != null && courtRowMap.has(match.court_id)) {
+        rowIdx = courtRowMap.get(match.court_id)!;
+      } else if (unassignedRow >= 0) {
+        rowIdx = unassignedRow;
       } else {
         continue;
       }
@@ -202,7 +194,7 @@ function buildTimeGrid(
     }
   }
 
-  const cells: TimeGridCell[] = [];
+  const cells: GridCell[] = [];
   for (const [key, entries] of cellMap) {
     const [col, row] = key.split(':').map(Number);
     cells.push({ col, row, entries });
@@ -386,14 +378,14 @@ function BracketSection({
   );
 }
 
-function TimeAlignedBracket({
+function CourtAlignedBracket({
   gridData,
   tournamentData,
   swrStagesResponse,
   swrUpcomingMatchesResponse,
   readOnly,
 }: {
-  gridData: TimeGridData;
+  gridData: GridData;
   tournamentData: TournamentMinimal;
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse> | null;
@@ -403,7 +395,7 @@ function TimeAlignedBracket({
   const { columns, rows, cells } = gridData;
 
   const colSizes = columns
-    .map((c) => (c.type === 'time-label' ? 'auto' : '200px'))
+    .map((c) => (c.type === 'label' ? 'auto' : '200px'))
     .join(' ');
 
   const rowSizes = rows
@@ -429,14 +421,12 @@ function TimeAlignedBracket({
           const isWinners = row.section === 'winners';
           return (
             <div key={`row-${rowIdx}`} style={{ display: 'contents' }}>
-              {/* Section label */}
               <div
                 className={classes.sectionTitleCell}
                 style={{ gridColumn: 1, gridRow }}
               >
                 {isWinners ? t('winners_bracket') : t('losers_bracket')}
               </div>
-              {/* Round headers */}
               {columns.map((col, colIdx) => {
                 let label: string | undefined;
                 if (isWinners) {
@@ -459,22 +449,22 @@ function TimeAlignedBracket({
           );
         }
 
-        if (row.type === 'time') {
+        if (row.type === 'court') {
           return (
             <div
-              key={`time-${rowIdx}`}
+              key={`court-${rowIdx}`}
               className={classes.timeLabel}
               style={{ gridColumn: 1, gridRow }}
             >
-              {formatTime(row.time!)}
+              {row.courtName}
             </div>
           );
         }
 
-        if (row.type === 'unscheduled') {
+        if (row.type === 'unassigned') {
           return (
             <div
-              key={`unsched-${rowIdx}`}
+              key={`unassigned-${rowIdx}`}
               className={classes.timeLabel}
               style={{ gridColumn: 1, gridRow }}
             >
@@ -483,11 +473,9 @@ function TimeAlignedBracket({
           );
         }
 
-        // gap row — rendered by grid sizing, nothing to draw
         return null;
       })}
 
-      {/* Match cells */}
       {cells.map((cell) => (
         <div
           key={`cell-${cell.col}-${cell.row}`}
@@ -557,11 +545,11 @@ export function GraphicalBracket({
     );
   }
 
-  const timeGridData = buildTimeGrid(winnersRounds, losersRounds, grandFinalsRounds);
-  if (timeGridData) {
+  const courtGridData = buildCourtGrid(winnersRounds, losersRounds, grandFinalsRounds);
+  if (courtGridData) {
     return (
-      <TimeAlignedBracket
-        gridData={timeGridData}
+      <CourtAlignedBracket
+        gridData={courtGridData}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
         swrUpcomingMatchesResponse={swrUpcomingMatchesResponse}
