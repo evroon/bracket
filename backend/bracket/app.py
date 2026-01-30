@@ -1,4 +1,5 @@
 import glob
+import os
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -45,6 +46,9 @@ init_sentry()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    os.makedirs("static/tournament-logos", exist_ok=True)
+    os.makedirs("static/team-logos", exist_ok=True)
+
     await database.connect()
     await init_db_when_empty()
 

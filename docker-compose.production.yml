@@ -1,0 +1,49 @@
+networks:
+  bracket_lan:
+    driver: bridge
+
+volumes:
+  bracket_pg_data:
+  bracket_static_data:
+
+services:
+  frontend:
+    container_name: bracket-frontend
+    depends_on:
+      - backend
+    environment:
+      BACKEND_URL: backend:8400
+    image: thunderdanp/bracket-frontend:latest
+    networks:
+      - bracket_lan
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+
+  backend:
+    container_name: bracket-backend
+    depends_on:
+      - postgres
+    environment:
+      ENVIRONMENT: PRODUCTION
+      PG_DSN: postgresql://bracket_prod:bracket_prod@postgres:5432/bracket_prod
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+    image: thunderdanp/bracket-backend:latest
+    networks:
+      - bracket_lan
+    restart: unless-stopped
+    volumes:
+      - bracket_static_data:/app/static
+
+  postgres:
+    environment:
+      POSTGRES_DB: bracket_prod
+      POSTGRES_PASSWORD: bracket_prod
+      POSTGRES_USER: bracket_prod
+    image: postgres
+    networks:
+      - bracket_lan
+    restart: always
+    volumes:
+      - bracket_pg_data:/var/lib/postgresql/data
