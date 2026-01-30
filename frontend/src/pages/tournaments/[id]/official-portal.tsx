@@ -1,6 +1,6 @@
 import { Alert, Button, Card, Container, Group, NumberInput, Text, TextInput, Title } from '@mantine/core';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getBaseApiUrl } from '@services/adapter';
@@ -45,6 +45,13 @@ function MatchScoreCard({
   const [score1, setScore1] = useState<number>(match.stage_item_input1_score);
   const [score2, setScore2] = useState<number>(match.stage_item_input2_score);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!submitting) {
+      setScore1(match.stage_item_input1_score);
+      setScore2(match.stage_item_input2_score);
+    }
+  }, [match.stage_item_input1_score, match.stage_item_input2_score, submitting]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
@@ -152,6 +159,17 @@ export default function OfficialPortalPage() {
       // Silently handle
     }
   }
+
+  const fetchMatchesRef = useRef(fetchMatches);
+  fetchMatchesRef.current = fetchMatches;
+
+  useEffect(() => {
+    if (officialInfo == null) return;
+    const interval = setInterval(() => {
+      fetchMatchesRef.current();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [officialInfo]);
 
   if (officialInfo == null) {
     return (
