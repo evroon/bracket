@@ -1,4 +1,14 @@
-import { Button, Center, Checkbox, Divider, Grid, Modal, NumberInput, Text } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Checkbox,
+  Divider,
+  Grid,
+  Modal,
+  NumberInput,
+  Select,
+  Text,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +18,7 @@ import DeleteButton from '@components/buttons/delete';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { getOfficials } from '@services/adapter';
 import { getMatchLookup, getStageItemLookup } from '@services/lookups';
 import { deleteMatch, updateMatch } from '@services/match';
 
@@ -82,6 +93,12 @@ function MatchModalForm({
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
     match.custom_margin_minutes != null
   );
+  const [selectedOfficialId, setSelectedOfficialId] = useState<string | null>(
+    match.official_id != null ? `${match.official_id}` : null
+  );
+
+  const swrOfficialsResponse = getOfficials(tournamentData.id);
+  const officials = swrOfficialsResponse.data?.data ?? [];
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);
   const matchesLookup = getMatchLookup(swrStagesResponse);
@@ -99,6 +116,7 @@ function MatchModalForm({
             stage_item_input1_score: values.stage_item_input1_score,
             stage_item_input2_score: values.stage_item_input2_score,
             court_id: match.court_id || null,
+            official_id: selectedOfficialId != null ? Number(selectedOfficialId) : null,
             custom_duration_minutes: customDurationEnabled ? values.custom_duration_minutes : null,
             custom_margin_minutes: customMarginEnabled ? values.custom_margin_minutes : null,
           };
@@ -121,6 +139,18 @@ function MatchModalForm({
           placeholder={`${t('score_of_label')} ${team2Name}`}
           {...form.getInputProps('stage_item_input2_score')}
         />
+        {officials.length > 0 && (
+          <Select
+            mt="lg"
+            label={t('official_label')}
+            placeholder={t('select_official_placeholder')}
+            data={officials.map((o) => ({ value: `${o.id}`, label: o.name }))}
+            value={selectedOfficialId}
+            onChange={setSelectedOfficialId}
+            clearable
+          />
+        )}
+
         <Divider mt="lg" />
 
         <Text size="sm" mt="lg">

@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Button,
   Center,
   Checkbox,
@@ -11,6 +12,7 @@ import {
   Image,
   NumberInput,
   Select,
+  Table,
   Text,
   TextInput,
 } from '@mantine/core';
@@ -18,12 +20,13 @@ import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
-import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from '@tabler/icons-react';
+import { IconCalendar, IconCalendarTime, IconCopy, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { MdArchive } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { SWRResponse } from 'swr';
 
+import OfficialModal from '@components/modals/create_official_modal';
 import { assert_not_none } from '@components/utils/assert';
 import { DropzoneButton } from '@components/utils/file_upload';
 import { GenericSkeletonThreeRows } from '@components/utils/skeletons';
@@ -34,10 +37,13 @@ import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   getBaseApiUrl,
   getClubs,
+  getOfficials,
   getTournamentById,
   handleRequestError,
+  OfficialsResponse,
   removeTournamentLogo,
 } from '@services/adapter';
+import { autoAssignOfficials, clearOfficialAssignments, deleteOfficial } from '@services/official';
 import {
   archiveTournament,
   deleteTournament,
@@ -343,10 +349,93 @@ function GeneralTournamentForm({
   );
 }
 
+function OfficialsSection({
+  tournamentId,
+  swrOfficialsResponse,
+}: {
+  tournamentId: number;
+  swrOfficialsResponse: SWRResponse<OfficialsResponse>;
+}) {
+  const { t } = useTranslation();
+  const officials = swrOfficialsResponse.data?.data ?? [];
+
+  return (
+    <Fieldset legend={t('officials_title')} mt="lg" radius="md">
+      <Text fz="sm" mb="md">
+        {t('officials_description')}
+      </Text>
+
+      {officials.length > 0 && (
+        <Table striped mb="md">
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>{t('name_input_label')}</Table.Th>
+              <Table.Th>{t('access_code_label')}</Table.Th>
+              <Table.Th />
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {officials.map((official) => (
+              <Table.Tr key={official.id}>
+                <Table.Td>{official.name}</Table.Td>
+                <Table.Td>
+                  <code>{official.access_code}</code>
+                </Table.Td>
+                <Table.Td>
+                  <ActionIcon
+                    color="red"
+                    variant="subtle"
+                    onClick={async () => {
+                      await deleteOfficial(tournamentId, official.id);
+                      await swrOfficialsResponse.mutate();
+                    }}
+                  >
+                    <IconTrash size="1.25rem" />
+                  </ActionIcon>
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      )}
+
+      <Group>
+        <OfficialModal
+          tournamentId={tournamentId}
+          swrOfficialsResponse={swrOfficialsResponse}
+        />
+        <Button
+          variant="outline"
+          color="blue"
+          size="sm"
+          onClick={async () => {
+            await autoAssignOfficials(tournamentId);
+            await swrOfficialsResponse.mutate();
+          }}
+        >
+          {t('auto_assign_officials_button')}
+        </Button>
+        <Button
+          variant="outline"
+          color="orange"
+          size="sm"
+          onClick={async () => {
+            await clearOfficialAssignments(tournamentId);
+            await swrOfficialsResponse.mutate();
+          }}
+        >
+          {t('clear_official_assignments_button')}
+        </Button>
+      </Group>
+    </Fieldset>
+  );
+}
+
 export default function SettingsPage() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrClubsResponse = getClubs();
   const swrTournamentResponse = getTournamentById(tournamentData.id);
+  const swrOfficialsResponse = getOfficials(tournamentData.id);
   const tournamentDataFull =
     swrTournamentResponse.data != null ? swrTournamentResponse.data.data : null;
 
@@ -360,11 +449,17 @@ export default function SettingsPage() {
 
   if (tournamentDataFull != null) {
     content = (
-      <GeneralTournamentForm
-        tournament={tournamentDataFull}
-        swrTournamentResponse={swrTournamentResponse}
-        clubs={clubs}
-      />
+      <>
+        <GeneralTournamentForm
+          tournament={tournamentDataFull}
+          swrTournamentResponse={swrTournamentResponse}
+          clubs={clubs}
+        />
+        <OfficialsSection
+          tournamentId={tournamentData.id}
+          swrOfficialsResponse={swrOfficialsResponse}
+        />
+      </>
     );
   }
 

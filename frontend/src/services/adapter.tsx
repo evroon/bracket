@@ -217,6 +217,22 @@ export function getCourts(tournament_id: number): SWRResponse<CourtsResponse> {
   return useSWR(`tournaments/${tournament_id}/courts`, fetcher);
 }
 
+export interface OfficialItem {
+  id: number;
+  name: string;
+  access_code: string;
+  created: string;
+  tournament_id: number;
+}
+
+export interface OfficialsResponse {
+  data: OfficialItem[];
+}
+
+export function getOfficials(tournament_id: number): SWRResponse<OfficialsResponse> {
+  return useSWR(`tournaments/${tournament_id}/officials`, fetcher);
+}
+
 export interface TournamentBreak {
   id: number;
   title: string;

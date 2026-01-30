@@ -30,6 +30,7 @@ import PlayersPage from './pages/tournaments/[id]/players';
 import RankingsPage from './pages/tournaments/[id]/rankings';
 import ResultsPage from './pages/tournaments/[id]/results';
 import SchedulePage from './pages/tournaments/[id]/schedule';
+import OfficialPortalPage from './pages/tournaments/[id]/official-portal';
 import SettingsPage from './pages/tournaments/[id]/settings';
 import StagesPage from './pages/tournaments/[id]/stages';
 import EliminationBracketPage from './pages/tournaments/[id]/stages/elimination/[stage_item_id]';
@@ -92,6 +93,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="rankings" element={<RankingsPage />} />
                   <Route path="settings" element={<SettingsPage />} />
                   <Route path="results" element={<ResultsPage />} />
+                  <Route path="official-portal" element={<OfficialPortalPage />} />
                   <Route path="stages">
                     <Route index element={<StagesPage />} />
                     <Route path="swiss/:stage_item_id" element={<SwissTournamentPage />} />

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from bracket.logic.scheduling.handle_stage_activation import StageItemInputUpdate
 from bracket.models.db.club import Club
 from bracket.models.db.court import Court
+from bracket.models.db.official import Official
 from bracket.models.db.tournament_break import TournamentBreak
 from bracket.models.db.match import Match, SuggestedMatch
 from bracket.models.db.player import Player
@@ -94,6 +95,14 @@ class CourtsResponse(DataResponse[list[Court]]):
 
 
 class SingleCourtResponse(DataResponse[Court]):
+    pass
+
+
+class OfficialsResponse(DataResponse[list[Official]]):
+    pass
+
+
+class SingleOfficialResponse(DataResponse[Official]):
     pass
 
 

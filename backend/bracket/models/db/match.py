@@ -4,9 +4,10 @@ from heliclockter import datetime_utc, timedelta
 from pydantic import BaseModel
 
 from bracket.models.db.court import Court
+from bracket.models.db.official import Official
 from bracket.models.db.shared import BaseModelORM
 from bracket.models.db.stage_item_inputs import StageItemInput
-from bracket.utils.id_types import CourtId, MatchId, RoundId, StageItemInputId
+from bracket.utils.id_types import CourtId, MatchId, OfficialId, RoundId, StageItemInputId
 from bracket.utils.types import assert_some
 
 
@@ -22,6 +23,7 @@ class MatchBaseInsertable(BaseModelORM):
     stage_item_input1_score: int
     stage_item_input2_score: int
     court_id: CourtId | None = None
+    official_id: OfficialId | None = None
     stage_item_input1_conflict: bool
     stage_item_input2_conflict: bool
 
@@ -68,6 +70,7 @@ class MatchWithDetails(Match):
     """
 
     court: Court | None = None
+    official: Official | None = None
 
 
 def get_match_hash(
@@ -80,6 +83,7 @@ class MatchWithDetailsDefinitive(Match):
     stage_item_input1: StageItemInput  # pyrefly: ignore [bad-override]
     stage_item_input2: StageItemInput  # pyrefly: ignore [bad-override]
     court: Court | None = None
+    official: Official | None = None
 
     @property
     def stage_item_inputs(self) -> list[StageItemInput]:
@@ -101,6 +105,7 @@ class MatchBody(BaseModelORM):
     stage_item_input1_score: int = 0
     stage_item_input2_score: int = 0
     court_id: CourtId | None = None
+    official_id: OfficialId | None = None
     custom_duration_minutes: int | None = None
     custom_margin_minutes: int | None = None
 
