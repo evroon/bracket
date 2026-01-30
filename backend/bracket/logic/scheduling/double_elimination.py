@@ -312,7 +312,9 @@ async def build_double_elimination_stage_item(
                 losers_matches_by_round.append([])
                 continue
 
-            # Pair WR1 losers with WR2 losers (1:1)
+            # Pair WR1 losers with WR2 losers (cross-matched to avoid rematches)
+            # WR1[i] loser plays WR2[n-1-i] loser so losers from the same branch
+            # don't meet in the losers bracket
             paired_count = min(len(w_r1_matches), len(w_r2_matches))
             for i in range(paired_count):
                 match = await sql_create_match(
@@ -320,7 +322,7 @@ async def build_double_elimination_stage_item(
                         round_id=losers_round.id,
                         tournament=tournament,
                         loser1_from=w_r1_matches[i].id,
-                        loser2_from=w_r2_matches[i].id,
+                        loser2_from=w_r2_matches[paired_count - 1 - i].id,
                     )
                 )
                 round_matches.append(match)
