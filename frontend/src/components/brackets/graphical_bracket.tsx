@@ -42,15 +42,26 @@ interface TimeGridCell {
   entries: TimeGridCellEntry[];
 }
 
+interface TimeGridRow {
+  type: 'header' | 'time' | 'unscheduled' | 'gap';
+  section?: 'winners' | 'losers';
+  time?: string;
+}
+
 interface TimeGridData {
   columns: TimeGridColumn[];
-  timeSlots: Array<{ time: string }>;
-  hasUnscheduled: boolean;
+  rows: TimeGridRow[];
   cells: TimeGridCell[];
 }
 
 // Losers round 1 shares a column with winners round 2
 const LOSERS_COLUMN_OFFSET = 1;
+
+function sortTimes(times: Set<string>): string[] {
+  return Array.from(times).sort(
+    (a, b) => parseISO(a).getTime() - parseISO(b).getTime()
+  );
+}
 
 function buildTimeGrid(
   winnersRounds: RoundWithMatches[],
@@ -63,39 +74,30 @@ function buildTimeGrid(
     ...grandFinalsRounds.map((r) => ({ round: r, bracket: 'grand-finals' as const })),
   ];
 
-  // Collect all unique start_times
-  const timeSet = new Set<string>();
-  let winnersHasTimes = false;
-  let losersHasTimes = false;
+  // Collect per-section times and check activation
+  const winnersTimeSet = new Set<string>();
+  const losersTimeSet = new Set<string>(); // includes grand finals
+  let winnersHasUnscheduled = false;
+  let losersHasUnscheduled = false;
 
   for (const { round, bracket } of allRounds) {
     for (const match of round.matches) {
       if (match.start_time) {
-        timeSet.add(match.start_time);
-        if (bracket === 'winners') winnersHasTimes = true;
-        if (bracket === 'losers') losersHasTimes = true;
+        if (bracket === 'winners') winnersTimeSet.add(match.start_time);
+        else losersTimeSet.add(match.start_time);
+      } else {
+        if (bracket === 'winners') winnersHasUnscheduled = true;
+        else losersHasUnscheduled = true;
       }
     }
   }
 
   // Fallback if no cross-bracket alignment is possible
-  if (!winnersHasTimes || !losersHasTimes) {
+  if (winnersTimeSet.size === 0 || losersTimeSet.size === 0) {
     return null;
   }
 
-  // Sort unique times chronologically
-  const sortedTimes = Array.from(timeSet).sort(
-    (a, b) => parseISO(a).getTime() - parseISO(b).getTime()
-  );
-
-  const timeSlots = sortedTimes.map((time) => ({ time }));
-  const timeIndex = new Map(sortedTimes.map((t, i) => [t, i]));
-
-  // Build overlapping column layout:
-  //   Col 0: time/section label
-  //   Winners rounds at cols 1, 2, …, N
-  //   Losers rounds at cols 1+OFFSET, 2+OFFSET, … (so LR1 shares col with WR2)
-  //   Grand finals after the last round column
+  // Build columns with offset (LR1 under WR2)
   const winnersColStart = 1;
   const losersColStart = winnersColStart + LOSERS_COLUMN_OFFSET;
 
@@ -131,21 +133,63 @@ function buildTimeGrid(
     if (col.grandFinalsRound) roundColIndex.set(col.grandFinalsRound.id, idx);
   });
 
-  // Group matches into cells: (col, row) -> entries
-  const cellMap = new Map<string, TimeGridCellEntry[]>();
-  let hasUnscheduled = false;
+  // Build row sequence: winners section, gap, losers section
+  const winnersTimes = sortTimes(winnersTimeSet);
+  const losersTimes = sortTimes(losersTimeSet);
 
-  for (const { round } of allRounds) {
+  const rows: TimeGridRow[] = [];
+  rows.push({ type: 'header', section: 'winners' });
+  for (const time of winnersTimes) {
+    rows.push({ type: 'time', section: 'winners', time });
+  }
+  if (winnersHasUnscheduled) {
+    rows.push({ type: 'unscheduled', section: 'winners' });
+  }
+  rows.push({ type: 'gap' });
+  rows.push({ type: 'header', section: 'losers' });
+  for (const time of losersTimes) {
+    rows.push({ type: 'time', section: 'losers', time });
+  }
+  if (losersHasUnscheduled) {
+    rows.push({ type: 'unscheduled', section: 'losers' });
+  }
+
+  // Build time-to-row maps for each section
+  const winnersTimeRow = new Map<string, number>();
+  const losersTimeRow = new Map<string, number>();
+  let winnersUnschedRow = -1;
+  let losersUnschedRow = -1;
+
+  rows.forEach((row, idx) => {
+    if (row.type === 'time' && row.time) {
+      if (row.section === 'winners') winnersTimeRow.set(row.time, idx);
+      else losersTimeRow.set(row.time, idx);
+    }
+    if (row.type === 'unscheduled') {
+      if (row.section === 'winners') winnersUnschedRow = idx;
+      else losersUnschedRow = idx;
+    }
+  });
+
+  // Group matches into cells using absolute row indices
+  const cellMap = new Map<string, TimeGridCellEntry[]>();
+
+  for (const { round, bracket } of allRounds) {
     const colIdx = roundColIndex.get(round.id);
     if (colIdx === undefined) continue;
 
+    const isWinners = bracket === 'winners';
+    const timeRowMap = isWinners ? winnersTimeRow : losersTimeRow;
+    const unschedRow = isWinners ? winnersUnschedRow : losersUnschedRow;
+
     for (const match of round.matches) {
       let rowIdx: number;
-      if (match.start_time && timeIndex.has(match.start_time)) {
-        rowIdx = timeIndex.get(match.start_time)!;
+      if (match.start_time && timeRowMap.has(match.start_time)) {
+        rowIdx = timeRowMap.get(match.start_time)!;
+      } else if (unschedRow >= 0) {
+        rowIdx = unschedRow;
       } else {
-        rowIdx = sortedTimes.length;
-        hasUnscheduled = true;
+        continue;
       }
 
       const key = `${colIdx}:${rowIdx}`;
@@ -164,7 +208,7 @@ function buildTimeGrid(
     cells.push({ col, row, entries });
   }
 
-  return { columns, timeSlots, hasUnscheduled, cells };
+  return { columns, rows, cells };
 }
 
 function MatchBox({
@@ -356,17 +400,19 @@ function TimeAlignedBracket({
   readOnly: boolean;
 }) {
   const { t } = useTranslation();
-  const { columns, timeSlots, hasUnscheduled, cells } = gridData;
+  const { columns, rows, cells } = gridData;
 
-  // Grid column sizes: auto for label column, 200px per round column
   const colSizes = columns
     .map((c) => (c.type === 'time-label' ? 'auto' : '200px'))
     .join(' ');
 
-  // Row 1: winners round headers, Row 2: losers round headers, Row 3+: time slots
-  const headerRows = 2;
-  const totalTimeRows = timeSlots.length + (hasUnscheduled ? 1 : 0);
-  const rowSizes = `auto auto repeat(${totalTimeRows}, minmax(80px, auto))`;
+  const rowSizes = rows
+    .map((r) => {
+      if (r.type === 'header') return 'auto';
+      if (r.type === 'gap') return '40px';
+      return 'minmax(80px, auto)';
+    })
+    .join(' ');
 
   return (
     <div
@@ -376,74 +422,77 @@ function TimeAlignedBracket({
         gridTemplateRows: rowSizes,
       }}
     >
-      {/* Row 1: Winners bracket label + winners round headers + GF */}
-      <div
-        className={classes.sectionTitleCell}
-        style={{ gridColumn: 1, gridRow: 1 }}
-      >
-        {t('winners_bracket')}
-      </div>
-      {columns.map((col, idx) => {
-        const label = col.winnersRound?.name ?? col.grandFinalsRound?.name;
-        if (!label) return null;
-        return (
-          <div
-            key={`wh-${idx}`}
-            className={classes.roundHeaderCell}
-            style={{ gridColumn: idx + 1, gridRow: 1 }}
-          >
-            {label}
-          </div>
-        );
+      {rows.map((row, rowIdx) => {
+        const gridRow = rowIdx + 1;
+
+        if (row.type === 'header') {
+          const isWinners = row.section === 'winners';
+          return (
+            <div key={`row-${rowIdx}`} style={{ display: 'contents' }}>
+              {/* Section label */}
+              <div
+                className={classes.sectionTitleCell}
+                style={{ gridColumn: 1, gridRow }}
+              >
+                {isWinners ? t('winners_bracket') : t('losers_bracket')}
+              </div>
+              {/* Round headers */}
+              {columns.map((col, colIdx) => {
+                let label: string | undefined;
+                if (isWinners) {
+                  label = col.winnersRound?.name ?? col.grandFinalsRound?.name;
+                } else {
+                  label = col.losersRound?.name;
+                }
+                if (!label) return null;
+                return (
+                  <div
+                    key={`h-${rowIdx}-${colIdx}`}
+                    className={classes.roundHeaderCell}
+                    style={{ gridColumn: colIdx + 1, gridRow }}
+                  >
+                    {label}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
+
+        if (row.type === 'time') {
+          return (
+            <div
+              key={`time-${rowIdx}`}
+              className={classes.timeLabel}
+              style={{ gridColumn: 1, gridRow }}
+            >
+              {formatTime(row.time!)}
+            </div>
+          );
+        }
+
+        if (row.type === 'unscheduled') {
+          return (
+            <div
+              key={`unsched-${rowIdx}`}
+              className={classes.timeLabel}
+              style={{ gridColumn: 1, gridRow }}
+            >
+              —
+            </div>
+          );
+        }
+
+        // gap row — rendered by grid sizing, nothing to draw
+        return null;
       })}
-
-      {/* Row 2: Losers bracket label + losers round headers */}
-      <div
-        className={classes.sectionTitleCell}
-        style={{ gridColumn: 1, gridRow: 2 }}
-      >
-        {t('losers_bracket')}
-      </div>
-      {columns.map((col, idx) => {
-        if (!col.losersRound) return null;
-        return (
-          <div
-            key={`lh-${idx}`}
-            className={classes.roundHeaderCell}
-            style={{ gridColumn: idx + 1, gridRow: 2 }}
-          >
-            {col.losersRound.name}
-          </div>
-        );
-      })}
-
-      {/* Time slot rows: time labels */}
-      {timeSlots.map((slot, slotIdx) => (
-        <div
-          key={`time-${slotIdx}`}
-          className={classes.timeLabel}
-          style={{ gridColumn: 1, gridRow: slotIdx + headerRows + 1 }}
-        >
-          {formatTime(slot.time)}
-        </div>
-      ))}
-
-      {/* Unscheduled row time label */}
-      {hasUnscheduled && (
-        <div
-          className={classes.timeLabel}
-          style={{ gridColumn: 1, gridRow: timeSlots.length + headerRows + 1 }}
-        >
-          —
-        </div>
-      )}
 
       {/* Match cells */}
       {cells.map((cell) => (
         <div
           key={`cell-${cell.col}-${cell.row}`}
           className={classes.gridMatchCell}
-          style={{ gridColumn: cell.col + 1, gridRow: cell.row + headerRows + 1 }}
+          style={{ gridColumn: cell.col + 1, gridRow: cell.row + 1 }}
         >
           {cell.entries.map((entry) => (
             <MatchBox
