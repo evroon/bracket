@@ -295,29 +295,43 @@ async def build_double_elimination_stage_item(
     losers_slots: list[BracketSlot] = []
 
     # Track which winners round's losers feed into losers bracket
-    # Pattern: W-R1 losers -> L-R1, W-R2 losers -> L-R2, etc. (on odd losers rounds)
-    winners_round_for_losers = 0
+    # LR1 absorbs both WR1 and WR2 losers, subsequent rounds start from WR3
+    winners_round_for_losers = 2
 
     for losers_round_idx, losers_round in enumerate(losers_rounds):
         round_matches: list[Match] = []
 
         if losers_round_idx == 0:
-            # First losers round: losers from first winners round pair with each other
-            # Get matches from first winners round that actually happened (not byes)
+            # First losers round: WR1 losers play WR2 losers (not each other)
             w_r1_matches = winners_matches_by_round[0]
+            w_r2_matches = (
+                winners_matches_by_round[1] if len(winners_matches_by_round) > 1 else []
+            )
 
-            if len(w_r1_matches) == 0:
-                # No matches in first round (all byes?) - skip this losers round
+            if len(w_r1_matches) == 0 and len(w_r2_matches) == 0:
                 losers_matches_by_round.append([])
                 continue
 
-            # Pair losers together
-            for i in range(0, len(w_r1_matches), 2):
-                match1 = w_r1_matches[i]
-                match2 = w_r1_matches[i + 1] if i + 1 < len(w_r1_matches) else None
+            # Pair WR1 losers with WR2 losers (1:1)
+            paired_count = min(len(w_r1_matches), len(w_r2_matches))
+            for i in range(paired_count):
+                match = await sql_create_match(
+                    create_match_body(
+                        round_id=losers_round.id,
+                        tournament=tournament,
+                        loser1_from=w_r1_matches[i].id,
+                        loser2_from=w_r2_matches[i].id,
+                    )
+                )
+                round_matches.append(match)
+                losers_slots.append(BracketSlot(winner_from_match_id=match.id))
 
+            # Extra WR1 losers (when WR1 has more matches than WR2) pair together
+            extra_wr1 = w_r1_matches[paired_count:]
+            for i in range(0, len(extra_wr1), 2):
+                match1 = extra_wr1[i]
+                match2 = extra_wr1[i + 1] if i + 1 < len(extra_wr1) else None
                 if match2:
-                    # Two losers play each other
                     match = await sql_create_match(
                         create_match_body(
                             round_id=losers_round.id,
@@ -329,15 +343,40 @@ async def build_double_elimination_stage_item(
                     round_matches.append(match)
                     losers_slots.append(BracketSlot(winner_from_match_id=match.id))
                 else:
-                    # Odd number of losers - this loser gets a bye in losers bracket
                     losers_slots.append(BracketSlot(loser_from_match_id=match1.id))
 
-            winners_round_for_losers = 1
+            # Extra WR2 losers (when WR2 has more) get byes
+            for i in range(paired_count, len(w_r2_matches)):
+                losers_slots.append(BracketSlot(loser_from_match_id=w_r2_matches[i].id))
 
         elif losers_round_idx % 2 == 1:
-            # Odd losers round (L-R2, L-R4, etc.): survivors meet new losers from winners
-            # Losers bracket survivors vs losers dropping from winners bracket
+            # Odd losers round (after LR1): survivors pair with each other
+            new_losers_slots: list[BracketSlot] = []
 
+            for i in range(0, len(losers_slots), 2):
+                slot1 = losers_slots[i]
+                slot2 = losers_slots[i + 1] if i + 1 < len(losers_slots) else None
+
+                if slot2:
+                    match = await sql_create_match(
+                        create_match_body(
+                            round_id=losers_round.id,
+                            tournament=tournament,
+                            winner1_from=slot1.winner_from_match_id,
+                            winner2_from=slot2.winner_from_match_id,
+                            loser1_from=slot1.loser_from_match_id,
+                            loser2_from=slot2.loser_from_match_id,
+                        )
+                    )
+                    round_matches.append(match)
+                    new_losers_slots.append(BracketSlot(winner_from_match_id=match.id))
+                else:
+                    new_losers_slots.append(slot1)
+
+            losers_slots = new_losers_slots
+
+        else:
+            # Even losers round (after LR1): survivors meet new losers from winners
             new_loser_matches = (
                 winners_matches_by_round[winners_round_for_losers]
                 if winners_round_for_losers < len(winners_matches_by_round)
@@ -346,10 +385,8 @@ async def build_double_elimination_stage_item(
 
             new_losers_slots: list[BracketSlot] = []
 
-            # Pair survivors with new losers
             for i, survivor_slot in enumerate(losers_slots):
                 if i < len(new_loser_matches):
-                    # Survivor vs new loser
                     new_loser_match = new_loser_matches[i]
 
                     if survivor_slot.winner_from_match_id:
@@ -362,7 +399,6 @@ async def build_double_elimination_stage_item(
                             )
                         )
                     elif survivor_slot.loser_from_match_id:
-                        # Survivor had a bye from previous round
                         match = await sql_create_match(
                             create_match_body(
                                 round_id=losers_round.id,
@@ -377,43 +413,13 @@ async def build_double_elimination_stage_item(
                     round_matches.append(match)
                     new_losers_slots.append(BracketSlot(winner_from_match_id=match.id))
                 else:
-                    # No new loser to pair with - survivor advances
                     new_losers_slots.append(survivor_slot)
 
-            # Handle any extra new losers that didn't have survivors to pair with
             for i in range(len(losers_slots), len(new_loser_matches)):
                 new_losers_slots.append(BracketSlot(loser_from_match_id=new_loser_matches[i].id))
 
             losers_slots = new_losers_slots
             winners_round_for_losers += 1
-
-        else:
-            # Even losers round (L-R3, L-R5, etc.): survivors pair with each other
-            new_losers_slots: list[BracketSlot] = []
-
-            for i in range(0, len(losers_slots), 2):
-                slot1 = losers_slots[i]
-                slot2 = losers_slots[i + 1] if i + 1 < len(losers_slots) else None
-
-                if slot2:
-                    # Two survivors play each other
-                    match = await sql_create_match(
-                        create_match_body(
-                            round_id=losers_round.id,
-                            tournament=tournament,
-                            winner1_from=slot1.winner_from_match_id,
-                            winner2_from=slot2.winner_from_match_id,
-                            loser1_from=slot1.loser_from_match_id,
-                            loser2_from=slot2.loser_from_match_id,
-                        )
-                    )
-                    round_matches.append(match)
-                    new_losers_slots.append(BracketSlot(winner_from_match_id=match.id))
-                else:
-                    # Odd number - this slot gets a bye
-                    new_losers_slots.append(slot1)
-
-            losers_slots = new_losers_slots
 
         losers_matches_by_round.append(round_matches)
 
