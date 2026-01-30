@@ -328,6 +328,10 @@ export type MatchBody = {
    */
   custom_margin_minutes: number | null;
   /**
+   * Official Id
+   */
+  official_id: number | null;
+  /**
    * Round Id
    */
   round_id: number;
@@ -394,6 +398,32 @@ export type MatchRescheduleBody = {
 };
 
 /**
+ * Official
+ */
+export type Official = {
+  /**
+   * Access Code
+   */
+  access_code: string;
+  /**
+   * Created
+   */
+  created: string;
+  /**
+   * Id
+   */
+  id: number;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Tournament Id
+   */
+  tournament_id: number;
+};
+
+/**
  * MatchWithDetails
  *
  * MatchWithDetails has zero or one defined stage item inputs, but not both.
@@ -428,6 +458,11 @@ export type MatchWithDetails = {
    * Margin Minutes
    */
   margin_minutes: number;
+  official: Official | null;
+  /**
+   * Official Id
+   */
+  official_id: number | null;
   /**
    * Position In Schedule
    */
@@ -515,6 +550,11 @@ export type MatchWithDetailsDefinitive = {
    * Margin Minutes
    */
   margin_minutes: number;
+  official: Official | null;
+  /**
+   * Official Id
+   */
+  official_id: number | null;
   /**
    * Position In Schedule
    */

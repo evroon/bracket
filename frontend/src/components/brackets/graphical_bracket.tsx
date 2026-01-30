@@ -254,6 +254,11 @@ function MatchBox({
             <Time datetime={match.start_time} />
           </div>
         )}
+        {match.official && (
+          <div className={classes.matchTime}>
+            {match.official.name}
+          </div>
+        )}
         <div className={`${classes.team} ${classes.teamTop} ${team1Wins ? classes.teamWinner : ''}`}>
           <span className={classes.teamName}>{team1Label || 'BYE'}</span>
           <span className={classes.teamScore}>{match.stage_item_input1_score}</span>

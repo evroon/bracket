@@ -30,6 +30,7 @@ export function MatchBadge({ match, theme }: { match: MatchWithDetails; theme: a
           <b>
             {match.court?.name} |{' '}
             {match.start_time != null ? <Time datetime={match.start_time} /> : null}
+            {match.official && ` | ${match.official.name}`}
           </b>
         </Center>
       </div>

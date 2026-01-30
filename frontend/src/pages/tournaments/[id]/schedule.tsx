@@ -8,6 +8,7 @@ import {
   Grid,
   Group,
   Menu,
+  Select,
   Stack,
   Text,
   Title,
@@ -34,9 +35,9 @@ import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import { Translator } from '@components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
-import { Court, CourtsResponse, MatchWithDetails } from '@openapi';
+import { Court, CourtsResponse, MatchWithDetails, StagesWithStageItemsResponse } from '@openapi';
 import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getBreaks, getCourts, getStages } from '@services/adapter';
+import { getBreaks, getCourts, getOfficials, getStages, OfficialItem } from '@services/adapter';
 import { deleteCourt } from '@services/court';
 import { deleteTournamentBreak } from '@services/tournament_break';
 import {
@@ -46,7 +47,7 @@ import {
   getStageItemLookup,
   stringToColour,
 } from '@services/lookups';
-import { clearSchedule, rescheduleMatch, scheduleMatches } from '@services/match';
+import { clearSchedule, rescheduleMatch, scheduleMatches, updateMatch } from '@services/match';
 
 function ScheduleRow({
   index,
@@ -54,12 +55,18 @@ function ScheduleRow({
   openMatchModal,
   stageItemsLookup,
   matchesLookup,
+  officials,
+  tournamentId,
+  swrStagesResponse,
 }: {
   index: number;
   match: MatchWithDetails;
   openMatchModal: any;
   stageItemsLookup: any;
   matchesLookup: any;
+  officials: OfficialItem[];
+  tournamentId: number;
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const { t } = useTranslation();
   return (
@@ -91,6 +98,29 @@ function ScheduleRow({
                     {formatMatchInput2(t, stageItemsLookup, matchesLookup, match)}
                   </Text>
                 </Group>
+                {officials.length > 0 && (
+                  <Select
+                    size="xs"
+                    mt="xs"
+                    placeholder={t('select_official_placeholder')}
+                    data={officials.map((o) => ({ value: `${o.id}`, label: o.name }))}
+                    value={match.official_id != null ? `${match.official_id}` : null}
+                    onChange={async (value) => {
+                      await updateMatch(tournamentId, match.id, {
+                        round_id: match.round_id,
+                        stage_item_input1_score: match.stage_item_input1_score,
+                        stage_item_input2_score: match.stage_item_input2_score,
+                        court_id: match.court_id,
+                        official_id: value != null ? Number(value) : null,
+                        custom_duration_minutes: match.custom_duration_minutes,
+                        custom_margin_minutes: match.custom_margin_minutes,
+                      });
+                      await swrStagesResponse.mutate();
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    clearable
+                  />
+                )}
               </Grid.Col>
               <Grid.Col span="content">
                 <Stack gap="xs" align="end">
@@ -103,6 +133,11 @@ function ScheduleRow({
                   >
                     {matchesLookup[match.id].stageItem.name}
                   </Badge>
+                  {match.official && (
+                    <Badge color="cyan" variant="light" size="sm">
+                      {match.official.name}
+                    </Badge>
+                  )}
                 </Stack>
               </Grid.Col>
             </Grid>
@@ -121,6 +156,8 @@ function ScheduleColumn({
   stageItemsLookup,
   swrCourtsResponse,
   matchesLookup,
+  officials,
+  swrStagesResponse,
 }: {
   tournamentId: number;
   court: Court;
@@ -129,6 +166,8 @@ function ScheduleColumn({
   stageItemsLookup: any;
   swrCourtsResponse: SWRResponse<CourtsResponse>;
   matchesLookup: any;
+  officials: OfficialItem[];
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const { t } = useTranslation();
   const rows = matches.map((match: MatchWithDetails, index: number) => (
@@ -139,6 +178,9 @@ function ScheduleColumn({
       match={match}
       openMatchModal={openMatchModal}
       key={match.id}
+      officials={officials}
+      tournamentId={tournamentId}
+      swrStagesResponse={swrStagesResponse}
     />
   ));
 
@@ -203,6 +245,8 @@ function Schedule({
   matchesLookup,
   schedule,
   openMatchModal,
+  officials,
+  swrStagesResponse,
 }: {
   t: Translator;
   tournament: TournamentMinimal;
@@ -211,6 +255,8 @@ function Schedule({
   matchesLookup: any;
   schedule: { court: Court; matches: MatchWithDetails[] }[];
   openMatchModal: CallableFunction;
+  officials: OfficialItem[];
+  swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
 }) {
   const columns = schedule.map((item) => (
     <ScheduleColumn
@@ -222,6 +268,8 @@ function Schedule({
       court={item.court}
       matches={item.matches}
       openMatchModal={openMatchModal}
+      officials={officials}
+      swrStagesResponse={swrStagesResponse}
     />
   ));
 
@@ -263,6 +311,8 @@ export default function SchedulePage() {
   const swrStagesResponse = getStages(tournamentData.id);
   const swrCourtsResponse = getCourts(tournamentData.id);
   const swrBreaksResponse = getBreaks(tournamentData.id);
+  const swrOfficialsResponse = getOfficials(tournamentData.id);
+  const officials = swrOfficialsResponse.data?.data ?? [];
 
   const stageItemsLookup = responseIsValid(swrStagesResponse)
     ? getStageItemLookup(swrStagesResponse)
@@ -388,6 +438,8 @@ export default function SchedulePage() {
             stageItemsLookup={stageItemsLookup}
             matchesLookup={matchesLookup}
             openMatchModal={openMatchModal}
+            officials={officials}
+            swrStagesResponse={swrStagesResponse}
           />
         </DragDropContext>
       </Group>

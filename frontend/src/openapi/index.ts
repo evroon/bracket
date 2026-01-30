@@ -274,6 +274,7 @@ export type {
   MatchRescheduleBody,
   MatchWithDetails,
   MatchWithDetailsDefinitive,
+  Official,
   PaginatedPlayers,
   PaginatedTeams,
   PingPingGetData,
