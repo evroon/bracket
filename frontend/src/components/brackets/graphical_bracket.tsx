@@ -19,11 +19,6 @@ import classes from './graphical_bracket.module.css';
 
 type BracketPosition = 'WINNERS' | 'LOSERS' | 'GRAND_FINALS' | 'NONE';
 
-/** Convert underscore-separated or raw keys to Title Case (e.g. "winners_bracket" → "Winners Bracket") */
-function cleanLabel(label: string): string {
-  return label.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 interface RoundWithMatchesExtended extends RoundWithMatches {
   bracket_position?: BracketPosition;
 }
@@ -430,7 +425,7 @@ function CourtAlignedBracket({
                 className={classes.sectionTitleCell}
                 style={{ gridColumn: 1, gridRow }}
               >
-                {cleanLabel(isWinners ? t('winners_bracket') : t('losers_bracket'))}
+                {isWinners ? t('winners_bracket') : t('losers_bracket')}
               </div>
               {columns.map((col, colIdx) => {
                 let label: string | undefined;
@@ -567,7 +562,7 @@ export function GraphicalBracket({
     <div className={classes.doubleEliminationLayout}>
       <BracketSection
         className={classes.winnersSection}
-        title={cleanLabel(t('winners_bracket'))}
+        title={t('winners_bracket')}
         rounds={winnersRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
@@ -577,7 +572,7 @@ export function GraphicalBracket({
 
       <BracketSection
         className={classes.losersSection}
-        title={cleanLabel(t('losers_bracket'))}
+        title={t('losers_bracket')}
         rounds={losersRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
@@ -589,7 +584,7 @@ export function GraphicalBracket({
       {grandFinalsRounds.length > 0 && (
         <BracketSection
           className={classes.grandFinalsSection}
-          title={cleanLabel(t('grand_finals'))}
+          title={t('grand_finals')}
           rounds={grandFinalsRounds}
           tournamentData={tournamentData}
           swrStagesResponse={swrStagesResponse}

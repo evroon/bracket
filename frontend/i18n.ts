@@ -13,6 +13,8 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    parseMissingKeyHandler: (key: string) =>
+      key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
   });
 
 export default i18n;
