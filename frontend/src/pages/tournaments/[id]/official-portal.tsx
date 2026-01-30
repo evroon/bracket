@@ -23,6 +23,33 @@ interface OfficialInfo {
   tournament_id: number;
 }
 
+const SESSION_KEY = 'official_portal_session';
+const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+
+function saveSession(accessCode: string, official: OfficialInfo) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ accessCode, official, loginTime: Date.now() }));
+}
+
+function loadSession(): { accessCode: string; official: OfficialInfo } | null {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (raw == null) return null;
+    const data = JSON.parse(raw);
+    if (Date.now() - data.loginTime > SESSION_DURATION_MS) {
+      localStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+    return { accessCode: data.accessCode, official: data.official };
+  } catch {
+    localStorage.removeItem(SESSION_KEY);
+    return null;
+  }
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
 function createPortalAxios() {
   return axios.create({
     baseURL: getBaseApiUrl(),
@@ -140,7 +167,9 @@ export default function OfficialPortalPage() {
       const response = await createPortalAxios().post('official_portal/login', {
         access_code: accessCode,
       });
-      setOfficialInfo(response.data.official);
+      const official = response.data.official;
+      setOfficialInfo(official);
+      saveSession(accessCode, official);
       await fetchMatches();
     } catch {
       setError(t('invalid_access_code_error'));
@@ -149,16 +178,25 @@ export default function OfficialPortalPage() {
     }
   }
 
-  async function fetchMatches() {
+  async function fetchMatches(code?: string) {
     try {
       const response = await createPortalAxios().get(
-        `official_portal/matches?access_code=${accessCode}`
+        `official_portal/matches?access_code=${code ?? accessCode}`
       );
       setMatches(response.data.data);
     } catch {
       // Silently handle
     }
   }
+
+  useEffect(() => {
+    const session = loadSession();
+    if (session != null) {
+      setAccessCode(session.accessCode);
+      setOfficialInfo(session.official);
+      fetchMatches(session.accessCode);
+    }
+  }, []);
 
   const fetchMatchesRef = useRef(fetchMatches);
   fetchMatchesRef.current = fetchMatches;
@@ -212,6 +250,7 @@ export default function OfficialPortalPage() {
           variant="outline"
           color="gray"
           onClick={() => {
+            clearSession();
             setOfficialInfo(null);
             setMatches([]);
             setAccessCode('');
