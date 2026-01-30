@@ -423,6 +423,17 @@
             "title": "Margin Minutes",
             "type": "integer"
           },
+          "official_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Id"
+          },
           "position_in_schedule": {
             "anyOf": [
               {
@@ -579,6 +590,7 @@
           "stage_item_input1_score",
           "stage_item_input2_score",
           "court_id",
+          "official_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
           "stage_item_input1_id",
@@ -629,6 +641,17 @@
             ],
             "title": "Custom Margin Minutes"
           },
+          "official_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Id"
+          },
           "round_id": {
             "title": "Round Id",
             "type": "integer"
@@ -649,6 +672,7 @@
           "stage_item_input1_score",
           "stage_item_input2_score",
           "court_id",
+          "official_id",
           "custom_duration_minutes",
           "custom_margin_minutes"
         ],
@@ -843,6 +867,27 @@
             "title": "Margin Minutes",
             "type": "integer"
           },
+          "official": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Official"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "official_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Id"
+          },
           "position_in_schedule": {
             "anyOf": [
               {
@@ -999,6 +1044,7 @@
           "stage_item_input1_score",
           "stage_item_input2_score",
           "court_id",
+          "official_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
           "stage_item_input1_id",
@@ -1010,7 +1056,8 @@
           "id",
           "stage_item_input1",
           "stage_item_input2",
-          "court"
+          "court",
+          "official"
         ],
         "title": "MatchWithDetails",
         "type": "object"
@@ -1077,6 +1124,27 @@
             "title": "Margin Minutes",
             "type": "integer"
           },
+          "official": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Official"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "official_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Id"
+          },
           "position_in_schedule": {
             "anyOf": [
               {
@@ -1227,6 +1295,7 @@
           "stage_item_input1_score",
           "stage_item_input2_score",
           "court_id",
+          "official_id",
           "stage_item_input1_conflict",
           "stage_item_input2_conflict",
           "stage_item_input1_id",
@@ -1238,9 +1307,73 @@
           "id",
           "stage_item_input1",
           "stage_item_input2",
-          "court"
+          "court",
+          "official"
         ],
         "title": "MatchWithDetailsDefinitive",
+        "type": "object"
+      },
+      "Official": {
+        "properties": {
+          "access_code": {
+            "title": "Access Code",
+            "type": "string"
+          },
+          "created": {
+            "format": "date-time",
+            "title": "Created",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "tournament_id": {
+            "title": "Tournament Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "access_code",
+          "created",
+          "tournament_id",
+          "id"
+        ],
+        "title": "Official",
+        "type": "object"
+      },
+      "OfficialBody": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "OfficialBody",
+        "type": "object"
+      },
+      "OfficialsResponse": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/Official"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "OfficialsResponse",
         "type": "object"
       },
       "PaginatedPlayers": {
@@ -1400,6 +1533,153 @@
           "data"
         ],
         "title": "PlayersResponse",
+        "type": "object"
+      },
+      "PortalLoginBody": {
+        "properties": {
+          "access_code": {
+            "title": "Access Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_code"
+        ],
+        "title": "PortalLoginBody",
+        "type": "object"
+      },
+      "PortalLoginResponse": {
+        "properties": {
+          "official": {
+            "$ref": "#/components/schemas/Official"
+          },
+          "tournament_id": {
+            "title": "Tournament Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "official",
+          "tournament_id"
+        ],
+        "title": "PortalLoginResponse",
+        "type": "object"
+      },
+      "PortalMatch": {
+        "properties": {
+          "court_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Court Name"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "position_in_schedule": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position In Schedule"
+          },
+          "stage_item_input1_score": {
+            "title": "Stage Item Input1 Score",
+            "type": "integer"
+          },
+          "stage_item_input2_score": {
+            "title": "Stage Item Input2 Score",
+            "type": "integer"
+          },
+          "start_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time"
+          },
+          "team1_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team1 Name"
+          },
+          "team2_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team2 Name"
+          }
+        },
+        "required": [
+          "id",
+          "position_in_schedule",
+          "start_time",
+          "court_name",
+          "stage_item_input1_score",
+          "stage_item_input2_score",
+          "team1_name",
+          "team2_name"
+        ],
+        "title": "PortalMatch",
+        "type": "object"
+      },
+      "PortalMatchesResponse": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/PortalMatch"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "PortalMatchesResponse",
+        "type": "object"
+      },
+      "PortalScoreBody": {
+        "properties": {
+          "stage_item_input1_score": {
+            "title": "Stage Item Input1 Score",
+            "type": "integer"
+          },
+          "stage_item_input2_score": {
+            "title": "Stage Item Input2 Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "stage_item_input1_score",
+          "stage_item_input2_score"
+        ],
+        "title": "PortalScoreBody",
         "type": "object"
       },
       "Ranking": {
@@ -1702,6 +1982,18 @@
           "data"
         ],
         "title": "SingleMatchResponse",
+        "type": "object"
+      },
+      "SingleOfficialResponse": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Official"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "SingleOfficialResponse",
         "type": "object"
       },
       "SinglePlayerResponse": {
@@ -3177,7 +3469,7 @@
     }
   },
   "info": {
-    "description": "\n### Description\nThis API allows you to do everything the frontend of [Bracket](https://github.com/evroon/bracket)\nallows you to do (the frontend uses this API as well).\n\nFore more information, see the [documentation](https://docs.bracketapp.nl).\n\n### Table of Contents\n*(links only work for [ReDoc](https://api.bracketapp.nl/redoc), not for Swagger UI)*\n\n- [Auth](#tag/Auth)\n\n- [Clubs](#tag/Clubs)\n\n- [Courts](#tag/Courts)\n\n- [Tournament Breaks](#tag/Tournament-Breaks)\n\n- [Internals](#tag/Internals)\n\n- [Matches](#tag/Matches)\n\n- [Players](#tag/Players)\n\n- [Rankings](#tag/Rankings)\n\n- [Rounds](#tag/Rounds)\n\n- [Stage Items](#tag/Stage-Items)\n\n- [Stage Item Inputs](#tag/Stage-Item-Inputs)\n\n- [Stages](#tag/Stages)\n\n- [Teams](#tag/Teams)\n\n- [Tournaments](#tag/Tournaments)\n\n- [Users](#tag/Users)\n\n### Links\nGitHub: <https://github.com/evroon/bracket>\n\nDocs: <https://docs.bracketapp.nl>\n\nDemo: <https://www.bracketapp.nl/demo>\n\nAPI docs (Redoc): <https://api.bracketapp.nl/redoc>\n\nAPI docs (Swagger UI): <https://api.bracketapp.nl/docs>\n",
+    "description": "\n### Description\nThis API allows you to do everything the frontend of [Bracket](https://github.com/evroon/bracket)\nallows you to do (the frontend uses this API as well).\n\nFore more information, see the [documentation](https://docs.bracketapp.nl).\n\n### Table of Contents\n*(links only work for [ReDoc](https://api.bracketapp.nl/redoc), not for Swagger UI)*\n\n- [Auth](#tag/Auth)\n\n- [Clubs](#tag/Clubs)\n\n- [Courts](#tag/Courts)\n\n- [Officials](#tag/Officials)\n\n- [Official Portal](#tag/Official-Portal)\n\n- [Tournament Breaks](#tag/Tournament-Breaks)\n\n- [Internals](#tag/Internals)\n\n- [Matches](#tag/Matches)\n\n- [Players](#tag/Players)\n\n- [Rankings](#tag/Rankings)\n\n- [Rounds](#tag/Rounds)\n\n- [Stage Items](#tag/Stage-Items)\n\n- [Stage Item Inputs](#tag/Stage-Item-Inputs)\n\n- [Stages](#tag/Stages)\n\n- [Teams](#tag/Teams)\n\n- [Tournaments](#tag/Tournaments)\n\n- [Users](#tag/Users)\n\n### Links\nGitHub: <https://github.com/evroon/bracket>\n\nDocs: <https://docs.bracketapp.nl>\n\nDemo: <https://www.bracketapp.nl/demo>\n\nAPI docs (Redoc): <https://api.bracketapp.nl/redoc>\n\nAPI docs (Swagger UI): <https://api.bracketapp.nl/docs>\n",
     "license": {
       "name": "AGPL-3.0",
       "url": "https://www.gnu.org/licenses/agpl-3.0.en.html"
@@ -3378,6 +3670,154 @@
         "summary": "Get Metrics",
         "tags": [
           "Internals"
+        ]
+      }
+    },
+    "/official_portal/login": {
+      "post": {
+        "operationId": "portal_login_official_portal_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalLoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalLoginResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Portal Login",
+        "tags": [
+          "Official Portal"
+        ]
+      }
+    },
+    "/official_portal/matches": {
+      "get": {
+        "operationId": "portal_get_matches_official_portal_matches_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_code",
+            "required": true,
+            "schema": {
+              "title": "Access Code",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalMatchesResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Portal Get Matches",
+        "tags": [
+          "Official Portal"
+        ]
+      }
+    },
+    "/official_portal/matches/{match_id}/score": {
+      "put": {
+        "operationId": "portal_submit_score_official_portal_matches__match_id__score_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "match_id",
+            "required": true,
+            "schema": {
+              "title": "Match Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "access_code",
+            "required": true,
+            "schema": {
+              "title": "Access Code",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalScoreBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "title": "Response Portal Submit Score Official Portal Matches  Match Id  Score Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Portal Submit Score",
+        "tags": [
+          "Official Portal"
         ]
       }
     },
@@ -4286,6 +4726,44 @@
       }
     },
     "/tournaments/{tournament_id}/logo": {
+      "get": {
+        "operationId": "get_tournament_logo_tournaments__tournament_id__logo_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Tournament Logo",
+        "tags": [
+          "Tournaments"
+        ]
+      },
       "post": {
         "operationId": "upload_logo_tournaments__tournament_id__logo_post",
         "parameters": [
@@ -4629,6 +5107,317 @@
         "summary": "Get Next Stage Rankings",
         "tags": [
           "Stages"
+        ]
+      }
+    },
+    "/tournaments/{tournament_id}/officials": {
+      "get": {
+        "operationId": "get_officials_tournaments__tournament_id__officials_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfficialsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Officials",
+        "tags": [
+          "Officials"
+        ]
+      },
+      "post": {
+        "operationId": "create_official_tournaments__tournament_id__officials_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfficialBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleOfficialResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Official",
+        "tags": [
+          "Officials"
+        ]
+      }
+    },
+    "/tournaments/{tournament_id}/officials/auto_assign": {
+      "post": {
+        "operationId": "auto_assign_officials_tournaments__tournament_id__officials_auto_assign_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Auto Assign Officials",
+        "tags": [
+          "Officials"
+        ]
+      }
+    },
+    "/tournaments/{tournament_id}/officials/clear_assignments": {
+      "post": {
+        "operationId": "clear_official_assignments_tournaments__tournament_id__officials_clear_assignments_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Clear Official Assignments",
+        "tags": [
+          "Officials"
+        ]
+      }
+    },
+    "/tournaments/{tournament_id}/officials/{official_id}": {
+      "delete": {
+        "operationId": "delete_official_tournaments__tournament_id__officials__official_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "official_id",
+            "required": true,
+            "schema": {
+              "title": "Official Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Delete Official",
+        "tags": [
+          "Officials"
+        ]
+      },
+      "put": {
+        "operationId": "update_official_by_id_tournaments__tournament_id__officials__official_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "official_id",
+            "required": true,
+            "schema": {
+              "title": "Official Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfficialBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleOfficialResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Official By Id",
+        "tags": [
+          "Officials"
         ]
       }
     },
@@ -6431,6 +7220,53 @@
       }
     },
     "/tournaments/{tournament_id}/teams/{team_id}/logo": {
+      "get": {
+        "operationId": "get_team_logo_tournaments__tournament_id__teams__team_id__logo_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "title": "Tournament Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "title": "Team Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Team Logo",
+        "tags": [
+          "Teams"
+        ]
+      },
       "post": {
         "operationId": "update_team_logo_tournaments__tournament_id__teams__team_id__logo_post",
         "parameters": [

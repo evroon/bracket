@@ -4,7 +4,6 @@ networks:
 
 volumes:
   bracket_pg_data:
-  bracket_static_data:
 
 services:
   bracket:
@@ -23,8 +22,6 @@ services:
     ports:
       - 8400:8400
     restart: unless-stopped
-    volumes:
-      - bracket_static_data:/app/static
 
   postgres:
     environment:

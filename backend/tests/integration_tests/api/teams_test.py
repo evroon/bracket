@@ -1,4 +1,3 @@
-import aiofiles.os
 import aiohttp
 import pytest
 
@@ -140,16 +139,12 @@ async def test_team_upload_and_remove_logo(
         )
 
         assert response["data"]["logo_path"], f"Response: {response}"
-        assert await aiofiles.os.path.exists(f"static/team-logos/{response['data']['logo_path']}")
 
         response = await send_tournament_request(
             method=HTTPMethod.POST,
-            endpoint="logo",
+            endpoint=f"teams/{team_inserted.id}/logo",
             auth_context=auth_context,
             body=aiohttp.FormData(),
         )
 
         assert response["data"]["logo_path"] is None, f"Response: {response}"
-        assert not await aiofiles.os.path.exists(
-            f"static/team-logos/{response['data']['logo_path']}"
-        )

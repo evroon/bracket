@@ -16,16 +16,17 @@ import { SWRResponse } from 'swr';
 
 import { DropzoneButton } from '@components/utils/file_upload';
 import { FullTeamWithPlayers, Player, TeamsWithPlayersResponse } from '@openapi';
-import { getBaseApiUrl, getPlayers, removeTeamLogo, requestSucceeded } from '@services/adapter';
+import { getBaseApiUrl, getPlayers, getTeamLogoUrl, removeTeamLogo, requestSucceeded } from '@services/adapter';
 import { updateTeam } from '@services/team';
 
-function TeamLogo({ team }: { team: FullTeamWithPlayers | null }) {
-  if (team == null || team.logo_path == null) return null;
+function TeamLogo({ tournament_id, team }: { tournament_id: number; team: FullTeamWithPlayers | null }) {
+  const src = team != null ? getTeamLogoUrl(tournament_id, team.id, team.logo_path) : null;
+  if (src == null) return null;
   return (
     <Image
       radius="md"
       alt="Logo of the team"
-      src={`${getBaseApiUrl()}/static/team-logos/${team.logo_path}`}
+      src={src}
     />
   );
 }
@@ -107,7 +108,7 @@ export default function TeamUpdateModal({
             />
             <Center my="lg">
               <div style={{ width: '50%' }}>
-                <TeamLogo team={team} />
+                <TeamLogo tournament_id={tournament_id} team={team} />
               </div>
             </Center>
             <Button

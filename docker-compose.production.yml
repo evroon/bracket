@@ -4,7 +4,6 @@ networks:
 
 volumes:
   bracket_pg_data:
-  bracket_static_data:
 
 services:
   frontend:
@@ -33,8 +32,6 @@ services:
     networks:
       - bracket_lan
     restart: unless-stopped
-    volumes:
-      - bracket_static_data:/app/static
 
   postgres:
     environment:

@@ -15,7 +15,7 @@ import { useLocation } from 'react-router';
 import PreloadLink from '@components/utils/link';
 import { getBaseURL } from '@components/utils/util';
 import { Tournament } from '@openapi';
-import { getBaseApiUrl } from '@services/adapter';
+import { getBaseApiUrl, getTournamentLogoUrl } from '@services/adapter';
 import classes from './layout.module.css';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
@@ -51,13 +51,14 @@ export function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tou
   if (tournamentDataFull == null) {
     return <Skeleton height={150} radius="xl" mb="xl" />;
   }
-  if (!tournamentDataFull.logo_path || hasError) return null;
+  const src = getTournamentLogoUrl(tournamentDataFull.id, tournamentDataFull.logo_path);
+  if (!src || hasError) return null;
   return (
     <Image
       radius="lg"
       mt="1rem"
       alt="Logo of the tournament"
-      src={`${getBaseApiUrl()}/static/tournament-logos/${tournamentDataFull.logo_path}`}
+      src={src}
       style={{ maxWidth: '400px' }}
       onError={() => setHasError(true)}
     />

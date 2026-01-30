@@ -21,30 +21,26 @@ import MatchModal from '@components/modals/match_modal';
 import { NoContent } from '@components/no_content/empty_table_info';
 import { Time, formatTime } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
 import { Translator } from '@components/utils/types';
 import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
 import { MatchWithDetails } from '@openapi';
 import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getBaseApiUrl, getCourts, getStages } from '@services/adapter';
+import { getBaseApiUrl, getCourts, getStages, getTeamLogoUrl } from '@services/adapter';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
-
-function getTeamLogoUrl(stageItemInput: any): string | null {
-  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
-    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
-  }
-  return null;
-}
 
 function ScheduleRow({
   data,
   openMatchModal,
   stageItemsLookup,
   matchesLookup,
+  tournamentData,
 }: {
   data: any;
   openMatchModal: any;
   stageItemsLookup: any;
   matchesLookup: any;
+  tournamentData: TournamentMinimal;
 }) {
   const { t } = useTranslation();
   const winColor = '#2a8f37';
@@ -113,9 +109,9 @@ function ScheduleRow({
           <Grid>
             <Grid.Col span="auto" pb="0rem">
               <Group gap="xs">
-                {getTeamLogoUrl(data.match.stage_item_input1) && (
+                {getTeamLogoUrl(tournamentData.id, data.match.stage_item_input1?.team?.id, data.match.stage_item_input1?.team?.logo_path) && (
                   <Avatar
-                    src={getTeamLogoUrl(data.match.stage_item_input1)}
+                    src={getTeamLogoUrl(tournamentData.id, data.match.stage_item_input1?.team?.id, data.match.stage_item_input1?.team?.logo_path)}
                     size="sm"
                     radius="sm"
                   />
@@ -143,9 +139,9 @@ function ScheduleRow({
           <Grid mb="0rem">
             <Grid.Col span="auto" pb="0rem">
               <Group gap="xs">
-                {getTeamLogoUrl(data.match.stage_item_input2) && (
+                {getTeamLogoUrl(tournamentData.id, data.match.stage_item_input2?.team?.id, data.match.stage_item_input2?.team?.logo_path) && (
                   <Avatar
-                    src={getTeamLogoUrl(data.match.stage_item_input2)}
+                    src={getTeamLogoUrl(tournamentData.id, data.match.stage_item_input2?.team?.id, data.match.stage_item_input2?.team?.logo_path)}
                     size="sm"
                     radius="sm"
                   />
@@ -181,11 +177,13 @@ function Schedule({
   stageItemsLookup,
   openMatchModal,
   matchesLookup,
+  tournamentData,
 }: {
   t: Translator;
   stageItemsLookup: any;
   openMatchModal: CallableFunction;
   matchesLookup: any;
+  tournamentData: TournamentMinimal;
 }) {
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
@@ -219,6 +217,7 @@ function Schedule({
         openMatchModal={openMatchModal}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
+        tournamentData={tournamentData}
       />
     );
   }
@@ -302,6 +301,7 @@ export default function ResultsPage() {
           matchesLookup={matchesLookup}
           stageItemsLookup={stageItemsLookup}
           openMatchModal={openMatchModal}
+          tournamentData={tournamentData}
         />
       </Center>
     </TournamentLayout>

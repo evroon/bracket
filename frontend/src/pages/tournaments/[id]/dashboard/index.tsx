@@ -11,25 +11,20 @@ import { Time, compareDateTime, formatTime } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { Translator } from '@components/utils/types';
 import { responseIsValid, setTitle } from '@components/utils/util';
-import { getBaseApiUrl, getCourtsLive, getStagesLive } from '@services/adapter';
+import { getBaseApiUrl, getCourtsLive, getStagesLive, getTeamLogoUrl } from '@services/adapter';
 import { getTournamentResponseByEndpointName } from '@services/dashboard';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
-
-function getTeamLogoUrl(stageItemInput: any): string | null {
-  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
-    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
-  }
-  return null;
-}
 
 function ScheduleRow({
   data,
   stageItemsLookup,
   matchesLookup,
+  tournamentData,
 }: {
   data: any;
   stageItemsLookup: any;
   matchesLookup: any;
+  tournamentData: { id: number };
 }) {
   const { t } = useTranslation();
   const winColor = '#2a8f37';
@@ -83,9 +78,9 @@ function ScheduleRow({
         <Grid>
           <Grid.Col span="auto" pb="0rem">
             <Group gap="xs">
-              {getTeamLogoUrl(data.match.stage_item_input1) && (
+              {getTeamLogoUrl(tournamentData.id, data.match.stage_item_input1?.team?.id, data.match.stage_item_input1?.team?.logo_path) && (
                 <Avatar
-                  src={getTeamLogoUrl(data.match.stage_item_input1)}
+                  src={getTeamLogoUrl(tournamentData.id, data.match.stage_item_input1?.team?.id, data.match.stage_item_input1?.team?.logo_path)}
                   size="sm"
                   radius="sm"
                 />
@@ -112,9 +107,9 @@ function ScheduleRow({
         <Grid mb="0rem">
           <Grid.Col span="auto" pb="0rem">
             <Group gap="xs">
-              {getTeamLogoUrl(data.match.stage_item_input2) && (
+              {getTeamLogoUrl(tournamentData.id, data.match.stage_item_input2?.team?.id, data.match.stage_item_input2?.team?.logo_path) && (
                 <Avatar
-                  src={getTeamLogoUrl(data.match.stage_item_input2)}
+                  src={getTeamLogoUrl(tournamentData.id, data.match.stage_item_input2?.team?.id, data.match.stage_item_input2?.team?.logo_path)}
                   size="sm"
                   radius="sm"
                 />
@@ -147,10 +142,12 @@ export function Schedule({
   t,
   stageItemsLookup,
   matchesLookup,
+  tournamentData,
 }: {
   t: Translator;
   stageItemsLookup: any;
   matchesLookup: any;
+  tournamentData: { id: number };
 }) {
   const matches: any[] = Object.values(matchesLookup);
   const sortedMatches = matches
@@ -186,6 +183,7 @@ export function Schedule({
         data={data}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
+        tournamentData={tournamentData}
       />
     );
   }
@@ -243,7 +241,7 @@ export default function DashboardSchedulePage() {
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Center>
         <Group style={{ maxWidth: '48rem', width: '100%' }} px="1rem">
-          <Schedule t={t} matchesLookup={matchesLookup} stageItemsLookup={stageItemsLookup} />
+          <Schedule t={t} matchesLookup={matchesLookup} stageItemsLookup={stageItemsLookup} tournamentData={tournamentDataFull} />
         </Group>
       </Center>
       <DashboardFooter />

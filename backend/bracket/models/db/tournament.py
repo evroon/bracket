@@ -24,6 +24,8 @@ class TournamentInsertable(BaseModelORM):
     dashboard_public: bool
     dashboard_endpoint: str | None = None
     logo_path: str | None = None
+    logo_data: bytes | None = Field(default=None, exclude=True)
+    logo_content_type: str | None = Field(default=None, exclude=True)
     players_can_be_in_multiple_teams: bool
     auto_assign_courts: bool
     status: TournamentStatus = TournamentStatus.OPEN

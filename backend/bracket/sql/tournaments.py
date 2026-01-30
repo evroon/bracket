@@ -9,10 +9,14 @@ from bracket.models.db.tournament import (
 )
 from bracket.utils.id_types import TournamentId
 
+TOURNAMENT_COLUMNS = """id, name, created, start_time, club_id, dashboard_public,
+    logo_path, dashboard_endpoint, players_can_be_in_multiple_teams,
+    auto_assign_courts, duration_minutes, margin_minutes, status"""
+
 
 async def sql_get_tournament(tournament_id: TournamentId) -> Tournament:
-    query = """
-        SELECT *
+    query = f"""
+        SELECT {TOURNAMENT_COLUMNS}
         FROM tournaments
         WHERE id = :tournament_id
         """
@@ -22,8 +26,8 @@ async def sql_get_tournament(tournament_id: TournamentId) -> Tournament:
 
 
 async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament | None:
-    query = """
-        SELECT *
+    query = f"""
+        SELECT {TOURNAMENT_COLUMNS}
         FROM tournaments
         WHERE dashboard_endpoint = :endpoint_name
         AND dashboard_public IS TRUE
@@ -37,8 +41,8 @@ async def sql_get_tournaments(
     endpoint_name: str | None = None,
     filter_: Literal["ALL", "OPEN", "ARCHIVED"] = "ALL",
 ) -> list[Tournament]:
-    query = """
-        SELECT *
+    query = f"""
+        SELECT {TOURNAMENT_COLUMNS}
         FROM tournaments
         WHERE club_id = any(:club_ids)
         """

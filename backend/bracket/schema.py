@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Table, UniqueConstraint, func
 from sqlalchemy.orm import declarative_base  # type: ignore[attr-defined]
-from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Enum, Float, Text
+from sqlalchemy.sql.sqltypes import BigInteger, Boolean, DateTime, Enum, Float, LargeBinary, Text
 
 Base = declarative_base()
 metadata = Base.metadata
@@ -24,6 +24,8 @@ tournaments = Table(
     Column("club_id", BigInteger, ForeignKey("clubs.id"), index=True, nullable=False),
     Column("dashboard_public", Boolean, nullable=False),
     Column("logo_path", String, nullable=True),
+    Column("logo_data", LargeBinary, nullable=True),
+    Column("logo_content_type", String, nullable=True),
     Column("dashboard_endpoint", String, nullable=True, index=True, unique=True),
     Column("players_can_be_in_multiple_teams", Boolean, nullable=False, server_default="f"),
     Column("auto_assign_courts", Boolean, nullable=False, server_default="f"),
@@ -181,6 +183,8 @@ teams = Table(
     Column("draws", Integer, nullable=False, server_default="0"),
     Column("losses", Integer, nullable=False, server_default="0"),
     Column("logo_path", String, nullable=True),
+    Column("logo_data", LargeBinary, nullable=True),
+    Column("logo_content_type", String, nullable=True),
 )
 
 players = Table(

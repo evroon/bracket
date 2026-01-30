@@ -13,7 +13,8 @@ async def get_teams_by_id(team_ids: set[TeamId], tournament_id: TournamentId) ->
         return []
 
     query = """
-        SELECT *
+        SELECT id, name, created, tournament_id, active, elo_score,
+               swiss_score, wins, draws, losses, logo_path
         FROM teams
         WHERE id = any(:team_ids)
         AND tournament_id = :tournament_id
@@ -49,7 +50,9 @@ async def get_teams_with_members(
     )
     query = f"""
         SELECT
-            teams.*,
+            teams.id, teams.name, teams.created, teams.tournament_id, teams.active,
+            teams.elo_score, teams.swiss_score, teams.wins, teams.draws, teams.losses,
+            teams.logo_path,
             to_json(array_agg(p.*)) AS players
         FROM teams
         LEFT JOIN players_x_teams pt on pt.team_id = teams.id

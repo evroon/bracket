@@ -1,5 +1,4 @@
 import glob
-import os
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -11,7 +10,6 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, Response
-from starlette.staticfiles import StaticFiles
 
 from bracket.config import Environment, config, environment, init_sentry
 from bracket.cronjobs.scheduling import start_cronjobs
@@ -46,9 +44,6 @@ init_sentry()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    os.makedirs("static/tournament-logos", exist_ok=True)
-    os.makedirs("static/team-logos", exist_ok=True)
-
     await database.connect()
     await init_db_when_empty()
 
@@ -161,8 +156,6 @@ async def validation_exception_handler(request: Request, exc: HTTPException) -> 
 async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     return JSONResponse({"detail": "Internal server error"}, status_code=500)
 
-
-app.mount(f"{config.api_prefix}/static", StaticFiles(directory="static"), name="static")
 
 for tag, router in routers.items():
     assert router.prefix == config.api_prefix, f"Prefix not set on router with tag `{tag}`"

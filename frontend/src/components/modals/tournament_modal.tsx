@@ -19,18 +19,19 @@ import { SWRResponse } from 'swr';
 import SaveButton from '@components/buttons/save';
 import { assert_not_none } from '@components/utils/assert';
 import { Club, Tournament, TournamentsResponse } from '@openapi';
-import { getBaseApiUrl, getClubs } from '@services/adapter';
+import { getBaseApiUrl, getClubs, getTournamentLogoUrl } from '@services/adapter';
 import { createTournament } from '@services/tournament';
 import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   const [hasError, setHasError] = useState(false);
-  if (tournament == null || tournament.logo_path == null || hasError) return null;
+  const src = tournament != null ? getTournamentLogoUrl(tournament.id, tournament.logo_path) : null;
+  if (src == null || hasError) return null;
   return (
     <Image
       radius="md"
       alt="Logo of the tournament"
-      src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
+      src={src}
       onError={() => setHasError(true)}
     />
   );

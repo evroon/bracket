@@ -296,6 +296,23 @@ export async function removeTeamLogo(tournament_id: number, team_id: number) {
   return createAxios().post(`tournaments/${tournament_id}/teams/${team_id}/logo`);
 }
 
+export function getTeamLogoUrl(
+  tournamentId: number,
+  teamId: number,
+  logoPath: string | null
+): string | null {
+  if (!logoPath) return null;
+  return `${getBaseApiUrl()}/tournaments/${tournamentId}/teams/${teamId}/logo?v=${logoPath}`;
+}
+
+export function getTournamentLogoUrl(
+  tournamentId: number,
+  logoPath: string | null
+): string | null {
+  if (!logoPath) return null;
+  return `${getBaseApiUrl()}/tournaments/${tournamentId}/logo?v=${logoPath}`;
+}
+
 export function checkForAuthError(response: any) {
   if (typeof window !== 'undefined' && !tokenPresent()) {
     const navigate = useNavigate();

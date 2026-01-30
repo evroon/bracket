@@ -10,16 +10,9 @@ import { Time } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2, isMatchHappening } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
-import { getBaseApiUrl } from '@services/adapter';
+import { getBaseApiUrl, getTeamLogoUrl } from '@services/adapter';
 import { getMatchLookup, getStageItemLookup } from '@services/lookups';
 import classes from './match.module.css';
-
-function getTeamLogoUrl(stageItemInput: any): string | null {
-  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
-    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
-  }
-  return null;
-}
 
 export function MatchBadge({ match, theme }: { match: MatchWithDetails; theme: any }) {
   const visibility = match.court ? 'visible' : 'hidden';
@@ -93,9 +86,9 @@ export default function Match({
         <Grid grow>
           <Grid.Col span={10}>
             <Group gap="xs" wrap="nowrap">
-              {getTeamLogoUrl(match.stage_item_input1) && (
+              {getTeamLogoUrl(tournamentData.id, match.stage_item_input1?.team?.id, match.stage_item_input1?.team?.logo_path) && (
                 <Avatar
-                  src={getTeamLogoUrl(match.stage_item_input1)}
+                  src={getTeamLogoUrl(tournamentData.id, match.stage_item_input1?.team?.id, match.stage_item_input1?.team?.logo_path)}
                   size="sm"
                   radius="sm"
                 />
@@ -111,9 +104,9 @@ export default function Match({
         <Grid grow>
           <Grid.Col span={10}>
             <Group gap="xs" wrap="nowrap">
-              {getTeamLogoUrl(match.stage_item_input2) && (
+              {getTeamLogoUrl(tournamentData.id, match.stage_item_input2?.team?.id, match.stage_item_input2?.team?.logo_path) && (
                 <Avatar
-                  src={getTeamLogoUrl(match.stage_item_input2)}
+                  src={getTeamLogoUrl(tournamentData.id, match.stage_item_input2?.team?.id, match.stage_item_input2?.team?.logo_path)}
                   size="sm"
                   radius="sm"
                 />

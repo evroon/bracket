@@ -24,6 +24,8 @@ class TeamInsertable(BaseModelORM):
     draws: int = 0
     losses: int = 0
     logo_path: str | None = None
+    logo_data: bytes | None = Field(default=None, exclude=True)
+    logo_content_type: str | None = Field(default=None, exclude=True)
 
 
 class Team(TeamInsertable):

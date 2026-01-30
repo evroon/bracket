@@ -9,15 +9,13 @@ import RequestErrorAlert from '@components/utils/error_alert';
 import PreloadLink from '@components/utils/link';
 import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
 import { Tournament, TournamentsResponse } from '@openapi';
-import { getBaseApiUrl } from '@services/adapter';
+import { getBaseApiUrl, getTournamentLogoUrl } from '@services/adapter';
 import classes from './tournaments.module.css';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament }) {
   const [hasError, setHasError] = useState(false);
-  const src =
-    tournament.logo_path && !hasError
-      ? `${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`
-      : undefined;
+  const logoUrl = getTournamentLogoUrl(tournament.id, tournament.logo_path);
+  const src = logoUrl && !hasError ? logoUrl : undefined;
   return (
     <Image
       radius="md"

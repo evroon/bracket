@@ -14,8 +14,6 @@ USER bracket
 
 RUN uv sync --no-dev --locked
 
-RUN mkdir -p static/tournament-logos static/team-logos
-
 EXPOSE 8400
 
 HEALTHCHECK --interval=3s --timeout=5s --retries=10 \
