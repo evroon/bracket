@@ -170,9 +170,9 @@ function buildCourtGrid(
     const colIdx = roundColIndex.get(round.id);
     if (colIdx === undefined) continue;
 
-    const isWinners = bracket === 'winners';
-    const courtRowMap = isWinners ? winnersCourtRow : losersCourtRow;
-    const unassignedRow = isWinners ? winnersUnassignedRow : losersUnassignedRow;
+    const isWinnersOrFinals = bracket === 'winners' || bracket === 'grand-finals';
+    const courtRowMap = isWinnersOrFinals ? winnersCourtRow : losersCourtRow;
+    const unassignedRow = isWinnersOrFinals ? winnersUnassignedRow : losersUnassignedRow;
 
     for (const match of round.matches) {
       let rowIdx: number;
