@@ -3,6 +3,7 @@ import {
   ActionIcon,
   Alert,
   Badge,
+  Button,
   Card,
   Grid,
   Group,
@@ -14,6 +15,8 @@ import {
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import {
   IconAlertCircle,
+  IconCalendarOff,
+  IconCalendarPlus,
   IconClock,
   IconDots,
   IconTrash,
@@ -43,7 +46,7 @@ import {
   getStageItemLookup,
   stringToColour,
 } from '@services/lookups';
-import { rescheduleMatch, updateMatch } from '@services/match';
+import { clearSchedule, rescheduleMatch, scheduleMatches, updateMatch } from '@services/match';
 
 function ScheduleRow({
   index,
@@ -344,6 +347,34 @@ export default function SchedulePage() {
           round={null}
         />
       ) : null}
+      {data.length >= 1 && (
+        <Group justify="right" mb="md">
+          <Button
+            color="red"
+            size="md"
+            variant="outline"
+            leftSection={<IconCalendarOff size={24} />}
+            onClick={async () => {
+              await clearSchedule(tournamentData.id);
+              await swrStagesResponse.mutate();
+            }}
+          >
+            {t('clear_schedule')}
+          </Button>
+          <Button
+            color="indigo"
+            size="md"
+            variant="filled"
+            leftSection={<IconCalendarPlus size={24} />}
+            onClick={async () => {
+              await scheduleMatches(tournamentData.id);
+              await swrStagesResponse.mutate();
+            }}
+          >
+            {t('schedule_description')}
+          </Button>
+        </Group>
+      )}
       <Group mt="md" gap="sm" align="center">
         <BreakModal
           swrBreaksResponse={swrBreaksResponse}
