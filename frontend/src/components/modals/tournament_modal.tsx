@@ -24,12 +24,14 @@ import { createTournament } from '@services/tournament';
 import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
-  if (tournament == null || tournament.logo_path == null) return null;
+  const [hasError, setHasError] = useState(false);
+  if (tournament == null || tournament.logo_path == null || hasError) return null;
   return (
     <Image
       radius="md"
       alt="Logo of the tournament"
       src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
+      onError={() => setHasError(true)}
     />
   );
 }

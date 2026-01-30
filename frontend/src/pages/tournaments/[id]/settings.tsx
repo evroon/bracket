@@ -21,6 +21,7 @@ import { useForm } from '@mantine/form';
 import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
 import { IconCalendar, IconCalendarTime, IconCopy, IconPencil, IconTrash } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdArchive } from 'react-icons/md';
 import { useNavigate } from 'react-router';
@@ -52,12 +53,14 @@ import {
 } from '@services/tournament';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
-  if (tournament == null || tournament.logo_path == null) return null;
+  const [hasError, setHasError] = useState(false);
+  if (tournament == null || tournament.logo_path == null || hasError) return null;
   return (
     <Image
       radius="md"
       alt="Logo of the tournament"
       src={`${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`}
+      onError={() => setHasError(true)}
     />
   );
 }

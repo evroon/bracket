@@ -8,6 +8,7 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
+import { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useLocation } from 'react-router';
 
@@ -46,20 +47,21 @@ export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: T
 }
 
 export function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
+  const [hasError, setHasError] = useState(false);
   if (tournamentDataFull == null) {
     return <Skeleton height={150} radius="xl" mb="xl" />;
   }
-  return tournamentDataFull.logo_path ? (
-    <>
-      <Image
-        radius="lg"
-        mt="1rem"
-        alt="Logo of the tournament"
-        src={`${getBaseApiUrl()}/static/tournament-logos/${tournamentDataFull.logo_path}`}
-        style={{ maxWidth: '400px' }}
-      />
-    </>
-  ) : null;
+  if (!tournamentDataFull.logo_path || hasError) return null;
+  return (
+    <Image
+      radius="lg"
+      mt="1rem"
+      alt="Logo of the tournament"
+      src={`${getBaseApiUrl()}/static/tournament-logos/${tournamentDataFull.logo_path}`}
+      style={{ maxWidth: '400px' }}
+      onError={() => setHasError(true)}
+    />
+  );
 }
 
 export function getTournamentHeadTitle(tournamentDataFull: Tournament) {
@@ -83,6 +85,7 @@ export function DoubleHeader({ tournamentData }: { tournamentData: Tournament })
     { link: `/tournaments/${endpoint}/dashboard`, label: 'Matches' },
     { link: `/tournaments/${endpoint}/dashboard/bracket`, label: 'Bracket' },
     { link: `/tournaments/${endpoint}/dashboard/standings`, label: 'Standings' },
+    { link: `/tournaments/${endpoint}/official-portal`, label: 'Officials' },
   ];
 
   const mainItems = mainLinks.map((item) => (
