@@ -82,9 +82,24 @@ export function getMatchLookup(swrStagesResponse: SWRResponse) {
 
   swrStagesResponse.data.data.map((stage: StageWithStageItems) =>
     stage.stage_items.forEach((stageItem) => {
-      stageItem.rounds.forEach((round) => {
+      const positionOrder: Record<string, number> = {
+        WINNERS: 0,
+        LOSERS: 1,
+        GRAND_FINALS: 2,
+        NONE: 3,
+      };
+      const sortedRounds = [...stageItem.rounds].sort((a, b) => {
+        const posA = positionOrder[(a as any).bracket_position ?? 'NONE'] ?? 3;
+        const posB = positionOrder[(b as any).bracket_position ?? 'NONE'] ?? 3;
+        if (posA !== posB) return posA - posB;
+        return a.name > b.name ? 1 : -1;
+      });
+
+      let gameNumber = 1;
+      sortedRounds.forEach((round) => {
         round.matches.forEach((match) => {
-          result = result.concat([[match.id, { match, stageItem }]]);
+          result = result.concat([[match.id, { match, stageItem, gameNumber }]]);
+          gameNumber += 1;
         });
       });
     })

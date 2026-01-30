@@ -231,6 +231,8 @@ function MatchBox({
 
   const isBye = !team1Label || !team2Label || team1Label === 'TBD' || team2Label === 'TBD';
 
+  const gameNumber = matchesLookup[match.id]?.gameNumber;
+
   const handleClick = () => {
     if (!readOnly) {
       setOpened(true);
@@ -243,6 +245,9 @@ function MatchBox({
         className={`${classes.matchBox} ${readOnly ? classes.matchBoxReadOnly : ''} ${isBye ? classes.byeMatch : ''}`}
         onClick={handleClick}
       >
+        {gameNumber != null && (
+          <div className={classes.matchGameNumber}>Game {gameNumber}</div>
+        )}
         {match.start_time && (
           <div className={classes.matchTime}>
             {match.court?.name && `${match.court.name} | `}

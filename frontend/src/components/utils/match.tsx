@@ -41,9 +41,14 @@ function formatMatchReference(
   sourceMatch: MatchWithDetails,
   isLoser: boolean
 ): string {
+  const entry = matchesLookup[sourceMatch.id];
+  const gameNum = entry?.gameNumber;
+  const label = isLoser ? t('loser_of_match') : t('winner_of_match');
+  if (gameNum != null) {
+    return `${label} Game ${gameNum}`;
+  }
   const match_1 = formatMatchInput1(t, stageItemsLookup, matchesLookup, sourceMatch);
   const match_2 = formatMatchInput2(t, stageItemsLookup, matchesLookup, sourceMatch);
-  const label = isLoser ? t('loser_of_match') : t('winner_of_match');
   return `${label} ${match_1} - ${match_2}`;
 }
 

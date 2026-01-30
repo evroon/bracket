@@ -70,10 +70,15 @@ export default function Match({
   const team1_label = formatMatchInput1(t, stageItemsLookup, matchesLookup, match);
   const team2_label = formatMatchInput2(t, stageItemsLookup, matchesLookup, match);
 
+  const gameNumber = matchesLookup[match.id]?.gameNumber;
+
   const [opened, setOpened] = useState(false);
 
   const bracket = (
     <>
+      {gameNumber != null && (
+        <div className={classes.gameNumber}>Game {gameNumber}</div>
+      )}
       <MatchBadge match={match} theme={theme} />
       <div className={classes.top} style={team1_style}>
         <Grid grow>

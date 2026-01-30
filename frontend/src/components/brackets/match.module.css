@@ -1,4 +1,12 @@
 
+.gameNumber {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--mantine-color-dimmed);
+  text-align: center;
+  padding: 2px 0;
+}
+
 .root {
   width: 100%;
   margin-top: 30px;

@@ -110,6 +110,15 @@
   background: var(--mantine-color-default-border);
 }
 
+.matchGameNumber {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: var(--mantine-color-dimmed);
+  text-align: center;
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
 .matchTime {
   font-size: 0.7rem;
   color: var(--mantine-color-dimmed);
