@@ -16,6 +16,11 @@ import RoundComponent from './round';
 // Bracket position enum - will be in OpenAPI types after regeneration
 type BracketPosition = 'WINNERS' | 'LOSERS' | 'GRAND_FINALS' | 'NONE';
 
+/** Convert underscore-separated or raw keys to Title Case (e.g. "winners_bracket" → "Winners Bracket") */
+function cleanLabel(label: string): string {
+  return label.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 // Extended round type with bracket_position - will be in OpenAPI types after regeneration
 interface RoundWithMatchesExtended extends RoundWithMatches {
   bracket_position?: BracketPosition;
@@ -97,7 +102,7 @@ export function DoubleEliminationBracket({
   return (
     <Stack gap="xl">
       <BracketSection
-        title={t('winners_bracket')}
+        title={cleanLabel(t('winners_bracket'))}
         rounds={winnersRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
@@ -109,7 +114,7 @@ export function DoubleEliminationBracket({
       {losersRounds.length > 0 && <Divider />}
 
       <BracketSection
-        title={t('losers_bracket')}
+        title={cleanLabel(t('losers_bracket'))}
         rounds={losersRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
@@ -121,7 +126,7 @@ export function DoubleEliminationBracket({
       {grandFinalsRounds.length > 0 && <Divider />}
 
       <BracketSection
-        title={t('grand_finals')}
+        title={cleanLabel(t('grand_finals'))}
         rounds={grandFinalsRounds}
         tournamentData={tournamentData}
         swrStagesResponse={swrStagesResponse}
