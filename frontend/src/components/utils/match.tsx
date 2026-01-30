@@ -43,10 +43,10 @@ function formatMatchReference(
 ): string {
   const entry = matchesLookup[sourceMatchId];
   const gameNum = entry?.gameNumber;
-  const label = isLoser ? t('loser_of_match') : t('winner_of_match');
   if (gameNum != null) {
-    return `${label} Game ${gameNum}`;
+    return `${isLoser ? 'Loser' : 'Winner'} of Game ${gameNum}`;
   }
+  const label = isLoser ? t('loser_of_match') : t('winner_of_match');
   // Fallback to old behavior if no game number
   const sourceMatch = entry?.match;
   if (sourceMatch) {
