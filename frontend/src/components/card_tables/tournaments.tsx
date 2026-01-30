@@ -1,4 +1,5 @@
 import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
 
@@ -12,17 +13,19 @@ import { getBaseApiUrl } from '@services/adapter';
 import classes from './tournaments.module.css';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament }) {
+  const [hasError, setHasError] = useState(false);
+  const src =
+    tournament.logo_path && !hasError
+      ? `${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`
+      : undefined;
   return (
     <Image
       radius="md"
       alt="Logo of the tournament"
-      src={
-        tournament.logo_path
-          ? `${getBaseApiUrl()}/static/tournament-logos/${tournament.logo_path}`
-          : undefined
-      }
+      src={src}
       fallbackSrc={`https://placehold.co/318x160?text=${tournament.name}`}
       height={160}
+      onError={() => setHasError(true)}
     />
   );
 }

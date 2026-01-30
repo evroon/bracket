@@ -1,4 +1,4 @@
-import { Alert, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from '@mantine/core';
+import { Alert, Avatar, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from '@mantine/core';
 import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
 import { IconAlertCircle } from '@tabler/icons-react';
 import React from 'react';
@@ -11,9 +11,16 @@ import { Time, compareDateTime, formatTime } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
 import { Translator } from '@components/utils/types';
 import { responseIsValid, setTitle } from '@components/utils/util';
-import { getCourtsLive, getStagesLive } from '@services/adapter';
+import { getBaseApiUrl, getCourtsLive, getStagesLive } from '@services/adapter';
 import { getTournamentResponseByEndpointName } from '@services/dashboard';
 import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
+
+function getTeamLogoUrl(stageItemInput: any): string | null {
+  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
+    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
+  }
+  return null;
+}
 
 function ScheduleRow({
   data,
@@ -75,9 +82,18 @@ function ScheduleRow({
       <Stack pt="sm">
         <Grid>
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>
-              {formatMatchInput1(t, stageItemsLookup, matchesLookup, data.match)}
-            </Text>
+            <Group gap="xs">
+              {getTeamLogoUrl(data.match.stage_item_input1) && (
+                <Avatar
+                  src={getTeamLogoUrl(data.match.stage_item_input1)}
+                  size="sm"
+                  radius="sm"
+                />
+              )}
+              <Text fw={500}>
+                {formatMatchInput1(t, stageItemsLookup, matchesLookup, data.match)}
+              </Text>
+            </Group>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div
@@ -95,9 +111,18 @@ function ScheduleRow({
         </Grid>
         <Grid mb="0rem">
           <Grid.Col span="auto" pb="0rem">
-            <Text fw={500}>
-              {formatMatchInput2(t, stageItemsLookup, matchesLookup, data.match)}
-            </Text>
+            <Group gap="xs">
+              {getTeamLogoUrl(data.match.stage_item_input2) && (
+                <Avatar
+                  src={getTeamLogoUrl(data.match.stage_item_input2)}
+                  size="sm"
+                  radius="sm"
+                />
+              )}
+              <Text fw={500}>
+                {formatMatchInput2(t, stageItemsLookup, matchesLookup, data.match)}
+              </Text>
+            </Group>
           </Grid.Col>
           <Grid.Col span="content" pb="0rem">
             <div
