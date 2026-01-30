@@ -170,12 +170,15 @@
 }
 
 .sectionTitleCell {
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   font-weight: bold;
   color: var(--mantine-color-dimmed);
-  text-align: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--mantine-color-default-border);
+  text-align: right;
+  padding: 0.25rem 0.5rem 0.25rem 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .roundHeaderCell {
