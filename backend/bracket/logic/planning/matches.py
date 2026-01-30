@@ -18,7 +18,7 @@ from bracket.sql.matches import (
 from bracket.sql.stages import get_full_tournament_details
 from bracket.sql.tournament_breaks import get_all_breaks_in_tournament
 from bracket.sql.tournaments import sql_get_tournament
-from bracket.utils.id_types import CourtId, MatchId, TournamentId
+from bracket.utils.id_types import CourtId, MatchId, StageItemId, TournamentId
 from bracket.utils.types import assert_some
 
 
@@ -110,6 +110,14 @@ async def schedule_all_unscheduled_matches(
     match_end_times: dict[MatchId, datetime_utc] = {}
     position_counter = 0
 
+    # Build a mapping of stage_item_id -> list of match IDs for cross-stage dependencies
+    stage_item_match_ids: dict[StageItemId, list[MatchId]] = defaultdict(list)
+    for stage in stages:
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                for match in round_.matches:
+                    stage_item_match_ids[stage_item.id].append(match.id)
+
     # Collect all matches grouped by round, maintaining round order
     # Process rounds in sequence (all round 1 matches before round 2, etc.)
     for stage in stages:
@@ -154,6 +162,17 @@ async def schedule_all_unscheduled_matches(
                     if prereq_id is not None and prereq_id in match_end_times:
                         if match_end_times[prereq_id] > earliest_start:
                             earliest_start = match_end_times[prereq_id]
+
+                # Check cross-stage dependencies: if inputs come from another
+                # stage item (via winner_from_stage_item_id), wait for all
+                # matches in that source stage item to finish.
+                for stage_input in (match.stage_item_input1, match.stage_item_input2):
+                    source_id = getattr(stage_input, "winner_from_stage_item_id", None)
+                    if source_id is not None:
+                        for source_match_id in stage_item_match_ids.get(source_id, []):
+                            if source_match_id in match_end_times:
+                                if match_end_times[source_match_id] > earliest_start:
+                                    earliest_start = match_end_times[source_match_id]
 
                 # Find the court that results in the earliest actual start time
                 # (accounting for both court availability, dependency constraints, and breaks)
