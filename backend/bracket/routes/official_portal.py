@@ -4,9 +4,16 @@ from starlette import status
 
 from bracket.config import config
 from bracket.database import database
+from bracket.logic.planning.matches import schedule_all_unscheduled_matches
+from bracket.logic.ranking.calculation import recalculate_ranking_for_stage_item
+from bracket.logic.ranking.elimination import update_inputs_in_subsequent_elimination_rounds
 from bracket.models.db.official import Official
+from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import StageItemInput, StageItemInputFinal
+from bracket.sql.matches import sql_get_match
 from bracket.sql.officials import get_official_by_access_code
+from bracket.sql.rounds import get_round_by_id
+from bracket.sql.stage_items import get_stage_item
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.id_types import MatchId, TournamentId
 
@@ -137,4 +144,15 @@ async def portal_submit_score(
             "score2": body.stage_item_input2_score,
         },
     )
+
+    match = await sql_get_match(match_id)
+    round_ = await get_round_by_id(official.tournament_id, match.round_id)
+    stage_item = await get_stage_item(official.tournament_id, round_.stage_item_id)
+    await recalculate_ranking_for_stage_item(official.tournament_id, stage_item)
+
+    if stage_item.type in (StageType.SINGLE_ELIMINATION, StageType.DOUBLE_ELIMINATION):
+        await update_inputs_in_subsequent_elimination_rounds(round_.id, stage_item, {match_id})
+        stages = await get_full_tournament_details(official.tournament_id)
+        await schedule_all_unscheduled_matches(official.tournament_id, stages)
+
     return {"success": True}
