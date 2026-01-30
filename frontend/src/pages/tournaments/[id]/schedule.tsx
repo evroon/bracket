@@ -11,6 +11,7 @@ import {
   Select,
   Stack,
   Text,
+  Title,
 } from '@mantine/core';
 import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
 import {
@@ -347,6 +348,7 @@ export default function SchedulePage() {
           round={null}
         />
       ) : null}
+      <Title>{t('planning_title')}</Title>
       {data.length >= 1 && (
         <Group justify="right" mb="md">
           <Button

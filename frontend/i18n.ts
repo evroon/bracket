@@ -14,7 +14,12 @@ i18n
       escapeValue: false,
     },
     parseMissingKeyHandler: (key: string) =>
-      key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+      key
+        .replace(/_/g, ' ')
+        .replace(/\b(title|button)\b/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
   });
 
 export default i18n;
