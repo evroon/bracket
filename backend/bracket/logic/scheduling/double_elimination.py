@@ -52,6 +52,12 @@ def get_number_of_rounds_double_elimination(team_count: int) -> dict[BracketPosi
     winners_rounds = int(log2(bracket_size))
     losers_rounds = 2 * (winners_rounds - 1)
 
+    # When byes fill more than a quarter of WR1, the losers bracket resolves
+    # one round earlier because the final odd round has only one survivor
+    # (nothing to pair). This applies when team_count <= 3/4 of bracket_size.
+    if losers_rounds > 0 and team_count <= bracket_size * 3 // 4:
+        losers_rounds -= 1
+
     return {
         BracketPosition.WINNERS: winners_rounds,
         BracketPosition.LOSERS: losers_rounds,
