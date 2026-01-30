@@ -1,4 +1,4 @@
-import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { Avatar, Center, Grid, Group, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { useColorScheme } from '@mantine/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +10,16 @@ import { Time } from '@components/utils/datetime';
 import { formatMatchInput1, formatMatchInput2, isMatchHappening } from '@components/utils/match';
 import { TournamentMinimal } from '@components/utils/tournament';
 import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
 import { getMatchLookup, getStageItemLookup } from '@services/lookups';
 import classes from './match.module.css';
+
+function getTeamLogoUrl(stageItemInput: any): string | null {
+  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
+    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
+  }
+  return null;
+}
 
 export function MatchBadge({ match, theme }: { match: MatchWithDetails; theme: any }) {
   const visibility = match.court ? 'visible' : 'hidden';
@@ -83,14 +91,36 @@ export default function Match({
       <MatchBadge match={match} theme={theme} />
       <div className={classes.top} style={team1_style}>
         <Grid grow>
-          <Grid.Col span={10}>{team1_label}</Grid.Col>
+          <Grid.Col span={10}>
+            <Group gap="xs" wrap="nowrap">
+              {getTeamLogoUrl(match.stage_item_input1) && (
+                <Avatar
+                  src={getTeamLogoUrl(match.stage_item_input1)}
+                  size="sm"
+                  radius="sm"
+                />
+              )}
+              {team1_label}
+            </Group>
+          </Grid.Col>
           <Grid.Col span={2}>{match.stage_item_input1_score}</Grid.Col>
         </Grid>
       </div>
       <div className={classes.divider} />
       <div className={classes.bottom} style={team2_style}>
         <Grid grow>
-          <Grid.Col span={10}>{team2_label}</Grid.Col>
+          <Grid.Col span={10}>
+            <Group gap="xs" wrap="nowrap">
+              {getTeamLogoUrl(match.stage_item_input2) && (
+                <Avatar
+                  src={getTeamLogoUrl(match.stage_item_input2)}
+                  size="sm"
+                  radius="sm"
+                />
+              )}
+              {team2_label}
+            </Group>
+          </Grid.Col>
           <Grid.Col span={2}>{match.stage_item_input2_score}</Grid.Col>
         </Grid>
       </div>

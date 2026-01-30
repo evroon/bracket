@@ -1,4 +1,4 @@
-import { Box, Title } from '@mantine/core';
+import { Avatar, Box, Title } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SWRResponse } from 'swr';
@@ -14,8 +14,16 @@ import {
   StagesWithStageItemsResponse,
   UpcomingMatchesResponse,
 } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
 import { getMatchLookup, getStageItemLookup } from '@services/lookups';
 import classes from './graphical_bracket.module.css';
+
+function getTeamLogoUrl(stageItemInput: any): string | null {
+  if (stageItemInput != null && 'team' in stageItemInput && stageItemInput.team?.logo_path) {
+    return `${getBaseApiUrl()}/static/team-logos/${stageItemInput.team.logo_path}`;
+  }
+  return null;
+}
 
 type BracketPosition = 'WINNERS' | 'LOSERS' | 'GRAND_FINALS' | 'NONE';
 
@@ -260,6 +268,14 @@ function MatchBox({
           </div>
         )}
         <div className={`${classes.team} ${classes.teamTop} ${team1Wins ? classes.teamWinner : ''}`}>
+          {getTeamLogoUrl(match.stage_item_input1) && (
+            <Avatar
+              src={getTeamLogoUrl(match.stage_item_input1)}
+              size={18}
+              radius="sm"
+              mr={4}
+            />
+          )}
           <span className={classes.teamName}>{team1Label || 'BYE'}</span>
           <span className={classes.teamScore}>{match.stage_item_input1_score}</span>
         </div>
@@ -267,6 +283,14 @@ function MatchBox({
         <div
           className={`${classes.team} ${classes.teamBottom} ${team2Wins ? classes.teamWinner : ''}`}
         >
+          {getTeamLogoUrl(match.stage_item_input2) && (
+            <Avatar
+              src={getTeamLogoUrl(match.stage_item_input2)}
+              size={18}
+              radius="sm"
+              mr={4}
+            />
+          )}
           <span className={classes.teamName}>{team2Label || 'BYE'}</span>
           <span className={classes.teamScore}>{match.stage_item_input2_score}</span>
         </div>
