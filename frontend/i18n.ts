@@ -16,7 +16,7 @@ i18n
     parseMissingKeyHandler: (key: string) =>
       key
         .replace(/_/g, ' ')
-        .replace(/\b(title|button)\b/gi, '')
+        .replace(/\b(title|button|label)\b/gi, '')
         .replace(/\s+/g, ' ')
         .trim()
         .replace(/\b\w/g, (c) => c.toUpperCase()),

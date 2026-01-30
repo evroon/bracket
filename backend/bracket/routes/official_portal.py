@@ -5,7 +5,9 @@ from starlette import status
 from bracket.config import config
 from bracket.database import database
 from bracket.models.db.official import Official
+from bracket.models.db.stage_item_inputs import StageItemInput, StageItemInputFinal
 from bracket.sql.officials import get_official_by_access_code
+from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.id_types import MatchId, TournamentId
 
 router = APIRouter(prefix=config.api_prefix)
@@ -56,45 +58,45 @@ async def portal_login(body: PortalLoginBody) -> PortalLoginResponse:
     return PortalLoginResponse(official=official, tournament_id=official.tournament_id)
 
 
+def _resolve_team_name(stage_item_input: StageItemInput | None) -> str | None:
+    if stage_item_input is None:
+        return None
+    if isinstance(stage_item_input, StageItemInputFinal):
+        return stage_item_input.team.name
+    return None
+
+
 @router.get("/official_portal/matches", response_model=PortalMatchesResponse)
 async def portal_get_matches(access_code: str) -> PortalMatchesResponse:
     official = await _get_official_or_raise(access_code)
 
-    query = """
-        SELECT
-            matches.id,
-            matches.position_in_schedule,
-            matches.start_time,
-            matches.stage_item_input1_score,
-            matches.stage_item_input2_score,
-            c.name as court_name,
-            t1.name as team1_name,
-            t2.name as team2_name
-        FROM matches
-        LEFT JOIN courts c ON matches.court_id = c.id
-        LEFT JOIN stage_item_inputs sii1 ON matches.stage_item_input1_id = sii1.id
-        LEFT JOIN stage_item_inputs sii2 ON matches.stage_item_input2_id = sii2.id
-        LEFT JOIN teams t1 ON sii1.team_id = t1.id
-        LEFT JOIN teams t2 ON sii2.team_id = t2.id
-        WHERE matches.official_id = :official_id
-        ORDER BY matches.position_in_schedule NULLS LAST, matches.id
-        """
-    results = await database.fetch_all(query=query, values={"official_id": official.id})
+    stages = await get_full_tournament_details(official.tournament_id)
     matches = []
-    for row in results:
-        mapping = dict(row._mapping)
-        matches.append(
-            PortalMatch(
-                id=mapping["id"],
-                position_in_schedule=mapping["position_in_schedule"],
-                start_time=str(mapping["start_time"]) if mapping["start_time"] else None,
-                court_name=mapping["court_name"],
-                stage_item_input1_score=mapping["stage_item_input1_score"],
-                stage_item_input2_score=mapping["stage_item_input2_score"],
-                team1_name=mapping["team1_name"],
-                team2_name=mapping["team2_name"],
-            )
+    for stage in stages:
+        for stage_item in stage.stage_items:
+            for round_ in stage_item.rounds:
+                for match in round_.matches:
+                    if match.official_id != official.id:
+                        continue
+                    matches.append(
+                        PortalMatch(
+                            id=match.id,
+                            position_in_schedule=match.position_in_schedule,
+                            start_time=str(match.start_time) if match.start_time else None,
+                            court_name=match.court.name if match.court else None,
+                            stage_item_input1_score=match.stage_item_input1_score,
+                            stage_item_input2_score=match.stage_item_input2_score,
+                            team1_name=_resolve_team_name(match.stage_item_input1),
+                            team2_name=_resolve_team_name(match.stage_item_input2),
+                        )
+                    )
+
+    matches.sort(
+        key=lambda m: (
+            m.position_in_schedule if m.position_in_schedule is not None else float("inf"),
+            m.id,
         )
+    )
     return PortalMatchesResponse(data=matches)
 
 
