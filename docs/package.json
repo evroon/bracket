@@ -47,7 +47,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "markdownlint-cli2": "^0.20.0",
-    "markdownlint-rule-relative-links": "^4.0.1",
+    "markdownlint-rule-relative-links": "^5.0.1",
     "postcss": "^8.5.3",
     "prettier": "^3.8.0",
     "tailwindcss": "^4.0.9",

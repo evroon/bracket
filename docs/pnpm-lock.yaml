@@ -103,8 +103,8 @@ importers:
         specifier: ^0.20.0
         version: 0.20.0
       markdownlint-rule-relative-links:
-        specifier: ^4.0.1
-        version: 4.2.0
+        specifier: ^5.0.1
+        version: 5.0.1
       postcss:
         specifier: ^8.5.3
         version: 8.5.6
@@ -2960,8 +2960,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  markdownlint-rule-relative-links@4.2.0:
-    resolution: {integrity: sha512-A81Bgl+ZeN9kBcWs79PQlE33ziqtA20rFGwfCgI8BDr03aJI4E2WOxp36hdvVwKC/owTVqj2O4ILpZVhdxwJ/g==}
+  markdownlint-rule-relative-links@5.0.1:
+    resolution: {integrity: sha512-siyArZC6ls9NsaxXlBOjscnmKXsGvQLYgmCwQxbkBYXT6UoOk6+SzaJbqFfaLKV89LJ6ircrLIplIaFitd8J7A==}
     engines: {node: '>=22.0.0'}
 
   markdownlint@0.40.0:
@@ -3168,6 +3168,11 @@ packages:
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
+
+  mime@4.1.0:
+    resolution: {integrity: sha512-X5ju04+cAzsojXKes0B/S4tcYtFAJ6tTMuSPBEn9CPGlrWr8Fiw7qYeLT0XyH80HSoAoqWCaz+MWKh22P7G1cw==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   mimic-fn@4.0.0:
     resolution: {integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==}
@@ -7255,9 +7260,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  markdownlint-rule-relative-links@4.2.0:
+  markdownlint-rule-relative-links@5.0.1:
     dependencies:
       markdown-it: 14.1.0
+      mime: 4.1.0
 
   markdownlint@0.40.0:
     dependencies:
@@ -7798,6 +7804,8 @@ snapshots:
     dependencies:
       braces: 3.0.3
       picomatch: 2.3.1
+
+  mime@4.1.0: {}
 
   mimic-fn@4.0.0: {}
 
