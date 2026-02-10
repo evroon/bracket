@@ -29,7 +29,7 @@
     "@react-icons/all-files": "4.1.0",
     "@tabler/icons-react": "3.36.0",
     "@vitejs/plugin-react": "5.1.0",
-    "axios": "1.13.0",
+    "axios": "1.13.5",
     "date-fns": "4.1.0",
     "dayjs": "1.11.10",
     "i18next": "25.8.0",
