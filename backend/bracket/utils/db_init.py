@@ -106,7 +106,7 @@ async def create_admin_user() -> UserId:
             email=config.admin_email,
             password_hash=hash_password(config.admin_password),
             created=datetime_utc.now(),
-            account_type=UserAccountType.REGULAR,
+            account_type=UserAccountType.ADMIN,
         )
     )
     return user.id
