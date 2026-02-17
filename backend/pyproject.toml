@@ -29,7 +29,7 @@ dependencies = [
     "types-aiofiles==25.1.0.20251011",
     "types-passlib==1.7.7.20241221",
     "types-simplejson==3.20.0.20250218",
-    "uvicorn==0.40.0",
+    "uvicorn==0.41.0",
 ]
 
 [tool.pytest.ini_options]
