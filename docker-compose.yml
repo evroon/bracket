@@ -6,6 +6,7 @@ volumes:
   bracket_pg_data:
   bracket_static_data:
 
+
 services:
   bracket:
     container_name: bracket
@@ -36,4 +37,4 @@ services:
       - bracket_lan
     restart: always
     volumes:
-      - bracket_pg_data:/var/lib/postgresql/data
+      - bracket_pg_data:/var/lib/postgresql

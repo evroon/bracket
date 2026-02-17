@@ -259,6 +259,7 @@
     "tournament_title": "Turnier",
     "tournaments_title": "Turniere",
     "unarchive_tournament_button": "Turnierarchivierung aufheben",
+    "unplayed_matches_draw_disclaimer": "Solange das Spiel noch nicht gespielt worden ist zählt es automatisch als unentschieden",
     "upcoming_matches_empty_table_info": "Bevorstehende Spiele",
     "upload_placeholder_team": "Ziehen Sie eine Datei hierher, um sie als Teamlogo hochzuladen.",
     "upload_placeholder_tournament": "Ziehen Sie eine Datei hierher, um sie als Tunierlogo hochzuladen.",
