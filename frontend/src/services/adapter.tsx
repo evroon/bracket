@@ -19,9 +19,11 @@ import {
   TournamentResponse,
   TournamentsResponse,
   UpcomingMatchesResponse,
+  UserPublic,
   UserPublicResponse,
 } from '@openapi';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {

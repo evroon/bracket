@@ -1607,7 +1607,7 @@ export type UpcomingMatchesResponse = {
 /**
  * UserAccountType
  */
-export type UserAccountType = 'REGULAR' | 'DEMO';
+export type UserAccountType = 'REGULAR' | 'DEMO' | 'ADMIN';
 
 /**
  * UserPasswordToUpdate

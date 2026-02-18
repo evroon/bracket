@@ -12,6 +12,7 @@ from bracket.config import config
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
+from bracket.models.db.account import UserAccountType
 from bracket.schema import tournaments
 from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name
 from bracket.sql.users import get_user, get_user_access_to_club, get_user_access_to_tournament
@@ -92,6 +93,24 @@ async def user_authenticated(token: str = Depends(oauth2_scheme)) -> UserPublic:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return UserPublic.model_validate(user.model_dump())
+
+async def user_is_admin(token: str = Depends(oauth2_scheme)) -> UserPublic:
+    user = await check_jwt_and_get_user(token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    if user.account_type != UserAccountType.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have enough privileges",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
