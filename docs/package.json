@@ -50,7 +50,7 @@
     "markdownlint-rule-relative-links": "^5.0.1",
     "postcss": "^8.5.3",
     "prettier": "^3.8.0",
-    "tailwindcss": "^4.0.9",
+    "tailwindcss": "^4.2.1",
     "typescript": "^5.7.3"
   }
 }
