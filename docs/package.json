@@ -37,7 +37,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.9",
+    "@tailwindcss/postcss": "^4.2.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "25.2.0",
