@@ -34,8 +34,8 @@ COPY --from=builder --chown=bracket:bracket /app/dist /app/frontend-dist
 
 EXPOSE 8400
 
-HEALTHCHECK --interval=3s --timeout=5s --retries=10 \
-    CMD ["wget", "-O", "/dev/null", "http://0.0.0.0:8400/ping"]
+HEALTHCHECK --interval=3s --timeout=5s --retries=10 --start-period=10s \
+    CMD wget -O - http://0.0.0.0:8400/api/ping | grep -q '"ping"'
 
 CMD [ \
     "uv", \
