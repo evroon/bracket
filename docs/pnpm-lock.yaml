@@ -103,8 +103,8 @@ importers:
         specifier: ^0.21.0
         version: 0.21.0
       markdownlint-rule-relative-links:
-        specifier: ^5.0.1
-        version: 5.0.1
+        specifier: ^5.1.0
+        version: 5.1.0
       postcss:
         specifier: ^8.5.3
         version: 8.5.6
@@ -2953,10 +2953,6 @@ packages:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
     engines: {node: '>=16'}
 
-  markdown-it@14.1.0:
-    resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
-    hasBin: true
-
   markdown-it@14.1.1:
     resolution: {integrity: sha512-BuU2qnTti9YKgK5N+IeMubp14ZUKUUw7yeJbkjtosvHiP0AZ5c8IAgEMk79D0eC8F23r4Ac/q8cAIFdm2FtyoA==}
     hasBin: true
@@ -2974,8 +2970,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  markdownlint-rule-relative-links@5.0.1:
-    resolution: {integrity: sha512-siyArZC6ls9NsaxXlBOjscnmKXsGvQLYgmCwQxbkBYXT6UoOk6+SzaJbqFfaLKV89LJ6ircrLIplIaFitd8J7A==}
+  markdownlint-rule-relative-links@5.1.0:
+    resolution: {integrity: sha512-0jZ3NlTXvAdV7XqWlVQ5guSee2W67acLrH102KOHk3t2nG5mzsoqGCBYUwNyeNBBpzc1hbj4bgi5maexB25V+A==}
     engines: {node: '>=22.0.0'}
 
   markdownlint@0.40.0:
@@ -3859,9 +3855,6 @@ packages:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
-
-  tailwindcss@4.1.17:
-    resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
 
   tailwindcss@4.2.1:
     resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
@@ -7254,15 +7247,6 @@ snapshots:
 
   markdown-extensions@2.0.0: {}
 
-  markdown-it@14.1.0:
-    dependencies:
-      argparse: 2.0.1
-      entities: 4.5.0
-      linkify-it: 5.0.0
-      mdurl: 2.0.0
-      punycode.js: 2.3.1
-      uc.micro: 2.1.0
-
   markdown-it@14.1.1:
     dependencies:
       argparse: 2.0.1
@@ -7290,9 +7274,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  markdownlint-rule-relative-links@5.0.1:
+  markdownlint-rule-relative-links@5.1.0:
     dependencies:
-      markdown-it: 14.1.0
+      markdown-it: 14.1.1
       mime: 4.1.0
 
   markdownlint@0.40.0:
@@ -8727,8 +8711,6 @@ snapshots:
   tailwindcss-animate@1.0.7(tailwindcss@4.2.1):
     dependencies:
       tailwindcss: 4.2.1
-
-  tailwindcss@4.1.17: {}
 
   tailwindcss@4.2.1: {}
 
