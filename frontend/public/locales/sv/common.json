@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Lägg till scenobjekt",
     "add_team_button": "Lägg till lag",
     "adjust_start_times_checkbox_label": "Justera starttiden för matcher i denna runda till aktuell tid",
+    "admin_dashboard_title": "Inställningar",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Alla matchningar",
     "all_matches_scheduled_description": "Matcher har schemalagts på alla spelplaner i denna runda. Lägg till en ny runda eller lägg till en ny spelplan för fler matcher.",
     "api_docs_title": "API docs",
