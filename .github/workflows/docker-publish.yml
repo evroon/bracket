@@ -58,7 +58,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_COMBINED }}
 
       - name: Build and push frontend Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: frontend
           push: true
@@ -68,7 +68,7 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8
 
       - name: Build and push backend Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: backend
           push: true
@@ -78,7 +78,7 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8
 
       - name: Build and push combined Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./
           push: true
