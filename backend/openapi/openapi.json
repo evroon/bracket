@@ -2813,7 +2813,8 @@
       "UserAccountType": {
         "enum": [
           "REGULAR",
-          "DEMO"
+          "DEMO",
+          "ADMIN"
         ],
         "title": "UserAccountType",
         "type": "string"
