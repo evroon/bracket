@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Ajouter un élément à l'étape",
     "add_team_button": "Ajouter une équipe",
     "adjust_start_times_checkbox_label": "Ajuster l'heure de début des matchs de ce tour à l'heure courante",
+    "admin_dashboard_title": "Paramètres",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Tous les matchs",
     "all_matches_scheduled_description": "Des matchs ont été programmés sur tous les terrains de ce tour. Ajoutez un nouveau tour ou ajoutez un nouveau terrain pour plus de matchs.",
     "api_docs_title": "Documentation de l'API",
