@@ -19,7 +19,8 @@ import { useLocation } from 'react-router';
 
 import PreloadLink from '@components/utils/link';
 import { capitalize } from '@components/utils/util';
-import { getBaseApiUrl } from '@services/adapter';
+import { UserAccountType } from '@openapi';
+import { getBaseApiUrl, getUser } from '@services/adapter';
 import classes from './_main_links.module.css';
 
 interface MainLinkProps {
@@ -71,6 +72,7 @@ function MainLink({ item, pathName }: { item: MainLinkProps; pathName: String })
 
 export function getBaseLinksDict() {
   const { t } = useTranslation();
+  const {data: user } = getUser();
 
   return [
     { link: '/clubs', label: capitalize(t('clubs_title')), links: [], icon: IconUsers },
@@ -80,6 +82,13 @@ export function getBaseLinksDict() {
       label: t('user_title'),
       links: [],
       icon: IconUser,
+    },
+    {
+      link: '/admin',
+      label: t('admin_title'),
+      links: [],
+      icon: IconSettings,
+      accountType: 'ADMIN' satisfies UserAccountType as UserAccountType,
     },
     {
       icon: IconDots,
@@ -95,12 +104,17 @@ export function getBaseLinksDict() {
         { link: `${getBaseApiUrl()}/docs`, label: t('api_docs_title'), icon: IconBook },
       ],
     },
-  ];
+  ].filter(
+    ({ accountType }) =>
+      (accountType === 'ADMIN' && user !== undefined && user.data?.account_type === 'ADMIN') ||
+      accountType !== 'ADMIN'
+  );
 }
 
 export function getBaseLinks() {
   const location = useLocation();
   const pathName = location.pathname.replace(/\/+$/, '');
+
   return getBaseLinksDict()
     .filter((link) => link.links.length < 1)
     .map((link) => <MainLinkMobile key={link.label} item={link} pathName={pathName} />);
