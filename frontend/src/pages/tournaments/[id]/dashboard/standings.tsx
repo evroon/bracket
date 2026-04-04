@@ -84,6 +84,9 @@ export default function DashboardStandingsPage() {
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Container mt="1rem" px="0rem">
         <Container style={{ width: '100%' }} px="sm">
+          <Text align="center" mb="md" size="sm" c="dimmed">
+            {t('unplayed_matches_draw_disclaimer')}
+          </Text>
           <StandingsContent
             swrStagesResponse={swrStagesResponse}
             fontSizeInPixels={16}
