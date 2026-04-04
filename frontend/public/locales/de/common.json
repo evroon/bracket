@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Der Phase ein Element hinzufügen",
     "add_team_button": "Team hinzufügen",
     "adjust_start_times_checkbox_label": "Startzeit der Spiele in dieser Runde an die aktuelle Zeit anpassen.",
+    "admin_dashboard_title": "Einstellungen",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Alle Spiele",
     "all_matches_scheduled_description": "Die Spiele wurden in dieser Runde auf allen Gerichten geplant. Füge eine neue Runde hinzu oder füge ein neues Gericht für weitere Spiele hinzu.",
     "api_docs_title": "API Dokumentation",

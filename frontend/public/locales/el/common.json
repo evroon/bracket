@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Προσθήκη Αντικειμένου Σκηνής",
     "add_team_button": "Προσθήκη Ομάδας",
     "adjust_start_times_checkbox_label": "Προσαρμόστε την ώρα έναρξης των αγώνων σε αυτόν τον γύρο στην τρέχουσα ώρα",
+    "admin_dashboard_title": "Ρυθμίσεις",
+    "admin_title": "Διαχειριστής",
     "all_matches_radio_label": "Όλα τα ταιριάσματα",
     "all_matches_scheduled_description": "Matches have been scheduled on all courts in this round. Add a new round or add a new court for more matches.",
     "api_docs_title": "API docs",

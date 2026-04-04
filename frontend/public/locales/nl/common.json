@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Fase item toevoegen",
     "add_team_button": "Team Toevoegen",
     "adjust_start_times_checkbox_label": "Pas de starttijd van wedstrijden in deze ronde aan naar de huidige tijd",
+    "admin_dashboard_title": "Instellingen",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Alle wedstrijden",
     "all_matches_scheduled_description": "Alle matches zijn gepland voor alle velden in deze ronde. Voeg een nieuwe ronde toe of voeg een nieuw veld toe voor meer matches.",
     "api_docs_title": "API documentatie",
