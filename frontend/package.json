@@ -67,7 +67,7 @@
     "postcss-simple-vars": "7.0.1",
     "prettier": "3.8.0",
     "typescript": "5.9.3",
-    "vite": "7.3.2",
+    "vite": "8.0.5",
     "vite-plugin-i18next-loader": "3.1.3"
   }
 }
