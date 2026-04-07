@@ -22,7 +22,7 @@
     "@mantine/core": "8.3.7",
     "@mantine/dates": "8.3.7",
     "@mantine/dropzone": "8.3.7",
-    "@mantine/form": "8.3.7",
+    "@mantine/form": "9.0.1",
     "@mantine/hooks": "8.3.7",
     "@mantine/notifications": "8.3.7",
     "@mantine/spotlight": "8.3.7",
