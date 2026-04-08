@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "Añadir elemento de etapa",
     "add_team_button": "Añadir equipo",
     "adjust_start_times_checkbox_label": "Ajustar la hora de inicio de las partidas en esta ronda a la hora actual",
+    "admin_dashboard_title": "Configuración",
+    "admin_title": "Admin",
     "all_matches_radio_label": "Todas las partidas",
     "all_matches_scheduled_description": "Los partidos han sido programados en todas las canchas de esta ronda. Añade una nueva ronda o añade una nueva cancha para más partidos.",
     "api_docs_title": "Documentación de API",

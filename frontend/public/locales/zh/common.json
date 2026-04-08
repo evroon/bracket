@@ -27,6 +27,8 @@
     "add_stage_item_modal_title": "添加阶段项目",
     "add_team_button": "添加队伍",
     "adjust_start_times_checkbox_label": "将本轮比赛的开始时间调整为当前时间",
+    "admin_dashboard_title": "设置",
+    "admin_title": "管理员",
     "all_matches_radio_label": "所有比赛",
     "all_matches_scheduled_description": "Matches have been scheduled on all courts in this round. Add a new round or add a new court for more matches.",
     "api_docs_title": "API 文档",
