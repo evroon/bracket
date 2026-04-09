@@ -22,6 +22,7 @@ services:
       - bracket_lan
     ports:
       - 8400:8400
+      - 3000:3000
     restart: unless-stopped
     volumes:
       - bracket_static_data:/app/static
