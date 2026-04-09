@@ -36,4 +36,4 @@ services:
       - bracket_lan
     restart: always
     volumes:
-      - bracket_pg_data:/var/lib/postgresql/data
+      - bracket_pg_data:/var/lib/postgresql
