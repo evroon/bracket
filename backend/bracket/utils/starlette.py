@@ -13,11 +13,13 @@ def _get_route_for_request(request: Request) -> Route | None:
     if route is not None:
         return route
 
-    for route in request.app.routes:
-        match, _ = route.matches(request.scope)
+    for r in request.app.routes:
+        if not isinstance(r, Route):
+            continue
+        match, _ = r.matches(request.scope)
         if match is Match.FULL:
-            request.state.__route_cached__ = route
-            return route
+            request.state.__route_cached__ = r
+            return r
 
     return None
 
