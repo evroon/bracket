@@ -14,6 +14,8 @@ def _get_route_for_request(request: Request) -> Route | None:
         return route
 
     for r in request.app.routes:
+        if not isinstance(r, Route):
+            continue
         match, _ = r.matches(request.scope)
         if match is Match.FULL:
             request.state.__route_cached__ = r
