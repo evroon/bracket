@@ -7,6 +7,8 @@ updates:
     directory: "/backend"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 30
     reviewers:
       - "evroon"
     ignore:
@@ -19,6 +21,8 @@ updates:
       - "/docs"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 30
     reviewers:
       - "evroon"
     ignore:
@@ -29,6 +33,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 30
     reviewers:
       - "evroon"
     ignore:
@@ -42,6 +48,8 @@ updates:
       - "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 30
     reviewers:
       - "evroon"
     ignore:
@@ -52,6 +60,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 30
     reviewers:
       - "evroon"
     ignore:
