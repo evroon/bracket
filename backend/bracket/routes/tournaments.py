@@ -67,9 +67,6 @@ async def get_tournament(
     user: UserPublic | None = Depends(user_authenticated_or_public_dashboard),
 ) -> TournamentResponse:
     tournament = await sql_get_tournament(tournament_id)
-    if user is None and not tournament.dashboard_public:
-        raise unauthorized_exception
-
     return TournamentResponse(data=tournament)
 
 
