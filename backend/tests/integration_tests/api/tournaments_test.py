@@ -15,6 +15,7 @@ from bracket.utils.types import assert_some
 from tests.integration_tests.api.shared import (
     SUCCESS_RESPONSE,
     send_auth_request,
+    send_request,
     send_tournament_request,
 )
 from tests.integration_tests.models import AuthContext
@@ -225,3 +226,40 @@ async def test_tournament_upload_and_remove_logo(
     assert not await aiofiles.os.path.exists(
         f"static/tournament-logos/{response['data']['logo_path']}"
     )
+
+
+UNAUTHORIZED_RESPONSE = {
+    "detail": "Could not validate credentials or page is not publicly available"
+}
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_non_public_tournament_endpoints_blocked_for_unauthenticated_users(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    """
+    Unauthenticated requests to a tournament with dashboard_public=False must be rejected.
+    This tests the fix for GHSA-9mjc-6fp2-hm9v.
+    """
+    async with inserted_tournament(
+        DUMMY_TOURNAMENT.model_copy(
+            update={
+                "club_id": auth_context.club.id,
+                "dashboard_public": False,
+                "dashboard_endpoint": "non-public-endpoint",
+            }
+        )
+    ) as private_tournament:
+        tournament_id = private_tournament.id
+        for endpoint in (
+            f"tournaments/{tournament_id}",
+            f"tournaments/{tournament_id}/courts",
+            f"tournaments/{tournament_id}/teams",
+            f"tournaments/{tournament_id}/rankings",
+            f"tournaments/{tournament_id}/stages?no_draft_rounds=true",
+        ):
+            response = await send_request(HTTPMethod.GET, endpoint)
+            assert response == UNAUTHORIZED_RESPONSE, (
+                f"Expected 401 for unauthenticated access to non-public endpoint {endpoint!r}, "
+                f"got: {response}"
+            )

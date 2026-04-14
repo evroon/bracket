@@ -142,7 +142,7 @@ async def user_authenticated_or_public_dashboard(
     tournaments_fetched = await fetch_all_parsed(
         database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
     )
-    if len(tournaments_fetched) < 1:
+    if len(tournaments_fetched) < 1 or not tournaments_fetched[0].dashboard_public:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials or page is not publicly available",
