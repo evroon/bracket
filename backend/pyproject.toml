@@ -21,7 +21,7 @@ dependencies = [
     "pydantic_settings==2.13.0",
     "pyjwt==2.12.0",
     "python-dotenv==1.2.1",
-    "python-multipart==0.0.22",
+    "python-multipart==0.0.26",
     "sentry-sdk==2.57.0",
     "sqlalchemy==2.0.44",
     "sqlalchemy-stubs==0.4",
