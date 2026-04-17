@@ -164,17 +164,17 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/BachErik">
-            <img src="https://avatars.githubusercontent.com/u/75324423?v=4" width="100;" alt="BachErik"/>
+        <a href="https://github.com/nvanheuverzwijn">
+            <img src="https://avatars.githubusercontent.com/u/943226?v=4" width="100;" alt="nvanheuverzwijn"/>
             <br />
-            <sub><b>BachErik</b></sub>
+            <sub><b>Nicolas Vanheuverzwijn</b></sub>
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/djpiper28">
-            <img src="https://avatars.githubusercontent.com/u/13609136?v=4" width="100;" alt="djpiper28"/>
+        <a href="https://github.com/sevi418">
+            <img src="https://avatars.githubusercontent.com/u/91365763?v=4" width="100;" alt="sevi418"/>
             <br />
-            <sub><b>Danny Piper</b></sub>
+            <sub><b>Sevi C</b></sub>
         </a>
     </td>
     <td align="center">
@@ -185,18 +185,25 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/sevi418">
-            <img src="https://avatars.githubusercontent.com/u/91365763?v=4" width="100;" alt="sevi418"/>
+        <a href="https://github.com/djpiper28">
+            <img src="https://avatars.githubusercontent.com/u/13609136?v=4" width="100;" alt="djpiper28"/>
             <br />
-            <sub><b>Sevi C</b></sub>
+            <sub><b>Danny Piper</b></sub>
         </a>
     </td></tr>
 <tr>
     <td align="center">
-        <a href="https://github.com/nvanheuverzwijn">
-            <img src="https://avatars.githubusercontent.com/u/943226?v=4" width="100;" alt="nvanheuverzwijn"/>
+        <a href="https://github.com/ByteAfterlife">
+            <img src="https://avatars.githubusercontent.com/u/113946747?v=4" width="100;" alt="ByteAfterlife"/>
             <br />
-            <sub><b>Nicolas Vanheuverzwijn</b></sub>
+            <sub><b>Byte</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/BachErik">
+            <img src="https://avatars.githubusercontent.com/u/75324423?v=4" width="100;" alt="BachErik"/>
+            <br />
+            <sub><b>BachErik</b></sub>
         </a>
     </td>
     <td align="center">
@@ -204,13 +211,6 @@ See the [contribution docs](https://docs.bracketapp.nl/docs/community/contributi
             <img src="https://avatars.githubusercontent.com/u/18418459?v=4" width="100;" alt="aminnairi"/>
             <br />
             <sub><b>Amin NAIRI</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/ByteAfterlife">
-            <img src="https://avatars.githubusercontent.com/u/113946747?v=4" width="100;" alt="ByteAfterlife"/>
-            <br />
-            <sub><b>Byte</b></sub>
         </a>
     </td>
     <td align="center">
