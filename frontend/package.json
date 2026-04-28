@@ -28,7 +28,7 @@
     "@mantine/notifications": "8.3.7",
     "@mantine/spotlight": "8.3.7",
     "@react-icons/all-files": "4.1.0",
-    "@tabler/icons-react": "3.40.0",
+    "@tabler/icons-react": "3.41.0",
     "@vitejs/plugin-react": "6.0.1",
     "axios": "1.15.0",
     "date-fns": "4.1.0",
