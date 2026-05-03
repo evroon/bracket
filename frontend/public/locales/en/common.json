@@ -259,6 +259,7 @@
     "tournament_title": "tournament",
     "tournaments_title": "tournaments",
     "unarchive_tournament_button": "Unarchive Tournament",
+    "unplayed_matches_draw_disclaimer": "As long as the match has not been played, it counts automatically as a draw",
     "upcoming_matches_empty_table_info": "upcoming matches",
     "upload_placeholder_team": "Drop a file here to upload as team logo.",
     "upload_placeholder_tournament": "Drop a file here to upload as tournament logo.",
