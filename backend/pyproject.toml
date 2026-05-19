@@ -22,7 +22,7 @@ dependencies = [
     "pyjwt==2.12.0",
     "python-dotenv==1.2.2",
     "python-multipart==0.0.27",
-    "sentry-sdk==2.57.0",
+    "sentry-sdk==2.58.0",
     "sqlalchemy==2.0.44",
     "sqlalchemy-stubs==0.4",
     "starlette==1.0.0",
