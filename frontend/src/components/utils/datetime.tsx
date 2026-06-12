@@ -15,5 +15,6 @@ export function formatTime(datetime: string) {
 }
 
 export function compareDateTime(datetime1: string, datetime2: string) {
-  return parseISO(datetime1) > parseISO(datetime2);
+  return parseISO(datetime1).getTime() - parseISO(datetime2).getTime();
 }
+

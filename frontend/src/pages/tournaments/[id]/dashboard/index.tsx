@@ -133,7 +133,7 @@ export function Schedule({
     .sort(
       (m1: any, m2: any) =>
         compareDateTime(m1.match.start_time, m2.match.start_time) ||
-        m1.match.court?.name.localeCompare(m2.match.court?.name)
+        (m1.match.court?.name || '').localeCompare(m2.match.court?.name || '')
     );
 
   const rows: React.JSX.Element[] = [];
