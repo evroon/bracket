@@ -52,7 +52,7 @@ filterwarnings = [
 [dependency-groups]
 dev = [
     "aioresponses==0.7.4",
-    "mypy==2.0.0",
+    "mypy==2.1.0",
     "pluggy==1.6.0",
     "pylint==4.0.2",
     "pyrefly==0.64.1",
