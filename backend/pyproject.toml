@@ -19,7 +19,7 @@ dependencies = [
     "passlib==1.7.4",
     "pydantic==2.13.2",
     "pydantic_settings==2.14.0",
-    "pyjwt==2.12.0",
+    "pyjwt==2.13.0",
     "python-dotenv==1.2.2",
     "python-multipart==0.0.27",
     "sentry-sdk==2.59.0",
