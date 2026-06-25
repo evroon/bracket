@@ -22,8 +22,11 @@ async def round_dependency(tournament_id: TournamentId, round_id: RoundId) -> Ro
         database,
         Round,
         rounds.select()
-        .join(stage_items, rounds.c.stage_item_id == stage_items.c.id)
-        .join(stages, stage_items.c.stage_id == stages.c.id)
+        .select_from(
+            rounds.join(stage_items, rounds.c.stage_item_id == stage_items.c.id).join(
+                stages, stage_items.c.stage_id == stages.c.id
+            )
+        )
         .where((rounds.c.id == round_id) & (stages.c.tournament_id == tournament_id)),
     )
 
@@ -67,9 +70,11 @@ async def match_dependency(tournament_id: TournamentId, match_id: MatchId) -> Ma
         database,
         Match,
         matches.select()
-        .join(rounds, matches.c.round_id == rounds.c.id)
-        .join(stage_items, rounds.c.stage_item_id == stage_items.c.id)
-        .join(stages, stage_items.c.stage_id == stages.c.id)
+        .select_from(
+            matches.join(rounds, matches.c.round_id == rounds.c.id)
+            .join(stage_items, rounds.c.stage_item_id == stage_items.c.id)
+            .join(stages, stage_items.c.stage_id == stages.c.id)
+        )
         .where((matches.c.id == match_id) & (stages.c.tournament_id == tournament_id)),
     )
 
