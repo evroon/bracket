@@ -108,7 +108,7 @@ async def create_court(
                 database,
                 Court,
                 courts.select().where(
-                    courts.c.id == last_record_id and courts.c.tournament_id == tournament_id
+                    (courts.c.id == last_record_id) & (courts.c.tournament_id == tournament_id)
                 ),
             )
         )
