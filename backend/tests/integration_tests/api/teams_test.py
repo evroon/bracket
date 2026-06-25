@@ -6,11 +6,11 @@ from bracket.database import database
 from bracket.models.db.team import Team
 from bracket.schema import players, teams
 from bracket.utils.db import fetch_one_parsed_certain
-from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1
+from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1, DUMMY_TOURNAMENT
 from bracket.utils.http import HTTPMethod
-from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_tournament_request
+from tests.integration_tests.api.shared import SUCCESS_RESPONSE, send_auth_request, send_tournament_request
 from tests.integration_tests.models import AuthContext
-from tests.integration_tests.sql import assert_row_count_and_clear, inserted_team
+from tests.integration_tests.sql import assert_row_count_and_clear, inserted_team, inserted_tournament
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -153,3 +153,25 @@ async def test_team_upload_and_remove_logo(
         assert not await aiofiles.os.path.exists(
             f"static/team-logos/{response['data']['logo_path']}"
         )
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_cross_tournament_team_access_denied(
+    startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
+) -> None:
+    """Regression test: a team from tournament B cannot be accessed via tournament A's URL."""
+    async with inserted_tournament(
+        DUMMY_TOURNAMENT.model_copy(
+            update={"club_id": auth_context.club.id, "dashboard_endpoint": None}
+        )
+    ) as other_tournament:
+        async with inserted_team(
+            DUMMY_TEAM1.model_copy(update={"tournament_id": other_tournament.id})
+        ) as other_team:
+            response = await send_auth_request(
+                HTTPMethod.PUT,
+                f"tournaments/{auth_context.tournament.id}/teams/{other_team.id}",
+                auth_context,
+                json={"name": "Hacked", "active": True, "player_ids": []},
+            )
+            assert response.get("detail") == f"Could not find team with id {other_team.id}"
