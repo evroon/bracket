@@ -46,17 +46,17 @@ async def round_with_matches_dependency(
 
 
 async def stage_dependency(tournament_id: TournamentId, stage_id: StageId) -> StageWithStageItems:
-    stages = await get_full_tournament_details(
+    stages_result = await get_full_tournament_details(
         tournament_id, no_draft_rounds=False, stage_id=stage_id
     )
 
-    if len(stages) < 1:
+    if len(stages_result) < 1:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Could not find stage with id {stage_id}",
         )
 
-    return stages[0]
+    return stages_result[0]
 
 
 async def stage_item_dependency(
