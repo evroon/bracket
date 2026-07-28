@@ -20,8 +20,15 @@ async def round_dependency(tournament_id: TournamentId, round_id: RoundId) -> Ro
     round_ = await fetch_one_parsed(
         database,
         Round,
-        "SELECT * FROM rounds WHERE id = :round_id",
-        {"round_id": round_id},
+        """
+        SELECT rounds.*
+        FROM rounds
+        JOIN stage_items ON stage_items.id = rounds.stage_item_id
+        JOIN stages ON stages.id = stage_items.stage_id
+        WHERE rounds.id = :round_id
+        AND stages.tournament_id = :tournament_id
+        """,
+        {"round_id": round_id, "tournament_id": tournament_id},
     )
 
     if round_ is None:
