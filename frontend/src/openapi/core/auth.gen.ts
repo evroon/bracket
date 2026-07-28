@@ -21,7 +21,7 @@ export interface Auth {
 
 export const getAuthToken = async (
   auth: Auth,
-  callback: ((auth: Auth) => Promise<AuthToken> | AuthToken) | AuthToken
+  callback: ((auth: Auth) => Promise<AuthToken> | AuthToken) | AuthToken,
 ): Promise<string | undefined> => {
   const token = typeof callback === 'function' ? await callback(auth) : callback;
 

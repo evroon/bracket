@@ -165,7 +165,7 @@ function getTeamCount(values: any) {
   return Number(
     values.type === 'SINGLE_ELIMINATION'
       ? values.team_count_elimination
-      : values.team_count_round_robin
+      : values.team_count_round_robin,
   );
 }
 

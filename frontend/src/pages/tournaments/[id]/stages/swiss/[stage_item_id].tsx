@@ -62,28 +62,28 @@ export default function SwissTournamentPage() {
 
   const [onlyRecommended, setOnlyRecommended] = useQueryState(
     'only-recommended',
-    parseAsString.withDefault('true')
+    parseAsString.withDefault('true'),
   );
   const [eloThreshold, setEloThreshold] = useQueryState(
     'max-elo-diff',
-    parseAsInteger.withDefault(200)
+    parseAsInteger.withDefault(200),
   );
   const [iterations, setIterations] = useQueryState(
     'iterations',
-    parseAsInteger.withDefault(2_000)
+    parseAsInteger.withDefault(2_000),
   );
   const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(50));
   const [matchVisibility, setMatchVisibility] = useQueryState(
     'match-visibility',
-    parseAsString.withDefault('all')
+    parseAsString.withDefault('all'),
   );
   const [teamNamesDisplay, setTeamNamesDisplay] = useQueryState(
     'which-names',
-    parseAsString.withDefault('team-names')
+    parseAsString.withDefault('team-names'),
   );
   const [showAdvancedSchedulingOptions, setShowAdvancedSchedulingOptions] = useQueryState(
     'advanced',
-    parseAsString.withDefault('false')
+    parseAsString.withDefault('false'),
   );
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
@@ -117,7 +117,7 @@ export default function SwissTournamentPage() {
 
     if (activeStage != null && activeStage.stage_items != null) {
       const draftRounds = stageItem.rounds.filter(
-        (round: RoundWithMatches) => round.stage_item_id === stageItemId && round.is_draft
+        (round: RoundWithMatches) => round.stage_item_id === stageItemId && round.is_draft,
       );
 
       if (draftRounds != null && draftRounds.length > 0) {
@@ -130,7 +130,7 @@ export default function SwissTournamentPage() {
     id,
     stageItemId,
     draftRound,
-    schedulerSettings
+    schedulerSettings,
   );
   const showScheduler =
     draftRound != null &&
@@ -190,7 +190,7 @@ export default function SwissTournamentPage() {
                 onClick={() => {
                   window.open(
                     `/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`,
-                    '_ blank'
+                    '_blank',
                   );
                 }}
               >

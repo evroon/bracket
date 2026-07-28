@@ -2,7 +2,6 @@
 title: Configuration
 ---
 
-
 # Configuration
 
 ## Backend
@@ -15,7 +14,7 @@ Copy `ci.env` to `prod.env` and fill in the values:
   [FastAPI docs](https://fastapi.tiangolo.com/tutorial/cors/))
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD`: The credentials of the admin user, which is created when
   initializing the database
-- `SENTRY_DSN`: The [Sentry](https://sentry.io) DSN  for monitoring and error tracking
+- `SENTRY_DSN`: The [Sentry](https://sentry.io) DSN for monitoring and error tracking
 - `BASE_URL`: The base url of the API used for SSO
 - `ALLOW_USER_REGISTRATION`: Can be used to disallow user registration in the web app, currently
   used for production while bracket is still in beta
@@ -53,7 +52,7 @@ API_PREFIX=/api
 
 - `VITE_HCAPTCHA_SITE_KEY`: The HCaptcha key used for captcha challenges when creating new
   accounts. You get the secret when you create a new site in HCaptcha.
-- `VITE_API_BASE_URL`:  The base URL of the backend API to which the frontend sends requests.
+- `VITE_API_BASE_URL`: The base URL of the backend API to which the frontend sends requests.
   For example: `https://api.bracket.com/api`.
 - `VITE_ANALYTICS_DATA_DOMAIN`: The `data-domain` attribute passed to the script for Plausible
   analytics

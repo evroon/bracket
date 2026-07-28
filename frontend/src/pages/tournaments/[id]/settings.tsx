@@ -75,7 +75,7 @@ function ArchiveTournamentButton({
       leftSection={<MdArchive size={36} />}
       onClick={async () => {
         await archiveTournament(tournament.id).catch((response: any) =>
-          handleRequestError(response)
+          handleRequestError(response),
         );
         await swrTournamentResponse.mutate();
       }}
@@ -103,7 +103,7 @@ function UnarchiveTournamentButton({
       leftSection={<MdUnarchive size={36} />}
       onClick={async () => {
         await unarchiveTournament(tournament.id).catch((response: any) =>
-          handleRequestError(response)
+          handleRequestError(response),
         );
         await swrTournamentResponse.mutate();
       }}
@@ -163,7 +163,7 @@ function GeneralTournamentForm({
           values.auto_assign_courts,
           values.start_time.toISOString(),
           values.duration_minutes,
-          values.margin_minutes
+          values.margin_minutes,
         );
 
         await swrTournamentResponse.mutate();

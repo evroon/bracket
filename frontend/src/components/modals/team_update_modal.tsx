@@ -66,7 +66,7 @@ export default function TeamUpdateModal({
               team.id,
               values.name,
               values.active,
-              values.player_ids
+              values.player_ids,
             );
             if (requestSucceeded(result)) {
               await swrTeamsResponse.mutate();

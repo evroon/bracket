@@ -18,10 +18,9 @@ export const About = () => {
               Bracket
             </h2>
             <p className="text-xl text-muted-foreground mt-4">
-              There are many tournament management systems available online.
-              However, only few (if any) are open-source and free to use, while
-              still being feature-rich. Bracket aims to fill this gap. Bracket
-              enables you to set up a tournament with as much flexibility as
+              There are many tournament management systems available online. However, only few (if
+              any) are open-source and free to use, while still being feature-rich. Bracket aims to
+              fill this gap. Bracket enables you to set up a tournament with as much flexibility as
               possible, while still being easy to use.
             </p>
 

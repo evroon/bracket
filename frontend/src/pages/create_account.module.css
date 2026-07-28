@@ -1,7 +1,9 @@
 .title {
   font-size: 26;
   font-weight: 900;
-  font-family: Greycliff CF, var(--mantine-font-family);
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
 }
 
 .controls {
@@ -12,12 +14,12 @@
 
 .control {
   @media (max-width: $mantine-breakpoint-xs) {
-      width: 100%;
-      text-align: center;
+    width: 100%;
+    text-align: center;
   }
 }
 
 .hcaptcha {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }

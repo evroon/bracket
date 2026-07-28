@@ -13,7 +13,7 @@ export default function PlayersPage() {
   const { tournamentData } = getTournamentIdFromRouter();
   const swrPlayersResponse = getPlayersPaginated(
     tournamentData.id,
-    tableStateToPagination(tableState)
+    tableStateToPagination(tableState),
   );
   const playerCount = swrPlayersResponse.data != null ? swrPlayersResponse.data.data.count : 1;
   const { t } = useTranslation();

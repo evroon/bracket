@@ -223,7 +223,7 @@ function Schedule({
         tournamentId={tournament.id}
         buttonSize="xs"
       />
-    </div>
+    </div>,
   );
   if (columns.length < 2) {
     return (

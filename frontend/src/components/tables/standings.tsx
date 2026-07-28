@@ -32,7 +32,7 @@ export function StandingsTableForStageItem({
   const rows = teams_with_inputs
     .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) => (p1.points > p2.points ? 1 : -1))
     .sort((p1: StageItemInputFinal, p2: StageItemInputFinal) =>
-      sortTableEntries(p1, p2, tableState)
+      sortTableEntries(p1, p2, tableState),
     )
     .slice(0, maxTeamsToDisplay)
     .map((team_with_input, index) => (

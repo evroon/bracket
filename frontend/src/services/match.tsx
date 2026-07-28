@@ -24,7 +24,7 @@ export async function updateMatch(tournament_id: number, match_id: number, match
 export async function rescheduleMatch(
   tournament_id: number,
   match_id: number,
-  match: MatchRescheduleBody
+  match: MatchRescheduleBody,
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/matches/${match_id}/reschedule`, match)

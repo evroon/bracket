@@ -68,7 +68,7 @@ function StageItemInputComboBox({
 }) {
   const { t } = useTranslation();
   const [selectedInput, setSelectedInput] = useState<StageItemInputChoice | null>(
-    availableInputs.find((o) => o.value === current_key) || null
+    availableInputs.find((o) => o.value === current_key) || null,
   );
   const [successIcon, setSuccessIcon] = useState<boolean>(false);
   const [search, setSearch] = useState('');
@@ -112,7 +112,7 @@ function StageItemInputComboBox({
           stageItemInput.id,
           option?.team_id || null,
           option?.winner_position || null,
-          option?.winner_from_stage_item_id || null
+          option?.winner_from_stage_item_id || null,
         ).then(() => {
           swrAvailableInputsResponse.mutate();
           swrStagesResponse.mutate();
@@ -163,7 +163,7 @@ function StageItemInputComboBox({
 export function getAvailableInputs(
   swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>,
   teamsMap: any,
-  stageItemMap: any
+  stageItemMap: any,
 ) {
   const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
     if ('winner_from_stage_item_id' in option) {

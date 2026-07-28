@@ -111,7 +111,7 @@ createRoot(document.getElementById('root')!).render(
         </I18nextProvider>
       </BrowserRouter>
     </NuqsAdapter>
-  </StrictMode>
+  </StrictMode>,
 );
 
 AnalyticsScript();

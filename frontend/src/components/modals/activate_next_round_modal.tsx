@@ -47,7 +47,7 @@ export default function ActivateNextRoundModal({
             await startNextRound(
               tournamentId,
               stageItem.id,
-              values.adjust_to_time ? dayjs() : null
+              values.adjust_to_time ? dayjs() : null,
             );
             await swrStagesResponse.mutate();
             await swrUpcomingMatchesResponse.mutate();

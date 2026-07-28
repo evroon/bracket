@@ -40,7 +40,7 @@ const serializeUrlSearchParamsPair = (data: URLSearchParams, key: string, value:
 
 export const formDataBodySerializer = {
   bodySerializer: <T extends Record<string, any> | Array<Record<string, any>>>(
-    body: T
+    body: T,
   ): FormData => {
     const data = new FormData();
 

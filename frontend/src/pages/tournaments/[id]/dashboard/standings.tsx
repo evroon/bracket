@@ -34,7 +34,7 @@ export function StandingsContent({
   const rows = Object.keys(stageItemTeamLookup)
     .filter((stageItemId) => stageItemsLookup[stageItemId] != null)
     .sort((si1: any, si2: any) =>
-      stageItemsLookup[si1].name > stageItemsLookup[si2].name ? 1 : -1
+      stageItemsLookup[si1].name > stageItemsLookup[si2].name ? 1 : -1,
     )
     .map((stageItemId) => (
       <div key={stageItemId}>

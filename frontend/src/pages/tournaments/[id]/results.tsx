@@ -176,7 +176,7 @@ function Schedule({
             <Text size="xl" fw={800}>
               {startTime}
             </Text>
-          </Center>
+          </Center>,
         );
       }
     }
@@ -188,7 +188,7 @@ function Schedule({
         openMatchModal={openMatchModal}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
-      />
+      />,
     );
   }
 

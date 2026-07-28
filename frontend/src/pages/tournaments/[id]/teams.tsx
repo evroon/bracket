@@ -57,7 +57,7 @@ export default function TeamsPage() {
   if (filteredStageItemId != null) {
     teams = (swrTeamsResponse.data?.data.teams || []).filter(
       (team: FullTeamWithPlayers) =>
-        stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
+        stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1,
     );
   }
 

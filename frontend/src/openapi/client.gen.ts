@@ -12,7 +12,7 @@ import type { ClientOptions as ClientOptions2 } from './types.gen';
  * to ensure your client always has the correct values.
  */
 export type CreateClientConfig<T extends ClientOptions = ClientOptions2> = (
-  override?: Config<ClientOptions & T>
+  override?: Config<ClientOptions & T>,
 ) => Config<Required<ClientOptions> & T>;
 
 export const client = createClient(createConfig<ClientOptions2>());

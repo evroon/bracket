@@ -10,7 +10,7 @@ export type SchedulingProgress = { courtsCount: number; scheduledMatchesCount: n
 
 export function getSwissRoundSchedulingProgress(
   draftRound: RoundWithMatches,
-  swrCourtsResponse: SWRResponse
+  swrCourtsResponse: SWRResponse,
 ) {
   return {
     courtsCount: swrCourtsResponse.data?.data?.length || 0,

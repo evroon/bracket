@@ -1,16 +1,16 @@
-import nextra from 'nextra'
+import nextra from "nextra";
 
 const withNextra = nextra({
-  contentDirBasePath: '/docs'
-})
+  contentDirBasePath: "/docs",
+});
 
 export default withNextra({
   reactStrictMode: true,
   trailingSlash: true,
   skipTrailingSlashRedirect: false,
   // Export only when building in GitHub Actions
-  output: process.env.GITHUB_ACTION ? 'export' : 'export',
+  output: process.env.GITHUB_ACTION ? "export" : "export",
   images: {
-    unoptimized: true
-  }
-})
+    unoptimized: true,
+  },
+});

@@ -25,13 +25,13 @@ export default function RoundComponent({
 }) {
   const matches = round.matches
     .sort((m1, m2) =>
-      (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
+      (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1,
     )
     .filter(
       (match: MatchWithDetails) =>
         displaySettings.matchVisibility === 'all' ||
         (displaySettings.matchVisibility === 'future-only' && isMatchInTheFutureOrPresent(match)) ||
-        (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match))
+        (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match)),
     )
     .map((match) => (
       <Match

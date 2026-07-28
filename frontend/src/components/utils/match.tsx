@@ -38,7 +38,7 @@ export function formatMatchInput1(
   t: Translator,
   stageItemsLookup: any,
   matchesLookup: any,
-  match: MatchWithDetails
+  match: MatchWithDetails,
 ): string {
   const formatted = formatStageItemInput(match.stage_item_input1, stageItemsLookup);
   if (formatted != null) return formatted;
@@ -56,7 +56,7 @@ export function formatMatchInput2(
   t: Translator,
   stageItemsLookup: any,
   matchesLookup: any,
-  match: MatchWithDetails
+  match: MatchWithDetails,
 ): string {
   const formatted = formatStageItemInput(match.stage_item_input2, stageItemsLookup);
   if (formatted != null) return formatted;

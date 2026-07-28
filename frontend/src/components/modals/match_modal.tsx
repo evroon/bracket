@@ -77,10 +77,10 @@ function MatchModalForm({
   });
 
   const [customDurationEnabled, setCustomDurationEnabled] = useState(
-    match.custom_duration_minutes != null
+    match.custom_duration_minutes != null,
   );
   const [customMarginEnabled, setCustomMarginEnabled] = useState(
-    match.custom_margin_minutes != null
+    match.custom_margin_minutes != null,
   );
 
   const stageItemsLookup = getStageItemLookup(swrStagesResponse);

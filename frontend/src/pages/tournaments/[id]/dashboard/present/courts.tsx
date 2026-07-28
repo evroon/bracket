@@ -48,7 +48,7 @@ export default function CourtsPresentPage() {
     const futureMatch = matchesForCourt
       .filter((m: MatchWithDetails) => isMatchInTheFuture(m))
       .sort((m1: MatchWithDetails, m2: MatchWithDetails) =>
-        (m1.start_time || '') > (m2.start_time || '') ? 1 : -1
+        (m1.start_time || '') > (m2.start_time || '') ? 1 : -1,
       )[0];
 
     return (

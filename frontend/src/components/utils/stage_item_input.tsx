@@ -32,14 +32,14 @@ export function getPositionName(position: number) {
 
 export function formatStageItemInputTentative(
   stage_item_input: StageItemInputTentative | StageItemInputOptionTentative,
-  stageItemsLookup: any
+  stageItemsLookup: any,
 ) {
   return `${getPositionName(assert_not_none(stage_item_input.winner_position))} of ${stageItemsLookup[assert_not_none(stage_item_input.winner_from_stage_item_id)].name}`;
 }
 
 export function formatStageItemInput(
   stage_item_input: StageItemInput | null,
-  stageItemsLookup: any
+  stageItemsLookup: any,
 ) {
   if (stage_item_input == null) return null;
   if ('team' in stage_item_input) return stage_item_input.team.name;

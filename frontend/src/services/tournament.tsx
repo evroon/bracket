@@ -10,7 +10,7 @@ export async function createTournament(
   auto_assign_courts: boolean,
   start_time: Dayjs,
   duration_minutes: number,
-  margin_minutes: number
+  margin_minutes: number,
 ) {
   return createAxios()
     .post('tournaments', {
@@ -48,7 +48,7 @@ export async function updateTournament(
   auto_assign_courts: boolean,
   start_time: string,
   duration_minutes: number,
-  margin_minutes: number
+  margin_minutes: number,
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}`, {

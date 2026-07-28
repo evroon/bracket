@@ -208,7 +208,7 @@ export type Options<
  * Get Clubs
  */
 export const getClubsClubsGet = <ThrowOnError extends boolean = false>(
-  options?: Options<GetClubsClubsGetData, ThrowOnError>
+  options?: Options<GetClubsClubsGetData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<GetClubsClubsGetResponses, unknown, ThrowOnError>({
     responseType: 'json',
@@ -221,7 +221,7 @@ export const getClubsClubsGet = <ThrowOnError extends boolean = false>(
  * Create New Club
  */
 export const createNewClubClubsPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateNewClubClubsPostData, ThrowOnError>
+  options: Options<CreateNewClubClubsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateNewClubClubsPostResponses,
@@ -242,7 +242,7 @@ export const createNewClubClubsPost = <ThrowOnError extends boolean = false>(
  * Delete Club
  */
 export const deleteClubClubsClubIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<DeleteClubClubsClubIdDeleteData, ThrowOnError>
+  options: Options<DeleteClubClubsClubIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteClubClubsClubIdDeleteResponses,
@@ -259,7 +259,7 @@ export const deleteClubClubsClubIdDelete = <ThrowOnError extends boolean = false
  * Update Club
  */
 export const updateClubClubsClubIdPut = <ThrowOnError extends boolean = false>(
-  options: Options<UpdateClubClubsClubIdPutData, ThrowOnError>
+  options: Options<UpdateClubClubsClubIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateClubClubsClubIdPutResponses,
@@ -280,7 +280,7 @@ export const updateClubClubsClubIdPut = <ThrowOnError extends boolean = false>(
  * Get Metrics
  */
 export const getMetricsMetricsGet = <ThrowOnError extends boolean = false>(
-  options?: Options<GetMetricsMetricsGetData, ThrowOnError>
+  options?: Options<GetMetricsMetricsGetData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<GetMetricsMetricsGetResponses, unknown, ThrowOnError>({
     responseType: 'text',
@@ -292,7 +292,7 @@ export const getMetricsMetricsGet = <ThrowOnError extends boolean = false>(
  * Healthcheck ping
  */
 export const pingPingGet = <ThrowOnError extends boolean = false>(
-  options?: Options<PingPingGetData, ThrowOnError>
+  options?: Options<PingPingGetData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<PingPingGetResponses, unknown, ThrowOnError>({
     responseType: 'json',
@@ -304,7 +304,7 @@ export const pingPingGet = <ThrowOnError extends boolean = false>(
  * Login For Access Token
  */
 export const loginForAccessTokenTokenPost = <ThrowOnError extends boolean = false>(
-  options: Options<LoginForAccessTokenTokenPostData, ThrowOnError>
+  options: Options<LoginForAccessTokenTokenPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     LoginForAccessTokenTokenPostResponses,
@@ -325,7 +325,7 @@ export const loginForAccessTokenTokenPost = <ThrowOnError extends boolean = fals
  * Get Tournaments
  */
 export const getTournamentsTournamentsGet = <ThrowOnError extends boolean = false>(
-  options?: Options<GetTournamentsTournamentsGetData, ThrowOnError>
+  options?: Options<GetTournamentsTournamentsGetData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<
     GetTournamentsTournamentsGetResponses,
@@ -342,7 +342,7 @@ export const getTournamentsTournamentsGet = <ThrowOnError extends boolean = fals
  * Create Tournament
  */
 export const createTournamentTournamentsPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateTournamentTournamentsPostData, ThrowOnError>
+  options: Options<CreateTournamentTournamentsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateTournamentTournamentsPostResponses,
@@ -363,7 +363,7 @@ export const createTournamentTournamentsPost = <ThrowOnError extends boolean = f
  * Delete Tournament
  */
 export const deleteTournamentTournamentsTournamentIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<DeleteTournamentTournamentsTournamentIdDeleteData, ThrowOnError>
+  options: Options<DeleteTournamentTournamentsTournamentIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteTournamentTournamentsTournamentIdDeleteResponses,
@@ -380,7 +380,7 @@ export const deleteTournamentTournamentsTournamentIdDelete = <ThrowOnError exten
  * Get Tournament
  */
 export const getTournamentTournamentsTournamentIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetTournamentTournamentsTournamentIdGetData, ThrowOnError>
+  options: Options<GetTournamentTournamentsTournamentIdGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetTournamentTournamentsTournamentIdGetResponses,
@@ -398,7 +398,7 @@ export const getTournamentTournamentsTournamentIdGet = <ThrowOnError extends boo
 export const updateTournamentByIdTournamentsTournamentIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateTournamentByIdTournamentsTournamentIdPutData, ThrowOnError>
+  options: Options<UpdateTournamentByIdTournamentsTournamentIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateTournamentByIdTournamentsTournamentIdPutResponses,
@@ -421,7 +421,7 @@ export const updateTournamentByIdTournamentsTournamentIdPut = <
 export const getAvailableInputsTournamentsTournamentIdAvailableInputsGet = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<GetAvailableInputsTournamentsTournamentIdAvailableInputsGetData, ThrowOnError>
+  options: Options<GetAvailableInputsTournamentsTournamentIdAvailableInputsGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetAvailableInputsTournamentsTournamentIdAvailableInputsGetResponses,
@@ -442,7 +442,7 @@ export const getAvailableInputsTournamentsTournamentIdAvailableInputsGet = <
 export const changeStatusTournamentsTournamentIdChangeStatusPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<ChangeStatusTournamentsTournamentIdChangeStatusPostData, ThrowOnError>
+  options: Options<ChangeStatusTournamentsTournamentIdChangeStatusPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     ChangeStatusTournamentsTournamentIdChangeStatusPostResponses,
@@ -463,7 +463,7 @@ export const changeStatusTournamentsTournamentIdChangeStatusPost = <
  * Get Courts
  */
 export const getCourtsTournamentsTournamentIdCourtsGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetCourtsTournamentsTournamentIdCourtsGetData, ThrowOnError>
+  options: Options<GetCourtsTournamentsTournamentIdCourtsGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetCourtsTournamentsTournamentIdCourtsGetResponses,
@@ -479,7 +479,7 @@ export const getCourtsTournamentsTournamentIdCourtsGet = <ThrowOnError extends b
  * Create Court
  */
 export const createCourtTournamentsTournamentIdCourtsPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateCourtTournamentsTournamentIdCourtsPostData, ThrowOnError>
+  options: Options<CreateCourtTournamentsTournamentIdCourtsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateCourtTournamentsTournamentIdCourtsPostResponses,
@@ -502,7 +502,7 @@ export const createCourtTournamentsTournamentIdCourtsPost = <ThrowOnError extend
 export const deleteCourtTournamentsTournamentIdCourtsCourtIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteCourtTournamentsTournamentIdCourtsCourtIdDeleteData, ThrowOnError>
+  options: Options<DeleteCourtTournamentsTournamentIdCourtsCourtIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteCourtTournamentsTournamentIdCourtsCourtIdDeleteResponses,
@@ -521,7 +521,7 @@ export const deleteCourtTournamentsTournamentIdCourtsCourtIdDelete = <
 export const updateCourtByIdTournamentsTournamentIdCourtsCourtIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateCourtByIdTournamentsTournamentIdCourtsCourtIdPutData, ThrowOnError>
+  options: Options<UpdateCourtByIdTournamentsTournamentIdCourtsCourtIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateCourtByIdTournamentsTournamentIdCourtsCourtIdPutResponses,
@@ -542,7 +542,7 @@ export const updateCourtByIdTournamentsTournamentIdCourtsCourtIdPut = <
  * Upload Logo
  */
 export const uploadLogoTournamentsTournamentIdLogoPost = <ThrowOnError extends boolean = false>(
-  options: Options<UploadLogoTournamentsTournamentIdLogoPostData, ThrowOnError>
+  options: Options<UploadLogoTournamentsTournamentIdLogoPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     UploadLogoTournamentsTournamentIdLogoPostResponses,
@@ -564,7 +564,7 @@ export const uploadLogoTournamentsTournamentIdLogoPost = <ThrowOnError extends b
  * Create Match
  */
 export const createMatchTournamentsTournamentIdMatchesPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateMatchTournamentsTournamentIdMatchesPostData, ThrowOnError>
+  options: Options<CreateMatchTournamentsTournamentIdMatchesPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateMatchTournamentsTournamentIdMatchesPostResponses,
@@ -587,7 +587,7 @@ export const createMatchTournamentsTournamentIdMatchesPost = <ThrowOnError exten
 export const deleteMatchTournamentsTournamentIdMatchesMatchIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteMatchTournamentsTournamentIdMatchesMatchIdDeleteData, ThrowOnError>
+  options: Options<DeleteMatchTournamentsTournamentIdMatchesMatchIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteMatchTournamentsTournamentIdMatchesMatchIdDeleteResponses,
@@ -606,7 +606,7 @@ export const deleteMatchTournamentsTournamentIdMatchesMatchIdDelete = <
 export const updateMatchByIdTournamentsTournamentIdMatchesMatchIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateMatchByIdTournamentsTournamentIdMatchesMatchIdPutData, ThrowOnError>
+  options: Options<UpdateMatchByIdTournamentsTournamentIdMatchesMatchIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateMatchByIdTournamentsTournamentIdMatchesMatchIdPutResponses,
@@ -632,7 +632,7 @@ export const rescheduleMatchTournamentsTournamentIdMatchesMatchIdReschedulePost 
   options: Options<
     RescheduleMatchTournamentsTournamentIdMatchesMatchIdReschedulePostData,
     ThrowOnError
-  >
+  >,
 ) =>
   (options.client ?? client).post<
     RescheduleMatchTournamentsTournamentIdMatchesMatchIdReschedulePostResponses,
@@ -660,7 +660,7 @@ export const getNextStageRankingsTournamentsTournamentIdNextStageRankingsGet = <
   options: Options<
     GetNextStageRankingsTournamentsTournamentIdNextStageRankingsGetData,
     ThrowOnError
-  >
+  >,
 ) =>
   (options.client ?? client).get<
     GetNextStageRankingsTournamentsTournamentIdNextStageRankingsGetResponses,
@@ -677,7 +677,7 @@ export const getNextStageRankingsTournamentsTournamentIdNextStageRankingsGet = <
  * Get Players
  */
 export const getPlayersTournamentsTournamentIdPlayersGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetPlayersTournamentsTournamentIdPlayersGetData, ThrowOnError>
+  options: Options<GetPlayersTournamentsTournamentIdPlayersGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetPlayersTournamentsTournamentIdPlayersGetResponses,
@@ -696,7 +696,7 @@ export const getPlayersTournamentsTournamentIdPlayersGet = <ThrowOnError extends
 export const createSinglePlayerTournamentsTournamentIdPlayersPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<CreateSinglePlayerTournamentsTournamentIdPlayersPostData, ThrowOnError>
+  options: Options<CreateSinglePlayerTournamentsTournamentIdPlayersPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateSinglePlayerTournamentsTournamentIdPlayersPostResponses,
@@ -719,7 +719,7 @@ export const createSinglePlayerTournamentsTournamentIdPlayersPost = <
 export const deletePlayerTournamentsTournamentIdPlayersPlayerIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeletePlayerTournamentsTournamentIdPlayersPlayerIdDeleteData, ThrowOnError>
+  options: Options<DeletePlayerTournamentsTournamentIdPlayersPlayerIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeletePlayerTournamentsTournamentIdPlayersPlayerIdDeleteResponses,
@@ -738,7 +738,7 @@ export const deletePlayerTournamentsTournamentIdPlayersPlayerIdDelete = <
 export const updatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPutData, ThrowOnError>
+  options: Options<UpdatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPutResponses,
@@ -761,7 +761,7 @@ export const updatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPut = <
 export const createMultiplePlayersTournamentsTournamentIdPlayersMultiPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<CreateMultiplePlayersTournamentsTournamentIdPlayersMultiPostData, ThrowOnError>
+  options: Options<CreateMultiplePlayersTournamentsTournamentIdPlayersMultiPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateMultiplePlayersTournamentsTournamentIdPlayersMultiPostResponses,
@@ -782,7 +782,7 @@ export const createMultiplePlayersTournamentsTournamentIdPlayersMultiPost = <
  * Get Rankings
  */
 export const getRankingsTournamentsTournamentIdRankingsGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetRankingsTournamentsTournamentIdRankingsGetData, ThrowOnError>
+  options: Options<GetRankingsTournamentsTournamentIdRankingsGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetRankingsTournamentsTournamentIdRankingsGetResponses,
@@ -800,7 +800,7 @@ export const getRankingsTournamentsTournamentIdRankingsGet = <ThrowOnError exten
 export const createRankingTournamentsTournamentIdRankingsPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<CreateRankingTournamentsTournamentIdRankingsPostData, ThrowOnError>
+  options: Options<CreateRankingTournamentsTournamentIdRankingsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateRankingTournamentsTournamentIdRankingsPostResponses,
@@ -823,7 +823,7 @@ export const createRankingTournamentsTournamentIdRankingsPost = <
 export const deleteRankingTournamentsTournamentIdRankingsRankingIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteRankingTournamentsTournamentIdRankingsRankingIdDeleteData, ThrowOnError>
+  options: Options<DeleteRankingTournamentsTournamentIdRankingsRankingIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteRankingTournamentsTournamentIdRankingsRankingIdDeleteResponses,
@@ -842,7 +842,7 @@ export const deleteRankingTournamentsTournamentIdRankingsRankingIdDelete = <
 export const updateRankingByIdTournamentsTournamentIdRankingsRankingIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateRankingByIdTournamentsTournamentIdRankingsRankingIdPutData, ThrowOnError>
+  options: Options<UpdateRankingByIdTournamentsTournamentIdRankingsRankingIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateRankingByIdTournamentsTournamentIdRankingsRankingIdPutResponses,
@@ -863,7 +863,7 @@ export const updateRankingByIdTournamentsTournamentIdRankingsRankingIdPut = <
  * Create Round
  */
 export const createRoundTournamentsTournamentIdRoundsPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateRoundTournamentsTournamentIdRoundsPostData, ThrowOnError>
+  options: Options<CreateRoundTournamentsTournamentIdRoundsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateRoundTournamentsTournamentIdRoundsPostResponses,
@@ -886,7 +886,7 @@ export const createRoundTournamentsTournamentIdRoundsPost = <ThrowOnError extend
 export const deleteRoundTournamentsTournamentIdRoundsRoundIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteRoundTournamentsTournamentIdRoundsRoundIdDeleteData, ThrowOnError>
+  options: Options<DeleteRoundTournamentsTournamentIdRoundsRoundIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteRoundTournamentsTournamentIdRoundsRoundIdDeleteResponses,
@@ -905,7 +905,7 @@ export const deleteRoundTournamentsTournamentIdRoundsRoundIdDelete = <
 export const updateRoundByIdTournamentsTournamentIdRoundsRoundIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateRoundByIdTournamentsTournamentIdRoundsRoundIdPutData, ThrowOnError>
+  options: Options<UpdateRoundByIdTournamentsTournamentIdRoundsRoundIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateRoundByIdTournamentsTournamentIdRoundsRoundIdPutResponses,
@@ -928,7 +928,7 @@ export const updateRoundByIdTournamentsTournamentIdRoundsRoundIdPut = <
 export const scheduleMatchesTournamentsTournamentIdScheduleMatchesPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<ScheduleMatchesTournamentsTournamentIdScheduleMatchesPostData, ThrowOnError>
+  options: Options<ScheduleMatchesTournamentsTournamentIdScheduleMatchesPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     ScheduleMatchesTournamentsTournamentIdScheduleMatchesPostResponses,
@@ -947,7 +947,7 @@ export const scheduleMatchesTournamentsTournamentIdScheduleMatchesPost = <
 export const createStageItemTournamentsTournamentIdStageItemsPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<CreateStageItemTournamentsTournamentIdStageItemsPostData, ThrowOnError>
+  options: Options<CreateStageItemTournamentsTournamentIdStageItemsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateStageItemTournamentsTournamentIdStageItemsPostResponses,
@@ -973,7 +973,7 @@ export const deleteStageItemTournamentsTournamentIdStageItemsStageItemIdDelete =
   options: Options<
     DeleteStageItemTournamentsTournamentIdStageItemsStageItemIdDeleteData,
     ThrowOnError
-  >
+  >,
 ) =>
   (options.client ?? client).delete<
     DeleteStageItemTournamentsTournamentIdStageItemsStageItemIdDeleteResponses,
@@ -992,7 +992,10 @@ export const deleteStageItemTournamentsTournamentIdStageItemsStageItemIdDelete =
 export const updateStageItemTournamentsTournamentIdStageItemsStageItemIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateStageItemTournamentsTournamentIdStageItemsStageItemIdPutData, ThrowOnError>
+  options: Options<
+    UpdateStageItemTournamentsTournamentIdStageItemsStageItemIdPutData,
+    ThrowOnError
+  >,
 ) =>
   (options.client ?? client).put<
     UpdateStageItemTournamentsTournamentIdStageItemsStageItemIdPutResponses,
@@ -1017,7 +1020,7 @@ export const updateStageItemInputTournamentsTournamentIdStageItemsStageItemIdInp
     options: Options<
       UpdateStageItemInputTournamentsTournamentIdStageItemsStageItemIdInputsStageItemInputIdPutData,
       ThrowOnError
-    >
+    >,
   ) =>
     (options.client ?? client).put<
       UpdateStageItemInputTournamentsTournamentIdStageItemsStageItemIdInputsStageItemInputIdPutResponses,
@@ -1043,7 +1046,7 @@ export const startNextRoundTournamentsTournamentIdStageItemsStageItemIdStartNext
   options: Options<
     StartNextRoundTournamentsTournamentIdStageItemsStageItemIdStartNextRoundPostData,
     ThrowOnError
-  >
+  >,
 ) =>
   (options.client ?? client).post<
     StartNextRoundTournamentsTournamentIdStageItemsStageItemIdStartNextRoundPostResponses,
@@ -1069,7 +1072,7 @@ export const getMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpc
   options: Options<
     GetMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpcomingMatchesGetData,
     ThrowOnError
-  >
+  >,
 ) =>
   (options.client ?? client).get<
     GetMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpcomingMatchesGetResponses,
@@ -1086,7 +1089,7 @@ export const getMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpc
  * Get Stages
  */
 export const getStagesTournamentsTournamentIdStagesGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetStagesTournamentsTournamentIdStagesGetData, ThrowOnError>
+  options: Options<GetStagesTournamentsTournamentIdStagesGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetStagesTournamentsTournamentIdStagesGetResponses,
@@ -1102,7 +1105,7 @@ export const getStagesTournamentsTournamentIdStagesGet = <ThrowOnError extends b
  * Create Stage
  */
 export const createStageTournamentsTournamentIdStagesPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateStageTournamentsTournamentIdStagesPostData, ThrowOnError>
+  options: Options<CreateStageTournamentsTournamentIdStagesPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateStageTournamentsTournamentIdStagesPostResponses,
@@ -1121,7 +1124,7 @@ export const createStageTournamentsTournamentIdStagesPost = <ThrowOnError extend
 export const activateNextStageTournamentsTournamentIdStagesActivatePost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<ActivateNextStageTournamentsTournamentIdStagesActivatePostData, ThrowOnError>
+  options: Options<ActivateNextStageTournamentsTournamentIdStagesActivatePostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     ActivateNextStageTournamentsTournamentIdStagesActivatePostResponses,
@@ -1144,7 +1147,7 @@ export const activateNextStageTournamentsTournamentIdStagesActivatePost = <
 export const deleteStageTournamentsTournamentIdStagesStageIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteStageTournamentsTournamentIdStagesStageIdDeleteData, ThrowOnError>
+  options: Options<DeleteStageTournamentsTournamentIdStagesStageIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteStageTournamentsTournamentIdStagesStageIdDeleteResponses,
@@ -1163,7 +1166,7 @@ export const deleteStageTournamentsTournamentIdStagesStageIdDelete = <
 export const updateStageTournamentsTournamentIdStagesStageIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateStageTournamentsTournamentIdStagesStageIdPutData, ThrowOnError>
+  options: Options<UpdateStageTournamentsTournamentIdStagesStageIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateStageTournamentsTournamentIdStagesStageIdPutResponses,
@@ -1184,7 +1187,7 @@ export const updateStageTournamentsTournamentIdStagesStageIdPut = <
  * Get Teams
  */
 export const getTeamsTournamentsTournamentIdTeamsGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetTeamsTournamentsTournamentIdTeamsGetData, ThrowOnError>
+  options: Options<GetTeamsTournamentsTournamentIdTeamsGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetTeamsTournamentsTournamentIdTeamsGetResponses,
@@ -1200,7 +1203,7 @@ export const getTeamsTournamentsTournamentIdTeamsGet = <ThrowOnError extends boo
  * Create Team
  */
 export const createTeamTournamentsTournamentIdTeamsPost = <ThrowOnError extends boolean = false>(
-  options: Options<CreateTeamTournamentsTournamentIdTeamsPostData, ThrowOnError>
+  options: Options<CreateTeamTournamentsTournamentIdTeamsPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateTeamTournamentsTournamentIdTeamsPostResponses,
@@ -1223,7 +1226,7 @@ export const createTeamTournamentsTournamentIdTeamsPost = <ThrowOnError extends 
 export const deleteTeamTournamentsTournamentIdTeamsTeamIdDelete = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<DeleteTeamTournamentsTournamentIdTeamsTeamIdDeleteData, ThrowOnError>
+  options: Options<DeleteTeamTournamentsTournamentIdTeamsTeamIdDeleteData, ThrowOnError>,
 ) =>
   (options.client ?? client).delete<
     DeleteTeamTournamentsTournamentIdTeamsTeamIdDeleteResponses,
@@ -1242,7 +1245,7 @@ export const deleteTeamTournamentsTournamentIdTeamsTeamIdDelete = <
 export const updateTeamByIdTournamentsTournamentIdTeamsTeamIdPut = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateTeamByIdTournamentsTournamentIdTeamsTeamIdPutData, ThrowOnError>
+  options: Options<UpdateTeamByIdTournamentsTournamentIdTeamsTeamIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateTeamByIdTournamentsTournamentIdTeamsTeamIdPutResponses,
@@ -1265,7 +1268,7 @@ export const updateTeamByIdTournamentsTournamentIdTeamsTeamIdPut = <
 export const updateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<UpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPostData, ThrowOnError>
+  options: Options<UpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     UpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPostResponses,
@@ -1289,7 +1292,7 @@ export const updateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPost = <
 export const createMultipleTeamsTournamentsTournamentIdTeamsMultiPost = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<CreateMultipleTeamsTournamentsTournamentIdTeamsMultiPostData, ThrowOnError>
+  options: Options<CreateMultipleTeamsTournamentsTournamentIdTeamsMultiPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     CreateMultipleTeamsTournamentsTournamentIdTeamsMultiPostResponses,
@@ -1310,7 +1313,7 @@ export const createMultipleTeamsTournamentsTournamentIdTeamsMultiPost = <
  * Get User
  */
 export const getUserUsersMeGet = <ThrowOnError extends boolean = false>(
-  options?: Options<GetUserUsersMeGetData, ThrowOnError>
+  options?: Options<GetUserUsersMeGetData, ThrowOnError>,
 ) =>
   (options?.client ?? client).get<GetUserUsersMeGetResponses, unknown, ThrowOnError>({
     responseType: 'json',
@@ -1323,7 +1326,7 @@ export const getUserUsersMeGet = <ThrowOnError extends boolean = false>(
  * Register User
  */
 export const registerUserUsersRegisterPost = <ThrowOnError extends boolean = false>(
-  options: Options<RegisterUserUsersRegisterPostData, ThrowOnError>
+  options: Options<RegisterUserUsersRegisterPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     RegisterUserUsersRegisterPostResponses,
@@ -1343,7 +1346,7 @@ export const registerUserUsersRegisterPost = <ThrowOnError extends boolean = fal
  * Register Demo User
  */
 export const registerDemoUserUsersRegisterDemoPost = <ThrowOnError extends boolean = false>(
-  options: Options<RegisterDemoUserUsersRegisterDemoPostData, ThrowOnError>
+  options: Options<RegisterDemoUserUsersRegisterDemoPostData, ThrowOnError>,
 ) =>
   (options.client ?? client).post<
     RegisterDemoUserUsersRegisterDemoPostResponses,
@@ -1363,7 +1366,7 @@ export const registerDemoUserUsersRegisterDemoPost = <ThrowOnError extends boole
  * Get Me
  */
 export const getMeUsersUserIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<GetMeUsersUserIdGetData, ThrowOnError>
+  options: Options<GetMeUsersUserIdGetData, ThrowOnError>,
 ) =>
   (options.client ?? client).get<
     GetMeUsersUserIdGetResponses,
@@ -1380,7 +1383,7 @@ export const getMeUsersUserIdGet = <ThrowOnError extends boolean = false>(
  * Update User Details
  */
 export const updateUserDetailsUsersUserIdPut = <ThrowOnError extends boolean = false>(
-  options: Options<UpdateUserDetailsUsersUserIdPutData, ThrowOnError>
+  options: Options<UpdateUserDetailsUsersUserIdPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     UpdateUserDetailsUsersUserIdPutResponses,
@@ -1401,7 +1404,7 @@ export const updateUserDetailsUsersUserIdPut = <ThrowOnError extends boolean = f
  * Put User Password
  */
 export const putUserPasswordUsersUserIdPasswordPut = <ThrowOnError extends boolean = false>(
-  options: Options<PutUserPasswordUsersUserIdPasswordPutData, ThrowOnError>
+  options: Options<PutUserPasswordUsersUserIdPasswordPutData, ThrowOnError>,
 ) =>
   (options.client ?? client).put<
     PutUserPasswordUsersUserIdPasswordPutResponses,

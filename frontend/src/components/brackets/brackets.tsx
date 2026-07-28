@@ -93,7 +93,7 @@ export function RoundsGridCols({
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .filter(
       (round: RoundWithMatches) =>
-        round.matches.length > 0 || displaySettings.matchVisibility === 'all'
+        round.matches.length > 0 || displaySettings.matchVisibility === 'all',
     )
     .map((round: RoundWithMatches) => (
       <RoundComponent
@@ -157,7 +157,7 @@ export function RoundsGridCols({
                   color="indigo"
                   onChange={(event) => {
                     displaySettings.setShowManualSchedulingOptions(
-                      event.currentTarget.checked ? 'false' : 'true'
+                      event.currentTarget.checked ? 'false' : 'true',
                     );
                   }}
                   miw="9rem"

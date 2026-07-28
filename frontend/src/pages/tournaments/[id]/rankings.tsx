@@ -79,7 +79,7 @@ function EditRankingForm({
           values.draw_points,
           values.loss_points,
           values.add_score_points,
-          values.position
+          values.position,
         );
         await swrRankingsResponse.mutate();
       })}

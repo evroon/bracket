@@ -19,7 +19,7 @@ export async function updateRound(
   tournament_id: number,
   round_id: number,
   name: string,
-  is_draft: boolean
+  is_draft: boolean,
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}/rounds/${round_id}`, { name, is_draft })
@@ -29,7 +29,7 @@ export async function updateRound(
 export async function startNextRound(
   tournament_id: number,
   stage_item_id: number,
-  adjust_to_time: Dayjs | null
+  adjust_to_time: Dayjs | null,
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/stage_items/${stage_item_id}/start_next_round`, {

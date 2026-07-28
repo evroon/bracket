@@ -36,7 +36,7 @@ export default function TeamsTable({
 
   const rows = teams
     .sort((p1: FullTeamWithPlayers, p2: FullTeamWithPlayers) =>
-      sortTableEntries(p1, p2, tableState)
+      sortTableEntries(p1, p2, tableState),
     )
     .map((team) => (
       <Table.Tr key={team.id}>
