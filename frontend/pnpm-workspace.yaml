@@ -1,0 +1,4 @@
+ignoredOptionalDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: false
