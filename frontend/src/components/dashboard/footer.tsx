@@ -1,16 +1,16 @@
-import { Anchor, Container, Group } from '@mantine/core';
+import { Anchor, Container, Group } from "@mantine/core";
 
-import { BrandFooter } from '@components/navbar/_brand';
-import classes from './footer.module.css';
+import { BrandFooter } from "@components/navbar/_brand";
+import classes from "./footer.module.css";
 
 const links = [
-  { link: 'https://docs.bracketapp.nl', label: 'Website' },
-  { link: 'https://github.com/evroon/bracket', label: 'GitHub' },
+  { link: "https://docs.bracketapp.nl", label: "Website" },
+  { link: "https://github.com/evroon/bracket", label: "GitHub" },
 ];
 
 export function DashboardFooter() {
   const items = links.map((link) => (
-    <Anchor<'a'> c="dimmed" key={link.label} href={link.link} size="sm">
+    <Anchor<"a"> c="dimmed" key={link.label} href={link.link} size="sm">
       {link.label}
     </Anchor>
   ));

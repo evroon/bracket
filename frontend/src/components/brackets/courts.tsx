@@ -1,19 +1,19 @@
-import { Grid, Title } from '@mantine/core';
-import { SWRResponse } from 'swr';
+import { Grid, Title } from "@mantine/core";
+import { SWRResponse } from "swr";
 
-import { TournamentMinimal } from '@components/utils/tournament';
-import { RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
-import { getStages } from '@services/adapter';
-import Match from './match';
+import { TournamentMinimal } from "@components/utils/tournament";
+import { RoundWithMatches, StagesWithStageItemsResponse } from "@openapi";
+import { getStages } from "@services/adapter";
+import Match from "./match";
 
 function getRoundsGridCols(
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>,
   activeRound: RoundWithMatches,
-  tournamentData: TournamentMinimal
+  tournamentData: TournamentMinimal,
 ) {
   return activeRound.matches
     .sort((m1, m2) =>
-      (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
+      (m1.court ? m1.court.name : "y") > (m2.court ? m2.court.name : "z") ? 1 : -1,
     )
     .map((match) => (
       <Grid.Col span={{ sm: 6 }} key={match.id}>

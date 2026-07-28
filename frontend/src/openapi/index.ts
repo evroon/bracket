@@ -62,7 +62,7 @@ export {
   updateUserDetailsUsersUserIdPut,
   uploadLogoTournamentsTournamentIdLogoPost,
   type Options,
-} from './sdk.gen';
+} from "./sdk.gen";
 export type {
   ActivateNextStageTournamentsTournamentIdStagesActivatePostData,
   ActivateNextStageTournamentsTournamentIdStagesActivatePostError,
@@ -437,4 +437,4 @@ export type {
   UserToRegister,
   UserToUpdate,
   ValidationError,
-} from './types.gen';
+} from "./types.gen";

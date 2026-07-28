@@ -12,29 +12,29 @@ import {
   Tooltip,
   useCombobox,
   useMantineTheme,
-} from '@mantine/core';
-import { useColorScheme } from '@mantine/hooks';
-import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
-import { BiCheck } from '@react-icons/all-files/bi/BiCheck';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { BiSolidWrench } from 'react-icons/bi';
-import { SWRResponse } from 'swr';
+} from "@mantine/core";
+import { useColorScheme } from "@mantine/hooks";
+import { AiFillWarning } from "@react-icons/all-files/ai/AiFillWarning";
+import { BiCheck } from "@react-icons/all-files/bi/BiCheck";
+import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { BiSolidWrench } from "react-icons/bi";
+import { SWRResponse } from "swr";
 
-import CreateStageButton from '@components/buttons/create_stage';
-import { CreateStageItemModal } from '@components/modals/create_stage_item';
-import { UpdateStageModal } from '@components/modals/update_stage';
-import { UpdateStageItemModal } from '@components/modals/update_stage_item';
-import { assert_not_none } from '@components/utils/assert';
-import RequestErrorAlert from '@components/utils/error_alert';
-import PreloadLink from '@components/utils/link';
+import CreateStageButton from "@components/buttons/create_stage";
+import { CreateStageItemModal } from "@components/modals/create_stage_item";
+import { UpdateStageModal } from "@components/modals/update_stage";
+import { UpdateStageItemModal } from "@components/modals/update_stage_item";
+import { assert_not_none } from "@components/utils/assert";
+import RequestErrorAlert from "@components/utils/error_alert";
+import PreloadLink from "@components/utils/link";
 import {
   StageItemInput,
   StageItemInputChoice,
   StageItemInputOption,
   formatStageItemInputTentative,
-} from '@components/utils/stage_item_input';
+} from "@components/utils/stage_item_input";
 import {
   Ranking,
   StageItemInputOptionsResponse,
@@ -43,11 +43,11 @@ import {
   StageWithStageItems,
   StagesWithStageItemsResponse,
   Tournament,
-} from '@openapi';
-import { getStageItemLookup, getTeamsLookup } from '@services/lookups';
-import { deleteStage } from '@services/stage';
-import { deleteStageItem } from '@services/stage_item';
-import { updateStageItemInput } from '@services/stage_item_input';
+} from "@openapi";
+import { getStageItemLookup, getTeamsLookup } from "@services/lookups";
+import { deleteStage } from "@services/stage";
+import { deleteStageItem } from "@services/stage_item";
+import { updateStageItemInput } from "@services/stage_item_input";
 
 function StageItemInputComboBox({
   tournament,
@@ -68,15 +68,15 @@ function StageItemInputComboBox({
 }) {
   const { t } = useTranslation();
   const [selectedInput, setSelectedInput] = useState<StageItemInputChoice | null>(
-    availableInputs.find((o) => o.value === current_key) || null
+    availableInputs.find((o) => o.value === current_key) || null,
   );
   const [successIcon, setSuccessIcon] = useState<boolean>(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const combobox = useCombobox({
     onDropdownClose: () => {
       combobox.resetSelectedOption();
       combobox.focusTarget();
-      setSearch('');
+      setSearch("");
     },
 
     onDropdownOpen: () => {
@@ -86,7 +86,7 @@ function StageItemInputComboBox({
 
   const options = availableInputs
     .filter((option: StageItemInputChoice) => !option.already_taken)
-    .filter((item) => (item.label || 'None').toLowerCase().includes(search.toLowerCase().trim()))
+    .filter((item) => (item.label || "None").toLowerCase().includes(search.toLowerCase().trim()))
     .map((option: StageItemInputChoice, i: number) => (
       <Combobox.Option key={i} value={option.value}>
         <Group gap="xs" justify="space-between">
@@ -97,7 +97,7 @@ function StageItemInputComboBox({
     ));
 
   const theme = useMantineTheme();
-  const dropdownBorderColor = useColorScheme() === 'dark' ? '#444' : '#ccc';
+  const dropdownBorderColor = useColorScheme() === "dark" ? "#444" : "#ccc";
 
   return (
     <Combobox
@@ -112,7 +112,7 @@ function StageItemInputComboBox({
           stageItemInput.id,
           option?.team_id || null,
           option?.winner_position || null,
-          option?.winner_from_stage_item_id || null
+          option?.winner_from_stage_item_id || null,
         ).then(() => {
           swrAvailableInputsResponse.mutate();
           swrStagesResponse.mutate();
@@ -142,7 +142,7 @@ function StageItemInputComboBox({
           ) : (
             <Group gap="xs">
               <AiFillWarning size={18} color={theme.colors.orange[4]} />
-              <b>{selectedInput?.label || t('empty_slot').toUpperCase()}</b>
+              <b>{selectedInput?.label || t("empty_slot").toUpperCase()}</b>
             </Group>
           )}
         </InputBase>
@@ -152,7 +152,7 @@ function StageItemInputComboBox({
         <Combobox.Search
           value={search}
           onChange={(event) => setSearch(event.currentTarget.value)}
-          placeholder={t('search_placeholder')}
+          placeholder={t("search_placeholder")}
         />
         <Combobox.Options>{options}</Combobox.Options>
       </Combobox.Dropdown>
@@ -163,10 +163,10 @@ function StageItemInputComboBox({
 export function getAvailableInputs(
   swrAvailableInputsResponse: SWRResponse<StageItemInputOptionsResponse>,
   teamsMap: any,
-  stageItemMap: any
+  stageItemMap: any,
 ) {
   const getComboBoxOptionForStageItemInput = (option: StageItemInputOption) => {
-    if ('winner_from_stage_item_id' in option) {
+    if ("winner_from_stage_item_id" in option) {
       option.winner_position = assert_not_none(option.winner_position);
       const stageItem = stageItemMap[option.winner_from_stage_item_id];
 
@@ -222,7 +222,7 @@ function StageItemInputSection({
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrRankingsPerStageItemResponse: SWRResponse<StageRankingResponse>;
 }) {
-  const opts = lastInList ? { pt: 'xs', mb: '-0.5rem' } : { py: 'xs', withBorder: true };
+  const opts = lastInList ? { pt: "xs", mb: "-0.5rem" } : { py: "xs", withBorder: true };
 
   return (
     <Card.Section inheritPadding {...opts}>
@@ -298,8 +298,8 @@ function StageItemRow({
             rankings={rankings}
           />
           <Group gap="0rem">
-            {stageItem.type === 'SWISS' ? (
-              <Tooltip label={t('handle_swiss_system')}>
+            {stageItem.type === "SWISS" ? (
+              <Tooltip label={t("handle_swiss_system")}>
                 <ActionIcon
                   variant="transparent"
                   color="gray"
@@ -324,15 +324,15 @@ function StageItemRow({
                     setOpened(true);
                   }}
                 >
-                  {t('edit_stage_item_label')}
+                  {t("edit_stage_item_label")}
                 </Menu.Item>
-                {stageItem.type === 'SWISS' ? (
+                {stageItem.type === "SWISS" ? (
                   <Menu.Item
                     leftSection={<BiSolidWrench size="1.5rem" />}
                     component={PreloadLink}
                     href={`/tournaments/${tournament.id}/stages/swiss/${stageItem.id}`}
                   >
-                    {t('handle_swiss_system')}
+                    {t("handle_swiss_system")}
                   </Menu.Item>
                 ) : null}
                 <Menu.Item
@@ -344,7 +344,7 @@ function StageItemRow({
                   }}
                   color="red"
                 >
-                  {t('delete_button')}
+                  {t("delete_button")}
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
@@ -383,7 +383,7 @@ function StageColumn({
   const availableInputs =
     getAvailableInputs(swrAvailableInputsResponse, teamsMap, stageItemsLookup)[stage.id] || [];
   availableInputs.push({
-    value: 'null',
+    value: "null",
     label: null,
     team_id: null,
     winner_from_stage_item_id: null,
@@ -419,7 +419,7 @@ function StageColumn({
       <Group justify="space-between">
         <Group>
           {stage.name}
-          {stage.is_active ? <Badge color="green">{t('active_badge_label')}</Badge> : null}
+          {stage.is_active ? <Badge color="green">{t("active_badge_label")}</Badge> : null}
         </Group>
         <Menu withinPortal position="bottom-end" shadow="sm">
           <Menu.Target>
@@ -435,7 +435,7 @@ function StageColumn({
                 setOpened(true);
               }}
             >
-              {t('edit_stage_label')}
+              {t("edit_stage_label")}
             </Menu.Item>
             <Menu.Item
               leftSection={<IconTrash size="1.5rem" />}
@@ -446,7 +446,7 @@ function StageColumn({
               }}
               color="red"
             >
-              {t('delete_button')}
+              {t("delete_button")}
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
@@ -500,7 +500,7 @@ export default function Builder({
 
   const button = (
     <Stack miw="24rem" align="top" key={-1}>
-      <h4 style={{ marginTop: '0rem' }}>
+      <h4 style={{ marginTop: "0rem" }}>
         <CreateStageButton
           tournament={tournament}
           swrStagesResponse={swrStagesResponse}

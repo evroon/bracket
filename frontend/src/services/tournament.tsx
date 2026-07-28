@@ -1,5 +1,5 @@
-import { Dayjs } from 'dayjs';
-import { createAxios, handleRequestError } from './adapter';
+import { Dayjs } from "dayjs";
+import { createAxios, handleRequestError } from "./adapter";
 
 export async function createTournament(
   club_id: number,
@@ -10,10 +10,10 @@ export async function createTournament(
   auto_assign_courts: boolean,
   start_time: Dayjs,
   duration_minutes: number,
-  margin_minutes: number
+  margin_minutes: number,
 ) {
   return createAxios()
-    .post('tournaments', {
+    .post("tournaments", {
       name,
       club_id,
       dashboard_public,
@@ -32,11 +32,11 @@ export async function deleteTournament(tournament_id: number) {
 }
 
 export async function archiveTournament(tournament_id: number) {
-  return createAxios().post(`tournaments/${tournament_id}/change-status`, { status: 'ARCHIVED' });
+  return createAxios().post(`tournaments/${tournament_id}/change-status`, { status: "ARCHIVED" });
 }
 
 export async function unarchiveTournament(tournament_id: number) {
-  return createAxios().post(`tournaments/${tournament_id}/change-status`, { status: 'OPEN' });
+  return createAxios().post(`tournaments/${tournament_id}/change-status`, { status: "OPEN" });
 }
 
 export async function updateTournament(
@@ -48,7 +48,7 @@ export async function updateTournament(
   auto_assign_courts: boolean,
   start_time: string,
   duration_minutes: number,
-  margin_minutes: number
+  margin_minutes: number,
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}`, {

@@ -1,4 +1,4 @@
-import { Fragment, createElement, useEffect, useState } from 'react';
+import { Fragment, createElement, useEffect, useState } from "react";
 
 /** React component that renders its children client-side only / after first mount */
 export const ClientOnly = ({ children }: any) => {

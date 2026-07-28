@@ -9,23 +9,23 @@ import {
   Select,
   Text,
   UnstyledButton,
-} from '@mantine/core';
-import { UseFormReturnType, useForm } from '@mantine/form';
-import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+} from "@mantine/core";
+import { UseFormReturnType, useForm } from "@mantine/form";
+import { GoPlus } from "@react-icons/all-files/go/GoPlus";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import { Translator } from '@components/utils/types';
+import { Translator } from "@components/utils/types";
 import {
   StageItemInputOptionsResponse,
   StageWithStageItems,
   StagesWithStageItemsResponse,
   Tournament,
-} from '@openapi';
-import { getStageItemLookup, getTeamsLookup } from '@services/lookups';
-import { createStageItem } from '@services/stage_item';
-import classes from './create_stage_item.module.css';
+} from "@openapi";
+import { getStageItemLookup, getTeamsLookup } from "@services/lookups";
+import { createStageItem } from "@services/stage_item";
+import classes from "./create_stage_item.module.css";
 
 function StageSelectCard({
   title,
@@ -49,10 +49,10 @@ function StageSelectCard({
         h="23rem"
         withBorder
         className={classes.socialLink}
-        style={{ border: selected ? '3px solid var(--mantine-color-green-7)' : '' }}
+        style={{ border: selected ? "3px solid var(--mantine-color-green-7)" : "" }}
       >
-        <Card.Section style={{ backgroundColor: '#dde' }}>
-          <Image src={image} h={212} style={{ padding: '1.5rem' }} fit="fill"></Image>
+        <Card.Section style={{ backgroundColor: "#dde" }}>
+          <Image src={image} h={212} style={{ padding: "1.5rem" }} fit="fill"></Image>
         </Card.Section>
 
         <Text fw={800} size="xl" mt="md" lineClamp={1}>
@@ -72,42 +72,42 @@ export function CreateStagesFromTemplateButtons({
   setSelectedType,
   t,
 }: {
-  selectedType: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
-  setSelectedType: (type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION') => void;
+  selectedType: "ROUND_ROBIN" | "SWISS" | "SINGLE_ELIMINATION";
+  setSelectedType: (type: "ROUND_ROBIN" | "SWISS" | "SINGLE_ELIMINATION") => void;
   t: Translator;
 }) {
   return (
     <Grid grow>
       <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
-          title={t('round_robin_label')}
-          description={t('round_robin_description')}
+          title={t("round_robin_label")}
+          description={t("round_robin_description")}
           image="/icons/group-stage-item.svg"
-          selected={selectedType === 'ROUND_ROBIN'}
+          selected={selectedType === "ROUND_ROBIN"}
           onClick={() => {
-            setSelectedType('ROUND_ROBIN');
+            setSelectedType("ROUND_ROBIN");
           }}
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
-          title={t('single_elimination_label')}
-          description={t('single_elimination_description')}
+          title={t("single_elimination_label")}
+          description={t("single_elimination_description")}
           image="/icons/single-elimination-stage-item.svg"
-          selected={selectedType === 'SINGLE_ELIMINATION'}
+          selected={selectedType === "SINGLE_ELIMINATION"}
           onClick={() => {
-            setSelectedType('SINGLE_ELIMINATION');
+            setSelectedType("SINGLE_ELIMINATION");
           }}
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, sm: 4 }}>
         <StageSelectCard
-          title={t('swiss_label')}
-          description={t('swiss_description')}
+          title={t("swiss_label")}
+          description={t("swiss_description")}
           image="/icons/swiss-stage-item.svg"
-          selected={selectedType === 'SWISS'}
+          selected={selectedType === "SWISS"}
           onClick={() => {
-            setSelectedType('SWISS');
+            setSelectedType("SWISS");
           }}
         />
       </Grid.Col>
@@ -118,23 +118,23 @@ export function CreateStagesFromTemplateButtons({
 function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) {
   const { t } = useTranslation();
   const data = [
-    { value: '2', label: '2' },
-    { value: '4', label: '4' },
-    { value: '8', label: '8' },
-    { value: '16', label: '16' },
-    { value: '32', label: '32' },
+    { value: "2", label: "2" },
+    { value: "4", label: "4" },
+    { value: "8", label: "8" },
+    { value: "16", label: "16" },
+    { value: "32", label: "32" },
   ];
   return (
     <Select
       withAsterisk
       data={data}
-      label={t('team_count_select_elimination_label')}
-      placeholder={t('team_count_select_elimination_placeholder')}
+      label={t("team_count_select_elimination_label")}
+      placeholder={t("team_count_select_elimination_placeholder")}
       searchable
       limit={20}
       mt="1rem"
       maw="50%"
-      {...form.getInputProps('team_count_elimination')}
+      {...form.getInputProps("team_count_elimination")}
     />
   );
 }
@@ -144,17 +144,17 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
   return (
     <NumberInput
       withAsterisk
-      label={t('team_count_input_round_robin_label')}
+      label={t("team_count_input_round_robin_label")}
       placeholder=""
       mt="1rem"
       maw="50%"
-      {...form.getInputProps('team_count_round_robin')}
+      {...form.getInputProps("team_count_round_robin")}
     />
   );
 }
 
 function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
-  if (form.values.type === 'SINGLE_ELIMINATION') {
+  if (form.values.type === "SINGLE_ELIMINATION") {
     return <TeamCountSelectElimination form={form} />;
   }
 
@@ -163,14 +163,14 @@ function TeamCountInput({ form }: { form: UseFormReturnType<any> }) {
 
 function getTeamCount(values: any) {
   return Number(
-    values.type === 'SINGLE_ELIMINATION'
+    values.type === "SINGLE_ELIMINATION"
       ? values.team_count_elimination
-      : values.team_count_round_robin
+      : values.team_count_round_robin,
   );
 }
 
 interface FormValues {
-  type: 'ROUND_ROBIN' | 'SWISS' | 'SINGLE_ELIMINATION';
+  type: "ROUND_ROBIN" | "SWISS" | "SINGLE_ELIMINATION";
   team_count_round_robin: number;
   team_count_elimination: number;
 }
@@ -189,10 +189,10 @@ export function CreateStageItemModal({
   const [opened, setOpened] = useState(false);
 
   const form = useForm<FormValues>({
-    initialValues: { type: 'ROUND_ROBIN', team_count_round_robin: 4, team_count_elimination: 2 },
+    initialValues: { type: "ROUND_ROBIN", team_count_round_robin: 4, team_count_elimination: 2 },
     validate: {
-      team_count_round_robin: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
-      team_count_elimination: (value) => (value >= 2 ? null : t('at_least_two_team_validation')),
+      team_count_round_robin: (value) => (value >= 2 ? null : t("at_least_two_team_validation")),
+      team_count_elimination: (value) => (value >= 2 ? null : t("at_least_two_team_validation")),
     },
   });
 
@@ -209,7 +209,7 @@ export function CreateStageItemModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t('add_stage_item_modal_title')}
+        title={t("add_stage_item_modal_title")}
         size="60rem"
       >
         <form
@@ -224,14 +224,14 @@ export function CreateStageItemModal({
             t={t}
             selectedType={form.values.type}
             setSelectedType={(_type) => {
-              form.setFieldValue('type', _type);
+              form.setFieldValue("type", _type);
             }}
           />
           <Divider mt="1rem" />
           <TeamCountInput form={form} />
 
           <Button fullWidth mt="1.5rem" color="green" type="submit">
-            {t('create_stage_item_button')}
+            {t("create_stage_item_button")}
           </Button>
         </form>
       </Modal>
@@ -243,7 +243,7 @@ export function CreateStageItemModal({
         onClick={() => setOpened(true)}
         leftSection={<GoPlus size={24} />}
       >
-        {t('add_stage_item_modal_title')}
+        {t("add_stage_item_modal_title")}
       </Button>
     </>
   );

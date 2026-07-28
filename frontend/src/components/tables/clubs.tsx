@@ -1,15 +1,15 @@
-import { Table } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+import { Table } from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import DeleteButton from '@components/buttons/delete';
-import ClubModal from '@components/modals/club_modal';
-import { EmptyTableInfo } from '@components/no_content/empty_table_info';
-import RequestErrorAlert from '@components/utils/error_alert';
-import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
-import { Club, ClubsResponse } from '@openapi';
-import { deleteClub } from '@services/club';
-import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import DeleteButton from "@components/buttons/delete";
+import ClubModal from "@components/modals/club_modal";
+import { EmptyTableInfo } from "@components/no_content/empty_table_info";
+import RequestErrorAlert from "@components/utils/error_alert";
+import { TableSkeletonSingleColumn } from "@components/utils/skeletons";
+import { Club, ClubsResponse } from "@openapi";
+import { deleteClub } from "@services/club";
+import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from "./table";
 
 export default function ClubsTable({
   swrClubsResponse,
@@ -17,7 +17,7 @@ export default function ClubsTable({
   swrClubsResponse: SWRResponse<ClubsResponse>;
 }) {
   const clubs: Club[] = swrClubsResponse.data != null ? swrClubsResponse.data.data : [];
-  const tableState = getTableState('name');
+  const tableState = getTableState("name");
   const { t } = useTranslation();
 
   if (swrClubsResponse.error) return <RequestErrorAlert error={swrClubsResponse.error} />;
@@ -37,20 +37,20 @@ export default function ClubsTable({
               await deleteClub(club.id);
               await swrClubsResponse.mutate();
             }}
-            title={t('delete_club_button')}
+            title={t("delete_club_button")}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t('clubs_title')} />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t("clubs_title")} />;
 
   return (
     <TableLayout>
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="name">
-            {t('title')}
+            {t("title")}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

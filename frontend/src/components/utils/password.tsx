@@ -1,10 +1,10 @@
-import { Group, PasswordInput, Progress, Stack, Text } from '@mantine/core';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import { useTranslation } from 'react-i18next';
+import { Group, PasswordInput, Progress, Stack, Text } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
   return (
-    <Text c={meets ? 'teal' : 'red'} pt="0rem" size="sm">
+    <Text c={meets ? "teal" : "red"} pt="0rem" size="sm">
       {meets ? <IconCheck size={12} stroke={1.5} /> : <IconX size={12} stroke={1.5} />} {label}
     </Text>
   );
@@ -14,10 +14,10 @@ export function PasswordStrength({ form }: { form: any }) {
   const { t } = useTranslation();
 
   const requirements = [
-    { re: /[0-9]/, label: t('number_required') },
-    { re: /[a-z]/, label: t('lowercase_required') },
-    { re: /[A-Z]/, label: t('uppercase_required') },
-    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: t('special_character_required') },
+    { re: /[0-9]/, label: t("number_required") },
+    { re: /[a-z]/, label: t("lowercase_required") },
+    { re: /[A-Z]/, label: t("uppercase_required") },
+    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: t("special_character_required") },
   ];
 
   function getStrength(password: string) {
@@ -51,20 +51,20 @@ export function PasswordStrength({ form }: { form: any }) {
               ? 100
               : 0
         }
-        c={strength > 80 ? 'teal' : strength > 50 ? 'yellow' : 'red'}
+        c={strength > 80 ? "teal" : strength > 50 ? "yellow" : "red"}
         key={index}
         size={4}
       />
     ));
 
   return (
-    <div style={{ marginBottom: '1.0rem' }}>
+    <div style={{ marginBottom: "1.0rem" }}>
       <PasswordInput
         value={form.values.password}
-        placeholder={t('password_input_placeholder')}
-        label={t('password_input_label')}
+        placeholder={t("password_input_placeholder")}
+        label={t("password_input_label")}
         mt="1.0rem"
-        {...form.getInputProps('password')}
+        {...form.getInputProps("password")}
       />
 
       <Group gap={5} grow mt="xs" mb="md">
@@ -73,7 +73,7 @@ export function PasswordStrength({ form }: { form: any }) {
 
       <Stack gap="xs">
         <PasswordRequirement
-          label={t('8_characters_required')}
+          label={t("8_characters_required")}
           meets={form.values.password.length >= 8}
         />
         {checks}

@@ -1,6 +1,6 @@
-import { Center, Group, Image, Text, Title, UnstyledButton } from '@mantine/core';
+import { Center, Group, Image, Text, Title, UnstyledButton } from "@mantine/core";
 
-import PreloadLink from '@components/utils/link';
+import PreloadLink from "@components/utils/link";
 
 export function Brand() {
   return (
@@ -8,11 +8,11 @@ export function Brand() {
       <UnstyledButton component={PreloadLink} href="/">
         <Group>
           <Image
-            style={{ width: '38px', marginRight: '0px' }}
+            style={{ width: "38px", marginRight: "0px" }}
             src="/favicon.svg"
             alt="Bracket logg"
           />
-          <Title style={{ height: '38px', marginBottom: '0.4rem' }}>Bracket</Title>
+          <Title style={{ height: "38px", marginBottom: "0.4rem" }}>Bracket</Title>
         </Group>
       </UnstyledButton>
     </Center>
@@ -25,7 +25,7 @@ export function BrandFooter() {
       <Center>
         <Image
           mb="0.25rem"
-          style={{ width: '32px', marginRight: '0px' }}
+          style={{ width: "32px", marginRight: "0px" }}
           src="/favicon.svg"
           alt="Bracket logg"
         />

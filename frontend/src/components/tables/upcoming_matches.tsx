@@ -1,22 +1,22 @@
-import { Badge, Button, Center, Stack, Table } from '@mantine/core';
-import { GoChecklist } from '@react-icons/all-files/go/GoChecklist';
-import { IconCalendarPlus, IconCheck } from '@tabler/icons-react';
-import { useTranslation } from 'react-i18next';
-import { FaCheck } from 'react-icons/fa6';
-import { SWRResponse } from 'swr';
+import { Badge, Button, Center, Stack, Table } from "@mantine/core";
+import { GoChecklist } from "@react-icons/all-files/go/GoChecklist";
+import { IconCalendarPlus, IconCheck } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
+import { FaCheck } from "react-icons/fa6";
+import { SWRResponse } from "swr";
 
-import { NoContent } from '@components/no_content/empty_table_info';
-import RequestErrorAlert from '@components/utils/error_alert';
+import { NoContent } from "@components/no_content/empty_table_info";
+import RequestErrorAlert from "@components/utils/error_alert";
 import {
   RoundWithMatches,
   StagesWithStageItemsResponse,
   SuggestedMatch,
   Tournament,
   UpcomingMatchesResponse,
-} from '@openapi';
-import { createMatch } from '@services/match';
-import { updateRound } from '@services/round';
-import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+} from "@openapi";
+import { createMatch } from "@services/match";
+import { updateRound } from "@services/round";
+import TableLayout, { ThNotSortable, ThSortable, getTableState, sortTableEntries } from "./table";
 
 export default function UpcomingMatchesTable({
   draftRound,
@@ -32,7 +32,7 @@ export default function UpcomingMatchesTable({
   const { t } = useTranslation();
   const upcoming_matches: SuggestedMatch[] =
     swrUpcomingMatchesResponse.data != null ? swrUpcomingMatchesResponse.data.data : [];
-  const tableState = getTableState('elo_diff');
+  const tableState = getTableState("elo_diff");
 
   if (draftRound == null) {
     return null;
@@ -71,19 +71,19 @@ export default function UpcomingMatchesTable({
         <Table.Td>
           {upcoming_match.is_recommended ? (
             <Badge leftSection={<IconCheck size={18} />} color="blue">
-              {t('recommended_badge_title')}
+              {t("recommended_badge_title")}
             </Badge>
           ) : null}
         </Table.Td>
         <Table.Td>
           {
-            ('team' in upcoming_match.stage_item_input1 ? upcoming_match.stage_item_input1 : null)
+            ("team" in upcoming_match.stage_item_input1 ? upcoming_match.stage_item_input1 : null)
               ?.team?.name
           }
         </Table.Td>
         <Table.Td>
           {
-            ('team' in upcoming_match.stage_item_input2 ? upcoming_match.stage_item_input2 : null)
+            ("team" in upcoming_match.stage_item_input2 ? upcoming_match.stage_item_input2 : null)
               ?.team?.name
           }
         </Table.Td>
@@ -97,7 +97,7 @@ export default function UpcomingMatchesTable({
             onClick={async () => scheduleMatch(upcoming_match)}
             leftSection={<IconCalendarPlus size={20} />}
           >
-            {t('schedule_title')}
+            {t("schedule_title")}
           </Button>
         </Table.Td>
       </Table.Tr>
@@ -107,8 +107,8 @@ export default function UpcomingMatchesTable({
     return (
       <Stack>
         <NoContent
-          title={t('no_more_matches_title')}
-          description={`${t('all_matches_scheduled_description')}`}
+          title={t("no_more_matches_title")}
+          description={`${t("all_matches_scheduled_description")}`}
           icon={<FaCheck />}
         />
         <Center>
@@ -124,7 +124,7 @@ export default function UpcomingMatchesTable({
               await swrUpcomingMatchesResponse.mutate();
             }}
           >
-            {t('mark_round_as_non_draft')}
+            {t("mark_round_as_non_draft")}
           </Button>
         </Center>
       </Stack>
@@ -136,19 +136,19 @@ export default function UpcomingMatchesTable({
       <Table.Thead>
         <Table.Tr>
           <ThSortable state={tableState} field="is_recommended">
-            {t('recommended_badge_title')}
+            {t("recommended_badge_title")}
           </ThSortable>
           <ThSortable state={tableState} field="team1.name">
-            {t('team_title')} 1
+            {t("team_title")} 1
           </ThSortable>
           <ThSortable state={tableState} field="team2.name">
-            {t('team_title')} 2
+            {t("team_title")} 2
           </ThSortable>
           <ThSortable state={tableState} field="elo_diff">
-            {t('elo_difference')}
+            {t("elo_difference")}
           </ThSortable>
           <ThSortable state={tableState} field="swiss_diff">
-            {t('swiss_difference')}
+            {t("swiss_difference")}
           </ThSortable>
           <ThNotSortable>{null}</ThNotSortable>
         </Table.Tr>

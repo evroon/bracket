@@ -1,14 +1,14 @@
-import { Button, Checkbox, Modal, Tabs, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { IconUser, IconUserPlus, IconUsers } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+import { Button, Checkbox, Modal, Tabs, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { IconUser, IconUserPlus, IconUsers } from "@tabler/icons-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import SaveButton from '@components/buttons/save';
-import { MultiPlayersInput } from '@components/forms/player_create_csv_input';
-import { PlayersResponse } from '@openapi';
-import { createMultiplePlayers, createPlayer } from '@services/player';
+import SaveButton from "@components/buttons/save";
+import { MultiPlayersInput } from "@components/forms/player_create_csv_input";
+import { PlayersResponse } from "@openapi";
+import { createMultiplePlayers, createPlayer } from "@services/player";
 
 function MultiPlayerTab({
   tournament_id,
@@ -22,12 +22,12 @@ function MultiPlayerTab({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      names: '',
+      names: "",
       active: true,
     },
 
     validate: {
-      names: (value) => (value.length > 0 ? null : t('at_least_one_player_validation')),
+      names: (value) => (value.length > 0 ? null : t("at_least_one_player_validation")),
     },
   });
   return (
@@ -42,11 +42,11 @@ function MultiPlayerTab({
 
       <Checkbox
         mt="md"
-        label={t('active_players_checkbox_label')}
-        {...form.getInputProps('active', { type: 'checkbox' })}
+        label={t("active_players_checkbox_label")}
+        {...form.getInputProps("active", { type: "checkbox" })}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        {t('save_players_button')}
+        {t("save_players_button")}
       </Button>
     </form>
   );
@@ -64,12 +64,12 @@ function SinglePlayerTab({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      name: '',
+      name: "",
       active: true,
       player_ids: [],
     },
     validate: {
-      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
+      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
     },
   });
   return (
@@ -82,19 +82,19 @@ function SinglePlayerTab({
     >
       <TextInput
         withAsterisk
-        label={t('name_input_label')}
-        placeholder={t('player_name_input_placeholder')}
-        {...form.getInputProps('name')}
+        label={t("name_input_label")}
+        placeholder={t("player_name_input_placeholder")}
+        {...form.getInputProps("name")}
       />
 
       <Checkbox
         mt="md"
-        label={t('active_player_checkbox_label')}
-        {...form.getInputProps('active', { type: 'checkbox' })}
+        label={t("active_player_checkbox_label")}
+        {...form.getInputProps("active", { type: "checkbox" })}
       />
 
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        {t('save_players_button')}
+        {t("save_players_button")}
       </Button>
     </form>
   );
@@ -114,15 +114,15 @@ export default function PlayerCreateModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t('create_player_modal_title')}
+        title={t("create_player_modal_title")}
       >
         <Tabs defaultValue="single">
           <Tabs.List justify="center" grow>
             <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
-              {t('single_player_title')}
+              {t("single_player_title")}
             </Tabs.Tab>
             <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
-              {t('multiple_players_title')}
+              {t("multiple_players_title")}
             </Tabs.Tab>
           </Tabs.List>
 
@@ -147,7 +147,7 @@ export default function PlayerCreateModal({
       <SaveButton
         onClick={() => setOpened(true)}
         leftSection={<IconUserPlus size={24} />}
-        title={t('add_player_button')}
+        title={t("add_player_button")}
       />
     </>
   );

@@ -1,14 +1,14 @@
-import { UserToRegister, UserToUpdate } from '@openapi';
-import { createAxios, handleRequestError } from './adapter';
+import { UserToRegister, UserToUpdate } from "@openapi";
+import { createAxios, handleRequestError } from "./adapter";
 
 export async function performLogin(username: string, password: string) {
   const bodyFormData = new FormData();
-  bodyFormData.append('grant_type', 'password');
-  bodyFormData.append('username', username);
-  bodyFormData.append('password', password);
+  bodyFormData.append("grant_type", "password");
+  bodyFormData.append("username", username);
+  bodyFormData.append("password", password);
 
   const { data } = await createAxios()
-    .post('token', bodyFormData)
+    .post("token", bodyFormData)
     .catch((err_response: any) => {
       handleRequestError(err_response);
       return { data: null };
@@ -18,7 +18,7 @@ export async function performLogin(username: string, password: string) {
     return false;
   }
 
-  localStorage.setItem('login', JSON.stringify(data));
+  localStorage.setItem("login", JSON.stringify(data));
 
   handleRequestError(data);
 
@@ -41,7 +41,7 @@ export async function updatePassword(user_id: number, password: string) {
 
 export async function registerUser(user: UserToRegister, captchaToken: string | null) {
   return createAxios()
-    .post('users/register', {
+    .post("users/register", {
       email: user.email,
       name: user.name,
       password: user.password,
@@ -52,7 +52,7 @@ export async function registerUser(user: UserToRegister, captchaToken: string | 
 
 export async function registerDemoUser(captchaToken: string | null) {
   return createAxios()
-    .post('users/register_demo', {
+    .post("users/register_demo", {
       captcha_token: captchaToken,
     })
     .catch((response: any) => handleRequestError(response));

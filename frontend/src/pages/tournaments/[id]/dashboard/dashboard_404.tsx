@@ -1,7 +1,7 @@
-import { Container, Text, Title } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
+import { Container, Text, Title } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
-import classes from '@pages/404.module.css';
+import classes from "@pages/404.module.css";
 
 export default function DashboardNotFoundPage() {
   const { t } = useTranslation();
@@ -9,9 +9,9 @@ export default function DashboardNotFoundPage() {
   return (
     <Container className={classes.root}>
       <div className={classes.label}>404</div>
-      <Title className={classes.title}> {t('not_found_title')}</Title>
+      <Title className={classes.title}> {t("not_found_title")}</Title>
       <Text c="dimmed" size="lg" ta="center" className={classes.description}>
-        {t('not_found_description')}
+        {t("not_found_description")}
       </Text>
     </Container>
   );

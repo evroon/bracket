@@ -1,19 +1,19 @@
-import { Alert, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from '@mantine/core';
-import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
-import { IconAlertCircle } from '@tabler/icons-react';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Alert, Badge, Card, Center, Flex, Grid, Group, Stack, Text } from "@mantine/core";
+import { AiOutlineHourglass } from "@react-icons/all-files/ai/AiOutlineHourglass";
+import { IconAlertCircle } from "@tabler/icons-react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-import { DashboardFooter } from '@components/dashboard/footer';
-import { DoubleHeader, getTournamentHeadTitle } from '@components/dashboard/layout';
-import { NoContent } from '@components/no_content/empty_table_info';
-import { Time, compareDateTime, formatTime } from '@components/utils/datetime';
-import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
-import { Translator } from '@components/utils/types';
-import { responseIsValid, setTitle } from '@components/utils/util';
-import { getCourtsLive, getStagesLive } from '@services/adapter';
-import { getTournamentResponseByEndpointName } from '@services/dashboard';
-import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
+import { DashboardFooter } from "@components/dashboard/footer";
+import { DoubleHeader, getTournamentHeadTitle } from "@components/dashboard/layout";
+import { NoContent } from "@components/no_content/empty_table_info";
+import { Time, compareDateTime, formatTime } from "@components/utils/datetime";
+import { formatMatchInput1, formatMatchInput2 } from "@components/utils/match";
+import { Translator } from "@components/utils/types";
+import { responseIsValid, setTitle } from "@components/utils/util";
+import { getCourtsLive, getStagesLive } from "@services/adapter";
+import { getTournamentResponseByEndpointName } from "@services/dashboard";
+import { getMatchLookup, getStageItemLookup, stringToColour } from "@services/lookups";
 
 function ScheduleRow({
   data,
@@ -25,9 +25,9 @@ function ScheduleRow({
   matchesLookup: any;
 }) {
   const { t } = useTranslation();
-  const winColor = '#2a8f37';
-  const drawColor = '#656565';
-  const loseColor = '#af4034';
+  const winColor = "#2a8f37";
+  const drawColor = "#656565";
+  const loseColor = "#af4034";
   const team1_color =
     data.match.stage_item_input1_score > data.match.stage_item_input2_score
       ? winColor
@@ -83,9 +83,9 @@ function ScheduleRow({
             <div
               style={{
                 backgroundColor: team1_color,
-                borderRadius: '0.5rem',
-                width: '2.5rem',
-                color: 'white',
+                borderRadius: "0.5rem",
+                width: "2.5rem",
+                color: "white",
                 fontWeight: 800,
               }}
             >
@@ -103,9 +103,9 @@ function ScheduleRow({
             <div
               style={{
                 backgroundColor: team2_color,
-                borderRadius: '0.5rem',
-                width: '2.5rem',
-                color: 'white',
+                borderRadius: "0.5rem",
+                width: "2.5rem",
+                color: "white",
                 fontWeight: 800,
               }}
             >
@@ -133,7 +133,7 @@ export function Schedule({
     .sort(
       (m1: any, m2: any) =>
         compareDateTime(m1.match.start_time, m2.match.start_time) ||
-        m1.match.court?.name.localeCompare(m2.match.court?.name)
+        m1.match.court?.name.localeCompare(m2.match.court?.name),
     );
 
   const rows: React.JSX.Element[] = [];
@@ -150,7 +150,7 @@ export function Schedule({
             <Text size="xl" fw={800}>
               {startTime}
             </Text>
-          </Center>
+          </Center>,
         );
       }
     }
@@ -161,29 +161,29 @@ export function Schedule({
         data={data}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
-      />
+      />,
     );
   }
 
   if (rows.length < 1) {
-    return <NoContent title={t('no_matches_title')} description="" icon={<AiOutlineHourglass />} />;
+    return <NoContent title={t("no_matches_title")} description="" icon={<AiOutlineHourglass />} />;
   }
 
   const noItemsAlert =
     matchesLookup.length < 1 ? (
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_matches_title')}
+        title={t("no_matches_title")}
         color="gray"
         radius="md"
       >
-        {t('drop_match_alert_title')}
+        {t("drop_match_alert_title")}
       </Alert>
     ) : null;
 
   return (
-    <Group wrap="nowrap" align="top" style={{ width: '100%' }}>
-      <div style={{ width: '100%' }}>
+    <Group wrap="nowrap" align="top" style={{ width: "100%" }}>
+      <div style={{ width: "100%" }}>
         {rows}
         {noItemsAlert}
       </div>
@@ -217,7 +217,7 @@ export default function DashboardSchedulePage() {
     <>
       <DoubleHeader tournamentData={tournamentDataFull} />
       <Center>
-        <Group style={{ maxWidth: '48rem', width: '100%' }} px="1rem">
+        <Group style={{ maxWidth: "48rem", width: "100%" }} px="1rem">
           <Schedule t={t} matchesLookup={matchesLookup} stageItemsLookup={stageItemsLookup} />
         </Group>
       </Center>

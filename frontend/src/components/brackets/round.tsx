@@ -1,12 +1,12 @@
-import { Center, Grid, Title } from '@mantine/core';
-import { SWRResponse } from 'swr';
+import { Center, Grid, Title } from "@mantine/core";
+import { SWRResponse } from "swr";
 
-import RoundModal from '@components/modals/round_modal';
-import { BracketDisplaySettings } from '@components/utils/brackets';
-import { isMatchHappening, isMatchInTheFutureOrPresent } from '@components/utils/match';
-import { TournamentMinimal } from '@components/utils/tournament';
-import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
-import Match from './match';
+import RoundModal from "@components/modals/round_modal";
+import { BracketDisplaySettings } from "@components/utils/brackets";
+import { isMatchHappening, isMatchInTheFutureOrPresent } from "@components/utils/match";
+import { TournamentMinimal } from "@components/utils/tournament";
+import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from "@openapi";
+import Match from "./match";
 
 export default function RoundComponent({
   tournamentData,
@@ -25,13 +25,13 @@ export default function RoundComponent({
 }) {
   const matches = round.matches
     .sort((m1, m2) =>
-      (m1.court ? m1.court.name : 'y') > (m2.court ? m2.court.name : 'z') ? 1 : -1
+      (m1.court ? m1.court.name : "y") > (m2.court ? m2.court.name : "z") ? 1 : -1,
     )
     .filter(
       (match: MatchWithDetails) =>
-        displaySettings.matchVisibility === 'all' ||
-        (displaySettings.matchVisibility === 'future-only' && isMatchInTheFutureOrPresent(match)) ||
-        (displaySettings.matchVisibility === 'present-only' && isMatchHappening(match))
+        displaySettings.matchVisibility === "all" ||
+        (displaySettings.matchVisibility === "future-only" && isMatchInTheFutureOrPresent(match)) ||
+        (displaySettings.matchVisibility === "present-only" && isMatchHappening(match)),
     )
     .map((match) => (
       <Match
@@ -46,12 +46,12 @@ export default function RoundComponent({
     ));
   const active_round_style = round.is_draft
     ? {
-        borderStyle: 'dashed',
-        borderColor: 'gray',
+        borderStyle: "dashed",
+        borderColor: "gray",
       }
     : {
-        borderStyle: 'solid',
-        borderColor: 'gray',
+        borderStyle: "solid",
+        borderColor: "gray",
       };
 
   const modal = readOnly ? (
@@ -65,17 +65,17 @@ export default function RoundComponent({
     />
   );
 
-  if (matches.length === 0 && displaySettings.matchVisibility !== 'all') {
+  if (matches.length === 0 && displaySettings.matchVisibility !== "all") {
     return null;
   }
 
   const item = (
     <div
       style={{
-        height: '100%',
+        height: "100%",
         minHeight: 320,
-        padding: '15px',
-        borderRadius: '20px',
+        padding: "15px",
+        borderRadius: "20px",
         ...active_round_style,
       }}
     >
@@ -87,7 +87,7 @@ export default function RoundComponent({
   if (readOnly) {
     return (
       <Grid.Col
-        style={{ minHeight: 320, maxWidth: 500, marginRight: '1rem', marginBottom: '1rem' }}
+        style={{ minHeight: 320, maxWidth: 500, marginRight: "1rem", marginBottom: "1rem" }}
       >
         {item}
       </Grid.Col>
@@ -95,7 +95,7 @@ export default function RoundComponent({
   }
 
   return (
-    <div style={{ minHeight: 320, width: 400, marginRight: '1rem', marginBottom: '1rem' }}>
+    <div style={{ minHeight: 320, width: 400, marginRight: "1rem", marginBottom: "1rem" }}>
       {item}
     </div>
   );

@@ -10,22 +10,22 @@ import {
   Text,
   Title,
   UnstyledButton,
-} from '@mantine/core';
-import { AiOutlineHourglass } from '@react-icons/all-files/ai/AiOutlineHourglass';
-import { IconAlertCircle } from '@tabler/icons-react';
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from "@mantine/core";
+import { AiOutlineHourglass } from "@react-icons/all-files/ai/AiOutlineHourglass";
+import { IconAlertCircle } from "@tabler/icons-react";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import MatchModal from '@components/modals/match_modal';
-import { NoContent } from '@components/no_content/empty_table_info';
-import { Time, formatTime } from '@components/utils/datetime';
-import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
-import { Translator } from '@components/utils/types';
-import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
-import { MatchWithDetails } from '@openapi';
-import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getCourts, getStages } from '@services/adapter';
-import { getMatchLookup, getStageItemLookup, stringToColour } from '@services/lookups';
+import MatchModal from "@components/modals/match_modal";
+import { NoContent } from "@components/no_content/empty_table_info";
+import { Time, formatTime } from "@components/utils/datetime";
+import { formatMatchInput1, formatMatchInput2 } from "@components/utils/match";
+import { Translator } from "@components/utils/types";
+import { getTournamentIdFromRouter, responseIsValid } from "@components/utils/util";
+import { MatchWithDetails } from "@openapi";
+import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import { getCourts, getStages } from "@services/adapter";
+import { getMatchLookup, getStageItemLookup, stringToColour } from "@services/lookups";
 
 function ScheduleRow({
   data,
@@ -39,9 +39,9 @@ function ScheduleRow({
   matchesLookup: any;
 }) {
   const { t } = useTranslation();
-  const winColor = '#2a8f37';
-  const drawColor = '#656565';
-  const loseColor = '#af4034';
+  const winColor = "#2a8f37";
+  const drawColor = "#656565";
+  const loseColor = "#af4034";
   const team1_color =
     data.match.stage_item_input1_score > data.match.stage_item_input2_score
       ? winColor
@@ -56,7 +56,7 @@ function ScheduleRow({
         : loseColor;
 
   return (
-    <UnstyledButton style={{ width: '48rem' }}>
+    <UnstyledButton style={{ width: "48rem" }}>
       <Card
         shadow="sm"
         radius="md"
@@ -107,10 +107,10 @@ function ScheduleRow({
               <div
                 style={{
                   backgroundColor: team1_color,
-                  borderRadius: '0.5rem',
-                  paddingLeft: '1rem',
-                  paddingRight: '1rem',
-                  color: 'white',
+                  borderRadius: "0.5rem",
+                  paddingLeft: "1rem",
+                  paddingRight: "1rem",
+                  color: "white",
                   fontWeight: 800,
                 }}
               >
@@ -128,10 +128,10 @@ function ScheduleRow({
               <div
                 style={{
                   backgroundColor: team2_color,
-                  borderRadius: '0.5rem',
-                  paddingLeft: '1rem',
-                  paddingRight: '1rem',
-                  color: 'white',
+                  borderRadius: "0.5rem",
+                  paddingLeft: "1rem",
+                  paddingRight: "1rem",
+                  color: "white",
                   fontWeight: 800,
                 }}
               >
@@ -176,7 +176,7 @@ function Schedule({
             <Text size="xl" fw={800}>
               {startTime}
             </Text>
-          </Center>
+          </Center>,
         );
       }
     }
@@ -188,15 +188,15 @@ function Schedule({
         openMatchModal={openMatchModal}
         stageItemsLookup={stageItemsLookup}
         matchesLookup={matchesLookup}
-      />
+      />,
     );
   }
 
   if (rows.length < 1) {
     return (
       <NoContent
-        title={t('no_matches_title')}
-        description={t('no_matches_description')}
+        title={t("no_matches_title")}
+        description={t("no_matches_description")}
         icon={<AiOutlineHourglass />}
       />
     );
@@ -206,17 +206,17 @@ function Schedule({
     matchesLookup.length < 1 ? (
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_matches_title')}
+        title={t("no_matches_title")}
         color="gray"
         radius="md"
       >
-        {t('drop_match_alert_title')}
+        {t("drop_match_alert_title")}
       </Alert>
     ) : null;
 
   return (
     <Group wrap="nowrap" align="top">
-      <div style={{ width: '48rem' }}>
+      <div style={{ width: "48rem" }}>
         {rows}
         {noItemsAlert}
       </div>
@@ -264,7 +264,7 @@ export default function ResultsPage() {
         setOpened={modalSetOpenedAndUpdateMatch}
         round={null}
       />
-      <Title>{t('results_title')}</Title>
+      <Title>{t("results_title")}</Title>
       <Center mt="1rem">
         <Schedule
           t={t}

@@ -1,4 +1,4 @@
-import { createAxios, handleRequestError } from './adapter';
+import { createAxios, handleRequestError } from "./adapter";
 
 export async function createRanking(tournament_id: number) {
   return createAxios()
@@ -13,7 +13,7 @@ export async function editRanking(
   draw_points: string,
   loss_points: string,
   add_score_points: boolean,
-  position: number
+  position: number,
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}/rankings/${ranking_id}`, {

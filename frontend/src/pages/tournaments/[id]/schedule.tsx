@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import {
   ActionIcon,
   Alert,
@@ -11,33 +11,33 @@ import {
   Stack,
   Text,
   Title,
-} from '@mantine/core';
-import { AiFillWarning } from '@react-icons/all-files/ai/AiFillWarning';
-import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+} from "@mantine/core";
+import { AiFillWarning } from "@react-icons/all-files/ai/AiFillWarning";
+import { IconAlertCircle, IconCalendarPlus, IconDots, IconTrash } from "@tabler/icons-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import CourtModal from '@components/modals/create_court_modal';
-import MatchModal from '@components/modals/match_modal';
-import { NoContent } from '@components/no_content/empty_table_info';
-import { Time } from '@components/utils/datetime';
-import { formatMatchInput1, formatMatchInput2 } from '@components/utils/match';
-import { TournamentMinimal } from '@components/utils/tournament';
-import { Translator } from '@components/utils/types';
-import { getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
-import { Court, CourtsResponse, MatchWithDetails } from '@openapi';
-import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getCourts, getStages } from '@services/adapter';
-import { deleteCourt } from '@services/court';
+import CourtModal from "@components/modals/create_court_modal";
+import MatchModal from "@components/modals/match_modal";
+import { NoContent } from "@components/no_content/empty_table_info";
+import { Time } from "@components/utils/datetime";
+import { formatMatchInput1, formatMatchInput2 } from "@components/utils/match";
+import { TournamentMinimal } from "@components/utils/tournament";
+import { Translator } from "@components/utils/types";
+import { getTournamentIdFromRouter, responseIsValid } from "@components/utils/util";
+import { Court, CourtsResponse, MatchWithDetails } from "@openapi";
+import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import { getCourts, getStages } from "@services/adapter";
+import { deleteCourt } from "@services/court";
 import {
   getMatchLookup,
   getMatchLookupByCourt,
   getScheduleData,
   getStageItemLookup,
   stringToColour,
-} from '@services/lookups';
-import { rescheduleMatch, scheduleMatches } from '@services/match';
+} from "@services/lookups";
+import { rescheduleMatch, scheduleMatches } from "@services/match";
 
 function ScheduleRow({
   index,
@@ -137,12 +137,12 @@ function ScheduleColumn({
     matches.length < 1 ? (
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_matches_title')}
+        title={t("no_matches_title")}
         color="gray"
         radius="md"
         mt="1rem"
       >
-        {t('drop_match_alert_title')}
+        {t("drop_match_alert_title")}
       </Alert>
     ) : null;
 
@@ -150,10 +150,10 @@ function ScheduleColumn({
     <Droppable droppableId={`${court.id}`} direction="vertical">
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div style={{ width: '25rem' }}>
+          <div style={{ width: "25rem" }}>
             <Group justify="space-between">
               <Group>
-                <h4 style={{ marginTop: '0', margin: 'auto' }}>{court.name}</h4>
+                <h4 style={{ marginTop: "0", margin: "auto" }}>{court.name}</h4>
               </Group>
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
@@ -171,7 +171,7 @@ function ScheduleColumn({
                     }}
                     color="red"
                   >
-                    {t('delete_court_button')}
+                    {t("delete_court_button")}
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
@@ -217,18 +217,18 @@ function Schedule({
   ));
 
   columns.push(
-    <div style={{ width: '25rem' }}>
+    <div style={{ width: "25rem" }}>
       <CourtModal
         swrCourtsResponse={swrCourtsResponse}
         tournamentId={tournament.id}
         buttonSize="xs"
       />
-    </div>
+    </div>,
   );
   if (columns.length < 2) {
     return (
       <Stack align="center">
-        <NoContent title={t('no_courts_title')} description={t('no_courts_description')} />
+        <NoContent title={t("no_courts_title")} description={t("no_courts_description")} />
         <CourtModal
           swrCourtsResponse={swrCourtsResponse}
           tournamentId={tournament.id}
@@ -290,7 +290,7 @@ export default function SchedulePage() {
       ) : null}
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>{t('planning_title')}</Title>
+          <Title>{t("planning_title")}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           {data.length < 1 ? null : (
@@ -306,7 +306,7 @@ export default function SchedulePage() {
                   await swrStagesResponse.mutate();
                 }}
               >
-                {t('schedule_description')}
+                {t("schedule_description")}
               </Button>
             </Group>
           )}

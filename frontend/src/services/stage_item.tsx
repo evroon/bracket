@@ -1,10 +1,10 @@
-import { createAxios, handleRequestError } from './adapter';
+import { createAxios, handleRequestError } from "./adapter";
 
 export async function createStageItem(
   tournament_id: number,
   stage_id: number,
   type: string,
-  team_count: number
+  team_count: number,
 ) {
   return createAxios()
     .post(`tournaments/${tournament_id}/stage_items`, { stage_id, type, team_count })
@@ -15,7 +15,7 @@ export async function updateStageItem(
   tournament_id: number,
   stage_item_id: number,
   name: string,
-  ranking_id: string
+  ranking_id: string,
 ) {
   return createAxios()
     .put(`tournaments/${tournament_id}/stage_items/${stage_item_id}`, { name, ranking_id })

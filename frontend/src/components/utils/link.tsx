@@ -1,8 +1,8 @@
-import type { ButtonProps, ElementProps } from '@mantine/core';
-import { forwardRef } from 'react';
-import { Link } from 'react-router';
+import type { ButtonProps, ElementProps } from "@mantine/core";
+import { forwardRef } from "react";
+import { Link } from "react-router";
 
-interface MyButtonProps extends ButtonProps, ElementProps<'a', keyof ButtonProps> {}
+interface MyButtonProps extends ButtonProps, ElementProps<"a", keyof ButtonProps> {}
 
 const PreloadLink = forwardRef(function PreloadLink({ href, ...props }: MyButtonProps, ref) {
   // @ts-ignore

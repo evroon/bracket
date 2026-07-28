@@ -1,4 +1,4 @@
-import NotFoundTitle from './404';
+import NotFoundTitle from "./404";
 
 // const useStyles = createStyles((theme) => ({
 //   title: {

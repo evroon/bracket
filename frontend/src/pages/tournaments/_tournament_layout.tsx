@@ -1,11 +1,11 @@
-import { Group, ThemeIcon, Title, Tooltip } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { HiArchiveBoxArrowDown } from 'react-icons/hi2';
+import { Group, ThemeIcon, Title, Tooltip } from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { HiArchiveBoxArrowDown } from "react-icons/hi2";
 
-import { TournamentLinks } from '@components/navbar/_main_links';
-import { responseIsValid } from '@components/utils/util';
-import Layout from '@pages/_layout';
-import { checkForAuthError, getTournamentById } from '@services/adapter';
+import { TournamentLinks } from "@components/navbar/_main_links";
+import { responseIsValid } from "@components/utils/util";
+import Layout from "@pages/_layout";
+import { checkForAuthError, getTournamentById } from "@services/adapter";
 
 export default function TournamentLayout({ children, tournament_id }: any) {
   const { t } = useTranslation();
@@ -23,12 +23,12 @@ export default function TournamentLayout({ children, tournament_id }: any) {
         {tournamentResponse.data?.data.name}
       </Title>
 
-      <Tooltip label={`${t('archived_header_label')}`}>
+      <Tooltip label={`${t("archived_header_label")}`}>
         <ThemeIcon
           color="yellow"
           variant="light"
           style={{
-            visibility: tournamentResponse.data?.data.status === 'ARCHIVED' ? 'visible' : 'hidden',
+            visibility: tournamentResponse.data?.data.status === "ARCHIVED" ? "visible" : "hidden",
           }}
         >
           <HiArchiveBoxArrowDown />

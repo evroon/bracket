@@ -1,15 +1,15 @@
-import { Grid, Select, Title } from '@mantine/core';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Grid, Select, Title } from "@mantine/core";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import TeamCreateModal from '@components/modals/team_create_modal';
-import { getTableState, tableStateToPagination } from '@components/tables/table';
-import TeamsTable from '@components/tables/teams';
-import { capitalize, getTournamentIdFromRouter, responseIsValid } from '@components/utils/util';
-import { FullTeamWithPlayers, StageItemWithRounds } from '@openapi';
-import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getStages, getTeamsPaginated } from '@services/adapter';
-import { getStageItemList, getStageItemTeamIdsLookup } from '@services/lookups';
+import TeamCreateModal from "@components/modals/team_create_modal";
+import { getTableState, tableStateToPagination } from "@components/tables/table";
+import TeamsTable from "@components/tables/teams";
+import { capitalize, getTournamentIdFromRouter, responseIsValid } from "@components/utils/util";
+import { FullTeamWithPlayers, StageItemWithRounds } from "@openapi";
+import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import { getStages, getTeamsPaginated } from "@services/adapter";
+import { getStageItemList, getStageItemTeamIdsLookup } from "@services/lookups";
 
 function StageItemSelect({
   groupStageItems,
@@ -27,8 +27,8 @@ function StageItemSelect({
   return (
     <Select
       data={data}
-      label={t('filter_stage_item_label')}
-      placeholder={t('filter_stage_item_placeholder')}
+      label={t("filter_stage_item_label")}
+      placeholder={t("filter_stage_item_placeholder")}
       searchable
       limit={25}
       onChange={setFilteredStageItemId}
@@ -37,7 +37,7 @@ function StageItemSelect({
 }
 
 export default function TeamsPage() {
-  const tableState = getTableState('name');
+  const tableState = getTableState("name");
   const { t } = useTranslation();
   const [filteredStageItemId, setFilteredStageItemId] = useState(null);
   const { tournamentData } = getTournamentIdFromRouter();
@@ -57,7 +57,7 @@ export default function TeamsPage() {
   if (filteredStageItemId != null) {
     teams = (swrTeamsResponse.data?.data.teams || []).filter(
       (team: FullTeamWithPlayers) =>
-        stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1
+        stageItemTeamLookup[filteredStageItemId].indexOf(team.id) !== -1,
     );
   }
 
@@ -65,7 +65,7 @@ export default function TeamsPage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between" mb="1rem">
         <Grid.Col span="auto">
-          <Title>{capitalize(t('teams_title'))}</Title>
+          <Title>{capitalize(t("teams_title"))}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <Grid align="flex-end">

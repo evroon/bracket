@@ -1,32 +1,32 @@
-import { Badge, Center, Pagination, Table, Text } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+import { Badge, Center, Pagination, Table, Text } from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import DeleteButton from '@components/buttons/delete';
-import PlayerUpdateModal from '@components/modals/player_update_modal';
-import { NoContent } from '@components/no_content/empty_table_info';
-import { DateTime } from '@components/utils/datetime';
-import RequestErrorAlert from '@components/utils/error_alert';
-import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
-import { TournamentMinimal } from '@components/utils/tournament';
-import { Player, PlayersResponse } from '@openapi';
-import { deletePlayer } from '@services/player';
-import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
+import DeleteButton from "@components/buttons/delete";
+import PlayerUpdateModal from "@components/modals/player_update_modal";
+import { NoContent } from "@components/no_content/empty_table_info";
+import { DateTime } from "@components/utils/datetime";
+import RequestErrorAlert from "@components/utils/error_alert";
+import { TableSkeletonSingleColumn } from "@components/utils/skeletons";
+import { TournamentMinimal } from "@components/utils/tournament";
+import { Player, PlayersResponse } from "@openapi";
+import { deletePlayer } from "@services/player";
+import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from "./table";
 
 export function WinDistributionTitle() {
   const { t } = useTranslation();
   return (
     <>
       <Text span color="teal" inherit>
-        {t('win_distribution_text_win')}
-      </Text>{' '}
-      /{' '}
+        {t("win_distribution_text_win")}
+      </Text>{" "}
+      /{" "}
       <Text span color="orange" inherit>
-        {t('win_distribution_text_draws')}
-      </Text>{' '}
-      /{' '}
+        {t("win_distribution_text_draws")}
+      </Text>{" "}
+      /{" "}
       <Text span color="red" inherit>
-        {t('win_distribution_text_losses')}
+        {t("win_distribution_text_losses")}
       </Text>
     </>
   );
@@ -85,13 +85,13 @@ export default function PlayersTable({
               await deletePlayer(tournamentData.id, player.id);
               await swrPlayersResponse.mutate();
             }}
-            title={t('delete_player_button')}
+            title={t("delete_player_button")}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <NoContent title={t('no_players_title')} />;
+  if (rows.length < 1) return <NoContent title={t("no_players_title")} />;
 
   return (
     <>
@@ -99,13 +99,13 @@ export default function PlayersTable({
         <Table.Thead>
           <Table.Tr>
             <ThSortable state={tableState} field="active">
-              {t('status')}
+              {t("status")}
             </ThSortable>
             <ThSortable state={tableState} field="name">
-              {t('title')}
+              {t("title")}
             </ThSortable>
             <ThSortable state={tableState} field="created">
-              {t('created')}
+              {t("created")}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

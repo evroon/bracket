@@ -1,18 +1,18 @@
-import { Alert, Button, Checkbox, Modal } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { MdOutlineAutoFixHigh } from 'react-icons/md';
-import { SWRResponse } from 'swr';
+import { Alert, Button, Checkbox, Modal } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { IconAlertCircle, IconSquareArrowRight } from "@tabler/icons-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { MdOutlineAutoFixHigh } from "react-icons/md";
+import { SWRResponse } from "swr";
 
 import {
   StageItemWithRounds,
   StagesWithStageItemsResponse,
   UpcomingMatchesResponse,
-} from '@openapi';
-import { startNextRound } from '@services/round';
-import dayjs from 'dayjs';
+} from "@openapi";
+import { startNextRound } from "@services/round";
+import dayjs from "dayjs";
 
 export default function ActivateNextRoundModal({
   tournamentId,
@@ -39,7 +39,7 @@ export default function ActivateNextRoundModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t('active_next_round_modal_title')}
+        title={t("active_next_round_modal_title")}
         size="40rem"
       >
         <form
@@ -47,7 +47,7 @@ export default function ActivateNextRoundModal({
             await startNextRound(
               tournamentId,
               stageItem.id,
-              values.adjust_to_time ? dayjs() : null
+              values.adjust_to_time ? dayjs() : null,
             );
             await swrStagesResponse.mutate();
             await swrUpcomingMatchesResponse.mutate();
@@ -55,26 +55,26 @@ export default function ActivateNextRoundModal({
           })}
         >
           <Alert icon={<IconAlertCircle size={16} />} color="gray" radius="lg">
-            {t('active_next_round_modal_description')}
+            {t("active_next_round_modal_description")}
             <br />
             <br />
-            {t('active_next_round_modal_choose_description')}
+            {t("active_next_round_modal_choose_description")}
             <ul>
               <li>
-                <b>{t('checkbox_status_unchecked')}</b>:{' '}
-                {t('active_next_round_modal_choose_option_unchecked')}
+                <b>{t("checkbox_status_unchecked")}</b>:{" "}
+                {t("active_next_round_modal_choose_option_unchecked")}
               </li>
               <li>
-                <b>{t('checkbox_status_checked')}</b>:{' '}
-                {t('active_next_round_modal_choose_option_checked')}
+                <b>{t("checkbox_status_checked")}</b>:{" "}
+                {t("active_next_round_modal_choose_option_checked")}
               </li>
             </ul>
           </Alert>
 
           <Checkbox
             mt="lg"
-            label={t('adjust_start_times_checkbox_label')}
-            {...form.getInputProps('adjust_to_time', { type: 'checkbox' })}
+            label={t("adjust_start_times_checkbox_label")}
+            {...form.getInputProps("adjust_to_time", { type: "checkbox" })}
           />
           <Button
             fullWidth
@@ -84,7 +84,7 @@ export default function ActivateNextRoundModal({
             type="submit"
             leftSection={<IconSquareArrowRight size={24} />}
           >
-            {t('auto_create_matches_button')}
+            {t("auto_create_matches_button")}
           </Button>
         </form>
       </Modal>
@@ -96,7 +96,7 @@ export default function ActivateNextRoundModal({
         leftSection={<MdOutlineAutoFixHigh size={24} />}
         onClick={() => setOpened(true)}
       >
-        {t('auto_create_matches_button')}
+        {t("auto_create_matches_button")}
       </Button>
     </>
   );

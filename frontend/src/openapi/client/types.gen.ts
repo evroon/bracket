@@ -7,14 +7,14 @@ import type {
   AxiosResponse,
   AxiosStatic,
   CreateAxiosDefaults,
-} from 'axios';
+} from "axios";
 
-import type { Auth } from '../core/auth.gen';
-import type { ServerSentEventsOptions, ServerSentEventsResult } from '../core/serverSentEvents.gen';
-import type { Client as CoreClient, Config as CoreConfig } from '../core/types.gen';
+import type { Auth } from "../core/auth.gen";
+import type { ServerSentEventsOptions, ServerSentEventsResult } from "../core/serverSentEvents.gen";
+import type { Client as CoreClient, Config as CoreConfig } from "../core/types.gen";
 
 export interface Config<T extends ClientOptions = ClientOptions>
-  extends Omit<CreateAxiosDefaults, 'auth' | 'baseURL' | 'headers' | 'method'>, CoreConfig {
+  extends Omit<CreateAxiosDefaults, "auth" | "baseURL" | "headers" | "method">, CoreConfig {
   /**
    * Axios implementation. You can use this option to provide either an
    * `AxiosStatic` or an `AxiosInstance`.
@@ -25,7 +25,7 @@ export interface Config<T extends ClientOptions = ClientOptions>
   /**
    * Base URL for all requests made by this client.
    */
-  baseURL?: T['baseURL'];
+  baseURL?: T["baseURL"];
   /**
    * An object containing any HTTP headers that you want to pre-populate your
    * `Headers` object with.
@@ -43,7 +43,7 @@ export interface Config<T extends ClientOptions = ClientOptions>
    *
    * @default false
    */
-  throwOnError?: T['throwOnError'];
+  throwOnError?: T["throwOnError"];
 }
 
 export interface RequestOptions<
@@ -57,11 +57,11 @@ export interface RequestOptions<
     }>,
     Pick<
       ServerSentEventsOptions<TData>,
-      | 'onSseError'
-      | 'onSseEvent'
-      | 'sseDefaultRetryDelay'
-      | 'sseMaxRetryAttempts'
-      | 'sseMaxRetryDelay'
+      | "onSseError"
+      | "onSseEvent"
+      | "sseDefaultRetryDelay"
+      | "sseMaxRetryAttempts"
+      | "sseMaxRetryDelay"
     > {
   /**
    * Any body that you want to add to your request.
@@ -100,16 +100,16 @@ export type RequestResult<
     >;
 
 type MethodFn = <TData = unknown, TError = unknown, ThrowOnError extends boolean = false>(
-  options: Omit<RequestOptions<TData, ThrowOnError>, 'method'>
+  options: Omit<RequestOptions<TData, ThrowOnError>, "method">,
 ) => RequestResult<TData, TError, ThrowOnError>;
 
 type SseFn = <TData = unknown, TError = unknown, ThrowOnError extends boolean = false>(
-  options: Omit<RequestOptions<TData, ThrowOnError>, 'method'>
+  options: Omit<RequestOptions<TData, ThrowOnError>, "method">,
 ) => Promise<ServerSentEventsResult<TData, TError>>;
 
 type RequestFn = <TData = unknown, TError = unknown, ThrowOnError extends boolean = false>(
-  options: Omit<RequestOptions<TData, ThrowOnError>, 'method'> &
-    Pick<Required<RequestOptions<TData, ThrowOnError>>, 'method'>
+  options: Omit<RequestOptions<TData, ThrowOnError>, "method"> &
+    Pick<Required<RequestOptions<TData, ThrowOnError>>, "method">,
 ) => RequestResult<TData, TError, ThrowOnError>;
 
 type BuildUrlFn = <
@@ -120,7 +120,7 @@ type BuildUrlFn = <
     url: string;
   },
 >(
-  options: TData & Options<TData>
+  options: TData & Options<TData>,
 ) => string;
 
 export type Client = CoreClient<RequestFn, Config, MethodFn, BuildUrlFn, SseFn> & {
@@ -136,7 +136,7 @@ export type Client = CoreClient<RequestFn, Config, MethodFn, BuildUrlFn, SseFn> 
  * to ensure your client always has the correct values.
  */
 export type CreateClientConfig<T extends ClientOptions = ClientOptions> = (
-  override?: Config<ClientOptions & T>
+  override?: Config<ClientOptions & T>,
 ) => Config<Required<ClientOptions> & T>;
 
 export interface TDataShape {
@@ -153,5 +153,5 @@ export type Options<
   TData extends TDataShape = TDataShape,
   ThrowOnError extends boolean = boolean,
   TResponse = unknown,
-> = OmitKeys<RequestOptions<TResponse, ThrowOnError>, 'body' | 'path' | 'query' | 'url'> &
-  ([TData] extends [never] ? unknown : Omit<TData, 'url'>);
+> = OmitKeys<RequestOptions<TResponse, ThrowOnError>, "body" | "path" | "query" | "url"> &
+  ([TData] extends [never] ? unknown : Omit<TData, "url">);

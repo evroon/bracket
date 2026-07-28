@@ -8,30 +8,30 @@ import {
   Skeleton,
   Stack,
   Switch,
-} from '@mantine/core';
-import { GoPlus } from '@react-icons/all-files/go/GoPlus';
-import { IoOptions } from '@react-icons/all-files/io5/IoOptions';
-import { IconAlertCircle } from '@tabler/icons-react';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { MdOutlineAutoFixHigh } from 'react-icons/md';
-import { SWRResponse } from 'swr';
+} from "@mantine/core";
+import { GoPlus } from "@react-icons/all-files/go/GoPlus";
+import { IoOptions } from "@react-icons/all-files/io5/IoOptions";
+import { IconAlertCircle } from "@tabler/icons-react";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { MdOutlineAutoFixHigh } from "react-icons/md";
+import { SWRResponse } from "swr";
 
-import ActivateNextRoundModal from '@components/modals/activate_next_round_modal';
-import { NoContent } from '@components/no_content/empty_table_info';
-import { BracketDisplaySettings } from '@components/utils/brackets';
-import { TournamentMinimal } from '@components/utils/tournament';
-import { Translator } from '@components/utils/types';
-import { responseIsValid } from '@components/utils/util';
+import ActivateNextRoundModal from "@components/modals/activate_next_round_modal";
+import { NoContent } from "@components/no_content/empty_table_info";
+import { BracketDisplaySettings } from "@components/utils/brackets";
+import { TournamentMinimal } from "@components/utils/tournament";
+import { Translator } from "@components/utils/types";
+import { responseIsValid } from "@components/utils/util";
 import {
   RoundWithMatches,
   StageItemWithRounds,
   StagesWithStageItemsResponse,
   Tournament,
   UpcomingMatchesResponse,
-} from '@openapi';
-import { createRound } from '@services/round';
-import RoundComponent from './round';
+} from "@openapi";
+import { createRound } from "@services/round";
+import RoundComponent from "./round";
 
 function AddRoundButton({
   t,
@@ -46,7 +46,7 @@ function AddRoundButton({
   stageItem: StageItemWithRounds;
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>;
   swrUpcomingMatchesResponse: SWRResponse<UpcomingMatchesResponse>;
-  size: 'md' | 'lg';
+  size: "md" | "lg";
 }) {
   return (
     <Button
@@ -60,7 +60,7 @@ function AddRoundButton({
         await swrUpcomingMatchesResponse.mutate();
       }}
     >
-      {t('add_round_button')}
+      {t("add_round_button")}
     </Button>
   );
 }
@@ -93,7 +93,7 @@ export function RoundsGridCols({
     .sort((r1: any, r2: any) => (r1.name > r2.name ? 1 : -1))
     .filter(
       (round: RoundWithMatches) =>
-        round.matches.length > 0 || displaySettings.matchVisibility === 'all'
+        round.matches.length > 0 || displaySettings.matchVisibility === "all",
     )
     .map((round: RoundWithMatches) => (
       <RoundComponent
@@ -112,7 +112,7 @@ export function RoundsGridCols({
       result = (
         <Container mt="1rem">
           <Stack align="center">
-            <NoContent title={t('no_round_description')} />
+            <NoContent title={t("no_round_description")} />
             {stageItem.rounds.length < 1 && (
               <AddRoundButton
                 t={t}
@@ -130,7 +130,7 @@ export function RoundsGridCols({
       result = (
         <Container mt="1rem">
           <Stack align="center">
-            <NoContent title={t('no_round_found_title')} />
+            <NoContent title={t("no_round_found_title")} />
           </Stack>
         </Container>
       );
@@ -141,7 +141,7 @@ export function RoundsGridCols({
 
   return (
     <React.Fragment key={stageItem.id}>
-      <div style={{ width: '100%' }}>
+      <div style={{ width: "100%" }}>
         <Grid grow>
           <Grid.Col span={6} mb="2rem">
             <Group>
@@ -150,14 +150,14 @@ export function RoundsGridCols({
                   size="md"
                   onLabel={<MdOutlineAutoFixHigh size={16} />}
                   offLabel={<IoOptions size={16} />}
-                  checked={displaySettings.showManualSchedulingOptions === 'false'}
+                  checked={displaySettings.showManualSchedulingOptions === "false"}
                   label={
-                    displaySettings.showManualSchedulingOptions === 'true' ? 'Manual' : 'Automatic'
+                    displaySettings.showManualSchedulingOptions === "true" ? "Manual" : "Automatic"
                   }
                   color="indigo"
                   onChange={(event) => {
                     displaySettings.setShowManualSchedulingOptions(
-                      event.currentTarget.checked ? 'false' : 'true'
+                      event.currentTarget.checked ? "false" : "true",
                     );
                   }}
                   miw="9rem"
@@ -168,7 +168,7 @@ export function RoundsGridCols({
           <Grid.Col span={6}>
             <Group justify="right">
               {hideAddRoundButton ||
-              displaySettings.showManualSchedulingOptions === 'false' ? null : (
+              displaySettings.showManualSchedulingOptions === "false" ? null : (
                 <AddRoundButton
                   t={t}
                   tournamentData={tournamentData}
@@ -179,7 +179,7 @@ export function RoundsGridCols({
                 />
               )}
               {hideAddRoundButton ||
-              displaySettings.showManualSchedulingOptions === 'true' ? null : (
+              displaySettings.showManualSchedulingOptions === "true" ? null : (
                 <ActivateNextRoundModal
                   tournamentId={tournamentData.id}
                   swrStagesResponse={swrStagesResponse}
@@ -202,11 +202,11 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
     return (
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_round_found_title')}
+        title={t("no_round_found_title")}
         color="blue"
         radius="lg"
       >
-        {t('no_round_found_description')}
+        {t("no_round_found_description")}
       </Alert>
     );
   }
@@ -214,11 +214,11 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
     <Container>
       <Alert
         icon={<IconAlertCircle size={16} />}
-        title={t('no_round_found_title')}
+        title={t("no_round_found_title")}
         color="blue"
         radius="lg"
       >
-        {t('no_round_found_in_stage_description')}
+        {t("no_round_found_in_stage_description")}
       </Alert>
     </Container>
   );
@@ -227,10 +227,10 @@ function NoRoundsAlert({ readOnly }: { readOnly: boolean }) {
 function LoadingSkeleton() {
   return (
     <Group>
-      <div style={{ width: '400px', marginLeft: '1rem' }}>
+      <div style={{ width: "400px", marginLeft: "1rem" }}>
         <Skeleton height={500} mb="xl" radius="xl" />
       </div>
-      <div style={{ width: '400px', marginLeft: '1rem' }}>
+      <div style={{ width: "400px", marginLeft: "1rem" }}>
         <Skeleton height={500} mb="xl" radius="xl" />
       </div>
     </Group>

@@ -1,18 +1,18 @@
-import { Accordion, Badge, Button, Center, Checkbox, Container, NumberInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
-import { SWRResponse } from 'swr';
+import { Accordion, Badge, Button, Center, Checkbox, Container, NumberInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useTranslation } from "react-i18next";
+import { SWRResponse } from "swr";
 
-import DeleteButton from '@components/buttons/delete';
-import { EmptyTableInfo } from '@components/no_content/empty_table_info';
-import RequestErrorAlert from '@components/utils/error_alert';
-import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
-import { Translator } from '@components/utils/types';
-import { getTournamentIdFromRouter } from '@components/utils/util';
-import { Ranking, RankingsResponse, Tournament } from '@openapi';
-import TournamentLayout from '@pages/tournaments/_tournament_layout';
-import { getRankings, getTournamentById } from '@services/adapter';
-import { createRanking, deleteRanking, editRanking } from '@services/ranking';
+import DeleteButton from "@components/buttons/delete";
+import { EmptyTableInfo } from "@components/no_content/empty_table_info";
+import RequestErrorAlert from "@components/utils/error_alert";
+import { TableSkeletonSingleColumn } from "@components/utils/skeletons";
+import { Translator } from "@components/utils/types";
+import { getTournamentIdFromRouter } from "@components/utils/util";
+import { Ranking, RankingsResponse, Tournament } from "@openapi";
+import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import { getRankings, getTournamentById } from "@services/adapter";
+import { createRanking, deleteRanking, editRanking } from "@services/ranking";
 
 function RankingDeleteButton({
   t,
@@ -28,7 +28,7 @@ function RankingDeleteButton({
   if (ranking.position === 0) {
     return (
       <Center ml="1rem" miw="10rem">
-        <Badge color="indigo">{t('default_ranking_badge')}</Badge>
+        <Badge color="indigo">{t("default_ranking_badge")}</Badge>
       </Center>
     );
   }
@@ -38,7 +38,7 @@ function RankingDeleteButton({
         await deleteRanking(tournament.id, ranking.id);
         await swrRankingsResponse.mutate();
       }}
-      title={t('delete_ranking_button')}
+      title={t("delete_ranking_button")}
       ml="1rem"
       variant="outline"
       miw="10rem"
@@ -67,7 +67,7 @@ function EditRankingForm({
     },
     validate: {},
   });
-  const rankingTitle = `${t('ranking_title')} ${ranking.position + 1}`;
+  const rankingTitle = `${t("ranking_title")} ${ranking.position + 1}`;
 
   return (
     <form
@@ -79,7 +79,7 @@ function EditRankingForm({
           values.draw_points,
           values.loss_points,
           values.add_score_points,
-          values.position
+          values.position,
         );
         await swrRankingsResponse.mutate();
       })}
@@ -99,28 +99,28 @@ function EditRankingForm({
         <Accordion.Panel>
           <NumberInput
             withAsterisk
-            label={t('win_points_input_label')}
-            {...form.getInputProps('win_points')}
+            label={t("win_points_input_label")}
+            {...form.getInputProps("win_points")}
           />
           <NumberInput
             mt="1rem"
             withAsterisk
-            label={t('draw_points_input_label')}
-            {...form.getInputProps('draw_points')}
+            label={t("draw_points_input_label")}
+            {...form.getInputProps("draw_points")}
           />
           <NumberInput
             mt="1rem"
             withAsterisk
-            label={t('loss_points_input_label')}
-            {...form.getInputProps('loss_points')}
+            label={t("loss_points_input_label")}
+            {...form.getInputProps("loss_points")}
           />
           <Checkbox
             mt="lg"
-            label={t('add_score_points_label')}
-            {...form.getInputProps('add_score_points', { type: 'checkbox' })}
+            label={t("add_score_points_label")}
+            {...form.getInputProps("add_score_points", { type: "checkbox" })}
           />
           <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-            {`${t('save_button')} ${rankingTitle}`}
+            {`${t("save_button")} ${rankingTitle}`}
           </Button>
         </Accordion.Panel>
       </Accordion.Item>
@@ -156,10 +156,10 @@ function RankingForm({
 
   if (swrRankingsResponse.error) return <RequestErrorAlert error={swrRankingsResponse.error} />;
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t('rankings_title')} />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t("rankings_title")} />;
 
   return (
-    <Accordion multiple defaultValue={['0']}>
+    <Accordion multiple defaultValue={["0"]}>
       {rows}
     </Accordion>
   );
@@ -196,7 +196,7 @@ export default function RankingsPage() {
             await swrRankingsResponse.mutate();
           }}
         >
-          {t('add_ranking_button')}
+          {t("add_ranking_button")}
         </Button>
       </Container>
     </TournamentLayout>

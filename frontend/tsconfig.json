@@ -5,7 +5,7 @@
       "@*": ["*"],
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
-      "@openapi/*": ["openapi/*"],
+      "@openapi/*": ["openapi/*"]
     },
     "target": "es6",
     "allowJs": true,
@@ -21,6 +21,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": [ "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

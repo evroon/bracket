@@ -1,8 +1,8 @@
-import { createAxios, handleRequestError } from './adapter';
+import { createAxios, handleRequestError } from "./adapter";
 
 export async function createClub(name: string) {
   return createAxios()
-    .post('clubs', { name })
+    .post("clubs", { name })
     .catch((response: any) => handleRequestError(response));
 }
 
