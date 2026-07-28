@@ -13,7 +13,7 @@ export const GitHub = () => {
           })}`}
         >
           <FaGithub size="32px" style={{ marginRight: "1rem", height: "32px" }} />
-          Github Repository
+          GitHub Repository
         </Link>
       </section>
     </section>
