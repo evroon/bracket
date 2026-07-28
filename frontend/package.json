@@ -46,7 +46,7 @@
     "vite-tsconfig-paths": "^6.1.1"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "0.95.0",
+    "@hey-api/openapi-ts": "0.97.3",
     "@types/node": "25.5.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
