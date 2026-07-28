@@ -47,14 +47,10 @@ export const Features = () => {
             {serviceList.map(({ icon, title, description }: ServiceProps) => (
               <Card key={title}>
                 <CardHeader className="space-y-1 flex md:flex-row justify-start items-start gap-4">
-                  <div className="mt-1 bg-primary/50 p-1 rounded-2xl">
-                    {icon}
-                  </div>
+                  <div className="mt-1 bg-primary/50 p-1 rounded-2xl">{icon}</div>
                   <div>
                     <CardTitle>{title}</CardTitle>
-                    <CardDescription className="text-md mt-2">
-                      {description}
-                    </CardDescription>
+                    <CardDescription className="text-md mt-2">{description}</CardDescription>
                   </div>
                 </CardHeader>
               </Card>

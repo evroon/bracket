@@ -12,10 +12,7 @@ export const GitHub = () => {
             variant: "outline",
           })}`}
         >
-          <FaGithub
-            size="32px"
-            style={{ marginRight: "1rem", height: "32px" }}
-          />
+          <FaGithub size="32px" style={{ marginRight: "1rem", height: "32px" }} />
           Github Repository
         </Link>
       </section>

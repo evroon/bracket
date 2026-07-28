@@ -27,14 +27,12 @@ const features: FeatureProps[] = [
   {
     icon: <BsCalendar4Week fill={"#a581e9"} size={64} />,
     title: "Schedule matches",
-    description:
-      "Use the drag&drop interface to choose the courts and start times of the matches.",
+    description: "Use the drag&drop interface to choose the courts and start times of the matches.",
   },
   {
     icon: <MdOutlineScoreboard fill={"#a581e9"} size={64} />,
     title: "Track scores & publish",
-    description:
-      "Enter the scores, customize the ranking and show it to the world on a dashboard.",
+    description: "Enter the scores, customize the ranking and show it to the world on a dashboard.",
   },
 ];
 

@@ -16,13 +16,7 @@ const navbar = (
   <Navbar
     logo={
       <>
-        <Image
-          width={36}
-          height={36}
-          src={logo.src}
-          className="mr-2"
-          alt="Preview of Bracket"
-        />
+        <Image width={36} height={36} src={logo.src} className="mr-2" alt="Preview of Bracket" />
         <b className="text-3xl">Bracket</b>
       </>
     }

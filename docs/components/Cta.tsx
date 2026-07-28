@@ -16,9 +16,8 @@ export const Cta = () => {
             of your tournaments
           </h2>
           <p className="text-muted-foreground text-xl mt-4 mb-8 lg:mb-0">
-            Keep your tournament software in your own hands: no vendor lock-in,
-            no analytics data being collected, transparent & open-source
-            software.
+            Keep your tournament software in your own hands: no vendor lock-in, no analytics data
+            being collected, transparent & open-source software.
           </p>
         </div>
 
@@ -28,10 +27,7 @@ export const Cta = () => {
             variant: "default",
           })}`}
         >
-          <IconRocket
-            size="32px"
-            style={{ marginRight: "0.5rem", height: "32px" }}
-          />
+          <IconRocket size="32px" style={{ marginRight: "0.5rem", height: "32px" }} />
           Launch Demo
         </Link>
       </div>

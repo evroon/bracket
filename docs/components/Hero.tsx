@@ -11,8 +11,8 @@ export const Hero = () => {
         </main>
 
         <p className="text-xl text-muted-foreground md:w-10/12 mx-auto lg:mx-0">
-          Build tournament setups, add teams, schedule matches, keep track of
-          scores and present ranking live to the public.
+          Build tournament setups, add teams, schedule matches, keep track of scores and present
+          ranking live to the public.
         </p>
 
         <div className="space-y-4 md:space-y-0 md:space-x-4">
@@ -22,10 +22,7 @@ export const Hero = () => {
               variant: "default",
             })}`}
           >
-            <IconRocket
-              size="32px"
-              style={{ marginRight: "0.5rem", height: "32px" }}
-            />
+            <IconRocket size="32px" style={{ marginRight: "0.5rem", height: "32px" }} />
             Launch Demo
           </Link>
 
@@ -35,10 +32,7 @@ export const Hero = () => {
               variant: "outline",
             })}`}
           >
-            <IconLibrary
-              size="24px"
-              style={{ marginRight: "0.5rem", height: "32px" }}
-            />
+            <IconLibrary size="24px" style={{ marginRight: "0.5rem", height: "32px" }} />
             Read the docs
           </Link>
         </div>

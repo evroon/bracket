@@ -10,7 +10,7 @@
     "format:write": "oxfmt .",
     "lint": "oxlint .",
     "test": "pnpm run format:write && pnpm markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
-    "test-check": "pnpm run format:write && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
+    "test-check": "pnpm run format:check && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
     "lint:markdown": "markdownlint-cli2",
     "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind && next-sitemap"
   },
@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
-    "oxfmt": "0.61.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "26.0.1",
     "@types/react": "^19.0.10",
@@ -47,6 +46,7 @@
     "autoprefixer": "^10.4.19",
     "markdownlint-cli2": "^0.22.0",
     "markdownlint-rule-relative-links": "^5.1.0",
+    "oxfmt": "0.61.0",
     "oxlint": "1.75.0",
     "postcss": "^8.5.18",
     "tailwindcss": "^4.2.1",

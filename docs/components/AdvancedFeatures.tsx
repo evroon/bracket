@@ -1,12 +1,6 @@
 import { Badge } from "./ui/badge";
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
 import image from "../content/img/assets/growth.png";
 import image3 from "../content/img/assets/reflecting.png";
 import image4 from "../content/img/assets/looking-ahead.png";
