@@ -3051,6 +3051,9 @@ packages:
   zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
+ignoredOptionalDependencies:
+  - esbuild
+
 snapshots:
 
   '@babel/code-frame@7.29.0':
