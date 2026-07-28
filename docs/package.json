@@ -6,11 +6,11 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
-    "prettier:write": "prettier --list-different --write \"**/*.{js,jsx,ts,tsx}\"",
+    "format:check": "oxfmt --check .",
+    "format:write": "oxfmt .",
     "lint": "oxlint .",
-    "test": "pnpm run prettier:write && pnpm markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
-    "test-check": "pnpm run prettier:check && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
+    "test": "pnpm run format:write && pnpm markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
+    "test-check": "pnpm run format:check && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
     "lint:markdown": "markdownlint-cli2",
     "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind && next-sitemap"
   },
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
-    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
+    "oxfmt": "0.61.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "26.0.1",
     "@types/react": "^19.0.10",
@@ -49,7 +49,6 @@
     "markdownlint-rule-relative-links": "^5.1.0",
     "oxlint": "1.75.0",
     "postcss": "^8.5.18",
-    "prettier": "^3.8.0",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.7.3"
   }
