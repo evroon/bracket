@@ -91,9 +91,7 @@ async def team_dependency(tournament_id: TournamentId, team_id: TeamId) -> Team:
     team = await fetch_one_parsed(
         database,
         Team,
-        teams.select().where(
-            (teams.c.id == team_id) & (teams.c.tournament_id == tournament_id)
-        ),
+        teams.select().where((teams.c.id == team_id) & (teams.c.tournament_id == tournament_id)),
     )
 
     if team is None:
