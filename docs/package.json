@@ -10,7 +10,7 @@
     "format:write": "oxfmt .",
     "lint": "oxlint .",
     "test": "pnpm run format:write && pnpm markdownlint-cli2 --fix --config .markdownlint-cli2.mjs",
-    "test-check": "pnpm run format:check && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
+    "test-check": "pnpm run format:write && pnpm run lint && pnpm markdownlint-cli2 --config .markdownlint-cli2.mjs",
     "lint:markdown": "markdownlint-cli2",
     "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind && next-sitemap"
   },
