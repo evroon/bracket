@@ -13,7 +13,7 @@
     "export": "vite build && vite export",
     "format:check": "oxfmt --check .",
     "format:write": "oxfmt .",
-    "test": "tsc && pnpm run format:write"
+    "test": "tsc && pnpm run format:check"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
