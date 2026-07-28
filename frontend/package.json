@@ -6,14 +6,14 @@
     "dev": "vite",
     "build": "vite build",
     "analyze": "ANALYZE=true vite build",
-    "openapi-ts": "openapi-ts && prettier --list-different --write \"**/*.{ts,tsx}\"",
+    "openapi-ts": "openapi-ts && pnpm run format:write",
     "start": "vite start",
     "update-deps": "ncu -c 30d -u",
     "typecheck": "tsc",
     "export": "vite build && vite export",
-    "prettier:check": "prettier  --check \"**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --list-different --write \"**/*.{ts,tsx}\"",
-    "test": "tsc && pnpm run prettier:write"
+    "format:check": "oxfmt --check .",
+    "format:write": "oxfmt .",
+    "test": "tsc && pnpm run format:write"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -35,7 +35,6 @@
     "dayjs": "1.11.20",
     "i18next": "26.0.3",
     "nuqs": "2.8.9",
-    "prettier-plugin-organize-imports": "^4.3.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-i18next": "17.0.1",
@@ -56,7 +55,7 @@
     "postcss": "8.5.18",
     "postcss-preset-mantine": "1.18.0",
     "postcss-simple-vars": "7.0.1",
-    "prettier": "3.8.0",
+    "oxfmt": "0.61.0",
     "typescript": "5.9.3",
     "vite": "8.0.16"
   }
