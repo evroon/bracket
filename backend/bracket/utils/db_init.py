@@ -1,11 +1,11 @@
 import random
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from heliclockter import datetime_utc
 from pydantic import BaseModel
 
 from bracket.config import Environment, config, environment
-from bracket.database import database, engine
+from bracket.database import database
 from bracket.logic.ranking.calculation import (
     recalculate_ranking_for_stage_item,
 )
@@ -31,22 +31,7 @@ from bracket.models.db.team import TeamInsertable
 from bracket.models.db.tournament import TournamentInsertable
 from bracket.models.db.user import UserInsertable
 from bracket.models.db.user_x_club import UserXClubInsertable, UserXClubRelation
-from bracket.schema import (
-    clubs,
-    courts,
-    matches,
-    metadata,
-    players,
-    players_x_teams,
-    rankings,
-    rounds,
-    stage_items,
-    stages,
-    teams,
-    tournaments,
-    users,
-    users_x_clubs,
-)
+from bracket.schema import metadata
 from bracket.sql.matches import sql_update_match
 from bracket.sql.stage_items import get_stage_item, sql_create_stage_item_with_inputs
 from bracket.sql.stages import get_full_tournament_details
@@ -92,9 +77,6 @@ from bracket.utils.logging import logger
 from bracket.utils.security import hash_password
 from bracket.utils.types import assert_some
 
-if TYPE_CHECKING:
-    from sqlalchemy import Table
-
 
 async def create_admin_user() -> UserId:
     assert config.admin_email
@@ -121,13 +103,29 @@ async def init_db_when_empty() -> UserId | None:
             environment is Environment.DEVELOPMENT and await get_user(config.admin_email) is None
         ):
             logger.warning("Empty db detected, creating tables...")
-            metadata.create_all(engine)
+            _create_all_tables()
             alembic_stamp_head()
 
             logger.warning("Empty db detected, creating admin user...")
             return await create_admin_user()
 
     return None
+
+
+def _create_all_tables() -> None:
+    import sqlalchemy
+
+    engine = sqlalchemy.create_engine(str(config.pg_dsn))
+    metadata.create_all(engine)
+    engine.dispose()
+
+
+def _drop_all_tables() -> None:
+    import sqlalchemy
+
+    engine = sqlalchemy.create_engine(str(config.pg_dsn))
+    metadata.drop_all(engine)
+    engine.dispose()
 
 
 async def sql_create_dev_db() -> UserId:
@@ -137,25 +135,25 @@ async def sql_create_dev_db() -> UserId:
 
     logger.warning("Initializing database with dummy records")
     await database.connect()
-    metadata.drop_all(engine)
-    metadata.create_all(engine)
+    _drop_all_tables()
+    _create_all_tables()
     real_user_id = await init_db_when_empty()
     alembic_stamp_head()
 
-    table_lookup: dict[type, Table] = {
-        UserInsertable: users,
-        ClubInsertable: clubs,
-        StageInsertable: stages,
-        TeamInsertable: teams,
-        UserXClubInsertable: users_x_clubs,
-        PlayerXTeamInsertable: players_x_teams,
-        PlayerInsertable: players,
-        RoundInsertable: rounds,
-        Match: matches,
-        TournamentInsertable: tournaments,
-        CourtInsertable: courts,
-        StageItemInsertable: stage_items,
-        RankingInsertable: rankings,
+    table_lookup: dict[type, str] = {
+        UserInsertable: "users",
+        ClubInsertable: "clubs",
+        StageInsertable: "stages",
+        TeamInsertable: "teams",
+        UserXClubInsertable: "users_x_clubs",
+        PlayerXTeamInsertable: "players_x_teams",
+        PlayerInsertable: "players",
+        RoundInsertable: "rounds",
+        Match: "matches",
+        TournamentInsertable: "tournaments",
+        CourtInsertable: "courts",
+        StageItemInsertable: "stage_items",
+        RankingInsertable: "rankings",
     }
 
     async def insert_dummy[BaseModelT: BaseModel](

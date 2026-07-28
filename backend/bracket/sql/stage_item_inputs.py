@@ -30,11 +30,11 @@ async def get_stage_item_input_by_id(
         return None
 
     if result["team_id"] is not None:
-        data = dict(result._mapping)
+        data = dict(result)
         data["team"] = await get_team_by_id(data["team_id"], tournament_id)
         return StageItemInputFinal.model_validate(data)
 
-    return TypeAdapter(StageItemInput).validate_python(result)
+    return TypeAdapter(StageItemInput).validate_python(dict(result))
 
 
 async def get_stage_item_input_ids_by_ranking_id(ranking_id: RankingId) -> list[StageItemId]:
@@ -131,4 +131,4 @@ async def sql_create_stage_item_input(
     if result is None:
         raise ValueError("Could not create stage")
 
-    return StageItemInputBase.model_validate(dict(result._mapping))
+    return StageItemInputBase.model_validate(dict(result))

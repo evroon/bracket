@@ -6,7 +6,6 @@ import pytest
 from bracket.database import database
 from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.tournament import Tournament, TournamentStatus
-from bracket.schema import tournaments
 from bracket.sql.tournaments import sql_delete_tournament, sql_get_tournament_by_endpoint_name
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TOURNAMENT
@@ -138,7 +137,8 @@ async def test_update_tournament(
     updated_tournament = await fetch_one_parsed_certain(
         database,
         Tournament,
-        query=tournaments.select().where(tournaments.c.id == auth_context.tournament.id),
+        "SELECT * FROM tournaments WHERE id = :id",
+        {"id": auth_context.tournament.id},
     )
     assert updated_tournament.name == body["name"]
     assert updated_tournament.dashboard_public == body["dashboard_public"]
@@ -148,13 +148,14 @@ async def test_update_tournament(
 async def test_archive_and_unarchive_tournament(
     startup_and_shutdown_uvicorn_server: None, auth_context: AuthContext
 ) -> None:
-    query = tournaments.select().where(tournaments.c.id == auth_context.tournament.id)
+    query = "SELECT * FROM tournaments WHERE id = :id"
+    values = {"id": auth_context.tournament.id}
     body = {"status": "ARCHIVED"}
     assert (
         await send_tournament_request(HTTPMethod.POST, "change-status", auth_context, json=body)
         == SUCCESS_RESPONSE
     )
-    updated_tournament = await fetch_one_parsed_certain(database, Tournament, query)
+    updated_tournament = await fetch_one_parsed_certain(database, Tournament, query, values)
     assert updated_tournament.status is TournamentStatus.ARCHIVED
     assert updated_tournament.dashboard_public is False
 
@@ -169,7 +170,7 @@ async def test_archive_and_unarchive_tournament(
         await send_tournament_request(HTTPMethod.POST, "change-status", auth_context, json=body)
         == SUCCESS_RESPONSE
     )
-    updated_tournament = await fetch_one_parsed_certain(database, Tournament, query)
+    updated_tournament = await fetch_one_parsed_certain(database, Tournament, query, values)
     assert updated_tournament.status is TournamentStatus.OPEN
     assert updated_tournament.dashboard_public is False
 

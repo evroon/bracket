@@ -2,7 +2,6 @@ from bracket.database import database
 from bracket.logic.tournaments import sql_delete_tournament_completely
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User, UserInDB, UserInsertable, UserPublic, UserToUpdate
-from bracket.schema import users
 from bracket.sql.clubs import get_clubs_for_user_id, sql_delete_club
 from bracket.sql.tournaments import sql_get_tournaments
 from bracket.utils.db import fetch_one_parsed
@@ -73,7 +72,7 @@ async def get_user_by_id(user_id: UserId) -> UserPublic | None:
         WHERE id = :user_id
         """
     result = await database.fetch_one(query=query, values={"user_id": user_id})
-    return UserPublic.model_validate(dict(result._mapping)) if result is not None else None
+    return UserPublic.model_validate(dict(result)) if result is not None else None
 
 
 async def get_expired_demo_users() -> list[UserPublic]:
@@ -84,7 +83,7 @@ async def get_expired_demo_users() -> list[UserPublic]:
         AND created <= NOW() - INTERVAL '30 minutes'
         """
     result = await database.fetch_all(query=query)
-    return [UserPublic.model_validate(demo_user) for demo_user in result]
+    return [UserPublic.model_validate(dict(demo_user)) for demo_user in result]
 
 
 async def create_user(user: UserInsertable) -> User:
@@ -103,7 +102,7 @@ async def create_user(user: UserInsertable) -> User:
             "account_type": user.account_type.value,
         },
     )
-    return User.model_validate(dict(assert_some(result)._mapping))
+    return User.model_validate(dict(assert_some(result)))
 
 
 async def delete_user(user_id: UserId) -> None:
@@ -125,7 +124,11 @@ async def check_whether_email_is_in_use(email: str) -> bool:
 
 
 async def get_user(email: str) -> UserInDB | None:
-    return await fetch_one_parsed(database, UserInDB, users.select().where(users.c.email == email))
+    return await fetch_one_parsed(
+        database, UserInDB,
+        "SELECT * FROM users WHERE email = :email",
+        {"email": email},
+    )
 
 
 async def delete_user_and_owned_clubs(user_id: UserId) -> None:

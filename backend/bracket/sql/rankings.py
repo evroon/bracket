@@ -11,7 +11,7 @@ async def get_all_rankings_in_tournament(tournament_id: TournamentId) -> list[Ra
         ORDER BY position
         """
     result = await database.fetch_all(query=query, values={"tournament_id": tournament_id})
-    return [Ranking.model_validate(dict(x._mapping)) for x in result]
+    return [Ranking.model_validate(dict(x)) for x in result]
 
 
 async def get_default_rankings_in_tournament(tournament_id: TournamentId) -> Ranking:
@@ -24,7 +24,7 @@ async def get_default_rankings_in_tournament(tournament_id: TournamentId) -> Ran
         """
     result = await database.fetch_one(query=query, values={"tournament_id": tournament_id})
     assert result is not None, "No default ranking found"
-    return Ranking.model_validate(dict(result._mapping))
+    return Ranking.model_validate(dict(result))
 
 
 async def get_ranking_for_stage_item(
@@ -40,7 +40,7 @@ async def get_ranking_for_stage_item(
     result = await database.fetch_one(
         query=query, values={"tournament_id": tournament_id, "stage_item_id": stage_item_id}
     )
-    return Ranking.model_validate(dict(result._mapping)) if result else None
+    return Ranking.model_validate(dict(result)) if result else None
 
 
 async def sql_update_ranking(
@@ -68,7 +68,7 @@ async def sql_update_ranking(
             "position": ranking_body.position,
         },
     )
-    return [Ranking.model_validate(dict(x._mapping)) for x in result]
+    return [Ranking.model_validate(dict(x)) for x in result]
 
 
 async def sql_delete_ranking(tournament_id: TournamentId, ranking_id: RankingId) -> None:

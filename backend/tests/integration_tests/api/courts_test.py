@@ -2,7 +2,6 @@ import pytest
 
 from bracket.database import database
 from bracket.models.db.court import Court
-from bracket.schema import courts
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_COURT1, DUMMY_MOCK_TIME, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
@@ -40,7 +39,7 @@ async def test_create_court(
     body = {"name": "Some new name", "active": True}
     response = await send_tournament_request(HTTPMethod.POST, "courts", auth_context, json=body)
     assert response["data"]["name"] == body["name"]
-    await assert_row_count_and_clear(courts, 1)
+    await assert_row_count_and_clear("courts", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -59,7 +58,7 @@ async def test_delete_court(
                 )
                 == SUCCESS_RESPONSE
             )
-            await assert_row_count_and_clear(courts, 0)
+            await assert_row_count_and_clear("courts", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -77,9 +76,9 @@ async def test_update_court(
                 HTTPMethod.PUT, f"courts/{court_inserted.id}", auth_context, json=body
             )
             updated_court = await fetch_one_parsed_certain(
-                database, Court, query=courts.select().where(courts.c.id == court_inserted.id)
+                database, Court, "SELECT * FROM courts WHERE id = :id", {"id": court_inserted.id}
             )
             assert updated_court.name == body["name"]
             assert response["data"]["name"] == body["name"]
 
-            await assert_row_count_and_clear(courts, 1)
+            await assert_row_count_and_clear("courts", 1)

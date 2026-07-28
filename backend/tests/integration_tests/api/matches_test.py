@@ -8,7 +8,6 @@ from bracket.models.db.stage_item import StageType
 from bracket.models.db.stage_item_inputs import (
     StageItemInputInsertable,
 )
-from bracket.schema import matches
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import (
     DUMMY_COURT1,
@@ -82,7 +81,7 @@ async def test_create_match(
         )
         assert response["data"]["id"], response
 
-        await assert_row_count_and_clear(matches, 1)
+        await assert_row_count_and_clear("matches", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -149,7 +148,7 @@ async def test_delete_match(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(matches, 0)
+        await assert_row_count_and_clear("matches", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -223,13 +222,14 @@ async def test_update_match(
         updated_match = await fetch_one_parsed_certain(
             database,
             Match,
-            query=matches.select().where(matches.c.id == match_inserted.id),
+            "SELECT * FROM matches WHERE id = :id",
+            {"id": match_inserted.id},
         )
         assert updated_match.stage_item_input1_score == body["stage_item_input1_score"]
         assert updated_match.stage_item_input2_score == body["stage_item_input2_score"]
         assert updated_match.court_id == body["court_id"]
 
-        await assert_row_count_and_clear(matches, 1)
+        await assert_row_count_and_clear("matches", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -304,12 +304,13 @@ async def test_update_endpoint_custom_duration_margin(
         updated_match = await fetch_one_parsed_certain(
             database,
             Match,
-            query=matches.select().where(matches.c.id == match_inserted.id),
+            "SELECT * FROM matches WHERE id = :id",
+            {"id": match_inserted.id},
         )
         assert updated_match.custom_duration_minutes == body["custom_duration_minutes"]
         assert updated_match.custom_margin_minutes == body["custom_margin_minutes"]
 
-        await assert_row_count_and_clear(matches, 1)
+        await assert_row_count_and_clear("matches", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")

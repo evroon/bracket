@@ -3,7 +3,6 @@ import pytest
 from bracket.database import database
 from bracket.models.db.round import Round
 from bracket.models.db.stage_item import StageType
-from bracket.schema import rounds
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_ROUND1, DUMMY_STAGE1, DUMMY_STAGE_ITEM1, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
@@ -46,7 +45,7 @@ async def test_create_round(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(rounds, 1)
+        await assert_row_count_and_clear("rounds", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -73,7 +72,7 @@ async def test_delete_round(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(rounds, 0)
+        await assert_row_count_and_clear("rounds", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -102,9 +101,9 @@ async def test_update_round(
             == SUCCESS_RESPONSE
         )
         updated_round = await fetch_one_parsed_certain(
-            database, Round, query=rounds.select().where(rounds.c.id == round_inserted.id)
+            database, Round, "SELECT * FROM rounds WHERE id = :id", {"id": round_inserted.id}
         )
         assert updated_round.name == body["name"]
         assert updated_round.is_draft == body["is_draft"]
 
-        await assert_row_count_and_clear(rounds, 1)
+        await assert_row_count_and_clear("rounds", 1)

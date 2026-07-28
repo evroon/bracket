@@ -18,7 +18,7 @@ async def sql_get_tournament(tournament_id: TournamentId) -> Tournament:
         """
     result = await database.fetch_one(query=query, values={"tournament_id": tournament_id})
     assert result is not None
-    return Tournament.model_validate(result)
+    return Tournament.model_validate(dict(result))
 
 
 async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament | None:
@@ -29,7 +29,7 @@ async def sql_get_tournament_by_endpoint_name(endpoint_name: str) -> Tournament 
         AND dashboard_public IS TRUE
         """
     result = await database.fetch_one(query=query, values={"endpoint_name": endpoint_name})
-    return Tournament.model_validate(result) if result is not None else None
+    return Tournament.model_validate(dict(result)) if result is not None else None
 
 
 async def sql_get_tournaments(
@@ -55,7 +55,7 @@ async def sql_get_tournaments(
         query += "AND status = 'ARCHIVED'"
 
     result = await database.fetch_all(query=query, values=params)
-    return [Tournament.model_validate(x) for x in result]
+    return [Tournament.model_validate(dict(x)) for x in result]
 
 
 async def sql_delete_tournament(tournament_id: TournamentId) -> None:

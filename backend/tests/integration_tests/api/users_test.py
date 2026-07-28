@@ -7,7 +7,6 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.models.db.account import UserAccountType
 from bracket.models.db.user import User, UserInsertable
-from bracket.schema import users
 from bracket.sql.users import create_user, delete_user, get_user_by_id
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.http import HTTPMethod
@@ -118,7 +117,7 @@ async def test_update_user_password(
             json=body,
         )
         updated_user = await fetch_one_parsed_certain(
-            database, User, query=users.select().where(users.c.id == user_created.id)
+            database, User, "SELECT * FROM users WHERE id = :id", {"id": user_created.id}
         )
 
         assert response.get("success") is True, response

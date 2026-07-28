@@ -34,7 +34,7 @@ async def sql_create_stage_item(
     if result is None:
         raise ValueError("Could not create stage")
 
-    return StageItem.model_validate(dict(result._mapping))
+    return StageItem.model_validate(dict(result))
 
 
 async def sql_create_stage_item_with_inputs(

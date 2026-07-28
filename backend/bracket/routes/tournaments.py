@@ -27,7 +27,6 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import SuccessResponse, TournamentResponse, TournamentsResponse
 from bracket.routes.util import disallow_archived_tournament
-from bracket.schema import tournaments
 from bracket.sql.rankings import (
     get_all_rankings_in_tournament,
     sql_create_ranking,
@@ -211,7 +210,7 @@ async def upload_logo(
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
-        tournaments.update().where(tournaments.c.id == tournament_id),
-        values={"logo_path": filename},
+        "UPDATE tournaments SET logo_path = :logo_path WHERE id = :tournament_id",
+        values={"logo_path": filename, "tournament_id": tournament_id},
     )
     return TournamentResponse(data=await sql_get_tournament(tournament_id))

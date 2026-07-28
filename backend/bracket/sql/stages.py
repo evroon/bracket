@@ -111,7 +111,7 @@ async def get_full_tournament_details(
         }
     )
     result = await database.fetch_all(query=query, values=values)
-    return [StageWithStageItems.model_validate(dict(x._mapping)) for x in result]
+    return [StageWithStageItems.model_validate(dict(x)) for x in result]
 
 
 async def sql_delete_stage(tournament_id: TournamentId, stage_id: StageId) -> None:
@@ -146,7 +146,7 @@ async def sql_create_stage(tournament_id: TournamentId) -> Stage:
     if result is None:
         raise ValueError("Could not create stage")
 
-    return Stage.model_validate(dict(result._mapping))
+    return Stage.model_validate(dict(result))
 
 
 async def get_next_stage_in_tournament(

@@ -12,7 +12,6 @@ from bracket.config import config
 from bracket.database import database
 from bracket.models.db.tournament import Tournament
 from bracket.models.db.user import UserInDB, UserPublic
-from bracket.schema import tournaments
 from bracket.sql.tournaments import sql_get_tournament_by_endpoint_name
 from bracket.sql.users import get_user, get_user_access_to_club, get_user_access_to_tournament
 from bracket.utils.db import fetch_all_parsed
@@ -140,7 +139,9 @@ async def user_authenticated_or_public_dashboard(
         pass
 
     tournaments_fetched = await fetch_all_parsed(
-        database, Tournament, tournaments.select().where(tournaments.c.id == tournament_id)
+        database, Tournament,
+        "SELECT * FROM tournaments WHERE id = :tournament_id",
+        {"tournament_id": tournament_id},
     )
     if len(tournaments_fetched) < 1 or not tournaments_fetched[0].dashboard_public:
         raise HTTPException(
