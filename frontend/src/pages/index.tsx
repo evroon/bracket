@@ -1,18 +1,18 @@
-import { Grid, Select, Title } from "@mantine/core";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Grid, Select, Title } from '@mantine/core';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import TournamentsCardTable from "@components/card_tables/tournaments";
-import TournamentModal from "@components/modals/tournament_modal";
-import { TournamentFilter } from "@components/utils/tournament";
-import { capitalize } from "@components/utils/util";
-import { checkForAuthError, getTournaments } from "@services/adapter";
-import Layout from "./_layout";
-import classes from "./index.module.css";
+import TournamentsCardTable from '@components/card_tables/tournaments';
+import TournamentModal from '@components/modals/tournament_modal';
+import { TournamentFilter } from '@components/utils/tournament';
+import { capitalize } from '@components/utils/util';
+import { checkForAuthError, getTournaments } from '@services/adapter';
+import Layout from './_layout';
+import classes from './index.module.css';
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<TournamentFilter>("OPEN");
+  const [filter, setFilter] = useState<TournamentFilter>('OPEN');
 
   const swrTournamentsResponse = getTournaments(filter);
   checkForAuthError(swrTournamentsResponse);
@@ -21,16 +21,16 @@ export default function HomePage() {
     <Layout>
       <Grid>
         <Grid.Col span="auto">
-          <Title>{capitalize(t("tournaments_title"))}</Title>
+          <Title>{capitalize(t('tournaments_title'))}</Title>
         </Grid.Col>
         <Grid.Col span="content" className={classes.fullWithMobile}>
           <Select
             size="md"
             placeholder="Pick value"
             data={[
-              { label: "All", value: "ALL" },
-              { label: "Archived", value: "ARCHIVED" },
-              { label: "Open", value: "OPEN" },
+              { label: 'All', value: 'ALL' },
+              { label: 'Archived', value: 'ARCHIVED' },
+              { label: 'Open', value: 'OPEN' },
             ]}
             allowDeselect={false}
             value={filter}

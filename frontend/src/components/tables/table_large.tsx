@@ -1,4 +1,4 @@
-import { ScrollArea, Table } from "@mantine/core";
+import { ScrollArea, Table } from '@mantine/core';
 
 export default function TableLayoutLarge({ children }: any) {
   return (
@@ -9,7 +9,7 @@ export default function TableLayoutLarge({ children }: any) {
           verticalSpacing="xs"
           striped
           highlightOnHover
-          style={{ fontSize: "inherit" }}
+          style={{ fontSize: 'inherit' }}
         >
           {children}
         </Table>

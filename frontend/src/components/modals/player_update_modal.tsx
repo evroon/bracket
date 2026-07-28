@@ -1,12 +1,12 @@
-import { Button, Checkbox, Modal, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { BiEditAlt } from "@react-icons/all-files/bi/BiEditAlt";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Button, Checkbox, Modal, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { Player, PlayersResponse } from "@openapi";
-import { updatePlayer } from "@services/player";
+import { Player, PlayersResponse } from '@openapi';
+import { updatePlayer } from '@services/player';
 
 export default function PlayerUpdateModal({
   tournament_id,
@@ -27,23 +27,23 @@ export default function PlayerUpdateModal({
       onClick={() => setOpened(true)}
       leftSection={<BiEditAlt size={20} />}
     >
-      {t("edit_player")}
+      {t('edit_player')}
     </Button>
   );
 
   const form = useForm({
     initialValues: {
-      name: player == null ? "" : player.name,
+      name: player == null ? '' : player.name,
       active: player == null ? true : player.active,
     },
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t("edit_player")}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_player')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updatePlayer(tournament_id, player.id, values.name, values.active, null);
@@ -53,19 +53,19 @@ export default function PlayerUpdateModal({
         >
           <TextInput
             withAsterisk
-            label={t("name_input_label")}
-            placeholder={t("player_name_input_placeholder")}
-            {...form.getInputProps("name")}
+            label={t('name_input_label')}
+            placeholder={t('player_name_input_placeholder')}
+            {...form.getInputProps('name')}
           />
 
           <Checkbox
             mt="md"
-            label={t("active_player_checkbox_label")}
-            {...form.getInputProps("active", { type: "checkbox" })}
+            label={t('active_player_checkbox_label')}
+            {...form.getInputProps('active', { type: 'checkbox' })}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            {t("save_button")}
+            {t('save_button')}
           </Button>
         </form>
       </Modal>

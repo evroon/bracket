@@ -867,7 +867,7 @@ export type StageActivateBody = {
   /**
    * Direction
    */
-  direction: "next" | "previous";
+  direction: 'next' | 'previous';
 };
 
 /**
@@ -1220,7 +1220,7 @@ export type StageRankingResponse = {
 /**
  * StageType
  */
-export type StageType = "ROUND_ROBIN" | "SINGLE_ELIMINATION" | "SWISS";
+export type StageType = 'ROUND_ROBIN' | 'SINGLE_ELIMINATION' | 'SWISS';
 
 /**
  * StageUpdateBody
@@ -1544,7 +1544,7 @@ export type TournamentResponse = {
 /**
  * TournamentStatus
  */
-export type TournamentStatus = "OPEN" | "ARCHIVED";
+export type TournamentStatus = 'OPEN' | 'ARCHIVED';
 
 /**
  * TournamentUpdateBody
@@ -1607,7 +1607,7 @@ export type UpcomingMatchesResponse = {
 /**
  * UserAccountType
  */
-export type UserAccountType = "REGULAR" | "DEMO";
+export type UserAccountType = 'REGULAR' | 'DEMO';
 
 /**
  * UserPasswordToUpdate
@@ -1707,7 +1707,7 @@ export type GetClubsClubsGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/clubs";
+  url: '/clubs';
 };
 
 export type GetClubsClubsGetResponses = {
@@ -1723,7 +1723,7 @@ export type CreateNewClubClubsPostData = {
   body: ClubCreateBody;
   path?: never;
   query?: never;
-  url: "/clubs";
+  url: '/clubs';
 };
 
 export type CreateNewClubClubsPostErrors = {
@@ -1755,7 +1755,7 @@ export type DeleteClubClubsClubIdDeleteData = {
     club_id: number;
   };
   query?: never;
-  url: "/clubs/{club_id}";
+  url: '/clubs/{club_id}';
 };
 
 export type DeleteClubClubsClubIdDeleteErrors = {
@@ -1787,7 +1787,7 @@ export type UpdateClubClubsClubIdPutData = {
     club_id: number;
   };
   query?: never;
-  url: "/clubs/{club_id}";
+  url: '/clubs/{club_id}';
 };
 
 export type UpdateClubClubsClubIdPutErrors = {
@@ -1814,7 +1814,7 @@ export type GetMetricsMetricsGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsMetricsGetResponses = {
@@ -1831,7 +1831,7 @@ export type PingPingGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/ping";
+  url: '/ping';
 };
 
 export type PingPingGetResponses = {
@@ -1849,7 +1849,7 @@ export type LoginForAccessTokenTokenPostData = {
   body: BodyLoginForAccessTokenTokenPost;
   path?: never;
   query?: never;
-  url: "/token";
+  url: '/token';
 };
 
 export type LoginForAccessTokenTokenPostErrors = {
@@ -1879,13 +1879,13 @@ export type GetTournamentsTournamentsGetData = {
     /**
      * Filter
      */
-    filter_?: "ALL" | "OPEN" | "ARCHIVED";
+    filter_?: 'ALL' | 'OPEN' | 'ARCHIVED';
     /**
      * Endpoint Name
      */
     endpoint_name?: string | null;
   };
-  url: "/tournaments";
+  url: '/tournaments';
 };
 
 export type GetTournamentsTournamentsGetErrors = {
@@ -1912,7 +1912,7 @@ export type CreateTournamentTournamentsPostData = {
   body: TournamentBody;
   path?: never;
   query?: never;
-  url: "/tournaments";
+  url: '/tournaments';
 };
 
 export type CreateTournamentTournamentsPostErrors = {
@@ -1944,7 +1944,7 @@ export type DeleteTournamentTournamentsTournamentIdDeleteData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}";
+  url: '/tournaments/{tournament_id}';
 };
 
 export type DeleteTournamentTournamentsTournamentIdDeleteErrors = {
@@ -1976,7 +1976,7 @@ export type GetTournamentTournamentsTournamentIdGetData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}";
+  url: '/tournaments/{tournament_id}';
 };
 
 export type GetTournamentTournamentsTournamentIdGetErrors = {
@@ -2008,7 +2008,7 @@ export type UpdateTournamentByIdTournamentsTournamentIdPutData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}";
+  url: '/tournaments/{tournament_id}';
 };
 
 export type UpdateTournamentByIdTournamentsTournamentIdPutErrors = {
@@ -2040,7 +2040,7 @@ export type GetAvailableInputsTournamentsTournamentIdAvailableInputsGetData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/available_inputs";
+  url: '/tournaments/{tournament_id}/available_inputs';
 };
 
 export type GetAvailableInputsTournamentsTournamentIdAvailableInputsGetErrors = {
@@ -2072,7 +2072,7 @@ export type ChangeStatusTournamentsTournamentIdChangeStatusPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/change-status";
+  url: '/tournaments/{tournament_id}/change-status';
 };
 
 export type ChangeStatusTournamentsTournamentIdChangeStatusPostErrors = {
@@ -2104,7 +2104,7 @@ export type GetCourtsTournamentsTournamentIdCourtsGetData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/courts";
+  url: '/tournaments/{tournament_id}/courts';
 };
 
 export type GetCourtsTournamentsTournamentIdCourtsGetErrors = {
@@ -2136,7 +2136,7 @@ export type CreateCourtTournamentsTournamentIdCourtsPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/courts";
+  url: '/tournaments/{tournament_id}/courts';
 };
 
 export type CreateCourtTournamentsTournamentIdCourtsPostErrors = {
@@ -2172,7 +2172,7 @@ export type DeleteCourtTournamentsTournamentIdCourtsCourtIdDeleteData = {
     court_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/courts/{court_id}";
+  url: '/tournaments/{tournament_id}/courts/{court_id}';
 };
 
 export type DeleteCourtTournamentsTournamentIdCourtsCourtIdDeleteErrors = {
@@ -2208,7 +2208,7 @@ export type UpdateCourtByIdTournamentsTournamentIdCourtsCourtIdPutData = {
     court_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/courts/{court_id}";
+  url: '/tournaments/{tournament_id}/courts/{court_id}';
 };
 
 export type UpdateCourtByIdTournamentsTournamentIdCourtsCourtIdPutErrors = {
@@ -2240,7 +2240,7 @@ export type UploadLogoTournamentsTournamentIdLogoPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/logo";
+  url: '/tournaments/{tournament_id}/logo';
 };
 
 export type UploadLogoTournamentsTournamentIdLogoPostErrors = {
@@ -2272,7 +2272,7 @@ export type CreateMatchTournamentsTournamentIdMatchesPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/matches";
+  url: '/tournaments/{tournament_id}/matches';
 };
 
 export type CreateMatchTournamentsTournamentIdMatchesPostErrors = {
@@ -2308,7 +2308,7 @@ export type DeleteMatchTournamentsTournamentIdMatchesMatchIdDeleteData = {
     match_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/matches/{match_id}";
+  url: '/tournaments/{tournament_id}/matches/{match_id}';
 };
 
 export type DeleteMatchTournamentsTournamentIdMatchesMatchIdDeleteErrors = {
@@ -2344,7 +2344,7 @@ export type UpdateMatchByIdTournamentsTournamentIdMatchesMatchIdPutData = {
     match_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/matches/{match_id}";
+  url: '/tournaments/{tournament_id}/matches/{match_id}';
 };
 
 export type UpdateMatchByIdTournamentsTournamentIdMatchesMatchIdPutErrors = {
@@ -2380,7 +2380,7 @@ export type RescheduleMatchTournamentsTournamentIdMatchesMatchIdReschedulePostDa
     match_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/matches/{match_id}/reschedule";
+  url: '/tournaments/{tournament_id}/matches/{match_id}/reschedule';
 };
 
 export type RescheduleMatchTournamentsTournamentIdMatchesMatchIdReschedulePostErrors = {
@@ -2412,7 +2412,7 @@ export type GetNextStageRankingsTournamentsTournamentIdNextStageRankingsGetData 
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/next_stage_rankings";
+  url: '/tournaments/{tournament_id}/next_stage_rankings';
 };
 
 export type GetNextStageRankingsTournamentsTournamentIdNextStageRankingsGetErrors = {
@@ -2463,21 +2463,21 @@ export type GetPlayersTournamentsTournamentIdPlayersGetData = {
     /**
      * Sort Direction
      */
-    sort_direction?: "asc" | "desc";
+    sort_direction?: 'asc' | 'desc';
     /**
      * Sort By
      */
     sort_by?:
-      | "name"
-      | "elo_score"
-      | "swiss_score"
-      | "wins"
-      | "draws"
-      | "losses"
-      | "active"
-      | "created";
+      | 'name'
+      | 'elo_score'
+      | 'swiss_score'
+      | 'wins'
+      | 'draws'
+      | 'losses'
+      | 'active'
+      | 'created';
   };
-  url: "/tournaments/{tournament_id}/players";
+  url: '/tournaments/{tournament_id}/players';
 };
 
 export type GetPlayersTournamentsTournamentIdPlayersGetErrors = {
@@ -2509,7 +2509,7 @@ export type CreateSinglePlayerTournamentsTournamentIdPlayersPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/players";
+  url: '/tournaments/{tournament_id}/players';
 };
 
 export type CreateSinglePlayerTournamentsTournamentIdPlayersPostErrors = {
@@ -2545,7 +2545,7 @@ export type DeletePlayerTournamentsTournamentIdPlayersPlayerIdDeleteData = {
     player_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/players/{player_id}";
+  url: '/tournaments/{tournament_id}/players/{player_id}';
 };
 
 export type DeletePlayerTournamentsTournamentIdPlayersPlayerIdDeleteErrors = {
@@ -2581,7 +2581,7 @@ export type UpdatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPutData = {
     player_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/players/{player_id}";
+  url: '/tournaments/{tournament_id}/players/{player_id}';
 };
 
 export type UpdatePlayerByIdTournamentsTournamentIdPlayersPlayerIdPutErrors = {
@@ -2613,7 +2613,7 @@ export type CreateMultiplePlayersTournamentsTournamentIdPlayersMultiPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/players_multi";
+  url: '/tournaments/{tournament_id}/players_multi';
 };
 
 export type CreateMultiplePlayersTournamentsTournamentIdPlayersMultiPostErrors = {
@@ -2645,7 +2645,7 @@ export type GetRankingsTournamentsTournamentIdRankingsGetData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rankings";
+  url: '/tournaments/{tournament_id}/rankings';
 };
 
 export type GetRankingsTournamentsTournamentIdRankingsGetErrors = {
@@ -2677,7 +2677,7 @@ export type CreateRankingTournamentsTournamentIdRankingsPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rankings";
+  url: '/tournaments/{tournament_id}/rankings';
 };
 
 export type CreateRankingTournamentsTournamentIdRankingsPostErrors = {
@@ -2713,7 +2713,7 @@ export type DeleteRankingTournamentsTournamentIdRankingsRankingIdDeleteData = {
     ranking_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rankings/{ranking_id}";
+  url: '/tournaments/{tournament_id}/rankings/{ranking_id}';
 };
 
 export type DeleteRankingTournamentsTournamentIdRankingsRankingIdDeleteErrors = {
@@ -2749,7 +2749,7 @@ export type UpdateRankingByIdTournamentsTournamentIdRankingsRankingIdPutData = {
     ranking_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rankings/{ranking_id}";
+  url: '/tournaments/{tournament_id}/rankings/{ranking_id}';
 };
 
 export type UpdateRankingByIdTournamentsTournamentIdRankingsRankingIdPutErrors = {
@@ -2781,7 +2781,7 @@ export type CreateRoundTournamentsTournamentIdRoundsPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rounds";
+  url: '/tournaments/{tournament_id}/rounds';
 };
 
 export type CreateRoundTournamentsTournamentIdRoundsPostErrors = {
@@ -2817,7 +2817,7 @@ export type DeleteRoundTournamentsTournamentIdRoundsRoundIdDeleteData = {
     round_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rounds/{round_id}";
+  url: '/tournaments/{tournament_id}/rounds/{round_id}';
 };
 
 export type DeleteRoundTournamentsTournamentIdRoundsRoundIdDeleteErrors = {
@@ -2853,7 +2853,7 @@ export type UpdateRoundByIdTournamentsTournamentIdRoundsRoundIdPutData = {
     round_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/rounds/{round_id}";
+  url: '/tournaments/{tournament_id}/rounds/{round_id}';
 };
 
 export type UpdateRoundByIdTournamentsTournamentIdRoundsRoundIdPutErrors = {
@@ -2885,7 +2885,7 @@ export type ScheduleMatchesTournamentsTournamentIdScheduleMatchesPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/schedule_matches";
+  url: '/tournaments/{tournament_id}/schedule_matches';
 };
 
 export type ScheduleMatchesTournamentsTournamentIdScheduleMatchesPostErrors = {
@@ -2917,7 +2917,7 @@ export type CreateStageItemTournamentsTournamentIdStageItemsPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stage_items";
+  url: '/tournaments/{tournament_id}/stage_items';
 };
 
 export type CreateStageItemTournamentsTournamentIdStageItemsPostErrors = {
@@ -2953,7 +2953,7 @@ export type DeleteStageItemTournamentsTournamentIdStageItemsStageItemIdDeleteDat
     stage_item_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stage_items/{stage_item_id}";
+  url: '/tournaments/{tournament_id}/stage_items/{stage_item_id}';
 };
 
 export type DeleteStageItemTournamentsTournamentIdStageItemsStageItemIdDeleteErrors = {
@@ -2989,7 +2989,7 @@ export type UpdateStageItemTournamentsTournamentIdStageItemsStageItemIdPutData =
     stage_item_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stage_items/{stage_item_id}";
+  url: '/tournaments/{tournament_id}/stage_items/{stage_item_id}';
 };
 
 export type UpdateStageItemTournamentsTournamentIdStageItemsStageItemIdPutErrors = {
@@ -3036,7 +3036,7 @@ export type UpdateStageItemInputTournamentsTournamentIdStageItemsStageItemIdInpu
       stage_item_input_id: number;
     };
     query?: never;
-    url: "/tournaments/{tournament_id}/stage_items/{stage_item_id}/inputs/{stage_item_input_id}";
+    url: '/tournaments/{tournament_id}/stage_items/{stage_item_id}/inputs/{stage_item_input_id}';
   };
 
 export type UpdateStageItemInputTournamentsTournamentIdStageItemsStageItemIdInputsStageItemInputIdPutErrors =
@@ -3087,7 +3087,7 @@ export type StartNextRoundTournamentsTournamentIdStageItemsStageItemIdStartNextR
      */
     only_recommended?: boolean;
   };
-  url: "/tournaments/{tournament_id}/stage_items/{stage_item_id}/start_next_round";
+  url: '/tournaments/{tournament_id}/stage_items/{stage_item_id}/start_next_round';
 };
 
 export type StartNextRoundTournamentsTournamentIdStageItemsStageItemIdStartNextRoundPostErrors = {
@@ -3142,7 +3142,7 @@ export type GetMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpco
        */
       limit?: number;
     };
-    url: "/tournaments/{tournament_id}/stage_items/{stage_item_id}/upcoming_matches";
+    url: '/tournaments/{tournament_id}/stage_items/{stage_item_id}/upcoming_matches';
   };
 
 export type GetMatchesToScheduleTournamentsTournamentIdStageItemsStageItemIdUpcomingMatchesGetErrors =
@@ -3181,7 +3181,7 @@ export type GetStagesTournamentsTournamentIdStagesGetData = {
      */
     no_draft_rounds?: boolean;
   };
-  url: "/tournaments/{tournament_id}/stages";
+  url: '/tournaments/{tournament_id}/stages';
 };
 
 export type GetStagesTournamentsTournamentIdStagesGetErrors = {
@@ -3213,7 +3213,7 @@ export type CreateStageTournamentsTournamentIdStagesPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stages";
+  url: '/tournaments/{tournament_id}/stages';
 };
 
 export type CreateStageTournamentsTournamentIdStagesPostErrors = {
@@ -3245,7 +3245,7 @@ export type ActivateNextStageTournamentsTournamentIdStagesActivatePostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stages/activate";
+  url: '/tournaments/{tournament_id}/stages/activate';
 };
 
 export type ActivateNextStageTournamentsTournamentIdStagesActivatePostErrors = {
@@ -3281,7 +3281,7 @@ export type DeleteStageTournamentsTournamentIdStagesStageIdDeleteData = {
     stage_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stages/{stage_id}";
+  url: '/tournaments/{tournament_id}/stages/{stage_id}';
 };
 
 export type DeleteStageTournamentsTournamentIdStagesStageIdDeleteErrors = {
@@ -3317,7 +3317,7 @@ export type UpdateStageTournamentsTournamentIdStagesStageIdPutData = {
     stage_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/stages/{stage_id}";
+  url: '/tournaments/{tournament_id}/stages/{stage_id}';
 };
 
 export type UpdateStageTournamentsTournamentIdStagesStageIdPutErrors = {
@@ -3364,21 +3364,21 @@ export type GetTeamsTournamentsTournamentIdTeamsGetData = {
     /**
      * Sort Direction
      */
-    sort_direction?: "asc" | "desc";
+    sort_direction?: 'asc' | 'desc';
     /**
      * Sort By
      */
     sort_by?:
-      | "name"
-      | "elo_score"
-      | "swiss_score"
-      | "wins"
-      | "draws"
-      | "losses"
-      | "active"
-      | "created";
+      | 'name'
+      | 'elo_score'
+      | 'swiss_score'
+      | 'wins'
+      | 'draws'
+      | 'losses'
+      | 'active'
+      | 'created';
   };
-  url: "/tournaments/{tournament_id}/teams";
+  url: '/tournaments/{tournament_id}/teams';
 };
 
 export type GetTeamsTournamentsTournamentIdTeamsGetErrors = {
@@ -3410,7 +3410,7 @@ export type CreateTeamTournamentsTournamentIdTeamsPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/teams";
+  url: '/tournaments/{tournament_id}/teams';
 };
 
 export type CreateTeamTournamentsTournamentIdTeamsPostErrors = {
@@ -3446,7 +3446,7 @@ export type DeleteTeamTournamentsTournamentIdTeamsTeamIdDeleteData = {
     team_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/teams/{team_id}";
+  url: '/tournaments/{tournament_id}/teams/{team_id}';
 };
 
 export type DeleteTeamTournamentsTournamentIdTeamsTeamIdDeleteErrors = {
@@ -3482,7 +3482,7 @@ export type UpdateTeamByIdTournamentsTournamentIdTeamsTeamIdPutData = {
     team_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/teams/{team_id}";
+  url: '/tournaments/{tournament_id}/teams/{team_id}';
 };
 
 export type UpdateTeamByIdTournamentsTournamentIdTeamsTeamIdPutErrors = {
@@ -3518,7 +3518,7 @@ export type UpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPostData = {
     team_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/teams/{team_id}/logo";
+  url: '/tournaments/{tournament_id}/teams/{team_id}/logo';
 };
 
 export type UpdateTeamLogoTournamentsTournamentIdTeamsTeamIdLogoPostErrors = {
@@ -3550,7 +3550,7 @@ export type CreateMultipleTeamsTournamentsTournamentIdTeamsMultiPostData = {
     tournament_id: number;
   };
   query?: never;
-  url: "/tournaments/{tournament_id}/teams_multi";
+  url: '/tournaments/{tournament_id}/teams_multi';
 };
 
 export type CreateMultipleTeamsTournamentsTournamentIdTeamsMultiPostErrors = {
@@ -3577,7 +3577,7 @@ export type GetUserUsersMeGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/users/me";
+  url: '/users/me';
 };
 
 export type GetUserUsersMeGetResponses = {
@@ -3594,7 +3594,7 @@ export type RegisterUserUsersRegisterPostData = {
   body: UserToRegister;
   path?: never;
   query?: never;
-  url: "/users/register";
+  url: '/users/register';
 };
 
 export type RegisterUserUsersRegisterPostErrors = {
@@ -3621,7 +3621,7 @@ export type RegisterDemoUserUsersRegisterDemoPostData = {
   body: DemoUserToRegister;
   path?: never;
   query?: never;
-  url: "/users/register_demo";
+  url: '/users/register_demo';
 };
 
 export type RegisterDemoUserUsersRegisterDemoPostErrors = {
@@ -3653,7 +3653,7 @@ export type GetMeUsersUserIdGetData = {
     user_id: number;
   };
   query?: never;
-  url: "/users/{user_id}";
+  url: '/users/{user_id}';
 };
 
 export type GetMeUsersUserIdGetErrors = {
@@ -3684,7 +3684,7 @@ export type UpdateUserDetailsUsersUserIdPutData = {
     user_id: number;
   };
   query?: never;
-  url: "/users/{user_id}";
+  url: '/users/{user_id}';
 };
 
 export type UpdateUserDetailsUsersUserIdPutErrors = {
@@ -3716,7 +3716,7 @@ export type PutUserPasswordUsersUserIdPasswordPutData = {
     user_id: number;
   };
   query?: never;
-  url: "/users/{user_id}/password";
+  url: '/users/{user_id}/password';
 };
 
 export type PutUserPasswordUsersUserIdPasswordPutErrors = {

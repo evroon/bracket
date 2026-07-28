@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button } from '@mantine/core';
 
 export default function SaveButton(props: any) {
   return (

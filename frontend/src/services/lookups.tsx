@@ -1,15 +1,15 @@
-import { SWRResponse } from "swr";
+import { SWRResponse } from 'swr';
 
-import { assert_not_none } from "@components/utils/assert";
-import { groupBy, responseIsValid } from "@components/utils/util";
+import { assert_not_none } from '@components/utils/assert';
+import { groupBy, responseIsValid } from '@components/utils/util';
 import {
   Court,
   CourtsResponse,
   FullTeamWithPlayers,
   MatchWithDetails,
   StageWithStageItems,
-} from "@openapi";
-import { getTeams } from "./adapter";
+} from '@openapi';
+import { getTeams } from './adapter';
 
 export function getTeamsLookup(tournamentId: number) {
   const swrTeamsResponse: SWRResponse = getTeams(tournamentId);
@@ -66,7 +66,7 @@ export function getStageItemTeamsLookup(swrStagesResponse: SWRResponse) {
       .sort((si1, si2) => (si1.name > si2.name ? 1 : -1))
       .forEach((stageItem) => {
         const teams_with_inputs = stageItem.inputs.filter(
-          (input) => "team" in input && input.team != null,
+          (input) => 'team' in input && input.team != null,
         );
 
         if (teams_with_inputs.length > 0) {
@@ -99,24 +99,24 @@ export function stringToColour(input: string) {
     hash = input.charCodeAt(i) + ((hash << 5) - hash);
   }
   const colors = [
-    "pink",
-    "violet",
-    "green",
-    "blue",
-    "red",
-    "grape",
-    "indigo",
-    "cyan",
-    "orange",
-    "yellow",
-    "teal",
+    'pink',
+    'violet',
+    'green',
+    'blue',
+    'red',
+    'grape',
+    'indigo',
+    'cyan',
+    'orange',
+    'yellow',
+    'teal',
   ];
   return colors[Math.abs(hash) % colors.length];
 }
 
 export function getMatchLookupByCourt(swrStagesResponse: SWRResponse) {
   const matches = Object.values(getMatchLookup(swrStagesResponse)).map((x) => x.match);
-  return groupBy(["court_id"])(matches);
+  return groupBy(['court_id'])(matches);
 }
 
 export function getScheduleData(

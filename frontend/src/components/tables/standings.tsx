@@ -1,14 +1,14 @@
-import { Table, Text } from "@mantine/core";
-import { useTranslation } from "react-i18next";
+import { Table, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
-import { PlayerScore } from "@components/info/player_score";
-import { WinDistribution } from "@components/info/player_statistics";
-import { EmptyTableInfo } from "@components/no_content/empty_table_info";
-import { formatStageItemInput } from "@components/utils/stage_item_input";
-import { StageItemInputFinal, StageItemWithRounds } from "@openapi";
-import { WinDistributionTitle } from "./players";
-import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from "./table";
-import TableLayoutLarge from "./table_large";
+import { PlayerScore } from '@components/info/player_score';
+import { WinDistribution } from '@components/info/player_statistics';
+import { EmptyTableInfo } from '@components/no_content/empty_table_info';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { StageItemInputFinal, StageItemWithRounds } from '@openapi';
+import { WinDistributionTitle } from './players';
+import { ThNotSortable, ThSortable, getTableState, sortTableEntries } from './table';
+import TableLayoutLarge from './table_large';
 
 export function StandingsTableForStageItem({
   teams_with_inputs,
@@ -24,7 +24,7 @@ export function StandingsTableForStageItem({
   maxTeamsToDisplay: number;
 }) {
   const { t } = useTranslation();
-  const tableState = getTableState("points", false);
+  const tableState = getTableState('points', false);
 
   const minPoints = Math.min(...teams_with_inputs.map((input) => parseFloat(input.points)));
   const maxPoints = Math.max(...teams_with_inputs.map((input) => parseFloat(input.points)));
@@ -37,19 +37,19 @@ export function StandingsTableForStageItem({
     .slice(0, maxTeamsToDisplay)
     .map((team_with_input, index) => (
       <Table.Tr key={team_with_input.id}>
-        <Table.Td style={{ width: "2rem" }}>{index + 1}</Table.Td>
-        <Table.Td style={{ width: "20rem" }}>
+        <Table.Td style={{ width: '2rem' }}>{index + 1}</Table.Td>
+        <Table.Td style={{ width: '20rem' }}>
           <Text truncate="end" lineClamp={1} inherit>
             {formatStageItemInput(team_with_input, stageItemsLookup)}
           </Text>
         </Table.Td>
-        <Table.Td visibleFrom="sm" style={{ minWidth: "8rem" }}>
+        <Table.Td visibleFrom="sm" style={{ minWidth: '8rem' }}>
           <Text truncate="end" lineClamp={1} inherit>
             {team_with_input.points}
           </Text>
         </Table.Td>
-        {stageItem.type === "SWISS" ? (
-          <Table.Td style={{ minWidth: "10rem" }}>
+        {stageItem.type === 'SWISS' ? (
+          <Table.Td style={{ minWidth: '10rem' }}>
             <PlayerScore
               score={parseFloat(team_with_input.points)}
               min_score={minPoints}
@@ -59,7 +59,7 @@ export function StandingsTableForStageItem({
             />
           </Table.Td>
         ) : (
-          <Table.Td style={{ minWidth: "10rem" }}>
+          <Table.Td style={{ minWidth: '10rem' }}>
             <WinDistribution
               wins={team_with_input.wins}
               draws={team_with_input.draws}
@@ -71,7 +71,7 @@ export function StandingsTableForStageItem({
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t("teams_title")} />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('teams_title')} />;
 
   return (
     <TableLayoutLarge display_mode="presentation">
@@ -79,21 +79,21 @@ export function StandingsTableForStageItem({
         <Table.Tr>
           <ThNotSortable>#</ThNotSortable>
           <ThSortable state={tableState} field="name">
-            {t("name_table_header")}
+            {t('name_table_header')}
           </ThSortable>
-          {stageItem.type === "SWISS" ? (
+          {stageItem.type === 'SWISS' ? (
             <>
               <ThSortable visibleFrom="sm" state={tableState} field="points">
-                {t("elo_score")}
+                {t('elo_score')}
               </ThSortable>
               <ThSortable state={tableState} field="elo_score">
-                {t("elo_score")}
+                {t('elo_score')}
               </ThSortable>
             </>
           ) : (
             <>
               <ThSortable visibleFrom="sm" state={tableState} field="points">
-                {t("points_table_header")}
+                {t('points_table_header')}
               </ThSortable>
               <ThNotSortable>
                 <WinDistributionTitle />

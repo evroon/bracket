@@ -1,14 +1,14 @@
-import { Button, Modal, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { BiEditAlt } from "@react-icons/all-files/bi/BiEditAlt";
-import { GoPlus } from "@react-icons/all-files/go/GoPlus";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Button, Modal, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import SaveButton from "@components/buttons/save";
-import { Club, ClubsResponse } from "@openapi";
-import { createClub, updateClub } from "@services/club";
+import SaveButton from '@components/buttons/save';
+import { Club, ClubsResponse } from '@openapi';
+import { createClub, updateClub } from '@services/club';
 
 export default function ClubModal({
   club,
@@ -19,7 +19,7 @@ export default function ClubModal({
 }) {
   const { t } = useTranslation();
   const is_create_form = club == null;
-  const operation_text = is_create_form ? t("create_club_button") : t("edit_club_button");
+  const operation_text = is_create_form ? t('create_club_button') : t('edit_club_button');
   const icon = is_create_form ? <GoPlus size={20} /> : <BiEditAlt size={20} />;
   const [opened, setOpened] = useState(false);
   const modalOpenButton = is_create_form ? (
@@ -44,11 +44,11 @@ export default function ClubModal({
 
   const form = useForm({
     initialValues: {
-      name: club == null ? "" : club.name,
+      name: club == null ? '' : club.name,
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
@@ -65,13 +65,13 @@ export default function ClubModal({
         >
           <TextInput
             withAsterisk
-            label={t("name_input_label")}
-            placeholder={t("club_name_input_placeholder")}
-            {...form.getInputProps("name")}
+            label={t('name_input_label')}
+            placeholder={t('club_name_input_placeholder')}
+            {...form.getInputProps('name')}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            {t("save_button")}
+            {t('save_button')}
           </Button>
         </form>
       </Modal>

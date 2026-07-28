@@ -1,3 +1,3 @@
-import { TFunction } from "i18next";
+import { TFunction } from 'i18next';
 
-export type Translator = TFunction<"translation", undefined>;
+export type Translator = TFunction<'translation', undefined>;

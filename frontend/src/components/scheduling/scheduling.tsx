@@ -1,8 +1,8 @@
-import { Divider } from "@mantine/core";
-import { SWRResponse } from "swr";
+import { Divider } from '@mantine/core';
+import { SWRResponse } from 'swr';
 
-import UpcomingMatchesTable from "@components/tables/upcoming_matches";
-import { SchedulerSettings } from "@components/utils/match";
+import UpcomingMatchesTable from '@components/tables/upcoming_matches';
+import { SchedulerSettings } from '@components/utils/match';
 import {
   CourtsResponse,
   RoundWithMatches,
@@ -10,8 +10,8 @@ import {
   StagesWithStageItemsResponse,
   Tournament,
   UpcomingMatchesResponse,
-} from "@openapi";
-import SwissSettings, { getSwissRoundSchedulingProgress } from "./settings/ladder_fixed";
+} from '@openapi';
+import SwissSettings, { getSwissRoundSchedulingProgress } from './settings/ladder_fixed';
 
 export default function Scheduler({
   activeStage,
@@ -31,7 +31,7 @@ export default function Scheduler({
   schedulerSettings: SchedulerSettings;
 }) {
   return (
-    <div style={{ marginTop: "1rem" }}>
+    <div style={{ marginTop: '1rem' }}>
       <h2>
         Schedule new matches for <u>{draftRound.name}</u> in <u>{activeStage.name}</u>
       </h2>

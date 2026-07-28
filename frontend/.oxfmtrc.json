@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
   "ignorePatterns": [],
   "overrides": [
     {

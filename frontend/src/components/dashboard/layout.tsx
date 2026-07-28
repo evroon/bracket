@@ -7,15 +7,15 @@ import {
   Skeleton,
   Title,
   UnstyledButton,
-} from "@mantine/core";
-import QRCode from "react-qr-code";
-import { useLocation } from "react-router";
+} from '@mantine/core';
+import QRCode from 'react-qr-code';
+import { useLocation } from 'react-router';
 
-import PreloadLink from "@components/utils/link";
-import { getBaseURL } from "@components/utils/util";
-import { Tournament } from "@openapi";
-import { getBaseApiUrl } from "@services/adapter";
-import classes from "./layout.module.css";
+import PreloadLink from '@components/utils/link';
+import { getBaseURL } from '@components/utils/util';
+import { Tournament } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
+import classes from './layout.module.css';
 
 export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
   if (tournamentDataFull == null) {
@@ -24,18 +24,18 @@ export function TournamentQRCode({ tournamentDataFull }: { tournamentDataFull: T
   return (
     <div
       style={{
-        width: "100%",
-        background: "white",
-        marginTop: "2rem",
-        maxWidth: "400px",
-        height: "auto",
-        borderRadius: "16px",
-        alignSelf: "end",
+        width: '100%',
+        background: 'white',
+        marginTop: '2rem',
+        maxWidth: '400px',
+        height: 'auto',
+        borderRadius: '16px',
+        alignSelf: 'end',
       }}
     >
       <Center>
         <QRCode
-          style={{ margin: "24px" }}
+          style={{ margin: '24px' }}
           // @ts-ignore
           size="auto"
           value={`${getBaseURL()}/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`}
@@ -56,14 +56,14 @@ export function TournamentLogo({ tournamentDataFull }: { tournamentDataFull: Tou
         mt="1rem"
         alt="Logo of the tournament"
         src={`${getBaseApiUrl()}/static/tournament-logos/${tournamentDataFull.logo_path}`}
-        style={{ maxWidth: "400px" }}
+        style={{ maxWidth: '400px' }}
       />
     </>
   ) : null;
 }
 
 export function getTournamentHeadTitle(tournamentDataFull: Tournament) {
-  return tournamentDataFull !== null ? `Bracket | ${tournamentDataFull.name}` : "Bracket";
+  return tournamentDataFull !== null ? `Bracket | ${tournamentDataFull.name}` : 'Bracket';
 }
 
 export function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: Tournament }) {
@@ -76,12 +76,12 @@ export function TournamentTitle({ tournamentDataFull }: { tournamentDataFull: To
 
 export function DoubleHeader({ tournamentData }: { tournamentData: Tournament }) {
   const navigate = useLocation();
-  const endpoint = tournamentData.dashboard_endpoint || "";
-  const pathName = navigate.pathname.replace("[id]", endpoint).replace(/\/+$/, "");
+  const endpoint = tournamentData.dashboard_endpoint || '';
+  const pathName = navigate.pathname.replace('[id]', endpoint).replace(/\/+$/, '');
 
   const mainLinks = [
-    { link: `/tournaments/${endpoint}/dashboard`, label: "Matches" },
-    { link: `/tournaments/${endpoint}/dashboard/standings`, label: "Standings" },
+    { link: `/tournaments/${endpoint}/dashboard`, label: 'Matches' },
+    { link: `/tournaments/${endpoint}/dashboard/standings`, label: 'Standings' },
   ];
 
   const mainItems = mainLinks.map((item) => (

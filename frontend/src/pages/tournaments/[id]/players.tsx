@@ -1,15 +1,15 @@
-import { Grid, Title } from "@mantine/core";
-import { useTranslation } from "react-i18next";
+import { Grid, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
-import PlayerCreateModal from "@components/modals/player_create_modal";
-import PlayersTable from "@components/tables/players";
-import { getTableState, tableStateToPagination } from "@components/tables/table";
-import { capitalize, getTournamentIdFromRouter } from "@components/utils/util";
-import TournamentLayout from "@pages/tournaments/_tournament_layout";
-import { getPlayersPaginated } from "@services/adapter";
+import PlayerCreateModal from '@components/modals/player_create_modal';
+import PlayersTable from '@components/tables/players';
+import { getTableState, tableStateToPagination } from '@components/tables/table';
+import { capitalize, getTournamentIdFromRouter } from '@components/utils/util';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
+import { getPlayersPaginated } from '@services/adapter';
 
 export default function PlayersPage() {
-  const tableState = getTableState("name");
+  const tableState = getTableState('name');
   const { tournamentData } = getTournamentIdFromRouter();
   const swrPlayersResponse = getPlayersPaginated(
     tournamentData.id,
@@ -21,7 +21,7 @@ export default function PlayersPage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid justify="space-between">
         <Grid.Col span="auto">
-          <Title>{capitalize(t("players_title"))}</Title>
+          <Title>{capitalize(t('players_title'))}</Title>
         </Grid.Col>
         <Grid.Col span="content">
           <PlayerCreateModal

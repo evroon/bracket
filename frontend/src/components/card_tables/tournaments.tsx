@@ -1,15 +1,15 @@
-import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from "@mantine/core";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Badge, Button, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { EmptyTableInfo } from "@components/no_content/empty_table_info";
-import { DateTime } from "@components/utils/datetime";
-import RequestErrorAlert from "@components/utils/error_alert";
-import PreloadLink from "@components/utils/link";
-import { TableSkeletonSingleColumn } from "@components/utils/skeletons";
-import { Tournament, TournamentsResponse } from "@openapi";
-import { getBaseApiUrl } from "@services/adapter";
-import classes from "./tournaments.module.css";
+import { EmptyTableInfo } from '@components/no_content/empty_table_info';
+import { DateTime } from '@components/utils/datetime';
+import RequestErrorAlert from '@components/utils/error_alert';
+import PreloadLink from '@components/utils/link';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { Tournament, TournamentsResponse } from '@openapi';
+import { getBaseApiUrl } from '@services/adapter';
+import classes from './tournaments.module.css';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament }) {
   return (
@@ -74,7 +74,7 @@ export default function TournamentsCardTable({
             </Group>
 
             <Card.Section className={classes.section}>
-              <Stat title={t("start_time")} value={<DateTime datetime={tournament.start_time} />} />
+              <Stat title={t('start_time')} value={<DateTime datetime={tournament.start_time} />} />
             </Card.Section>
 
             <Card.Section className={classes.section}>
@@ -84,9 +84,9 @@ export default function TournamentsCardTable({
                   color="yellow"
                   variant="outline"
                   size="lg"
-                  style={{ visibility: tournament.status === "ARCHIVED" ? "visible" : "hidden" }}
+                  style={{ visibility: tournament.status === 'ARCHIVED' ? 'visible' : 'hidden' }}
                 >
-                  {t("archived_label")}
+                  {t('archived_label')}
                 </Badge>
                 <Button
                   component={PreloadLink}
@@ -104,10 +104,10 @@ export default function TournamentsCardTable({
       </Group>
     ));
 
-  if (rows.length < 1) return <EmptyTableInfo entity_name={t("tournaments_title")} />;
+  if (rows.length < 1) return <EmptyTableInfo entity_name={t('tournaments_title')} />;
 
   return (
-    <Group gap="sm" style={{ width: "100%" }}>
+    <Group gap="sm" style={{ width: '100%' }}>
       {rows}
     </Group>
   );

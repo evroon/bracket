@@ -1,34 +1,34 @@
-import { Center, Grid, UnstyledButton, useMantineTheme } from "@mantine/core";
-import { useColorScheme } from "@mantine/hooks";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Center, Grid, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { useColorScheme } from '@mantine/hooks';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import MatchModal from "@components/modals/match_modal";
-import { assert_not_none } from "@components/utils/assert";
-import { Time } from "@components/utils/datetime";
-import { formatMatchInput1, formatMatchInput2, isMatchHappening } from "@components/utils/match";
-import { TournamentMinimal } from "@components/utils/tournament";
-import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from "@openapi";
-import { getMatchLookup, getStageItemLookup } from "@services/lookups";
-import classes from "./match.module.css";
+import MatchModal from '@components/modals/match_modal';
+import { assert_not_none } from '@components/utils/assert';
+import { Time } from '@components/utils/datetime';
+import { formatMatchInput1, formatMatchInput2, isMatchHappening } from '@components/utils/match';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { MatchWithDetails, RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { getMatchLookup, getStageItemLookup } from '@services/lookups';
+import classes from './match.module.css';
 
 export function MatchBadge({ match, theme }: { match: MatchWithDetails; theme: any }) {
-  const visibility = match.court ? "visible" : "hidden";
+  const visibility = match.court ? 'visible' : 'hidden';
   const badgeColor = useColorScheme() ? theme.colors.blue[7] : theme.colors.blue[7];
   return (
-    <Center style={{ transform: "translateY(0%)", visibility }}>
+    <Center style={{ transform: 'translateY(0%)', visibility }}>
       <div
         style={{
-          width: "75%",
+          width: '75%',
           backgroundColor: isMatchHappening(match) ? theme.colors.grape[9] : badgeColor,
-          borderRadius: "8px 8px 0px 0px",
-          padding: "4px 12px 4px 12px",
+          borderRadius: '8px 8px 0px 0px',
+          padding: '4px 12px 4px 12px',
         }}
       >
         <Center>
           <b>
-            {match.court?.name} |{" "}
+            {match.court?.name} |{' '}
             {match.start_time != null ? <Time datetime={match.start_time} /> : null}
           </b>
         </Center>

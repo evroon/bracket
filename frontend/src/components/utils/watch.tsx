@@ -1,4 +1,4 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import { DependencyList, EffectCallback, useEffect, useRef } from 'react';
 
 export function useWatch(func: EffectCallback, deps: DependencyList | undefined) {
   const mounted = useRef<boolean>(false);

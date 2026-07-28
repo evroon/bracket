@@ -1,6 +1,6 @@
-import { SWRResponse } from "swr";
+import { SWRResponse } from 'swr';
 
-import { StagesWithStageItemsResponse } from "@openapi";
+import { StagesWithStageItemsResponse } from '@openapi';
 
 export function getStageById(
   swrStagesResponse: SWRResponse<StagesWithStageItemsResponse>,

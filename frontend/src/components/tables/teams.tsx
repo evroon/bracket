@@ -1,18 +1,18 @@
-import { Badge, Center, Pagination, Table } from "@mantine/core";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Badge, Center, Pagination, Table } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import DeleteButton from "@components/buttons/delete";
-import PlayerList from "@components/info/player_list";
-import TeamUpdateModal from "@components/modals/team_update_modal";
-import { NoContent } from "@components/no_content/empty_table_info";
-import { DateTime } from "@components/utils/datetime";
-import RequestErrorAlert from "@components/utils/error_alert";
-import { TableSkeletonSingleColumn } from "@components/utils/skeletons";
-import { TournamentMinimal } from "@components/utils/tournament";
-import { FullTeamWithPlayers, TeamsWithPlayersResponse } from "@openapi";
-import { deleteTeam } from "@services/team";
-import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from "./table";
+import DeleteButton from '@components/buttons/delete';
+import PlayerList from '@components/info/player_list';
+import TeamUpdateModal from '@components/modals/team_update_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { DateTime } from '@components/utils/datetime';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonSingleColumn } from '@components/utils/skeletons';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { FullTeamWithPlayers, TeamsWithPlayersResponse } from '@openapi';
+import { deleteTeam } from '@services/team';
+import TableLayout, { TableState, ThNotSortable, ThSortable, sortTableEntries } from './table';
 
 export default function TeamsTable({
   tournamentData,
@@ -42,9 +42,9 @@ export default function TeamsTable({
       <Table.Tr key={team.id}>
         <Table.Td>
           {team.active ? (
-            <Badge color="green">{t("active")}</Badge>
+            <Badge color="green">{t('active')}</Badge>
           ) : (
-            <Badge color="red">{t("inactive")}</Badge>
+            <Badge color="red">{t('inactive')}</Badge>
           )}
         </Table.Td>
         <Table.Td>{team.name}</Table.Td>
@@ -65,13 +65,13 @@ export default function TeamsTable({
               await deleteTeam(tournamentData.id, team.id);
               await swrTeamsResponse.mutate();
             }}
-            title={t("delete_team_button")}
+            title={t('delete_team_button')}
           />
         </Table.Td>
       </Table.Tr>
     ));
 
-  if (rows.length < 1) return <NoContent title={t("no_teams_title")} />;
+  if (rows.length < 1) return <NoContent title={t('no_teams_title')} />;
 
   return (
     <>
@@ -79,14 +79,14 @@ export default function TeamsTable({
         <Table.Thead>
           <Table.Tr>
             <ThSortable state={tableState} field="active">
-              {t("status")}
+              {t('status')}
             </ThSortable>
             <ThSortable state={tableState} field="name">
-              {t("name_table_header")}
+              {t('name_table_header')}
             </ThSortable>
-            <ThNotSortable>{t("members_table_header")}</ThNotSortable>
+            <ThNotSortable>{t('members_table_header')}</ThNotSortable>
             <ThSortable state={tableState} field="created">
-              {t("created")}
+              {t('created')}
             </ThSortable>
             <ThNotSortable>{null}</ThNotSortable>
           </Table.Tr>

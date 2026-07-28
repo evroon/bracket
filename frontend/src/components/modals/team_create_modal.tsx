@@ -1,15 +1,15 @@
-import { Button, Checkbox, Modal, MultiSelect, Tabs, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconUser, IconUsers, IconUsersPlus } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Button, Checkbox, Modal, MultiSelect, Tabs, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconUser, IconUsers, IconUsersPlus } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import SaveButton from "@components/buttons/save";
-import { MultiTeamsInput } from "@components/forms/player_create_csv_input";
-import { Player, TeamsWithPlayersResponse } from "@openapi";
-import { getPlayers } from "@services/adapter";
-import { createTeam, createTeams } from "@services/team";
+import SaveButton from '@components/buttons/save';
+import { MultiTeamsInput } from '@components/forms/player_create_csv_input';
+import { Player, TeamsWithPlayersResponse } from '@openapi';
+import { getPlayers } from '@services/adapter';
+import { createTeam, createTeams } from '@services/team';
 
 function MultiTeamTab({
   tournament_id,
@@ -23,12 +23,12 @@ function MultiTeamTab({
   const { t } = useTranslation();
   const form = useForm({
     initialValues: {
-      names: "",
+      names: '',
       active: true,
     },
 
     validate: {
-      names: (value) => (value.length > 0 ? null : t("at_least_one_team_validation")),
+      names: (value) => (value.length > 0 ? null : t('at_least_one_team_validation')),
     },
   });
   return (
@@ -43,11 +43,11 @@ function MultiTeamTab({
 
       <Checkbox
         mt="md"
-        label={t("active_teams_checkbox_label")}
-        {...form.getInputProps("active", { type: "checkbox" })}
+        label={t('active_teams_checkbox_label')}
+        {...form.getInputProps('active', { type: 'checkbox' })}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        {t("save_button")}
+        {t('save_button')}
       </Button>
     </form>
   );
@@ -67,12 +67,12 @@ function SingleTeamTab({
   const players: Player[] = data != null ? data.data.players : [];
   const form = useForm({
     initialValues: {
-      name: "",
+      name: '',
       active: true,
       player_ids: [],
     },
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
   return (
@@ -85,29 +85,29 @@ function SingleTeamTab({
     >
       <TextInput
         withAsterisk
-        label={t("name_input_label")}
-        placeholder={t("team_name_input_placeholder")}
-        {...form.getInputProps("name")}
+        label={t('name_input_label')}
+        placeholder={t('team_name_input_placeholder')}
+        {...form.getInputProps('name')}
       />
 
       <Checkbox
         mt="md"
-        label={t("active_teams_checkbox_label")}
-        {...form.getInputProps("active", { type: "checkbox" })}
+        label={t('active_teams_checkbox_label')}
+        {...form.getInputProps('active', { type: 'checkbox' })}
       />
 
       <MultiSelect
         data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label={t("team_member_select_title")}
+        label={t('team_member_select_title')}
         maxDropdownHeight={160}
         searchable
         mb="12rem"
         mt={12}
         limit={25}
-        {...form.getInputProps("player_ids")}
+        {...form.getInputProps('player_ids')}
       />
       <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-        {t("save_button")}
+        {t('save_button')}
       </Button>
     </form>
   );
@@ -128,10 +128,10 @@ export default function TeamCreateModal({
         <Tabs defaultValue="single">
           <Tabs.List justify="center" grow>
             <Tabs.Tab value="single" leftSection={<IconUser size="0.8rem" />}>
-              {t("single_team")}
+              {t('single_team')}
             </Tabs.Tab>
             <Tabs.Tab value="multi" leftSection={<IconUsers size="0.8rem" />}>
-              {t("multiple_teams")}
+              {t('multiple_teams')}
             </Tabs.Tab>
           </Tabs.List>
 
@@ -156,7 +156,7 @@ export default function TeamCreateModal({
       <SaveButton
         onClick={() => setOpened(true)}
         leftSection={<IconUsersPlus size={24} />}
-        title={t("add_team_button")}
+        title={t('add_team_button')}
         mb={0}
       />
     </>

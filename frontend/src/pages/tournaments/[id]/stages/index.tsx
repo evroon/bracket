@@ -1,22 +1,22 @@
-import { Group, Stack } from "@mantine/core";
-import { useTranslation } from "react-i18next";
+import { Group, Stack } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
-import Builder from "@components/builder/builder";
-import { CreateStageButtonLarge } from "@components/buttons/create_stage";
-import ActivateNextStageModal from "@components/modals/activate_next_stage_modal";
-import ActivatePreviousStageModal from "@components/modals/activate_previous_stage_modal";
-import { NoContent } from "@components/no_content/empty_table_info";
-import { TableSkeletonTwoColumnsSmall } from "@components/utils/skeletons";
-import { getTournamentIdFromRouter } from "@components/utils/util";
-import { StageWithStageItems } from "@openapi";
-import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import Builder from '@components/builder/builder';
+import { CreateStageButtonLarge } from '@components/buttons/create_stage';
+import ActivateNextStageModal from '@components/modals/activate_next_stage_modal';
+import ActivatePreviousStageModal from '@components/modals/activate_previous_stage_modal';
+import { NoContent } from '@components/no_content/empty_table_info';
+import { TableSkeletonTwoColumnsSmall } from '@components/utils/skeletons';
+import { getTournamentIdFromRouter } from '@components/utils/util';
+import { StageWithStageItems } from '@openapi';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   getAvailableStageItemInputs,
   getRankings,
   getRankingsPerStageItem,
   getStages,
   getTournamentById,
-} from "@services/adapter";
+} from '@services/adapter';
 
 export default function StagesPage() {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ export default function StagesPage() {
   } else if (stages.length < 1) {
     content = (
       <Stack align="center">
-        <NoContent title={t("no_matches_title")} description={t("no_matches_description")} />
+        <NoContent title={t('no_matches_title')} description={t('no_matches_description')} />
         <CreateStageButtonLarge
           tournament={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}

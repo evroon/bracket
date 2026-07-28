@@ -1,10 +1,10 @@
-import { Center, Group, ScrollArea, Table, Text, UnstyledButton } from "@mantine/core";
-import { HiSortAscending } from "@react-icons/all-files/hi/HiSortAscending";
-import { HiSortDescending } from "@react-icons/all-files/hi/HiSortDescending";
-import { MdSort } from "@react-icons/all-files/md/MdSort";
-import React, { useState } from "react";
+import { Center, Group, ScrollArea, Table, Text, UnstyledButton } from '@mantine/core';
+import { HiSortAscending } from '@react-icons/all-files/hi/HiSortAscending';
+import { HiSortDescending } from '@react-icons/all-files/hi/HiSortDescending';
+import { MdSort } from '@react-icons/all-files/md/MdSort';
+import React, { useState } from 'react';
 
-import classes from "./table.module.css";
+import classes from './table.module.css';
 
 export interface TableState {
   sortField: string;
@@ -51,7 +51,7 @@ export const getTableState = (
 };
 
 export function tableStateToPagination(tableState: TableState) {
-  const sort_direction: "asc" | "desc" = tableState.reversed ? "asc" : "desc";
+  const sort_direction: 'asc' | 'desc' = tableState.reversed ? 'asc' : 'desc';
   return {
     limit: tableState.pageSize,
     offset: tableState.pageSize * (tableState.page - 1),
@@ -76,7 +76,7 @@ export function ThSortable({ children, field, visibleFrom, state }: ThProps) {
   const onSort = () => setSorting(state, field);
   return (
     <Table.Th className={classes.th} visibleFrom={visibleFrom}>
-      <UnstyledButton onClick={onSort} className={classes.control} style={{ fontSize: "inherit" }}>
+      <UnstyledButton onClick={onSort} className={classes.control} style={{ fontSize: 'inherit' }}>
         <Group justify="apart">
           <Text fw={800} inherit ml="0.5rem" my="0.25rem">
             {children}

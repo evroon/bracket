@@ -1,15 +1,15 @@
-import { ActionIcon, Button, Modal, TextInput, Title, UnstyledButton } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconPencil } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { LuConstruction } from "react-icons/lu";
-import { SWRResponse } from "swr";
+import { ActionIcon, Button, Modal, TextInput, Title, UnstyledButton } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconPencil } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LuConstruction } from 'react-icons/lu';
+import { SWRResponse } from 'swr';
 
-import DeleteButton from "@components/buttons/delete";
-import { TournamentMinimal } from "@components/utils/tournament";
-import { RoundWithMatches, StagesWithStageItemsResponse } from "@openapi";
-import { deleteRound, updateRound } from "@services/round";
+import DeleteButton from '@components/buttons/delete';
+import { TournamentMinimal } from '@components/utils/tournament';
+import { RoundWithMatches, StagesWithStageItemsResponse } from '@openapi';
+import { deleteRound, updateRound } from '@services/round';
 
 function RoundDeleteButton({
   tournamentData,
@@ -31,9 +31,9 @@ function RoundDeleteButton({
         await swrStagesResponse.mutate();
         if (swrUpcomingMatchesResponse != null) await swrUpcomingMatchesResponse.mutate();
       }}
-      style={{ marginTop: "15px" }}
+      style={{ marginTop: '15px' }}
       size="sm"
-      title={t("delete_round_button")}
+      title={t('delete_round_button')}
     />
   );
 }
@@ -54,17 +54,17 @@ export default function RoundModal({
 
   const form = useForm({
     initialValues: {
-      name: round == null ? "" : round.name,
+      name: round == null ? '' : round.name,
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t("edit_round")}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_round')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             await updateRound(tournamentData.id, round.id, values.name, round.is_draft);
@@ -74,12 +74,12 @@ export default function RoundModal({
         >
           <TextInput
             withAsterisk
-            label={t("name_input_label")}
-            placeholder={t("round_name_input_placeholder")}
-            {...form.getInputProps("name")}
+            label={t('name_input_label')}
+            placeholder={t('round_name_input_placeholder')}
+            {...form.getInputProps('name')}
           />
           <Button fullWidth mt="1rem" color="green" type="submit">
-            {t("save_button")}
+            {t('save_button')}
           </Button>
         </form>
         <Button
@@ -96,7 +96,7 @@ export default function RoundModal({
             setOpened(false);
           }}
         >
-          {t("mark_round_as_draft")}
+          {t('mark_round_as_draft')}
         </Button>
         <RoundDeleteButton
           swrStagesResponse={swrStagesResponse}
@@ -116,7 +116,7 @@ export default function RoundModal({
         color="gray"
         onClick={() => setOpened(true)}
       >
-        <IconPencil size={18} style={{ marginBottom: "5px" }} />
+        <IconPencil size={18} style={{ marginBottom: '5px' }} />
       </ActionIcon>
     </>
   );

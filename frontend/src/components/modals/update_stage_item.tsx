@@ -1,11 +1,11 @@
-import { Button, Modal, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Button, Modal, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { RankingSelect } from "@components/select/ranking_select";
-import { Ranking, StageItemWithRounds, StagesWithStageItemsResponse, Tournament } from "@openapi";
-import { updateStageItem } from "@services/stage_item";
+import { RankingSelect } from '@components/select/ranking_select';
+import { Ranking, StageItemWithRounds, StagesWithStageItemsResponse, Tournament } from '@openapi';
+import { updateStageItem } from '@services/stage_item';
 
 export function UpdateStageItemModal({
   tournament,
@@ -32,7 +32,7 @@ export function UpdateStageItemModal({
   });
 
   return (
-    <Modal opened={opened} onClose={() => setOpened(false)} title={t("edit_stage_item_label")}>
+    <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_stage_item_label')}>
       <form
         onSubmit={form.onSubmit(async (values) => {
           await updateStageItem(tournament.id, stageItem.id, values.name, values.ranking_id);
@@ -41,16 +41,16 @@ export function UpdateStageItemModal({
         })}
       >
         <TextInput
-          label={t("name_input_label")}
+          label={t('name_input_label')}
           placeholder=""
           required
           my="lg"
           type="text"
-          {...form.getInputProps("name")}
+          {...form.getInputProps('name')}
         />
         <RankingSelect form={form} rankings={rankings} />
         <Button fullWidth style={{ marginTop: 16 }} color="green" type="submit">
-          {t("save_button")}
+          {t('save_button')}
         </Button>
       </form>
     </Modal>

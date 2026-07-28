@@ -1,17 +1,17 @@
-import { Alert, Button, Container, Grid, Modal, Title } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { FaArrowRight } from "@react-icons/all-files/fa/FaArrowRight";
-import { IconAlertCircle, IconSquareArrowRight } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Alert, Button, Container, Grid, Modal, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { FaArrowRight } from '@react-icons/all-files/fa/FaArrowRight';
+import { IconAlertCircle, IconSquareArrowRight } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import RequestErrorAlert from "@components/utils/error_alert";
-import { GenericSkeleton } from "@components/utils/skeletons";
-import { formatStageItemInput } from "@components/utils/stage_item_input";
-import { StageItemInputUpdate, StageRankingResponse, StagesWithStageItemsResponse } from "@openapi";
-import { getStageItemLookup } from "@services/lookups";
-import { activateNextStage } from "@services/stage";
+import RequestErrorAlert from '@components/utils/error_alert';
+import { GenericSkeleton } from '@components/utils/skeletons';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { StageItemInputUpdate, StageRankingResponse, StagesWithStageItemsResponse } from '@openapi';
+import { getStageItemLookup } from '@services/lookups';
+import { activateNextStage } from '@services/stage';
 
 function UpdatesToStageItemInputsTable({
   stageItemsLookup,
@@ -28,7 +28,7 @@ function UpdatesToStageItemInputsTable({
           {formatStageItemInput(update.stage_item_input, stageItemsLookup)}
         </Grid.Col>
         <Grid.Col span={{ sm: 6 }}>
-          <FaArrowRight style={{ marginRight: "0.5rem" }} />
+          <FaArrowRight style={{ marginRight: '0.5rem' }} />
           {update.team?.name}
         </Grid.Col>
       </Grid>
@@ -89,18 +89,18 @@ export default function ActivateNextStageModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t("active_next_stage_modal_title")}
+        title={t('active_next_stage_modal_title')}
         size="40rem"
       >
         <form
           onSubmit={form.onSubmit(async () => {
-            await activateNextStage(tournamentId, "next");
+            await activateNextStage(tournamentId, 'next');
             swrStagesResponse.mutate();
             setOpened(false);
           })}
         >
           <Alert icon={<IconAlertCircle size={16} />} color="gray" radius="lg">
-            {t("active_next_stage_modal_description")}
+            {t('active_next_stage_modal_description')}
           </Alert>
 
           <Container mt="1rem">
@@ -118,7 +118,7 @@ export default function ActivateNextStageModal({
             type="submit"
             leftSection={<IconSquareArrowRight size={24} />}
           >
-            {t("plan_next_stage_button")}
+            {t('plan_next_stage_button')}
           </Button>
         </form>
       </Modal>
@@ -132,7 +132,7 @@ export default function ActivateNextStageModal({
           setOpened(true);
         }}
       >
-        {t("next_stage_button")}
+        {t('next_stage_button')}
       </Button>
     </>
   );

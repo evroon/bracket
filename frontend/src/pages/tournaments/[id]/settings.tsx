@@ -13,38 +13,38 @@ import {
   Select,
   Text,
   TextInput,
-} from "@mantine/core";
-import { DateTimePicker } from "@mantine/dates";
-import { useForm } from "@mantine/form";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
-import { MdUnarchive } from "@react-icons/all-files/md/MdUnarchive";
-import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from "@tabler/icons-react";
-import { useTranslation } from "react-i18next";
-import { MdArchive } from "react-icons/md";
-import { useNavigate } from "react-router";
-import { SWRResponse } from "swr";
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { MdDelete } from '@react-icons/all-files/md/MdDelete';
+import { MdUnarchive } from '@react-icons/all-files/md/MdUnarchive';
+import { IconCalendar, IconCalendarTime, IconCopy, IconPencil } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+import { MdArchive } from 'react-icons/md';
+import { useNavigate } from 'react-router';
+import { SWRResponse } from 'swr';
 
-import { assert_not_none } from "@components/utils/assert";
-import { DropzoneButton } from "@components/utils/file_upload";
-import { GenericSkeletonThreeRows } from "@components/utils/skeletons";
-import { capitalize, getBaseURL, getTournamentIdFromRouter } from "@components/utils/util";
-import { Club, Tournament, TournamentResponse } from "@openapi";
-import NotFoundTitle from "@pages/404";
-import TournamentLayout from "@pages/tournaments/_tournament_layout";
+import { assert_not_none } from '@components/utils/assert';
+import { DropzoneButton } from '@components/utils/file_upload';
+import { GenericSkeletonThreeRows } from '@components/utils/skeletons';
+import { capitalize, getBaseURL, getTournamentIdFromRouter } from '@components/utils/util';
+import { Club, Tournament, TournamentResponse } from '@openapi';
+import NotFoundTitle from '@pages/404';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   getBaseApiUrl,
   getClubs,
   getTournamentById,
   handleRequestError,
   removeTournamentLogo,
-} from "@services/adapter";
+} from '@services/adapter';
 import {
   archiveTournament,
   deleteTournament,
   unarchiveTournament,
   updateTournament,
-} from "@services/tournament";
-import dayjs from "dayjs";
+} from '@services/tournament';
+import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -80,7 +80,7 @@ function ArchiveTournamentButton({
         await swrTournamentResponse.mutate();
       }}
     >
-      {t("archive_tournament_button")}
+      {t('archive_tournament_button')}
     </Button>
   );
 }
@@ -108,7 +108,7 @@ function UnarchiveTournamentButton({
         await swrTournamentResponse.mutate();
       }}
     >
-      {t("unarchive_tournament_button")}
+      {t('unarchive_tournament_button')}
     </Button>
   );
 }
@@ -139,13 +139,13 @@ function GeneralTournamentForm({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
-      club_id: (value) => (value != null ? null : t("club_choose_title")),
-      start_time: (value) => (value != null ? null : t("start_time_choose_title")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
+      club_id: (value) => (value != null ? null : t('club_choose_title')),
+      start_time: (value) => (value != null ? null : t('start_time_choose_title')),
       duration_minutes: (value) =>
-        value != null && value > 0 ? null : t("duration_minutes_choose_title"),
+        value != null && value > 0 ? null : t('duration_minutes_choose_title'),
       margin_minutes: (value) =>
-        value != null && value > 0 ? null : t("margin_minutes_choose_title"),
+        value != null && value > 0 ? null : t('margin_minutes_choose_title'),
     },
   });
 
@@ -171,30 +171,30 @@ function GeneralTournamentForm({
     >
       <TextInput
         withAsterisk
-        label={t("name_input_label")}
-        placeholder={t("tournament_name_input_placeholder")}
-        {...form.getInputProps("name")}
+        label={t('name_input_label')}
+        placeholder={t('tournament_name_input_placeholder')}
+        {...form.getInputProps('name')}
       />
 
       <Select
         withAsterisk
         data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label={capitalize(t("clubs_title"))}
-        placeholder={t("club_select_placeholder")}
+        label={capitalize(t('clubs_title'))}
+        placeholder={t('club_select_placeholder')}
         searchable
         limit={20}
         mt="lg"
-        {...form.getInputProps("club_id")}
+        {...form.getInputProps('club_id')}
       />
 
-      <Fieldset legend={t("planning_of_matches_legend")} mt="lg" radius="md">
-        <Text fz="sm">{t("planning_of_matches_description")}</Text>
+      <Fieldset legend={t('planning_of_matches_legend')} mt="lg" radius="md">
+        <Text fz="sm">{t('planning_of_matches_description')}</Text>
         <Grid>
           <Grid.Col span={{ sm: 9 }}>
             <DateTimePicker
               rightSection={<IconCalendar size="1.1rem" stroke={1.5} />}
               mx="auto"
-              {...form.getInputProps("start_time")}
+              {...form.getInputProps('start_time')}
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 3 }}>
@@ -203,10 +203,10 @@ function GeneralTournamentForm({
               color="indigo"
               leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
               onClick={() => {
-                form.setFieldValue("start_time", dayjs());
+                form.setFieldValue('start_time', dayjs());
               }}
             >
-              {t("set_to_new_button")}
+              {t('set_to_new_button')}
             </Button>
           </Grid.Col>
         </Grid>
@@ -214,27 +214,27 @@ function GeneralTournamentForm({
         <Grid>
           <Grid.Col span={{ sm: 6 }}>
             <NumberInput
-              label={t("match_duration_label")}
+              label={t('match_duration_label')}
               mt="lg"
-              {...form.getInputProps("duration_minutes")}
+              {...form.getInputProps('duration_minutes')}
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 6 }}>
             <NumberInput
-              label={t("time_between_matches_label")}
+              label={t('time_between_matches_label')}
               mt="lg"
-              {...form.getInputProps("margin_minutes")}
+              {...form.getInputProps('margin_minutes')}
             />
           </Grid.Col>
         </Grid>
       </Fieldset>
-      <Fieldset legend={t("dashboard_settings_title")} mt="lg" radius="md">
-        <Text fz="sm">{t("dashboard_link_label")}</Text>
+      <Fieldset legend={t('dashboard_settings_title')} mt="lg" radius="md">
+        <Text fz="sm">{t('dashboard_link_label')}</Text>
         <Grid>
           <Grid.Col span={{ sm: 9 }}>
             <TextInput
-              placeholder={t("dashboard_link_placeholder")}
-              {...form.getInputProps("dashboard_endpoint")}
+              placeholder={t('dashboard_link_placeholder')}
+              {...form.getInputProps('dashboard_endpoint')}
             />
           </Grid.Col>
           <Grid.Col span={{ sm: 3 }}>
@@ -243,13 +243,13 @@ function GeneralTournamentForm({
             >
               {({ copied, copy }) => (
                 <Button
-                  disabled={form.values.dashboard_endpoint === ""}
+                  disabled={form.values.dashboard_endpoint === ''}
                   leftSection={<IconCopy size="1.1rem" stroke={1.5} />}
                   fullWidth
-                  color={copied ? "teal" : "indigo"}
+                  color={copied ? 'teal' : 'indigo'}
                   onClick={copy}
                 >
-                  {copied ? t("copied_url_button") : t("copy_url_button")}
+                  {copied ? t('copied_url_button') : t('copy_url_button')}
                 </Button>
               )}
             </CopyButton>
@@ -258,8 +258,8 @@ function GeneralTournamentForm({
 
         <Checkbox
           mt="lg"
-          label={t("dashboard_public_description")}
-          {...form.getInputProps("dashboard_public", { type: "checkbox" })}
+          label={t('dashboard_public_description')}
+          {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
         />
 
         <DropzoneButton
@@ -268,7 +268,7 @@ function GeneralTournamentForm({
           variant="tournament"
         />
         <Center my="lg">
-          <div style={{ width: "50%" }}>
+          <div style={{ width: '50%' }}>
             <TournamentLogo tournament={tournament} />
           </div>
         </Center>
@@ -281,18 +281,18 @@ function GeneralTournamentForm({
             await swrTournamentResponse.mutate();
           }}
         >
-          {t("remove_logo")}
+          {t('remove_logo')}
         </Button>
       </Fieldset>
-      <Fieldset legend={t("miscellaneous_title")} mt="lg" radius="md">
+      <Fieldset legend={t('miscellaneous_title')} mt="lg" radius="md">
         <Checkbox
-          label={t("miscellaneous_label")}
-          {...form.getInputProps("players_can_be_in_multiple_teams", { type: "checkbox" })}
+          label={t('miscellaneous_label')}
+          {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
         />
         <Checkbox
           mt="md"
-          label={t("auto_assign_courts_label")}
-          {...form.getInputProps("auto_assign_courts", { type: "checkbox" })}
+          label={t('auto_assign_courts_label')}
+          {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
         />
       </Fieldset>
 
@@ -304,7 +304,7 @@ function GeneralTournamentForm({
         type="submit"
         leftSection={<IconPencil size={36} />}
       >
-        {t("save_button")}
+        {t('save_button')}
       </Button>
 
       <Divider mt="2rem" mb="1rem" size="2px" />
@@ -318,15 +318,15 @@ function GeneralTournamentForm({
           onClick={async () => {
             await deleteTournament(tournament.id)
               .then(async () => {
-                await navigate("/");
+                await navigate('/');
               })
               .catch((response: any) => handleRequestError(response));
           }}
         >
-          {t("delete_tournament_button")}
+          {t('delete_tournament_button')}
         </Button>
 
-        {tournament.status === "OPEN" ? (
+        {tournament.status === 'OPEN' ? (
           <ArchiveTournamentButton
             tournament={tournament}
             t={t}

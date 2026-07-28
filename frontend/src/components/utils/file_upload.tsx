@@ -1,18 +1,18 @@
-import { Group, Text } from "@mantine/core";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { IconCloudUpload, IconDownload, IconX } from "@tabler/icons-react";
-import { AxiosError } from "axios";
-import { useMemo, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Group, Text } from '@mantine/core';
+import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
+import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import { AxiosError } from 'axios';
+import { useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
 import {
   FullTeamWithPlayers,
   TeamsWithPlayersResponse,
   Tournament,
   TournamentResponse,
-} from "@openapi";
-import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from "@services/adapter";
+} from '@openapi';
+import { handleRequestError, uploadTeamLogo, uploadTournamentLogo } from '@services/adapter';
 
 export function DropzoneButton({
   tournamentId,
@@ -20,21 +20,21 @@ export function DropzoneButton({
   variant,
   teamId,
 }: {
-  tournamentId: Tournament["id"];
+  tournamentId: Tournament['id'];
   swrResponse: SWRResponse<TeamsWithPlayersResponse> | SWRResponse<TournamentResponse>;
-  variant: "tournament" | "team";
-  teamId?: FullTeamWithPlayers["id"];
+  variant: 'tournament' | 'team';
+  teamId?: FullTeamWithPlayers['id'];
 }) {
   // const { classes, theme } = useStyles();
   const openRef = useRef<() => void>(null);
   const { t } = useTranslation();
 
   const useUploadLogo = useMemo(() => {
-    if (variant === "tournament") {
+    if (variant === 'tournament') {
       return uploadTournamentLogo.bind(null, tournamentId);
     }
 
-    if (teamId === undefined) throw new TypeError("Team is undefined");
+    if (teamId === undefined) throw new TypeError('Team is undefined');
     return uploadTeamLogo.bind(null, tournamentId, teamId);
   }, [tournamentId, teamId, variant]);
 
@@ -53,7 +53,7 @@ export function DropzoneButton({
         accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
         maxSize={5 * 1024 ** 2}
       >
-        <div style={{ pointerEvents: "none" }}>
+        <div style={{ pointerEvents: 'none' }}>
           <Group justify="center">
             <Dropzone.Accept>
               <IconDownload size={50} stroke={1.5} />
@@ -67,14 +67,14 @@ export function DropzoneButton({
           </Group>
 
           <Text ta="center" fw={700} size="lg" mt="xl">
-            <Dropzone.Accept>{t("dropzone_accept_text")}</Dropzone.Accept>
-            <Dropzone.Reject>{t("dropzone_reject_text")}</Dropzone.Reject>
-            <Dropzone.Idle>{t("dropzone_idle_text")}</Dropzone.Idle>
+            <Dropzone.Accept>{t('dropzone_accept_text')}</Dropzone.Accept>
+            <Dropzone.Reject>{t('dropzone_reject_text')}</Dropzone.Reject>
+            <Dropzone.Idle>{t('dropzone_idle_text')}</Dropzone.Idle>
           </Text>
           <Text ta="center" size="sm" mt="xs" c="dimmed">
             {t(`upload_placeholder_${variant}`)}
             <br />
-            {t("dropzone_reject_text")}
+            {t('dropzone_reject_text')}
           </Text>
         </div>
       </Dropzone>

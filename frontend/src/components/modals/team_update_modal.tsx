@@ -7,17 +7,17 @@ import {
   Modal,
   MultiSelect,
   TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { BiEditAlt } from "@react-icons/all-files/bi/BiEditAlt";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { BiEditAlt } from '@react-icons/all-files/bi/BiEditAlt';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { DropzoneButton } from "@components/utils/file_upload";
-import { FullTeamWithPlayers, Player, TeamsWithPlayersResponse } from "@openapi";
-import { getBaseApiUrl, getPlayers, removeTeamLogo, requestSucceeded } from "@services/adapter";
-import { updateTeam } from "@services/team";
+import { DropzoneButton } from '@components/utils/file_upload';
+import { FullTeamWithPlayers, Player, TeamsWithPlayersResponse } from '@openapi';
+import { getBaseApiUrl, getPlayers, removeTeamLogo, requestSucceeded } from '@services/adapter';
+import { updateTeam } from '@services/team';
 
 function TeamLogo({ team }: { team: FullTeamWithPlayers | null }) {
   if (team == null || team.logo_path == null) return null;
@@ -52,13 +52,13 @@ export default function TeamUpdateModal({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t("edit_team_title")}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('edit_team_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             const result = await updateTeam(
@@ -76,29 +76,29 @@ export default function TeamUpdateModal({
         >
           <TextInput
             withAsterisk
-            label={t("name_input_label")}
-            placeholder={t("team_name_input_placeholder")}
-            {...form.getInputProps("name")}
+            label={t('name_input_label')}
+            placeholder={t('team_name_input_placeholder')}
+            {...form.getInputProps('name')}
           />
 
           <Checkbox
             mt="md"
-            label={t("active_team_checkbox_label")}
-            {...form.getInputProps("active", { type: "checkbox" })}
+            label={t('active_team_checkbox_label')}
+            {...form.getInputProps('active', { type: 'checkbox' })}
           />
 
           <MultiSelect
             data={players.map((p) => ({ value: `${p.id}`, label: p.name }))}
-            label={t("team_member_select_title")}
-            placeholder={t("team_member_select_placeholder")}
+            label={t('team_member_select_title')}
+            placeholder={t('team_member_select_placeholder')}
             maxDropdownHeight={160}
             searchable
             mt={12}
             limit={25}
-            {...form.getInputProps("player_ids")}
+            {...form.getInputProps('player_ids')}
           />
 
-          <Fieldset legend={t("logo_settings_title")} mt={12} radius="md">
+          <Fieldset legend={t('logo_settings_title')} mt={12} radius="md">
             <DropzoneButton
               tournamentId={tournament_id}
               teamId={team.id}
@@ -106,7 +106,7 @@ export default function TeamUpdateModal({
               variant="team"
             />
             <Center my="lg">
-              <div style={{ width: "50%" }}>
+              <div style={{ width: '50%' }}>
                 <TeamLogo team={team} />
               </div>
             </Center>
@@ -119,12 +119,12 @@ export default function TeamUpdateModal({
                 await swrTeamsResponse.mutate();
               }}
             >
-              {t("remove_logo")}
+              {t('remove_logo')}
             </Button>
           </Fieldset>
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            {t("save_button")}
+            {t('save_button')}
           </Button>
         </form>
       </Modal>
@@ -136,7 +136,7 @@ export default function TeamUpdateModal({
         onClick={() => setOpened(true)}
         leftSection={<BiEditAlt size={20} />}
       >
-        {t("edit_team_title")}
+        {t('edit_team_title')}
       </Button>
     </>
   );

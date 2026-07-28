@@ -1,18 +1,18 @@
-import { Grid } from "@mantine/core";
-import React from "react";
+import { Grid } from '@mantine/core';
+import React from 'react';
 
 import {
   TournamentLogo,
   TournamentQRCode,
   TournamentTitle,
   getTournamentHeadTitle,
-} from "@components/dashboard/layout";
-import RequestErrorAlert from "@components/utils/error_alert";
-import { TableSkeletonTwoColumns } from "@components/utils/skeletons";
-import { setTitle } from "@components/utils/util";
-import { StandingsContent } from "@pages/tournaments/[id]/dashboard/standings";
-import { getStagesLive, getTeamsLive } from "@services/adapter";
-import { getTournamentResponseByEndpointName } from "@services/dashboard";
+} from '@components/dashboard/layout';
+import RequestErrorAlert from '@components/utils/error_alert';
+import { TableSkeletonTwoColumns } from '@components/utils/skeletons';
+import { setTitle } from '@components/utils/util';
+import { StandingsContent } from '@pages/tournaments/[id]/dashboard/standings';
+import { getStagesLive, getTeamsLive } from '@services/adapter';
+import { getTournamentResponseByEndpointName } from '@services/dashboard';
 
 export default function StandingsPresentPage() {
   const tournamentDataFull = getTournamentResponseByEndpointName();
@@ -36,7 +36,7 @@ export default function StandingsPresentPage() {
   const fontSizeInPixels = 28;
   return (
     <>
-      <Grid style={{ margin: "1rem" }} gutter="2rem">
+      <Grid style={{ margin: '1rem' }} gutter="2rem">
         <Grid.Col span={{ base: 12, lg: 2 }}>
           <TournamentTitle tournamentDataFull={tournamentDataFull} />
           <TournamentLogo tournamentDataFull={tournamentDataFull} />

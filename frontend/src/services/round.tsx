@@ -1,5 +1,5 @@
-import { Dayjs } from "dayjs";
-import { createAxios, handleRequestError } from "./adapter";
+import { Dayjs } from 'dayjs';
+import { createAxios, handleRequestError } from './adapter';
 
 export async function createRound(tournament_id: number, stage_item_id: number) {
   return createAxios()

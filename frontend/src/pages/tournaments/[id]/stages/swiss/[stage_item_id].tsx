@@ -1,40 +1,40 @@
-import { Button, Container, Grid, Group, SegmentedControl, Stack, Title } from "@mantine/core";
-import { IconExternalLink } from "@tabler/icons-react";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { useTranslation } from "react-i18next";
-import { LuNavigation } from "react-icons/lu";
-import { SWRResponse } from "swr";
+import { Button, Container, Grid, Group, SegmentedControl, Stack, Title } from '@mantine/core';
+import { IconExternalLink } from '@tabler/icons-react';
+import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
+import { useTranslation } from 'react-i18next';
+import { LuNavigation } from 'react-icons/lu';
+import { SWRResponse } from 'swr';
 
-import { RoundsGridCols } from "@components/brackets/brackets";
-import { NoContent } from "@components/no_content/empty_table_info";
-import Scheduler from "@components/scheduling/scheduling";
-import classes from "@components/utility.module.css";
-import { BracketDisplaySettings } from "@components/utils/brackets";
-import PreloadLink from "@components/utils/link";
-import { SchedulerSettings } from "@components/utils/match";
-import { getStageById } from "@components/utils/stage";
-import { Translator } from "@components/utils/types";
+import { RoundsGridCols } from '@components/brackets/brackets';
+import { NoContent } from '@components/no_content/empty_table_info';
+import Scheduler from '@components/scheduling/scheduling';
+import classes from '@components/utility.module.css';
+import { BracketDisplaySettings } from '@components/utils/brackets';
+import PreloadLink from '@components/utils/link';
+import { SchedulerSettings } from '@components/utils/match';
+import { getStageById } from '@components/utils/stage';
+import { Translator } from '@components/utils/types';
 import {
   getStageItemIdFromRouter,
   getTournamentIdFromRouter,
   responseIsValid,
-} from "@components/utils/util";
-import { RoundWithMatches, Tournament } from "@openapi";
-import NotFoundTitle from "@pages/404";
-import TournamentLayout from "@pages/tournaments/_tournament_layout";
+} from '@components/utils/util';
+import { RoundWithMatches, Tournament } from '@openapi';
+import NotFoundTitle from '@pages/404';
+import TournamentLayout from '@pages/tournaments/_tournament_layout';
 import {
   checkForAuthError,
   getCourts,
   getStages,
   getTournamentById,
   getUpcomingMatches,
-} from "@services/adapter";
-import { getStageItemLookup } from "@services/lookups";
+} from '@services/adapter';
+import { getStageItemLookup } from '@services/lookups';
 
 function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: Tournament }) {
   return (
     <Stack align="center">
-      <NoContent title={t("no_courts_title")} description={t("no_courts_description_swiss")} />
+      <NoContent title={t('no_courts_title')} description={t('no_courts_description_swiss')} />
       <Button
         color="green"
         size="lg"
@@ -44,7 +44,7 @@ function NoCourtsButton({ t, tournamentData }: { t: Translator; tournamentData: 
         className={classes.mobileLink}
         href={`/tournaments/${tournamentData.id}/schedule`}
       >
-        {t("go_to_courts_page")}
+        {t('go_to_courts_page')}
       </Button>
     </Stack>
   );
@@ -61,29 +61,29 @@ export default function SwissTournamentPage() {
   const swrCourtsResponse = getCourts(tournamentData.id);
 
   const [onlyRecommended, setOnlyRecommended] = useQueryState(
-    "only-recommended",
-    parseAsString.withDefault("true"),
+    'only-recommended',
+    parseAsString.withDefault('true'),
   );
   const [eloThreshold, setEloThreshold] = useQueryState(
-    "max-elo-diff",
+    'max-elo-diff',
     parseAsInteger.withDefault(200),
   );
   const [iterations, setIterations] = useQueryState(
-    "iterations",
+    'iterations',
     parseAsInteger.withDefault(2_000),
   );
-  const [limit, setLimit] = useQueryState("limit", parseAsInteger.withDefault(50));
+  const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(50));
   const [matchVisibility, setMatchVisibility] = useQueryState(
-    "match-visibility",
-    parseAsString.withDefault("all"),
+    'match-visibility',
+    parseAsString.withDefault('all'),
   );
   const [teamNamesDisplay, setTeamNamesDisplay] = useQueryState(
-    "which-names",
-    parseAsString.withDefault("team-names"),
+    'which-names',
+    parseAsString.withDefault('team-names'),
   );
   const [showAdvancedSchedulingOptions, setShowAdvancedSchedulingOptions] = useQueryState(
-    "advanced",
-    parseAsString.withDefault("false"),
+    'advanced',
+    parseAsString.withDefault('false'),
   );
   const displaySettings: BracketDisplaySettings = {
     matchVisibility,
@@ -136,7 +136,7 @@ export default function SwissTournamentPage() {
     draftRound != null &&
     stageItem != null &&
     activeStage != null &&
-    displaySettings.showManualSchedulingOptions === "true" &&
+    displaySettings.showManualSchedulingOptions === 'true' &&
     swrUpcomingMatchesResponse != null;
 
   if (!swrTournamentResponse.isLoading && tournamentDataFull == null) {
@@ -166,7 +166,7 @@ export default function SwissTournamentPage() {
     <TournamentLayout tournament_id={tournamentData.id}>
       <Grid grow>
         <Grid.Col span={6}>
-          <Title>{stageItem != null ? stageItem.name : ""}</Title>
+          <Title>{stageItem != null ? stageItem.name : ''}</Title>
         </Grid.Col>
         <Grid.Col span={6}>
           <Group justify="right">
@@ -175,9 +175,9 @@ export default function SwissTournamentPage() {
               value={matchVisibility}
               onChange={setMatchVisibility}
               data={[
-                { label: t("match_filter_option_all"), value: "all" },
-                { label: t("match_filter_option_past"), value: "future-only" },
-                { label: t("match_filter_option_current"), value: "present-only" },
+                { label: t('match_filter_option_all'), value: 'all' },
+                { label: t('match_filter_option_past'), value: 'future-only' },
+                { label: t('match_filter_option_current'), value: 'present-only' },
               ]}
             />
             {tournamentDataFull?.dashboard_endpoint && (
@@ -190,17 +190,17 @@ export default function SwissTournamentPage() {
                 onClick={() => {
                   window.open(
                     `/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`,
-                    "_ blank",
+                    '_ blank',
                   );
                 }}
               >
-                {t("view_dashboard_button")}
+                {t('view_dashboard_button')}
               </Button>
             )}
           </Group>
         </Grid.Col>
       </Grid>
-      <div style={{ marginTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
+      <div style={{ marginTop: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
         <RoundsGridCols
           tournamentData={tournamentDataFull}
           swrStagesResponse={swrStagesResponse}

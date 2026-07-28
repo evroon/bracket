@@ -1,4 +1,4 @@
-import { createAxios, handleRequestError } from "./adapter";
+import { createAxios, handleRequestError } from './adapter';
 
 export async function createPlayer(tournament_id: number, name: string, active: boolean) {
   return createAxios()

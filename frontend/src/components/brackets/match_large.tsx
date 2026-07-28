@@ -1,8 +1,8 @@
-import { Card, Center, Grid, Text } from "@mantine/core";
+import { Card, Center, Grid, Text } from '@mantine/core';
 
-import { Time } from "@components/utils/datetime";
-import { formatStageItemInput } from "@components/utils/stage_item_input";
-import { MatchWithDetails } from "@openapi";
+import { Time } from '@components/utils/datetime';
+import { formatStageItemInput } from '@components/utils/stage_item_input';
+import { MatchWithDetails } from '@openapi';
 
 export default function MatchLarge({
   match,
@@ -25,7 +25,7 @@ export default function MatchLarge({
           </Grid.Col>
           <Grid.Col span={{ sm: 3 }}>
             <Center>
-              <Time datetime={match.start_time || ""} />
+              <Time datetime={match.start_time || ''} />
             </Center>
           </Grid.Col>
         </Grid>
@@ -36,9 +36,9 @@ export default function MatchLarge({
   return (
     <div
       style={{
-        width: "100%",
-        padding: "0px",
-        fontSize: "1.8rem",
+        width: '100%',
+        padding: '0px',
+        fontSize: '1.8rem',
       }}
     >
       {bracket}

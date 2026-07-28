@@ -1,11 +1,11 @@
-import { showNotification } from "@mantine/notifications";
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { useNavigate } from "react-router";
-import useSWR, { SWRResponse } from "swr";
+import { showNotification } from '@mantine/notifications';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router';
+import useSWR, { SWRResponse } from 'swr';
 
-import { SchedulerSettings } from "@components/utils/match";
-import { TournamentFilter } from "@components/utils/tournament";
-import { Pagination } from "@components/utils/util";
+import { SchedulerSettings } from '@components/utils/match';
+import { TournamentFilter } from '@components/utils/tournament';
+import { Pagination } from '@components/utils/util';
 import {
   ClubsResponse,
   CourtsResponse,
@@ -20,16 +20,16 @@ import {
   TournamentsResponse,
   UpcomingMatchesResponse,
   UserPublicResponse,
-} from "@openapi";
-import dayjs from "dayjs";
-import { getLogin, performLogout, tokenPresent } from "./local_storage";
+} from '@openapi';
+import dayjs from 'dayjs';
+import { getLogin, performLogout, tokenPresent } from './local_storage';
 
 export function handleRequestError(response: AxiosError) {
-  if (response.code === "ERR_NETWORK") {
+  if (response.code === 'ERR_NETWORK') {
     showNotification({
-      color: "red",
-      title: "An error occurred",
-      message: "Internal server error",
+      color: 'red',
+      title: 'An error occurred',
+      message: 'Internal server error',
       autoClose: 10000,
     });
     return;
@@ -44,14 +44,14 @@ export function handleRequestError(response: AxiosError) {
 
     if (Array.isArray(detail)) {
       const firstError = detail[0];
-      message = `${firstError.loc.slice(1).join(" - ")}: ${firstError.msg}`;
+      message = `${firstError.loc.slice(1).join(' - ')}: ${firstError.msg}`;
     } else {
       message = detail.toString();
     }
 
     showNotification({
-      color: "red",
-      title: "An error occurred",
+      color: 'red',
+      title: 'An error occurred',
       message,
       autoClose: 10000,
     });
@@ -60,23 +60,23 @@ export function handleRequestError(response: AxiosError) {
 
 export function requestSucceeded(result: AxiosResponse | AxiosError) {
   // @ts-ignore
-  return result.name !== "AxiosError";
+  return result.name !== 'AxiosError';
 }
 
 export function getBaseApiUrl() {
   return import.meta.env.VITE_API_BASE_URL != null
     ? import.meta.env.VITE_API_BASE_URL
-    : "http://localhost:8400";
+    : 'http://localhost:8400';
 }
 
 export function createAxios() {
   const user = getLogin();
-  const access_token = user != null ? user.access_token : "";
+  const access_token = user != null ? user.access_token : '';
   return axios.create({
     baseURL: getBaseApiUrl(),
     headers: {
       Authorization: `bearer ${access_token}`,
-      Accept: "application/json",
+      Accept: 'application/json',
     },
   });
 }
@@ -88,7 +88,7 @@ export async function awaitRequestAndHandleError(
   try {
     response = await requestFunction(createAxios());
   } catch (exc: any) {
-    if (exc.name === "AxiosError") {
+    if (exc.name === 'AxiosError') {
       handleRequestError(exc);
       return exc;
     }
@@ -115,7 +115,7 @@ const fetcherWithTimestamp = (url: string) =>
     .then((res: { data: any }) => ({ ...res.data, ...getTimeState() }));
 
 export function getClubs(): SWRResponse<ClubsResponse> {
-  return useSWR("clubs", fetcher);
+  return useSWR('clubs', fetcher);
 }
 
 export function getTournamentByEndpointName(
@@ -224,7 +224,7 @@ export function getCourtsLive(tournament_id: number | null): SWRResponse<CourtsR
 }
 
 export function getUser(): SWRResponse<UserPublicResponse> {
-  return useSWR("users/me", fetcher);
+  return useSWR('users/me', fetcher);
 }
 
 export function getUpcomingMatches(
@@ -243,7 +243,7 @@ export function getUpcomingMatches(
 
 export async function uploadTournamentLogo(tournament_id: number, file: any) {
   const bodyFormData = new FormData();
-  bodyFormData.append("file", file, file.name);
+  bodyFormData.append('file', file, file.name);
 
   return createAxios().post(`tournaments/${tournament_id}/logo`, bodyFormData);
 }
@@ -254,7 +254,7 @@ export async function removeTournamentLogo(tournament_id: number) {
 
 export async function uploadTeamLogo(tournament_id: number, team_id: number, file: any) {
   const bodyFormData = new FormData();
-  bodyFormData.append("file", file, file.name);
+  bodyFormData.append('file', file, file.name);
 
   return createAxios().post(`tournaments/${tournament_id}/teams/${team_id}/logo`, bodyFormData);
 }
@@ -264,9 +264,9 @@ export async function removeTeamLogo(tournament_id: number, team_id: number) {
 }
 
 export function checkForAuthError(response: any) {
-  if (typeof window !== "undefined" && !tokenPresent()) {
+  if (typeof window !== 'undefined' && !tokenPresent()) {
     const navigate = useNavigate();
-    navigate("/login");
+    navigate('/login');
   }
 
   // We send a simple GET `/clubs` request to test whether we really should log out. // Next
@@ -282,7 +282,7 @@ export function checkForAuthError(response: any) {
   }
   if (responseHasAuthError(response)) {
     createAxios()
-      .get("users/me")
+      .get('users/me')
       .then(() => {})
       .catch((error: any) => {
         if (error.toJSON().status === 401) {

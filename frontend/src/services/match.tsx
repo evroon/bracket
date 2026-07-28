@@ -1,7 +1,7 @@
-import { showNotification } from "@mantine/notifications";
+import { showNotification } from '@mantine/notifications';
 
-import { MatchBody, MatchCreateBodyFrontend, MatchRescheduleBody } from "@openapi";
-import { createAxios, handleRequestError } from "./adapter";
+import { MatchBody, MatchCreateBodyFrontend, MatchRescheduleBody } from '@openapi';
+import { createAxios, handleRequestError } from './adapter';
 
 export async function createMatch(tournament_id: number, match: MatchCreateBodyFrontend) {
   return createAxios()
@@ -32,9 +32,9 @@ export async function rescheduleMatch(
     .then((response: any) => {
       if (response != null && response.status === 200) {
         showNotification({
-          color: "green",
-          title: "Successfully rescheduled match",
-          message: "",
+          color: 'green',
+          title: 'Successfully rescheduled match',
+          message: '',
         });
       }
     });

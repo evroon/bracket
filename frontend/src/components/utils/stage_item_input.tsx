@@ -4,8 +4,8 @@ import {
   StageItemInputOptionFinal,
   StageItemInputOptionTentative,
   StageItemInputTentative,
-} from "@openapi";
-import { assert_not_none } from "./assert";
+} from '@openapi';
+import { assert_not_none } from './assert';
 
 export type StageItemInput = StageItemInputTentative | StageItemInputFinal | StageItemInputEmpty;
 export type StageItemInputOption = StageItemInputOptionTentative | StageItemInputOptionFinal;
@@ -23,9 +23,9 @@ export function getPositionName(position: number) {
   // TODO: handle inputs like `21` (21st)
   return (
     {
-      1: "1st",
-      2: "2nd",
-      3: "3rd",
+      1: '1st',
+      2: '2nd',
+      3: '3rd',
     }[position] || `${position}th`
   );
 }
@@ -42,7 +42,7 @@ export function formatStageItemInput(
   stageItemsLookup: any,
 ) {
   if (stage_item_input == null) return null;
-  if ("team" in stage_item_input) return stage_item_input.team.name;
+  if ('team' in stage_item_input) return stage_item_input.team.name;
   if (stage_item_input?.winner_from_stage_item_id != null) {
     return formatStageItemInputTentative(stage_item_input, stageItemsLookup);
   }

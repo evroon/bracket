@@ -1,9 +1,9 @@
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { Center } from "@mantine/core";
-import { useParams } from "react-router";
-import { SWRResponse } from "swr";
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Center } from '@mantine/core';
+import { useParams } from 'react-router';
+import { SWRResponse } from 'swr';
 
-import classes from "@pages/create_account.module.css";
+import classes from '@pages/create_account.module.css';
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -34,12 +34,12 @@ export function responseIsValid(response: SWRResponse | null) {
 }
 
 export function getBaseURL() {
-  return typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
+  return typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
 }
 
 export const groupBy = (keys: any) => (array: any) =>
   array.reduce((objectsByKeyValue: any, obj: any) => {
-    const value = keys.map((key: any) => obj[key]).join("-");
+    const value = keys.map((key: any) => obj[key]).join('-');
     // eslint-disable-next-line no-param-reassign
     objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
     return objectsByKeyValue;
@@ -71,7 +71,7 @@ export interface Pagination {
   offset: number;
   limit: number;
   sort_by: string;
-  sort_direction: "asc" | "desc";
+  sort_direction: 'asc' | 'desc';
 }
 
 export const setTitle = (title: string) => {

@@ -8,16 +8,16 @@ import {
   Menu,
   useComputedColorScheme,
   useMantineColorScheme,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Icon, IconMoonStars, IconSun } from "@tabler/icons-react";
-import { ReactNode } from "react";
-import { useLocation } from "react-router";
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Icon, IconMoonStars, IconSun } from '@tabler/icons-react';
+import { ReactNode } from 'react';
+import { useLocation } from 'react-router';
 
-import { Brand } from "@components/navbar/_brand";
-import { getBaseLinks, getBaseLinksDict } from "@components/navbar/_main_links";
-import PreloadLink from "@components/utils/link";
-import classes from "./_layout.module.css";
+import { Brand } from '@components/navbar/_brand';
+import { getBaseLinks, getBaseLinksDict } from '@components/navbar/_main_links';
+import PreloadLink from '@components/utils/link';
+import classes from './_layout.module.css';
 
 interface HeaderActionLink {
   link: string | null;
@@ -37,7 +37,7 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, pathName: st
     <a key={item.label} className={classes.link} href={item.link}>
       <Center>
         <item.icon />
-        <span style={{ marginLeft: "0.25rem", marginTop: "0.2rem" }}>{item.label}</span>
+        <span style={{ marginLeft: '0.25rem', marginTop: '0.2rem' }}>{item.label}</span>
       </Center>
     </a>
   ));
@@ -46,7 +46,7 @@ function getMenuItemsForLink(link: HeaderActionLink, _classes: any, pathName: st
       <Menu.Target>
         <PreloadLink
           className={classes.link}
-          href={link.link || ""}
+          href={link.link || ''}
           data-active={pathName === link.link || undefined}
         >
           <>{link.label}</>
@@ -63,7 +63,7 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
 
   const [opened, { toggle }] = navbarState != null ? navbarState : [false, { toggle: () => {} }];
   const { setColorScheme } = useMantineColorScheme();
-  const computedColorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   const items = links.map((link) => {
     if (link.links) {
@@ -74,7 +74,7 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
       <PreloadLink
         key={link.label}
         className={classes.link}
-        href={link.link || ""}
+        href={link.link || ''}
         data-active={pathName === link.link || undefined}
       >
         {link.label}
@@ -95,7 +95,7 @@ export function HeaderAction({ links, navbarState, breadcrumbs }: HeaderActionPr
           {items}
           <ActionIcon
             variant="default"
-            onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
+            onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
             size={30}
             ml="1rem"
           >
@@ -138,7 +138,7 @@ export default function Layout({ children, additionalNavbarLinks, breadcrumbs }:
       header={{ height: 60 }}
       navbar={{
         width: 80,
-        breakpoint: "sm",
+        breakpoint: 'sm',
         collapsed: {
           desktop: additionalNavbarLinks == null || additionalNavbarLinks.length < 1,
           mobile: !opened,

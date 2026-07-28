@@ -1,14 +1,14 @@
-import { Alert, Container, Text, Title } from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { HiMiniWrenchScrewdriver } from "react-icons/hi2";
+import { Alert, Container, Text, Title } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { HiMiniWrenchScrewdriver } from 'react-icons/hi2';
 
-import classes from "./empty_table_info.module.css";
+import classes from './empty_table_info.module.css';
 
 export function EmptyTableInfo({
   entity_name,
-  message = "",
+  message = '',
 }: {
   entity_name: string;
   message?: string;
@@ -22,7 +22,7 @@ export function EmptyTableInfo({
       radius="lg"
       mt={8}
     >
-      {t("could_not_find_any_alert")} {entity_name}
+      {t('could_not_find_any_alert')} {entity_name}
       {message}
     </Alert>
   );

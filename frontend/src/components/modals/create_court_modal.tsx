@@ -1,19 +1,19 @@
-import { Button, Modal, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { GoPlus } from "@react-icons/all-files/go/GoPlus";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Button, Modal, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { CourtsResponse } from "@openapi";
-import { createCourt } from "@services/court";
+import { CourtsResponse } from '@openapi';
+import { createCourt } from '@services/court';
 
 export default function CourtModal({
   tournamentId,
   swrCourtsResponse,
   buttonSize,
 }: {
-  buttonSize: "xs" | "lg";
+  buttonSize: 'xs' | 'lg';
   tournamentId: number;
   swrCourtsResponse: SWRResponse<CourtsResponse>;
 }) {
@@ -21,17 +21,17 @@ export default function CourtModal({
   const [opened, setOpened] = useState(false);
   const form = useForm({
     initialValues: {
-      name: "",
+      name: '',
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
     },
   });
 
   return (
     <>
-      <Modal opened={opened} onClose={() => setOpened(false)} title={t("add_court_title")}>
+      <Modal opened={opened} onClose={() => setOpened(false)} title={t('add_court_title')}>
         <form
           onSubmit={form.onSubmit(async (values) => {
             await createCourt(tournamentId, values.name);
@@ -41,13 +41,13 @@ export default function CourtModal({
         >
           <TextInput
             withAsterisk
-            label={t("name_input_label")}
-            placeholder={t("court_name_input_placeholder")}
-            {...form.getInputProps("name")}
+            label={t('name_input_label')}
+            placeholder={t('court_name_input_placeholder')}
+            {...form.getInputProps('name')}
           />
 
           <Button fullWidth style={{ marginTop: 10 }} color="green" type="submit">
-            {t("save_button")}
+            {t('save_button')}
           </Button>
         </form>
       </Modal>
@@ -59,7 +59,7 @@ export default function CourtModal({
         onClick={() => setOpened(true)}
         leftSection={<GoPlus size={24} />}
       >
-        {t("add_court_title")}
+        {t('add_court_title')}
       </Button>
     </>
   );

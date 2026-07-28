@@ -7,21 +7,21 @@ import {
   NumberInput,
   Select,
   TextInput,
-} from "@mantine/core";
-import { DateTimePicker } from "@mantine/dates";
-import { useForm } from "@mantine/form";
-import { GoPlus } from "@react-icons/all-files/go/GoPlus";
-import { IconCalendar, IconCalendarTime } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { GoPlus } from '@react-icons/all-files/go/GoPlus';
+import { IconCalendar, IconCalendarTime } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import SaveButton from "@components/buttons/save";
-import { assert_not_none } from "@components/utils/assert";
-import { Club, Tournament, TournamentsResponse } from "@openapi";
-import { getBaseApiUrl, getClubs } from "@services/adapter";
-import { createTournament } from "@services/tournament";
-import dayjs from "dayjs";
+import SaveButton from '@components/buttons/save';
+import { assert_not_none } from '@components/utils/assert';
+import { Club, Tournament, TournamentsResponse } from '@openapi';
+import { getBaseApiUrl, getClubs } from '@services/adapter';
+import { createTournament } from '@services/tournament';
+import dayjs from 'dayjs';
 
 export function TournamentLogo({ tournament }: { tournament: Tournament | null }) {
   if (tournament == null || tournament.logo_path == null) return null;
@@ -47,10 +47,10 @@ function GeneralTournamentForm({
   const form = useForm({
     initialValues: {
       start_time: dayjs(),
-      name: "",
+      name: '',
       club_id: null,
       dashboard_public: true,
-      dashboard_endpoint: "",
+      dashboard_endpoint: '',
       players_can_be_in_multiple_teams: false,
       auto_assign_courts: true,
       duration_minutes: 10,
@@ -58,13 +58,13 @@ function GeneralTournamentForm({
     },
 
     validate: {
-      name: (value) => (value.length > 0 ? null : t("too_short_name_validation")),
-      club_id: (value) => (value != null ? null : t("club_choose_title")),
-      start_time: (value) => (value != null ? null : t("start_time_choose_title")),
+      name: (value) => (value.length > 0 ? null : t('too_short_name_validation')),
+      club_id: (value) => (value != null ? null : t('club_choose_title')),
+      start_time: (value) => (value != null ? null : t('start_time_choose_title')),
       duration_minutes: (value) =>
-        value != null && value > 0 ? null : t("duration_minutes_choose_title"),
+        value != null && value > 0 ? null : t('duration_minutes_choose_title'),
       margin_minutes: (value) =>
-        value != null && value > 0 ? null : t("margin_minutes_choose_title"),
+        value != null && value > 0 ? null : t('margin_minutes_choose_title'),
     },
   });
 
@@ -88,34 +88,34 @@ function GeneralTournamentForm({
     >
       <TextInput
         withAsterisk
-        label={t("name_input_label")}
-        placeholder={t("tournament_name_input_placeholder")}
-        {...form.getInputProps("name")}
+        label={t('name_input_label')}
+        placeholder={t('tournament_name_input_placeholder')}
+        {...form.getInputProps('name')}
       />
 
       <Select
         withAsterisk
         data={clubs.map((p) => ({ value: `${p.id}`, label: p.name }))}
-        label={t("club_select_label")}
-        placeholder={t("club_select_placeholder")}
+        label={t('club_select_label')}
+        placeholder={t('club_select_placeholder')}
         searchable
         limit={20}
         style={{ marginTop: 10 }}
-        {...form.getInputProps("club_id")}
+        {...form.getInputProps('club_id')}
       />
 
       <TextInput
-        label={t("dashboard_link_label")}
-        placeholder={t("dashboard_link_placeholder")}
+        label={t('dashboard_link_label')}
+        placeholder={t('dashboard_link_placeholder')}
         mt="lg"
-        {...form.getInputProps("dashboard_endpoint")}
+        {...form.getInputProps('dashboard_endpoint')}
       />
       <Grid mt="1rem">
         <Grid.Col span={{ sm: 9 }}>
           <DateTimePicker
             leftSection={<IconCalendar size="1.1rem" stroke={1.5} />}
             mx="auto"
-            {...form.getInputProps("start_time")}
+            {...form.getInputProps('start_time')}
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 3 }}>
@@ -124,10 +124,10 @@ function GeneralTournamentForm({
             color="indigo"
             leftSection={<IconCalendarTime size="1.1rem" stroke={1.5} />}
             onClick={() => {
-              form.setFieldValue("start_time", dayjs());
+              form.setFieldValue('start_time', dayjs());
             }}
           >
-            {t("now_button")}
+            {t('now_button')}
           </Button>
         </Grid.Col>
       </Grid>
@@ -135,38 +135,38 @@ function GeneralTournamentForm({
       <Grid>
         <Grid.Col span={{ sm: 6 }}>
           <NumberInput
-            label={t("match_duration_label")}
+            label={t('match_duration_label')}
             mt="lg"
-            {...form.getInputProps("duration_minutes")}
+            {...form.getInputProps('duration_minutes')}
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 6 }}>
           <NumberInput
-            label={t("time_between_matches_label")}
+            label={t('time_between_matches_label')}
             mt="lg"
-            {...form.getInputProps("margin_minutes")}
+            {...form.getInputProps('margin_minutes')}
           />
         </Grid.Col>
       </Grid>
 
       <Checkbox
         mt="md"
-        label={t("dashboard_public_description")}
-        {...form.getInputProps("dashboard_public", { type: "checkbox" })}
+        label={t('dashboard_public_description')}
+        {...form.getInputProps('dashboard_public', { type: 'checkbox' })}
       />
       <Checkbox
         mt="md"
-        label={t("miscellaneous_label")}
-        {...form.getInputProps("players_can_be_in_multiple_teams", { type: "checkbox" })}
+        label={t('miscellaneous_label')}
+        {...form.getInputProps('players_can_be_in_multiple_teams', { type: 'checkbox' })}
       />
       <Checkbox
         mt="md"
-        label={t("auto_assign_courts_label")}
-        {...form.getInputProps("auto_assign_courts", { type: "checkbox" })}
+        label={t('auto_assign_courts_label')}
+        {...form.getInputProps('auto_assign_courts', { type: 'checkbox' })}
       />
 
       <Button fullWidth mt={8} color="green" type="submit">
-        {t("save_button")}
+        {t('save_button')}
       </Button>
     </form>
   );
@@ -179,7 +179,7 @@ export default function TournamentModal({
 }) {
   const { t } = useTranslation();
   const [opened, setOpened] = useState(false);
-  const operation_text = t("create_tournament_button");
+  const operation_text = t('create_tournament_button');
   const swrClubsResponse = getClubs();
   const clubs = swrClubsResponse.data?.data || [];
 

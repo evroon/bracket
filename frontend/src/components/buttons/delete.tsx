@@ -1,5 +1,5 @@
-import { Button } from "@mantine/core";
-import { MdDelete } from "@react-icons/all-files/md/MdDelete";
+import { Button } from '@mantine/core';
+import { MdDelete } from '@react-icons/all-files/md/MdDelete';
 
 export default function DeleteButton(props: any) {
   return (

@@ -1,4 +1,4 @@
-import { awaitRequestAndHandleError, createAxios, handleRequestError } from "./adapter";
+import { awaitRequestAndHandleError, createAxios, handleRequestError } from './adapter';
 
 export async function createTeam(
   tournament_id: number,

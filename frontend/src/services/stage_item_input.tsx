@@ -1,4 +1,4 @@
-import { createAxios, handleRequestError } from "./adapter";
+import { createAxios, handleRequestError } from './adapter';
 
 export async function updateStageItemInput(
   tournament_id: number,

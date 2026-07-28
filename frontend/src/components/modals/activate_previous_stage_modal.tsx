@@ -1,12 +1,12 @@
-import { Alert, Button, Modal } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconAlertCircle, IconSquareArrowLeft } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SWRResponse } from "swr";
+import { Alert, Button, Modal } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconAlertCircle, IconSquareArrowLeft } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { SWRResponse } from 'swr';
 
-import { StageRankingResponse, StagesWithStageItemsResponse } from "@openapi";
-import { activateNextStage } from "@services/stage";
+import { StageRankingResponse, StagesWithStageItemsResponse } from '@openapi';
+import { activateNextStage } from '@services/stage';
 
 export default function ActivatePreviousStageModal({
   tournamentId,
@@ -29,19 +29,19 @@ export default function ActivatePreviousStageModal({
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t("active_previous_stage_modal_title")}
+        title={t('active_previous_stage_modal_title')}
         size="40rem"
       >
         <form
           onSubmit={form.onSubmit(async () => {
-            await activateNextStage(tournamentId, "previous");
+            await activateNextStage(tournamentId, 'previous');
             swrStagesResponse.mutate();
             swrRankingsPerStageItemResponse.mutate();
             setOpened(false);
           })}
         >
           <Alert icon={<IconAlertCircle size={16} />} color="orange" radius="lg">
-            {t("active_previous_stage_modal_description")}
+            {t('active_previous_stage_modal_description')}
           </Alert>
 
           <Button
@@ -52,7 +52,7 @@ export default function ActivatePreviousStageModal({
             type="submit"
             leftSection={<IconSquareArrowLeft size={24} />}
           >
-            {t("plan_previous_stage_button")}
+            {t('plan_previous_stage_button')}
           </Button>
         </form>
       </Modal>
@@ -66,7 +66,7 @@ export default function ActivatePreviousStageModal({
           setOpened(true);
         }}
       >
-        {t("previous_stage_button")}
+        {t('previous_stage_button')}
       </Button>
     </>
   );

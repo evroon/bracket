@@ -1,15 +1,15 @@
-import { Code, Text, Textarea } from "@mantine/core";
-import { UseFormReturnType } from "@mantine/form";
-import { useTranslation } from "react-i18next";
+import { Code, Text, Textarea } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
 
 export function MultiPlayersInput({ form }: { form: UseFormReturnType<any> }) {
   const { t } = useTranslation();
   return (
     <Textarea
-      label={t("multiple_players_input_label")}
-      placeholder={t("multiple_players_input_placeholder")}
+      label={t('multiple_players_input_label')}
+      placeholder={t('multiple_players_input_placeholder')}
       minRows={10}
-      {...form.getInputProps("names")}
+      {...form.getInputProps('names')}
     />
   );
 }
@@ -19,12 +19,12 @@ export function MultiTeamsInput({ form }: { form: UseFormReturnType<any> }) {
   return (
     <>
       <Textarea
-        label={t("multiple_teams_input_label")}
-        placeholder={t("multiple_teams_input_placeholder")}
+        label={t('multiple_teams_input_label')}
+        placeholder={t('multiple_teams_input_placeholder')}
         minRows={10}
-        {...form.getInputProps("names")}
+        {...form.getInputProps('names')}
       />
-      <Text mt="1rem">{t("example_label")}</Text>
+      <Text mt="1rem">{t('example_label')}</Text>
       <Code block>
         Team 1
         <br />
