@@ -31,8 +31,12 @@ from bracket.utils.id_types import TeamId
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
+ROW_COUNT_TABLES = {"courts", "matches", "players", "rounds", "stage_items", "stages", "teams"}
+
 
 async def assert_row_count_and_clear(table_name: str, expected_rows: int) -> None:
+    if table_name not in ROW_COUNT_TABLES:
+        raise ValueError(f"Unsupported table for row count assertion: {table_name}")
     rows = await database.fetch_val(query=f"SELECT COUNT(*) FROM {table_name}")
     assert rows == expected_rows
     await database.execute(query=f"DELETE FROM {table_name}")
