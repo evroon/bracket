@@ -4,7 +4,6 @@ import pytest
 
 from bracket.database import database
 from bracket.models.db.team import Team
-from bracket.schema import players, teams
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
@@ -50,7 +49,7 @@ async def test_create_team(
     body = {"name": "Some new name", "active": True, "player_ids": []}
     response = await send_tournament_request(HTTPMethod.POST, "teams", auth_context, None, body)
     assert response["data"]["name"] == body["name"]
-    await assert_row_count_and_clear(teams, 1)
+    await assert_row_count_and_clear("teams", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -62,8 +61,8 @@ async def test_create_teams(
         HTTPMethod.POST, "teams_multi", auth_context, None, body
     )
     assert response["success"] is True
-    await assert_row_count_and_clear(teams, 2)
-    await assert_row_count_and_clear(players, 3)
+    await assert_row_count_and_clear("teams", 2)
+    await assert_row_count_and_clear("players", 3)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -79,7 +78,7 @@ async def test_delete_team(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(teams, 0)
+        await assert_row_count_and_clear("teams", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -94,12 +93,12 @@ async def test_update_team(
             HTTPMethod.PUT, f"teams/{team_inserted.id}", auth_context, None, body
         )
         updated_team = await fetch_one_parsed_certain(
-            database, Team, query=teams.select().where(teams.c.id == team_inserted.id)
+            database, Team, "SELECT * FROM teams WHERE id = :id", {"id": team_inserted.id}
         )
         assert updated_team.name == body["name"]
         assert response["data"]["name"] == body["name"]
 
-        await assert_row_count_and_clear(teams, 1)
+        await assert_row_count_and_clear("teams", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")

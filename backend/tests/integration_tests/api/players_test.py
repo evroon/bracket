@@ -2,7 +2,6 @@ import pytest
 
 from bracket.database import database
 from bracket.models.db.player import Player
-from bracket.schema import players
 from bracket.utils.db import fetch_one_parsed_certain
 from bracket.utils.dummy_records import DUMMY_MOCK_TIME, DUMMY_PLAYER1, DUMMY_TEAM1
 from bracket.utils.http import HTTPMethod
@@ -49,7 +48,7 @@ async def test_create_player(
     body = {"name": "Some new name", "active": True}
     response = await send_tournament_request(HTTPMethod.POST, "players", auth_context, json=body)
     assert response["success"] is True
-    await assert_row_count_and_clear(players, 1)
+    await assert_row_count_and_clear("players", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -61,7 +60,7 @@ async def test_create_players(
         HTTPMethod.POST, "players_multi", auth_context, json=body
     )
     assert response["success"] is True
-    await assert_row_count_and_clear(players, 2)
+    await assert_row_count_and_clear("players", 2)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -80,7 +79,7 @@ async def test_delete_player(
                 )
                 == SUCCESS_RESPONSE
             )
-            await assert_row_count_and_clear(players, 0)
+            await assert_row_count_and_clear("players", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -98,9 +97,9 @@ async def test_update_player(
                 HTTPMethod.PUT, f"players/{player_inserted.id}", auth_context, json=body
             )
             updated_player = await fetch_one_parsed_certain(
-                database, Player, query=players.select().where(players.c.id == player_inserted.id)
+                database, Player, "SELECT * FROM players WHERE id = :id", {"id": player_inserted.id}
             )
             assert updated_player.name == body["name"]
             assert response["data"]["name"] == body["name"]
 
-            await assert_row_count_and_clear(players, 1)
+            await assert_row_count_and_clear("players", 1)

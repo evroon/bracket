@@ -2,7 +2,6 @@ import pytest
 
 from bracket.models.db.match import MatchRescheduleBody
 from bracket.models.db.stage_item_inputs import StageItemInputInsertable
-from bracket.schema import matches
 from bracket.sql.matches import sql_get_match
 from bracket.utils.dummy_records import (
     DUMMY_COURT1,
@@ -100,7 +99,7 @@ async def test_reschedule_match(
             == SUCCESS_RESPONSE
         )
         match = await sql_get_match(match_inserted.id)
-        await assert_row_count_and_clear(matches, 0)
+        await assert_row_count_and_clear("matches", 0)
 
     assert match.court_id == body.new_court_id
     assert match.position_in_schedule == 0

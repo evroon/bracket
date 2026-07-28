@@ -14,7 +14,6 @@ from bracket.routes.models import (
     SuccessResponse,
 )
 from bracket.routes.util import disallow_archived_tournament
-from bracket.schema import players
 from bracket.sql.players import (
     get_all_players_in_tournament,
     get_player_count,
@@ -54,20 +53,19 @@ async def update_player_by_id(
     _: UserPublic = Depends(user_authenticated_for_tournament),
     __: Tournament = Depends(disallow_archived_tournament),
 ) -> SinglePlayerResponse:
+    values = player_body.model_dump()
+    set_clause = ", ".join(f"{k} = :{k}" for k in values)
     await database.execute(
-        query=players.update().where(
-            (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
-        ),
-        values=player_body.model_dump(),
+        query=f"UPDATE players SET {set_clause} WHERE id = :player_id AND tournament_id = :tournament_id",
+        values={**values, "player_id": player_id, "tournament_id": tournament_id},
     )
     return SinglePlayerResponse(
         data=assert_some(
             await fetch_one_parsed(
                 database,
                 Player,
-                players.select().where(
-                    (players.c.id == player_id) & (players.c.tournament_id == tournament_id)
-                ),
+                "SELECT * FROM players WHERE id = :player_id AND tournament_id = :tournament_id",
+                {"player_id": player_id, "tournament_id": tournament_id},
             )
         )
     )

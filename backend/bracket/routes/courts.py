@@ -14,7 +14,6 @@ from bracket.routes.auth import (
 )
 from bracket.routes.models import CourtsResponse, SingleCourtResponse, SuccessResponse
 from bracket.routes.util import disallow_archived_tournament
-from bracket.schema import courts
 from bracket.sql.courts import get_all_courts_in_tournament, sql_delete_court, update_court
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.db import fetch_one_parsed
@@ -50,9 +49,8 @@ async def update_court_by_id(
             await fetch_one_parsed(
                 database,
                 Court,
-                courts.select().where(
-                    (courts.c.id == court_id) & (courts.c.tournament_id == tournament_id)
-                ),
+                "SELECT * FROM courts WHERE id = :court_id AND tournament_id = :tournament_id",
+                {"court_id": court_id, "tournament_id": tournament_id},
             )
         )
     )
@@ -94,22 +92,25 @@ async def create_court(
     existing_courts = await get_all_courts_in_tournament(tournament_id)
     check_requirement(existing_courts, user, "max_courts")
 
-    last_record_id = await database.execute(
-        query=courts.insert(),
-        values=CourtToInsert(
-            **court_body.model_dump(),
-            created=datetime_utc.now(),
-            tournament_id=tournament_id,
-        ).model_dump(),
+    insertable = CourtToInsert(
+        **court_body.model_dump(),
+        created=datetime_utc.now(),
+        tournament_id=tournament_id,
+    )
+    values = insertable.model_dump()
+    columns = ", ".join(values.keys())
+    placeholders = ", ".join(f":{k}" for k in values.keys())
+    last_record_id = await database.fetch_val(
+        query=f"INSERT INTO courts ({columns}) VALUES ({placeholders}) RETURNING id",
+        values=values,
     )
     return SingleCourtResponse(
         data=assert_some(
             await fetch_one_parsed(
                 database,
                 Court,
-                courts.select().where(
-                    courts.c.id == last_record_id and courts.c.tournament_id == tournament_id
-                ),
+                "SELECT * FROM courts WHERE id = :court_id AND tournament_id = :tournament_id",
+                {"court_id": last_record_id, "tournament_id": tournament_id},
             )
         )
     )

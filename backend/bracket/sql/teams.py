@@ -21,7 +21,7 @@ async def get_teams_by_id(team_ids: set[TeamId], tournament_id: TournamentId) ->
     result = await database.fetch_all(
         query=query, values={"team_ids": team_ids, "tournament_id": tournament_id}
     )
-    return [Team.model_validate(team) for team in result]
+    return [Team.model_validate(dict(team)) for team in result]
 
 
 async def get_team_by_id(team_id: TeamId, tournament_id: TournamentId) -> Team | None:
@@ -71,7 +71,7 @@ async def get_teams_with_members(
         }
     )
     result = await database.fetch_all(query=query, values=values)
-    return [FullTeamWithPlayers.model_validate(x) for x in result]
+    return [FullTeamWithPlayers.model_validate(dict(x)) for x in result]
 
 
 async def get_team_count(

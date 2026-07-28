@@ -5,7 +5,6 @@ import pytest
 
 from bracket.database import database
 from bracket.models.db.ranking import Ranking
-from bracket.schema import rankings
 from bracket.sql.rankings import (
     get_all_rankings_in_tournament,
     sql_delete_ranking,
@@ -95,7 +94,8 @@ async def test_update_ranking(
             updated_ranking = await fetch_one_parsed_certain(
                 database,
                 Ranking,
-                query=rankings.select().where(rankings.c.id == ranking_inserted.id),
+                "SELECT * FROM rankings WHERE id = :id",
+                {"id": ranking_inserted.id},
             )
             assert response["success"] is True
             assert updated_ranking.win_points == Decimal("7.5")

@@ -5,16 +5,15 @@ from time import sleep
 
 import pytest
 import pytest_asyncio
-from databases import Database
 
-from bracket.database import database, engine
-from bracket.schema import metadata
+from bracket.database import DatabasePool, database
+from bracket.utils.db_init import _create_all_tables, _drop_all_tables
 from tests.integration_tests.models import AuthContext
 from tests.integration_tests.sql import inserted_auth_context
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
-async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
+async def reinit_database(worker_id: str) -> AsyncIterator[DatabasePool]:
     """
     Creates the test database on the first test run in the session.
 
@@ -25,8 +24,8 @@ async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
     await database.connect()
 
     if worker_id == "master":
-        metadata.drop_all(engine)
-        metadata.create_all(engine)
+        _drop_all_tables()
+        _create_all_tables()
 
         try:
             yield database
@@ -42,8 +41,8 @@ async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
             with open(lock_path, mode="w") as file:
                 file.write("")
 
-            metadata.drop_all(engine)
-            metadata.create_all(engine)
+            _drop_all_tables()
+            _create_all_tables()
         finally:
             os.remove(lock_path)
     else:
@@ -59,6 +58,6 @@ async def reinit_database(worker_id: str) -> AsyncIterator[Database]:
 
 
 @pytest.fixture(scope="session")
-async def auth_context(reinit_database: Database) -> AsyncIterator[AuthContext]:
+async def auth_context(reinit_database: DatabasePool) -> AsyncIterator[AuthContext]:
     async with reinit_database, inserted_auth_context() as auth_context:
         yield auth_context

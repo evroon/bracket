@@ -36,7 +36,6 @@ from bracket.routes.util import (
     team_dependency,
     team_with_players_dependency,
 )
-from bracket.schema import players_x_teams, teams
 from bracket.sql.players import get_all_players_in_tournament, insert_player
 from bracket.sql.teams import (
     get_team_by_id,
@@ -64,17 +63,21 @@ async def update_team_members(
     for player_id in player_ids:
         if player_id not in team.player_ids:
             await database.execute(
-                query=players_x_teams.insert(),
+                query="INSERT INTO players_x_teams (team_id, player_id) VALUES (:team_id, :player_id)",
                 values={"team_id": team_id, "player_id": player_id},
             )
 
     # Remove old members from the team
-    await database.execute(
-        query=players_x_teams.delete().where(
-            (players_x_teams.c.player_id.not_in(player_ids))  # type: ignore[attr-defined]
-            & (players_x_teams.c.team_id == team_id)
-        ),
-    )
+    if player_ids:
+        await database.execute(
+            query="DELETE FROM players_x_teams WHERE team_id = :team_id AND player_id != ALL(:player_ids)",
+            values={"team_id": team_id, "player_ids": list(player_ids)},
+        )
+    else:
+        await database.execute(
+            query="DELETE FROM players_x_teams WHERE team_id = :team_id",
+            values={"team_id": team_id},
+        )
 
 
 @router.get("/tournaments/{tournament_id}/teams", response_model=TeamsWithPlayersResponse)
@@ -101,11 +104,11 @@ async def update_team_by_id(
 ) -> SingleTeamResponse:
     await check_foreign_keys_belong_to_tournament(team_body, tournament_id)
 
+    values = team_body.model_dump(exclude={"player_ids"})
+    set_clause = ", ".join(f"{k} = :{k}" for k in values)
     await database.execute(
-        query=teams.update().where(
-            (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
-        ),
-        values=team_body.model_dump(exclude={"player_ids"}),
+        query=f"UPDATE teams SET {set_clause} WHERE id = :team_id AND tournament_id = :tournament_id",
+        values={**values, "team_id": team.id, "tournament_id": tournament_id},
     )
     await update_team_members(team.id, tournament_id, team_body.player_ids)
 
@@ -114,9 +117,8 @@ async def update_team_by_id(
             await fetch_one_parsed(
                 database,
                 Team,
-                teams.select().where(
-                    (teams.c.id == team.id) & (teams.c.tournament_id == tournament_id)
-                ),
+                "SELECT * FROM teams WHERE id = :team_id AND tournament_id = :tournament_id",
+                {"team_id": team.id, "tournament_id": tournament_id},
             )
         )
     )
@@ -154,8 +156,8 @@ async def update_team_logo(
             logger.error(f"Could not remove logo that should still exist: {old_logo_path}\n{exc}")
 
     await database.execute(
-        teams.update().where(teams.c.id == team.id),
-        values={"logo_path": filename},
+        "UPDATE teams SET logo_path = :logo_path WHERE id = :team_id",
+        values={"logo_path": filename, "team_id": team.id},
     )
     return SingleTeamResponse(data=assert_some(await get_team_by_id(team.id, tournament_id)))
 
@@ -191,13 +193,17 @@ async def create_team(
     existing_teams = await get_teams_with_members(tournament_id)
     check_requirement(existing_teams, user, "max_teams")
 
-    last_record_id = await database.execute(
-        query=teams.insert(),
-        values=TeamInsertable(
-            **team_to_insert.model_dump(exclude={"player_ids"}),
-            created=datetime_utc.now(),
-            tournament_id=tournament_id,
-        ).model_dump(),
+    insertable = TeamInsertable(
+        **team_to_insert.model_dump(exclude={"player_ids"}),
+        created=datetime_utc.now(),
+        tournament_id=tournament_id,
+    )
+    values = insertable.model_dump()
+    columns = ", ".join(values.keys())
+    placeholders = ", ".join(f":{k}" for k in values.keys())
+    last_record_id = await database.fetch_val(
+        query=f"INSERT INTO teams ({columns}) VALUES ({placeholders}) RETURNING id",
+        values=values,
     )
     await update_team_members(last_record_id, tournament_id, team_to_insert.player_ids)
 
@@ -229,14 +235,18 @@ async def create_multiple_teams(
 
     async with database.transaction():
         for team_name, players in teams_and_players:
+            insertable = TeamInsertable(
+                name=team_name,
+                active=team_body.active,
+                created=datetime_utc.now(),
+                tournament_id=tournament_id,
+            )
+            values = insertable.model_dump()
+            columns = ", ".join(values.keys())
+            placeholders = ", ".join(f":{k}" for k in values.keys())
             await database.execute(
-                query=teams.insert(),
-                values=TeamInsertable(
-                    name=team_name,
-                    active=team_body.active,
-                    created=datetime_utc.now(),
-                    tournament_id=tournament_id,
-                ).model_dump(),
+                query=f"INSERT INTO teams ({columns}) VALUES ({placeholders})",
+                values=values,
             )
             for player in players:
                 player_body = PlayerBody(name=player, active=team_body.active)

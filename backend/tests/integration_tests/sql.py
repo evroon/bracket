@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 from typing import cast
 
 from pydantic import BaseModel
-from sqlalchemy import Table
 
 from bracket.database import database
 from bracket.models.db.club import Club, ClubInsertable
@@ -25,22 +24,6 @@ from bracket.models.db.team import Team, TeamInsertable
 from bracket.models.db.tournament import Tournament, TournamentInsertable
 from bracket.models.db.user import UserBase, UserInDB
 from bracket.models.db.user_x_club import UserXClub, UserXClubInsertable, UserXClubRelation
-from bracket.schema import (
-    clubs,
-    courts,
-    matches,
-    players,
-    players_x_teams,
-    rankings,
-    rounds,
-    stage_item_inputs,
-    stage_items,
-    stages,
-    teams,
-    tournaments,
-    users,
-    users_x_clubs,
-)
 from bracket.sql.teams import get_teams_by_id
 from bracket.utils.db import insert_generic
 from bracket.utils.dummy_records import DUMMY_CLUB, DUMMY_RANKING1, DUMMY_TOURNAMENT
@@ -49,62 +32,66 @@ from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
 
-async def assert_row_count_and_clear(table: Table, expected_rows: int) -> None:
-    # assert len(await database.fetch_all(query=table.select())) == expected_rows
-    await database.execute(query=table.delete())
+async def assert_row_count_and_clear(table_name: str, expected_rows: int) -> None:
+    await database.execute(query=f"DELETE FROM {table_name}")
 
 
 @asynccontextmanager
 async def inserted_generic[BaseModelT: BaseModel](
-    data_model: BaseModelT, table: Table, return_type: type[BaseModelT]
+    data_model: BaseModelT, table_name: str, return_type: type[BaseModelT]
 ) -> AsyncIterator[BaseModelT]:
-    last_record_id, row_inserted = await insert_generic(database, data_model, table, return_type)
+    last_record_id, row_inserted = await insert_generic(
+        database, data_model, table_name, return_type
+    )
 
     try:
         yield row_inserted
     finally:
-        await database.execute(query=table.delete().where(table.c.id == last_record_id))
+        await database.execute(
+            query=f"DELETE FROM {table_name} WHERE id = :id",
+            values={"id": last_record_id},
+        )
 
 
 @asynccontextmanager
 async def inserted_user(user: UserBase) -> AsyncIterator[UserInDB]:
-    async with inserted_generic(user, users, UserInDB) as row_inserted:
+    async with inserted_generic(user, "users", UserInDB) as row_inserted:
         yield cast("UserInDB", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_club(club: ClubInsertable) -> AsyncIterator[Club]:
-    async with inserted_generic(club, clubs, Club) as row_inserted:
+    async with inserted_generic(club, "clubs", Club) as row_inserted:
         yield cast("Club", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_tournament(tournament: TournamentInsertable) -> AsyncIterator[Tournament]:
-    async with inserted_generic(tournament, tournaments, Tournament) as row_inserted:
+    async with inserted_generic(tournament, "tournaments", Tournament) as row_inserted:
         yield cast("Tournament", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_team(team: TeamInsertable) -> AsyncIterator[Team]:
-    async with inserted_generic(team, teams, Team) as row_inserted:
+    async with inserted_generic(team, "teams", Team) as row_inserted:
         yield cast("Team", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_court(court: CourtInsertable) -> AsyncIterator[Court]:
-    async with inserted_generic(court, courts, Court) as row_inserted:
+    async with inserted_generic(court, "courts", Court) as row_inserted:
         yield cast("Court", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_ranking(ranking: RankingInsertable) -> AsyncIterator[Ranking]:
-    async with inserted_generic(ranking, rankings, Ranking) as row_inserted:
+    async with inserted_generic(ranking, "rankings", Ranking) as row_inserted:
         yield cast("Ranking", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_player(player: PlayerInsertable) -> AsyncIterator[Player]:
-    async with inserted_generic(player, players, Player) as row_inserted:
+    async with inserted_generic(player, "players", Player) as row_inserted:
         yield cast("Player", row_inserted)
 
 
@@ -112,10 +99,10 @@ async def inserted_player(player: PlayerInsertable) -> AsyncIterator[Player]:
 async def inserted_player_in_team(
     player: PlayerInsertable, team_id: TeamId
 ) -> AsyncIterator[Player]:
-    async with inserted_generic(player, players, Player) as row_inserted:
+    async with inserted_generic(player, "players", Player) as row_inserted:
         async with inserted_generic(
             PlayerXTeamInsertable(player_id=cast("Player", row_inserted).id, team_id=team_id),
-            players_x_teams,
+            "players_x_teams",
             PlayerXTeamInsertable,
         ):
             yield cast("Player", row_inserted)
@@ -123,13 +110,13 @@ async def inserted_player_in_team(
 
 @asynccontextmanager
 async def inserted_stage(stage: StageInsertable) -> AsyncIterator[Stage]:
-    async with inserted_generic(stage, stages, Stage) as row_inserted:
+    async with inserted_generic(stage, "stages", Stage) as row_inserted:
         yield cast("Stage", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_stage_item(stage_item: StageItemInsertable) -> AsyncIterator[StageItem]:
-    async with inserted_generic(stage_item, stage_items, StageItem) as row_inserted:
+    async with inserted_generic(stage_item, "stage_items", StageItem) as row_inserted:
         yield StageItem(**row_inserted.model_dump())
 
 
@@ -139,7 +126,7 @@ async def inserted_stage_item_input(
 ) -> AsyncIterator[StageItemInputFinal | StageItemInputEmpty]:
     async with inserted_generic(
         stage_item_input,
-        stage_item_inputs,
+        "stage_item_inputs",
         StageItemInputBase,  # pyrefly: ignore[bad-argument-type]
     ) as row_inserted:
         if stage_item_input.team_id is not None:
@@ -155,19 +142,19 @@ async def inserted_stage_item_input(
 
 @asynccontextmanager
 async def inserted_round(round_: RoundInsertable) -> AsyncIterator[Round]:
-    async with inserted_generic(round_, rounds, Round) as row_inserted:
+    async with inserted_generic(round_, "rounds", Round) as row_inserted:
         yield cast("Round", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_match(match: MatchInsertable) -> AsyncIterator[Match]:
-    async with inserted_generic(match, matches, Match) as row_inserted:
+    async with inserted_generic(match, "matches", Match) as row_inserted:
         yield cast("Match", row_inserted)
 
 
 @asynccontextmanager
 async def inserted_user_x_club(user_x_club: UserXClubInsertable) -> AsyncIterator[UserXClub]:
-    async with inserted_generic(user_x_club, users_x_clubs, UserXClub) as row_inserted:
+    async with inserted_generic(user_x_club, "users_x_clubs", UserXClub) as row_inserted:
         yield cast("UserXClub", row_inserted)
 
 
@@ -192,7 +179,7 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
         ) as user_x_club_inserted,
     ):
         yield AuthContext(
-            headers={"Authorization": f"Bearer {get_mock_token(mock_user.email)}"},
+            headers={"Authorization": f"******"},
             user=user_inserted,
             club=club_inserted,
             tournament=tournament_inserted,

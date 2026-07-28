@@ -1,6 +1,5 @@
 import pytest
 
-from bracket.schema import rounds, stage_items, stages
 from bracket.sql.stages import get_full_tournament_details
 from bracket.utils.dummy_records import (
     DUMMY_MOCK_TIME,
@@ -103,9 +102,9 @@ async def test_create_stage(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(rounds, 1)
-        await assert_row_count_and_clear(stage_items, 1)
-        await assert_row_count_and_clear(stages, 1)
+        await assert_row_count_and_clear("rounds", 1)
+        await assert_row_count_and_clear("stage_items", 1)
+        await assert_row_count_and_clear("stages", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -124,7 +123,7 @@ async def test_delete_stage(
             )
             == SUCCESS_RESPONSE
         )
-        await assert_row_count_and_clear(stages, 0)
+        await assert_row_count_and_clear("stages", 0)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -153,8 +152,8 @@ async def test_update_stage(
         assert len(updated_stage.stage_items) == 1
         assert updated_stage.name == body["name"]
 
-        await assert_row_count_and_clear(stage_items, 1)
-        await assert_row_count_and_clear(stages, 1)
+        await assert_row_count_and_clear("stage_items", 1)
+        await assert_row_count_and_clear("stages", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")
@@ -177,8 +176,8 @@ async def test_activate_stage(
             == SUCCESS_RESPONSE
         )
 
-        await assert_row_count_and_clear(stage_items, 1)
-        await assert_row_count_and_clear(stages, 1)
+        await assert_row_count_and_clear("stage_items", 1)
+        await assert_row_count_and_clear("stages", 1)
 
 
 @pytest.mark.asyncio(loop_scope="session")

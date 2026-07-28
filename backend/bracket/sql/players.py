@@ -5,7 +5,6 @@ from heliclockter import datetime_utc
 from bracket.database import database
 from bracket.logic.ranking.statistics import START_ELO
 from bracket.models.db.player import Player, PlayerBody, PlayerToInsert
-from bracket.schema import players
 from bracket.utils.id_types import PlayerId, TournamentId
 from bracket.utils.pagination import PaginationPlayers
 from bracket.utils.types import dict_without_none
@@ -45,7 +44,7 @@ async def get_all_players_in_tournament(
         ),
     )
 
-    return [Player.model_validate(x) for x in result]
+    return [Player.model_validate(dict(x)) for x in result]
 
 
 async def get_player_by_id(player_id: PlayerId, tournament_id: TournamentId) -> Player | None:
@@ -58,7 +57,7 @@ async def get_player_by_id(player_id: PlayerId, tournament_id: TournamentId) -> 
     result = await database.fetch_one(
         query=query, values={"player_id": player_id, "tournament_id": tournament_id}
     )
-    return Player.model_validate(result) if result is not None else None
+    return Player.model_validate(dict(result)) if result is not None else None
 
 
 async def get_player_count(
@@ -89,13 +88,16 @@ async def sql_delete_players_of_tournament(tournament_id: TournamentId) -> None:
 
 
 async def insert_player(player_body: PlayerBody, tournament_id: TournamentId) -> None:
+    values = PlayerToInsert(
+        **player_body.model_dump(),
+        created=datetime_utc.now(),
+        tournament_id=tournament_id,
+        elo_score=START_ELO,
+        swiss_score=Decimal("0.0"),
+    ).model_dump()
+    columns = ", ".join(values.keys())
+    placeholders = ", ".join(f":{k}" for k in values.keys())
     await database.execute(
-        query=players.insert(),
-        values=PlayerToInsert(
-            **player_body.model_dump(),
-            created=datetime_utc.now(),
-            tournament_id=tournament_id,
-            elo_score=START_ELO,
-            swiss_score=Decimal("0.0"),
-        ).model_dump(),
+        query=f"INSERT INTO players ({columns}) VALUES ({placeholders})",
+        values=values,
     )

@@ -10,7 +10,6 @@ dependencies = [
     "asyncpg==0.31.0",
     "bcrypt==5.0.0",
     "click==8.4.0",
-    "databases[asyncpg]==0.9.0",
     "fastapi==0.138.0",
     "fastapi-sso==0.21.0",
     "gunicorn==26.0.0",
@@ -24,7 +23,6 @@ dependencies = [
     "python-multipart==0.0.31",
     "sentry-sdk==2.63.0",
     "sqlalchemy==2.0.44",
-    "sqlalchemy-stubs==0.4",
     "starlette==1.3.1",
     "types-aiofiles==25.1.0.20251011",
     "types-passlib==1.7.7.20241221",
@@ -40,7 +38,6 @@ junit_family = 'xunit2'
 asyncio_mode = 'auto'
 filterwarnings = [
     'error',
-    'ignore:The SelectBase.c and SelectBase.columns attributes are deprecated.*:DeprecationWarning',
     'ignore:pkg_resources is deprecated as an API.*:DeprecationWarning',
     'ignore:Deprecated call to `pkg_resources.declare_namespace(.*)`.*:DeprecationWarning',
     'ignore:.*:pytest.PytestDeprecationWarning',
