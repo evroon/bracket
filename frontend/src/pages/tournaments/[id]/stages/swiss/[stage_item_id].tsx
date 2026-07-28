@@ -190,7 +190,7 @@ export default function SwissTournamentPage() {
                 onClick={() => {
                   window.open(
                     `/tournaments/${tournamentDataFull.dashboard_endpoint}/dashboard`,
-                    '_ blank',
+                    '_blank',
                   );
                 }}
               >
