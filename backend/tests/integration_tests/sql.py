@@ -33,6 +33,8 @@ from tests.integration_tests.models import AuthContext
 
 
 async def assert_row_count_and_clear(table_name: str, expected_rows: int) -> None:
+    rows = await database.fetch_val(query=f"SELECT COUNT(*) FROM {table_name}")
+    assert rows == expected_rows
     await database.execute(query=f"DELETE FROM {table_name}")
 
 
@@ -178,8 +180,9 @@ async def inserted_auth_context() -> AsyncIterator[AuthContext]:
             )
         ) as user_x_club_inserted,
     ):
+        token = get_mock_token(user_inserted.email)
         yield AuthContext(
-            headers={"Authorization": f"******"},
+            headers={"Authorization": " ".join(["Bearer", token])},
             user=user_inserted,
             club=club_inserted,
             tournament=tournament_inserted,

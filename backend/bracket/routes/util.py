@@ -70,8 +70,8 @@ async def match_dependency(tournament_id: TournamentId, match_id: MatchId) -> Ma
     match = await fetch_one_parsed(
         database,
         Match,
-        "SELECT * FROM matches WHERE id = :match_id",
-        {"match_id": match_id},
+        "SELECT * FROM matches WHERE id = :match_id AND tournament_id = :tournament_id",
+        {"match_id": match_id, "tournament_id": tournament_id},
     )
 
     if match is None:
