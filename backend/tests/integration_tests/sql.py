@@ -31,15 +31,25 @@ from bracket.utils.id_types import TeamId
 from tests.integration_tests.mocks import get_mock_token, get_mock_user
 from tests.integration_tests.models import AuthContext
 
-ROW_COUNT_TABLES = {"courts", "matches", "players", "rounds", "stage_items", "stages", "teams"}
+ROW_COUNT_QUERIES = {
+    "courts": ("SELECT COUNT(*) FROM courts", "DELETE FROM courts"),
+    "matches": ("SELECT COUNT(*) FROM matches", "DELETE FROM matches"),
+    "players": ("SELECT COUNT(*) FROM players", "DELETE FROM players"),
+    "rounds": ("SELECT COUNT(*) FROM rounds", "DELETE FROM rounds"),
+    "stage_items": ("SELECT COUNT(*) FROM stage_items", "DELETE FROM stage_items"),
+    "stages": ("SELECT COUNT(*) FROM stages", "DELETE FROM stages"),
+    "teams": ("SELECT COUNT(*) FROM teams", "DELETE FROM teams"),
+}
 
 
 async def assert_row_count_and_clear(table_name: str, expected_rows: int) -> None:
-    if table_name not in ROW_COUNT_TABLES:
+    queries = ROW_COUNT_QUERIES.get(table_name)
+    if queries is None:
         raise ValueError(f"Unsupported table for row count assertion: {table_name}")
-    rows = await database.fetch_val(query=f"SELECT COUNT(*) FROM {table_name}")
+    row_count_query, clear_query = queries
+    rows = await database.fetch_val(query=row_count_query)
     assert rows == expected_rows
-    await database.execute(query=f"DELETE FROM {table_name}")
+    await database.execute(query=clear_query)
 
 
 @asynccontextmanager
