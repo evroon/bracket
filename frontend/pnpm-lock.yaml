@@ -52,7 +52,7 @@ importers:
         version: 6.0.1(vite@8.0.16(@types/node@26.0.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.18)))
       axios:
         specifier: 1.18.0
-        version: 1.18.0(debug@4.4.3)
+        version: 1.18.0
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -60,8 +60,8 @@ importers:
         specifier: 1.11.20
         version: 1.11.20
       i18next:
-        specifier: 26.0.3
-        version: 26.0.3(typescript@5.9.3)
+        specifier: 26.3.4
+        version: 26.3.4(typescript@5.9.3)
       nuqs:
         specifier: 2.8.9
         version: 2.8.9(react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
@@ -73,7 +73,7 @@ importers:
         version: 19.2.0(react@19.2.0)
       react-i18next:
         specifier: 17.0.1
-        version: 17.0.1(i18next@26.0.3(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+        version: 17.0.1(i18next@26.3.4(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       react-icons:
         specifier: 5.6.0
         version: 5.6.0(react@19.2.0)
@@ -944,8 +944,8 @@ packages:
   i18next-http-backend@3.0.5:
     resolution: {integrity: sha512-QaWHnsxieEDcqKe+vo/RFqpiIFRi/KBqlOSPcUlvinBaISCeiTRCbtrazHAjtHtsLC66oDsROAH8frWkQzfMMQ==}
 
-  i18next@26.0.3:
-    resolution: {integrity: sha512-1571kXINxHKY7LksWp8wP+zP0YqHSSpl/OW0Y0owFEf2H3s8gCAffWaZivcz14rMkOvn3R/psiQxVsR9t2Nafg==}
+  i18next@26.3.4:
+    resolution: {integrity: sha512-pa7m0d7pBDqGHZxljT+WPFeyFgQ7P7SciPPo1tTqYuO0z4sqADYhwnBESmmGp/wEof1inwdls/k8ZgTg8rxFHA==}
     peerDependencies:
       typescript: ^5 || ^6
     peerDependenciesMeta:
@@ -2152,9 +2152,9 @@ snapshots:
 
   attr-accept@2.2.5: {}
 
-  axios@1.18.0(debug@4.4.3):
+  axios@1.18.0:
     dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3)
+      follow-redirects: 1.16.0
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -2329,9 +2329,7 @@ snapshots:
 
   find-root@1.1.0: {}
 
-  follow-redirects@1.16.0(debug@4.4.3):
-    optionalDependencies:
-      debug: 4.4.3
+  follow-redirects@1.16.0: {}
 
   form-data@4.0.6:
     dependencies:
@@ -2419,9 +2417,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  i18next@26.0.3(typescript@5.9.3):
-    dependencies:
-      '@babel/runtime': 7.29.7
+  i18next@26.3.4(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 
@@ -2699,11 +2695,11 @@ snapshots:
       prop-types: 15.8.1
       react: 19.2.0
 
-  react-i18next@17.0.1(i18next@26.0.3(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
+  react-i18next@17.0.1(i18next@26.3.4(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
     dependencies:
       '@babel/runtime': 7.29.7
       html-parse-stringify: 3.1.0
-      i18next: 26.0.3(typescript@5.9.3)
+      i18next: 26.3.4(typescript@5.9.3)
       react: 19.2.0
       use-sync-external-store: 1.6.0(react@19.2.0)
     optionalDependencies:
