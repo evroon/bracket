@@ -52,7 +52,7 @@ importers:
         version: 6.0.1(vite@8.0.16(@types/node@26.0.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.18)))
       axios:
         specifier: 1.18.0
-        version: 1.18.0(debug@4.4.3)
+        version: 1.18.0
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -75,8 +75,8 @@ importers:
         specifier: 17.0.1
         version: 17.0.1(i18next@26.0.3(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       react-icons:
-        specifier: 5.6.0
-        version: 5.6.0(react@19.2.0)
+        specifier: 5.7.0
+        version: 5.7.0(react@19.2.0)
       react-qr-code:
         specifier: 2.0.18
         version: 2.0.18(react@19.2.0)
@@ -1307,8 +1307,8 @@ packages:
       typescript:
         optional: true
 
-  react-icons@5.6.0:
-    resolution: {integrity: sha512-RH93p5ki6LfOiIt0UtDyNg/cee+HLVR6cHHtW3wALfo+eOHTp8RnU2kRkI6E+H19zMIs03DyxUG/GfZMOGvmiA==}
+  react-icons@5.7.0:
+    resolution: {integrity: sha512-LBLy340Rzqy6+/yVhZKT3B/QpP1BZaesGqasf09HPOBzRarcDIFH0WwXlXQfE7q7ipxK4MSiC5DIBWURCny6fw==}
     peerDependencies:
       react: '*'
 
@@ -2152,9 +2152,9 @@ snapshots:
 
   attr-accept@2.2.5: {}
 
-  axios@1.18.0(debug@4.4.3):
+  axios@1.18.0:
     dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3)
+      follow-redirects: 1.16.0
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -2329,9 +2329,7 @@ snapshots:
 
   find-root@1.1.0: {}
 
-  follow-redirects@1.16.0(debug@4.4.3):
-    optionalDependencies:
-      debug: 4.4.3
+  follow-redirects@1.16.0: {}
 
   form-data@4.0.6:
     dependencies:
@@ -2710,7 +2708,7 @@ snapshots:
       react-dom: 19.2.0(react@19.2.0)
       typescript: 5.9.3
 
-  react-icons@5.6.0(react@19.2.0):
+  react-icons@5.7.0(react@19.2.0):
     dependencies:
       react: 19.2.0
 
