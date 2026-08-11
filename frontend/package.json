@@ -51,7 +51,7 @@
     "@types/react-dom": "19.2.3",
     "i18next-browser-languagedetector": "8.2.1",
     "i18next-http-backend": "3.0.5",
-    "npm-check-updates": "20.0.0",
+    "npm-check-updates": "22.2.9",
     "oxfmt": "0.61.0",
     "postcss": "8.5.18",
     "postcss-preset-mantine": "1.18.0",

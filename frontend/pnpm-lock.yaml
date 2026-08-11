@@ -109,8 +109,8 @@ importers:
         specifier: 3.0.5
         version: 3.0.5
       npm-check-updates:
-        specifier: 20.0.0
-        version: 20.0.0
+        specifier: 22.2.9
+        version: 22.2.9
       oxfmt:
         specifier: 0.61.0
         version: 0.61.0
@@ -1132,9 +1132,9 @@ packages:
       encoding:
         optional: true
 
-  npm-check-updates@20.0.0:
-    resolution: {integrity: sha512-qCs02x51irGf0okCttwv8lHEO2NxT903IJ2bKpG82kIzkm6pfT3CoWB5YIvqY/wi/DdnYRfI7eVfCYYymQgvCg==}
-    engines: {node: '>=20.0.0', npm: '>=8.12.1'}
+  npm-check-updates@22.2.9:
+    resolution: {integrity: sha512-DVeZ0KirHfliSsHuR2o7cHE+tW439sVHfJjF6cGWeDiY0Wyl3BI/jS4zV0eixtcMOquFbcF1Su/FsxOvk5MoYA==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: '>=10.0.0'}
     hasBin: true
 
   nuqs@2.8.9:
@@ -2544,7 +2544,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  npm-check-updates@20.0.0: {}
+  npm-check-updates@22.2.9: {}
 
   nuqs@2.8.9(react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0):
     dependencies:
