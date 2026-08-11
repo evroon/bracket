@@ -44,7 +44,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "autoprefixer": "^10.4.19",
-    "markdownlint-cli2": "^0.22.0",
+    "markdownlint-cli2": "^0.23.0",
     "markdownlint-rule-relative-links": "^5.1.0",
     "oxfmt": "0.61.0",
     "oxlint": "1.75.0",
