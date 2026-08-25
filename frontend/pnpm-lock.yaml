@@ -30,8 +30,8 @@ importers:
         specifier: 8.3.7
         version: 8.3.7(@mantine/core@8.3.7(@mantine/hooks@8.3.7(react@19.2.0))(@types/react@19.2.14)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@mantine/hooks@8.3.7(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@mantine/form':
-        specifier: 9.0.1
-        version: 9.0.1(react@19.2.0)
+        specifier: 9.4.2
+        version: 9.4.2(react@19.2.0)
       '@mantine/hooks':
         specifier: 8.3.7
         version: 8.3.7(react@19.2.0)
@@ -52,7 +52,7 @@ importers:
         version: 6.0.1(vite@8.0.16(@types/node@26.0.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
       axios:
         specifier: 1.18.0
-        version: 1.18.0
+        version: 1.18.0(debug@4.4.3)
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -334,8 +334,8 @@ packages:
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/form@9.0.1':
-    resolution: {integrity: sha512-47XTUugKjBwc5Dmr+2+81I4M5v48i0Z/HgGoGVdiydIgvtfchDV9GBySMxvsQ1ZVR2s+BwcYGsNHFO9RQNVM7w==}
+  '@mantine/form@9.4.2':
+    resolution: {integrity: sha512-rpj43qFQEhas/T5qD0fp2ErCNATV544BuHColyrkko/2UcVf57LUJ52N8KZxT3/mKTQmNqprOJReHrbc42Z59Q==}
     peerDependencies:
       react: ^19.2.0
 
@@ -1924,7 +1924,7 @@ snapshots:
       react-dom: 19.2.0(react@19.2.0)
       react-dropzone: 14.3.8(react@19.2.0)
 
-  '@mantine/form@9.0.1(react@19.2.0)':
+  '@mantine/form@9.4.2(react@19.2.0)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-deep-equal: 3.1.3
@@ -2132,9 +2132,9 @@ snapshots:
 
   attr-accept@2.2.5: {}
 
-  axios@1.18.0:
+  axios@1.18.0(debug@4.4.3):
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -2303,7 +2303,9 @@ snapshots:
 
   find-root@1.1.0: {}
 
-  follow-redirects@1.16.0: {}
+  follow-redirects@1.16.0(debug@4.4.3):
+    optionalDependencies:
+      debug: 4.4.3
 
   form-data@4.0.6:
     dependencies:
