@@ -52,7 +52,7 @@ importers:
         version: 6.0.1(vite@8.0.16(@types/node@26.0.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
       axios:
         specifier: 1.18.0
-        version: 1.18.0
+        version: 1.18.0(debug@4.4.3)
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -78,8 +78,8 @@ importers:
         specifier: 5.7.0
         version: 5.7.0(react@19.2.0)
       react-qr-code:
-        specifier: 2.0.18
-        version: 2.0.18(react@19.2.0)
+        specifier: 2.2.0
+        version: 2.2.0(react@19.2.0)
       react-router:
         specifier: 8.3.0
         version: 8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1260,8 +1260,8 @@ packages:
     resolution: {integrity: sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==}
     engines: {node: '>=10'}
 
-  qr.js@0.0.0:
-    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+  qrcode-generator@2.0.4:
+    resolution: {integrity: sha512-mZSiP6RnbHl4xL2Ap5HfkjLnmxfKcPWpWe/c+5XxCuetEenqmNFf1FH/ftXPCtFG5/TDobjsjz6sSNL0Sr8Z9g==}
 
   raf-schd@4.0.3:
     resolution: {integrity: sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==}
@@ -1310,8 +1310,8 @@ packages:
       react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  react-qr-code@2.0.18:
-    resolution: {integrity: sha512-v1Jqz7urLMhkO6jkgJuBYhnqvXagzceg3qJUWayuCK/c6LTIonpWbwxR1f1APGd4xrW/QcQEovNrAojbUz65Tg==}
+  react-qr-code@2.2.0:
+    resolution: {integrity: sha512-e5nS0UUN22K3Nf8KBRUzemfdJ6OmnN5w+kbnj1lvJaol9RyVRFeGl05bCkxSN2ZegbLxjjYjX1+mmAoX9+fAhw==}
     peerDependencies:
       react: '*'
 
@@ -2132,9 +2132,9 @@ snapshots:
 
   attr-accept@2.2.5: {}
 
-  axios@1.18.0:
+  axios@1.18.0(debug@4.4.3):
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -2303,7 +2303,9 @@ snapshots:
 
   find-root@1.1.0: {}
 
-  follow-redirects@1.16.0: {}
+  follow-redirects@1.16.0(debug@4.4.3):
+    optionalDependencies:
+      debug: 4.4.3
 
   form-data@4.0.6:
     dependencies:
@@ -2640,7 +2642,7 @@ snapshots:
 
   proxy-from-env@2.1.0: {}
 
-  qr.js@0.0.0: {}
+  qrcode-generator@2.0.4: {}
 
   raf-schd@4.0.3: {}
 
@@ -2683,10 +2685,10 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  react-qr-code@2.0.18(react@19.2.0):
+  react-qr-code@2.2.0(react@19.2.0):
     dependencies:
       prop-types: 15.8.1
-      qr.js: 0.0.0
+      qrcode-generator: 2.0.4
       react: 19.2.0
 
   react-redux@9.3.0(@types/react@19.2.14)(react@19.2.0)(redux@5.0.1):
