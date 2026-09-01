@@ -109,8 +109,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       npm-check-updates:
-        specifier: 22.2.9
-        version: 22.2.9
+        specifier: 23.0.0
+        version: 23.0.0
       oxfmt:
         specifier: 0.61.0
         version: 0.61.0
@@ -1121,9 +1121,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  npm-check-updates@22.2.9:
-    resolution: {integrity: sha512-DVeZ0KirHfliSsHuR2o7cHE+tW439sVHfJjF6cGWeDiY0Wyl3BI/jS4zV0eixtcMOquFbcF1Su/FsxOvk5MoYA==}
-    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: '>=10.0.0'}
+  npm-check-updates@23.0.0:
+    resolution: {integrity: sha512-B7dvnnS4Tm/4YQghXjBgGBDuHsk88hqCmr4ZuCr0nscsPzf/QVMls5mT8ZUcHrcrFRBP1afB2KNuJo8Px55DrA==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0, npm: '>=10.0.0'}
     hasBin: true
 
   nuqs@2.9.0:
@@ -2512,7 +2512,7 @@ snapshots:
 
   nanoid@3.3.18: {}
 
-  npm-check-updates@22.2.9: {}
+  npm-check-updates@23.0.0: {}
 
   nuqs@2.9.0(react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0):
     dependencies:
