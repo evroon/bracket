@@ -41,7 +41,7 @@
     "react-icons": "5.7.0",
     "react-qr-code": "2.2.0",
     "react-router": "8.3.0",
-    "swr": "2.4.1",
+    "swr": "2.5.0",
     "vite-tsconfig-paths": "^6.1.1"
   },
   "devDependencies": {
