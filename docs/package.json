@@ -46,7 +46,7 @@
     "autoprefixer": "^10.5.4",
     "markdownlint-cli2": "^0.23.0",
     "markdownlint-rule-relative-links": "^5.1.0",
-    "oxfmt": "0.61.0",
+    "oxfmt": "0.62.0",
     "oxlint": "1.77.0",
     "postcss": "^8.5.23",
     "tailwindcss": "^4.3.2",
