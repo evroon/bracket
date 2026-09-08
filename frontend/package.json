@@ -52,7 +52,7 @@
     "i18next-browser-languagedetector": "8.2.1",
     "i18next-http-backend": "4.0.0",
     "npm-check-updates": "23.0.0",
-    "oxfmt": "0.61.0",
+    "oxfmt": "0.62.0",
     "postcss": "8.5.23",
     "postcss-preset-mantine": "1.18.0",
     "postcss-simple-vars": "7.0.1",
