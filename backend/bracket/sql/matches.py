@@ -247,3 +247,38 @@ async def clear_scores_for_matches_in_stage_item(
             "tournament_id": tournament_id,
         },
     )
+
+async def sql_get_matches_needing_notification(minutes_ahead: int = 15) -> list[dict]:
+    query = """
+        SELECT
+            matches.id AS match_id,
+            matches.start_time,
+            players.email AS player_email,
+            players.name AS player_name
+        FROM matches
+        LEFT JOIN stage_item_inputs AS input1
+            ON matches.stage_item_input1_id = input1.id
+        LEFT JOIN stage_item_inputs AS input2
+            ON matches.stage_item_input2_id = input2.id
+        LEFT JOIN players_x_teams AS pxt1
+            ON input1.team_id = pxt1.team_id
+        LEFT JOIN players_x_teams AS pxt2
+            ON input2.team_id = pxt2.team_id
+        LEFT JOIN players
+            ON players.id = pxt1.player_id OR players.id = pxt2.player_id
+        WHERE matches.players_notified = false
+            AND matches.start_time IS NOT NULL
+            AND matches.start_time <= NOW() + (:minutes_ahead * interval '1 minute')
+            AND matches.start_time > NOW()
+            AND players.email IS NOT NULL
+        """
+    return await database.fetch_all(query=query, values={"minutes_ahead": minutes_ahead})
+
+
+async def sql_mark_match_players_notified(match_id: int) -> None:
+    query = """
+        UPDATE matches
+        SET players_notified = true
+        WHERE matches.id = :match_id
+        """
+    await database.execute(query=query, values={"match_id": match_id})

@@ -18,6 +18,7 @@ from bracket.sql.users import (
     check_whether_email_is_in_use,
     create_user,
 )
+from bracket.cronjobs.scheduling import notify_players_of_upcoming_matches
 from bracket.utils.db_init import sql_create_dev_db
 from bracket.utils.security import hash_password
 from openapi import openapi  # noqa: F401
@@ -76,6 +77,12 @@ def hash_password_cmd() -> None:
 @run_async
 async def create_dev_db() -> None:
     await sql_create_dev_db()
+
+
+@cli.command()
+@run_async
+async def send_match_notifications() -> None:
+    await notify_players_of_upcoming_matches()
 
 
 @cli.command()

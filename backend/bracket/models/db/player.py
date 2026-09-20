@@ -17,6 +17,7 @@ class PlayerInsertable(BaseModelORM):
     wins: int = 0
     draws: int = 0
     losses: int = 0
+    email: str | None = None
 
 
 class Player(PlayerInsertable):
@@ -29,6 +30,7 @@ class Player(PlayerInsertable):
 class PlayerBody(BaseModelORM):
     name: str = Field(..., min_length=1, max_length=30)
     active: bool
+    email: str | None = None
 
 
 class PlayerMultiBody(BaseModelORM):
