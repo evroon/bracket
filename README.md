@@ -111,6 +111,10 @@ Read the [deployment docs](https://docs.bracketapp.nl/docs/deployment) for how t
 
 Bracket can be run in Docker or by itself (using `uv` and `pnpm`).
 
+## ☁️ One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Bracket/)
+
 # Development setup
 Read the [development docs](https://docs.bracketapp.nl/docs/community/development) for how to run Bracket for development.
 
