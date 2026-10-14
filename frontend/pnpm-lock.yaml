@@ -49,7 +49,7 @@ importers:
         version: 3.46.0(react@19.2.0)
       '@vitejs/plugin-react':
         specifier: 6.1.0
-        version: 6.1.0(vite@8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
+        version: 6.1.0(vite@8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
       axios:
         specifier: 1.20.0
         version: 1.20.0(debug@4.4.3)
@@ -88,14 +88,14 @@ importers:
         version: 2.5.0(react@19.2.0)
       vite-tsconfig-paths:
         specifier: ^6.1.1
-        version: 6.1.1(typescript@5.9.3)(vite@8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
+        version: 6.1.1(typescript@5.9.3)(vite@8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))
     devDependencies:
       '@hey-api/openapi-ts':
         specifier: 0.99.0
         version: 0.99.0(typescript@5.9.3)
       '@types/node':
-        specifier: 26.4.0
-        version: 26.4.0
+        specifier: 26.5.1
+        version: 26.5.1
       '@types/react':
         specifier: 19.2.14
         version: 19.2.14
@@ -128,7 +128,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: 8.2.0
-        version: 8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
+        version: 8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
 
 packages:
 
@@ -616,8 +616,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@26.4.0':
-    resolution: {integrity: sha512-faiGnoIrLH/V8cibOMEAZ8pMw6oXqSukl29ra4mN8GdaB2ZewzeaLj+INpV5N+Z1eKWzY+IzaIZH2EIR6YZRNQ==}
+  '@types/node@26.5.1':
+    resolution: {integrity: sha512-CzNm2FezW4VR/LjG6yUdiEgLE/rAQ9Slj5gCu/C2VrdcW7I0ahNZ8DRbHT7zOZ6r3ONgd/bsQIeSaoDGrd1C6g==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -1508,8 +1508,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@8.3.0:
-    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   use-callback-ref@1.3.3:
     resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
@@ -2090,9 +2090,9 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@26.4.0':
+  '@types/node@26.5.1':
     dependencies:
-      undici-types: 8.3.0
+      undici-types: 8.9.0
 
   '@types/parse-json@4.0.2': {}
 
@@ -2106,10 +2106,10 @@ snapshots:
 
   '@types/use-sync-external-store@0.0.6': {}
 
-  '@vitejs/plugin-react@6.1.0(vite@8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))':
+  '@vitejs/plugin-react@6.1.0(vite@8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
+      vite: 8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
 
   agent-base@6.0.2:
     dependencies:
@@ -2866,7 +2866,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  undici-types@8.3.0: {}
+  undici-types@8.9.0: {}
 
   use-callback-ref@1.3.3(@types/react@19.2.14)(react@19.2.0):
     dependencies:
@@ -2908,17 +2908,17 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite-tsconfig-paths@6.1.1(typescript@5.9.3)(vite@8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))):
+  vite-tsconfig-paths@6.1.1(typescript@5.9.3)(vite@8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))):
     dependencies:
       debug: 4.4.3
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@5.9.3)
-      vite: 8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
+      vite: 8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23))
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@8.2.0(@types/node@26.4.0)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)):
+  vite@8.2.0(@types/node@26.5.1)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.23)):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
@@ -2926,7 +2926,7 @@ snapshots:
       rolldown: 1.2.1
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.4.0
+      '@types/node': 26.5.1
       fsevents: 2.3.3
       jiti: 2.7.0
       sugarss: 5.0.1(postcss@8.5.23)
