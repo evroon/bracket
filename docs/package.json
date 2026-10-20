@@ -43,7 +43,7 @@
     "@types/node": "26.6.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "autoprefixer": "^10.5.4",
+    "autoprefixer": "^10.6.1",
     "markdownlint-cli2": "^0.23.0",
     "markdownlint-rule-relative-links": "^5.1.0",
     "oxfmt": "0.68.0",
