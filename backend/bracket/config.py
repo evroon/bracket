@@ -42,6 +42,18 @@ class Config(BaseSettings):
     sentry_dsn: str | None = None
     serve_frontend: bool = False
     api_prefix: str = ""
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_from_address: str | None = None
+    smtp_use_tls: bool = True
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_from_address: str | None = None
+    smtp_use_tls: bool = True
 
     def is_cors_enabled(self) -> bool:
         return self.cors_origins != "*"

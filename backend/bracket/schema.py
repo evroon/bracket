@@ -139,6 +139,7 @@ matches = Table(
     Column("stage_item_input1_score", Integer, nullable=False),
     Column("stage_item_input2_score", Integer, nullable=False),
     Column("position_in_schedule", Integer, nullable=True),
+    Column("players_notified", Boolean, nullable=False, server_default="f"),
 )
 
 teams = Table(
@@ -170,6 +171,7 @@ players = Table(
     Column("draws", Integer, nullable=False),
     Column("losses", Integer, nullable=False),
     Column("active", Boolean, nullable=False, index=True, server_default="t"),
+    Column("email", String, nullable=True),
 )
 
 users = Table(

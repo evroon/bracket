@@ -154,6 +154,7 @@ async def sql_reschedule_match(
     query = """
         UPDATE matches
         SET court_id = :court_id,
+            players_notified = (players_notified AND start_time IS NOT DISTINCT FROM :start_time),
             start_time = :start_time,
             position_in_schedule = :position_in_schedule,
             duration_minutes = :duration_minutes,
@@ -247,3 +248,37 @@ async def clear_scores_for_matches_in_stage_item(
             "tournament_id": tournament_id,
         },
     )
+
+async def sql_get_matches_needing_notification(minutes_ahead: int = 15) -> list[dict]:
+    query = """
+        SELECT DISTINCT
+            matches.id AS match_id,
+            matches.start_time,
+            players.id AS player_id,
+            players.email AS player_email,
+            players.name AS player_name
+        FROM matches
+        JOIN stage_item_inputs
+            ON stage_item_inputs.id IN (matches.stage_item_input1_id, matches.stage_item_input2_id)
+        JOIN players_x_teams
+            ON players_x_teams.team_id = stage_item_inputs.team_id
+        JOIN players
+            ON players.id = players_x_teams.player_id
+        WHERE matches.players_notified = false
+            AND matches.start_time IS NOT NULL
+            AND matches.start_time > NOW()
+            AND matches.start_time <= NOW() + (:minutes_ahead * interval '1 minute')
+            AND players.email IS NOT NULL
+            AND players.email <> ''
+        ORDER BY start_time, match_id, player_id
+        """
+    return await database.fetch_all(query=query, values={"minutes_ahead": minutes_ahead})
+
+
+async def sql_mark_match_players_notified(match_id: int) -> None:
+    query = """
+        UPDATE matches
+        SET players_notified = true
+        WHERE matches.id = :match_id
+        """
+    await database.execute(query=query, values={"match_id": match_id})

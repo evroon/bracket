@@ -66,6 +66,7 @@ function SinglePlayerTab({
     initialValues: {
       name: '',
       active: true,
+      email: '',
       player_ids: [],
     },
     validate: {
@@ -75,7 +76,7 @@ function SinglePlayerTab({
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        await createPlayer(tournament_id, values.name, values.active);
+        await createPlayer(tournament_id, values.name, values.active, values.email || null);
         await swrPlayersResponse.mutate();
         setOpened(false);
       })}
@@ -85,6 +86,14 @@ function SinglePlayerTab({
         label={t('name_input_label')}
         placeholder={t('player_name_input_placeholder')}
         {...form.getInputProps('name')}
+      />
+
+      <TextInput
+        mt="md"
+        label={t('email_input_label')}
+        placeholder="player@example.com"
+        type="email"
+        {...form.getInputProps('email')}
       />
 
       <Checkbox
