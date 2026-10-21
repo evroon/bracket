@@ -48,7 +48,7 @@ services:
       - postgres
 
   postgres:
-    image: postgres
+    image: postgres:18
     restart: always
     environment:
       POSTGRES_DB: bracket_prod
