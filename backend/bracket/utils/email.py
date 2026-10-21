@@ -1,19 +1,22 @@
 import logging
+from email.message import EmailMessage
 
 import aiosmtplib
-from email.message import EmailMessage
 
 from bracket.config import config
 
 logger = logging.getLogger(__name__)
 
 
-async def send_email(to_address: str, subject: str, body: str) -> None:
+def is_email_configured() -> bool:
+    return config.smtp_host is not None
+
+
+async def send_email(to_address: str, subject: str, body: str) -> bool:
+    """Send a plain-text email. Returns True only if the SMTP server accepted the email."""
     if config.smtp_host is None:
-        logger.info(
-            f"SMTP not configured, skipping email to {to_address} (subject: {subject})"
-        )
-        return
+        logger.info(f"SMTP not configured, skipping email to {to_address} (subject: {subject})")
+        return False
 
     message = EmailMessage()
     message["From"] = config.smtp_from_address or config.smtp_username
@@ -32,3 +35,6 @@ async def send_email(to_address: str, subject: str, body: str) -> None:
         )
     except Exception:
         logger.exception(f"Failed to send email to {to_address}")
+        return False
+
+    return True

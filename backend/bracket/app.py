@@ -48,7 +48,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     if config.auto_run_migrations and environment is not Environment.CI:
         alembic_run_migrations()
 
-    if environment is Environment.PRODUCTION:
+    if environment is Environment.PRODUCTION or config.smtp_host is not None:
         start_cronjobs()
 
     if environment is Environment.PRODUCTION and not config.is_cors_enabled():
