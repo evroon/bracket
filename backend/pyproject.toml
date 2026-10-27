@@ -23,7 +23,7 @@ dependencies = [
     "python-dotenv==1.2.2",
     "python-multipart==0.0.31",
     "sentry-sdk==2.70.0",
-    "sqlalchemy==2.0.44",
+    "sqlalchemy==2.1.1",
     "sqlalchemy-stubs==0.4",
     "starlette==1.7.0",
     "types-aiofiles==25.1.0.20251011",
