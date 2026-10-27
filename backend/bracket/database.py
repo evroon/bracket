@@ -24,4 +24,6 @@ async def asyncpg_init(connection: Any) -> None:
 
 database = Database(str(config.pg_dsn), init=asyncpg_init)
 
-engine = sqlalchemy.create_engine(str(config.pg_dsn))
+engine = sqlalchemy.create_engine(
+    str(config.pg_dsn).replace("postgresql://", "postgresql+psycopg2://")
+)
