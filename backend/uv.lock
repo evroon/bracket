@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -506,7 +506,7 @@ requires-dist = [
     { name = "click", specifier = "==8.5.0" },
     { name = "databases", extras = ["asyncpg"], specifier = "==0.9.0" },
     { name = "fastapi", specifier = "==0.141.1" },
-    { name = "fastapi-sso", specifier = "==0.22.0" },
+    { name = "fastapi-sso", specifier = "==0.23.0" },
     { name = "gunicorn", specifier = "==26.2.0" },
     { name = "heliclockter", specifier = "==3.0.1" },
     { name = "parameterized", specifier = "==0.9.0" },
@@ -717,7 +717,7 @@ wheels = [
 
 [[package]]
 name = "fastapi-sso"
-version = "0.22.0"
+version = "0.23.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastapi" },
@@ -726,9 +726,9 @@ dependencies = [
     { name = "pydantic", extra = ["email"] },
     { name = "pyjwt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f8/47/e6ecdd15874d7b9ac3202979396fedfd964e62d005d85eaf6dec2af1da95/fastapi_sso-0.22.0.tar.gz", hash = "sha256:94a71869097fba7c1d36a24939b9fe31cc59ba1c31d25ac661a35f6c810968ea", size = 19522, upload-time = "2026-08-31T10:15:29.925Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ec/22/cbe208936aa09345e4b7855d3397792dc15b0b72a479aa5a3b4866ba15ad/fastapi_sso-0.23.0.tar.gz", hash = "sha256:be2858b30603a6337ad59aba82049099f5536ebc1eb41b036ad498a95f06ce29", size = 21387, upload-time = "2026-09-21T13:21:11.227Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/ef/1c6ca984b954c88750164a6e2fb511fb69a240b7ccc66be8a7601942973b/fastapi_sso-0.22.0-py3-none-any.whl", hash = "sha256:7b6bc60a510a117dfbd2a3d97871159738677dceb00fd3ad1bfc9c4751226924", size = 30085, upload-time = "2026-08-31T10:15:30.848Z" },
+    { url = "https://files.pythonhosted.org/packages/b3/60/d5dcb6978ccf1fce22f5944c51c31ebfc97e1dacc9241b67cff19c4e0c4c/fastapi_sso-0.23.0-py3-none-any.whl", hash = "sha256:7dd537adc836142e8b64def86a901fead21c9d42d4001872a18e6f9316bc4ec0", size = 31821, upload-time = "2026-09-21T13:21:12.238Z" },
 ]
 
 [[package]]
