@@ -64,7 +64,7 @@ importers:
         version: 26.4.0(typescript@5.9.3)
       nuqs:
         specifier: 2.10.0
-        version: 2.10.0(react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        version: 2.10.0(react-router@8.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -81,8 +81,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(react@19.2.0)
       react-router:
-        specifier: 8.3.0
-        version: 8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 8.4.0
+        version: 8.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       swr:
         specifier: 2.5.0
         version: 2.5.0(react@19.2.0)
@@ -485,6 +485,9 @@ packages:
     resolution: {integrity: sha512-hxBI2UOuVaI3O/BhQfhtb4kcGn9ft12RWAFVMUeNjqqhLsHvFtzIkFaptBJpFDANTKoDfdVoHTKZDlwKCACbMQ==}
     peerDependencies:
       react: '*'
+
+  '@remix-run/route-pattern@0.22.1':
+    resolution: {integrity: sha512-czdGJWh09Lapvcqt7Vb09KlrU2PhRJ8xQaI+AItTuD9aDJ5MAgxnS38lnys6Ll+6RJEqPiaUqTwIQhVLwFvv+w==}
 
   '@rolldown/binding-android-arm-eabi@1.2.11':
     resolution: {integrity: sha512-A5kXfGKvKWWZE0TtPrfsvT+q4Y5d1QG8gGUzpYjGydM+fARM9MuX90PrXYXe0XbsDVgyxxNzHo6giCj90bsFNw==}
@@ -1335,8 +1338,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-router@8.3.0:
-    resolution: {integrity: sha512-qyPMvW83jGIct3yiieisxdk9M745anqhpIMKN5m1t6yBMfgVPpt77aHOqs5fUlEJRMCGffg9BaQLH9oPVOL7xQ==}
+  react-router@8.4.0:
+    resolution: {integrity: sha512-JtydAkBvU9UTEe5qNC+POhu+ZBNM7rlKY2IegwXc7Idj7xfRG16x5RZrw3mju+XlqBxfvb2ky9P3jUp9WyWC1g==}
     engines: {node: '>=22.22.0'}
     peerDependencies:
       react: '>=19.2.7'
@@ -1991,6 +1994,8 @@ snapshots:
     dependencies:
       react: 19.2.0
 
+  '@remix-run/route-pattern@0.22.1': {}
+
   '@rolldown/binding-android-arm-eabi@1.2.11':
     optional: true
 
@@ -2466,12 +2471,12 @@ snapshots:
 
   npm-check-updates@23.1.0: {}
 
-  nuqs@2.10.0(react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0):
+  nuqs@2.10.0(react-router@8.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0):
     dependencies:
       '@standard-schema/spec': 1.1.0
       react: 19.2.0
     optionalDependencies:
-      react-router: 8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react-router: 8.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
 
   object-assign@4.1.1: {}
 
@@ -2679,8 +2684,9 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  react-router@8.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-router@8.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
+      '@remix-run/route-pattern': 0.22.1
       cookie-es: 3.1.1
       react: 19.2.0
     optionalDependencies:
