@@ -28,7 +28,9 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     config_ini_section = ALEMBIC_CONFIG.get_section(ALEMBIC_CONFIG.config_ini_section)
     assert config_ini_section is not None, "No section 'alembic' found in config.ini"
-    config_ini_section["sqlalchemy.url"] = str(get_sync_engine_url())
+    config_ini_section["sqlalchemy.url"] = get_sync_engine_url().render_as_string(
+        hide_password=False
+    )
 
     engine = engine_from_config(config_ini_section, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
