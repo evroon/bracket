@@ -10,7 +10,7 @@ from alembic import context
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parent_dir)
 
-from bracket.config import config
+from bracket.database import get_sync_engine_url
 from bracket.schema import Base
 
 ALEMBIC_CONFIG = context.config
@@ -28,7 +28,7 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     config_ini_section = ALEMBIC_CONFIG.get_section(ALEMBIC_CONFIG.config_ini_section)
     assert config_ini_section is not None, "No section 'alembic' found in config.ini"
-    config_ini_section["sqlalchemy.url"] = str(config.pg_dsn)
+    config_ini_section["sqlalchemy.url"] = get_sync_engine_url()
 
     engine = engine_from_config(config_ini_section, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
