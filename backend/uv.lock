@@ -522,7 +522,7 @@ requires-dist = [
     { name = "starlette", specifier = "==1.7.0" },
     { name = "types-aiofiles", specifier = "==25.1.0.20251011" },
     { name = "types-passlib", specifier = "==1.7.7.20241221" },
-    { name = "types-simplejson", specifier = "==4.1.0.20260724" },
+    { name = "types-simplejson", specifier = "==4.2.0.20261006" },
     { name = "uvicorn", specifier = "==0.54.0" },
 ]
 
@@ -1892,11 +1892,11 @@ wheels = [
 
 [[package]]
 name = "types-simplejson"
-version = "4.1.0.20260724"
+version = "4.2.0.20261006"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1d/42/1916db531db4130e4c3dc5df35144d2cb018c9f24895743f36c5cb35da6f/types_simplejson-4.1.0.20260724.tar.gz", hash = "sha256:62045f0b81581e714641c486c9238088eacaa3310b7873e05b89999664b64934", size = 11069, upload-time = "2026-07-24T04:58:39.843Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/84/10c94f04f123c9e20e00c8733ed63f757ae7dfc41132c7eaca1008a0d7af/types_simplejson-4.2.0.20261006.tar.gz", hash = "sha256:af8957b430aded84f6f872be2ea3e21e1c3121da917d1585edd34ac1822c3fdd", size = 11253, upload-time = "2026-10-06T08:15:15.643Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c4/fc/64b8f433237ba4bb1b204f83be37b4954de187e334e36ecce78851045f60/types_simplejson-4.1.0.20260724-py3-none-any.whl", hash = "sha256:160e894bb546ccf8455d34512f5fa7edf2aa25c047a43be840dde3a7bf3e4388", size = 10583, upload-time = "2026-07-24T04:58:38.994Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/a4/125d32bdbc912592fc1f00f6d413dbda7b89025e91502a25f7105500955d/types_simplejson-4.2.0.20261006-py3-none-any.whl", hash = "sha256:0a11e50d899f593738e013c728353eba3d83376da4093d3e7da1e0f22c533254", size = 10628, upload-time = "2026-10-06T08:15:14.818Z" },
 ]
 
 [[package]]
