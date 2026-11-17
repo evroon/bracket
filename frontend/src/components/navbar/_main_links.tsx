@@ -8,6 +8,7 @@ import {
   IconCalendar,
   IconDots,
   IconHome,
+  IconLayoutDashboard,
   IconScoreboard,
   IconSettings,
   IconTrophy,
@@ -19,7 +20,7 @@ import { useLocation } from 'react-router';
 
 import PreloadLink from '@components/utils/link';
 import { capitalize } from '@components/utils/util';
-import { getBaseApiUrl } from '@services/adapter';
+import { getBaseApiUrl, getTournamentById } from '@services/adapter';
 import classes from './_main_links.module.css';
 
 interface MainLinkProps {
@@ -112,7 +113,19 @@ export function TournamentLinks({ tournament_id }: any) {
   const tm_prefix = `/tournaments/${tournament_id}`;
   const pathName = location.pathname.replace('[id]', tournament_id).replace(/\/+$/, '');
 
+  const swrTournamentResponse = getTournamentById(tournament_id);
+  const dashboardEndpoint = swrTournamentResponse.data?.data?.dashboard_endpoint;
+
   const data = [
+    ...(dashboardEndpoint
+      ? [
+          {
+            icon: IconLayoutDashboard,
+            label: capitalize(t('view_dashboard_button')),
+            link: `/tournaments/${dashboardEndpoint}/dashboard`,
+          },
+        ]
+      : []),
     {
       icon: IconTrophy,
       label: capitalize(t('stage_title')),
