@@ -31,7 +31,7 @@ services:
       POSTGRES_DB: bracket_dev
       POSTGRES_PASSWORD: bracket_dev
       POSTGRES_USER: bracket_dev
-    image: postgres
+    image: postgres:18
     networks:
       - bracket_lan
     restart: always
