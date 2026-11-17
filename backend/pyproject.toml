@@ -53,7 +53,7 @@ filterwarnings = [
 dev = [
     "aioresponses==0.7.4",
     "mypy==2.4.0",
-    "pluggy==1.6.0",
+    "pluggy==1.7.0",
     "pylint==4.1.2",
     "pyrefly==1.4.0",
     "pytest-asyncio==1.4.0",
